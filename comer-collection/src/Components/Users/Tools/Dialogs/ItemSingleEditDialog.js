@@ -10,8 +10,11 @@ import {
 import { SaveIcon } from "../../../IconImports.js";
 import { getLocalISOString } from "../HelperMethods/getLocalISOString.js";
 import PropTypes from "prop-types";
+import { useSnackbar } from "../../../App/AppSnackbar.js";
+import { useAppUser } from "../../../App/AppUser.js";
+import { User } from "../Entities/User.js";
 
-export const ItemSingleEditDialog = ({ entity, dialogTitle, dialogInstructions, editDialogItem, editDialogFieldDefinitions, editDialogIsOpen, setEditDialogIsOpen, handleItemEdit }) => {
+export const ItemSingleEditDialog = ({ Entity, dialogInstructions, editDialogItem, editDialogFieldDefinitions, refreshAllItems, editDialogIsOpen, setEditDialogIsOpen }) => {
 
 
     const editDialogFieldRefs = useRef([]);
@@ -44,7 +47,13 @@ export const ItemSingleEditDialog = ({ entity, dialogTitle, dialogInstructions, 
             })
         );
     }, [editDialogFieldDefinitions, editDialogItem]);
-  
+
+
+    const singularCapitalized = Entity?.singular.substr(0, 1).toUpperCase() + Entity?.singular.substr(1).toLowerCase();
+
+    const showSnackbar = useSnackbar();
+    const [appUser, , initializeAppUser] = useAppUser();
+    
   
     return (
         <Dialog component="form" sx={{zIndex: 10000}}
@@ -60,14 +69,21 @@ export const ItemSingleEditDialog = ({ entity, dialogTitle, dialogInstructions, 
                 for(const r of editDialogFieldRefs.current) {
                     editDialogFieldData[r.name] = r.value;
                 }
-                handleItemEdit(editDialogItem.id, editDialogFieldData).then(() => {
-                    editDialogFieldRefs.current = [];
-                }).catch(() => {
-                    console.log("Error within handleItemEdit subroutine");
+                Entity.handleEdit(editDialogItem.id, editDialogFieldData).then((msg) => {
+                    // setAllItems(allItems.filter((i) => i.id !== editDialogItem.id));
+                    showSnackbar(msg, "success");
+                    refreshAllItems();
+                    setEditDialogIsOpen(false);
+                    if(Entity === User && editDialogItem.id == appUser.id) {
+                        initializeAppUser();
+                    }
+                }).catch((err) => {
+                    // setSubmitEnabled(true);
+                    showSnackbar(err, "error");
                 });
             }}
         >
-            <DialogTitle variant="h4" textAlign="center">{dialogTitle}</DialogTitle>
+            <DialogTitle variant="h4" textAlign="center">Edit {singularCapitalized}</DialogTitle>
             <DialogContent
                 sx={{
                     width: "500px",
@@ -87,7 +103,7 @@ export const ItemSingleEditDialog = ({ entity, dialogTitle, dialogInstructions, 
                     </Button>
                     <Button color="primary" variant="contained" size="large" startIcon={<SaveIcon />} sx={{ width: "100%" }}
                         type="submit">
-                        <Typography variant="body1">Save {entity}</Typography>
+                        <Typography variant="body1">Save {Entity.singular}</Typography>
                     </Button>
                 </Stack>
             </DialogActions>
@@ -96,12 +112,11 @@ export const ItemSingleEditDialog = ({ entity, dialogTitle, dialogInstructions, 
 };
 
 ItemSingleEditDialog.propTypes = {
-    entity: PropTypes.string,
-    dialogTitle: PropTypes.string,
+    Entity: PropTypes.any,
     dialogInstructions: PropTypes.string,
     editDialogItem: PropTypes.object,
     editDialogFieldDefinitions: PropTypes.arrayOf(PropTypes.object),
     editDialogIsOpen: PropTypes.bool,
     setEditDialogIsOpen: PropTypes.func,
-    handleItemEdit: PropTypes.func
+    refreshAllItems: PropTypes.func.isRequired
 };

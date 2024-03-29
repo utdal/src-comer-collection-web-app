@@ -34,6 +34,18 @@ class Entity {
             });
         });
     }
+
+
+    static handleEdit(itemId, updateFields) {
+        return new Promise((resolve, reject) => {
+            sendAuthenticatedRequest("PUT", `${this.baseUrl}/${itemId}`, updateFields).then(() => {
+                resolve(`${capitalized(this.singular)} updated`);
+            }).catch(() => {
+                reject(`Failed to update ${this.singular.toLowerCase()}`);
+            });
+        });
+    }
+    
 }
 
 export { Entity };

@@ -17,10 +17,9 @@ import { AssociationManagementDialog } from "../Tools/Dialogs/AssociationManagem
 import { Navigate, useNavigate } from "react-router";
 import { UserChangePrivilegesDialog } from "../Tools/Dialogs/UserChangePrivilegesDialog.js";
 import { SelectionSummary } from "../Tools/SelectionSummary.js";
-import { filterItemFields, userFieldDefinitions } from "../Tools/HelperMethods/fields.js";
+import { userFieldDefinitions } from "../Tools/HelperMethods/fields.js";
 import { sendAuthenticatedRequest } from "../Tools/HelperMethods/APICalls.js";
 import { CourseFilterMenu } from "../Tools/CourseFilterMenu.js";
-import { ItemMultiDeleteDialog } from "../Tools/Dialogs/ItemMultiDeleteDialog.js";
 import { useSnackbar } from "../../App/AppSnackbar.js";
 import { useAppUser } from "../../App/AppUser.js";
 import { useTitle } from "../../App/AppTitle.js";
@@ -44,8 +43,6 @@ const UserManagement = () => {
 
     const [deleteDialogIsOpen, setDeleteDialogIsOpen] = useState(false);
     const [deleteDialogUser, setDeleteDialogUser] = useState(null);
-
-    const [multiDeleteDialogIsOpen, setMultiDeleteDialogIsOpen] = useState(false);
 
     const [editDialogIsOpen, setEditDialogIsOpen] = useState(false);
     const [editDialogUser, setEditDialogUser] = useState(null);
@@ -71,7 +68,7 @@ const UserManagement = () => {
 
 
     const [, setSelectedNavItem] = useAccountNav();
-    const [appUser, , initializeAppUser] = useAppUser();
+    const [appUser] = useAppUser();
     const showSnackbar = useSnackbar();
     const navigate = useNavigate();
     const setTitleText = useTitle();
@@ -120,26 +117,6 @@ const UserManagement = () => {
             doesItemMatchSearchQuery(searchQuery, user, ["full_name", "full_name_reverse", "email_without_domain"])
         );
     }, [userCourseIdFilter, searchQuery]);
-
-
-    const handleUserEdit = async (userId, updateFields) => {
-        const filteredUser = filterItemFields(userFieldDefinitions, updateFields);
-        try {
-            await sendAuthenticatedRequest("PUT", `/api/admin/users/${userId}`, filteredUser);
-            fetchData();
-
-            setEditDialogIsOpen(false);
-
-            if (userId == appUser.id)
-                initializeAppUser();
-
-            showSnackbar("Successfully edited user", "success");
-
-        } catch (error) {
-            showSnackbar("Error editing user", "error");
-            throw "TestError";
-        }
-    };
 
 
 
@@ -207,37 +184,6 @@ const UserManagement = () => {
         }
     };
 
-
-    const handleDeleteMultiple = async (userIds) => {
-
-        let usersDeleted = 0;
-        for (const userId of userIds) {
-            try {
-                await sendAuthenticatedRequest("DELETE", `/api/users/${userId}`);
-                usersDeleted++;
-            } catch (error) { /* empty */ }
-        }
-        fetchData();
-
-        if (usersDeleted == userIds.length) {
-            setDialogIsOpen(false);
-
-            showSnackbar(`Successfully deleted ${userIds.length} ${userIds.length == 1 ? "user" : "users"}`, "success");
-
-            setMultiDeleteDialogIsOpen(false);
-
-        } else if (usersDeleted < userIds.length) {
-
-            if (usersDeleted > 0) {
-                showSnackbar(`Deleted ${usersDeleted} of ${userIds.length} ${userIds.length == 1 ? "user" : "users"}`, "warning");
-            }
-            else {
-                showSnackbar(`Failed to delete ${userIds.length} ${userIds.length == 1 ? "user" : "users"}`, "error");
-            }
-
-        }
-
-    };
 
 
     const handleCopyToClipboard = useCallback((user, fieldName) => {
@@ -587,26 +533,6 @@ const UserManagement = () => {
                     entityPlural="users"
                 />
                 <Stack direction="row" spacing={2} >
-                    {(() => {
-                        const selectedDeletableUsers = selectedUsers.filter((u) => u.is_deletable);
-                        return (
-                            <Button variant="outlined"
-                                sx={{
-                                    display: selectedDeletableUsers.length == 0 ? "none" : ""
-                                }}
-                                startIcon={<DeleteIcon />}
-                                onClick={() => {
-                                    if (selectedDeletableUsers.length == 1) {
-                                        setDeleteDialogUser(selectedDeletableUsers[0]);
-                                        setDeleteDialogIsOpen(true);
-                                    } else {
-                                        setMultiDeleteDialogIsOpen(true);
-                                    }
-                                }}>
-                                <Typography variant="body1">{selectedDeletableUsers.length}</Typography>
-                            </Button>
-                        );
-                    })()}
                     <Button variant="outlined"
                         sx={{
                             display: selectedUsers.length == 0 ? "none" : ""
@@ -630,11 +556,10 @@ const UserManagement = () => {
                 {...{ dialogIsOpen, setDialogIsOpen }} />
 
             <ItemSingleEditDialog
-                entity="user"
-                dialogTitle={"Edit User"}
+                Entity={User}
                 dialogInstructions={"Edit the user fields, then click 'Save'."}
                 editDialogItem={editDialogUser}
-                handleItemEdit={handleUserEdit}
+                refreshAllItems={fetchData}
                 {...{ editDialogFieldDefinitions: userFieldDefinitions, editDialogIsOpen, setEditDialogIsOpen }} />
 
             <ItemSingleDeleteDialog
@@ -643,15 +568,6 @@ const UserManagement = () => {
                 setAllItems={setUsers}
                 deleteDialogItem={deleteDialogUser}
                 {...{ deleteDialogIsOpen, setDeleteDialogIsOpen }} />
-
-            <ItemMultiDeleteDialog
-                entitySingular="user"
-                entityPlural="users"
-                deleteDialogItems={selectedUsers.filter((u) => u.is_deletable)}
-                deleteDialogIsOpen={multiDeleteDialogIsOpen}
-                setDeleteDialogIsOpen={setMultiDeleteDialogIsOpen}
-                handleDelete={handleDeleteMultiple}
-            />
 
             <AssociationManagementDialog
                 primaryEntity="user"

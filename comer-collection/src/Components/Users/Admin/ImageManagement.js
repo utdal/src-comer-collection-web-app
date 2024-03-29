@@ -153,24 +153,6 @@ const ImageManagement = () => {
     };
 
 
-    const handleImageEdit = async (imageId, updateFields) => {
-        try {
-            let filteredImage = filterItemFields(imageFieldDefinitions, updateFields);
-            await sendAuthenticatedRequest("PUT", `/api/admin/images/${imageId}`, filteredImage);
-            await fetchImages();
-
-            setEditDialogIsOpen(false);
-
-            showSnackbar("Successfully edited image", "success");
-
-        } catch (error) {
-
-            showSnackbar("Error editing for image", "error");
-            throw "ImageEditError";
-        }
-    };
-
-
     const handleCreateArtist = async (newArtist) => {
         try {
             let filteredArtist = filterItemFields(artistFieldDefinitions, newArtist);
@@ -948,11 +930,10 @@ const ImageManagement = () => {
                 {...{ createDialogFieldDefinitions, dialogIsOpen, setDialogIsOpen }} />
 
             <ItemSingleEditDialog
-                entity="image"
-                dialogTitle={"Edit Image"}
+                Entity={Image}
                 dialogInstructions={"Edit the image fields, then click 'Save'."}
                 editDialogItem={editDialogImage}
-                handleItemEdit={handleImageEdit}
+                refreshAllItems={fetchImages}
                 {...{ editDialogFieldDefinitions, editDialogIsOpen, setEditDialogIsOpen }} />
 
             <ItemSingleDeleteDialog

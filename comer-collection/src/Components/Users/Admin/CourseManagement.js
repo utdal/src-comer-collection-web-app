@@ -14,7 +14,7 @@ import { doesItemMatchSearchQuery } from "../Tools/SearchUtilities.js";
 import { AssociationManagementDialog } from "../Tools/Dialogs/AssociationManagementDialog.js";
 import { Navigate, useNavigate } from "react-router";
 import { SelectionSummary } from "../Tools/SelectionSummary.js";
-import { courseFieldDefinitions, filterItemFields } from "../Tools/HelperMethods/fields.js";
+import { courseFieldDefinitions } from "../Tools/HelperMethods/fields.js";
 import { sendAuthenticatedRequest } from "../Tools/HelperMethods/APICalls.js";
 import { useSnackbar } from "../../App/AppSnackbar.js";
 import { useAppUser } from "../../App/AppUser.js";
@@ -164,24 +164,6 @@ const CourseManagement = () => {
         await fetchData();
     }, [showSnackbar]);
 
-
-
-    const handleCourseEdit = async (courseId, updateFields) => {
-        try {
-            const filteredCourse = filterItemFields(courseFieldDefinitions, updateFields);
-            await sendAuthenticatedRequest("PUT", `/api/admin/courses/${courseId}`, filteredCourse);
-            fetchData();
-
-            setEditDialogIsOpen(false);
-
-            showSnackbar("Successfully edited course", "success");
-
-        } catch (error) {
-            console.error(`Error editing course ${courseId}: ${error}`);
-
-            showSnackbar("Error editing course.  Make sure the end time is after the start time.", "error");
-        }
-    };
 
 
 
@@ -479,11 +461,10 @@ const CourseManagement = () => {
                 {...{ createDialogFieldDefinitions, dialogIsOpen, setDialogIsOpen }} />
 
             <ItemSingleEditDialog
-                entity="course"
-                dialogTitle={"Edit Course"}
+                Entity={Course}
                 dialogInstructions={"Edit the course fields, then click 'Save'."}
                 editDialogItem={editDialogCourse}
-                handleItemEdit={handleCourseEdit}
+                refreshAllItems={fetchData}
                 {...{ editDialogFieldDefinitions, editDialogIsOpen, setEditDialogIsOpen }} />
 
             <ItemSingleDeleteDialog

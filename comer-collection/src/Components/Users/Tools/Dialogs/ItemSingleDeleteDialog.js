@@ -34,7 +34,6 @@ export const ItemSingleDeleteDialog = ({ requireTypedConfirmation, allItems, set
                 e.preventDefault();
                 setSubmitEnabled(false);
                 if(deleteDialogItem)
-                // handleDelete(deleteDialogItem.id);
                 {
                     Entity.handleDelete(deleteDialogItem.id).then((msg) => {
                         setAllItems(allItems.filter((i) => i.id !== deleteDialogItem.id));
