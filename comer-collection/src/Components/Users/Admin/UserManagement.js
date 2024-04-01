@@ -557,7 +557,6 @@ const UserManagement = () => {
 
             <ItemSingleEditDialog
                 Entity={User}
-                dialogInstructions={"Edit the user fields, then click 'Save'."}
                 editDialogItem={editDialogUser}
                 refreshAllItems={fetchData}
                 {...{ editDialogFieldDefinitions: userFieldDefinitions, editDialogIsOpen, setEditDialogIsOpen }} />
