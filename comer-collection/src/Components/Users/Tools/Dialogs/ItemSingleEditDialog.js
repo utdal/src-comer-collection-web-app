@@ -14,7 +14,7 @@ import { useSnackbar } from "../../../App/AppSnackbar.js";
 import { useAppUser } from "../../../App/AppUser.js";
 import { User } from "../Entities/User.js";
 
-export const ItemSingleEditDialog = ({ Entity, dialogInstructions, editDialogItem, editDialogFieldDefinitions, refreshAllItems, editDialogIsOpen, setEditDialogIsOpen }) => {
+export const ItemSingleEditDialog = ({ Entity, editDialogItem, editDialogFieldDefinitions, refreshAllItems, editDialogIsOpen, setEditDialogIsOpen }) => {
 
 
     const editDialogFieldRefs = useRef([]);
@@ -89,7 +89,7 @@ export const ItemSingleEditDialog = ({ Entity, dialogInstructions, editDialogIte
                     width: "500px",
                 }}>
                 <Stack spacing={2}>
-                    <DialogContentText variant="body1">{dialogInstructions}</DialogContentText>
+                    <DialogContentText variant="body1">Edit the {Entity.singular} fields, then click &lsquo;Save {singularCapitalized}&rsquo;.</DialogContentText>
                     {editDialogEntryFields}
                 </Stack>
             </DialogContent>
@@ -113,7 +113,6 @@ export const ItemSingleEditDialog = ({ Entity, dialogInstructions, editDialogIte
 
 ItemSingleEditDialog.propTypes = {
     Entity: PropTypes.any,
-    dialogInstructions: PropTypes.string,
     editDialogItem: PropTypes.object,
     editDialogFieldDefinitions: PropTypes.arrayOf(PropTypes.object),
     editDialogIsOpen: PropTypes.bool,

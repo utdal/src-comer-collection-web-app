@@ -15,7 +15,6 @@ import { doesItemMatchSearchQuery } from "../Tools/SearchUtilities.js";
 import { Navigate } from "react-router";
 import { ImageFullScreenViewer } from "../Tools/ImageFullScreenViewer.js";
 import { tagFieldDefinitions } from "../Tools/HelperMethods/fields.js";
-import { filterItemFields } from "../Tools/HelperMethods/fields.js";
 import { EntityManageDialog } from "../Tools/Dialogs/EntityManageDialog.js";
 import { imageFieldDefinitions } from "../Tools/HelperMethods/fields.js";
 import { artistFieldDefinitions } from "../Tools/HelperMethods/fields.js";
@@ -151,107 +150,6 @@ const ImageManagement = () => {
         const tagData = await sendAuthenticatedRequest("GET", "/api/admin/tags");
         setTags(tagData.data);
     };
-
-
-    const handleCreateArtist = async (newArtist) => {
-        try {
-            let filteredArtist = filterItemFields(artistFieldDefinitions, newArtist);
-            await sendAuthenticatedRequest("POST", "/api/admin/artists/", filteredArtist);
-            fetchArtists();
-
-            showSnackbar("Artist created", "success");
-
-        } catch (error) {
-
-            showSnackbar("Error creating artist", "error");
-        }
-    };
-
-
-
-    const handleCreateTag = async (newTag) => {
-        try {
-            let filteredTag = filterItemFields(tagFieldDefinitions, newTag);
-            await sendAuthenticatedRequest("POST", "/api/admin/tags/", filteredTag);
-            fetchTags();
-
-            showSnackbar("Tag created", "success");
-
-        } catch (error) {
-
-            showSnackbar("Error creating tag", "error");
-        }
-    };
-
-
-    const handleEditArtist = async (artistId, updateFields) => {
-        try {
-            let filteredartist = filterItemFields(artistFieldDefinitions, updateFields);
-            await sendAuthenticatedRequest("PUT", `/api/admin/artists/${artistId}`, filteredartist);
-            fetchArtists();
-
-            setArtistEditDialogIsOpen(false);
-            showSnackbar("Successfully edited artist", "success");
-
-        } catch (error) {
-
-            showSnackbar("Error editing for artist", "error");
-            throw "Error editing artist";
-        }
-    };
-
-
-
-    const handleEditTag = async (tagId, updateFields) => {
-        try {
-            let filteredtag = filterItemFields(tagFieldDefinitions, updateFields);
-            await sendAuthenticatedRequest("PUT", `/api/admin/tags/${tagId}`, filteredtag);
-            fetchTags();
-
-            setTagEditDialogIsOpen(false);
-
-            showSnackbar("Successfully edited tag", "success");
-
-        } catch (error) {
-
-            showSnackbar("Error editing for tag", "error");
-        }
-    };
-
-
-    const handleDeleteArtist = async (artistId) => {
-        try {
-            await sendAuthenticatedRequest("DELETE", `/api/admin/artists/${artistId}`);
-            fetchArtists();
-
-            setArtistDeleteDialogIsOpen(false);
-            setArtistDeleteDialogItem(null);
-
-            showSnackbar("Artist deleted", "success");
-
-        } catch (error) {
-
-            showSnackbar("Error deleting artist", "error");
-        }
-    };
-
-
-    const handleDeleteTag = async (tagId) => {
-        try {
-            await sendAuthenticatedRequest("DELETE", `/api/admin/tags/${tagId}`);
-            fetchTags();
-
-            setTagDeleteDialogIsOpen(false);
-            setTagDeleteDialogItem(null);
-
-            showSnackbar(`Tag ${tagId} deleted`, "success");
-
-        } catch (error) {
-
-            showSnackbar(`Error deleting tag ${tagId}`, "error");
-        }
-    };
-
 
 
     const handleAssignImagesToArtist = useCallback(async (artistId, imageIds) => {
@@ -931,7 +829,6 @@ const ImageManagement = () => {
 
             <ItemSingleEditDialog
                 Entity={Image}
-                dialogInstructions={"Edit the image fields, then click 'Save'."}
                 editDialogItem={editDialogImage}
                 refreshAllItems={fetchImages}
                 {...{ editDialogFieldDefinitions, editDialogIsOpen, setEditDialogIsOpen }} />
@@ -957,9 +854,6 @@ const ImageManagement = () => {
                 dialogTableFields={artistTableFields}
                 dialogIsOpen={manageArtistDialogIsOpen}
                 setDialogIsOpen={setManageArtistDialogIsOpen}
-                handleItemCreate={handleCreateArtist}
-                handleItemEdit={handleEditArtist}
-                handleItemDelete={handleDeleteArtist}
                 searchBoxFields={["fullName", "fullNameReverse", "notes"]}
                 searchBoxPlaceholder="Search artists by name or notes"
                 internalDeleteDialogIsOpen={artistDeleteDialogIsOpen}
@@ -972,6 +866,7 @@ const ImageManagement = () => {
                 setInternalEditDialogItem={setArtistEditDialogItem}
                 itemSearchQuery={artistDialogSearchQuery}
                 setItemSearchQuery={setArtistDialogSearchQuery}
+                refreshAllItems={fetchArtists}
             />
 
             <EntityManageDialog
@@ -985,9 +880,6 @@ const ImageManagement = () => {
                 dialogTableFields={tagTableFields}
                 dialogIsOpen={manageTagDialogIsOpen}
                 setDialogIsOpen={setManageTagDialogIsOpen}
-                handleItemCreate={handleCreateTag}
-                handleItemEdit={handleEditTag}
-                handleItemDelete={handleDeleteTag}
                 searchBoxFields={["data", "notes"]}
                 searchBoxPlaceholder="Search tags by name or notes"
                 internalDeleteDialogIsOpen={tagDeleteDialogIsOpen}
@@ -1000,6 +892,7 @@ const ImageManagement = () => {
                 setInternalEditDialogItem={setTagEditDialogItem}
                 itemSearchQuery={tagDialogSearchQuery}
                 setItemSearchQuery={setTagDialogSearchQuery}
+                refreshAllItems={fetchTags}
             />
 
             <ImageFullScreenViewer

@@ -15,13 +15,12 @@ import { searchItems } from "../SearchUtilities.js";
 import { ItemSingleDeleteDialog } from "./ItemSingleDeleteDialog.js";
 import { ItemSingleEditDialog } from "./ItemSingleEditDialog.js";
 import PropTypes from "prop-types";
+import { useSnackbar } from "../../../App/AppSnackbar.js";
 
 export const EntityManageDialog = ({ Entity,
-    dialogTitle, dialogInstructionsTable, dialogInstructionsForm,
     dialogItems, setDialogItems,
     dialogFieldDefinitions, dialogTableFields,
     dialogIsOpen, setDialogIsOpen,
-    handleItemCreate, handleItemEdit,
     searchBoxFields, searchBoxPlaceholder, itemSearchQuery, setItemSearchQuery,
 
     internalDeleteDialogIsOpen, setInternalDeleteDialogIsOpen,
@@ -30,11 +29,21 @@ export const EntityManageDialog = ({ Entity,
     internalEditDialogIsOpen, setInternalEditDialogIsOpen,
     internalEditDialogItem, 
 
+    refreshAllItems,
+
     onClose
 }) => {
 
     const blankItem = getBlankItemFields(dialogFieldDefinitions);
     const [itemToAdd, setItemToAdd] = useState(blankItem);
+    const showSnackbar = useSnackbar();
+
+
+    // const [internalEditDialogItem, setInternalEditDialogItem] = useState(null);
+    // const [internalEditDialogIsOpen, setInternalEditDialogIsOpen] = useState(false);
+    
+    // const [internalDeleteDialogItem, setInternalDeleteDialogItem] = useState(null);
+    // const [internalDeleteDialogIsOpen, setInternalDeleteDialogIsOpen] = useState(false);
 
     const visibleItems = useMemo(() => {
         return searchItems(itemSearchQuery, dialogItems, searchBoxFields);
@@ -46,6 +55,9 @@ export const EntityManageDialog = ({ Entity,
         );
     }, [dialogItems, visibleItems]);
 
+    const singularCapitalized = Entity?.singular.substr(0, 1).toUpperCase() + Entity?.singular.substr(1).toLowerCase();
+    const pluralCapitalized = Entity?.plural.substr(0, 1).toUpperCase() + Entity?.plural.substr(1).toLowerCase();
+
     return (
         <>
             <Dialog fullWidth={true} maxWidth="lg" sx={{ zIndex: 10000 }}
@@ -56,8 +68,7 @@ export const EntityManageDialog = ({ Entity,
                     setDialogIsOpen(false);
                 }}
             >
-                <DialogTitle textAlign="center" variant="h4">{dialogTitle}
-                </DialogTitle>
+                <DialogTitle textAlign="center" variant="h4">Manage {pluralCapitalized}</DialogTitle>
                 <DialogContent>
                     <Stack spacing={2}
                         sx={{
@@ -69,27 +80,38 @@ export const EntityManageDialog = ({ Entity,
             "create"
             `
                         }}>
-                        <Box sx={{ gridArea: "update" }}>
-                            <Stack spacing={2} sx={{ height: "300px" }}>
-                                <Stack direction="row" spacing={2} justifyContent="space-between" alignItems="center">
-                                    <DialogContentText textAlign="left" variant="h6">{dialogInstructionsTable}</DialogContentText>
-                                    <SearchBox searchQuery={itemSearchQuery} setSearchQuery={setItemSearchQuery}
-                                        placeholder={searchBoxPlaceholder} width="40%"
-                                    />
-                                </Stack>
+                        {dialogItems.length > 0 && (
+                            <>
+                                <Box sx={{ gridArea: "update" }}>
+                                    <Stack spacing={2} sx={{ height: "300px" }}>
+                                        <Stack direction="row" spacing={2} justifyContent="space-between" alignItems="center">
+                                            <DialogContentText textAlign="left" variant="h6">Edit or delete existing {Entity.plural}</DialogContentText>
+                                            <SearchBox searchQuery={itemSearchQuery} setSearchQuery={setItemSearchQuery}
+                                                placeholder={searchBoxPlaceholder} width="40%"
+                                            />
+                                        </Stack>
 
-                                {entityDataTable}
+                                        {entityDataTable}
 
-                            </Stack>
-                        </Box>
-                        <Divider />
+                                    </Stack>
+                                </Box>
+                                <Divider />
+                            </>
+                        )}
                         <Box sx={{ gridArea: "create" }}>
                             <Stack spacing={2}>
-                                <DialogContentText textAlign="left" variant="h6">{dialogInstructionsForm}</DialogContentText>
+                                <DialogContentText textAlign="left" variant="h6">Create a new {Entity.singular}</DialogContentText>
                                 <Stack component="form"
                                     onSubmit={(e) => {
                                         e.preventDefault();
-                                        handleItemCreate(itemToAdd);
+                                        Entity.handleMultiCreate([itemToAdd]).then(([{status}]) => {
+                                            if(status == "fulfilled") {
+                                                refreshAllItems();
+                                                showSnackbar(`${singularCapitalized} created`, "success");
+                                            } else {
+                                                showSnackbar(`Failed to create ${Entity.singular}`, "error");
+                                            }
+                                        });
                                         setItemToAdd(getBlankItemFields(dialogFieldDefinitions));
                                     }}
                                     direction="row" alignItems="center" spacing={2} justifyContent="space-around">
@@ -154,13 +176,10 @@ export const EntityManageDialog = ({ Entity,
 
 
             <ItemSingleEditDialog
+                {...{Entity, refreshAllItems}}
                 editDialogIsOpen={internalEditDialogIsOpen}
                 setEditDialogIsOpen={setInternalEditDialogIsOpen}
                 editDialogItem={internalEditDialogItem}
-                entity={Entity.singular}
-                dialogTitle={`Edit ${Entity.singular[0].toUpperCase()}${Entity.singular.substring(1)}`}
-                dialogInstructions="Update"
-                handleItemEdit={handleItemEdit}
                 editDialogFieldDefinitions={dialogFieldDefinitions}
             />
 
@@ -182,17 +201,12 @@ export const EntityManageDialog = ({ Entity,
 
 EntityManageDialog.propTypes = {
     Entity: PropTypes.any,
-    dialogTitle: PropTypes.string,
-    dialogInstructionsTable: PropTypes.string,
-    dialogInstructionsForm: PropTypes.string,
     dialogItems: PropTypes.arrayOf(PropTypes.object),
     setDialogItems: PropTypes.func,
     dialogFieldDefinitions: PropTypes.arrayOf(PropTypes.object),
     dialogTableFields: PropTypes.PropTypes.arrayOf(PropTypes.object),
     dialogIsOpen: PropTypes.bool,
     setDialogIsOpen: PropTypes.func,
-    handleItemCreate: PropTypes.func,
-    handleItemEdit: PropTypes.func,
     searchBoxFields: PropTypes.arrayOf(PropTypes.string),
     searchBoxPlaceholder: PropTypes.string,
     itemSearchQuery: PropTypes.string,
@@ -203,5 +217,6 @@ EntityManageDialog.propTypes = {
     internalEditDialogIsOpen: PropTypes.bool,
     setInternalEditDialogIsOpen: PropTypes.func,
     internalEditDialogItem: PropTypes.object,
+    refreshAllItems: PropTypes.func,
     onClose: PropTypes.func
 };

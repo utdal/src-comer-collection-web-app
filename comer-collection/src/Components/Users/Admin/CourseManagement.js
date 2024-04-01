@@ -462,7 +462,6 @@ const CourseManagement = () => {
 
             <ItemSingleEditDialog
                 Entity={Course}
-                dialogInstructions={"Edit the course fields, then click 'Save'."}
                 editDialogItem={editDialogCourse}
                 refreshAllItems={fetchData}
                 {...{ editDialogFieldDefinitions, editDialogIsOpen, setEditDialogIsOpen }} />
