@@ -849,9 +849,6 @@ const ImageManagement = () => {
 
             <EntityManageDialog
                 Entity={Artist}
-                dialogTitle="Manage Artists"
-                dialogInstructionsTable="Edit or delete existing artists"
-                dialogInstructionsForm="Create a new artist"
                 dialogItems={artists}
                 setDialogItems={setArtists}
                 dialogFieldDefinitions={artistFieldDefinitions}
@@ -875,9 +872,6 @@ const ImageManagement = () => {
 
             <EntityManageDialog
                 Entity={Tag}
-                dialogTitle="Manage Tags"
-                dialogInstructionsTable="Edit or delete existing tags"
-                dialogInstructionsForm="Create a new tag"
                 dialogItems={tags}
                 setDialogItems={setTags}
                 dialogFieldDefinitions={tagFieldDefinitions}
