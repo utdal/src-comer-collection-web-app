@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useMemo, useState } from "react";
 import {
     Stack,
     Button,
-    Typography, Box, IconButton, Paper
+    Typography, Box, Paper
 } from "@mui/material";
 import { Unauthorized } from "../../ErrorPages/Unauthorized.js";
 import SearchBox from "../Tools/SearchBox.js";
@@ -22,11 +22,7 @@ import {
     FilterAltOffOutlinedIcon,
     AddIcon,
     SearchIcon,
-    RefreshIcon,
-    EditIcon,
-    DeleteIcon,
-    PersonIcon,
-    PersonAddIcon,
+    RefreshIcon, PersonAddIcon,
     PersonRemoveIcon,
     CheckIcon,
     GroupAddIcon,
@@ -39,6 +35,7 @@ import {
 import { useTitle } from "../../App/AppTitle.js";
 import { useAccountNav } from "../Account.js";
 import { Course } from "../Tools/Entities/Course.js";
+import { User } from "../Tools/Entities/User.js";
 
 
 const CourseManagement = () => {
@@ -171,7 +168,7 @@ const CourseManagement = () => {
         {
             columnDescription: "ID",
             generateTableCell: (course) => (
-                <Typography variant="body1">{course.id}</Typography>
+                <Course.TableCells.ID {...{course}} />
             ),
             generateSortableValue: (course) => course.id
         },
@@ -186,91 +183,52 @@ const CourseManagement = () => {
         {
             columnDescription: "Start",
             generateTableCell: (course) => (
-                <Stack direction="column" padding={0}>
-                    <Typography variant="body1">
-                        {new Date(course.date_start).toLocaleDateString([], {
-                            year: "numeric",
-                            month: "short",
-                            day: "numeric",
-                            weekday: "short"
-                        })}
-                    </Typography>
-                    <Typography variant="body1">{new Date(course.date_start).toLocaleTimeString([], {
-                        hour: "numeric",
-                        minute: "2-digit"
-                    })}</Typography>
-                </Stack>
+                <Course.TableCells.StartDateTimeStacked {...{course}} />
             ),
             generateSortableValue: (course) => new Date(course.date_start)
         },
         {
             columnDescription: "End",
             generateTableCell: (course) => (
-                <Stack direction="column" padding={0}>
-                    <Typography variant="body1">
-                        {new Date(course.date_end).toLocaleDateString([], {
-                            year: "numeric",
-                            month: "short",
-                            day: "numeric",
-                            weekday: "short"
-                        })}
-                    </Typography>
-                    <Typography variant="body1">{new Date(course.date_end).toLocaleTimeString([], {
-                        hour: "numeric",
-                        minute: "2-digit"
-                    })}</Typography>
-                </Stack>
+                <Course.TableCells.EndDateTimeStacked {...{course}} />
             ),
             generateSortableValue: (course) => new Date(course.date_end)
         },
         {
             columnDescription: "Status",
             generateTableCell: (course) => (
-                <Typography variant="body1">{course.status}</Typography>
+                <Course.TableCells.Status {...{course}} />
             )
         },
         {
             columnDescription: "Enrollment",
             generateTableCell: (course) => (
-                <Stack direction="row" spacing={1} alignItems="center">
-                    <Button variant="outlined" color="primary" startIcon={<PersonIcon />}
-                        onClick={() => {
-                            setAssignUserDialogCourses([course]);
-                            setAssignUserDialogIsOpen(true);
-                        }}
-                    >
-                        <Typography variant="body1">{course.Users.length}</Typography>
-                    </Button>
-                </Stack>
+                <Course.TableCells.UserAssignmentButton {...{course}} onClick={() => {
+                    setAssignUserDialogCourses([course]);
+                    setAssignUserDialogIsOpen(true);
+                }} />
             )
         },
         {
             columnDescription: "Notes",
             generateTableCell: (course) => (
-                <Typography variant="body1">{course.notes}</Typography>
+                <Course.TableCells.Notes {...{course}} />
             )
         },
         {
             columnDescription: "Options",
             generateTableCell: (course) => (
                 <>
-                    <IconButton
+                    <Course.TableCells.EditButton 
                         onClick={() => {
                             setEditDialogCourse(course);
                             setEditDialogIsOpen(true);
-                        }}
-                    >
-                        <EditIcon />
-                    </IconButton>
-                    <IconButton
-                        disabled={course.Users.length > 0}
+                        }} />
+                    <Course.TableCells.DeleteButton {...{course}}
                         onClick={() => {
                             setDeleteDialogCourse(course);
                             setDeleteDialogIsOpen(true);
-                        }}
-                    >
-                        <DeleteIcon />
-                    </IconButton>
+                        }} />
                 </>
             )
         }
@@ -291,14 +249,14 @@ const CourseManagement = () => {
         {
             columnDescription: "Name",
             generateTableCell: (user) => (
-                <Typography variant="body1">{user.full_name_reverse ?? "not set"}</Typography>
+                <User.TableCells.Name {...{user}} />
             ),
             generateSortableValue: (user) => user.full_name_reverse?.toLowerCase() ?? ""
         },
         {
             columnDescription: "Email",
             generateTableCell: (user) => (
-                <Typography variant="body1">{user.email}</Typography>
+                <User.TableCells.Email {...{user}} />
             )
         }
     ];

@@ -33,12 +33,14 @@ class User extends Entity {
             );
         },
         Email({ user, onClick }) {
-            return (
+            return onClick && (
                 <Button color="grey"
                     variant="text" sx={{ textTransform: "unset" }}
                     onClick={onClick}>
                     <Typography variant="body1">{user.email}</Typography>
                 </Button>
+            ) || !onClick && (
+                <Typography variant="body1" color="grey">{user.email}</Typography>
             );
         },
         PasswordChangeCurrentAdmin({ user, onClick }) {
