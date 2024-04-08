@@ -4,7 +4,8 @@ const { sequelize } = db;
 import { Op } from "sequelize";
 
 
-const manageManyToManyAssociation = async (req, res, next, model, association, action, primaryIds, secondaryIds) => {
+const manageManyToManyAssociation = async (req, res, next, model, association, primaryIds, secondaryIds) => {
+    const action = req.body.action;
     try {
         if (!Array.isArray(primaryIds)) {
             throw "primaryIds must be an array";

@@ -4,8 +4,8 @@ const router = Router();
 import { listArtists, createArtist, updateArtist, deleteArtist, getArtist } from "./controllers/artists.js";
 import { deleteImage, updateImage, listImages, getImage, createImage } from "./controllers/images.js";
 import { deleteTag, listTags, getTag, createTag, updateTag } from "./controllers/tags.js";
-import { assignImageTags, unassignImageTags } from "./controllers/imagetags.js";
-import { assignImageArtists, unassignImageArtists } from "./controllers/imageartists.js";
+import { manageImageTags } from "./controllers/imagetags.js";
+import { manageImageArtists } from "./controllers/imageartists.js";
 
 
 // Handle artists
@@ -33,13 +33,11 @@ router.delete("/tags/:tagId(\\d+)", deleteTag);
 
 
 // Handle image/tag assignments
-router.put("/imagetags/assign", assignImageTags);
-router.put("/imagetags/unassign", unassignImageTags);
+router.put("/imagetags", manageImageTags);
 
 
 // Handle image/artist assignments
-router.put("/imageartists/assign", assignImageArtists);
-router.put("/imageartists/unassign", unassignImageArtists);
+router.put("/imageartists", manageImageArtists);
 
 
 

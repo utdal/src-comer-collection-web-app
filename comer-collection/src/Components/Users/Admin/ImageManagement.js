@@ -154,7 +154,8 @@ const ImageManagement = () => {
 
     const handleAssignImagesToArtist = useCallback(async (artistId, imageIds) => {
         try {
-            await sendAuthenticatedRequest("PUT", "/api/admin/imageartists/assign", {
+            await sendAuthenticatedRequest("PUT", "/api/admin/imageartists", {
+                action: "assign",
                 images: imageIds,
                 artists: [artistId]
             });
@@ -168,7 +169,8 @@ const ImageManagement = () => {
 
     const handleUnassignImagesFromArtist = useCallback(async (artistId, imageIds) => {
         try {
-            await sendAuthenticatedRequest("PUT", "/api/admin/imageartists/unassign", {
+            await sendAuthenticatedRequest("PUT", "/api/admin/imageartists", {
+                action: "unassign",
                 images: imageIds,
                 artists: [artistId]
             });
@@ -183,7 +185,8 @@ const ImageManagement = () => {
 
     const handleAssignImagesToTag = useCallback(async (tagId, imageIds) => {
         try {
-            await sendAuthenticatedRequest("PUT", "/api/admin/imagetags/assign", {
+            await sendAuthenticatedRequest("PUT", "/api/admin/imagetags", {
+                action: "assign",
                 images: imageIds,
                 tags: [tagId]
             });
@@ -197,7 +200,8 @@ const ImageManagement = () => {
 
     const handleUnassignImagesFromTag = useCallback(async (tagId, imageIds) => {
         try {
-            await sendAuthenticatedRequest("PUT", "/api/admin/imagetags/unassign", {
+            await sendAuthenticatedRequest("PUT", "/api/admin/imagetags", {
+                action: "unassign",
                 images: imageIds,
                 tags: [tagId]
             });

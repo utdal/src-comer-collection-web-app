@@ -122,7 +122,8 @@ const UserManagement = () => {
 
     const handleAssignUsersToCourse = useCallback(async (courseId, userIds) => {
         try {
-            await sendAuthenticatedRequest("PUT", "/api/admin/enrollments/assign", {
+            await sendAuthenticatedRequest("PUT", "/api/admin/enrollments", {
+                action: "assign",
                 users: userIds,
                 courses: [courseId]
             });
@@ -138,7 +139,8 @@ const UserManagement = () => {
 
     const handleUnassignUsersFromCourse = useCallback(async (courseId, userIds) => {
         try {
-            await sendAuthenticatedRequest("PUT", "/api/admin/enrollments/unassign", {
+            await sendAuthenticatedRequest("PUT", "/api/admin/enrollments", {
+                action: "unassign",
                 users: userIds,
                 courses: [courseId]
             });

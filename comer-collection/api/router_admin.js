@@ -3,7 +3,7 @@ const router = Router();
 
 import { deleteUser, updateUser, createUser, listUsers, deactivateUser, activateUser, getUser, resetUserPassword, changeUserAccess } from "./controllers/users.js";
 import { deleteCourse, updateCourse, createCourse, listCourses, getCourse } from "./controllers/courses.js";
-import { assignUserCourses, unassignUserCourses } from "./controllers/enrollments.js";
+import { manageUserCourses } from "./controllers/enrollments.js";
 import { listExhibitions, getExhibition, adminEditExhibitionSettings, adminDeleteExhibition, loadExhibitionAdmin, saveExhibitionAdmin } from "./controllers/exhibitions.js";
 
 
@@ -34,8 +34,7 @@ router.delete("/courses/:courseId(\\d+)", deleteCourse);
 
 
 // Handle user/course assignments
-router.put("/enrollments/assign", assignUserCourses);
-router.put("/enrollments/unassign", unassignUserCourses);
+router.put("/enrollments", manageUserCourses);
 
 
 // Handle exhibitions
