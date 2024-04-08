@@ -2,10 +2,9 @@ import React, { useCallback, useEffect, useMemo, useState } from "react";
 import {
     Stack,
     Button,
-    Typography,
-    Switch, Box, IconButton, Paper
+    Typography, Box, Paper
 } from "@mui/material";
-import { FilterAltOffOutlinedIcon, GroupAddIcon, LockResetIcon, OpenInNewIcon, RefreshIcon, EditIcon, DeleteIcon, SchoolIcon, ClearIcon, CheckIcon, PersonAddIcon, PersonIcon, SecurityIcon, PhotoCameraBackIcon, SearchIcon, InfoIcon, LockIcon, AccessTimeIcon, WarningIcon, CollectionManagerIcon } from "../../IconImports.js";
+import { FilterAltOffOutlinedIcon, GroupAddIcon, RefreshIcon, SchoolIcon, ClearIcon, CheckIcon, PersonAddIcon, SearchIcon, InfoIcon, LockIcon, AccessTimeIcon, WarningIcon } from "../../IconImports.js";
 import { Unauthorized } from "../../ErrorPages/Unauthorized.js";
 import SearchBox from "../Tools/SearchBox.js";
 import { ItemSingleDeleteDialog } from "../Tools/Dialogs/ItemSingleDeleteDialog.js";
@@ -26,6 +25,7 @@ import { useTitle } from "../../App/AppTitle.js";
 import { UserResetPasswordDialog } from "../Tools/Dialogs/UserResetPasswordDialog.js";
 import { useAccountNav } from "../Account.js";
 import { User } from "../Tools/Entities/User.js";
+import { Entity } from "../Tools/Entities/Entity.js";
 
 
 const UserManagement = () => {
@@ -205,12 +205,7 @@ const UserManagement = () => {
         {
             columnDescription: "ID",
             generateTableCell: (user) => (
-                <Stack direction="row" alignItems="center" spacing={1}>
-                    <Typography variant="body1">{user.id}</Typography>
-                    {user.id == appUser.id && (
-                        <PersonIcon color="secondary" />
-                    )}
-                </Stack>
+                <User.TableCells.ID {...{user}} />
             ),
             generateSortableValue: (user) => user.id
         },
@@ -218,22 +213,16 @@ const UserManagement = () => {
             columnDescription: "Name",
             maxWidth: "150px",
             generateTableCell: (user) => (
-                user.has_name ? (
-                    <Typography variant="body1">{user.full_name_reverse}</Typography>
-                ) : (
-                    <Typography variant="body1" sx={{ opacity: 0.5 }}>Not set</Typography>
-                )
+                <User.TableCells.Name {...{user}} />
             ),
             generateSortableValue: (user) => user.full_name_reverse.toLowerCase()
         },
         {
             columnDescription: "Email",
             generateTableCell: (user) => (
-                <Button color="grey"
-                    variant="text" sx={{ textTransform: "unset" }}
-                    onClick={() => { handleCopyToClipboard(user, "email"); }}>
-                    <Typography variant="body1">{user.email}</Typography>
-                </Button>
+                <User.TableCells.Email {...{user}} onClick={() => { 
+                    handleCopyToClipboard(user, "email");
+                }} />
             ),
             generateSortableValue: (user) => user.email
         },
@@ -242,27 +231,14 @@ const UserManagement = () => {
             generateTableCell: (user) => (
                 <>
                     {appUser.id == user.id ? (
-                        <Button startIcon={<OpenInNewIcon />} color={user.is_admin_or_collection_manager ? "secondary" : "primary"}
-                            variant="outlined"
-                            onClick={() => {
-                                navigate("/Account/ChangePassword");
-                            }}>
-                            <Typography variant="body1">Change</Typography>
-                        </Button>
+                        <User.TableCells.PasswordChangeCurrentAdmin {...{user}} onClick={() => {
+                            navigate("/Account/ChangePassword");
+                        }} />
                     ) : (
-                        <Button
-                            startIcon={user.has_password ? <LockResetIcon /> : <LockIcon />}
-                            color={user.is_admin_or_collection_manager ? "secondary" : "primary"}
-                            itemID={user.id}
-                            variant={user.has_password ? "outlined" : "contained"}
-                            onClick={() => {
-                                setResetPasswordDialogUser(user);
-                                setResetPasswordDialogIsOpen(true);
-                            }}>
-                            <Typography variant="body1">
-                                {user.has_password ? "Reset" : "Set"}
-                            </Typography>
-                        </Button>
+                        <User.TableCells.PasswordSetOrReset {...{user}} onClick={() => {
+                            setResetPasswordDialogUser(user);
+                            setResetPasswordDialogIsOpen(true);
+                        }} />
                     )}
                 </>
             )
@@ -270,92 +246,49 @@ const UserManagement = () => {
         {
             columnDescription: "Courses",
             generateTableCell: (user) => (
-                <Stack direction="row" spacing={1} alignItems="center">
-                    <Button variant="text"
-                        color="lightgrey"
-                        startIcon={<SchoolIcon />}
-                        onClick={() => {
-                            setAssignCourseDialogUsers([user]);
-                            setAssignCourseDialogIsOpen(true);
-                        }}
-                    >
-                        <Typography variant="body1">{user.Courses.length}</Typography>
-                    </Button>
-                </Stack>
+                <User.TableCells.CourseAssignmentButton {...{user}} onClick={() => {
+                    setAssignCourseDialogUsers([user]);
+                    setAssignCourseDialogIsOpen(true);
+                }} />
             )
         },
         {
             columnDescription: "Exhibitions",
             generateTableCell: (user) => (
-                <Stack direction="row" spacing={1}>
-                    <Button variant="text" sx={{ textTransform: "unset" }}
-                        color={user.is_admin_or_collection_manager ? "secondary" : "primary"}
-                        disabled startIcon={<PhotoCameraBackIcon />}
-                        onClick={() => {
-                            // setAssignCourseDialogUser(user);
-                            // setAssignCourseDialogCourses([...user.Courses]);
-                            // setAssignCourseDialogIsOpen(true);
-                        }}
-                    >
-                        <Typography variant="body1">{user.Exhibitions.length} of {user.exhibition_quota}</Typography>
-                    </Button>
-                </Stack>
+                <User.TableCells.UserExhibitionCountButton {...{user}} />
             )
         },
         {
             columnDescription: "User Type",
             generateTableCell: (user) => (
-                <Button color="lightgrey" sx={{ textTransform: "unset" }}
-                    disabled={user.id == appUser.id}
-                    onClick={() => {
-                        setPrivilegesDialogUser(user);
-                        setPrivilegesDialogIsOpen(true);
-                    }}
-                    startIcon={
-                        user.is_admin && (<SecurityIcon color="secondary" />) || 
-                        user.is_collection_manager && (<CollectionManagerIcon color="secondary" />) || 
-                        (<PersonIcon color="primary" />)
-                    }
-                >
-                    <Typography variant="body1" align="left" width={90} >{user.is_admin ? "Administrator" : user.is_collection_manager ? "Collection Manager" : "Curator"}</Typography>
-                </Button>
+                <User.TableCells.UserTypeButton {...{user}} onClick={() => {
+                    setPrivilegesDialogUser(user);
+                    setPrivilegesDialogIsOpen(true);
+                }} />
             )
         },
         {
             columnDescription: "Active",
             generateTableCell: (user) => (
-                <Switch
-                    itemID={user.id}
-                    checked={user.is_active && user.has_password}
-                    disabled={user.id == appUser.id || !user.has_password}
-                    color={user.is_admin_or_collection_manager ? "secondary" : "primary"}
-                    onClick={(e) => {
-                        handleChangeUserActivationStatus(e.target.parentElement.attributes.itemid.value, e.target.checked);
-                    }}
-                />
+                <User.TableCells.UserActivationSwitch {...{user}} onClick={(e) => {
+                    handleChangeUserActivationStatus(e.target.parentElement.attributes.itemid.value, e.target.checked);
+                }} />
             )
         },
         {
             columnDescription: "Options",
             generateTableCell: (user) => (
                 <Stack direction="row">
-                    <IconButton
-                        onClick={() => {
-                            setEditDialogUser(user);
-                            setEditDialogIsOpen(true);
-                        }}
-                    >
-                        <EditIcon />
-                    </IconButton>
-                    <IconButton
+                    <Entity.TableCells.EditButton onClick={() => {
+                        setEditDialogUser(user);
+                        setEditDialogIsOpen(true);
+                    }} />
+                    <Entity.TableCells.DeleteButton 
                         disabled={Boolean(user.Courses.length || user.Exhibitions.length || user.id == appUser.id)}
                         onClick={() => {
                             setDeleteDialogUser(user);
                             setDeleteDialogIsOpen(true);
-                        }}
-                    >
-                        <DeleteIcon />
-                    </IconButton>
+                        }} />
                 </Stack>
             )
         }

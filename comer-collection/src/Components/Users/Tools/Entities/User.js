@@ -1,10 +1,124 @@
+/* eslint-disable react/prop-types */
+import { Button, Stack, Switch, Typography } from "@mui/material";
 import { sendAuthenticatedRequest } from "../HelperMethods/APICalls.js";
 import { Entity } from "./Entity.js";
+import React from "react";
+import { useAppUser } from "../../../App/AppUser.js";
+import { CollectionManagerIcon, LockIcon, LockResetIcon, OpenInNewIcon, PersonIcon, PhotoCameraBackIcon, SchoolIcon, SecurityIcon } from "../../../IconImports.js";
 
 class User extends Entity {
     static baseUrl = "/api/admin/users";
     static singular = "user";
     static plural = "users";
+
+    static TableCells = {
+        ID({ user }) {
+            const [appUser] = useAppUser();
+            return (
+                <Stack direction="row" alignItems="center" spacing={1}>
+                    <Typography variant="body1">{user.id}</Typography>
+                    {user.id == appUser.id && (
+                        <PersonIcon color="secondary" />
+                    )}
+                </Stack>
+            );
+        },
+        Name({ user }) {
+            return (
+                user.has_name ? (
+                    <Typography variant="body1">{user.full_name_reverse}</Typography>
+                ) : (
+                    <Typography variant="body1" sx={{ opacity: 0.5 }}>Not set</Typography>
+                )
+            );
+        },
+        Email({ user, onClick }) {
+            return (
+                <Button color="grey"
+                    variant="text" sx={{ textTransform: "unset" }}
+                    onClick={onClick}>
+                    <Typography variant="body1">{user.email}</Typography>
+                </Button>
+            );
+        },
+        PasswordChangeCurrentAdmin({ user, onClick }) {
+            return (
+                <Button startIcon={<OpenInNewIcon />} color={user.is_admin_or_collection_manager ? "secondary" : "primary"}
+                    variant="outlined"
+                    onClick={onClick}>
+                    <Typography variant="body1">Change</Typography>
+                </Button>
+            );
+        },
+        PasswordSetOrReset({ user, onClick }) {
+            return (
+                <Button
+                    startIcon={user.has_password ? <LockResetIcon /> : <LockIcon />}
+                    color={user.is_admin_or_collection_manager ? "secondary" : "primary"}
+                    itemID={user.id}
+                    variant={user.has_password ? "outlined" : "contained"}
+                    onClick={onClick}>
+                    <Typography variant="body1">
+                        {user.has_password ? "Reset" : "Set"}
+                    </Typography>
+                </Button>
+            );
+        },
+        CourseAssignmentButton({ user, onClick }) {
+            return (
+                <Stack direction="row" spacing={1} alignItems="center">
+                    <Button variant="text"
+                        color="lightgrey"
+                        startIcon={<SchoolIcon />}
+                        onClick={onClick}
+                    >
+                        <Typography variant="body1">{user.Courses.length}</Typography>
+                    </Button>
+                </Stack>
+            );
+        },
+        UserExhibitionCountButton({ user, onClick }) {
+            return (
+                <Stack direction="row" spacing={1}>
+                    <Button variant="text" sx={{ textTransform: "unset" }}
+                        color={user.is_admin_or_collection_manager ? "secondary" : "primary"}
+                        disabled startIcon={<PhotoCameraBackIcon />}
+                        {...{onClick}}
+                    >
+                        <Typography variant="body1">{user.Exhibitions.length} of {user.exhibition_quota}</Typography>
+                    </Button>
+                </Stack>
+            );
+        },
+        UserTypeButton({ user, onClick }) {
+            const [appUser] = useAppUser();
+            return (
+                <Button color="lightgrey" sx={{ textTransform: "unset" }}
+                    disabled={user.id == appUser.id}
+                    {...{onClick}}
+                    startIcon={
+                        user.is_admin && (<SecurityIcon color="secondary" />) || 
+                        user.is_collection_manager && (<CollectionManagerIcon color="secondary" />) || 
+                        (<PersonIcon color="primary" />)
+                    }
+                >
+                    <Typography variant="body1" align="left" width={90} >{user.is_admin ? "Administrator" : user.is_collection_manager ? "Collection Manager" : "Curator"}</Typography>
+                </Button>
+            );
+        },
+        UserActivationSwitch({ user, onClick }) {
+            const [appUser] = useAppUser();
+            return (
+                <Switch
+                    itemID={user.id}
+                    checked={user.is_active && user.has_password}
+                    disabled={user.id == appUser.id || !user.has_password}
+                    color={user.is_admin_or_collection_manager ? "secondary" : "primary"}
+                    {...{onClick}}
+                />
+            );
+        }
+    };
 
     static handleChangeUserAccess(userId, newAccess) {
         return new Promise((resolve, reject) => {

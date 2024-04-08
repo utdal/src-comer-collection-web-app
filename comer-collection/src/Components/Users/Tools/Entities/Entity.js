@@ -1,4 +1,8 @@
+/* eslint-disable react/prop-types */
+import { IconButton } from "@mui/material";
 import { sendAuthenticatedRequest } from "../HelperMethods/APICalls.js";
+import { DeleteIcon, EditIcon } from "../../../IconImports.js";
+import React from "react";
 
 export const capitalized = (string) => {
     return string.substr(0, 1).toUpperCase() + string.substr(1).toLowerCase();
@@ -10,6 +14,24 @@ class Entity {
 
     static singular = "item";
     static plural = "items";
+
+
+    static TableCells = {
+        EditButton({ onClick, disabled }) {
+            return (
+                <IconButton {...{onClick, disabled}}>
+                    <EditIcon />
+                </IconButton>
+            );
+        },
+        DeleteButton({ onClick, disabled }) {
+            return (
+                <IconButton {...{onClick, disabled}}>
+                    <DeleteIcon />
+                </IconButton>
+            );
+        }
+    };
 
 
     static handleMultiCreate([...newItems]) {
