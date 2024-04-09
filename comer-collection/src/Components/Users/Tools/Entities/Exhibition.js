@@ -1,8 +1,8 @@
 /* eslint-disable react/prop-types */
-import { Stack, Typography } from "@mui/material";
+import { Button, Stack, Typography } from "@mui/material";
 import { Entity } from "./Entity.js";
 import React from "react";
-import { LockIcon, PublicIcon, VpnLockIcon } from "../../../IconImports.js";
+import { LockIcon, OpenInNewIcon, PublicIcon, VpnLockIcon } from "../../../IconImports.js";
 
 class Exhibition extends Entity {
     static baseUrl = "/api/admin/exhibitions";
@@ -14,6 +14,23 @@ class Exhibition extends Entity {
     }
 
     static TableCells = {
+        ID({ exhibition }) {
+            return (
+                <Typography variant="body1">{exhibition.id}</Typography>
+            );
+        },
+        Title({ exhibition }) {
+            return (
+                <Typography variant="body1">{exhibition.title}</Typography>
+            );
+        },
+        OpenInNewTab({ exhibition }) {
+            return (
+                <Button variant="outlined" endIcon={<OpenInNewIcon />} href={`/Exhibitions/${exhibition.id}`} target="_blank">
+                    <Typography variant="body1">Open</Typography>
+                </Button>
+            );
+        },
         DateCreated({ exhibition }) {
             return (
                 <Typography variant="body1">{Entity.formatDate(exhibition.date_created)}, {Entity.formatTime(exhibition.date_created)}</Typography>

@@ -697,6 +697,7 @@ const ImageManagement = () => {
 
             <AssociationManagementDialog
                 Association={ImageArtist}
+                editMode={true}
                 primaryItems={assignArtistDialogImages}
                 secondaryItemsAll={artists}
                 secondariesByPrimary={artistsByImage}
@@ -720,6 +721,7 @@ const ImageManagement = () => {
 
             <AssociationManagementDialog
                 Association={ImageTag}
+                editMode={true}
                 primaryItems={assignTagDialogImages}
                 secondaryItemsAll={tags}
                 secondariesByPrimary={tagsByImage}

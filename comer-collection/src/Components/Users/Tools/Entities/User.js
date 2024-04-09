@@ -102,8 +102,8 @@ class User extends Entity {
             return (
                 <Stack direction="row" spacing={1}>
                     <Button variant="text" sx={{ textTransform: "unset" }}
-                        color={user.is_admin_or_collection_manager ? "secondary" : "primary"}
-                        disabled startIcon={<PhotoCameraBackIcon />}
+                        color="lightgrey"
+                        startIcon={<PhotoCameraBackIcon />}
                         {...{onClick}}
                     >
                         <Typography variant="body1">{user.Exhibitions.length} of {user.exhibition_quota}</Typography>

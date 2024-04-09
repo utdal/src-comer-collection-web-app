@@ -29,7 +29,7 @@ const computeSecondaryItemsAssigned = (secondaryItemsAll, secondariesByPrimary, 
 };
 
 export const AssociationManagementDialog = ({
-    Association, primaryItems,
+    Association, editMode, primaryItems,
     secondaryItemsAll, secondariesByPrimary,
     secondaryTableFields,
     dialogInstructions, dialogButtonForSecondaryManagement,
@@ -41,7 +41,7 @@ export const AssociationManagementDialog = ({
 
     const showSnackbar = useSnackbar();
 
-    const secondaryTableFieldsAll = [...secondaryTableFields, {
+    const assignButtonColumnDefinition = {
         generateTableCell: (secondaryItem) => {
             const buttonColor = Association.secondary == User && secondaryItem.is_admin_or_collection_manager ? "secondary" : "primary";
             const quantity = secondaryItem.quantity_assigned;
@@ -83,9 +83,9 @@ export const AssociationManagementDialog = ({
                 );
             }
         }
-    }];
+    };
 
-    const secondaryTableFieldsAssignedOnly = [...secondaryTableFields, {
+    const unassignButtonColumnDefinition = {
         generateTableCell: (secondaryItem) => {
             const buttonColor = Association.secondary == User && secondaryItem.is_admin_or_collection_manager ? "secondary" : "primary";
             const quantity = secondaryItem.quantity_assigned;
@@ -108,7 +108,10 @@ export const AssociationManagementDialog = ({
                 </Button>
             );
         }
-    }];
+    };
+
+    const secondaryTableFieldsAll = editMode ? [...secondaryTableFields, assignButtonColumnDefinition] : secondaryTableFields;
+    const secondaryTableFieldsAssignedOnly = editMode ? [...secondaryTableFields, unassignButtonColumnDefinition] : secondaryTableFields;
 
     const [secondarySearchQuery, setSecondarySearchQuery] = useState("");
 
@@ -166,7 +169,7 @@ export const AssociationManagementDialog = ({
     const secondaryPluralCapitalized = Association.secondary.plural.substr(0, 1).toUpperCase() + Association.secondary.plural.substr(1);
 
     return (
-        <Dialog fullWidth={true} maxWidth="lg" sx={{ zIndex: 10000 }}
+        <Dialog fullWidth={true} maxWidth={editMode ? "lg" : "md"} sx={{ zIndex: 10000 }}
             open={dialogIsOpen} disableEscapeKeyDown
             onClose={(event, reason) => {
                 if (reason == "backdropClick")
@@ -176,8 +179,8 @@ export const AssociationManagementDialog = ({
         >
             <DialogTitle textAlign="center" variant="h4" sx={{ textOverflow: "ellipsis", wordWrap: "break-word" }}>
                 {primaryItems.length == 1 ?
-                    `Manage ${associationPluralCapitalized} for ${primaryItems[0].safe_display_name}` :
-                    `Manage ${associationPluralCapitalized} for ${primaryItems.length} Selected ${primaryPluralCapitalized}`}
+                    `${editMode ? "Manage" : "View"} ${associationPluralCapitalized} for ${primaryItems[0].safe_display_name}` :
+                    `${editMode ? "Manage" : "View"} ${associationPluralCapitalized} for ${primaryItems.length} Selected ${primaryPluralCapitalized}`}
             </DialogTitle>
             <DialogContent>
                 <DialogContentText variant="body1">{dialogInstructions}</DialogContentText>
@@ -190,10 +193,13 @@ export const AssociationManagementDialog = ({
                     )}
                 </Stack>
                 <Stack spacing={2} direction="row" padding={2}>
-                    <Stack sx={{ width: "50%", wordWrap: "break-word" }} spacing={2} textAlign="center">
-                        <Typography variant="h5">All {secondaryPluralCapitalized}</Typography>
-                        <Box maxHeight="350px">
-                            {secondaryItemsAll.length > 0 && secondaryItemsAllResults.length > 0 &&
+                    {
+                        editMode && (
+                            <>
+                                <Stack sx={{ width: "50%", wordWrap: "break-word" }} spacing={2} textAlign="center">
+                                    <Typography variant="h5">All {secondaryPluralCapitalized}</Typography>
+                                    <Box maxHeight="350px">
+                                        {secondaryItemsAll.length > 0 && secondaryItemsAllResults.length > 0 &&
                                 allTable
                                 || secondaryItemsAll.length > 0 && secondaryItemsAllResults.length == 0 && (
                                     <Box sx={{ width: "100%", height: "100%" }}>
@@ -203,18 +209,21 @@ export const AssociationManagementDialog = ({
                                         </Stack>
                                     </Box>
                                 ) || secondaryItemsAll.length == 0 && (
-                                <Box sx={{ width: "100%", height: "100%" }}>
-                                    <Stack direction="column" alignItems="center" justifyContent="center" paddingTop={2} spacing={2} sx={{ height: "100%", opacity: 0.5 }}>
-                                        <InfoIcon sx={{ fontSize: "150pt" }} />
-                                        <Typography variant="h4">This list is empty</Typography>
-                                    </Stack>
-                                </Box>
-                            )}
-                        </Box>
-                    </Stack>
-                    <Divider sx={{ borderWidth: "2px" }} />
-                    <Stack sx={{ width: "50%", wordWrap: "break-word" }} spacing={2} textAlign="center">
-                        <Typography variant="h5">Current {secondaryPluralCapitalized} for Selected {primaryPluralCapitalized}</Typography>
+                                            <Box sx={{ width: "100%", height: "100%" }}>
+                                                <Stack direction="column" alignItems="center" justifyContent="center" paddingTop={2} spacing={2} sx={{ height: "100%", opacity: 0.5 }}>
+                                                    <InfoIcon sx={{ fontSize: "150pt" }} />
+                                                    <Typography variant="h4">This list is empty</Typography>
+                                                </Stack>
+                                            </Box>
+                                        )}
+                                    </Box>
+                                </Stack>
+                                <Divider sx={{ borderWidth: "2px" }} />
+                            </>
+                        )
+                    }
+                    <Stack sx={{ width: editMode ? "50%" : "100%", wordWrap: "break-word" }} spacing={2} textAlign="center">
+                        {editMode && <Typography variant="h5">Current {secondaryPluralCapitalized} for Selected {primaryPluralCapitalized}</Typography>}
                         <Box maxHeight="350px">
                             {secondaryItemsAssigned.length > 0 && secondaryItemsAssignedResults.length > 0 && assignedTable
                                 || secondaryItemsAssigned.length > 0 && secondaryItemsAssignedResults.length == 0 && (
@@ -257,6 +266,7 @@ export const AssociationManagementDialog = ({
 
 AssociationManagementDialog.propTypes = {
     Association: PropTypes.any,
+    editMode: PropTypes.bool.isRequired,
     primaryItems: PropTypes.arrayOf(PropTypes.object).isRequired,
     secondaryItemsAll: PropTypes.arrayOf(PropTypes.object).isRequired,
     secondariesByPrimary: PropTypes.object.isRequired,

@@ -4,7 +4,7 @@ import {
 } from "@mui/material";
 import { Navigate, useNavigate } from "react-router";
 import { DataTable } from "./Tools/DataTable.js";
-import { PhotoCameraBackIcon, AddIcon, InfoIcon, OpenInNewIcon, SettingsIcon, DeleteIcon, SecurityIcon } from "../IconImports.js";
+import { PhotoCameraBackIcon, AddIcon, InfoIcon, SettingsIcon, DeleteIcon, SecurityIcon } from "../IconImports.js";
 import { sendAuthenticatedRequest } from "./Tools/HelperMethods/APICalls.js";
 import { ExhibitionSettingsDialog } from "./Tools/Dialogs/ExhibitionSettingsDialog.js";
 import { ItemSingleDeleteDialog } from "./Tools/Dialogs/ItemSingleDeleteDialog.js";
@@ -89,9 +89,7 @@ const MyExhibitions = () => {
             columnDescription: "Open",
             columnHeaderLabel: "",
             generateTableCell: (exhibition) => (
-                <Button variant="outlined" endIcon={<OpenInNewIcon />} href={`/Exhibitions/${exhibition.id}`} target="_blank">
-                    <Typography variant="body1">Open</Typography>
-                </Button>
+                <Exhibition.TableCells.OpenInNewTab {...{exhibition}} />
             )
         },
         {

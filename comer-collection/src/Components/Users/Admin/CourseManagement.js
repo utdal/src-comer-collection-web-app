@@ -323,6 +323,7 @@ const CourseManagement = () => {
 
             <AssociationManagementDialog
                 Association={EnrollmentCoursePrimary}
+                editMode={true}
                 primaryEntity="course"
                 secondaryEntity="user"
                 primaryItems={assignUserDialogCourses}
