@@ -16,6 +16,23 @@ class Entity {
     static plural = "items";
 
 
+    static formatDate = (date) => {
+        return new Date(date).toLocaleDateString([], {
+            year: "numeric",
+            month: "short",
+            day: "numeric",
+            weekday: "short"
+        });
+    };
+
+    static formatTime = (date) => {
+        return new Date(date).toLocaleTimeString([], {
+            hour: "numeric",
+            minute: "2-digit",
+            second: "2-digit"
+        });
+    };
+
     static TableCells = {
         EditButton({ onClick, disabled }) {
             return (

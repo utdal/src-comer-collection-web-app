@@ -2,28 +2,12 @@
 import { Button, Stack, Typography } from "@mui/material";
 import { Entity } from "./Entity.js";
 import React from "react";
-import { PersonIcon } from "../../../IconImports.js";
+import { AccessTimeIcon, CheckIcon, ExpiredIcon, PersonIcon } from "../../../IconImports.js";
 
 class Course extends Entity {
     static baseUrl = "/api/admin/courses";
     static singular = "course";
     static plural = "courses";
-
-    static formatDate = (date) => {
-        return new Date(date).toLocaleDateString([], {
-            year: "numeric",
-            month: "short",
-            day: "numeric",
-            weekday: "short"
-        });
-    };
-
-    static formatTime = (date) => {
-        return new Date(date).toLocaleTimeString([], {
-            hour: "numeric",
-            minute: "2-digit"
-        });
-    };
 
     static TableCells = {
         ID({ course }) {
@@ -38,7 +22,14 @@ class Course extends Entity {
         },
         Status({ course }) {
             return (
-                <Typography variant="body1">{course.status}</Typography>
+                <Stack direction="row" spacing={1}>
+                    {
+                        course.status == "Active" && <CheckIcon color="grey"/> ||
+                        course.status == "Upcoming" && <AccessTimeIcon color="grey"/> ||
+                        course.status == "Expired" && <ExpiredIcon color="grey"/>
+                    }
+                    <Typography variant="body1">{course.status}</Typography>
+                </Stack>
             );
         },
         StartDateTime({ course }) {

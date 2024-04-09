@@ -12,6 +12,7 @@ import { useAppUser } from "../App/AppUser.js";
 import { useSnackbar } from "../App/AppSnackbar.js";
 import { useTitle } from "../App/AppTitle.js";
 import { useAccountNav } from "./Account.js";
+import { Course } from "./Tools/Entities/Course.js";
 
 const Profile = () => {
 
@@ -33,54 +34,31 @@ const Profile = () => {
     const courseTableFields = [
         {
             columnDescription: "Course Name",
-            generateTableHeaderCell: () => (
-                <Typography variant="h6">Course Name</Typography>
-            ),
             generateTableCell: (course) => (
                 <Typography variant="body1">{course.name}</Typography>
             )
         },
         {
             columnDescription: "Start",
-            generateTableHeaderCell: () => (
-                <Typography variant="h6">Start</Typography>
-            ),
             generateTableCell: (course) => (
-                <Typography variant="body1">{new Date (course.date_start).toLocaleString()}</Typography>
+                <Course.TableCells.StartDateTime {...{course}} />
             )
         },
         {
             columnDescription: "End",
-            generateTableHeaderCell: () => (
-                <Typography variant="h6">End</Typography>
-            ),
             generateTableCell: (course) => (
-                <Typography variant="body1">{new Date (course.date_end).toLocaleString()}</Typography>
+                <Course.TableCells.EndDateTime {...{course}} />
             )
         },
         {
             columnDescription: "Status",
-            generateTableHeaderCell: () => (
-                <Typography variant="h6">Status</Typography>
-            ),
             generateTableCell: (course) => (
-                new Date(course.date_start).getTime() > new Date().getTime() && (
-                    <Typography variant="body1">Upcoming</Typography>
-                ) || 
-        new Date(course.date_end).getTime() < new Date().getTime() && (
-            <Typography variant="body1">Expired</Typography>
-        ) || 
-        new Date(course.date_end).getTime() >= new Date().getTime() && new Date(course.date_start).getTime() <= new Date().getTime() && (
-            <Typography variant="body1">Active</Typography>
-        )
+                <Course.TableCells.Status {...{course}} />
             )
         },
         {
             columnDescription: "Notes",
             maxWidth: "300px",
-            generateTableHeaderCell: () => (
-                <Typography variant="h6">Notes</Typography>
-            ),
             generateTableCell: (course) => (
                 <Typography variant="body1">{course.notes}</Typography>
             )
@@ -91,9 +69,6 @@ const Profile = () => {
     const userTableFields = [
         {
             columnDescription: "Name",
-            generateTableHeaderCell: () => (
-                <Typography variant="h6">Name</Typography>
-            ),
             generateTableCell: (user) => (
                 user.has_name ? (
                     <Typography variant="body1">{user.full_name}</Typography>
@@ -104,9 +79,6 @@ const Profile = () => {
         },
         {
             columnDescription: "Email",
-            generateTableHeaderCell: () => (
-                <Typography variant="h6">Email</Typography>
-            ),
             generateTableCell: (user) => (
                 <Button color="grey"
                     variant="text" sx={{textTransform: "unset"}}
@@ -117,9 +89,6 @@ const Profile = () => {
         },
         {
             columnDescription: "Password",
-            generateTableHeaderCell: () => (
-                <Typography variant="h6">Password Last Changed</Typography>
-            ),
             generateTableCell: (user) => (
                 <Stack direction="row" spacing={2} alignItems="center">
                     <Typography variant="body1">{new Date(appUser.pw_updated).toLocaleString()}</Typography>
@@ -135,9 +104,6 @@ const Profile = () => {
         },
         {
             columnDescription: "User Type",
-            generateTableHeaderCell: () => (
-                <Typography variant="h6">User Type</Typography>
-            ),
             generateTableCell: (user) => (
                 <Stack direction="row" spacing={1}>
                     <Typography variant="body1">{user.is_admin ? "Administrator" : user.is_collection_manager ? "Collection Manager" : "Curator"}</Typography>
@@ -147,9 +113,6 @@ const Profile = () => {
         },
         {
             columnDescription: "Exhibition Quota",
-            generateTableHeaderCell: () => (
-                <Typography variant="h6">Exhibition Quota</Typography>
-            ),
             generateTableCell: (user) => (
                 <Stack direction="row" spacing={1}>
                     <PhotoCameraBackIcon />
@@ -209,6 +172,8 @@ const Profile = () => {
                         NoContentIcon={SchoolIcon}
                         emptyMinHeight="400px"
                         noContentMessage="You are not enrolled in any courses."
+                        defaultSortAscending={false}
+                        defaultSortColumn="Start"
                     />
                 </Stack>
             </Stack>

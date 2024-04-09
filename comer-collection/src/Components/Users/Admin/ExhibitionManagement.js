@@ -6,7 +6,7 @@ import {
 } from "@mui/material";
 import { Unauthorized } from "../../ErrorPages/Unauthorized.js";
 import SearchBox from "../Tools/SearchBox.js";
-import { LockIcon, RefreshIcon, DeleteIcon, SearchIcon, InfoIcon, VpnLockIcon, PublicIcon, SettingsIcon, OpenInNewIcon, FilterAltOffOutlinedIcon, WarningIcon, AccessTimeIcon } from "../../IconImports.js";
+import { LockIcon, RefreshIcon, DeleteIcon, SearchIcon, InfoIcon, SettingsIcon, OpenInNewIcon, FilterAltOffOutlinedIcon, WarningIcon, AccessTimeIcon } from "../../IconImports.js";
 import { ItemSingleDeleteDialog } from "../Tools/Dialogs/ItemSingleDeleteDialog.js";
 import { DataTable } from "../Tools/DataTable.js";
 import { Navigate } from "react-router";
@@ -164,36 +164,21 @@ const ExhibitionManagement = () => {
         {
             columnDescription: "Created",
             generateTableCell: (exhibition) => (
-                <Typography variant="body1">{new Date(exhibition.date_created).toLocaleString()}</Typography>
+                <Exhibition.TableCells.DateCreatedStacked {...{exhibition}} />
             ),
             generateSortableValue: (exhibition) => new Date(exhibition.date_created)
         },
         {
             columnDescription: "Modified",
             generateTableCell: (exhibition) => (
-                <Typography variant="body1">{new Date(exhibition.date_modified).toLocaleString()}</Typography>
+                <Exhibition.TableCells.DateModifiedStacked {...{exhibition}} />
             ),
             generateSortableValue: (exhibition) => new Date(exhibition.date_modified)
         },
         {
             columnDescription: "Access",
             generateTableCell: (exhibition) => (
-                <Stack direction="row" spacing={1} alignItems="center">
-                    {exhibition.privacy == "PRIVATE" && (
-                        <LockIcon />
-                    ) || exhibition.privacy == "PUBLIC_ANONYMOUS" && (
-                        <VpnLockIcon />
-                    ) || exhibition.privacy == "PUBLIC" && (
-                        <PublicIcon />
-                    )}
-                    <Typography variant="body1">{exhibition.privacy == "PRIVATE" && (
-                        "Private"
-                    ) || exhibition.privacy == "PUBLIC_ANONYMOUS" && (
-                        "Public Anonymous"
-                    ) || exhibition.privacy == "PUBLIC" && (
-                        "Public"
-                    )}</Typography>
-                </Stack>
+                <Exhibition.TableCells.Access {...{exhibition}} />
             )
         },
         {

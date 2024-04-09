@@ -24,6 +24,7 @@ export { default as DeleteIcon } from "@mui/icons-material/esm/Delete.js";
 export { default as DeselectIcon } from "@mui/icons-material/esm/Deselect.js";
 export { default as EditIcon } from "@mui/icons-material/esm/Edit.js";
 export { default as ExpandMoreIcon } from "@mui/icons-material/esm/ExpandMore.js";
+export { default as ExpiredIcon } from "@mui/icons-material/esm/EventBusy.js";
 export { default as FilterAltIcon } from "@mui/icons-material/esm/FilterAlt.js";
 export { default as FilterAltOutlinedIcon } from "@mui/icons-material/esm/FilterAltOutlined.js";
 export { default as FilterAltOffOutlinedIcon } from "@mui/icons-material/esm/FilterAltOffOutlined.js";
