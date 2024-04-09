@@ -39,7 +39,7 @@ export { default as LogoutIcon } from "@mui/icons-material/esm/Logout.js";
 export { default as MenuIcon } from "@mui/icons-material/esm/Menu.js";
 export { default as OpenInNewIcon } from "@mui/icons-material/esm/OpenInNew.js";
 export { default as PersonIcon } from "@mui/icons-material/esm/Person.js";
-export { default as PersonAddIcon } from "@mui/icons-material/esm/PersonAdd.js";
+export { default as PersonAddIcon } from "@mui/icons-material/esm/PersonAddAlt1.js";
 export { default as PersonRemoveIcon } from "@mui/icons-material/esm/PersonRemove.js";
 export { default as PhotoCameraBackIcon } from "@mui/icons-material/esm/PhotoCameraBack.js";
 export { default as PlaceIcon } from "@mui/icons-material/esm/Place.js";

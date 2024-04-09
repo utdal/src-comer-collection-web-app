@@ -20,6 +20,7 @@ import { CourseFilterMenu } from "../Tools/CourseFilterMenu.js";
 import { useTitle } from "../../App/AppTitle.js";
 import { useAccountNav } from "../Account.js";
 import { Exhibition } from "../Tools/Entities/Exhibition.js";
+import { User } from "../Tools/Entities/User.js";
 
 const ExhibitionManagement = () => {
     const [courses, setCourses] = useState([]);
@@ -156,10 +157,7 @@ const ExhibitionManagement = () => {
         {
             columnDescription: "Owner",
             generateTableCell: (exhibition) => (
-                <Stack direction="column" paddingTop={1} paddingBottom={1}>
-                    <Typography variant="body1">{exhibition.User.full_name_reverse}</Typography>
-                    <Typography variant="body1" sx={{ opacity: 0.5 }}>{exhibition.User.email}</Typography>
-                </Stack>
+                <User.TableCells.StackedNameEmail user={exhibition.User} />
             ),
             generateSortableValue: (exhibition) => exhibition.User.full_name_reverse?.toLowerCase()
         },

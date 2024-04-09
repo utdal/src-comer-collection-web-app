@@ -16,18 +16,12 @@ import { Navigate, useNavigate } from "react-router";
 import { SelectionSummary } from "../Tools/SelectionSummary.js";
 import { courseFieldDefinitions } from "../Tools/HelperMethods/fields.js";
 import { sendAuthenticatedRequest } from "../Tools/HelperMethods/APICalls.js";
-import { useSnackbar } from "../../App/AppSnackbar.js";
 import { useAppUser } from "../../App/AppUser.js";
 import {
     FilterAltOffOutlinedIcon,
     AddIcon,
     SearchIcon,
-    RefreshIcon, PersonAddIcon,
-    PersonRemoveIcon,
-    CheckIcon,
-    GroupAddIcon,
-    SecurityIcon,
-    InfoIcon,
+    RefreshIcon, GroupAddIcon, InfoIcon,
     AccessTimeIcon,
     WarningIcon,
     LockIcon
@@ -36,6 +30,7 @@ import { useTitle } from "../../App/AppTitle.js";
 import { useAccountNav } from "../Account.js";
 import { Course } from "../Tools/Entities/Course.js";
 import { User } from "../Tools/Entities/User.js";
+import { EnrollmentCoursePrimary } from "../Tools/Associations/Enrollment.js";
 
 
 const CourseManagement = () => {
@@ -74,7 +69,6 @@ const CourseManagement = () => {
 
 
     const [, setSelectedNavItem] = useAccountNav();
-    const showSnackbar = useSnackbar();
     const [appUser] = useAppUser();
     const navigate = useNavigate();
     const setTitleText = useTitle();
@@ -129,38 +123,6 @@ const CourseManagement = () => {
     const visibleCourses = useMemo(() => courses.filter((course) => {
         return courseFilterFunction(course);
     }), [courses, searchQuery]);
-
-
-    const handleAssignCoursesToUser = useCallback(async (userId, courseIds) => {
-        try {
-            await sendAuthenticatedRequest("PUT", "/api/admin/enrollments/assign", {
-                courses: courseIds,
-                users: [userId]
-            });
-            showSnackbar("Successfully enrolled", "success");
-
-        } catch (error) {
-            showSnackbar("Failed to enroll", "error");
-        }
-        await fetchData();
-    }, [showSnackbar]);
-
-
-
-    const handleUnassignCoursesFromUser = useCallback(async (userId, courseIds) => {
-        try {
-            await sendAuthenticatedRequest("PUT", "/api/admin/enrollments/unassign", {
-                courses: courseIds,
-                users: [userId]
-            });
-            showSnackbar("Successfully unenrolled", "success");
-
-        } catch (error) {
-            showSnackbar("Failed to unenroll", "error");
-        }
-        await fetchData();
-    }, [showSnackbar]);
-
 
 
 
@@ -239,91 +201,18 @@ const CourseManagement = () => {
         {
             columnDescription: "ID",
             generateTableCell: (user) => (
-                <Stack direction="row" spacing={1} alignItems="center">
-                    <Typography variant="body1">{user.id} </Typography>
-                    {user.is_admin && (<SecurityIcon color="secondary" />)}
-                </Stack>
+                <User.TableCells.IDWithAccessIcon {...{user}} />
             ),
             generateSortableValue: (user) => user.id
         },
         {
-            columnDescription: "Name",
+            columnDescription: "User",
             generateTableCell: (user) => (
-                <User.TableCells.Name {...{user}} />
+                <User.TableCells.StackedNameEmail {...{user}} />
             ),
             generateSortableValue: (user) => user.full_name_reverse?.toLowerCase() ?? ""
-        },
-        {
-            columnDescription: "Email",
-            generateTableCell: (user) => (
-                <User.TableCells.Email {...{user}} />
-            )
         }
     ];
-
-    const userTableFieldsForDialogAll = [...userTableFieldsForDialog, {
-        columnDescription: "Enroll",
-        generateTableCell: (user) => {
-            const quantity = user.quantity_assigned;
-            return (
-                quantity == assignUserDialogCourses.length && (
-                    <Button variant="text" color={user.is_admin ? "secondary" : "primary"} disabled startIcon={<CheckIcon />}>
-                        {assignUserDialogCourses.length == 1 ? (
-                            <Typography variant="body1">Enrolled</Typography>
-                        ) : (
-                            <Typography variant="body1">
-                                {quantity == 2 ? "Enrolled in both" : `Enrolled in all ${quantity}`}
-                            </Typography>
-                        )}
-                    </Button>) ||
-        quantity == 0 && (
-            <Button variant="outlined" color={user.is_admin ? "secondary" : "primary"} startIcon={<PersonAddIcon />} onClick={() => {
-                handleAssignCoursesToUser(user.id, assignUserDialogCourses.map((c) => c.id));
-            }}>
-                {assignUserDialogCourses.length == 1 ? (
-                    <Typography variant="body1">Enroll</Typography>
-                ) : (
-                    <Typography variant="body1">Enroll in {assignUserDialogCourses.length}</Typography>
-                )}
-            </Button>
-        ) ||
-        quantity > 0 && quantity < assignUserDialogCourses.length && (
-            <Button variant="outlined" color={user.is_admin ? "secondary" : "primary"} startIcon={<PersonAddIcon />} onClick={() => {
-                handleAssignCoursesToUser(user.id, assignUserDialogCourses.map((c) => c.id));
-            }}>
-                <Typography variant="body1">Enroll in {assignUserDialogCourses.length - quantity} more</Typography>
-            </Button>
-        )
-            );
-        }
-    }];
-
-    const userTableFieldsForDialogAssigned = [...userTableFieldsForDialog, {
-        columnDescription: "",
-        generateTableCell: (user) => {
-            const quantity = user.quantity_assigned;
-            return (
-                quantity == assignUserDialogCourses.length && (
-                    <Button variant="outlined" color={user.is_admin ? "secondary" : "primary"} startIcon={<PersonRemoveIcon />} onClick={() => {
-                        handleUnassignCoursesFromUser(user.id, assignUserDialogCourses.map((c) => c.id));
-                    }}>
-                        {assignUserDialogCourses.length == 1 ? (
-                            <Typography variant="body1">Unenroll</Typography>
-                        ) : (
-                            <Typography variant="body1">Unenroll from {quantity}</Typography>
-                        )}
-                    </Button>
-                ) ||
-        quantity > 0 && quantity < assignUserDialogCourses.length && (
-            <Button variant="outlined" color={user.is_admin ? "secondary" : "primary"} startIcon={<PersonRemoveIcon />} onClick={() => {
-                handleUnassignCoursesFromUser(user.id, assignUserDialogCourses.map((c) => c.id));
-            }}>
-                <Typography variant="body1">Unenroll from {quantity}</Typography>
-            </Button>
-        )
-            );
-        }
-    }];
 
 
 
@@ -433,16 +322,12 @@ const CourseManagement = () => {
 
 
             <AssociationManagementDialog
+                Association={EnrollmentCoursePrimary}
                 primaryEntity="course"
                 secondaryEntity="user"
                 primaryItems={assignUserDialogCourses}
                 secondaryItemsAll={users}
                 secondariesByPrimary={usersByCourse}
-                dialogTitle={
-                    assignUserDialogCourses.length == 1 ?
-                        `Manage Enrollment for ${assignUserDialogCourses[0].safe_display_name}` :
-                        `Manage Enrollment for ${assignUserDialogCourses.length} Selected Courses`
-                }
                 dialogButtonForSecondaryManagement={<>
                     <Button variant="outlined" onClick={() => {
                         navigate("/Account/UserManagement");
@@ -451,20 +336,14 @@ const CourseManagement = () => {
                     </Button>
                 </>}
                 dialogIsOpen={assignUserDialogIsOpen}
-                tableTitleAssigned={
-                    assignUserDialogCourses.length == 1 ?
-                        `Current Users in ${assignUserDialogCourses[0].safe_display_name}` :
-                        "Current Users in Selected Courses"
-                }
-                tableTitleAll={"All Users"}
                 setDialogIsOpen={setAssignUserDialogIsOpen}
                 secondaryFieldInPrimary="Users"
-                secondaryTableFieldsAll={userTableFieldsForDialogAll}
-                secondaryTableFieldsAssignedOnly={userTableFieldsForDialogAssigned}
+                secondaryTableFields={userTableFieldsForDialog}
                 secondarySearchFields={["given_name"]}
                 secondarySearchBoxPlaceholder={"Search users by name or email"}
                 defaultSortAscending={true}
                 defaultSortColumn="Name"
+                refreshAllItems={fetchData}
             />
 
         </Box>

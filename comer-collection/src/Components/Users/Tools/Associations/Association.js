@@ -1,0 +1,58 @@
+/* eslint-disable react/prop-types */
+
+import { AddIcon, RemoveIcon } from "../../../IconImports.js";
+import { capitalized } from "../Entities/Entity.js";
+import { sendAuthenticatedRequest } from "../HelperMethods/APICalls.js";
+
+class Association {
+
+    static url = null;
+    static primary = null;
+    static secondary = null;
+
+    static singular = "association";
+    static plural = "associations";
+
+    static assignPresent = "assign";
+    static assignPast = "assigned";
+    static unassignPresent = "unassign";
+    static unassignPast = "unassigned";
+
+
+    static AssignIcon = AddIcon;
+    static UnassignIcon = RemoveIcon;
+
+
+    static handleAssign([...primaries], [...secondaries]) {
+        return new Promise((resolve, reject) => {
+            sendAuthenticatedRequest("PUT", `${this.url}`, {
+                action: "assign",
+                [this.primary.plural]: primaries,
+                [this.secondary.plural]: secondaries
+            }).then(() => {
+                resolve(`${capitalized(primaries.length > 1 || secondaries.length > 1 ? this.plural : this.singular)} updated`);
+            }).catch(() => {
+                reject(`Failed to update ${this.plural.toLowerCase()}`);
+            });
+        });
+    }
+
+
+    static handleUnassign([...primaries], [...secondaries]) {
+        return new Promise((resolve, reject) => {
+            sendAuthenticatedRequest("PUT", `${this.url}`, {
+                action: "unassign",
+                [this.primary.plural]: primaries,
+                [this.secondary.plural]: secondaries
+            }).then(() => {
+                resolve(`${capitalized(primaries.length > 1 || secondaries.length > 1 ? this.plural : this.singular)} updated`);
+            }).catch(() => {
+                reject(`Failed to update ${this.plural.toLowerCase()}`);
+            });
+        });
+    }
+    
+
+}
+
+export { Association };

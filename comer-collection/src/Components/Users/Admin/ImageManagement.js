@@ -6,7 +6,7 @@ import {
 } from "@mui/material";
 import { Unauthorized } from "../../ErrorPages/Unauthorized.js";
 import SearchBox from "../Tools/SearchBox.js";
-import { FilterAltOffOutlinedIcon, RefreshIcon, EditIcon, InfoIcon, AddIcon, RemoveIcon, SearchIcon, DeleteIcon, VisibilityIcon, AddPhotoAlternateIcon, PlaceIcon, SellIcon, BrushIcon, ImageIcon, ContentCopyIcon, PhotoCameraBackIcon, PersonAddIcon, PersonRemoveIcon, CheckIcon, AccessTimeIcon, WarningIcon, LockIcon } from "../../IconImports.js";
+import { FilterAltOffOutlinedIcon, RefreshIcon, EditIcon, InfoIcon, SearchIcon, DeleteIcon, VisibilityIcon, AddPhotoAlternateIcon, PlaceIcon, SellIcon, BrushIcon, ImageIcon, ContentCopyIcon, PhotoCameraBackIcon, AccessTimeIcon, WarningIcon, LockIcon } from "../../IconImports.js";
 import { ItemSingleDeleteDialog } from "../Tools/Dialogs/ItemSingleDeleteDialog.js";
 import { ItemMultiCreateDialog } from "../Tools/Dialogs/ItemMultiCreateDialog.js";
 import { ItemSingleEditDialog } from "../Tools/Dialogs/ItemSingleEditDialog.js";
@@ -28,6 +28,8 @@ import { useAccountNav } from "../Account.js";
 import { Image } from "../Tools/Entities/Image.js";
 import { Artist } from "../Tools/Entities/Artist.js";
 import { Tag } from "../Tools/Entities/Tag.js";
+import { ImageArtist } from "../Tools/Associations/ImageArtist.js";
+import { ImageTag } from "../Tools/Associations/ImageTag.js";
 
 
 const ImageManagement = () => {
@@ -150,70 +152,6 @@ const ImageManagement = () => {
         const tagData = await sendAuthenticatedRequest("GET", "/api/admin/tags");
         setTags(tagData.data);
     };
-
-
-    const handleAssignImagesToArtist = useCallback(async (artistId, imageIds) => {
-        try {
-            await sendAuthenticatedRequest("PUT", "/api/admin/imageartists", {
-                action: "assign",
-                images: imageIds,
-                artists: [artistId]
-            });
-            showSnackbar(`Successfully assigned artist ${artistId} for ${imageIds.length} images`, "success");
-
-        } catch (error) {
-            showSnackbar(`Failed to assign artist ${artistId} for ${imageIds.length} images`, "error");
-        }
-        await fetchImages();
-    }, [showSnackbar]);
-
-    const handleUnassignImagesFromArtist = useCallback(async (artistId, imageIds) => {
-        try {
-            await sendAuthenticatedRequest("PUT", "/api/admin/imageartists", {
-                action: "unassign",
-                images: imageIds,
-                artists: [artistId]
-            });
-            showSnackbar(`Successfully unassigned artist ${artistId} for ${imageIds.length} images`, "success");
-
-        } catch (error) {
-            showSnackbar(`Failed to unassign artist ${artistId} for ${imageIds.length} images`, "error");
-        }
-        await fetchImages();
-    }, [showSnackbar]);
-
-
-    const handleAssignImagesToTag = useCallback(async (tagId, imageIds) => {
-        try {
-            await sendAuthenticatedRequest("PUT", "/api/admin/imagetags", {
-                action: "assign",
-                images: imageIds,
-                tags: [tagId]
-            });
-            showSnackbar(`Successfully assigned tag ${tagId} for ${imageIds.length} images`, "success");
-
-        } catch (error) {
-            showSnackbar(`Failed to assign tag ${tagId} for ${imageIds.length} images`, "error");
-        }
-        await fetchImages();
-    }, [showSnackbar]);
-
-    const handleUnassignImagesFromTag = useCallback(async (tagId, imageIds) => {
-        try {
-            await sendAuthenticatedRequest("PUT", "/api/admin/imagetags", {
-                action: "unassign",
-                images: imageIds,
-                tags: [tagId]
-            });
-            showSnackbar("Successfully unassigned tag", "success");
-
-        } catch (error) {
-            showSnackbar("Failed to unassign tag", "error");
-        }
-        await fetchImages();
-    }, [showSnackbar]);
-
-
 
 
     const handleCopyToClipboard = useCallback((item, fieldName) => {
@@ -566,150 +504,6 @@ const ImageManagement = () => {
 
 
 
-    const artistTableFieldsForDialogAll = useMemo(() => [...artistTableFieldsForDialog, {
-        columnDescription: "Add",
-        generateTableCell: (artist) => {
-            const quantity = artist.quantity_assigned;
-            return (
-                quantity == assignArtistDialogImages.length && (
-                    <Button variant="text" color="primary" disabled startIcon={<CheckIcon />}>
-                        {assignArtistDialogImages.length == 1 ? (
-                            <Typography variant="body1">Added</Typography>
-                        ) : (
-                            <Typography variant="body1">
-                                {quantity == 2 ? "Added to both images" : `Added to all ${quantity} images`}
-                            </Typography>
-                        )}
-                    </Button>) ||
-        quantity == 0 && (
-            <Button variant="outlined" color="primary" startIcon={<PersonAddIcon />} onClick={() => {
-                handleAssignImagesToArtist(artist.id, assignArtistDialogImages.map((i) => i.id));
-            }}>
-                {assignArtistDialogImages.length == 1 ? (
-                    <Typography variant="body1">Add</Typography>
-                ) : (
-                    <Typography variant="body1">Add to {assignArtistDialogImages.length} images</Typography>
-                )}
-            </Button>
-        ) ||
-        quantity > 0 && quantity < assignArtistDialogImages.length && (
-            <Button variant="outlined" color="primary" startIcon={<PersonAddIcon />} onClick={() => {
-                handleAssignImagesToArtist(artist.id, assignArtistDialogImages.map((i) => i.id));
-            }}>
-                {assignArtistDialogImages.length - quantity == 1 ? (
-                    <Typography variant="body1">Add to {assignArtistDialogImages.length - quantity} more image</Typography>
-                ) : (
-                    <Typography variant="body1">Add to {assignArtistDialogImages.length - quantity} more images</Typography>
-                )}
-            </Button>
-        )
-            );
-        }
-    }
-    ], [assignArtistDialogImages, handleAssignImagesToArtist]);
-
-
-    const tagTableFieldsForDialogAll = useMemo(() => [...tagTableFieldsForDialog, {
-        columnDescription: "Add",
-        generateTableCell: (tag) => {
-            const quantity = tag.quantity_assigned;
-            return (
-                quantity == assignTagDialogImages.length && (
-                    <Button variant="text" color="primary" disabled startIcon={<CheckIcon />}>
-                        {assignTagDialogImages.length == 1 ? (
-                            <Typography variant="body1">Added</Typography>
-                        ) : (
-                            <Typography variant="body1">
-                                {quantity == 2 ? "Added to both images" : `Added to all ${quantity} images`}
-                            </Typography>
-                        )}
-                    </Button>) ||
-        quantity == 0 && (
-            <Button variant="outlined" color="primary" startIcon={<AddIcon />} onClick={() => {
-                handleAssignImagesToTag(tag.id, assignTagDialogImages.map((i) => i.id));
-            }}>
-                {assignTagDialogImages.length == 1 ? (
-                    <Typography variant="body1">Add</Typography>
-                ) : (
-                    <Typography variant="body1">Add to {assignTagDialogImages.length} images</Typography>
-                )}
-            </Button>
-        ) ||
-        quantity > 0 && quantity < assignTagDialogImages.length && (
-            <Button variant="outlined" color="primary" startIcon={<AddIcon />} onClick={() => {
-                handleAssignImagesToTag(tag.id, assignTagDialogImages.map((i) => i.id));
-            }}>
-                {assignTagDialogImages.length - quantity == 1 ? (
-                    <Typography variant="body1">Add to {assignTagDialogImages.length - quantity} more image</Typography>
-                ) : (
-                    <Typography variant="body1">Add to {assignTagDialogImages.length - quantity} more images</Typography>
-                )}
-            </Button>
-        )
-            );
-        }
-    }
-    ], [assignTagDialogImages, handleAssignImagesToTag]);
-
-
-    const artistTableFieldsForDialogAssigned = useMemo(() => [...artistTableFieldsForDialog, {
-        columnDescription: "",
-        generateTableCell: (artist) => {
-            const quantity = artist.quantity_assigned;
-            return (
-                quantity == assignArtistDialogImages.length && (
-                    <Button variant="outlined" startIcon={<PersonRemoveIcon />} onClick={() => {
-                        handleUnassignImagesFromArtist(artist.id, assignArtistDialogImages.map((i) => i.id));
-                    }}>
-                        {assignArtistDialogImages.length == 1 ? (
-                            <Typography variant="body1">Remove</Typography>
-                        ) : (
-                            <Typography variant="body1">Remove from {quantity} images</Typography>
-                        )}
-                    </Button>
-                ) ||
-        quantity > 0 && quantity < assignArtistDialogImages.length && (
-            <Button variant="outlined" startIcon={<PersonRemoveIcon />} onClick={() => {
-                handleUnassignImagesFromArtist(artist.id, assignArtistDialogImages.map((i) => i.id));
-            }}>
-                <Typography variant="body1">Remove from {quantity} {quantity == 1 ? "image" : "images"}</Typography>
-            </Button>
-        )
-            );
-        }
-    }], [assignArtistDialogImages, handleUnassignImagesFromArtist]);
-
-
-
-    const tagTableFieldsForDialogAssigned = useMemo(() => [...tagTableFieldsForDialog, {
-        columnDescription: "",
-        generateTableCell: (tag) => {
-            const quantity = tag.quantity_assigned;
-            return (
-                quantity == assignTagDialogImages.length && (
-                    <Button variant="outlined" startIcon={<RemoveIcon />} onClick={() => {
-                        handleUnassignImagesFromTag(tag.id, assignTagDialogImages.map((i) => i.id));
-                    }}>
-                        {assignTagDialogImages.length == 1 ? (
-                            <Typography variant="body1">Remove</Typography>
-                        ) : (
-                            <Typography variant="body1">Remove from {quantity} images</Typography>
-                        )}
-                    </Button>
-                ) ||
-        quantity > 0 && quantity < assignTagDialogImages.length && (
-            <Button variant="outlined" startIcon={<RemoveIcon />} onClick={() => {
-                handleUnassignImagesFromTag(tag.id, assignTagDialogImages.map((i) => i.id));
-            }}>
-                <Typography variant="body1">Remove from {quantity} {quantity == 1 ? "image" : "images"}</Typography>
-            </Button>
-        )
-            );
-        }
-    }], [assignTagDialogImages, handleUnassignImagesFromTag]);
-
-
-
     const visibleImages = useMemo(() => images.filter((image) => {
         return imageFilterFunction(image);
     }), [images, searchQuery]);
@@ -902,16 +696,10 @@ const ImageManagement = () => {
 
 
             <AssociationManagementDialog
-                primaryEntity="image"
-                secondaryEntity="artist"
+                Association={ImageArtist}
                 primaryItems={assignArtistDialogImages}
                 secondaryItemsAll={artists}
                 secondariesByPrimary={artistsByImage}
-                dialogTitle={
-                    assignArtistDialogImages.length == 1 ?
-                        `Edit Listed Artists for ${assignArtistDialogImages[0].title}` :
-                        `Edit Listed Artists for ${assignArtistDialogImages.length} Selected Images`
-                }
                 dialogButtonForSecondaryManagement={<>
                     <Button variant="outlined" onClick={() => {
                         setAssignArtistDialogIsOpen(false);
@@ -921,32 +709,20 @@ const ImageManagement = () => {
                     </Button>
                 </>}
                 dialogIsOpen={assignArtistDialogIsOpen}
-                tableTitleAssigned={
-                    assignArtistDialogImages.length == 1 ?
-                        `Listed Artists for ${assignArtistDialogImages[0].title}` :
-                        "Listed Artists for Selected Images"
-                }
-                tableTitleAll={"All Artists"}
                 setDialogIsOpen={setAssignArtistDialogIsOpen}
                 secondaryFieldInPrimary="Artists"
-                secondaryTableFieldsAll={artistTableFieldsForDialogAll}
-                secondaryTableFieldsAssignedOnly={artistTableFieldsForDialogAssigned}
+                secondaryTableFields={artistTableFieldsForDialog}
                 secondarySearchFields={["fullName", "fullNameReverse", "notes"]}
                 secondarySearchBoxPlaceholder={"Search artists by name or notes"}
+                refreshAllItems={fetchData}
             />
 
 
             <AssociationManagementDialog
-                primaryEntity="image"
-                secondaryEntity="tag"
+                Association={ImageTag}
                 primaryItems={assignTagDialogImages}
                 secondaryItemsAll={tags}
                 secondariesByPrimary={tagsByImage}
-                dialogTitle={
-                    assignTagDialogImages.length == 1 ?
-                        `Edit Listed Tags for ${assignTagDialogImages[0].title}` :
-                        `Edit Listed Tags for ${assignTagDialogImages.length} Selected Images`
-                }
                 dialogButtonForSecondaryManagement={<>
                     <Button variant="outlined" onClick={() => {
                         setAssignTagDialogIsOpen(false);
@@ -956,18 +732,12 @@ const ImageManagement = () => {
                     </Button>
                 </>}
                 dialogIsOpen={assignTagDialogIsOpen}
-                tableTitleAssigned={
-                    assignTagDialogImages.length == 1 ?
-                        `Listed Tags for ${assignTagDialogImages[0].title}` :
-                        "Listed Tags for Selected Images"
-                }
-                tableTitleAll={"All Tags"}
                 setDialogIsOpen={setAssignTagDialogIsOpen}
                 secondaryFieldInPrimary="Tags"
-                secondaryTableFieldsAll={tagTableFieldsForDialogAll}
-                secondaryTableFieldsAssignedOnly={tagTableFieldsForDialogAssigned}
+                secondaryTableFields={tagTableFieldsForDialog}
                 secondarySearchFields={["data", "notes"]}
                 secondarySearchBoxPlaceholder={"Search tags by name or notes"}
+                refreshAllItems={fetchData}
             />
 
 

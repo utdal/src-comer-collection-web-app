@@ -10,6 +10,7 @@ import {
 import { ContentCopyIcon, SyncIcon } from "../../../IconImports.js";
 import { useSnackbar } from "../../../App/AppSnackbar.js";
 import PropTypes from "prop-types";
+import { User } from "../Entities/User.js";
 
 
 const randomPassword = () => {
@@ -18,7 +19,7 @@ const randomPassword = () => {
 };
 
 
-export const UserResetPasswordDialog = ({ dialogUser, dialogIsOpen, setDialogIsOpen, handleResetPassword }) => {
+export const UserResetPasswordDialog = ({ dialogUser, dialogIsOpen, setDialogIsOpen }) => {
 
     const [newPassword, setNewPassword] = useState("");
     const [editMode, setEditMode] = useState(true);
@@ -38,7 +39,7 @@ export const UserResetPasswordDialog = ({ dialogUser, dialogIsOpen, setDialogIsO
             }} 
             onSubmit={(e) => {
                 e.preventDefault();
-                handleResetPassword(dialogUser?.id, newPassword).then(() => {
+                User.handleResetPassword(dialogUser?.id, newPassword).then(() => {
                     setEditMode(false);
                 });
             }}
@@ -144,6 +145,5 @@ export const UserResetPasswordDialog = ({ dialogUser, dialogIsOpen, setDialogIsO
 UserResetPasswordDialog.propTypes = {
     dialogUser: PropTypes.object,
     dialogIsOpen: PropTypes.bool,
-    setDialogIsOpen: PropTypes.func,
-    handleResetPassword: PropTypes.func
+    setDialogIsOpen: PropTypes.func
 };

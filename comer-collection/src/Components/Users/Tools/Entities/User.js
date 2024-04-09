@@ -23,6 +23,17 @@ class User extends Entity {
                 </Stack>
             );
         },
+        IDWithAccessIcon({ user }) {
+            return (
+                <Stack direction="row" spacing={1} alignItems="center">
+                    <Typography variant="body1">{user.id} </Typography>
+                    {
+                        user.is_admin && (<SecurityIcon color="secondary" />) ||
+                        user.is_collection_manager && (<CollectionManagerIcon color="secondary" />)
+                    }
+                </Stack>
+            );
+        },
         Name({ user }) {
             return (
                 user.has_name ? (
@@ -41,6 +52,14 @@ class User extends Entity {
                 </Button>
             ) || !onClick && (
                 <Typography variant="body1" color="grey">{user.email}</Typography>
+            );
+        },
+        StackedNameEmail({ user }) {
+            return (
+                <Stack direction="column" paddingTop={1} paddingBottom={1}>
+                    <Typography variant="body1">{user.full_name_reverse}</Typography>
+                    <Typography variant="body1" sx={{ opacity: 0.5 }}>{user.email}</Typography>
+                </Stack>
             );
         },
         PasswordChangeCurrentAdmin({ user, onClick }) {
@@ -128,6 +147,26 @@ class User extends Entity {
                 resolve("User access updated");
             }).catch(() => {
                 reject("Failed to update user access");
+            });
+        });
+    }
+
+    static handleChangeUserActivationStatus(userId, newActivationStatus) {
+        return new Promise((resolve, reject) => {
+            sendAuthenticatedRequest("PUT", `${this.baseUrl}/${userId}/${newActivationStatus ? "activate" : "deactivate"}`).then(() => {
+                resolve(newActivationStatus ? "User activated" : "User deactivated");
+            }).catch(() => {
+                reject(newActivationStatus ? "Failed to activate user" : "Failed to deactivate user");
+            });
+        });
+    }
+
+    static handleResetPassword(userId, newPassword) {
+        return new Promise((resolve, reject) => {
+            sendAuthenticatedRequest("PUT", `${this.baseUrl}/${userId}/resetpassword`, { newPassword }).then(() => {
+                resolve("Password reset");
+            }).catch(() => {
+                reject("Failed to reset password");
             });
         });
     }

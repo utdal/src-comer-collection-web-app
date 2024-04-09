@@ -4,7 +4,7 @@ import {
     Button,
     Typography, Box, Paper
 } from "@mui/material";
-import { FilterAltOffOutlinedIcon, GroupAddIcon, RefreshIcon, SchoolIcon, ClearIcon, CheckIcon, PersonAddIcon, SearchIcon, InfoIcon, LockIcon, AccessTimeIcon, WarningIcon } from "../../IconImports.js";
+import { FilterAltOffOutlinedIcon, GroupAddIcon, RefreshIcon, SchoolIcon, SearchIcon, InfoIcon, LockIcon, AccessTimeIcon, WarningIcon } from "../../IconImports.js";
 import { Unauthorized } from "../../ErrorPages/Unauthorized.js";
 import SearchBox from "../Tools/SearchBox.js";
 import { ItemSingleDeleteDialog } from "../Tools/Dialogs/ItemSingleDeleteDialog.js";
@@ -26,6 +26,7 @@ import { UserResetPasswordDialog } from "../Tools/Dialogs/UserResetPasswordDialo
 import { useAccountNav } from "../Account.js";
 import { User } from "../Tools/Entities/User.js";
 import { Entity } from "../Tools/Entities/Entity.js";
+import { EnrollmentUserPrimary } from "../Tools/Associations/Enrollment.js";
 
 
 const UserManagement = () => {
@@ -119,75 +120,6 @@ const UserManagement = () => {
     }, [userCourseIdFilter, searchQuery]);
 
 
-
-    const handleAssignUsersToCourse = useCallback(async (courseId, userIds) => {
-        try {
-            await sendAuthenticatedRequest("PUT", "/api/admin/enrollments", {
-                action: "assign",
-                users: userIds,
-                courses: [courseId]
-            });
-            showSnackbar("Successfully enrolled", "success");
-
-        } catch (error) {
-            showSnackbar("Failed to enroll", "error");
-        }
-        await fetchData();
-    }, [showSnackbar]);
-
-
-
-    const handleUnassignUsersFromCourse = useCallback(async (courseId, userIds) => {
-        try {
-            await sendAuthenticatedRequest("PUT", "/api/admin/enrollments", {
-                action: "unassign",
-                users: userIds,
-                courses: [courseId]
-            });
-            showSnackbar("Successfully unenrolled", "success");
-
-        } catch (error) {
-            showSnackbar("Failed to enroll", "error");
-        }
-        await fetchData();
-    }, [showSnackbar]);
-
-
-
-    const handleChangeUserActivationStatus = async (userId, willBeActive) => {
-        try {
-            await sendAuthenticatedRequest("PUT", (willBeActive ?
-                `/api/admin/users/${userId}/activate` :
-                `/api/admin/users/${userId}/deactivate`
-            ));
-            fetchData();
-
-            showSnackbar(`User ${willBeActive ? "activated" : "deactivated"}`, "success");
-
-        } catch (error) {
-            showSnackbar(`Error ${willBeActive ? "activating" : "deactivating"} user`, "error");
-        }
-    };
-
-
-
-    const handleResetPassword = async (userId, newPassword) => {
-        try {
-            await sendAuthenticatedRequest("PUT", `/api/admin/users/${userId}/resetpassword`, { newPassword });
-            fetchData();
-
-            showSnackbar(`Password reset for user ${userId}`, "success");
-
-        } catch (error) {
-
-            showSnackbar(`Error resetting password for user ${userId}`, "error");
-
-            throw "Reset Password error";
-        }
-    };
-
-
-
     const handleCopyToClipboard = useCallback((user, fieldName) => {
         try {
             navigator.clipboard.writeText(user[fieldName]);
@@ -273,7 +205,12 @@ const UserManagement = () => {
             columnDescription: "Active",
             generateTableCell: (user) => (
                 <User.TableCells.UserActivationSwitch {...{user}} onClick={(e) => {
-                    handleChangeUserActivationStatus(e.target.parentElement.attributes.itemid.value, e.target.checked);
+                    User.handleChangeUserActivationStatus(user.id, e.target.checked).then((msg) => {
+                        fetchData();
+                        showSnackbar(msg, "success");
+                    }).catch((err) => {
+                        showSnackbar(err, "error");
+                    });
                 }} />
             )
         },
@@ -322,70 +259,6 @@ const UserManagement = () => {
             )
         }
     ];
-
-    const courseTableFieldsForDialogAll = [...courseTableFieldsForDialog, {
-        columnDescription: "Enroll",
-        generateTableCell: (course) => {
-            const quantity = course.quantity_assigned;
-            return (
-                quantity == assignCourseDialogUsers.length && (
-                    <Button variant="text" color="primary" disabled startIcon={<CheckIcon />}>
-                        {assignCourseDialogUsers.length == 1 ? (
-                            <Typography variant="body1">Enrolled</Typography>
-                        ) : (
-                            <Typography variant="body1">
-                                {quantity == 2 ? "Both users enrolled" : `All ${quantity} users enrolled`}
-                            </Typography>
-                        )}
-                    </Button>) ||
-                quantity == 0 && (
-                    <Button variant="outlined" color="primary" startIcon={<PersonAddIcon />} onClick={() => {
-                        handleAssignUsersToCourse(course.id, assignCourseDialogUsers.map((u) => u.id));
-                    }}>
-                        {assignCourseDialogUsers.length == 1 ? (
-                            <Typography variant="body1">Enroll</Typography>
-                        ) : (
-                            <Typography variant="body1">Enroll {assignCourseDialogUsers.length} users</Typography>
-                        )}
-                    </Button>
-                ) ||
-                quantity > 0 && quantity < assignCourseDialogUsers.length && (
-                    <Button variant="outlined" color="primary" startIcon={<PersonAddIcon />} onClick={() => {
-                        handleAssignUsersToCourse(course.id, assignCourseDialogUsers.map((u) => u.id));
-                    }}>
-                        {assignCourseDialogUsers.length - quantity == 1 ? (
-                            <Typography variant="body1">Enroll {assignCourseDialogUsers.length - quantity} more user</Typography>
-                        ) : (
-                            <Typography variant="body1">Enroll {assignCourseDialogUsers.length - quantity} more users</Typography>
-                        )}
-                    </Button>
-                )
-            );
-        }
-    }];
-
-    const courseTableFieldsForDialogAssigned = [...courseTableFieldsForDialog, {
-        columnDescription: "",
-        generateTableCell: (course) => {
-            const quantity = course.quantity_assigned;
-            return (
-                <Button variant="outlined" color="primary" startIcon={<ClearIcon />} onClick={() => {
-                    handleUnassignUsersFromCourse(course.id, assignCourseDialogUsers.map((u) => u.id));
-                }}>
-                    {quantity == 1 ? (
-                        assignCourseDialogUsers.length == 1 ? (
-                            <Typography variant="body1">Unenroll</Typography>
-                        ) : (
-                            <Typography variant="body1">Unenroll {quantity} user</Typography>
-                        )
-                    ) : (
-                        <Typography variant="body1">Unenroll {quantity} users</Typography>
-                    )}
-                </Button>
-            );
-        }
-    }];
-
 
     const visibleUsers = useMemo(() => users.filter((user) => {
         return userFilterFunction(user);
@@ -504,11 +377,13 @@ const UserManagement = () => {
                 {...{ deleteDialogIsOpen, setDeleteDialogIsOpen }} />
 
             <AssociationManagementDialog
+                Association={EnrollmentUserPrimary}
                 primaryEntity="user"
                 secondaryEntity="course"
                 primaryItems={assignCourseDialogUsers}
                 secondaryItemsAll={courses}
                 secondariesByPrimary={coursesByUser}
+                refreshAllItems={fetchData}
                 dialogTitle={
                     assignCourseDialogUsers.length == 1 ?
                         `Manage Course Enrollments for ${assignCourseDialogUsers[0].safe_display_name}` :
@@ -529,8 +404,7 @@ const UserManagement = () => {
                 }
                 tableTitleAll={"All Courses"}
                 setDialogIsOpen={setAssignCourseDialogIsOpen}
-                secondaryTableFieldsAll={courseTableFieldsForDialogAll}
-                secondaryTableFieldsAssignedOnly={courseTableFieldsForDialogAssigned}
+                secondaryTableFields={courseTableFieldsForDialog}
                 secondarySearchFields={["name"]}
                 secondarySearchBoxPlaceholder="Search courses by name"
             />
@@ -546,7 +420,6 @@ const UserManagement = () => {
                 dialogIsOpen={resetPasswordDialogIsOpen}
                 dialogUser={resetPasswordDialogUser}
                 setDialogIsOpen={setResetPasswordDialogIsOpen}
-                handleResetPassword={handleResetPassword}
             />
 
         </Box>
