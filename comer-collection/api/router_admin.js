@@ -20,7 +20,7 @@ router.put("/users/:userId(\\d+)/activate", activateUser);
 
 router.put("/users/:userId(\\d+)/access", changeUserAccess);
 
-router.put("/users/:userId(\\d+)/resetpassword", resetUserPassword);
+router.put("/users/:userId(\\d+)/password", resetUserPassword);
 
 
 // Handle courses

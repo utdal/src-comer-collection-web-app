@@ -163,7 +163,7 @@ class User extends Entity {
 
     static handleResetPassword(userId, newPassword) {
         return new Promise((resolve, reject) => {
-            sendAuthenticatedRequest("PUT", `${this.baseUrl}/${userId}/resetpassword`, { newPassword }).then(() => {
+            sendAuthenticatedRequest("PUT", `${this.baseUrl}/${userId}/password`, { newPassword }).then(() => {
                 resolve("Password reset");
             }).catch(() => {
                 reject("Failed to reset password");

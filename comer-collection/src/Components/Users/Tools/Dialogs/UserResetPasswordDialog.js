@@ -39,8 +39,11 @@ export const UserResetPasswordDialog = ({ dialogUser, dialogIsOpen, setDialogIsO
             }} 
             onSubmit={(e) => {
                 e.preventDefault();
-                User.handleResetPassword(dialogUser?.id, newPassword).then(() => {
+                User.handleResetPassword(dialogUser?.id, newPassword).then((msg) => {
                     setEditMode(false);
+                    showSnackbar(msg, "success");
+                }).catch((err) => {
+                    showSnackbar(err, "error");
                 });
             }}
         >
