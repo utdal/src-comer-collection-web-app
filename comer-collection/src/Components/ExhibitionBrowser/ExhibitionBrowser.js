@@ -4,7 +4,7 @@ import { sendAuthenticatedRequest } from "../Users/Tools/HelperMethods/APICalls.
 import { DataTable } from "../Users/Tools/DataTable.js";
 import { PhotoCameraBackIcon } from "../IconImports.js";
 import { useNavigate } from "react-router";
-import { useTitle } from "../App/AppTitle.js";
+import { useTitle } from "../App/AppFeatures.js";
 
   
 export const ExhibitionBrowser = () => {

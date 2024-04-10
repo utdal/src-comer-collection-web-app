@@ -7,8 +7,8 @@ import ExhibitionViewer from "../ExhibitionViewer/ExhibitionViewer.js";
 import { sendAuthenticatedRequest } from "../Users/Tools/HelperMethods/APICalls.js";
 import { useAppUser } from "../App/AppUser.js";
 import { FullPageMessage } from "../FullPageMessage.js";
-import { useSnackbar } from "../App/AppSnackbar.js";
-import { useTitle } from "../App/AppTitle.js";
+import { useSnackbar } from "../App/AppFeatures.js";
+import { useTitle } from "../App/AppFeatures.js";
 import { AccessTimeIcon, InfoIcon } from "../IconImports.js";
 
 

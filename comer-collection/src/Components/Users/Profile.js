@@ -9,8 +9,8 @@ import { Navigate, useNavigate } from "react-router";
 import { DataTable } from "./Tools/DataTable.js";
 import { SecurityIcon, PersonIcon, AccountCircleIcon, SchoolIcon, PhotoCameraBackIcon, CollectionManagerIcon } from "../IconImports.js";
 import { useAppUser } from "../App/AppUser.js";
-import { useSnackbar } from "../App/AppSnackbar.js";
-import { useTitle } from "../App/AppTitle.js";
+import { useSnackbar } from "../App/AppFeatures.js";
+import { useTitle } from "../App/AppFeatures.js";
 import { useAccountNav } from "./Account.js";
 import { Course } from "./Tools/Entities/Course.js";
 

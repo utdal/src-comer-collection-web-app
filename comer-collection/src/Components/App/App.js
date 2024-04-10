@@ -7,9 +7,8 @@ import { Box, ThemeProvider, createTheme } from "@mui/material";
 import { green, grey, orange } from "@mui/material/colors/index.js";
 import { CollectionBrowser } from "../CollectionBrowser/CollectionBrowser.js";
 import { ExhibitionBrowser } from "../ExhibitionBrowser/ExhibitionBrowser.js";
-import { SnackbarProvider } from "./AppSnackbar.js";
+import { AppFeatureProvider } from "./AppFeatures.js";
 import { AppUserProvider } from "./AppUser.js";
-import { TitleProvider } from "./AppTitle.js";
 import { Helmet, HelmetProvider } from "react-helmet-async";
 
 import { CacheProvider } from "@emotion/react";
@@ -114,26 +113,24 @@ const App = () => {
                             <NavBar {...{appDarkTheme, setAppDarkTheme}} sx={{ gridArea: "header" }} />
                             <Box sx={{ gridArea: "body", position: "relative" }} >
 
-                                <TitleProvider>
-                                    <SnackbarProvider >
-                                        <Routes>
+                                <AppFeatureProvider >
+                                    <Routes>
           
-                                            <Route index element={<Navigate to="/login" />} />
+                                        <Route index element={<Navigate to="/login" />} />
           
-                                            <Route path="/BrowseCollection" element={<CollectionBrowser isDialogMode={false} />} />
-                                            <Route path="/Exhibitions" element={<ExhibitionBrowser />} />
-                                            <Route path="/Exhibitions/:exhibitionId" element={<ExhibitionPageWrapper />} />
+                                        <Route path="/BrowseCollection" element={<CollectionBrowser isDialogMode={false} />} />
+                                        <Route path="/Exhibitions" element={<ExhibitionBrowser />} />
+                                        <Route path="/Exhibitions/:exhibitionId" element={<ExhibitionPageWrapper />} />
 
-                                            <Route path="/Account/*" element={<AccountWrapper />} />
+                                        <Route path="/Account/*" element={<AccountWrapper />} />
 
-                                            <Route path="/login" element={<Login />} />
-                                            <Route path="*" element={<Navigate to="/login" />} replace />
+                                        <Route path="/login" element={<Login />} />
+                                        <Route path="*" element={<Navigate to="/login" />} replace />
 
               
-                                        </Routes>
-                                    </SnackbarProvider>
-
-                                </TitleProvider>
+                                    </Routes>
+                                </AppFeatureProvider>
+                                    
                             </Box>
                         </Box>
         

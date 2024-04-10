@@ -10,7 +10,7 @@ import {
 import { DeleteIcon } from "../../../IconImports.js";
 import { getBlankItemFields } from "../HelperMethods/fields.js";
 import PropTypes from "prop-types";
-import { useSnackbar } from "../../../App/AppSnackbar.js";
+import { useSnackbar } from "../../../App/AppFeatures.js";
 
 export const ItemMultiCreateDialog = ({ Entity, refreshAllItems, dialogInstructions, createDialogFieldDefinitions, dialogIsOpen, setDialogIsOpen }) => {
 

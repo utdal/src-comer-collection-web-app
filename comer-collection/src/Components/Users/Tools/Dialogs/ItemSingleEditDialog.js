@@ -10,7 +10,7 @@ import {
 import { SaveIcon } from "../../../IconImports.js";
 import { getLocalISOString } from "../HelperMethods/getLocalISOString.js";
 import PropTypes from "prop-types";
-import { useSnackbar } from "../../../App/AppSnackbar.js";
+import { useSnackbar } from "../../../App/AppFeatures.js";
 import { useAppUser } from "../../../App/AppUser.js";
 import { User } from "../Entities/User.js";
 

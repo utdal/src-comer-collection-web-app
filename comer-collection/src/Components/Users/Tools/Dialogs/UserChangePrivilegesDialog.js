@@ -10,7 +10,7 @@ import {
 import { SecurityIcon, PersonIcon, CollectionManagerIcon } from "../../../IconImports.js";
 import PropTypes from "prop-types";
 import { User } from "../Entities/User.js";
-import { useSnackbar } from "../../../App/AppSnackbar.js";
+import { useSnackbar } from "../../../App/AppFeatures.js";
 
 
 const userPrivilegeOptions = () => [

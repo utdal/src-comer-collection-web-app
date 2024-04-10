@@ -8,9 +8,9 @@ import { PhotoCameraBackIcon, AddIcon, InfoIcon, SettingsIcon, DeleteIcon, Secur
 import { sendAuthenticatedRequest } from "./Tools/HelperMethods/APICalls.js";
 import { ExhibitionSettingsDialog } from "./Tools/Dialogs/ExhibitionSettingsDialog.js";
 import { ItemSingleDeleteDialog } from "./Tools/Dialogs/ItemSingleDeleteDialog.js";
-import { useSnackbar } from "../App/AppSnackbar.js";
+import { useSnackbar } from "../App/AppFeatures.js";
 import { useAppUser } from "../App/AppUser.js";
-import { useTitle } from "../App/AppTitle.js";
+import { useTitle } from "../App/AppFeatures.js";
 import { useAccountNav } from "./Account.js";
 import { Exhibition, MyExhition } from "./Tools/Entities/Exhibition.js";
 

@@ -26,7 +26,7 @@ import {
     WarningIcon,
     LockIcon
 } from "../../IconImports.js";
-import { useTitle } from "../../App/AppTitle.js";
+import { useTitle } from "../../App/AppFeatures.js";
 import { useAccountNav } from "../Account.js";
 import { Course } from "../Tools/Entities/Course.js";
 import { User } from "../Tools/Entities/User.js";

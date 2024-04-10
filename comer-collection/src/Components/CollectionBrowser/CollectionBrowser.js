@@ -6,7 +6,7 @@ import { SellIcon, PersonIcon, GridOnIcon, ViewListIcon } from "../IconImports.j
 import { TagFilterMenu } from "../Users/Tools/TagFilterMenu.js";
 import SearchBox from "../Users/Tools/SearchBox.js";
 import { doesItemMatchSearchQuery } from "../Users/Tools/SearchUtilities.js";
-import { useTitle } from "../App/AppTitle.js";
+import { useTitle } from "../App/AppFeatures.js";
 import PropTypes from "prop-types";
 import { InView } from "react-intersection-observer";
 

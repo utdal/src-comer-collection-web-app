@@ -12,7 +12,7 @@ import { DataTable } from "../DataTable.js";
 import SearchBox from "../SearchBox.js";
 import { searchItems } from "../SearchUtilities.js";
 import PropTypes from "prop-types";
-import { useSnackbar } from "../../../App/AppSnackbar.js";
+import { useSnackbar } from "../../../App/AppFeatures.js";
 import { capitalized } from "../Entities/Entity.js";
 import { User } from "../Entities/User.js";
 
