@@ -16,6 +16,14 @@ class Entity {
     static plural = "items";
 
 
+    static fieldDefinitions = [
+        {
+            fieldName: "id",
+            displayName: "ID"
+        }
+    ];
+
+
     static formatDate = (date) => {
         return new Date(date).toLocaleDateString([], {
             year: "numeric",

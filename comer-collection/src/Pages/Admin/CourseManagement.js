@@ -14,7 +14,6 @@ import { doesItemMatchSearchQuery } from "../../Helpers/SearchUtilities.js";
 import { AssociationManagementDialog } from "../../Components/Dialogs/AssociationManagementDialog.js";
 import { Navigate, useNavigate } from "react-router";
 import { SelectionSummary } from "../../Components/SelectionSummary.js";
-import { courseFieldDefinitions } from "../../Helpers/fields.js";
 import { sendAuthenticatedRequest } from "../../Helpers/APICalls.js";
 import { useAppUser } from "../../ContextProviders/AppUser.js";
 import {
@@ -51,9 +50,6 @@ const CourseManagement = () => {
     const [assignUserDialogCourses, setAssignUserDialogCourses] = useState([]);
 
     const [usersByCourse, setUsersByCourse] = useState({});
-
-    const editDialogFieldDefinitions = courseFieldDefinitions;
-    const createDialogFieldDefinitions = courseFieldDefinitions;
 
     const [dialogIsOpen, setDialogIsOpen] = useState(false);
 
@@ -305,13 +301,13 @@ const CourseManagement = () => {
                 Entity={Course}
                 refreshAllItems={fetchData}
                 dialogInstructions={"Add courses, edit the course fields, then click 'Create'.  You can enroll users after creating the course."}
-                {...{ createDialogFieldDefinitions, dialogIsOpen, setDialogIsOpen }} />
+                {...{ dialogIsOpen, setDialogIsOpen }} />
 
             <ItemSingleEditDialog
                 Entity={Course}
                 editDialogItem={editDialogCourse}
                 refreshAllItems={fetchData}
-                {...{ editDialogFieldDefinitions, editDialogIsOpen, setEditDialogIsOpen }} />
+                {...{ editDialogIsOpen, setEditDialogIsOpen }} />
 
             <ItemSingleDeleteDialog
                 Entity={Course}

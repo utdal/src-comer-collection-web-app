@@ -14,10 +14,7 @@ import { DataTable } from "../../Components/DataTable.js";
 import { doesItemMatchSearchQuery } from "../../Helpers/SearchUtilities.js";
 import { Navigate } from "react-router";
 import { ImageFullScreenViewer } from "../../Components/Dialogs/ImageFullScreenViewer.js";
-import { tagFieldDefinitions } from "../../Helpers/fields.js";
 import { EntityManageDialog } from "../../Components/Dialogs/EntityManageDialog.js";
-import { imageFieldDefinitions } from "../../Helpers/fields.js";
-import { artistFieldDefinitions } from "../../Helpers/fields.js";
 import { SelectionSummary } from "../../Components/SelectionSummary.js";
 import { AssociationManagementDialog } from "../../Components/Dialogs/AssociationManagementDialog.js";
 import { sendAuthenticatedRequest } from "../../Helpers/APICalls.js";
@@ -73,9 +70,6 @@ const ImageManagement = () => {
     const [tagEditDialogIsOpen, setTagEditDialogIsOpen] = useState(false);
     const [tagEditDialogItem, setTagEditDialogItem] = useState(null);
     const [tagDialogSearchQuery, setTagDialogSearchQuery] = useState("");
-
-    const editDialogFieldDefinitions = imageFieldDefinitions;
-    const createDialogFieldDefinitions = imageFieldDefinitions;
 
     const [dialogIsOpen, setDialogIsOpen] = useState(false);
 
@@ -623,13 +617,13 @@ const ImageManagement = () => {
                 dialogInstructions={"Add images, edit the image fields, then click 'Create'.  You can add artists and tags after you have created the images."}
                 allItems={images}
                 refreshAllItems={fetchImages}
-                {...{ createDialogFieldDefinitions, dialogIsOpen, setDialogIsOpen }} />
+                {...{ dialogIsOpen, setDialogIsOpen }} />
 
             <ItemSingleEditDialog
                 Entity={Image}
                 editDialogItem={editDialogImage}
                 refreshAllItems={fetchImages}
-                {...{ editDialogFieldDefinitions, editDialogIsOpen, setEditDialogIsOpen }} />
+                {...{ editDialogIsOpen, setEditDialogIsOpen }} />
 
             <ItemSingleDeleteDialog
                 entity="image"
@@ -645,7 +639,6 @@ const ImageManagement = () => {
                 Entity={Artist}
                 dialogItems={artists}
                 setDialogItems={setArtists}
-                dialogFieldDefinitions={artistFieldDefinitions}
                 dialogTableFields={artistTableFields}
                 dialogIsOpen={manageArtistDialogIsOpen}
                 setDialogIsOpen={setManageArtistDialogIsOpen}
@@ -668,7 +661,6 @@ const ImageManagement = () => {
                 Entity={Tag}
                 dialogItems={tags}
                 setDialogItems={setTags}
-                dialogFieldDefinitions={tagFieldDefinitions}
                 dialogTableFields={tagTableFields}
                 dialogIsOpen={manageTagDialogIsOpen}
                 setDialogIsOpen={setManageTagDialogIsOpen}

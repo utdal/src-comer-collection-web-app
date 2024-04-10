@@ -11,6 +11,31 @@ class User extends Entity {
     static singular = "user";
     static plural = "users";
 
+    static fieldDefinitions = [
+        {
+            fieldName: "given_name",
+            displayName: "First Name"
+        },
+        {
+            fieldName: "family_name",
+            displayName: "Last Name"
+        },
+        {
+            fieldName: "email",
+            displayName: "Email",
+            isRequired: true,
+            inputType: "email"
+        },
+        {
+            fieldName: "exhibition_quota",
+            displayName: "Exhibition Quota",
+            isRequired: true,
+            inputType: "number",
+            blank: 5,
+            minValue: 0
+        }
+    ];
+
     static TableCells = {
         ID({ user }) {
             const [appUser] = useAppUser();

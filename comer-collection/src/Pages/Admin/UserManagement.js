@@ -16,7 +16,6 @@ import { AssociationManagementDialog } from "../../Components/Dialogs/Associatio
 import { Navigate, useNavigate } from "react-router";
 import { UserChangePrivilegesDialog } from "../../Components/Dialogs/UserChangePrivilegesDialog.js";
 import { SelectionSummary } from "../../Components/SelectionSummary.js";
-import { userFieldDefinitions } from "../../Helpers/fields.js";
 import { sendAuthenticatedRequest } from "../../Helpers/APICalls.js";
 import { CourseFilterMenu } from "../../Components/Menus/CourseFilterMenu.js";
 import { useSnackbar } from "../../ContextProviders/AppFeatures.js";
@@ -421,14 +420,13 @@ const UserManagement = () => {
                 allItems={users}
                 refreshAllItems={fetchData}
                 dialogInstructions={"Add users, edit the user fields, then click 'Create'.  You can set passwords after creating the users."}
-                createDialogFieldDefinitions={userFieldDefinitions}
                 {...{ dialogIsOpen, setDialogIsOpen }} />
 
             <ItemSingleEditDialog
                 Entity={User}
                 editDialogItem={editDialogUser}
                 refreshAllItems={fetchData}
-                {...{ editDialogFieldDefinitions: userFieldDefinitions, editDialogIsOpen, setEditDialogIsOpen }} />
+                {...{ editDialogIsOpen, setEditDialogIsOpen }} />
 
             <ItemSingleDeleteDialog
                 Entity={User}

@@ -12,13 +12,13 @@ import { getBlankItemFields } from "../../Helpers/fields.js";
 import PropTypes from "prop-types";
 import { useSnackbar } from "../../ContextProviders/AppFeatures.js";
 
-export const ItemMultiCreateDialog = ({ Entity, refreshAllItems, dialogInstructions, createDialogFieldDefinitions, dialogIsOpen, setDialogIsOpen }) => {
+export const ItemMultiCreateDialog = ({ Entity, refreshAllItems, dialogInstructions, dialogIsOpen, setDialogIsOpen }) => {
 
 
     const createDialogReducer = useCallback((createDialogItems, action) => {
         switch (action.type) {
         case "add":
-            return [...createDialogItems, getBlankItemFields(createDialogFieldDefinitions)];
+            return [...createDialogItems, getBlankItemFields(Entity.fieldDefinitions)];
   
         case "change":
             return createDialogItems.map((r, i) => {
@@ -40,7 +40,7 @@ export const ItemMultiCreateDialog = ({ Entity, refreshAllItems, dialogInstructi
         default:
             throw Error("Unknown action type");
         }
-    }, [createDialogFieldDefinitions]);
+    }, []);
 
 
     const [createDialogItems, createDialogDispatch] = useReducer(createDialogReducer, []);
@@ -104,7 +104,7 @@ export const ItemMultiCreateDialog = ({ Entity, refreshAllItems, dialogInstructi
                             <Stack direction="row" spacing={2} alignItems="center" justifyItems="center">
                                 <DialogContentText variant="body1">{index + 1}</DialogContentText>
                                 <Stack key={index} direction="row" spacing={{xs: 1, sm: 2}} alignItems="center" useFlexGap flexWrap="wrap">
-                                    {createDialogFieldDefinitions.map((f, fi) => (
+                                    {Entity.fieldDefinitions.map((f, fi) => (
                                         <TextField key={f.fieldName} 
                                             name={f.fieldName} 
                                             label={f.displayName ?? ""} 

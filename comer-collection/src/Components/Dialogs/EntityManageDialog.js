@@ -19,7 +19,7 @@ import { useSnackbar } from "../../ContextProviders/AppFeatures.js";
 
 export const EntityManageDialog = ({ Entity,
     dialogItems, setDialogItems,
-    dialogFieldDefinitions, dialogTableFields,
+    dialogTableFields,
     dialogIsOpen, setDialogIsOpen,
     searchBoxFields, searchBoxPlaceholder, itemSearchQuery, setItemSearchQuery,
 
@@ -34,7 +34,7 @@ export const EntityManageDialog = ({ Entity,
     onClose
 }) => {
 
-    const blankItem = getBlankItemFields(dialogFieldDefinitions);
+    const blankItem = getBlankItemFields(Entity.fieldDefinitions);
     const [itemToAdd, setItemToAdd] = useState(blankItem);
     const showSnackbar = useSnackbar();
 
@@ -112,11 +112,11 @@ export const EntityManageDialog = ({ Entity,
                                                 showSnackbar(`Failed to create ${Entity.singular}`, "error");
                                             }
                                         });
-                                        setItemToAdd(getBlankItemFields(dialogFieldDefinitions));
+                                        setItemToAdd(getBlankItemFields(Entity.fieldDefinitions));
                                     }}
                                     direction="row" alignItems="center" spacing={2} justifyContent="space-around">
                                     <Stack direction="row" useFlexGap flexWrap="wrap" alignItems="center" spacing={2} >
-                                        {dialogFieldDefinitions.map((f, fi) => (
+                                        {Entity.fieldDefinitions.map((f, fi) => (
                                             <TextField key={f.fieldName}
                                                 name={f.fieldName}
                                                 label={f.displayName}
@@ -180,7 +180,6 @@ export const EntityManageDialog = ({ Entity,
                 editDialogIsOpen={internalEditDialogIsOpen}
                 setEditDialogIsOpen={setInternalEditDialogIsOpen}
                 editDialogItem={internalEditDialogItem}
-                editDialogFieldDefinitions={dialogFieldDefinitions}
             />
 
 
@@ -203,7 +202,6 @@ EntityManageDialog.propTypes = {
     Entity: PropTypes.any,
     dialogItems: PropTypes.arrayOf(PropTypes.object),
     setDialogItems: PropTypes.func,
-    dialogFieldDefinitions: PropTypes.arrayOf(PropTypes.object),
     dialogTableFields: PropTypes.PropTypes.arrayOf(PropTypes.object),
     dialogIsOpen: PropTypes.bool,
     setDialogIsOpen: PropTypes.func,

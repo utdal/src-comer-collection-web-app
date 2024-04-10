@@ -9,6 +9,33 @@ class Course extends Entity {
     static singular = "course";
     static plural = "courses";
 
+    static fieldDefinitions = [
+        {
+            fieldName: "name",
+            displayName: "Course Name",
+            inputType: "textarea",
+            isRequired: true
+        },
+        {
+            fieldName: "date_start",
+            displayName: "Start",
+            inputType: "datetime-local",
+            isRequired: true
+        },
+        {
+            fieldName: "date_end",
+            displayName: "End",
+            inputType: "datetime-local",
+            isRequired: true
+        },
+        {
+            fieldName: "notes",
+            displayName: "Notes",
+            inputType: "textarea",
+            multiline: true
+        }
+    ];
+
     static TableCells = {
         ID({ course }) {
             return (

@@ -14,7 +14,7 @@ import { useSnackbar } from "../../ContextProviders/AppFeatures.js";
 import { useAppUser } from "../../ContextProviders/AppUser.js";
 import { User } from "../../Classes/Entities/User.js";
 
-export const ItemSingleEditDialog = ({ Entity, editDialogItem, editDialogFieldDefinitions, refreshAllItems, editDialogIsOpen, setEditDialogIsOpen }) => {
+export const ItemSingleEditDialog = ({ Entity, editDialogItem, refreshAllItems, editDialogIsOpen, setEditDialogIsOpen }) => {
 
 
     const editDialogFieldRefs = useRef([]);
@@ -23,7 +23,7 @@ export const ItemSingleEditDialog = ({ Entity, editDialogItem, editDialogFieldDe
 
     const editDialogEntryFields = useMemo(() => {
         return (
-            editDialogFieldDefinitions.map((f) => {
+            Entity.fieldDefinitions.map((f) => {
                 return (
                     <TextField multiline={f.multiline}
                         minRows={2}
@@ -46,7 +46,7 @@ export const ItemSingleEditDialog = ({ Entity, editDialogItem, editDialogFieldDe
                 );
             })
         );
-    }, [editDialogFieldDefinitions, editDialogItem]);
+    }, [editDialogItem]);
 
 
     const singularCapitalized = Entity?.singular.substr(0, 1).toUpperCase() + Entity?.singular.substr(1).toLowerCase();
@@ -114,7 +114,6 @@ export const ItemSingleEditDialog = ({ Entity, editDialogItem, editDialogFieldDe
 ItemSingleEditDialog.propTypes = {
     Entity: PropTypes.any,
     editDialogItem: PropTypes.object,
-    editDialogFieldDefinitions: PropTypes.arrayOf(PropTypes.object),
     editDialogIsOpen: PropTypes.bool,
     setEditDialogIsOpen: PropTypes.func,
     refreshAllItems: PropTypes.func.isRequired
