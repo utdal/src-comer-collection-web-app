@@ -38,7 +38,7 @@ const get_canvas_dimensions = (boundingBoxElement) => {
 };
 
 
-const ExhibitionViewer = ({exhibitionState: primary_json, exhibitionMetadata, exhibitionIsLoaded, exhibitionIsEditable, globalImageCatalog, editModeActive, setEditModeActive}) => {
+const Exhibition3DViewport = ({exhibitionState: primary_json, exhibitionMetadata, exhibitionIsLoaded, exhibitionIsEditable, globalImageCatalog, editModeActive, setEditModeActive}) => {
 
         
     const containerRef = useRef(null);
@@ -499,7 +499,7 @@ const ExhibitionViewer = ({exhibitionState: primary_json, exhibitionMetadata, ex
 };
 
 
-ExhibitionViewer.propTypes = {
+Exhibition3DViewport.propTypes = {
     exhibitionState: PropTypes.object.isRequired,
     exhibitionMetadata: PropTypes.object.isRequired,
     exhibitionIsLoaded: PropTypes.bool.isRequired,
@@ -609,4 +609,4 @@ ExhibitionIntro.propTypes = {
     setDialogIsOpen: PropTypes.func.isRequired
 };
 
-export default ExhibitionViewer;
+export default Exhibition3DViewport;

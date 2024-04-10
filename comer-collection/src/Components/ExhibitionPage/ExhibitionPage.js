@@ -3,7 +3,7 @@ import { useParams } from "react-router";
 import { ExhibitionEditPane } from "../ExhibitionEditPane/ExhibitionEditPane.js";
 import React, { useEffect, useReducer, useState } from "react";
 import { exhibitionEditReducer, blankExhibitionData } from "./exhibitionEditReducer.js";
-import ExhibitionViewer from "../ExhibitionViewer/ExhibitionViewer.js";
+import Exhibition3DViewport from "../Exhibition3DViewport/Exhibition3DViewport.js";
 import { sendAuthenticatedRequest } from "../Users/Tools/HelperMethods/APICalls.js";
 import { useAppUser } from "../App/AppUser.js";
 import { FullPageMessage } from "../FullPageMessage.js";
@@ -175,7 +175,7 @@ const ExhibitionPage = () => {
                 `
             }}>
 
-            <ExhibitionViewer {...{exhibitionState, exhibitionMetadata, exhibitionIsLoaded, globalImageCatalog, exhibitionIsEditable, editModeActive, setEditModeActive}}
+            <Exhibition3DViewport {...{exhibitionState, exhibitionMetadata, exhibitionIsLoaded, globalImageCatalog, exhibitionIsEditable, editModeActive, setEditModeActive}}
                 sx={{gridArea: "viewer", width: "100%", height: "calc(100vh - 64px)"}}
             />
 
