@@ -4,7 +4,7 @@ import {
     DialogTitle,
     DialogContent,
     DialogActions,
-    Button,
+    Button, Divider,
     Typography, DialogContentText, ToggleButton, ToggleButtonGroup
 } from "@mui/material";
 import { useAppDarkTheme, useAppSettingsDialog } from "../../ContextProviders/AppFeatures.js";
@@ -45,6 +45,7 @@ export const AppSettingsDialog = () => {
             <DialogContent>
                 <Stack spacing={2}>
                     <DialogContentText variant="body1">These settings are stored and applied in this browser only.</DialogContentText>
+                    <Divider />
                     <Option description="Application Theme">
                         <ToggleButtonGroup required value={appDarkTheme}>
                             <ToggleButton value={false} onClick={() => {

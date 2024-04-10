@@ -159,7 +159,7 @@ const NavBar = () => {
 
                             )}
                     </Stack>
-                    <IconButton sx={{color: "white", paddingLeft: 2}} onClick={() => {
+                    <IconButton sx={{color: "white", marginLeft: 2}} onClick={() => {
                         setAppSettingsDialogIsOpen(true);
                     }}>
                         <SettingsIcon />
