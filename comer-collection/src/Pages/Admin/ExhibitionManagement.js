@@ -4,23 +4,23 @@ import {
     Button,
     Typography, Box, IconButton, Paper
 } from "@mui/material";
-import { FullPageMessage } from "../../FullPageMessage.js";
-import SearchBox from "../../SearchBox.js";
-import { LockIcon, RefreshIcon, DeleteIcon, SearchIcon, InfoIcon, SettingsIcon, OpenInNewIcon, FilterAltOffOutlinedIcon, WarningIcon, AccessTimeIcon } from "../../../Imports/IconImports.js";
-import { ItemSingleDeleteDialog } from "../../Dialogs/ItemSingleDeleteDialog.js";
-import { DataTable } from "../../DataTable.js";
+import { FullPageMessage } from "../../Components/FullPageMessage.js";
+import SearchBox from "../../Components/SearchBox.js";
+import { LockIcon, RefreshIcon, DeleteIcon, SearchIcon, InfoIcon, SettingsIcon, OpenInNewIcon, FilterAltOffOutlinedIcon, WarningIcon, AccessTimeIcon } from "../../Imports/IconImports.js";
+import { ItemSingleDeleteDialog } from "../../Components/Dialogs/ItemSingleDeleteDialog.js";
+import { DataTable } from "../../Components/DataTable.js";
 import { Navigate } from "react-router";
-import { SelectionSummary } from "../../SelectionSummary.js";
-import { sendAuthenticatedRequest } from "../../../Helpers/APICalls.js";
-import { ExhibitionSettingsDialog } from "../../Dialogs/ExhibitionSettingsDialog.js";
-import { useSnackbar } from "../../../ContextProviders/AppFeatures.js";
-import { useAppUser } from "../../../ContextProviders/AppUser.js";
-import { doesItemMatchSearchQuery } from "../../../Helpers/SearchUtilities.js";
-import { CourseFilterMenu } from "../../Menus/CourseFilterMenu.js";
-import { useTitle } from "../../../ContextProviders/AppFeatures.js";
-import { useAccountNav } from "../../../ContextProviders/AccountNavProvider.js";
-import { Exhibition } from "../../../Classes/Entities/Exhibition.js";
-import { User } from "../../../Classes/Entities/User.js";
+import { SelectionSummary } from "../../Components/SelectionSummary.js";
+import { sendAuthenticatedRequest } from "../../Helpers/APICalls.js";
+import { ExhibitionSettingsDialog } from "../../Components/Dialogs/ExhibitionSettingsDialog.js";
+import { useSnackbar } from "../../ContextProviders/AppFeatures.js";
+import { useAppUser } from "../../ContextProviders/AppUser.js";
+import { doesItemMatchSearchQuery } from "../../Helpers/SearchUtilities.js";
+import { CourseFilterMenu } from "../../Components/Menus/CourseFilterMenu.js";
+import { useTitle } from "../../ContextProviders/AppFeatures.js";
+import { useAccountNav } from "../../ContextProviders/AccountNavProvider.js";
+import { Exhibition } from "../../Classes/Entities/Exhibition.js";
+import { User } from "../../Classes/Entities/User.js";
 
 const ExhibitionManagement = () => {
     const [courses, setCourses] = useState([]);

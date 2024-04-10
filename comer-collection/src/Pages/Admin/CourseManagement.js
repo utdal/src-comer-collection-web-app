@@ -4,19 +4,19 @@ import {
     Button,
     Typography, Box, Paper
 } from "@mui/material";
-import { FullPageMessage } from "../../FullPageMessage.js";
-import SearchBox from "../../SearchBox.js";
-import { ItemSingleDeleteDialog } from "../../Dialogs/ItemSingleDeleteDialog.js";
-import { ItemMultiCreateDialog } from "../../Dialogs/ItemMultiCreateDialog.js";
-import { ItemSingleEditDialog } from "../../Dialogs/ItemSingleEditDialog.js";
-import { DataTable } from "../../DataTable.js";
-import { doesItemMatchSearchQuery } from "../../../Helpers/SearchUtilities.js";
-import { AssociationManagementDialog } from "../../Dialogs/AssociationManagementDialog.js";
+import { FullPageMessage } from "../../Components/FullPageMessage.js";
+import SearchBox from "../../Components/SearchBox.js";
+import { ItemSingleDeleteDialog } from "../../Components/Dialogs/ItemSingleDeleteDialog.js";
+import { ItemMultiCreateDialog } from "../../Components/Dialogs/ItemMultiCreateDialog.js";
+import { ItemSingleEditDialog } from "../../Components/Dialogs/ItemSingleEditDialog.js";
+import { DataTable } from "../../Components/DataTable.js";
+import { doesItemMatchSearchQuery } from "../../Helpers/SearchUtilities.js";
+import { AssociationManagementDialog } from "../../Components/Dialogs/AssociationManagementDialog.js";
 import { Navigate, useNavigate } from "react-router";
-import { SelectionSummary } from "../../SelectionSummary.js";
-import { courseFieldDefinitions } from "../../../Helpers/fields.js";
-import { sendAuthenticatedRequest } from "../../../Helpers/APICalls.js";
-import { useAppUser } from "../../../ContextProviders/AppUser.js";
+import { SelectionSummary } from "../../Components/SelectionSummary.js";
+import { courseFieldDefinitions } from "../../Helpers/fields.js";
+import { sendAuthenticatedRequest } from "../../Helpers/APICalls.js";
+import { useAppUser } from "../../ContextProviders/AppUser.js";
 import {
     FilterAltOffOutlinedIcon,
     AddIcon,
@@ -25,12 +25,12 @@ import {
     AccessTimeIcon,
     WarningIcon,
     LockIcon
-} from "../../../Imports/IconImports.js";
-import { useTitle } from "../../../ContextProviders/AppFeatures.js";
-import { useAccountNav } from "../../../ContextProviders/AccountNavProvider.js";
-import { Course } from "../../../Classes/Entities/Course.js";
-import { User } from "../../../Classes/Entities/User.js";
-import { EnrollmentCoursePrimary } from "../../../Classes/Associations/Enrollment.js";
+} from "../../Imports/IconImports.js";
+import { useTitle } from "../../ContextProviders/AppFeatures.js";
+import { useAccountNav } from "../../ContextProviders/AccountNavProvider.js";
+import { Course } from "../../Classes/Entities/Course.js";
+import { User } from "../../Classes/Entities/User.js";
+import { EnrollmentCoursePrimary } from "../../Classes/Associations/Enrollment.js";
 
 
 const CourseManagement = () => {

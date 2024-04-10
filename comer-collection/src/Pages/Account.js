@@ -1,15 +1,15 @@
 import React, { useState } from "react";
 import { Navigate, Route, Routes } from "react-router-dom"; // Import Route from react-router-dom
 import { AccountNavPane } from "../Components/AccountNavPane.js";
-import UserManagement from "../Components/Users/Admin/UserManagement.js";
-import ImageManagement from "../Components/Users/Admin/ImageManagement.js";
+import UserManagement from "./Admin/UserManagement.js";
+import ImageManagement from "./Admin/ImageManagement.js";
 import Profile from "./Account/Profile.js";
 import { Box } from "@mui/material";
 import { FullPageMessage } from "../Components/FullPageMessage.js";
 import ChangePassword from "./Account/ChangePassword.js";
-import CourseManagement from "../Components/Users/Admin/CourseManagement.js";
+import CourseManagement from "./Admin/CourseManagement.js";
 import MyExhibitions from "./Account/MyExhibitions.js";
-import ExhibitionManagement from "../Components/Users/Admin/ExhibitionManagement.js";
+import ExhibitionManagement from "./Admin/ExhibitionManagement.js";
 import { useAppUser } from "../ContextProviders/AppUser.js";
 import { AccessTimeIcon, LockIcon } from "../Imports/IconImports.js";
 import { AccountNavProvider } from "../ContextProviders/AccountNavProvider.js";

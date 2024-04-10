@@ -4,31 +4,31 @@ import {
     Button,
     Typography, Box, Paper
 } from "@mui/material";
-import { FilterAltOffOutlinedIcon, GroupAddIcon, RefreshIcon, SchoolIcon, SearchIcon, InfoIcon, LockIcon, AccessTimeIcon, WarningIcon } from "../../../Imports/IconImports.js";
-import { FullPageMessage } from "../../FullPageMessage.js";
-import SearchBox from "../../SearchBox.js";
-import { ItemSingleDeleteDialog } from "../../Dialogs/ItemSingleDeleteDialog.js";
-import { ItemMultiCreateDialog } from "../../Dialogs/ItemMultiCreateDialog.js";
-import { ItemSingleEditDialog } from "../../Dialogs/ItemSingleEditDialog.js";
-import { DataTable } from "../../DataTable.js";
-import { doesItemMatchSearchQuery } from "../../../Helpers/SearchUtilities.js";
-import { AssociationManagementDialog } from "../../Dialogs/AssociationManagementDialog.js";
+import { FilterAltOffOutlinedIcon, GroupAddIcon, RefreshIcon, SchoolIcon, SearchIcon, InfoIcon, LockIcon, AccessTimeIcon, WarningIcon } from "../../Imports/IconImports.js";
+import { FullPageMessage } from "../../Components/FullPageMessage.js";
+import SearchBox from "../../Components/SearchBox.js";
+import { ItemSingleDeleteDialog } from "../../Components/Dialogs/ItemSingleDeleteDialog.js";
+import { ItemMultiCreateDialog } from "../../Components/Dialogs/ItemMultiCreateDialog.js";
+import { ItemSingleEditDialog } from "../../Components/Dialogs/ItemSingleEditDialog.js";
+import { DataTable } from "../../Components/DataTable.js";
+import { doesItemMatchSearchQuery } from "../../Helpers/SearchUtilities.js";
+import { AssociationManagementDialog } from "../../Components/Dialogs/AssociationManagementDialog.js";
 import { Navigate, useNavigate } from "react-router";
-import { UserChangePrivilegesDialog } from "../../Dialogs/UserChangePrivilegesDialog.js";
-import { SelectionSummary } from "../../SelectionSummary.js";
-import { userFieldDefinitions } from "../../../Helpers/fields.js";
-import { sendAuthenticatedRequest } from "../../../Helpers/APICalls.js";
-import { CourseFilterMenu } from "../../Menus/CourseFilterMenu.js";
-import { useSnackbar } from "../../../ContextProviders/AppFeatures.js";
-import { useAppUser } from "../../../ContextProviders/AppUser.js";
-import { useTitle } from "../../../ContextProviders/AppFeatures.js";
-import { UserResetPasswordDialog } from "../../Dialogs/UserResetPasswordDialog.js";
-import { useAccountNav } from "../../../ContextProviders/AccountNavProvider.js";
-import { User } from "../../../Classes/Entities/User.js";
-import { Entity } from "../../../Classes/Entity.js";
-import { EnrollmentUserPrimary } from "../../../Classes/Associations/Enrollment.js";
-import { UserExhibition } from "../../../Classes/Associations/UserExhibition.js";
-import { Exhibition } from "../../../Classes/Entities/Exhibition.js";
+import { UserChangePrivilegesDialog } from "../../Components/Dialogs/UserChangePrivilegesDialog.js";
+import { SelectionSummary } from "../../Components/SelectionSummary.js";
+import { userFieldDefinitions } from "../../Helpers/fields.js";
+import { sendAuthenticatedRequest } from "../../Helpers/APICalls.js";
+import { CourseFilterMenu } from "../../Components/Menus/CourseFilterMenu.js";
+import { useSnackbar } from "../../ContextProviders/AppFeatures.js";
+import { useAppUser } from "../../ContextProviders/AppUser.js";
+import { useTitle } from "../../ContextProviders/AppFeatures.js";
+import { UserResetPasswordDialog } from "../../Components/Dialogs/UserResetPasswordDialog.js";
+import { useAccountNav } from "../../ContextProviders/AccountNavProvider.js";
+import { User } from "../../Classes/Entities/User.js";
+import { Entity } from "../../Classes/Entity.js";
+import { EnrollmentUserPrimary } from "../../Classes/Associations/Enrollment.js";
+import { UserExhibition } from "../../Classes/Associations/UserExhibition.js";
+import { Exhibition } from "../../Classes/Entities/Exhibition.js";
 
 
 const UserManagement = () => {
