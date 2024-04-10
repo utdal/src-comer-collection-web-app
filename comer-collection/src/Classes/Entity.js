@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
 import { IconButton } from "@mui/material";
-import { sendAuthenticatedRequest } from "../Components/Users/Tools/HelperMethods/APICalls.js";
+import { sendAuthenticatedRequest } from "../Helpers/APICalls.js";
 import { DeleteIcon, EditIcon } from "../Imports/IconImports.js";
 import React from "react";
 

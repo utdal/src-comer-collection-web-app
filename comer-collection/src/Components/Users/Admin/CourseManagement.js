@@ -15,7 +15,7 @@ import { AssociationManagementDialog } from "../../Dialogs/AssociationManagement
 import { Navigate, useNavigate } from "react-router";
 import { SelectionSummary } from "../Tools/SelectionSummary.js";
 import { courseFieldDefinitions } from "../../../Helpers/fields.js";
-import { sendAuthenticatedRequest } from "../Tools/HelperMethods/APICalls.js";
+import { sendAuthenticatedRequest } from "../../../Helpers/APICalls.js";
 import { useAppUser } from "../../../ContextProviders/AppUser.js";
 import {
     FilterAltOffOutlinedIcon,

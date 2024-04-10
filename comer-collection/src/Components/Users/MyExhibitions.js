@@ -5,7 +5,7 @@ import {
 import { Navigate, useNavigate } from "react-router";
 import { DataTable } from "../DataTable.js";
 import { PhotoCameraBackIcon, AddIcon, InfoIcon, SettingsIcon, DeleteIcon, SecurityIcon } from "../../Imports/IconImports.js";
-import { sendAuthenticatedRequest } from "./Tools/HelperMethods/APICalls.js";
+import { sendAuthenticatedRequest } from "../../Helpers/APICalls.js";
 import { ExhibitionSettingsDialog } from "../Dialogs/ExhibitionSettingsDialog.js";
 import { ItemSingleDeleteDialog } from "../Dialogs/ItemSingleDeleteDialog.js";
 import { useSnackbar } from "../../ContextProviders/AppFeatures.js";

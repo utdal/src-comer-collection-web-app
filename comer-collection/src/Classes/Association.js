@@ -2,7 +2,7 @@
 
 import { AddIcon, RemoveIcon } from "../Imports/IconImports.js";
 import { capitalized } from "./Entity.js";
-import { sendAuthenticatedRequest } from "../Components/Users/Tools/HelperMethods/APICalls.js";
+import { sendAuthenticatedRequest } from "../Helpers/APICalls.js";
 
 class Association {
 

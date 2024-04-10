@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
 import { Button, Stack, Switch, Typography } from "@mui/material";
-import { sendAuthenticatedRequest } from "../../Components/Users/Tools/HelperMethods/APICalls.js";
+import { sendAuthenticatedRequest } from "../../Helpers/APICalls.js";
 import { Entity } from "../Entity.js";
 import React from "react";
 import { useAppUser } from "../../ContextProviders/AppUser.js";

@@ -4,7 +4,7 @@ import { Box, Button, Divider, Paper, Stack, TextField, Typography } from "@mui/
 import { useAppUser } from "../../ContextProviders/AppUser.js";
 import { useTitle } from "../../ContextProviders/AppFeatures.js";
 import { useSnackbar } from "../../ContextProviders/AppFeatures.js";
-import { sendAuthenticatedRequest } from "./Tools/HelperMethods/APICalls.js";
+import { sendAuthenticatedRequest } from "../../Helpers/APICalls.js";
 import { useAccountNav } from "./Account.js";
 
 const ChangePassword = () => {

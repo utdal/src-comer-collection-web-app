@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Navigate, useNavigate } from "react-router";
 import { Box, Button, Divider, Paper, Stack, TextField, Typography } from "@mui/material";
-import { sendAuthenticatedRequest } from "../Components/Users/Tools/HelperMethods/APICalls.js";
+import { sendAuthenticatedRequest } from "../Helpers/APICalls.js";
 import { useAppUser } from "../ContextProviders/AppUser.js";
 import { useTitle } from "../ContextProviders/AppFeatures.js";
 

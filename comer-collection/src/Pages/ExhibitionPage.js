@@ -4,7 +4,7 @@ import { ExhibitionEditPane } from "../Components/ExhibitionPage/ExhibitionEditP
 import React, { useEffect, useReducer, useState } from "react";
 import { exhibitionEditReducer, blankExhibitionData } from "../Components/ExhibitionPage/exhibitionEditReducer.js";
 import Exhibition3DViewport from "../Components/Exhibition3DViewport/Exhibition3DViewport.js";
-import { sendAuthenticatedRequest } from "../Components/Users/Tools/HelperMethods/APICalls.js";
+import { sendAuthenticatedRequest } from "../Helpers/APICalls.js";
 import { useAppUser } from "../ContextProviders/AppUser.js";
 import { FullPageMessage } from "../Components/FullPageMessage.js";
 import { useSnackbar } from "../ContextProviders/AppFeatures.js";

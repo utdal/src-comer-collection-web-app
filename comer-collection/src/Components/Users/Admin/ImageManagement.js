@@ -20,7 +20,7 @@ import { imageFieldDefinitions } from "../../../Helpers/fields.js";
 import { artistFieldDefinitions } from "../../../Helpers/fields.js";
 import { SelectionSummary } from "../Tools/SelectionSummary.js";
 import { AssociationManagementDialog } from "../../Dialogs/AssociationManagementDialog.js";
-import { sendAuthenticatedRequest } from "../Tools/HelperMethods/APICalls.js";
+import { sendAuthenticatedRequest } from "../../../Helpers/APICalls.js";
 import { useSnackbar } from "../../../ContextProviders/AppFeatures.js";
 import { useAppUser } from "../../../ContextProviders/AppUser.js";
 import { useTitle } from "../../../ContextProviders/AppFeatures.js";

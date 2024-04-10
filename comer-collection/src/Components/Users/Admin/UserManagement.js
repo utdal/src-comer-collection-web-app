@@ -17,7 +17,7 @@ import { Navigate, useNavigate } from "react-router";
 import { UserChangePrivilegesDialog } from "../../Dialogs/UserChangePrivilegesDialog.js";
 import { SelectionSummary } from "../Tools/SelectionSummary.js";
 import { userFieldDefinitions } from "../../../Helpers/fields.js";
-import { sendAuthenticatedRequest } from "../Tools/HelperMethods/APICalls.js";
+import { sendAuthenticatedRequest } from "../../../Helpers/APICalls.js";
 import { CourseFilterMenu } from "../../Menus/CourseFilterMenu.js";
 import { useSnackbar } from "../../../ContextProviders/AppFeatures.js";
 import { useAppUser } from "../../../ContextProviders/AppUser.js";

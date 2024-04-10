@@ -1,6 +1,6 @@
 import { Box, Chip, Paper, Stack, ToggleButton, ToggleButtonGroup, Typography, ListItemButton } from "@mui/material";
 import React, { useEffect, useMemo, useState } from "react";
-import { sendAuthenticatedRequest } from "../../Components/Users/Tools/HelperMethods/APICalls.js";
+import { sendAuthenticatedRequest } from "../../Helpers/APICalls.js";
 import { ArtistFilterMenu } from "../../Components/Menus/ArtistFilterMenu.js";
 import { SellIcon, PersonIcon, GridOnIcon, ViewListIcon } from "../../Imports/IconImports.js";
 import { TagFilterMenu } from "../../Components/Menus/TagFilterMenu.js";

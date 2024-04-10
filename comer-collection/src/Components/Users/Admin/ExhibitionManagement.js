@@ -11,7 +11,7 @@ import { ItemSingleDeleteDialog } from "../../Dialogs/ItemSingleDeleteDialog.js"
 import { DataTable } from "../../DataTable.js";
 import { Navigate } from "react-router";
 import { SelectionSummary } from "../Tools/SelectionSummary.js";
-import { sendAuthenticatedRequest } from "../Tools/HelperMethods/APICalls.js";
+import { sendAuthenticatedRequest } from "../../../Helpers/APICalls.js";
 import { ExhibitionSettingsDialog } from "../../Dialogs/ExhibitionSettingsDialog.js";
 import { useSnackbar } from "../../../ContextProviders/AppFeatures.js";
 import { useAppUser } from "../../../ContextProviders/AppUser.js";
