@@ -17,7 +17,7 @@ import { FullPageMessage } from "./Components/FullPageMessage.js";
 import { AccessTimeIcon } from "./Imports/IconImports.js";
 
 
-const ExhibitionPage = lazy(() => import("./Components/ExhibitionPage/ExhibitionPage.js"));
+const ExhibitionPage = lazy(() => import("./Pages/ExhibitionPage.js"));
 const ExhibitionPageWrapper = () => (
     <Suspense fallback={<FullPageMessage message="Loading exhibition viewer..." Icon={AccessTimeIcon} />}>
         <ExhibitionPage />

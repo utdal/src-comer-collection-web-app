@@ -1,7 +1,7 @@
 import { Accordion, AccordionDetails, AccordionSummary, Box, Button, Checkbox, Dialog, DialogActions, DialogContent, DialogTitle, Divider, IconButton, Input, ListItemButton, MenuItem, Paper, Select, Stack, TextField, ToggleButton, ToggleButtonGroup, Typography } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { useTheme } from "@emotion/react";
-import { getImageStateById } from "../ExhibitionPage/exhibitionEditReducer.js";
+import { getImageStateById } from "./exhibitionEditReducer.js";
 import { CollectionBrowser } from "../../Pages/Browsers/CollectionBrowser.js";
 import {
     ExpandMoreIcon,

@@ -1,15 +1,15 @@
 import { Box } from "@mui/material";
 import { useParams } from "react-router";
-import { ExhibitionEditPane } from "../ExhibitionEditPane/ExhibitionEditPane.js";
+import { ExhibitionEditPane } from "../Components/ExhibitionPage/ExhibitionEditPane.js";
 import React, { useEffect, useReducer, useState } from "react";
-import { exhibitionEditReducer, blankExhibitionData } from "./exhibitionEditReducer.js";
-import Exhibition3DViewport from "../Exhibition3DViewport/Exhibition3DViewport.js";
-import { sendAuthenticatedRequest } from "../Users/Tools/HelperMethods/APICalls.js";
-import { useAppUser } from "../../ContextProviders/AppUser.js";
-import { FullPageMessage } from "../FullPageMessage.js";
-import { useSnackbar } from "../../ContextProviders/AppFeatures.js";
-import { useTitle } from "../../ContextProviders/AppFeatures.js";
-import { AccessTimeIcon, InfoIcon } from "../../Imports/IconImports.js";
+import { exhibitionEditReducer, blankExhibitionData } from "../Components/ExhibitionPage/exhibitionEditReducer.js";
+import Exhibition3DViewport from "../Components/Exhibition3DViewport/Exhibition3DViewport.js";
+import { sendAuthenticatedRequest } from "../Components/Users/Tools/HelperMethods/APICalls.js";
+import { useAppUser } from "../ContextProviders/AppUser.js";
+import { FullPageMessage } from "../Components/FullPageMessage.js";
+import { useSnackbar } from "../ContextProviders/AppFeatures.js";
+import { useTitle } from "../ContextProviders/AppFeatures.js";
+import { AccessTimeIcon, InfoIcon } from "../Imports/IconImports.js";
 
 
 const ExhibitionPage = () => {
