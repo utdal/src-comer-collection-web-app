@@ -16,7 +16,7 @@ import { ExhibitionSettingsDialog } from "../Tools/Dialogs/ExhibitionSettingsDia
 import { useSnackbar } from "../../../ContextProviders/AppFeatures.js";
 import { useAppUser } from "../../../ContextProviders/AppUser.js";
 import { doesItemMatchSearchQuery } from "../Tools/SearchUtilities.js";
-import { CourseFilterMenu } from "../Tools/CourseFilterMenu.js";
+import { CourseFilterMenu } from "../../Menus/CourseFilterMenu.js";
 import { useTitle } from "../../../ContextProviders/AppFeatures.js";
 import { useAccountNav } from "../Account.js";
 import { Exhibition } from "../../../Classes/Entities/Exhibition.js";

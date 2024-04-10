@@ -18,7 +18,7 @@ import { UserChangePrivilegesDialog } from "../Tools/Dialogs/UserChangePrivilege
 import { SelectionSummary } from "../Tools/SelectionSummary.js";
 import { userFieldDefinitions } from "../Tools/HelperMethods/fields.js";
 import { sendAuthenticatedRequest } from "../Tools/HelperMethods/APICalls.js";
-import { CourseFilterMenu } from "../Tools/CourseFilterMenu.js";
+import { CourseFilterMenu } from "../../Menus/CourseFilterMenu.js";
 import { useSnackbar } from "../../../ContextProviders/AppFeatures.js";
 import { useAppUser } from "../../../ContextProviders/AppUser.js";
 import { useTitle } from "../../../ContextProviders/AppFeatures.js";
