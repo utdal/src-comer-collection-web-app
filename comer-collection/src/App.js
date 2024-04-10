@@ -5,8 +5,8 @@ import React, { Suspense, lazy, useState } from "react";
 
 import { Box, ThemeProvider, createTheme } from "@mui/material";
 import { green, grey, orange } from "@mui/material/colors/index.js";
-import { CollectionBrowser } from "./Components/CollectionBrowser/CollectionBrowser.js";
-import { ExhibitionBrowser } from "./Components/ExhibitionBrowser/ExhibitionBrowser.js";
+import { CollectionBrowser } from "./Pages/Browsers/CollectionBrowser.js";
+import { ExhibitionBrowser } from "./Pages/Browsers/ExhibitionBrowser.js";
 import { AppFeatureProvider } from "./ContextProviders/AppFeatures.js";
 import { AppUserProvider } from "./ContextProviders/AppUser.js";
 import { Helmet, HelmetProvider } from "react-helmet-async";

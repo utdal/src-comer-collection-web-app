@@ -2,7 +2,7 @@ import { Accordion, AccordionDetails, AccordionSummary, Box, Button, Checkbox, D
 import React, { useEffect, useState } from "react";
 import { useTheme } from "@emotion/react";
 import { getImageStateById } from "../ExhibitionPage/exhibitionEditReducer.js";
-import { CollectionBrowser } from "../CollectionBrowser/CollectionBrowser.js";
+import { CollectionBrowser } from "../../Pages/Browsers/CollectionBrowser.js";
 import {
     ExpandMoreIcon,
     CloudUploadIcon,

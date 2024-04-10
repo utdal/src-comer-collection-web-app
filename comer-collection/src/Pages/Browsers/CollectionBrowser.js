@@ -1,11 +1,11 @@
 import { Box, Chip, Paper, Stack, ToggleButton, ToggleButtonGroup, Typography, ListItemButton } from "@mui/material";
 import React, { useEffect, useMemo, useState } from "react";
-import { sendAuthenticatedRequest } from "../Users/Tools/HelperMethods/APICalls.js";
-import { ArtistFilterMenu } from "../Users/Tools/ArtistFilterMenu.js";
-import { SellIcon, PersonIcon, GridOnIcon, ViewListIcon } from "../IconImports.js";
-import { TagFilterMenu } from "../Users/Tools/TagFilterMenu.js";
-import SearchBox from "../Users/Tools/SearchBox.js";
-import { doesItemMatchSearchQuery } from "../Users/Tools/SearchUtilities.js";
+import { sendAuthenticatedRequest } from "../../Components/Users/Tools/HelperMethods/APICalls.js";
+import { ArtistFilterMenu } from "../../Components/Users/Tools/ArtistFilterMenu.js";
+import { SellIcon, PersonIcon, GridOnIcon, ViewListIcon } from "../../Components/IconImports.js";
+import { TagFilterMenu } from "../../Components/Users/Tools/TagFilterMenu.js";
+import SearchBox from "../../Components/Users/Tools/SearchBox.js";
+import { doesItemMatchSearchQuery } from "../../Components/Users/Tools/SearchUtilities.js";
 import { useTitle } from "../../ContextProviders/AppFeatures.js";
 import PropTypes from "prop-types";
 import { InView } from "react-intersection-observer";
