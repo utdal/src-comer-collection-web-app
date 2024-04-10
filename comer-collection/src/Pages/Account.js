@@ -1,17 +1,17 @@
 import React, { createContext, useContext, useState } from "react";
 import { Navigate, Route, Routes } from "react-router-dom"; // Import Route from react-router-dom
-import { AccountNav } from "../AccountNav.js";
+import AdminNav from "../Components/AccountNav.js";
 import UserManagement from "./Admin/UserManagement.js";
 import ImageManagement from "./Admin/ImageManagement.js";
-import Profile from "./Profile.js";
+import Profile from "./Account/Profile.js";
 import { Box } from "@mui/material";
-import { FullPageMessage } from "../FullPageMessage.js";
-import ChangePassword from "./ChangePassword.js";
+import { FullPageMessage } from "../Components/FullPageMessage.js";
+import ChangePassword from "./Account/ChangePassword.js";
 import CourseManagement from "./Admin/CourseManagement.js";
-import MyExhibitions from "./MyExhibitions.js";
+import MyExhibitions from "./Account/MyExhibitions.js";
 import ExhibitionManagement from "./Admin/ExhibitionManagement.js";
-import { useAppUser } from "../../ContextProviders/AppUser.js";
-import { AccessTimeIcon, LockIcon } from "../../Imports/IconImports.js";
+import { useAppUser } from "../ContextProviders/AppUser.js";
+import { AccessTimeIcon, LockIcon } from "../Imports/IconImports.js";
 
 
 const AccountNavContext = createContext();
@@ -38,7 +38,7 @@ const Account = () => {
             }}>
 
 
-                <AccountNav sx={{gridArea: "sidebar"}} />
+                <AdminNav sx={{gridArea: "sidebar"}} />
         
                 <Box sx={{gridArea: "main", position: "relative", overflowY: "hidden", height: "100%"}}>
           

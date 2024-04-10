@@ -2,9 +2,9 @@ import React from "react";
 import { List, ListItemButton, ListItemIcon, ListItemText, Typography, Stack, Divider } from "@mui/material";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useTheme } from "@emotion/react";
-import { AccountCircleIcon, GroupsIcon, PhotoCameraBackIcon, ImageIcon, SchoolIcon, LockIcon } from "../../Imports/IconImports.js";
-import { useAppUser } from "../../ContextProviders/AppUser.js";
-import { useAccountNav } from "./Account.js";
+import { AccountCircleIcon, GroupsIcon, PhotoCameraBackIcon, ImageIcon, SchoolIcon, LockIcon } from "../Imports/IconImports.js";
+import { useAppUser } from "../ContextProviders/AppUser.js";
+import { useAccountNav } from "./Users/Account.js";
 
 const navLinks = [
     {
@@ -63,7 +63,7 @@ const adminNavLinks = [
 
 
 
-const AccountNav = () => {
+export const AccountNav = () => {
 
     const [selectedNavItem, setSelectedNavItem] = useAccountNav();
 
@@ -192,5 +192,3 @@ const AccountNav = () => {
         </Stack>
     );
 };
-
-export default AccountNav;
