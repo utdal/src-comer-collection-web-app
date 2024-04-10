@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState } from "react";
 import { Navigate, Route, Routes } from "react-router-dom"; // Import Route from react-router-dom
-import AdminNav from "../Components/AccountNav.js";
+import AdminNav from "../Components/AccountNavPane.js";
 import UserManagement from "./Admin/UserManagement.js";
 import ImageManagement from "./Admin/ImageManagement.js";
 import Profile from "./Account/Profile.js";

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Navigate, Route, Routes } from "react-router-dom"; // Import Route from react-router-dom
-import { AccountNav } from "../AccountNav.js";
+import { AccountNavPane } from "../AccountNavPane.js";
 import UserManagement from "./Admin/UserManagement.js";
 import ImageManagement from "./Admin/ImageManagement.js";
 import Profile from "./Profile.js";
@@ -36,7 +36,7 @@ const Account = () => {
             }}>
 
 
-                <AccountNav sx={{gridArea: "sidebar"}} />
+                <AccountNavPane sx={{gridArea: "sidebar"}} />
         
                 <Box sx={{gridArea: "main", position: "relative", overflowY: "hidden", height: "100%"}}>
           

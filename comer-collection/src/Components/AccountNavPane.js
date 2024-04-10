@@ -63,7 +63,7 @@ const adminNavLinks = [
 
 
 
-export const AccountNav = () => {
+export const AccountNavPane = () => {
 
     const [selectedNavItem, setSelectedNavItem] = useAccountNav();
 
