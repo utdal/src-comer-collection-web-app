@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { Navigate, Route, Routes } from "react-router-dom"; // Import Route from react-router-dom
 import { AccountNavPane } from "../Components/AccountNavPane.js";
 import UserManagement from "./Admin/UserManagement.js";
@@ -19,12 +19,10 @@ const Account = () => {
 
     const [appUser, , , appUserIsLoaded] = useAppUser();
 
-    const [selectedNavItem, setSelectedNavItem] = useState("");
-
     return !appUserIsLoaded && (
         <FullPageMessage Icon={AccessTimeIcon} message="Loading" />
     ) || appUserIsLoaded && appUser && (
-        <AccountNavProvider value={{selectedNavItem, setSelectedNavItem}}>
+        <AccountNavProvider>
 
             <Box sx={{
                 display: "grid",

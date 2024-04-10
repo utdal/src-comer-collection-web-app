@@ -16,7 +16,7 @@ import PropTypes from "prop-types";
 
 
 const NavBarUserMenu = () => {
-  
+
     const [anchorElement, setAnchorElement] = useState(null);
     const [appUser, setAppUser] = useAppUser();
     const navigate = useNavigate();
@@ -31,17 +31,17 @@ const NavBarUserMenu = () => {
 
     return (
         <>
-            <Button variant="text" endIcon={<ArrowDropDownIcon sx={{height: "100%", color: "white"}}/>} onClick={handleMenuOpen} sx={{textTransform: "unset", paddingLeft: "20px", paddingRight: "10px"}}
+            <Button variant="text" endIcon={<ArrowDropDownIcon sx={{ height: "100%", color: "white" }} />} onClick={handleMenuOpen} sx={{ textTransform: "unset", paddingLeft: "20px", paddingRight: "10px" }}
                 aria-haspopup={Boolean(anchorElement)}
                 aria-expanded={Boolean(anchorElement)}
             >
                 <Stack direction="row" alignContent="center" alignItems="center">
-                    <Typography variant="h6" sx={{color: "white"}}>
+                    <Typography variant="h6" sx={{ color: "white" }}>
                         {appUser.safe_display_name}
                     </Typography>
                 </Stack>
             </Button>
-            <Menu sx={{zIndex: 5000}} MenuListProps={{
+            <Menu sx={{ zIndex: 5000 }} MenuListProps={{
             }} anchorEl={anchorElement} anchorOrigin={{
                 vertical: "bottom",
                 horizontal: "right"
@@ -56,7 +56,7 @@ const NavBarUserMenu = () => {
                     <Stack direction="row" spacing={1}>
                         <AccountCircleIcon />
                         <Typography variant="body">
-              My Profile
+                            My Profile
                         </Typography>
                     </Stack>
                 </MenuItem>
@@ -67,7 +67,7 @@ const NavBarUserMenu = () => {
                     <Stack direction="row" spacing={1}>
                         <PhotoCameraBackIcon />
                         <Typography variant="body">
-              My Exhibitions
+                            My Exhibitions
                         </Typography>
                     </Stack>
                 </MenuItem>
@@ -81,7 +81,7 @@ const NavBarUserMenu = () => {
                     <Stack direction="row" spacing={1}>
                         <LogoutIcon />
                         <Typography variant="body">
-              Sign Out
+                            Sign Out
                         </Typography>
                     </Stack>
                 </MenuItem>
@@ -92,7 +92,7 @@ const NavBarUserMenu = () => {
 
 
 const NavBarButton = ({ href, text }) => {
-  
+
     const navigate = useNavigate();
     const theme = useTheme();
 
@@ -106,7 +106,7 @@ const NavBarButton = ({ href, text }) => {
             textTransform: "unset"
         }} onClick={() => navigate(href)}>
             <Typography variant="h6" color="white">{text}</Typography>
-        </Button> 
+        </Button>
     );
 };
 
@@ -117,18 +117,18 @@ NavBarButton.propTypes = {
 
 
 const NavBar = () => {
-  
+
     const [appUser] = useAppUser();
     const navigate = useNavigate();
 
     return (
-        <AppBar position="fixed" color="primary" sx={{zIndex: 5000}}>
+        <AppBar position="fixed" color="primary" sx={{ zIndex: 5000 }}>
             <Stack direction="row" spacing={2} alignItems="center" justifyContent="space-between">
                 <Stack direction="row" alignItems="center" paddingLeft={2}>
                     {/* Placeholder for logo */}
-                    {/* <img src={utd_logo} height="48px" /> */}
-                    <Typography variant="h5" sx={{paddingLeft: "25px"}}>
-              UTD Comer Collection
+                    <img src="/images/logo_image_only_orange.png" height="48px" />
+                    <Typography variant="h5" sx={{ fontWeight: "bold", paddingLeft: 1 }}>
+                        Comer Collection
                     </Typography>
                 </Stack>
                 <Toolbar>
@@ -143,18 +143,18 @@ const NavBar = () => {
                             }} />
                             <NavBarUserMenu />
                         </> ||
-            !appUser && (
-                <Stack direction="column" sx={{
-                    justifyContent: "center"
-                }}>
-                    <Button variant="contained" sx={{
-                        height: "60%"
-                    }} onClick={() => {navigate("/SignIn");}}>
-                        <Typography>Sign In</Typography>
-                    </Button>
-                </Stack>
-              
-            )}
+                            !appUser && (
+                                <Stack direction="column" sx={{
+                                    justifyContent: "center"
+                                }}>
+                                    <Button variant="contained" sx={{
+                                        height: "60%"
+                                    }} onClick={() => { navigate("/SignIn"); }}>
+                                        <Typography>Sign In</Typography>
+                                    </Button>
+                                </Stack>
+
+                            )}
                     </Stack>
                 </Toolbar>
             </Stack>

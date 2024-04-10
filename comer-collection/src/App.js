@@ -35,7 +35,7 @@ const AccountWrapper = () => (
 
 const App = () => {
 
-    const [appDarkTheme, setAppDarkTheme] = useState(true);
+    const [appDarkTheme, setAppDarkTheme] = useState(false);
 
     const primaryColor = green;
     const secondaryColor = orange;
@@ -47,9 +47,7 @@ const App = () => {
 
     const theme = createTheme({
         typography: {
-            fontFamily: [
-                "Helvetica"
-            ].join(","),
+            fontFamily: "Helvetica",
             fontSize: 12,
             body1: {
                 fontWeight: 500,
@@ -77,12 +75,12 @@ const App = () => {
             },
             grey: {
                 main: grey["600"],
-                contrastText: "white",
+                contrastText: appDarkTheme ? "white" : "black",
                 translucent: appDarkTheme ? grey["800"] : "#CCC",
                 veryTranslucent: appDarkTheme ? "#333" : "#EEE",
             },
             lightgrey: {
-                main: grey["500"]
+                main: appDarkTheme ? grey["500"] : grey["700"]
             }
         }
     });

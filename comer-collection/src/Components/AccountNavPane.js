@@ -1,6 +1,6 @@
 import React from "react";
 import { List, ListItemButton, ListItemIcon, ListItemText, Typography, Stack, Divider } from "@mui/material";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useTheme } from "@emotion/react";
 import { AccountCircleIcon, GroupsIcon, PhotoCameraBackIcon, ImageIcon, SchoolIcon, LockIcon } from "../Imports/Icons.js";
 import { useAppUser } from "../ContextProviders/AppUser.js";
@@ -67,7 +67,6 @@ const AccountNavSection = ({ sectionTitle, linkDefinitions }) => {
     const [selectedNavItem, setSelectedNavItem] = useAccountNav();
 
     const navigate = useNavigate();
-    const location = useLocation();
     const [appUser] = useAppUser();
     const theme = useTheme();
     return (
@@ -82,27 +81,22 @@ const AccountNavSection = ({ sectionTitle, linkDefinitions }) => {
                             navigate(item.link);
                         }}
                         sx={{
-                            backgroundColor:
-                                selectedNavItem == item.title
-                                    ? theme.palette.secondary.main
-                                    : "unset",
+                            backgroundColor: selectedNavItem == item.title ? theme.palette.secondary.main : "unset",
                             "&:hover": {
-                                backgroundColor:
-                                    selectedNavItem == item.title
-                                        ? theme.palette.secondary.main
-                                        : "#444",
-                            },
+                                backgroundColor: selectedNavItem == item.title ? theme.palette.secondary.main : theme.palette.grey.main,
+                                textDecoration: "underline"
+                            }
                         }}
                     >
                         <ListItemIcon sx={{ color: "white" }}>
                             <item.Icon fontSize="large" />
                         </ListItemIcon>
                         <ListItemText
-                            primary={item.displayText ?? item.title}
-                            sx={{
-                                textDecoration:
-                                    location.pathname === item.link ? "underline" : "none",
-                            }}
+                            primary={
+                                <Typography variant="body1">
+                                    {item.displayText ?? item.title}
+                                </Typography>
+                            }
                         />
                     </ListItemButton>
                 ))}
@@ -113,10 +107,7 @@ const AccountNavSection = ({ sectionTitle, linkDefinitions }) => {
 
 AccountNavSection.propTypes = {
     sectionTitle: PropTypes.string,
-    linkDefinitions: PropTypes.arrayOf(PropTypes.objectOf({
-        title: PropTypes.string.isRequired,
-        link: PropTypes.string.isRequired
-    })).isRequired
+    linkDefinitions: PropTypes.arrayOf(PropTypes.object).isRequired
 };
 
 
@@ -124,20 +115,27 @@ AccountNavSection.propTypes = {
 export const AccountNavPane = () => {
 
     const [appUser] = useAppUser();
+    const theme = useTheme();
 
     return (
         <Stack direction="column" sx={{ backgroundColor: "#222", height: "100%", color: "white" }}>
             <AccountNavSection sectionTitle={"Account"} linkDefinitions={navLinks} />
             {appUser.is_admin_or_collection_manager && (
                 <>
-                    <Divider />
+                    <Divider sx={{
+                        borderColor: theme.palette.grey.main,
+                        opacity: 0.5
+                    }} />
                     <AccountNavSection sectionTitle={"Collection"} linkDefinitions={collectionManagerNavLinks} />
                 </>
             )}
             {appUser.is_admin && (
                 <>
-                    <Divider />
-                    <AccountNavSection sectionTitle={"Administration"} linkDefinitions={adminNavLinks }/>
+                    <Divider sx={{
+                        borderColor: theme.palette.grey.main,
+                        opacity: 0.5
+                    }} />
+                    <AccountNavSection sectionTitle={"Administration"} linkDefinitions={adminNavLinks} />
                 </>
             )}
         </Stack>
