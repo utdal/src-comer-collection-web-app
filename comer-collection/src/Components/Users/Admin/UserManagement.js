@@ -4,7 +4,7 @@ import {
     Button,
     Typography, Box, Paper
 } from "@mui/material";
-import { FilterAltOffOutlinedIcon, GroupAddIcon, RefreshIcon, SchoolIcon, SearchIcon, InfoIcon, LockIcon, AccessTimeIcon, WarningIcon } from "../../IconImports.js";
+import { FilterAltOffOutlinedIcon, GroupAddIcon, RefreshIcon, SchoolIcon, SearchIcon, InfoIcon, LockIcon, AccessTimeIcon, WarningIcon } from "../../../Imports/IconImports.js";
 import { FullPageMessage } from "../../FullPageMessage.js";
 import SearchBox from "../Tools/SearchBox.js";
 import { ItemSingleDeleteDialog } from "../Tools/Dialogs/ItemSingleDeleteDialog.js";

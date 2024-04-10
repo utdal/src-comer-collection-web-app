@@ -7,7 +7,7 @@ import {
     Button,
     Typography, DialogContentText, Checkbox, ToggleButtonGroup, ToggleButton
 } from "@mui/material";
-import { SecurityIcon, PersonIcon, CollectionManagerIcon } from "../../../IconImports.js";
+import { SecurityIcon, PersonIcon, CollectionManagerIcon } from "../../../../Imports/IconImports.js";
 import PropTypes from "prop-types";
 import { User } from "../Entities/User.js";
 import { useSnackbar } from "../../../../ContextProviders/AppFeatures.js";

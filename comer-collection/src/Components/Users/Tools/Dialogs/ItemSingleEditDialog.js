@@ -7,7 +7,7 @@ import {
     Button,
     Typography, DialogContentText, TextField
 } from "@mui/material";
-import { SaveIcon } from "../../../IconImports.js";
+import { SaveIcon } from "../../../../Imports/IconImports.js";
 import { getLocalISOString } from "../HelperMethods/getLocalISOString.js";
 import PropTypes from "prop-types";
 import { useSnackbar } from "../../../../ContextProviders/AppFeatures.js";

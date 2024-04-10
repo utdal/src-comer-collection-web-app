@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
 
-import { AddIcon, RemoveIcon } from "../../../IconImports.js";
+import { AddIcon, RemoveIcon } from "../../../../Imports/IconImports.js";
 import { capitalized } from "../Entities/Entity.js";
 import { sendAuthenticatedRequest } from "../HelperMethods/APICalls.js";
 

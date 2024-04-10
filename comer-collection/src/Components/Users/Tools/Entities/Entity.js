@@ -1,7 +1,7 @@
 /* eslint-disable react/prop-types */
 import { IconButton } from "@mui/material";
 import { sendAuthenticatedRequest } from "../HelperMethods/APICalls.js";
-import { DeleteIcon, EditIcon } from "../../../IconImports.js";
+import { DeleteIcon, EditIcon } from "../../../../Imports/IconImports.js";
 import React from "react";
 
 export const capitalized = (string) => {

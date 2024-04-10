@@ -11,7 +11,7 @@ import {
     AccountCircleIcon,
     PhotoCameraBackIcon,
     LogoutIcon
-} from "../IconImports.js";
+} from "../../Imports/IconImports.js";
 import PropTypes from "prop-types";
 
 

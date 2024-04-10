@@ -4,7 +4,7 @@ import {
     Button,
     Typography
 } from "@mui/material";
-import { CheckIcon, ArrowUpwardIcon, DeselectIcon } from "../../IconImports.js";
+import { CheckIcon, ArrowUpwardIcon, DeselectIcon } from "../../../Imports/IconImports.js";
 import PropTypes from "prop-types";
 
 export const SelectionSummary = ({ items, selectedItems, setSelectedItems, visibleItems, entitySingular, entityPlural }) => {

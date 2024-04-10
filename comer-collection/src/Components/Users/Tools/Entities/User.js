@@ -4,7 +4,7 @@ import { sendAuthenticatedRequest } from "../HelperMethods/APICalls.js";
 import { Entity } from "./Entity.js";
 import React from "react";
 import { useAppUser } from "../../../../ContextProviders/AppUser.js";
-import { CollectionManagerIcon, LockIcon, LockResetIcon, OpenInNewIcon, PersonIcon, PhotoCameraBackIcon, SchoolIcon, SecurityIcon } from "../../../IconImports.js";
+import { CollectionManagerIcon, LockIcon, LockResetIcon, OpenInNewIcon, PersonIcon, PhotoCameraBackIcon, SchoolIcon, SecurityIcon } from "../../../../Imports/IconImports.js";
 
 class User extends Entity {
     static baseUrl = "/api/admin/users";

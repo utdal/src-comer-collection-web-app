@@ -13,7 +13,7 @@ import {
     ArrowBackIcon,
     ArrowForwardIcon,
     SecurityIcon,
-} from "../IconImports.js";
+} from "../../Imports/IconImports.js";
 import { useAppUser } from "../../ContextProviders/AppUser.js";
 import PropTypes from "prop-types";
 

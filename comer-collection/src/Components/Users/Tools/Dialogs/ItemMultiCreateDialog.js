@@ -7,7 +7,7 @@ import {
     Button,
     Typography, IconButton, DialogContentText, TextField, Divider
 } from "@mui/material";
-import { DeleteIcon } from "../../../IconImports.js";
+import { DeleteIcon } from "../../../../Imports/IconImports.js";
 import { getBlankItemFields } from "../HelperMethods/fields.js";
 import PropTypes from "prop-types";
 import { useSnackbar } from "../../../../ContextProviders/AppFeatures.js";
