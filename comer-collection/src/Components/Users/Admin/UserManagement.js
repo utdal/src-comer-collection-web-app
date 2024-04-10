@@ -15,7 +15,7 @@ import { doesItemMatchSearchQuery } from "../../../Helpers/SearchUtilities.js";
 import { AssociationManagementDialog } from "../../Dialogs/AssociationManagementDialog.js";
 import { Navigate, useNavigate } from "react-router";
 import { UserChangePrivilegesDialog } from "../../Dialogs/UserChangePrivilegesDialog.js";
-import { SelectionSummary } from "../Tools/SelectionSummary.js";
+import { SelectionSummary } from "../../SelectionSummary.js";
 import { userFieldDefinitions } from "../../../Helpers/fields.js";
 import { sendAuthenticatedRequest } from "../../../Helpers/APICalls.js";
 import { CourseFilterMenu } from "../../Menus/CourseFilterMenu.js";

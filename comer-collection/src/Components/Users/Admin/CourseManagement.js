@@ -13,7 +13,7 @@ import { DataTable } from "../../DataTable.js";
 import { doesItemMatchSearchQuery } from "../../../Helpers/SearchUtilities.js";
 import { AssociationManagementDialog } from "../../Dialogs/AssociationManagementDialog.js";
 import { Navigate, useNavigate } from "react-router";
-import { SelectionSummary } from "../Tools/SelectionSummary.js";
+import { SelectionSummary } from "../../SelectionSummary.js";
 import { courseFieldDefinitions } from "../../../Helpers/fields.js";
 import { sendAuthenticatedRequest } from "../../../Helpers/APICalls.js";
 import { useAppUser } from "../../../ContextProviders/AppUser.js";

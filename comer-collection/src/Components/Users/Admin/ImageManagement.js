@@ -18,7 +18,7 @@ import { tagFieldDefinitions } from "../../../Helpers/fields.js";
 import { EntityManageDialog } from "../../Dialogs/EntityManageDialog.js";
 import { imageFieldDefinitions } from "../../../Helpers/fields.js";
 import { artistFieldDefinitions } from "../../../Helpers/fields.js";
-import { SelectionSummary } from "../Tools/SelectionSummary.js";
+import { SelectionSummary } from "../../SelectionSummary.js";
 import { AssociationManagementDialog } from "../../Dialogs/AssociationManagementDialog.js";
 import { sendAuthenticatedRequest } from "../../../Helpers/APICalls.js";
 import { useSnackbar } from "../../../ContextProviders/AppFeatures.js";

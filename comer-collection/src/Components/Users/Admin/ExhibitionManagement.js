@@ -10,7 +10,7 @@ import { LockIcon, RefreshIcon, DeleteIcon, SearchIcon, InfoIcon, SettingsIcon, 
 import { ItemSingleDeleteDialog } from "../../Dialogs/ItemSingleDeleteDialog.js";
 import { DataTable } from "../../DataTable.js";
 import { Navigate } from "react-router";
-import { SelectionSummary } from "../Tools/SelectionSummary.js";
+import { SelectionSummary } from "../../SelectionSummary.js";
 import { sendAuthenticatedRequest } from "../../../Helpers/APICalls.js";
 import { ExhibitionSettingsDialog } from "../../Dialogs/ExhibitionSettingsDialog.js";
 import { useSnackbar } from "../../../ContextProviders/AppFeatures.js";
