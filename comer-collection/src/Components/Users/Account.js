@@ -5,7 +5,7 @@ import UserManagement from "./Admin/UserManagement.js";
 import ImageManagement from "./Admin/ImageManagement.js";
 import Profile from "./Profile.js";
 import { Box } from "@mui/material";
-import { Unauthorized } from "../ErrorPages/Unauthorized.js";
+import { FullPageMessage } from "../FullPageMessage.js";
 import ChangePassword from "./ChangePassword.js";
 import CourseManagement from "./Admin/CourseManagement.js";
 import MyExhibitions from "./MyExhibitions.js";
@@ -24,7 +24,7 @@ const Account = () => {
     const [selectedNavItem, setSelectedNavItem] = useState("");
 
     return !appUserIsLoaded && (
-        <Unauthorized Icon={AccessTimeIcon} message="Loading" />
+        <FullPageMessage Icon={AccessTimeIcon} message="Loading" />
     ) || appUserIsLoaded && appUser && (
         <AccountNavContext.Provider value={{selectedNavItem, setSelectedNavItem}}>
 
@@ -63,7 +63,7 @@ const Account = () => {
             </Box>
         </AccountNavContext.Provider>
     ) || appUserIsLoaded && !appUser && (
-        <Unauthorized Icon={LockIcon} message="Unauthorized" buttonDestination="/login" buttonText="Return to Login" />
+        <FullPageMessage Icon={LockIcon} message="Unauthorized" buttonDestination="/login" buttonText="Return to Login" />
     );
 };
 

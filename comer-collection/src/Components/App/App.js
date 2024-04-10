@@ -14,13 +14,13 @@ import { Helmet, HelmetProvider } from "react-helmet-async";
 
 import { CacheProvider } from "@emotion/react";
 import createCache from "@emotion/cache";
-import { Unauthorized } from "../ErrorPages/Unauthorized.js";
+import { FullPageMessage } from "../FullPageMessage.js";
 import { AccessTimeIcon } from "../IconImports.js";
 
 
 const ExhibitionPage = lazy(() => import("../ExhibitionPage/ExhibitionPage.js"));
 const ExhibitionPageWrapper = () => (
-    <Suspense fallback={<Unauthorized message="Loading exhibition viewer..." Icon={AccessTimeIcon} />}>
+    <Suspense fallback={<FullPageMessage message="Loading exhibition viewer..." Icon={AccessTimeIcon} />}>
         <ExhibitionPage />
     </Suspense>
 );
@@ -28,7 +28,7 @@ const ExhibitionPageWrapper = () => (
 
 const Account = lazy(() => import("../Users/Account.js"));
 const AccountWrapper = () => (
-    <Suspense fallback={<Unauthorized message="Loading account..." Icon={AccessTimeIcon} />}>
+    <Suspense fallback={<FullPageMessage message="Loading account..." Icon={AccessTimeIcon} />}>
         <Account />
     </Suspense>
 );

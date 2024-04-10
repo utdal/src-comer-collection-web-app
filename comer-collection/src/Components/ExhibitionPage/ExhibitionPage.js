@@ -6,7 +6,7 @@ import { exhibitionEditReducer, blankExhibitionData } from "./exhibitionEditRedu
 import ExhibitionViewer from "../ExhibitionViewer/ExhibitionViewer.js";
 import { sendAuthenticatedRequest } from "../Users/Tools/HelperMethods/APICalls.js";
 import { useAppUser } from "../App/AppUser.js";
-import { Unauthorized } from "../ErrorPages/Unauthorized.js";
+import { FullPageMessage } from "../FullPageMessage.js";
 import { useSnackbar } from "../App/AppSnackbar.js";
 import { useTitle } from "../App/AppTitle.js";
 import { AccessTimeIcon, InfoIcon } from "../IconImports.js";
@@ -158,9 +158,9 @@ const ExhibitionPage = () => {
 
 
     return !appUserIsLoaded && (
-        <Unauthorized message="Loading exhibition..." Icon={AccessTimeIcon} />
+        <FullPageMessage message="Loading exhibition..." Icon={AccessTimeIcon} />
     ) || appUserIsLoaded && !isPermissionGranted && (
-        <Unauthorized message="This exhibition is not available" buttonText="View Public Exhibitions" 
+        <FullPageMessage message="This exhibition is not available" buttonText="View Public Exhibitions" 
             buttonDestination="/Exhibitions" Icon={InfoIcon} />
     ) || appUserIsLoaded && isPermissionGranted && (
         <Box 

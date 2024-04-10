@@ -4,7 +4,7 @@ import {
     Button,
     Typography, Box, IconButton, Paper
 } from "@mui/material";
-import { Unauthorized } from "../../ErrorPages/Unauthorized.js";
+import { FullPageMessage } from "../../FullPageMessage.js";
 import SearchBox from "../Tools/SearchBox.js";
 import { FilterAltOffOutlinedIcon, RefreshIcon, EditIcon, InfoIcon, SearchIcon, DeleteIcon, VisibilityIcon, AddPhotoAlternateIcon, PlaceIcon, SellIcon, BrushIcon, ImageIcon, ContentCopyIcon, PhotoCameraBackIcon, AccessTimeIcon, WarningIcon, LockIcon } from "../../IconImports.js";
 import { ItemSingleDeleteDialog } from "../Tools/Dialogs/ItemSingleDeleteDialog.js";
@@ -510,13 +510,13 @@ const ImageManagement = () => {
 
 
     return !appUser.is_admin_or_collection_manager && (
-        <Unauthorized message="Insufficient Privileges" Icon={LockIcon} buttonText="Return to Profile" buttonDestination="/Account/Profile" />
+        <FullPageMessage message="Insufficient Privileges" Icon={LockIcon} buttonText="Return to Profile" buttonDestination="/Account/Profile" />
     ) || appUser.pw_change_required && (
         <Navigate to="/Account/ChangePassword" />
     ) || isError && (
-        <Unauthorized message="Error loading images" Icon={WarningIcon} buttonText="Retry" buttonAction={fetchData} />
+        <FullPageMessage message="Error loading images" Icon={WarningIcon} buttonText="Retry" buttonAction={fetchData} />
     ) || !isLoaded && (
-        <Unauthorized message="Loading images..." Icon={AccessTimeIcon} />
+        <FullPageMessage message="Loading images..." Icon={AccessTimeIcon} />
     ) || (
         <Box component={Paper} square={true} sx={{
             display: "grid",
@@ -567,7 +567,7 @@ const ImageManagement = () => {
             </Stack>
 
             {!isLoaded && (
-                <Unauthorized message="Loading images..." Icon={AccessTimeIcon} />
+                <FullPageMessage message="Loading images..." Icon={AccessTimeIcon} />
             ) || isLoaded && <DataTable items={images} visibleItems={visibleImages}
                 tableFields={imageTableFields}
                 rowSelectionEnabled={true}

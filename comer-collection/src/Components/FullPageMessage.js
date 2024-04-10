@@ -3,7 +3,7 @@ import React from "react";
 import { useNavigate } from "react-router";
 import PropTypes from "prop-types";
 
-export const Unauthorized = ({ message, buttonText, buttonDestination, Icon, buttonAction }) => {
+export const FullPageMessage = ({ message, buttonText, buttonDestination, Icon, buttonAction }) => {
 
     const navigate = useNavigate();
 
@@ -22,7 +22,7 @@ export const Unauthorized = ({ message, buttonText, buttonDestination, Icon, but
     );
 };
 
-Unauthorized.propTypes = {
+FullPageMessage.propTypes = {
     message: PropTypes.string,
     buttonText: PropTypes.string,
     buttonDestination: PropTypes.string,

@@ -4,7 +4,7 @@ import {
     Button,
     Typography, Box, Paper
 } from "@mui/material";
-import { Unauthorized } from "../../ErrorPages/Unauthorized.js";
+import { FullPageMessage } from "../../FullPageMessage.js";
 import SearchBox from "../Tools/SearchBox.js";
 import { ItemSingleDeleteDialog } from "../Tools/Dialogs/ItemSingleDeleteDialog.js";
 import { ItemMultiCreateDialog } from "../Tools/Dialogs/ItemMultiCreateDialog.js";
@@ -217,13 +217,13 @@ const CourseManagement = () => {
 
 
     return !appUser.is_admin && (
-        <Unauthorized message="Insufficient Privileges" Icon={LockIcon} buttonText="Return to Profile" buttonDestination="/Account/Profile" />
+        <FullPageMessage message="Insufficient Privileges" Icon={LockIcon} buttonText="Return to Profile" buttonDestination="/Account/Profile" />
     ) || appUser.pw_change_required && (
         <Navigate to="/Account/ChangePassword" />
     ) || isError && (
-        <Unauthorized message="Error loading courses" Icon={WarningIcon} buttonText="Retry" buttonAction={fetchData} />
+        <FullPageMessage message="Error loading courses" Icon={WarningIcon} buttonText="Retry" buttonAction={fetchData} />
     ) || !isLoaded && (
-        <Unauthorized message="Loading courses..." Icon={AccessTimeIcon} />
+        <FullPageMessage message="Loading courses..." Icon={AccessTimeIcon} />
     ) || (
         <Box component={Paper} square sx={{
             display: "grid",
