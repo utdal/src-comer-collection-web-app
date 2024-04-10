@@ -4,7 +4,6 @@ import { createContext } from "react";
 import PropTypes from "prop-types";
 import { ThemeProvider, createTheme } from "@mui/material";
 import { green, grey, orange } from "@mui/material/colors/index.js";
-import { AppSettingsDialog } from "../Components/Dialogs/AppSettingsDialog.js";
 
 let defaultTitleSuffix = "Comer Collection";
 
@@ -22,9 +21,8 @@ export const AppFeatureProvider = ({ children }) => {
 
     const [titleText, setTitleText] = useState(null);
 
-    const [appDarkTheme, setAppDarkTheme] = useState(false);
+    const [appDarkTheme, setAppDarkTheme] = useState(JSON.parse(localStorage.getItem("appDarkTheme")) ?? false);
 
-    const [appSettingsDialogIsOpen, setAppSettingsDialogIsOpen] = useState(false);
     
 
     const theme = createTheme({
@@ -84,8 +82,7 @@ export const AppFeatureProvider = ({ children }) => {
     return (
         <AppFeatureContext.Provider value={{
             showSnackbar, setTitleText, 
-            appDarkTheme, setAppDarkTheme,
-            appSettingsDialogIsOpen, setAppSettingsDialogIsOpen
+            appDarkTheme, setAppDarkTheme
         }}>
             
             <ThemeProvider theme={theme}>
@@ -110,7 +107,6 @@ export const AppFeatureProvider = ({ children }) => {
                         </Stack>
                     </Alert>
                 </Snackbar>
-                <AppSettingsDialog />
             </ThemeProvider>
         </AppFeatureContext.Provider>
     );
@@ -134,10 +130,9 @@ export const useTitle = () => {
 
 export const useAppDarkTheme = () => {
     const { appDarkTheme, setAppDarkTheme } = useContext(AppFeatureContext);
-    return { appDarkTheme, setAppDarkTheme };
-};
-
-export const useAppSettingsDialog = () => {
-    const { appSettingsDialogIsOpen, setAppSettingsDialogIsOpen } = useContext(AppFeatureContext);
-    return { appSettingsDialogIsOpen, setAppSettingsDialogIsOpen };
+    const handleDarkThemeChange = useCallback((isEnabled) => {
+        setAppDarkTheme(isEnabled);
+        localStorage.setItem("appDarkTheme", JSON.stringify(isEnabled));
+    }, [setAppDarkTheme]);
+    return { appDarkTheme, setAppDarkTheme: handleDarkThemeChange };
 };

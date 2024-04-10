@@ -7,7 +7,7 @@ import {
     Button, Divider,
     Typography, DialogContentText, ToggleButton, ToggleButtonGroup
 } from "@mui/material";
-import { useAppDarkTheme, useAppSettingsDialog } from "../../ContextProviders/AppFeatures.js";
+import { useAppDarkTheme } from "../../ContextProviders/AppFeatures.js";
 import { DarkModeIcon, LightModeIcon } from "../../Imports/Icons.js";
 import PropTypes from "prop-types";
 
@@ -29,8 +29,9 @@ Option.propTypes = {
 };
 
 
-export const AppSettingsDialog = () => {
-    const { appSettingsDialogIsOpen, setAppSettingsDialogIsOpen } = useAppSettingsDialog();
+
+export const AppSettingsDialog = ({ appSettingsDialogIsOpen, setAppSettingsDialogIsOpen }) => {
+    
     const { appDarkTheme, setAppDarkTheme } = useAppDarkTheme();
     return (
         <Dialog component="form" sx={{ zIndex: 10000 }}
@@ -79,4 +80,10 @@ export const AppSettingsDialog = () => {
             </DialogActions>
         </Dialog>
     );
+};
+
+
+AppSettingsDialog.propTypes = {
+    appSettingsDialogIsOpen: PropTypes.bool,
+    setAppSettingsDialogIsOpen: PropTypes.func
 };

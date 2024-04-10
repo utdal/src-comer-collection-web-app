@@ -4,6 +4,7 @@ import { useTheme } from "@emotion/react";
 import { ColumnSortButton } from "./Buttons/ColumnSortButton.js";
 import PropTypes from "prop-types";
 import { InView } from "react-intersection-observer";
+import { useAppDarkTheme } from "../ContextProviders/AppFeatures.js";
 
 
 const DataTableCell = ({tf, itemAsString}) => {
@@ -47,6 +48,7 @@ export const DataTable = ({ nonEmptyHeight, tableFields, items,
     emptyMinHeight, NoContentIcon, noContentMessage, noContentButtonAction, noContentButtonText }) => {
 
     const theme = useTheme();
+    const { appDarkTheme } = useAppDarkTheme();
 
     const [sortColumn, setSortColumn] = useState(defaultSortColumn ?? "ID");
     const [sortAscending, setSortAscending] = useState(defaultSortAscending ?? true);
@@ -129,7 +131,7 @@ export const DataTable = ({ nonEmptyHeight, tableFields, items,
             })
         );
         return itemInformationToReturn;
-    }, [items, selectedItems]);
+    }, [items, selectedItems, appDarkTheme]);
 
 
     const visibleItemInformation = useMemo(() => itemInformation.filter((r) => visibleItems.map((vi) => vi.id).includes(r[0].id)), [itemInformation, visibleItems]);

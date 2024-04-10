@@ -14,7 +14,7 @@ import {
     SettingsIcon
 } from "../Imports/Icons.js";
 import PropTypes from "prop-types";
-import { useAppSettingsDialog } from "../ContextProviders/AppFeatures.js";
+import { AppSettingsDialog } from "./Dialogs/AppSettingsDialog.js";
 
 
 const NavBarUserMenu = () => {
@@ -123,7 +123,7 @@ const NavBar = () => {
     const [appUser] = useAppUser();
     const navigate = useNavigate();
 
-    const { setAppSettingsDialogIsOpen } = useAppSettingsDialog();
+    const [appSettingsDialogIsOpen, setAppSettingsDialogIsOpen] = useState(false);
 
     return (
         <AppBar position="fixed" color="primary" sx={{ zIndex: 5000 }}>
@@ -166,6 +166,7 @@ const NavBar = () => {
                     </IconButton>
                 </Toolbar>
             </Stack>
+            <AppSettingsDialog {...{appSettingsDialogIsOpen, setAppSettingsDialogIsOpen}} />
         </AppBar>
     );
 };
