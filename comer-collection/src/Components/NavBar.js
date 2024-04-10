@@ -5,13 +5,13 @@ import { AppBar, Toolbar, Typography, Button } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { Divider, Menu, MenuItem, Stack } from "@mui/material";
 import { useTheme } from "@emotion/react";
-import { useAppUser } from "../../ContextProviders/AppUser.js";
+import { useAppUser } from "../ContextProviders/AppUser.js";
 import {
     ArrowDropDownIcon,
     AccountCircleIcon,
     PhotoCameraBackIcon,
     LogoutIcon
-} from "../../Imports/IconImports.js";
+} from "../Imports/IconImports.js";
 import PropTypes from "prop-types";
 
 

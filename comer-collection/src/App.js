@@ -1,6 +1,6 @@
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import SignIn from "./Pages/SignIn.js";
-import NavBar from "./Components/NavBar/NavBar.js";
+import NavBar from "./Components/NavBar.js";
 import React, { Suspense, lazy, useState } from "react";
 
 import { Box, ThemeProvider, createTheme } from "@mui/material";
