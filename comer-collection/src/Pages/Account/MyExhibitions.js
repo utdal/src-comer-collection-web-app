@@ -149,50 +149,56 @@ const MyExhibitions = () => {
     return appUser.pw_change_required && (
         <Navigate to="/Account/ChangePassword" />
     ) || !appUser.pw_change_required && (
-        <Box component={Paper} square sx={{height: "100%"}}>
-            <Stack spacing={4} padding={5}>
-                <Stack direction="row" paddingLeft={1} spacing={2} justifyContent="space-between">
-                    <Stack direction="row" paddingLeft={1} spacing={2} alignItems="center">
-                        <PhotoCameraBackIcon fontSize="large" />
-                        <Typography variant="h4">My Exhibitions</Typography>
+        <Box component={Paper} square sx={{overflowY: "auto", padding: "50px", display: "grid", 
+            gridTemplateColumns: "1fr",
+            gridTemplateRows: "40px 80px calc(100vh - 284px)",
+            gridTemplateAreas: `
+            "header"
+            "comment"
+            "table"
+        `}}>
+            <Stack direction="row" justifyContent="space-between" sx={{gridArea: "header"}}>
+                <Stack direction="row" alignItems="center" spacing={2} >
+                    <PhotoCameraBackIcon fontSize="large" />
+                    <Typography variant="h4">My Exhibitions</Typography>
+                </Stack>
+                <Button color="primary" disabled={!appUser.can_create_exhibition} variant="contained" startIcon={<AddIcon/>} 
+                    onClick={() => {
+                        setDialogIsEditMode(false);
+                        setDialogExhibitionId(null);
+                        setDialogIsOpen(true);
+                    }}
+                >
+                    <Typography variant="body1">Create Exhibition</Typography>
+                </Button>
+            </Stack>
+            <Stack direction="column" spacing={2} sx={{gridArea: "comment", justifyContent: "center"}}>
+                {appUser.is_admin && (
+                    <Stack direction="row" spacing={2} color="gray">
+                        <SecurityIcon color="secondary" />
+                        <Typography variant="body1">Restrictions on exhibition creation are removed for administrators.</Typography>
                     </Stack>
-                    <Button color="primary" disabled={!appUser.can_create_exhibition} variant="contained" startIcon={<AddIcon/>} 
-                        onClick={() => {
-                            setDialogIsEditMode(false);
-                            setDialogExhibitionId(null);
-                            setDialogIsOpen(true);
-                        }}
-                    >
-                        <Typography variant="body1">Create Exhibition</Typography>
-                    </Button>
-                </Stack>
-                <Stack direction="column" spacing={2}>
-                    {appUser.is_admin && (
-                        <Stack direction="row" spacing={2} color="gray">
-                            <SecurityIcon color="secondary" />
-                            <Typography variant="body1">Restrictions on exhibition creation are removed for administrators.</Typography>
-                        </Stack>
-                    )}
-                    {!appUser.is_admin && appUser.Courses.filter((c) => c.status == "Active").length == 0 && (
-                        <Stack direction="row" spacing={2} color="gray">
-                            <InfoIcon />
-                            <Typography variant="body1">You must be enrolled in at least one active course to create exhibitions.</Typography>
-                        </Stack>
-                    )}
-                    {!appUser.is_admin && appUser.Exhibitions.length >= appUser.exhibition_quota && (
-                        <Stack direction="row" spacing={2} color="gray">
-                            <InfoIcon />
-                            <Typography variant="body1">Your account has reached its exhibition quota.  To create an exhibition, first delete an existing exhibition, or contact your instructor to request a quota increase.</Typography>
-                        </Stack>
-                    )}
-                </Stack>
+                )}
+                {!appUser.is_admin && appUser.Courses.filter((c) => c.status == "Active").length == 0 && (
+                    <Stack direction="row" spacing={2} color="gray">
+                        <InfoIcon />
+                        <Typography variant="body1">You must be enrolled in at least one active course to create exhibitions.</Typography>
+                    </Stack>
+                )}
+                {!appUser.is_admin && appUser.Exhibitions.length >= appUser.exhibition_quota && (
+                    <Stack direction="row" spacing={2} color="gray">
+                        <InfoIcon />
+                        <Typography variant="body1">Your account has reached its exhibition quota.  To create an exhibition, first delete an existing exhibition, or contact your instructor to request a quota increase.</Typography>
+                    </Stack>
+                )}
+            </Stack>
+            <Box sx={{gridArea: "table"}}>
                 <DataTable
                     items={appUser.Exhibitions}
                     visibleItems={appUser.Exhibitions}
                     defaultSortColumn={"Date Modified"}
                     defaultSortAscending={false}
                     tableFields={exhibitionTableFields}
-                    emptyMinHeight="400px"
                     NoContentIcon={InfoIcon}
                     noContentMessage="You have no exhibitions."
                     noContentButtonText="View your courses"
@@ -200,7 +206,7 @@ const MyExhibitions = () => {
                         navigate("/Account/Profile");
                     }}
                 />
-            </Stack>
+            </Box>
 
             <ItemSingleDeleteDialog 
                 deleteDialogIsOpen={deleteDialogIsOpen}

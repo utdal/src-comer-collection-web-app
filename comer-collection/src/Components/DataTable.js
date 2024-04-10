@@ -1,10 +1,11 @@
 import React, { memo, useCallback, useEffect, useMemo, useState } from "react";
-import { Box, Button, Checkbox, Paper, Stack, TableCell, TableContainer, Typography, Table, TableBody, TableHead, TableRow, Skeleton } from "@mui/material";
+import { Checkbox, Paper, Stack, TableCell, TableContainer, Typography, Table, TableBody, TableHead, TableRow, Skeleton } from "@mui/material";
 import { useTheme } from "@emotion/react";
 import { ColumnSortButton } from "./Buttons/ColumnSortButton.js";
 import PropTypes from "prop-types";
 import { InView } from "react-intersection-observer";
 import { useAppDarkTheme } from "../ContextProviders/AppFeatures.js";
+import { FullPageMessage } from "../Components/FullPageMessage.js";
 
 
 const DataTableCell = ({tf, itemAsString}) => {
@@ -42,10 +43,10 @@ TableRowPlaceholder.propTypes = {
 };
 
 
-export const DataTable = ({ nonEmptyHeight, tableFields, items, 
+export const DataTable = ({ tableFields, items, 
     rowSelectionEnabled, selectedItems, setSelectedItems, visibleItems,
     defaultSortColumn, defaultSortAscending,
-    emptyMinHeight, NoContentIcon, noContentMessage, noContentButtonAction, noContentButtonText }) => {
+    NoContentIcon, noContentMessage, noContentButtonAction, noContentButtonText }) => {
 
     const theme = useTheme();
     const { appDarkTheme } = useAppDarkTheme();
@@ -151,19 +152,19 @@ export const DataTable = ({ nonEmptyHeight, tableFields, items,
 
 
     return (
-        <TableContainer component={Paper} sx={{ width: "100%" || "calc(100% - 0px)", height: items.length ? nonEmptyHeight : "unset" , minHeight: items.length == 0 ? emptyMinHeight : "unset" }}>
-            <Table stickyHeader size="small" sx={{ width: "100%" }}>
+        <TableContainer component={Paper} sx={{ width: "100%", height: "100%" }}>
+            <Table stickyHeader size="small">
                 <TableHead>
                     <TableRow>
                         {Boolean(rowSelectionEnabled) && (
                             <TableCell sx={{backgroundColor: theme.palette.grey.translucent}}>
                                 <Typography variant="body1">
                                     <Checkbox checked={
-                                        visibleSelectedItems.length == visibleItems.length
+                                        visibleSelectedItems.length == visibleItems.length && visibleItems.length > 0
                                     } 
                                     disabled={visibleItems.length == 0}
                                     indeterminate={
-                                        visibleSelectedItems.length > 0 && visibleSelectedItems.length < visibleItems.length
+                                        visibleSelectedItems.length > 0 && visibleSelectedItems.length < visibleItems.length || visibleItems.length == 0
                                     }
                                     onChange={(e) => {
                                         if(e.target.checked) {
@@ -201,21 +202,13 @@ export const DataTable = ({ nonEmptyHeight, tableFields, items,
                     {itemsInFinalDisplayOrder}
                 </TableBody>
             </Table>
-            {visibleItems.length == 0 && emptyMinHeight && (
-                <Box sx={{width: "100%"}}>
-                    <Stack direction="column" alignItems="center" justifyContent="center" spacing={2} sx={{height: "100%"}}>
-                        {NoContentIcon && (
-                            <NoContentIcon sx={{fontSize: "150pt", opacity: 0.5}} />
-                        )}
-                        <Typography variant="h4">{noContentMessage ?? "This list is empty"}</Typography>
-                        {noContentButtonText && noContentButtonAction && (
-                            <Button variant="contained" onClick={noContentButtonAction}>
-                                <Typography variant="body1">{noContentButtonText}</Typography>
-                            </Button>
-                        )}
-
-                    </Stack>
-                </Box>
+            {visibleItems.length == 0 && (
+                <FullPageMessage 
+                    Icon={NoContentIcon} 
+                    message={noContentMessage ?? "This list is empty"} 
+                    buttonAction={noContentButtonAction} 
+                    buttonText={noContentButtonText}
+                />
             )}
         </TableContainer>
     );
@@ -223,7 +216,6 @@ export const DataTable = ({ nonEmptyHeight, tableFields, items,
 
 
 DataTable.propTypes = {
-    nonEmptyHeight: PropTypes.string,
     tableFields: PropTypes.arrayOf(PropTypes.object),
     items: PropTypes.arrayOf(PropTypes.object),
     rowSelectionEnabled: PropTypes.bool,
@@ -232,7 +224,6 @@ DataTable.propTypes = {
     visibleItems: PropTypes.arrayOf(PropTypes.object),
     defaultSortColumn: PropTypes.string,
     defaultSortAscending: PropTypes.bool,
-    emptyMinHeight: PropTypes.string,
     NoContentIcon: PropTypes.elementType,
     noContentMessage: PropTypes.string,
     noContentButtonAction: PropTypes.func,

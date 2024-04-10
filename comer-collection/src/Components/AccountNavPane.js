@@ -118,7 +118,7 @@ export const AccountNavPane = () => {
     const theme = useTheme();
 
     return (
-        <Stack direction="column" sx={{ backgroundColor: "#222", height: "100%", color: "white" }}>
+        <Stack direction="column" sx={{ backgroundColor: "#222", height: "100%", color: "white", overflowY: "auto" }}>
             <AccountNavSection sectionTitle={"Account"} linkDefinitions={navLinks} />
             {appUser.is_admin_or_collection_manager && (
                 <>

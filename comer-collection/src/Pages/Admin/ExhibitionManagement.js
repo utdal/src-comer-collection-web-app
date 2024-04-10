@@ -255,24 +255,24 @@ const ExhibitionManagement = () => {
                     </Button>
                 </Stack>
             </Stack>
-            <DataTable items={exhibitions} visibleItems={visibleExhibitions} tableFields={exhibitionTableFields}
-                rowSelectionEnabled={true}
-                selectedItems={selectedExhibitions} setSelectedItems={setSelectedExhibitions}
-                defaultSortColumn="Modified"
-                defaultSortAscending={false}
-                {...{ sortColumn, setSortColumn, sortAscending, setSortAscending }}
-                sx={{ gridArea: "table" }}
-                emptyMinHeight="300px"
-                {...visibleExhibitions.length == exhibitions.length && {
-                    noContentMessage: "No exhibitions yet",
-                    NoContentIcon: InfoIcon
-                } || visibleExhibitions.length < exhibitions.length && {
-                    noContentMessage: "No results",
-                    noContentButtonAction: clearFilters,
-                    noContentButtonText: "Clear Filters",
-                    NoContentIcon: SearchIcon
-                }}
-            />
+            <Box sx={{ gridArea: "table" }}>
+                <DataTable items={exhibitions} visibleItems={visibleExhibitions} tableFields={exhibitionTableFields}
+                    rowSelectionEnabled={true}
+                    selectedItems={selectedExhibitions} setSelectedItems={setSelectedExhibitions}
+                    defaultSortColumn="Modified"
+                    defaultSortAscending={false}
+                    {...{ sortColumn, setSortColumn, sortAscending, setSortAscending }}
+                    {...visibleExhibitions.length == exhibitions.length && {
+                        noContentMessage: "No exhibitions yet",
+                        NoContentIcon: InfoIcon
+                    } || visibleExhibitions.length < exhibitions.length && {
+                        noContentMessage: "No results",
+                        noContentButtonAction: clearFilters,
+                        noContentButtonText: "Clear Filters",
+                        NoContentIcon: SearchIcon
+                    }}
+                />
+            </Box>
             <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={2} padding={2} sx={{ gridArea: "bottom" }}>
                 <SelectionSummary
                     items={exhibitions}

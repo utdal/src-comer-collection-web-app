@@ -135,7 +135,7 @@ const Profile = () => {
     return appUser.pw_change_required && (
         <Navigate to="/Account/ChangePassword" />
     ) || !appUser.pw_change_required && (
-        <Box component={Paper} square sx={{height: "100%"}}>
+        <Box component={Paper} square sx={{height: "100%", overflowY: "auto"}}>
             <Stack spacing={4} paddingTop={5} paddingLeft={5} paddingRight={5}>
                 <Stack spacing={2}>
                     <Stack direction="row" paddingLeft={1} spacing={2} alignItems="center">
@@ -165,12 +165,10 @@ const Profile = () => {
                         <Typography variant="h4">My Courses</Typography>
                     </Stack>
                     <DataTable sx={{overflow: "scroll"}}
-                        nonEmptyHeight="350px"
                         items={appUser.Courses}
                         visibleItems={appUser.Courses}
                         tableFields={courseTableFields}
                         NoContentIcon={SchoolIcon}
-                        emptyMinHeight="400px"
                         noContentMessage="You are not enrolled in any courses."
                         defaultSortAscending={false}
                         defaultSortColumn="Start"
