@@ -6,7 +6,7 @@ import ImageManagement from "../Components/Users/Admin/ImageManagement.js";
 import Profile from "./Account/Profile.js";
 import { Box } from "@mui/material";
 import { FullPageMessage } from "../Components/FullPageMessage.js";
-import ChangePassword from "../Components/Users/ChangePassword.js";
+import ChangePassword from "./Account/ChangePassword.js";
 import CourseManagement from "../Components/Users/Admin/CourseManagement.js";
 import MyExhibitions from "../Components/Users/MyExhibitions.js";
 import ExhibitionManagement from "../Components/Users/Admin/ExhibitionManagement.js";
