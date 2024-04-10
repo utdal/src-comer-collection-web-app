@@ -3,7 +3,7 @@ import { Button, Stack, Switch, Typography } from "@mui/material";
 import { sendAuthenticatedRequest } from "../HelperMethods/APICalls.js";
 import { Entity } from "./Entity.js";
 import React from "react";
-import { useAppUser } from "../../../App/AppUser.js";
+import { useAppUser } from "../../../../ContextProviders/AppUser.js";
 import { CollectionManagerIcon, LockIcon, LockResetIcon, OpenInNewIcon, PersonIcon, PhotoCameraBackIcon, SchoolIcon, SecurityIcon } from "../../../IconImports.js";
 
 class User extends Entity {

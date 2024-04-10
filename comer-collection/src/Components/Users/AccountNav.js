@@ -3,7 +3,7 @@ import { List, ListItemButton, ListItemIcon, ListItemText, Typography, Stack, Di
 import { useNavigate, useLocation } from "react-router-dom";
 import { useTheme } from "@emotion/react";
 import { AccountCircleIcon, GroupsIcon, PhotoCameraBackIcon, ImageIcon, SchoolIcon, LockIcon } from "../IconImports.js";
-import { useAppUser } from "../App/AppUser.js";
+import { useAppUser } from "../../ContextProviders/AppUser.js";
 import { useAccountNav } from "./Account.js";
 
 const navLinks = [

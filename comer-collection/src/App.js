@@ -1,23 +1,23 @@
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
-import SignIn from "../SignIn/SignIn.js";
-import NavBar from "../NavBar/NavBar.js";
+import SignIn from "./Components/SignIn/SignIn.js";
+import NavBar from "./Components/NavBar/NavBar.js";
 import React, { Suspense, lazy, useState } from "react";
 
 import { Box, ThemeProvider, createTheme } from "@mui/material";
 import { green, grey, orange } from "@mui/material/colors/index.js";
-import { CollectionBrowser } from "../CollectionBrowser/CollectionBrowser.js";
-import { ExhibitionBrowser } from "../ExhibitionBrowser/ExhibitionBrowser.js";
-import { AppFeatureProvider } from "./AppFeatures.js";
-import { AppUserProvider } from "./AppUser.js";
+import { CollectionBrowser } from "./Components/CollectionBrowser/CollectionBrowser.js";
+import { ExhibitionBrowser } from "./Components/ExhibitionBrowser/ExhibitionBrowser.js";
+import { AppFeatureProvider } from "./ContextProviders/AppFeatures.js";
+import { AppUserProvider } from "./ContextProviders/AppUser.js";
 import { Helmet, HelmetProvider } from "react-helmet-async";
 
 import { CacheProvider } from "@emotion/react";
 import createCache from "@emotion/cache";
-import { FullPageMessage } from "../FullPageMessage.js";
-import { AccessTimeIcon } from "../IconImports.js";
+import { FullPageMessage } from "./Components/FullPageMessage.js";
+import { AccessTimeIcon } from "./Components/IconImports.js";
 
 
-const ExhibitionPage = lazy(() => import("../ExhibitionPage/ExhibitionPage.js"));
+const ExhibitionPage = lazy(() => import("./Components/ExhibitionPage/ExhibitionPage.js"));
 const ExhibitionPageWrapper = () => (
     <Suspense fallback={<FullPageMessage message="Loading exhibition viewer..." Icon={AccessTimeIcon} />}>
         <ExhibitionPage />
@@ -25,7 +25,7 @@ const ExhibitionPageWrapper = () => (
 );
 
 
-const Account = lazy(() => import("../Users/Account.js"));
+const Account = lazy(() => import("./Components/Users/Account.js"));
 const AccountWrapper = () => (
     <Suspense fallback={<FullPageMessage message="Loading account..." Icon={AccessTimeIcon} />}>
         <Account />

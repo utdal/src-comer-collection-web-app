@@ -16,7 +16,7 @@ import { Navigate, useNavigate } from "react-router";
 import { SelectionSummary } from "../Tools/SelectionSummary.js";
 import { courseFieldDefinitions } from "../Tools/HelperMethods/fields.js";
 import { sendAuthenticatedRequest } from "../Tools/HelperMethods/APICalls.js";
-import { useAppUser } from "../../App/AppUser.js";
+import { useAppUser } from "../../../ContextProviders/AppUser.js";
 import {
     FilterAltOffOutlinedIcon,
     AddIcon,
@@ -26,7 +26,7 @@ import {
     WarningIcon,
     LockIcon
 } from "../../IconImports.js";
-import { useTitle } from "../../App/AppFeatures.js";
+import { useTitle } from "../../../ContextProviders/AppFeatures.js";
 import { useAccountNav } from "../Account.js";
 import { Course } from "../Tools/Entities/Course.js";
 import { User } from "../Tools/Entities/User.js";

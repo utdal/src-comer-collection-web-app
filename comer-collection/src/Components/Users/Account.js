@@ -10,7 +10,7 @@ import ChangePassword from "./ChangePassword.js";
 import CourseManagement from "./Admin/CourseManagement.js";
 import MyExhibitions from "./MyExhibitions.js";
 import ExhibitionManagement from "./Admin/ExhibitionManagement.js";
-import { useAppUser } from "../App/AppUser.js";
+import { useAppUser } from "../../ContextProviders/AppUser.js";
 import { AccessTimeIcon, LockIcon } from "../IconImports.js";
 
 

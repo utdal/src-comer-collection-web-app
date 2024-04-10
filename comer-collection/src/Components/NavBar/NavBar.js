@@ -5,7 +5,7 @@ import { AppBar, Toolbar, Typography, Button } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { Divider, Menu, MenuItem, Stack } from "@mui/material";
 import { useTheme } from "@emotion/react";
-import { useAppUser } from "../App/AppUser.js";
+import { useAppUser } from "../../ContextProviders/AppUser.js";
 import {
     ArrowDropDownIcon,
     AccountCircleIcon,

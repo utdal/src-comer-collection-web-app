@@ -1,9 +1,9 @@
 import { useNavigate } from "react-router";
 import React, { useEffect, useState } from "react";
 import { Box, Button, Divider, Paper, Stack, TextField, Typography } from "@mui/material";
-import { useAppUser } from "../App/AppUser.js";
-import { useTitle } from "../App/AppFeatures.js";
-import { useSnackbar } from "../App/AppFeatures.js";
+import { useAppUser } from "../../ContextProviders/AppUser.js";
+import { useTitle } from "../../ContextProviders/AppFeatures.js";
+import { useSnackbar } from "../../ContextProviders/AppFeatures.js";
 import { sendAuthenticatedRequest } from "./Tools/HelperMethods/APICalls.js";
 import { useAccountNav } from "./Account.js";
 

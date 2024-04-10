@@ -5,10 +5,10 @@ import React, { useEffect, useReducer, useState } from "react";
 import { exhibitionEditReducer, blankExhibitionData } from "./exhibitionEditReducer.js";
 import Exhibition3DViewport from "../Exhibition3DViewport/Exhibition3DViewport.js";
 import { sendAuthenticatedRequest } from "../Users/Tools/HelperMethods/APICalls.js";
-import { useAppUser } from "../App/AppUser.js";
+import { useAppUser } from "../../ContextProviders/AppUser.js";
 import { FullPageMessage } from "../FullPageMessage.js";
-import { useSnackbar } from "../App/AppFeatures.js";
-import { useTitle } from "../App/AppFeatures.js";
+import { useSnackbar } from "../../ContextProviders/AppFeatures.js";
+import { useTitle } from "../../ContextProviders/AppFeatures.js";
 import { AccessTimeIcon, InfoIcon } from "../IconImports.js";
 
 

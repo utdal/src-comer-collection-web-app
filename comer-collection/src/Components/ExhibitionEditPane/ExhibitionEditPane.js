@@ -14,7 +14,7 @@ import {
     ArrowForwardIcon,
     SecurityIcon,
 } from "../IconImports.js";
-import { useAppUser } from "../App/AppUser.js";
+import { useAppUser } from "../../ContextProviders/AppUser.js";
 import PropTypes from "prop-types";
 
 const ColorInput = ({value, onChange, disabled}) => {

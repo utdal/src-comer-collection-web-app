@@ -15,7 +15,7 @@ import { searchItems } from "../SearchUtilities.js";
 import { ItemSingleDeleteDialog } from "./ItemSingleDeleteDialog.js";
 import { ItemSingleEditDialog } from "./ItemSingleEditDialog.js";
 import PropTypes from "prop-types";
-import { useSnackbar } from "../../../App/AppFeatures.js";
+import { useSnackbar } from "../../../../ContextProviders/AppFeatures.js";
 
 export const EntityManageDialog = ({ Entity,
     dialogItems, setDialogItems,
