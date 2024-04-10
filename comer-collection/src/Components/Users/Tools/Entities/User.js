@@ -138,6 +138,13 @@ class User extends Entity {
                     {...{onClick}}
                 />
             );
+        },
+        DeleteButton({ user, onClick }) {
+            const appUser = useAppUser();
+            const disabled = Boolean(user.Courses.length || user.Exhibitions.length || user.id == appUser.id);
+            return (
+                <Entity.TableCells.DeleteButton {...{onClick, disabled}} />
+            );
         }
     };
 

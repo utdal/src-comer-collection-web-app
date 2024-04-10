@@ -245,8 +245,7 @@ const UserManagement = () => {
                         setEditDialogUser(user);
                         setEditDialogIsOpen(true);
                     }} />
-                    <Entity.TableCells.DeleteButton 
-                        disabled={Boolean(user.Courses.length || user.Exhibitions.length || user.id == appUser.id)}
+                    <User.TableCells.DeleteButton {...{user}}
                         onClick={() => {
                             setDeleteDialogUser(user);
                             setDeleteDialogIsOpen(true);
