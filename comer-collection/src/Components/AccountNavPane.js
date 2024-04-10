@@ -5,6 +5,7 @@ import { useTheme } from "@emotion/react";
 import { AccountCircleIcon, GroupsIcon, PhotoCameraBackIcon, ImageIcon, SchoolIcon, LockIcon } from "../Imports/IconImports.js";
 import { useAppUser } from "../ContextProviders/AppUser.js";
 import { useAccountNav } from "../ContextProviders/AccountNavProvider.js";
+import PropTypes from "prop-types";
 
 const navLinks = [
     {
@@ -35,7 +36,7 @@ const collectionManagerNavLinks = [
         requirePermanentPassword: true
     }
 ];
-  
+
 const adminNavLinks = [
     {
         displayText: "Users",
@@ -62,21 +63,18 @@ const adminNavLinks = [
 ];
 
 
-
-export const AccountNavPane = () => {
-
+const AccountNavSection = ({ sectionTitle, linkDefinitions }) => {
     const [selectedNavItem, setSelectedNavItem] = useAccountNav();
 
     const navigate = useNavigate();
     const location = useLocation();
     const [appUser] = useAppUser();
     const theme = useTheme();
-
     return (
-        <Stack direction="column" sx={{ backgroundColor: "#222", height: "100%", color: "white" }}>
-            <Typography variant="h5" alignSelf="center" paddingTop="10px">Account</Typography>
+        <>
+            <Typography variant="h5" alignSelf="center" paddingTop="10px">{sectionTitle}</Typography>
             <List>
-                {navLinks.map((item) => (
+                {linkDefinitions.map((item) => (
                     <ListItemButton disabled={Boolean(item.requirePermanentPassword && appUser.pw_change_required)}
                         key={item.title}
                         onClick={() => {
@@ -85,108 +83,61 @@ export const AccountNavPane = () => {
                         }}
                         sx={{
                             backgroundColor:
-                  selectedNavItem == item.title
-                      ? theme.palette.secondary.main
-                      : "unset",
+                                selectedNavItem == item.title
+                                    ? theme.palette.secondary.main
+                                    : "unset",
                             "&:hover": {
                                 backgroundColor:
-                      selectedNavItem == item.title
-                          ? theme.palette.secondary.main
-                          : "#444",
+                                    selectedNavItem == item.title
+                                        ? theme.palette.secondary.main
+                                        : "#444",
                             },
                         }}
                     >
                         <ListItemIcon sx={{ color: "white" }}>
-                            <item.Icon fontSize="large"/>
+                            <item.Icon fontSize="large" />
                         </ListItemIcon>
                         <ListItemText
                             primary={item.displayText ?? item.title}
                             sx={{
                                 textDecoration:
-                    location.pathname === item.link ? "underline" : "none",
+                                    location.pathname === item.link ? "underline" : "none",
                             }}
                         />
                     </ListItemButton>
                 ))}
             </List>
+        </>
+    );
+};
+
+AccountNavSection.propTypes = {
+    sectionTitle: PropTypes.string,
+    linkDefinitions: PropTypes.arrayOf(PropTypes.objectOf({
+        title: PropTypes.string.isRequired,
+        link: PropTypes.string.isRequired
+    })).isRequired
+};
+
+
+
+export const AccountNavPane = () => {
+
+    const [appUser] = useAppUser();
+
+    return (
+        <Stack direction="column" sx={{ backgroundColor: "#222", height: "100%", color: "white" }}>
+            <AccountNavSection sectionTitle={"Account"} linkDefinitions={navLinks} />
             {appUser.is_admin_or_collection_manager && (
                 <>
                     <Divider />
-                    <Typography variant="h5" alignSelf="center" paddingTop="10px">Collection</Typography>
-                    <List>
-                        {collectionManagerNavLinks.map((item) => (
-                            <ListItemButton disabled={Boolean(item.requirePermanentPassword && appUser.pw_change_required)}
-                                key={item.title}
-                                onClick={() => {
-                                    setSelectedNavItem(item.title);
-                                    navigate(item.link);
-                                }}
-                                sx={{
-                                    backgroundColor:
-                    selectedNavItem == item.title
-                        ? theme.palette.secondary.main
-                        : "unset",
-                                    "&:hover": {
-                                        backgroundColor:
-                      selectedNavItem == item.title
-                          ? theme.palette.secondary.main
-                          : "#444",
-                                    },
-                                }}
-                            >
-                                <ListItemIcon sx={{ color: "white" }}>
-                                    <item.Icon fontSize="large"/>
-                                </ListItemIcon>
-                                <ListItemText
-                                    primary={item.displayText ?? item.title}
-                                    sx={{
-                                        textDecoration:
-                      location.pathname === item.link ? "underline" : "none",
-                                    }}
-                                />
-                            </ListItemButton>
-                        ))}
-                    </List>
+                    <AccountNavSection sectionTitle={"Collection"} linkDefinitions={collectionManagerNavLinks} />
                 </>
             )}
             {appUser.is_admin && (
                 <>
                     <Divider />
-                    <Typography variant="h5" alignSelf="center" paddingTop="10px">Administration</Typography>
-                    <List>
-                        {adminNavLinks.map((item) => (
-                            <ListItemButton disabled={Boolean(item.requirePermanentPassword && appUser.pw_change_required)}
-                                key={item.title}
-                                onClick={() => {
-                                    setSelectedNavItem(item.title);
-                                    navigate(item.link);
-                                }}
-                                sx={{
-                                    backgroundColor:
-                    selectedNavItem == item.title
-                        ? theme.palette.secondary.main
-                        : "unset",
-                                    "&:hover": {
-                                        backgroundColor:
-                      selectedNavItem == item.title
-                          ? theme.palette.secondary.main
-                          : "#444",
-                                    },
-                                }}
-                            >
-                                <ListItemIcon sx={{ color: "white" }}>
-                                    <item.Icon fontSize="large"/>
-                                </ListItemIcon>
-                                <ListItemText
-                                    primary={item.displayText ?? item.title}
-                                    sx={{
-                                        textDecoration:
-                      location.pathname === item.link ? "underline" : "none",
-                                    }}
-                                />
-                            </ListItemButton>
-                        ))}
-                    </List>
+                    <AccountNavSection sectionTitle={"Administration"} linkDefinitions={adminNavLinks }/>
                 </>
             )}
         </Stack>
