@@ -13,7 +13,7 @@ import { ItemSingleEditDialog } from "../../Dialogs/ItemSingleEditDialog.js";
 import { DataTable } from "../../DataTable.js";
 import { doesItemMatchSearchQuery } from "../Tools/SearchUtilities.js";
 import { Navigate } from "react-router";
-import { ImageFullScreenViewer } from "../Tools/ImageFullScreenViewer.js";
+import { ImageFullScreenViewer } from "../../Dialogs/ImageFullScreenViewer.js";
 import { tagFieldDefinitions } from "../../../Helpers/fields.js";
 import { EntityManageDialog } from "../../Dialogs/EntityManageDialog.js";
 import { imageFieldDefinitions } from "../../../Helpers/fields.js";
