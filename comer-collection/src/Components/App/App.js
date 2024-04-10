@@ -1,5 +1,5 @@
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
-import Login from "../Login/Login.js";
+import SignIn from "../SignIn/SignIn.js";
 import NavBar from "../NavBar/NavBar.js";
 import React, { Suspense, lazy, useState } from "react";
 
@@ -116,7 +116,7 @@ const App = () => {
                                 <AppFeatureProvider >
                                     <Routes>
           
-                                        <Route index element={<Navigate to="/login" />} />
+                                        <Route index element={<Navigate to="/SignIn" />} />
           
                                         <Route path="/BrowseCollection" element={<CollectionBrowser isDialogMode={false} />} />
                                         <Route path="/Exhibitions" element={<ExhibitionBrowser />} />
@@ -124,8 +124,8 @@ const App = () => {
 
                                         <Route path="/Account/*" element={<AccountWrapper />} />
 
-                                        <Route path="/login" element={<Login />} />
-                                        <Route path="*" element={<Navigate to="/login" />} replace />
+                                        <Route path="/SignIn" element={<SignIn />} />
+                                        <Route path="*" element={<Navigate to="/SignIn" />} replace />
 
               
                                     </Routes>

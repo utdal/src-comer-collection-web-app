@@ -63,7 +63,7 @@ const Account = () => {
             </Box>
         </AccountNavContext.Provider>
     ) || appUserIsLoaded && !appUser && (
-        <FullPageMessage Icon={LockIcon} message="Unauthorized" buttonDestination="/login" buttonText="Return to Login" />
+        <FullPageMessage Icon={LockIcon} message="Unauthorized" buttonDestination="/SignIn" buttonText="Sign In" />
     );
 };
 

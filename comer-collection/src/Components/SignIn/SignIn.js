@@ -6,7 +6,7 @@ import { useAppUser } from "../App/AppUser.js";
 import { useTitle } from "../App/AppFeatures.js";
 
 
-const Login = () => {
+const SignIn = () => {
   
     const [appUser, setAppUser] = useAppUser();
 
@@ -18,7 +18,7 @@ const Login = () => {
     const navigate = useNavigate();
     const setTitleText = useTitle();
 
-    const handleLogin = async (event) => {
+    const handleSignIn = async (event) => {
         event.preventDefault();
         setFormEnabled(false);
 
@@ -46,14 +46,14 @@ const Login = () => {
     };
 
     useEffect(() => {
-        setTitleText("Log In");
+        setTitleText("Sign In");
     });
 
     return appUser && 
         <Navigate to="/Account" replace />
     || !appUser && (
         <Box component={Paper} square sx={{height: "100%"}}>
-            <Box component="form" sx={{height: "100%"}} onSubmit={handleLogin}>
+            <Box component="form" sx={{height: "100%"}} onSubmit={handleSignIn}>
                 <Stack direction="column" spacing={2} alignItems="center" justifyContent="center" 
                     sx={{width: "100%", height: "100%"}}>
                     <TextField sx={{minWidth: "400px"}} autoFocus
@@ -88,7 +88,7 @@ const Login = () => {
                         sx={{minWidth: "400px"}} 
                         disabled={!(email && password && formEnabled)}
                     >
-                        <Typography variant="body1">Log In</Typography>
+                        <Typography variant="body1">Sign In</Typography>
                     </Button>
                 </Stack>
             </Box>
@@ -96,4 +96,4 @@ const Login = () => {
     );
 };
 
-export default Login;
+export default SignIn;

@@ -81,7 +81,7 @@ const NavBarUserMenu = () => {
                     <Stack direction="row" spacing={1}>
                         <LogoutIcon />
                         <Typography variant="body">
-              Log Out
+              Sign Out
                         </Typography>
                     </Stack>
                 </MenuItem>
@@ -149,8 +149,8 @@ const NavBar = () => {
                 }}>
                     <Button variant="contained" sx={{
                         height: "60%"
-                    }} onClick={() => {navigate("/login");}}>
-                        <Typography>Log In</Typography>
+                    }} onClick={() => {navigate("/SignIn");}}>
+                        <Typography>Sign In</Typography>
                     </Button>
                 </Stack>
               

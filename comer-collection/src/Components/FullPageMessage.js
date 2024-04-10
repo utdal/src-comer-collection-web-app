@@ -13,7 +13,7 @@ export const FullPageMessage = ({ message, buttonText, buttonDestination, Icon, 
                 <Icon sx={{fontSize: "150pt", opacity: 0.5}} />
                 <Typography variant="h4">{message}</Typography>
                 {(buttonDestination || buttonText) && (
-                    <Button variant="contained" onClick={buttonAction ?? (() => navigate(buttonDestination ?? "/login"))}>
+                    <Button variant="contained" onClick={buttonAction ?? (() => navigate(buttonDestination ?? "/SignIn"))}>
                         <Typography variant="body1">{buttonText ?? "Return to Login Page"}</Typography>
                     </Button>
                 )}
