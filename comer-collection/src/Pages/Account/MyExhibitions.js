@@ -4,7 +4,7 @@ import {
 } from "@mui/material";
 import { Navigate, useNavigate } from "react-router";
 import { DataTable } from "../../Components/DataTable.js";
-import { PhotoCameraBackIcon, AddIcon, InfoIcon, SettingsIcon, DeleteIcon, SecurityIcon } from "../../Imports/IconImports.js";
+import { PhotoCameraBackIcon, AddIcon, InfoIcon, SettingsIcon, DeleteIcon, SecurityIcon } from "../../Imports/Icons.js";
 import { sendAuthenticatedRequest } from "../../Helpers/APICalls.js";
 import { ExhibitionSettingsDialog } from "../../Components/Dialogs/ExhibitionSettingsDialog.js";
 import { ItemSingleDeleteDialog } from "../../Components/Dialogs/ItemSingleDeleteDialog.js";

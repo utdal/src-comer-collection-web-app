@@ -6,7 +6,7 @@ import {
 } from "@mui/material";
 import { FullPageMessage } from "../../Components/FullPageMessage.js";
 import SearchBox from "../../Components/SearchBox.js";
-import { LockIcon, RefreshIcon, DeleteIcon, SearchIcon, InfoIcon, SettingsIcon, OpenInNewIcon, FilterAltOffOutlinedIcon, WarningIcon, AccessTimeIcon } from "../../Imports/IconImports.js";
+import { LockIcon, RefreshIcon, DeleteIcon, SearchIcon, InfoIcon, SettingsIcon, OpenInNewIcon, FilterAltOffOutlinedIcon, WarningIcon, AccessTimeIcon } from "../../Imports/Icons.js";
 import { ItemSingleDeleteDialog } from "../../Components/Dialogs/ItemSingleDeleteDialog.js";
 import { DataTable } from "../../Components/DataTable.js";
 import { Navigate } from "react-router";

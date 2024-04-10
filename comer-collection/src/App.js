@@ -14,7 +14,7 @@ import { Helmet, HelmetProvider } from "react-helmet-async";
 import { CacheProvider } from "@emotion/react";
 import createCache from "@emotion/cache";
 import { FullPageMessage } from "./Components/FullPageMessage.js";
-import { AccessTimeIcon } from "./Imports/IconImports.js";
+import { AccessTimeIcon } from "./Imports/Icons.js";
 
 
 const ExhibitionPage = lazy(() => import("./Pages/ExhibitionPage.js"));

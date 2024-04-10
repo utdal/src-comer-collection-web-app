@@ -2,7 +2,7 @@ import { Box, Button, Paper, Stack, Typography } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { sendAuthenticatedRequest } from "../../Helpers/APICalls.js";
 import { DataTable } from "../../Components/DataTable.js";
-import { PhotoCameraBackIcon } from "../../Imports/IconImports.js";
+import { PhotoCameraBackIcon } from "../../Imports/Icons.js";
 import { useNavigate } from "react-router";
 import { useTitle } from "../../ContextProviders/AppFeatures.js";
 

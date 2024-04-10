@@ -7,7 +7,7 @@ import {
 } from "@mui/material";
 import { Navigate, useNavigate } from "react-router";
 import { DataTable } from "../../Components/DataTable.js";
-import { SecurityIcon, PersonIcon, AccountCircleIcon, SchoolIcon, PhotoCameraBackIcon, CollectionManagerIcon } from "../../Imports/IconImports.js";
+import { SecurityIcon, PersonIcon, AccountCircleIcon, SchoolIcon, PhotoCameraBackIcon, CollectionManagerIcon } from "../../Imports/Icons.js";
 import { useAppUser } from "../../ContextProviders/AppUser.js";
 import { useSnackbar } from "../../ContextProviders/AppFeatures.js";
 import { useTitle } from "../../ContextProviders/AppFeatures.js";

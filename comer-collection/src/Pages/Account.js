@@ -11,7 +11,7 @@ import CourseManagement from "./Admin/CourseManagement.js";
 import MyExhibitions from "./Account/MyExhibitions.js";
 import ExhibitionManagement from "./Admin/ExhibitionManagement.js";
 import { useAppUser } from "../ContextProviders/AppUser.js";
-import { AccessTimeIcon, LockIcon } from "../Imports/IconImports.js";
+import { AccessTimeIcon, LockIcon } from "../Imports/Icons.js";
 import { AccountNavProvider } from "../ContextProviders/AccountNavProvider.js";
 
 

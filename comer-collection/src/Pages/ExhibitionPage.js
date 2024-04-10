@@ -9,7 +9,7 @@ import { useAppUser } from "../ContextProviders/AppUser.js";
 import { FullPageMessage } from "../Components/FullPageMessage.js";
 import { useSnackbar } from "../ContextProviders/AppFeatures.js";
 import { useTitle } from "../ContextProviders/AppFeatures.js";
-import { AccessTimeIcon, InfoIcon } from "../Imports/IconImports.js";
+import { AccessTimeIcon, InfoIcon } from "../Imports/Icons.js";
 
 
 const ExhibitionPage = () => {

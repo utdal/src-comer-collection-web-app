@@ -2,7 +2,7 @@ import React from "react";
 import { List, ListItemButton, ListItemIcon, ListItemText, Typography, Stack, Divider } from "@mui/material";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useTheme } from "@emotion/react";
-import { AccountCircleIcon, GroupsIcon, PhotoCameraBackIcon, ImageIcon, SchoolIcon, LockIcon } from "../Imports/IconImports.js";
+import { AccountCircleIcon, GroupsIcon, PhotoCameraBackIcon, ImageIcon, SchoolIcon, LockIcon } from "../Imports/Icons.js";
 import { useAppUser } from "../ContextProviders/AppUser.js";
 import { useAccountNav } from "../ContextProviders/AccountNavProvider.js";
 import PropTypes from "prop-types";

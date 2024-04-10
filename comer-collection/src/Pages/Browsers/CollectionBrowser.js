@@ -2,7 +2,7 @@ import { Box, Chip, Paper, Stack, ToggleButton, ToggleButtonGroup, Typography, L
 import React, { useEffect, useMemo, useState } from "react";
 import { sendAuthenticatedRequest } from "../../Helpers/APICalls.js";
 import { ArtistFilterMenu } from "../../Components/Menus/ArtistFilterMenu.js";
-import { SellIcon, PersonIcon, GridOnIcon, ViewListIcon } from "../../Imports/IconImports.js";
+import { SellIcon, PersonIcon, GridOnIcon, ViewListIcon } from "../../Imports/Icons.js";
 import { TagFilterMenu } from "../../Components/Menus/TagFilterMenu.js";
 import SearchBox from "../../Components/SearchBox.js";
 import { doesItemMatchSearchQuery } from "../../Helpers/SearchUtilities.js";

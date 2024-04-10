@@ -1,5 +1,5 @@
 import React from "react";
-import { BrushIcon } from "../../Imports/IconImports.js";
+import { BrushIcon } from "../../Imports/Icons.js";
 import PropTypes from "prop-types";
 import { SecondaryFilterMenu } from "./SecondaryFilterMenu.js";
 import { Typography } from "@mui/material";

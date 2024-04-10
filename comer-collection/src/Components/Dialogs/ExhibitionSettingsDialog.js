@@ -7,7 +7,7 @@ import {
     Button,
     Typography, DialogContentText, TextField, ToggleButtonGroup, ToggleButton
 } from "@mui/material";
-import { SaveIcon, PublicIcon, LockIcon, VpnLockIcon } from "../../Imports/IconImports.js";
+import { SaveIcon, PublicIcon, LockIcon, VpnLockIcon } from "../../Imports/Icons.js";
 import PropTypes from "prop-types";
 
 export const exhibitionAccessOptions = (adminMode) => [

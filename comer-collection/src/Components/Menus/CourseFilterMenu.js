@@ -1,5 +1,5 @@
 import React from "react";
-import { SchoolIcon } from "../../Imports/IconImports.js";
+import { SchoolIcon } from "../../Imports/Icons.js";
 import PropTypes from "prop-types";
 import { SecondaryFilterMenu } from "./SecondaryFilterMenu.js";
 import { Typography } from "@mui/material";

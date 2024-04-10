@@ -24,7 +24,7 @@ import {
     AccessTimeIcon,
     WarningIcon,
     LockIcon
-} from "../../Imports/IconImports.js";
+} from "../../Imports/Icons.js";
 import { useTitle } from "../../ContextProviders/AppFeatures.js";
 import { useAccountNav } from "../../ContextProviders/AccountNavProvider.js";
 import { Course } from "../../Classes/Entities/Course.js";
