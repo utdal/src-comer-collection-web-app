@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { Navigate, useNavigate } from "react-router";
 import { Box, Button, Divider, Paper, Stack, TextField, Typography } from "@mui/material";
-import { sendAuthenticatedRequest } from "../Users/Tools/HelperMethods/APICalls.js";
-import { useAppUser } from "../../ContextProviders/AppUser.js";
-import { useTitle } from "../../ContextProviders/AppFeatures.js";
+import { sendAuthenticatedRequest } from "../Components/Users/Tools/HelperMethods/APICalls.js";
+import { useAppUser } from "../ContextProviders/AppUser.js";
+import { useTitle } from "../ContextProviders/AppFeatures.js";
 
 
 const SignIn = () => {

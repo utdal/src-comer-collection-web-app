@@ -1,5 +1,5 @@
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
-import SignIn from "./Components/SignIn/SignIn.js";
+import SignIn from "./Pages/SignIn.js";
 import NavBar from "./Components/NavBar/NavBar.js";
 import React, { Suspense, lazy, useState } from "react";
 
