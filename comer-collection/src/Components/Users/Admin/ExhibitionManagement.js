@@ -7,12 +7,12 @@ import {
 import { FullPageMessage } from "../../FullPageMessage.js";
 import SearchBox from "../Tools/SearchBox.js";
 import { LockIcon, RefreshIcon, DeleteIcon, SearchIcon, InfoIcon, SettingsIcon, OpenInNewIcon, FilterAltOffOutlinedIcon, WarningIcon, AccessTimeIcon } from "../../../Imports/IconImports.js";
-import { ItemSingleDeleteDialog } from "../Tools/Dialogs/ItemSingleDeleteDialog.js";
+import { ItemSingleDeleteDialog } from "../../Dialogs/ItemSingleDeleteDialog.js";
 import { DataTable } from "../Tools/DataTable.js";
 import { Navigate } from "react-router";
 import { SelectionSummary } from "../Tools/SelectionSummary.js";
 import { sendAuthenticatedRequest } from "../Tools/HelperMethods/APICalls.js";
-import { ExhibitionSettingsDialog } from "../Tools/Dialogs/ExhibitionSettingsDialog.js";
+import { ExhibitionSettingsDialog } from "../../Dialogs/ExhibitionSettingsDialog.js";
 import { useSnackbar } from "../../../ContextProviders/AppFeatures.js";
 import { useAppUser } from "../../../ContextProviders/AppUser.js";
 import { doesItemMatchSearchQuery } from "../Tools/SearchUtilities.js";

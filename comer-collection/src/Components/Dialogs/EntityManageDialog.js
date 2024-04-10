@@ -7,15 +7,15 @@ import {
     Button,
     Typography, DialogContentText, Divider, TextField, Box
 } from "@mui/material";
-import { AddIcon } from "../../../../Imports/IconImports.js";
-import { getBlankItemFields } from "../HelperMethods/fields.js";
-import { DataTable } from "../DataTable.js";
-import SearchBox from "../SearchBox.js";
-import { searchItems } from "../SearchUtilities.js";
+import { AddIcon } from "../../Imports/IconImports.js";
+import { getBlankItemFields } from "../Users/Tools/HelperMethods/fields.js";
+import { DataTable } from "../Users/Tools/DataTable.js";
+import SearchBox from "../Users/Tools/SearchBox.js";
+import { searchItems } from "../Users/Tools/SearchUtilities.js";
 import { ItemSingleDeleteDialog } from "./ItemSingleDeleteDialog.js";
 import { ItemSingleEditDialog } from "./ItemSingleEditDialog.js";
 import PropTypes from "prop-types";
-import { useSnackbar } from "../../../../ContextProviders/AppFeatures.js";
+import { useSnackbar } from "../../ContextProviders/AppFeatures.js";
 
 export const EntityManageDialog = ({ Entity,
     dialogItems, setDialogItems,

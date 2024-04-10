@@ -7,10 +7,10 @@ import {
     Button,
     Typography, IconButton, DialogContentText, TextField, Divider
 } from "@mui/material";
-import { DeleteIcon } from "../../../../Imports/IconImports.js";
-import { getBlankItemFields } from "../HelperMethods/fields.js";
+import { DeleteIcon } from "../../Imports/IconImports.js";
+import { getBlankItemFields } from "../Users/Tools/HelperMethods/fields.js";
 import PropTypes from "prop-types";
-import { useSnackbar } from "../../../../ContextProviders/AppFeatures.js";
+import { useSnackbar } from "../../ContextProviders/AppFeatures.js";
 
 export const ItemMultiCreateDialog = ({ Entity, refreshAllItems, dialogInstructions, createDialogFieldDefinitions, dialogIsOpen, setDialogIsOpen }) => {
 

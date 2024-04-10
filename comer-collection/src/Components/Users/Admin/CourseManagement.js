@@ -6,12 +6,12 @@ import {
 } from "@mui/material";
 import { FullPageMessage } from "../../FullPageMessage.js";
 import SearchBox from "../Tools/SearchBox.js";
-import { ItemSingleDeleteDialog } from "../Tools/Dialogs/ItemSingleDeleteDialog.js";
-import { ItemMultiCreateDialog } from "../Tools/Dialogs/ItemMultiCreateDialog.js";
-import { ItemSingleEditDialog } from "../Tools/Dialogs/ItemSingleEditDialog.js";
+import { ItemSingleDeleteDialog } from "../../Dialogs/ItemSingleDeleteDialog.js";
+import { ItemMultiCreateDialog } from "../../Dialogs/ItemMultiCreateDialog.js";
+import { ItemSingleEditDialog } from "../../Dialogs/ItemSingleEditDialog.js";
 import { DataTable } from "../Tools/DataTable.js";
 import { doesItemMatchSearchQuery } from "../Tools/SearchUtilities.js";
-import { AssociationManagementDialog } from "../Tools/Dialogs/AssociationManagementDialog.js";
+import { AssociationManagementDialog } from "../../Dialogs/AssociationManagementDialog.js";
 import { Navigate, useNavigate } from "react-router";
 import { SelectionSummary } from "../Tools/SelectionSummary.js";
 import { courseFieldDefinitions } from "../Tools/HelperMethods/fields.js";

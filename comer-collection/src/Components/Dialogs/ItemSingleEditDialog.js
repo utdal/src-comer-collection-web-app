@@ -7,12 +7,12 @@ import {
     Button,
     Typography, DialogContentText, TextField
 } from "@mui/material";
-import { SaveIcon } from "../../../../Imports/IconImports.js";
-import { getLocalISOString } from "../HelperMethods/getLocalISOString.js";
+import { SaveIcon } from "../../Imports/IconImports.js";
+import { getLocalISOString } from "../Users/Tools/HelperMethods/getLocalISOString.js";
 import PropTypes from "prop-types";
-import { useSnackbar } from "../../../../ContextProviders/AppFeatures.js";
-import { useAppUser } from "../../../../ContextProviders/AppUser.js";
-import { User } from "../../../../Classes/Entities/User.js";
+import { useSnackbar } from "../../ContextProviders/AppFeatures.js";
+import { useAppUser } from "../../ContextProviders/AppUser.js";
+import { User } from "../../Classes/Entities/User.js";
 
 export const ItemSingleEditDialog = ({ Entity, editDialogItem, editDialogFieldDefinitions, refreshAllItems, editDialogIsOpen, setEditDialogIsOpen }) => {
 
