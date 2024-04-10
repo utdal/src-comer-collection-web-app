@@ -8,7 +8,7 @@ import {
     Typography, DialogContentText, TextField
 } from "@mui/material";
 import { SaveIcon } from "../../Imports/IconImports.js";
-import { getLocalISOString } from "../Users/Tools/HelperMethods/getLocalISOString.js";
+import { getLocalISOString } from "../../Helpers/getLocalISOString.js";
 import PropTypes from "prop-types";
 import { useSnackbar } from "../../ContextProviders/AppFeatures.js";
 import { useAppUser } from "../../ContextProviders/AppUser.js";
