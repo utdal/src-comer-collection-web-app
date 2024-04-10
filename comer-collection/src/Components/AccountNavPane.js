@@ -32,7 +32,7 @@ const collectionManagerNavLinks = [
         displayText: "Images",
         title: "Image Management",
         Icon: ImageIcon,
-        link: "/Account/ImageManagement",
+        link: "/Account/Admin/Images",
         requirePermanentPassword: true
     }
 ];
@@ -42,21 +42,21 @@ const adminNavLinks = [
         displayText: "Users",
         title: "User Management",
         Icon: GroupsIcon,
-        link: "/Account/UserManagement",
+        link: "/Account/Admin/Users",
         requirePermanentPassword: true
     },
     {
         displayText: "Exhibitions",
         title: "Exhibition Management",
         Icon: PhotoCameraBackIcon,
-        link: "/Account/ExhibitionManagement",
+        link: "/Account/Admin/Exhibitions",
         requirePermanentPassword: true
     },
     {
         displayText: "Courses",
         title: "Course Management",
         Icon: SchoolIcon,
-        link: "/Account/CourseManagement",
+        link: "/Account/Admin/Courses",
         requirePermanentPassword: true
     }
 

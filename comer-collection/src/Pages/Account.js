@@ -36,28 +36,28 @@ const Account = () => {
             }}>
 
 
-                <AccountNavPane sx={{gridArea: "sidebar"}} />
-        
-                <Box sx={{gridArea: "main", position: "relative", overflowY: "hidden", height: "100%"}}>
-          
+                <AccountNavPane sx={{ gridArea: "sidebar" }} />
+
+                <Box sx={{ gridArea: "main", position: "relative", overflowY: "hidden", height: "100%" }}>
+
                     <Routes>
                         <Route index element={
                             !appUser.pw_change_required && (<Navigate to='Profile' replace />) ||
-              appUser.pw_change_required && (<Navigate to='ChangePassword' replace />)
+                            appUser.pw_change_required && (<Navigate to='ChangePassword' replace />)
                         } />
                         <Route path="Profile" element={<Profile />} />
                         <Route path="ChangePassword" element={<ChangePassword />} />
                         <Route path="MyExhibitions" element={<MyExhibitions />} />
-                        <Route path="UserManagement" element={<UserManagement />} />
-                        <Route path="ExhibitionManagement" element={<ExhibitionManagement />} />
-                        <Route path="ImageManagement" element={<ImageManagement />} />
-                        <Route path="CourseManagement" element={<CourseManagement />} />
+                        <Route path="Admin/Images" element={<ImageManagement />} />
+                        <Route path="Admin/Users" element={<UserManagement />} />
+                        <Route path="Admin/Exhibitions" element={<ExhibitionManagement />} />
+                        <Route path="Admin/Courses" element={<CourseManagement />} />
                         <Route path="*" element={<Navigate to="Profile" />} replace />
 
                     </Routes>
 
                 </Box>
-      
+
             </Box>
         </AccountNavProvider>
     ) || appUserIsLoaded && !appUser && (
