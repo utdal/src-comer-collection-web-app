@@ -10,7 +10,7 @@ import { ItemSingleDeleteDialog } from "../../Dialogs/ItemSingleDeleteDialog.js"
 import { ItemMultiCreateDialog } from "../../Dialogs/ItemMultiCreateDialog.js";
 import { ItemSingleEditDialog } from "../../Dialogs/ItemSingleEditDialog.js";
 import { DataTable } from "../../DataTable.js";
-import { doesItemMatchSearchQuery } from "../Tools/SearchUtilities.js";
+import { doesItemMatchSearchQuery } from "../../../Helpers/SearchUtilities.js";
 import { AssociationManagementDialog } from "../../Dialogs/AssociationManagementDialog.js";
 import { Navigate, useNavigate } from "react-router";
 import { SelectionSummary } from "../Tools/SelectionSummary.js";

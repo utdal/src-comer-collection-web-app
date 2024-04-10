@@ -11,7 +11,7 @@ import { ItemSingleDeleteDialog } from "../../Dialogs/ItemSingleDeleteDialog.js"
 import { ItemMultiCreateDialog } from "../../Dialogs/ItemMultiCreateDialog.js";
 import { ItemSingleEditDialog } from "../../Dialogs/ItemSingleEditDialog.js";
 import { DataTable } from "../../DataTable.js";
-import { doesItemMatchSearchQuery } from "../Tools/SearchUtilities.js";
+import { doesItemMatchSearchQuery } from "../../../Helpers/SearchUtilities.js";
 import { Navigate } from "react-router";
 import { ImageFullScreenViewer } from "../../Dialogs/ImageFullScreenViewer.js";
 import { tagFieldDefinitions } from "../../../Helpers/fields.js";

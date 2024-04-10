@@ -10,7 +10,7 @@ import {
 import { CheckIcon, InfoIcon, SearchIcon } from "../../Imports/IconImports.js";
 import { DataTable } from "../DataTable.js";
 import SearchBox from "../Users/Tools/SearchBox.js";
-import { searchItems } from "../Users/Tools/SearchUtilities.js";
+import { searchItems } from "../../Helpers/SearchUtilities.js";
 import PropTypes from "prop-types";
 import { useSnackbar } from "../../ContextProviders/AppFeatures.js";
 import { capitalized } from "../../Classes/Entity.js";

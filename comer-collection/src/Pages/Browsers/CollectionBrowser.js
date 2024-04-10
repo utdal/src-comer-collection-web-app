@@ -5,7 +5,7 @@ import { ArtistFilterMenu } from "../../Components/Menus/ArtistFilterMenu.js";
 import { SellIcon, PersonIcon, GridOnIcon, ViewListIcon } from "../../Imports/IconImports.js";
 import { TagFilterMenu } from "../../Components/Menus/TagFilterMenu.js";
 import SearchBox from "../../Components/Users/Tools/SearchBox.js";
-import { doesItemMatchSearchQuery } from "../../Components/Users/Tools/SearchUtilities.js";
+import { doesItemMatchSearchQuery } from "../../Helpers/SearchUtilities.js";
 import { useTitle } from "../../ContextProviders/AppFeatures.js";
 import PropTypes from "prop-types";
 import { InView } from "react-intersection-observer";

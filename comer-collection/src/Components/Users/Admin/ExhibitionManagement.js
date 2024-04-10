@@ -15,7 +15,7 @@ import { sendAuthenticatedRequest } from "../../../Helpers/APICalls.js";
 import { ExhibitionSettingsDialog } from "../../Dialogs/ExhibitionSettingsDialog.js";
 import { useSnackbar } from "../../../ContextProviders/AppFeatures.js";
 import { useAppUser } from "../../../ContextProviders/AppUser.js";
-import { doesItemMatchSearchQuery } from "../Tools/SearchUtilities.js";
+import { doesItemMatchSearchQuery } from "../../../Helpers/SearchUtilities.js";
 import { CourseFilterMenu } from "../../Menus/CourseFilterMenu.js";
 import { useTitle } from "../../../ContextProviders/AppFeatures.js";
 import { useAccountNav } from "../Account.js";
