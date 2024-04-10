@@ -3,11 +3,11 @@ import {
     Typography, Stack, Paper, Box, Button, IconButton
 } from "@mui/material";
 import { Navigate, useNavigate } from "react-router";
-import { DataTable } from "../DataTable.js";
+import { DataTable } from "../../Components/DataTable.js";
 import { PhotoCameraBackIcon, AddIcon, InfoIcon, SettingsIcon, DeleteIcon, SecurityIcon } from "../../Imports/IconImports.js";
 import { sendAuthenticatedRequest } from "../../Helpers/APICalls.js";
-import { ExhibitionSettingsDialog } from "../Dialogs/ExhibitionSettingsDialog.js";
-import { ItemSingleDeleteDialog } from "../Dialogs/ItemSingleDeleteDialog.js";
+import { ExhibitionSettingsDialog } from "../../Components/Dialogs/ExhibitionSettingsDialog.js";
+import { ItemSingleDeleteDialog } from "../../Components/Dialogs/ItemSingleDeleteDialog.js";
 import { useSnackbar } from "../../ContextProviders/AppFeatures.js";
 import { useAppUser } from "../../ContextProviders/AppUser.js";
 import { useTitle } from "../../ContextProviders/AppFeatures.js";

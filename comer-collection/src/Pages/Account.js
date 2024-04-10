@@ -8,7 +8,7 @@ import { Box } from "@mui/material";
 import { FullPageMessage } from "../Components/FullPageMessage.js";
 import ChangePassword from "./Account/ChangePassword.js";
 import CourseManagement from "../Components/Users/Admin/CourseManagement.js";
-import MyExhibitions from "../Components/Users/MyExhibitions.js";
+import MyExhibitions from "./Account/MyExhibitions.js";
 import ExhibitionManagement from "../Components/Users/Admin/ExhibitionManagement.js";
 import { useAppUser } from "../ContextProviders/AppUser.js";
 import { AccessTimeIcon, LockIcon } from "../Imports/IconImports.js";
