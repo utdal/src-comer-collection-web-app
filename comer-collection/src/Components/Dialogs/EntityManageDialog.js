@@ -8,7 +8,7 @@ import {
     Typography, DialogContentText, Divider, TextField, Box
 } from "@mui/material";
 import { AddIcon } from "../../Imports/IconImports.js";
-import { getBlankItemFields } from "../Users/Tools/HelperMethods/fields.js";
+import { getBlankItemFields } from "../../Helpers/fields.js";
 import { DataTable } from "../DataTable.js";
 import SearchBox from "../Users/Tools/SearchBox.js";
 import { searchItems } from "../Users/Tools/SearchUtilities.js";
