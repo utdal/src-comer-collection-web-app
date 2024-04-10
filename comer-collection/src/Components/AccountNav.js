@@ -4,7 +4,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { useTheme } from "@emotion/react";
 import { AccountCircleIcon, GroupsIcon, PhotoCameraBackIcon, ImageIcon, SchoolIcon, LockIcon } from "../Imports/IconImports.js";
 import { useAppUser } from "../ContextProviders/AppUser.js";
-import { useAccountNav } from "./Users/Account.js";
+import { useAccountNav } from "../ContextProviders/AccountNavProvider.js";
 
 const navLinks = [
     {

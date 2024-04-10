@@ -11,7 +11,7 @@ import { SecurityIcon, PersonIcon, AccountCircleIcon, SchoolIcon, PhotoCameraBac
 import { useAppUser } from "../../ContextProviders/AppUser.js";
 import { useSnackbar } from "../../ContextProviders/AppFeatures.js";
 import { useTitle } from "../../ContextProviders/AppFeatures.js";
-import { useAccountNav } from "./Account.js";
+import { useAccountNav } from "../../ContextProviders/AccountNavProvider.js";
 import { Course } from "../../Classes/Entities/Course.js";
 
 const Profile = () => {

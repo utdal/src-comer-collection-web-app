@@ -24,7 +24,7 @@ import { sendAuthenticatedRequest } from "../../../Helpers/APICalls.js";
 import { useSnackbar } from "../../../ContextProviders/AppFeatures.js";
 import { useAppUser } from "../../../ContextProviders/AppUser.js";
 import { useTitle } from "../../../ContextProviders/AppFeatures.js";
-import { useAccountNav } from "../Account.js";
+import { useAccountNav } from "../../../ContextProviders/AccountNavProvider.js";
 import { Image } from "../../../Classes/Entities/Image.js";
 import { Artist } from "../../../Classes/Entities/Artist.js";
 import { Tag } from "../../../Classes/Entities/Tag.js";

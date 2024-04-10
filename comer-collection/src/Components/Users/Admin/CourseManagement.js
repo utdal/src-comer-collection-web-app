@@ -27,7 +27,7 @@ import {
     LockIcon
 } from "../../../Imports/IconImports.js";
 import { useTitle } from "../../../ContextProviders/AppFeatures.js";
-import { useAccountNav } from "../Account.js";
+import { useAccountNav } from "../../../ContextProviders/AccountNavProvider.js";
 import { Course } from "../../../Classes/Entities/Course.js";
 import { User } from "../../../Classes/Entities/User.js";
 import { EnrollmentCoursePrimary } from "../../../Classes/Associations/Enrollment.js";

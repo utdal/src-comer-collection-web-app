@@ -18,7 +18,7 @@ import { useAppUser } from "../../../ContextProviders/AppUser.js";
 import { doesItemMatchSearchQuery } from "../../../Helpers/SearchUtilities.js";
 import { CourseFilterMenu } from "../../Menus/CourseFilterMenu.js";
 import { useTitle } from "../../../ContextProviders/AppFeatures.js";
-import { useAccountNav } from "../Account.js";
+import { useAccountNav } from "../../../ContextProviders/AccountNavProvider.js";
 import { Exhibition } from "../../../Classes/Entities/Exhibition.js";
 import { User } from "../../../Classes/Entities/User.js";
 

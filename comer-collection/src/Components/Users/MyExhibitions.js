@@ -11,7 +11,7 @@ import { ItemSingleDeleteDialog } from "../Dialogs/ItemSingleDeleteDialog.js";
 import { useSnackbar } from "../../ContextProviders/AppFeatures.js";
 import { useAppUser } from "../../ContextProviders/AppUser.js";
 import { useTitle } from "../../ContextProviders/AppFeatures.js";
-import { useAccountNav } from "./Account.js";
+import { useAccountNav } from "../../ContextProviders/AccountNavProvider.js";
 import { Exhibition, MyExhition } from "../../Classes/Entities/Exhibition.js";
 
 

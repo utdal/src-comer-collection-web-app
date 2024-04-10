@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState } from "react";
+import React, { useState } from "react";
 import { Navigate, Route, Routes } from "react-router-dom"; // Import Route from react-router-dom
 import { AccountNav } from "../AccountNav.js";
 import UserManagement from "./Admin/UserManagement.js";
@@ -12,9 +12,7 @@ import MyExhibitions from "./MyExhibitions.js";
 import ExhibitionManagement from "./Admin/ExhibitionManagement.js";
 import { useAppUser } from "../../ContextProviders/AppUser.js";
 import { AccessTimeIcon, LockIcon } from "../../Imports/IconImports.js";
-
-
-const AccountNavContext = createContext();
+import { AccountNavProvider } from "../../ContextProviders/AccountNavProvider.js";
 
 
 const Account = () => {
@@ -26,7 +24,7 @@ const Account = () => {
     return !appUserIsLoaded && (
         <FullPageMessage Icon={AccessTimeIcon} message="Loading" />
     ) || appUserIsLoaded && appUser && (
-        <AccountNavContext.Provider value={{selectedNavItem, setSelectedNavItem}}>
+        <AccountNavProvider value={{selectedNavItem, setSelectedNavItem}}>
 
             <Box sx={{
                 display: "grid",
@@ -61,15 +59,10 @@ const Account = () => {
                 </Box>
       
             </Box>
-        </AccountNavContext.Provider>
+        </AccountNavProvider>
     ) || appUserIsLoaded && !appUser && (
         <FullPageMessage Icon={LockIcon} message="Unauthorized" buttonDestination="/SignIn" buttonText="Sign In" />
     );
-};
-
-export const useAccountNav = () => {
-    const { selectedNavItem, setSelectedNavItem } = useContext(AccountNavContext);
-    return [selectedNavItem, setSelectedNavItem];
 };
 
 export default Account;

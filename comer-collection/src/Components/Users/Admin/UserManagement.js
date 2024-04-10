@@ -23,7 +23,7 @@ import { useSnackbar } from "../../../ContextProviders/AppFeatures.js";
 import { useAppUser } from "../../../ContextProviders/AppUser.js";
 import { useTitle } from "../../../ContextProviders/AppFeatures.js";
 import { UserResetPasswordDialog } from "../../Dialogs/UserResetPasswordDialog.js";
-import { useAccountNav } from "../Account.js";
+import { useAccountNav } from "../../../ContextProviders/AccountNavProvider.js";
 import { User } from "../../../Classes/Entities/User.js";
 import { Entity } from "../../../Classes/Entity.js";
 import { EnrollmentUserPrimary } from "../../../Classes/Associations/Enrollment.js";

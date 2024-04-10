@@ -5,7 +5,7 @@ import { useAppUser } from "../../ContextProviders/AppUser.js";
 import { useTitle } from "../../ContextProviders/AppFeatures.js";
 import { useSnackbar } from "../../ContextProviders/AppFeatures.js";
 import { sendAuthenticatedRequest } from "../../Helpers/APICalls.js";
-import { useAccountNav } from "./Account.js";
+import { useAccountNav } from "../../ContextProviders/AccountNavProvider.js";
 
 const ChangePassword = () => {
   
