@@ -10,7 +10,7 @@ import { FilterAltOffOutlinedIcon, RefreshIcon, EditIcon, InfoIcon, SearchIcon, 
 import { ItemSingleDeleteDialog } from "../../Dialogs/ItemSingleDeleteDialog.js";
 import { ItemMultiCreateDialog } from "../../Dialogs/ItemMultiCreateDialog.js";
 import { ItemSingleEditDialog } from "../../Dialogs/ItemSingleEditDialog.js";
-import { DataTable } from "../Tools/DataTable.js";
+import { DataTable } from "../../DataTable.js";
 import { doesItemMatchSearchQuery } from "../Tools/SearchUtilities.js";
 import { Navigate } from "react-router";
 import { ImageFullScreenViewer } from "../Tools/ImageFullScreenViewer.js";

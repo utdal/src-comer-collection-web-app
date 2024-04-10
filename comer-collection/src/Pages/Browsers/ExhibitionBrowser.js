@@ -1,7 +1,7 @@
 import { Box, Button, Paper, Stack, Typography } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { sendAuthenticatedRequest } from "../../Components/Users/Tools/HelperMethods/APICalls.js";
-import { DataTable } from "../../Components/Users/Tools/DataTable.js";
+import { DataTable } from "../../Components/DataTable.js";
 import { PhotoCameraBackIcon } from "../../Imports/IconImports.js";
 import { useNavigate } from "react-router";
 import { useTitle } from "../../ContextProviders/AppFeatures.js";

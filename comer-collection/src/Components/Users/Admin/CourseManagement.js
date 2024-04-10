@@ -9,7 +9,7 @@ import SearchBox from "../Tools/SearchBox.js";
 import { ItemSingleDeleteDialog } from "../../Dialogs/ItemSingleDeleteDialog.js";
 import { ItemMultiCreateDialog } from "../../Dialogs/ItemMultiCreateDialog.js";
 import { ItemSingleEditDialog } from "../../Dialogs/ItemSingleEditDialog.js";
-import { DataTable } from "../Tools/DataTable.js";
+import { DataTable } from "../../DataTable.js";
 import { doesItemMatchSearchQuery } from "../Tools/SearchUtilities.js";
 import { AssociationManagementDialog } from "../../Dialogs/AssociationManagementDialog.js";
 import { Navigate, useNavigate } from "react-router";

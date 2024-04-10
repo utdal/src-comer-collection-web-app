@@ -3,7 +3,7 @@ import {
     Typography, Stack, Paper, Box, Button, IconButton
 } from "@mui/material";
 import { Navigate, useNavigate } from "react-router";
-import { DataTable } from "./Tools/DataTable.js";
+import { DataTable } from "../DataTable.js";
 import { PhotoCameraBackIcon, AddIcon, InfoIcon, SettingsIcon, DeleteIcon, SecurityIcon } from "../../Imports/IconImports.js";
 import { sendAuthenticatedRequest } from "./Tools/HelperMethods/APICalls.js";
 import { ExhibitionSettingsDialog } from "../Dialogs/ExhibitionSettingsDialog.js";

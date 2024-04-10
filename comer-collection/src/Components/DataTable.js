@@ -1,7 +1,7 @@
 import React, { memo, useCallback, useEffect, useMemo, useState } from "react";
 import { Box, Button, Checkbox, Paper, Stack, TableCell, TableContainer, Typography, Table, TableBody, TableHead, TableRow, Skeleton } from "@mui/material";
 import { useTheme } from "@emotion/react";
-import { ColumnSortButton } from "../../Buttons/ColumnSortButton.js";
+import { ColumnSortButton } from "./Buttons/ColumnSortButton.js";
 import PropTypes from "prop-types";
 import { InView } from "react-intersection-observer";
 

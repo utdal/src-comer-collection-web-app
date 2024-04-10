@@ -8,7 +8,7 @@ import {
     Typography, DialogContentText, Divider, Box
 } from "@mui/material";
 import { CheckIcon, InfoIcon, SearchIcon } from "../../Imports/IconImports.js";
-import { DataTable } from "../Users/Tools/DataTable.js";
+import { DataTable } from "../DataTable.js";
 import SearchBox from "../Users/Tools/SearchBox.js";
 import { searchItems } from "../Users/Tools/SearchUtilities.js";
 import PropTypes from "prop-types";

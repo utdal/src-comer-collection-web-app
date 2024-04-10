@@ -6,7 +6,7 @@ import {
     Box
 } from "@mui/material";
 import { Navigate, useNavigate } from "react-router";
-import { DataTable } from "./Tools/DataTable.js";
+import { DataTable } from "../DataTable.js";
 import { SecurityIcon, PersonIcon, AccountCircleIcon, SchoolIcon, PhotoCameraBackIcon, CollectionManagerIcon } from "../../Imports/IconImports.js";
 import { useAppUser } from "../../ContextProviders/AppUser.js";
 import { useSnackbar } from "../../ContextProviders/AppFeatures.js";
