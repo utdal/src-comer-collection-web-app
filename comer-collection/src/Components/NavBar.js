@@ -3,16 +3,18 @@ import React, { useState } from "react";
 import { AppBar, Toolbar, Typography, Button } from "@mui/material";
 
 import { useNavigate } from "react-router-dom";
-import { Divider, Menu, MenuItem, Stack } from "@mui/material";
+import { Divider, Menu, MenuItem, IconButton, Stack } from "@mui/material";
 import { useTheme } from "@emotion/react";
 import { useAppUser } from "../ContextProviders/AppUser.js";
 import {
     ArrowDropDownIcon,
     AccountCircleIcon,
     PhotoCameraBackIcon,
-    LogoutIcon
+    LogoutIcon,
+    SettingsIcon
 } from "../Imports/Icons.js";
 import PropTypes from "prop-types";
+import { useAppSettingsDialog } from "../ContextProviders/AppFeatures.js";
 
 
 const NavBarUserMenu = () => {
@@ -121,11 +123,12 @@ const NavBar = () => {
     const [appUser] = useAppUser();
     const navigate = useNavigate();
 
+    const { setAppSettingsDialogIsOpen } = useAppSettingsDialog();
+
     return (
         <AppBar position="fixed" color="primary" sx={{ zIndex: 5000 }}>
             <Stack direction="row" spacing={2} alignItems="center" justifyContent="space-between">
                 <Stack direction="row" alignItems="center" paddingLeft={2}>
-                    {/* Placeholder for logo */}
                     <img src="/images/logo_image_only_orange.png" height="48px" />
                     <Typography variant="h5" sx={{ fontWeight: "bold", paddingLeft: 1 }}>
                         Comer Collection
@@ -156,6 +159,11 @@ const NavBar = () => {
 
                             )}
                     </Stack>
+                    <IconButton sx={{color: "white", paddingLeft: 2}} onClick={() => {
+                        setAppSettingsDialogIsOpen(true);
+                    }}>
+                        <SettingsIcon />
+                    </IconButton>
                 </Toolbar>
             </Stack>
         </AppBar>

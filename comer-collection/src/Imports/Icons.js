@@ -20,6 +20,7 @@ export { default as CloudUploadIcon } from "@mui/icons-material/esm/CloudUpload.
 export { default as CollectionsIcon } from "@mui/icons-material/esm/Collections.js";
 export { default as CollectionManagerIcon } from "@mui/icons-material/esm/Build.js";
 export { default as ContentCopyIcon } from "@mui/icons-material/esm/ContentCopy.js";
+export { default as DarkModeIcon } from "@mui/icons-material/esm/DarkMode.js";
 export { default as DeleteIcon } from "@mui/icons-material/esm/Delete.js";
 export { default as DeselectIcon } from "@mui/icons-material/esm/Deselect.js";
 export { default as EditIcon } from "@mui/icons-material/esm/Edit.js";
@@ -33,6 +34,7 @@ export { default as GroupAddIcon } from "@mui/icons-material/esm/GroupAdd.js";
 export { default as GroupsIcon } from "@mui/icons-material/esm/Groups.js";
 export { default as ImageIcon } from "@mui/icons-material/esm/Image.js";
 export { default as InfoIcon } from "@mui/icons-material/esm/Info.js";
+export { default as LightModeIcon } from "@mui/icons-material/esm/LightMode.js";
 export { default as LockAddIcon } from "@mui/icons-material/esm/EnhancedEncryption.js";
 export { default as LockIcon } from "@mui/icons-material/esm/Lock.js";
 export { default as LockResetIcon } from "@mui/icons-material/esm/LockReset.js";
