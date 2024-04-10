@@ -6,7 +6,7 @@ import {
 } from "@mui/material";
 import { FilterAltOffOutlinedIcon, GroupAddIcon, RefreshIcon, SchoolIcon, SearchIcon, InfoIcon, LockIcon, AccessTimeIcon, WarningIcon } from "../../../Imports/IconImports.js";
 import { FullPageMessage } from "../../FullPageMessage.js";
-import SearchBox from "../Tools/SearchBox.js";
+import SearchBox from "../../SearchBox.js";
 import { ItemSingleDeleteDialog } from "../../Dialogs/ItemSingleDeleteDialog.js";
 import { ItemMultiCreateDialog } from "../../Dialogs/ItemMultiCreateDialog.js";
 import { ItemSingleEditDialog } from "../../Dialogs/ItemSingleEditDialog.js";

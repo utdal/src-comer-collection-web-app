@@ -10,7 +10,7 @@ import {
 import { AddIcon } from "../../Imports/IconImports.js";
 import { getBlankItemFields } from "../../Helpers/fields.js";
 import { DataTable } from "../DataTable.js";
-import SearchBox from "../Users/Tools/SearchBox.js";
+import SearchBox from "../SearchBox.js";
 import { searchItems } from "../../Helpers/SearchUtilities.js";
 import { ItemSingleDeleteDialog } from "./ItemSingleDeleteDialog.js";
 import { ItemSingleEditDialog } from "./ItemSingleEditDialog.js";

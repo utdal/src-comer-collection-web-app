@@ -9,7 +9,7 @@ import {
 } from "@mui/material";
 import { CheckIcon, InfoIcon, SearchIcon } from "../../Imports/IconImports.js";
 import { DataTable } from "../DataTable.js";
-import SearchBox from "../Users/Tools/SearchBox.js";
+import SearchBox from "../SearchBox.js";
 import { searchItems } from "../../Helpers/SearchUtilities.js";
 import PropTypes from "prop-types";
 import { useSnackbar } from "../../ContextProviders/AppFeatures.js";

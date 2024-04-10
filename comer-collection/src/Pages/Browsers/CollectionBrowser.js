@@ -4,7 +4,7 @@ import { sendAuthenticatedRequest } from "../../Helpers/APICalls.js";
 import { ArtistFilterMenu } from "../../Components/Menus/ArtistFilterMenu.js";
 import { SellIcon, PersonIcon, GridOnIcon, ViewListIcon } from "../../Imports/IconImports.js";
 import { TagFilterMenu } from "../../Components/Menus/TagFilterMenu.js";
-import SearchBox from "../../Components/Users/Tools/SearchBox.js";
+import SearchBox from "../../Components/SearchBox.js";
 import { doesItemMatchSearchQuery } from "../../Helpers/SearchUtilities.js";
 import { useTitle } from "../../ContextProviders/AppFeatures.js";
 import PropTypes from "prop-types";

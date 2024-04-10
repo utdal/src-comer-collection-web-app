@@ -5,7 +5,7 @@ import {
     Typography, Box, IconButton, Paper
 } from "@mui/material";
 import { FullPageMessage } from "../../FullPageMessage.js";
-import SearchBox from "../Tools/SearchBox.js";
+import SearchBox from "../../SearchBox.js";
 import { FilterAltOffOutlinedIcon, RefreshIcon, EditIcon, InfoIcon, SearchIcon, DeleteIcon, VisibilityIcon, AddPhotoAlternateIcon, PlaceIcon, SellIcon, BrushIcon, ImageIcon, ContentCopyIcon, PhotoCameraBackIcon, AccessTimeIcon, WarningIcon, LockIcon } from "../../../Imports/IconImports.js";
 import { ItemSingleDeleteDialog } from "../../Dialogs/ItemSingleDeleteDialog.js";
 import { ItemMultiCreateDialog } from "../../Dialogs/ItemMultiCreateDialog.js";

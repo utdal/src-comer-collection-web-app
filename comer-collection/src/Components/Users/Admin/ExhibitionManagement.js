@@ -5,7 +5,7 @@ import {
     Typography, Box, IconButton, Paper
 } from "@mui/material";
 import { FullPageMessage } from "../../FullPageMessage.js";
-import SearchBox from "../Tools/SearchBox.js";
+import SearchBox from "../../SearchBox.js";
 import { LockIcon, RefreshIcon, DeleteIcon, SearchIcon, InfoIcon, SettingsIcon, OpenInNewIcon, FilterAltOffOutlinedIcon, WarningIcon, AccessTimeIcon } from "../../../Imports/IconImports.js";
 import { ItemSingleDeleteDialog } from "../../Dialogs/ItemSingleDeleteDialog.js";
 import { DataTable } from "../../DataTable.js";
