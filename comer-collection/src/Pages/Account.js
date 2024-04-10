@@ -3,7 +3,7 @@ import { Navigate, Route, Routes } from "react-router-dom"; // Import Route from
 import { AccountNavPane } from "../Components/AccountNavPane.js";
 import UserManagement from "../Components/Users/Admin/UserManagement.js";
 import ImageManagement from "../Components/Users/Admin/ImageManagement.js";
-import Profile from "../Components/Users/Profile.js";
+import Profile from "./Account/Profile.js";
 import { Box } from "@mui/material";
 import { FullPageMessage } from "../Components/FullPageMessage.js";
 import ChangePassword from "../Components/Users/ChangePassword.js";
