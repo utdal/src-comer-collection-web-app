@@ -25,7 +25,7 @@ const ExhibitionPageWrapper = () => (
 );
 
 
-const Account = lazy(() => import("./Components/Users/Account.js"));
+const Account = lazy(() => import("./Pages/Account.js"));
 const AccountWrapper = () => (
     <Suspense fallback={<FullPageMessage message="Loading account..." Icon={AccessTimeIcon} />}>
         <Account />
