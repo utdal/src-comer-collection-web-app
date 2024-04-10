@@ -10,7 +10,7 @@ import {
 import { ContentCopyIcon, SyncIcon } from "../../../../Imports/IconImports.js";
 import { useSnackbar } from "../../../../ContextProviders/AppFeatures.js";
 import PropTypes from "prop-types";
-import { User } from "../Entities/User.js";
+import { User } from "../../../../Classes/Entities/User.js";
 
 
 const randomPassword = () => {

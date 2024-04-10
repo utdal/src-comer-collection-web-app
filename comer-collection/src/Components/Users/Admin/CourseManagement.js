@@ -28,9 +28,9 @@ import {
 } from "../../../Imports/IconImports.js";
 import { useTitle } from "../../../ContextProviders/AppFeatures.js";
 import { useAccountNav } from "../Account.js";
-import { Course } from "../Tools/Entities/Course.js";
-import { User } from "../Tools/Entities/User.js";
-import { EnrollmentCoursePrimary } from "../Tools/Associations/Enrollment.js";
+import { Course } from "../../../Classes/Entities/Course.js";
+import { User } from "../../../Classes/Entities/User.js";
+import { EnrollmentCoursePrimary } from "../../../Classes/Associations/Enrollment.js";
 
 
 const CourseManagement = () => {

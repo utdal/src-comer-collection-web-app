@@ -13,8 +13,8 @@ import SearchBox from "../SearchBox.js";
 import { searchItems } from "../SearchUtilities.js";
 import PropTypes from "prop-types";
 import { useSnackbar } from "../../../../ContextProviders/AppFeatures.js";
-import { capitalized } from "../Entities/Entity.js";
-import { User } from "../Entities/User.js";
+import { capitalized } from "../../../../Classes/Entity.js";
+import { User } from "../../../../Classes/Entities/User.js";
 
 const computeSecondaryItemsAssigned = (secondaryItemsAll, secondariesByPrimary, primaryItems) => {
     if (primaryItems?.length == 0)

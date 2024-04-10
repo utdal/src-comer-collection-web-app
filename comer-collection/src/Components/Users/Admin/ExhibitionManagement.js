@@ -19,8 +19,8 @@ import { doesItemMatchSearchQuery } from "../Tools/SearchUtilities.js";
 import { CourseFilterMenu } from "../Tools/CourseFilterMenu.js";
 import { useTitle } from "../../../ContextProviders/AppFeatures.js";
 import { useAccountNav } from "../Account.js";
-import { Exhibition } from "../Tools/Entities/Exhibition.js";
-import { User } from "../Tools/Entities/User.js";
+import { Exhibition } from "../../../Classes/Entities/Exhibition.js";
+import { User } from "../../../Classes/Entities/User.js";
 
 const ExhibitionManagement = () => {
     const [courses, setCourses] = useState([]);

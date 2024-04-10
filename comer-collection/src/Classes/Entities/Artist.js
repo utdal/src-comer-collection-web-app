@@ -1,4 +1,4 @@
-import { Entity } from "./Entity.js";
+import { Entity } from "../Entity.js";
 
 class Artist extends Entity {
     static baseUrl = "/api/admin/artists";

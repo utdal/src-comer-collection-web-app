@@ -1,7 +1,7 @@
-import { PersonAddIcon, PersonRemoveIcon } from "../../../../Imports/IconImports.js";
+import { PersonAddIcon, PersonRemoveIcon } from "../../Imports/IconImports.js";
 import { Course } from "../Entities/Course.js";
 import { User } from "../Entities/User.js";
-import { Association } from "./Association.js";
+import { Association } from "../Association.js";
 
 class Enrollment extends Association {
     static url = "/api/admin/enrollments";

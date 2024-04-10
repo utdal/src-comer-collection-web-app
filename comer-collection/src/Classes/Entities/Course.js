@@ -1,8 +1,8 @@
 /* eslint-disable react/prop-types */
 import { Button, Stack, Typography } from "@mui/material";
-import { Entity } from "./Entity.js";
+import { Entity } from "../Entity.js";
 import React from "react";
-import { AccessTimeIcon, CheckIcon, ExpiredIcon, PersonIcon } from "../../../../Imports/IconImports.js";
+import { AccessTimeIcon, CheckIcon, ExpiredIcon, PersonIcon } from "../../Imports/IconImports.js";
 
 class Course extends Entity {
     static baseUrl = "/api/admin/courses";

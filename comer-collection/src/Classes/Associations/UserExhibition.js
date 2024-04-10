@@ -1,6 +1,6 @@
 import { Exhibition } from "../Entities/Exhibition.js";
 import { User } from "../Entities/User.js";
-import { Association } from "./Association.js";
+import { Association } from "../Association.js";
 
 class UserExhibition extends Association {
     static url = null;

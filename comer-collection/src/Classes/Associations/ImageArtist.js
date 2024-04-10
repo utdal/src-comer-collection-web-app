@@ -1,6 +1,6 @@
 import { Artist } from "../Entities/Artist.js";
 import { Image } from "../Entities/Image.js";
-import { Association } from "./Association.js";
+import { Association } from "../Association.js";
 
 class ImageArtist extends Association {
     static url = "/api/admin/imageartists";

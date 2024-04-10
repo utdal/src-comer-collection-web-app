@@ -24,11 +24,11 @@ import { useAppUser } from "../../../ContextProviders/AppUser.js";
 import { useTitle } from "../../../ContextProviders/AppFeatures.js";
 import { UserResetPasswordDialog } from "../Tools/Dialogs/UserResetPasswordDialog.js";
 import { useAccountNav } from "../Account.js";
-import { User } from "../Tools/Entities/User.js";
-import { Entity } from "../Tools/Entities/Entity.js";
-import { EnrollmentUserPrimary } from "../Tools/Associations/Enrollment.js";
-import { UserExhibition } from "../Tools/Associations/UserExhibition.js";
-import { Exhibition } from "../Tools/Entities/Exhibition.js";
+import { User } from "../../../Classes/Entities/User.js";
+import { Entity } from "../../../Classes/Entity.js";
+import { EnrollmentUserPrimary } from "../../../Classes/Associations/Enrollment.js";
+import { UserExhibition } from "../../../Classes/Associations/UserExhibition.js";
+import { Exhibition } from "../../../Classes/Entities/Exhibition.js";
 
 
 const UserManagement = () => {

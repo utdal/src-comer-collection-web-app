@@ -12,7 +12,7 @@ import { useSnackbar } from "../../ContextProviders/AppFeatures.js";
 import { useAppUser } from "../../ContextProviders/AppUser.js";
 import { useTitle } from "../../ContextProviders/AppFeatures.js";
 import { useAccountNav } from "./Account.js";
-import { Exhibition, MyExhition } from "./Tools/Entities/Exhibition.js";
+import { Exhibition, MyExhition } from "../../Classes/Entities/Exhibition.js";
 
 
 const MyExhibitions = () => {

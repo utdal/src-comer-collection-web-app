@@ -12,7 +12,7 @@ import { getLocalISOString } from "../HelperMethods/getLocalISOString.js";
 import PropTypes from "prop-types";
 import { useSnackbar } from "../../../../ContextProviders/AppFeatures.js";
 import { useAppUser } from "../../../../ContextProviders/AppUser.js";
-import { User } from "../Entities/User.js";
+import { User } from "../../../../Classes/Entities/User.js";
 
 export const ItemSingleEditDialog = ({ Entity, editDialogItem, editDialogFieldDefinitions, refreshAllItems, editDialogIsOpen, setEditDialogIsOpen }) => {
 

@@ -12,7 +12,7 @@ import { useAppUser } from "../../ContextProviders/AppUser.js";
 import { useSnackbar } from "../../ContextProviders/AppFeatures.js";
 import { useTitle } from "../../ContextProviders/AppFeatures.js";
 import { useAccountNav } from "./Account.js";
-import { Course } from "./Tools/Entities/Course.js";
+import { Course } from "../../Classes/Entities/Course.js";
 
 const Profile = () => {
 
