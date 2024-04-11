@@ -213,6 +213,15 @@ export const AssociationManagementDialog = ({
     const primaryPluralCapitalized = Association.primary.plural.substr(0, 1).toUpperCase() + Association.primary.plural.substr(1);
     const secondaryPluralCapitalized = Association.secondary.plural.substr(0, 1).toUpperCase() + Association.secondary.plural.substr(1);
 
+    const summarizedSelection = (
+        primaryItems.length == 1 && (
+            <b>{primaryItems[0].safe_display_name}</b>
+        ) || primaryItems.length > 1 && (
+            `${primaryItems.length} Selected ${primaryPluralCapitalized}`
+        )
+    );
+    
+
     return (
         <Dialog fullWidth={true} maxWidth={editMode ? "lg" : "md"} sx={{ zIndex: 10000 }}
             open={dialogIsOpen} disableEscapeKeyDown
@@ -223,13 +232,7 @@ export const AssociationManagementDialog = ({
             }}
         >
             <DialogTitle textAlign="center" variant="h4" sx={{ textOverflow: "ellipsis", wordWrap: "break-word" }}>
-                {editMode ? "Manage" : "View"} {associationPluralCapitalized} for {
-                    primaryItems.length == 1 && (
-                        <b>{primaryItems[0].safe_display_name}</b>
-                    ) || primaryItems.length > 1 && (
-                        `${primaryItems.length} Selected ${primaryPluralCapitalized}`
-                    )
-                }
+                {editMode ? "Manage" : "View"} {associationPluralCapitalized} for {summarizedSelection}
             </DialogTitle>
             <DialogContent>
                 <DialogContentText variant="body1">{dialogInstructions}</DialogContentText>
@@ -257,7 +260,7 @@ export const AssociationManagementDialog = ({
                         }
                         <Box sx={{gridArea: "assigned"}}>
                             <AssociationTableDisplay secondaryItems={secondaryItemsAssigned} secondaryItemsResults={secondaryItemsAssignedResults}
-                                tableCaption={editMode && `Current ${secondaryPluralCapitalized} for Selected ${primaryPluralCapitalized}`}
+                                tableCaption={<>Current {secondaryPluralCapitalized} for {summarizedSelection}</>}
                             >
                                 {assignedTable}
                             </AssociationTableDisplay>
