@@ -21,7 +21,7 @@ export const exhibitionAccessOptions = (adminMode) => [
     },
     {
         value: "PUBLIC_ANONYMOUS",
-        displayText: "Anonymous",
+        displayText: "Public Anonymous",
         caption: adminMode ?
             "This exhibition will be visible to the public, but the owner's name will not be displayed to anyone except the owner and administrators." :
             "This exhibition will be visible to the public, but your name will not be displayed to anyone except you and administrators.",
