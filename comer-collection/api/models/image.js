@@ -1,3 +1,5 @@
+import { DataTypes } from "sequelize";
+
 export default (db) => {
     const { sequelize, Sequelize } = db;
     const Image = sequelize.define("Image", {
@@ -120,6 +122,12 @@ export default (db) => {
             field: "image_location",
             set(value) {
                 this.setDataValue("image_location", value ? value : null);
+            }
+        },
+        safe_display_name: {
+            type: DataTypes.VIRTUAL,
+            get() {
+                return this.title ?? `Untitled Image ${this.id}`;
             }
         }
     }, {
