@@ -17,7 +17,12 @@ const listImagesPublic = async (req, res, next) => {
 
 const listImages = async (req, res, next) => {
     await listItems(req, res, next, Image.scope("admin"), [
-        Artist, Tag, Exhibition
+        Artist, Tag,
+        req.app_user.is_admin && Exhibition || 
+        req.app_user.is_collection_manager && {
+            model: Exhibition,
+            attributes: ["id"]
+        }
     ]);
 };
 
@@ -66,7 +71,12 @@ const downloadImagePublic = async (req, res, next) => {
 
 const getImage = async (req, res, next) => {
     await getItem(req, res, next, Image.scope("admin"), [
-        Artist, Tag, Exhibition
+        Artist, Tag, 
+        req.app_user.is_admin && Exhibition || 
+        req.app_user.is_collection_manager && {
+            model: Exhibition,
+            attributes: ["id"]
+        }
     ], req.params.imageId);
 };
 

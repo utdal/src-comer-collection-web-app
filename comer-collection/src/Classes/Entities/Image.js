@@ -1,4 +1,8 @@
+/* eslint-disable react/prop-types */
 import { Entity } from "../Entity.js";
+import React from "react";
+import { Button, Stack, Typography } from "@mui/material";
+import { PhotoCameraBackIcon } from "../../Imports/Icons.js";
 
 class Image extends Entity {
     static baseUrl = "/api/admin/images";
@@ -104,6 +108,23 @@ class Image extends Entity {
             multiline: true
         }
     ];
+
+    static TableCells = {
+        ImageExhibitionCountButton({ image, onClick }) {
+            return (
+                <Stack direction="row" spacing={1}>
+                    <Button variant="text" sx={{ textTransform: "unset" }}
+                        color="lightgrey"
+                        startIcon={<PhotoCameraBackIcon />}
+                        {...{onClick}}
+                    >
+                        <Typography variant="body1">{image.Exhibitions.length}</Typography>
+                    </Button>
+                </Stack>
+            );
+        }
+    };    
+    
 }
 
 export { Image };

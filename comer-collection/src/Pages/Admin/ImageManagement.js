@@ -6,13 +6,13 @@ import {
 } from "@mui/material";
 import { FullPageMessage } from "../../Components/FullPageMessage.js";
 import SearchBox from "../../Components/SearchBox.js";
-import { FilterAltOffOutlinedIcon, RefreshIcon, EditIcon, InfoIcon, SearchIcon, DeleteIcon, VisibilityIcon, AddPhotoAlternateIcon, PlaceIcon, SellIcon, BrushIcon, ImageIcon, ContentCopyIcon, PhotoCameraBackIcon, AccessTimeIcon, WarningIcon, LockIcon } from "../../Imports/Icons.js";
+import { FilterAltOffOutlinedIcon, RefreshIcon, EditIcon, InfoIcon, SearchIcon, DeleteIcon, VisibilityIcon, AddPhotoAlternateIcon, PlaceIcon, SellIcon, BrushIcon, ImageIcon, ContentCopyIcon, AccessTimeIcon, WarningIcon, LockIcon } from "../../Imports/Icons.js";
 import { ItemSingleDeleteDialog } from "../../Components/Dialogs/ItemSingleDeleteDialog.js";
 import { ItemMultiCreateDialog } from "../../Components/Dialogs/ItemMultiCreateDialog.js";
 import { ItemSingleEditDialog } from "../../Components/Dialogs/ItemSingleEditDialog.js";
 import { DataTable } from "../../Components/DataTable.js";
 import { doesItemMatchSearchQuery } from "../../Helpers/SearchUtilities.js";
-import { Navigate } from "react-router";
+import { Navigate, useNavigate } from "react-router";
 import { ImageFullScreenViewer } from "../../Components/Dialogs/ImageFullScreenViewer.js";
 import { EntityManageDialog } from "../../Components/Dialogs/EntityManageDialog.js";
 import { SelectionSummary } from "../../Components/SelectionSummary.js";
@@ -27,12 +27,15 @@ import { Artist } from "../../Classes/Entities/Artist.js";
 import { Tag } from "../../Classes/Entities/Tag.js";
 import { ImageArtist } from "../../Classes/Associations/ImageArtist.js";
 import { ImageTag } from "../../Classes/Associations/ImageTag.js";
+import { ImageExhibition } from "../../Classes/Associations/ImageExhibition.js";
+import { Exhibition } from "../../Classes/Entities/Exhibition.js";
 
 
 const ImageManagement = () => {
     const [images, setImages] = useState([]);
     const [artists, setArtists] = useState([]);
     const [tags, setTags] = useState([]);
+    const [exhibitions, setExhibitions] = useState([]);
     const [refreshInProgress, setRefreshInProgress] = useState(true);
 
     const [isLoaded, setIsLoaded] = useState(false);
@@ -53,6 +56,10 @@ const ImageManagement = () => {
     const [assignTagDialogIsOpen, setAssignTagDialogIsOpen] = useState(false);
     const [assignTagDialogImages, setAssignTagDialogImages] = useState([]);
     const [tagsByImage, setTagsByImage] = useState({});
+
+    const [viewImageExhibitionDialogIsOpen, setViewImageExhibitionDialogIsOpen] = useState(false);
+    const [viewImageExhibitionDialogImages, setViewImageExhibitionDialogImages] = useState([]);
+    const [exhibitionsByImage, setExhibitionsByImage] = useState({});
 
     const [previewerImage, setPreviewerImage] = useState(null);
     const [previewerOpen, setPreviewerOpen] = useState(false);
@@ -84,6 +91,7 @@ const ImageManagement = () => {
     const showSnackbar = useSnackbar();
     const [appUser] = useAppUser();
     const setTitleText = useTitle();
+    const navigate = useNavigate();
 
 
     useEffect(() => {
@@ -133,6 +141,14 @@ const ImageManagement = () => {
             tagsByImageDraft[i.id] = i.Tags;
         }
         setTagsByImage({ ...tagsByImageDraft });
+
+        setExhibitions(imageData.data.map((i) => i.Exhibitions).flat());
+
+        const exhibitionsByImageDraft = {};
+        for (const i of imageData.data) {
+            exhibitionsByImageDraft[i.id] = i.Exhibitions;
+        }
+        setExhibitionsByImage({ ...exhibitionsByImageDraft });
     };
 
 
@@ -406,19 +422,10 @@ const ImageManagement = () => {
         {
             columnDescription: "Exhibitions",
             generateTableCell: (image) => (
-                <Stack direction="row" spacing={1} alignItems="center">
-                    <Button variant="text"
-                        color="primary"
-                        disabled startIcon={<PhotoCameraBackIcon />}
-                        onClick={() => {
-                            // setAssignCourseDialogUser(user);
-                            // setAssignCourseDialogCourses([...user.Courses]);
-                            // setAssignCourseDialogIsOpen(true);
-                        }}
-                    >
-                        <Typography variant="body1">{image.Exhibitions.length}</Typography>
-                    </Button>
-                </Stack>
+                <Image.TableCells.ImageExhibitionCountButton {...{image}} onClick={() => {
+                    setViewImageExhibitionDialogImages([image]);
+                    setViewImageExhibitionDialogIsOpen(true);
+                }} />
             )
         },
         {
@@ -495,6 +502,45 @@ const ImageManagement = () => {
             )
         }
     ], []);
+
+    const exhibitionTableFieldsForDialog = [
+        {
+            columnDescription: "ID",
+            generateTableCell: (exhibition) => (
+                <Exhibition.TableCells.ID {...{exhibition}} />
+            )
+        },
+        {
+            columnDescription: "Title",
+            generateTableCell: (exhibition) => (
+                <Exhibition.TableCells.Title {...{exhibition}} />
+            )
+        },
+        {
+            columnDescription: "Open",
+            generateTableCell: (exhibition) => (
+                <Exhibition.TableCells.OpenInNewTab {...{exhibition}} />
+            )
+        },
+        {
+            columnDescription: "Created",
+            generateTableCell: (exhibition) => (
+                <Exhibition.TableCells.DateCreatedStacked {...{exhibition}} />
+            )
+        },
+        {
+            columnDescription: "Modified",
+            generateTableCell: (exhibition) => (
+                <Exhibition.TableCells.DateModifiedStacked {...{exhibition}} />
+            )
+        },
+        {
+            columnDescription: "Access",
+            generateTableCell: (exhibition) => (
+                <Exhibition.TableCells.Access {...{exhibition}} />
+            )
+        }
+    ];
 
 
 
@@ -732,6 +778,28 @@ const ImageManagement = () => {
                 secondarySearchFields={["data", "notes"]}
                 secondarySearchBoxPlaceholder={"Search tags by name or notes"}
                 refreshAllItems={fetchData}
+            />
+            
+
+            <AssociationManagementDialog
+                Association={ImageExhibition}
+                editMode={false}
+                primaryItems={viewImageExhibitionDialogImages}
+                secondaryItemsAll={exhibitions}
+                secondariesByPrimary={exhibitionsByImage}
+                refreshAllItems={fetchData}
+                dialogButtonForSecondaryManagement={<>
+                    <Button variant="outlined" onClick={() => {
+                        navigate("/Account/ExhibitionManagement");
+                    }}>
+                        <Typography>Go to exhibition management</Typography>
+                    </Button>
+                </>}
+                dialogIsOpen={viewImageExhibitionDialogIsOpen}
+                setDialogIsOpen={setViewImageExhibitionDialogIsOpen}
+                secondaryTableFields={exhibitionTableFieldsForDialog}
+                secondarySearchFields={["title"]}
+                secondarySearchBoxPlaceholder="Search exhibitions by title"
             />
 
 
