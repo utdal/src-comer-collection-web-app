@@ -92,9 +92,7 @@ export const AssociationManagementDialog = ({
                 const buttonText = (
                     primaryItems.length == 1 ?
                         `${Association.assignPast} ${Association.primary.singular}` :
-                        quantity == 2 ?
-                            `${Association.assignPast} both ${Association.primary.plural}` :
-                            `${Association.assignPast} all ${quantity} ${Association.primary.plural}`
+                        `${Association.assignPast} ${quantity} ${Association.primary.plural}`
                 );
                 return (
                     <Button variant="text" color={buttonColor} disabled startIcon={<CheckIcon />}>
