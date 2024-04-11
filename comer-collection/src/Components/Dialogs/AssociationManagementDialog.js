@@ -34,7 +34,7 @@ const AssociationTableDisplay = ({secondaryItems, secondaryItemsResults, tableCa
             display: "grid", gridTemplateAreas: `
             "caption"
             "table"
-        `, gridTemplateRows: tableCaption ? "50px 300px" : "0px 350px"
+        `, gridTemplateRows: tableCaption ? "50px 300px" : "0px 300px"
         }}>
             <Stack direction="row" justifyContent="center" sx={{ gridArea: "caption" }}>
                 {tableCaption && <Typography variant="h5" align="center">{tableCaption}</Typography>}
@@ -245,7 +245,7 @@ export const AssociationManagementDialog = ({
                     )}
                     <Box spacing={2} sx={{ display: "grid", gridTemplateAreas: `
                     "all divider assigned"
-                `, gridTemplateColumns: editMode ? "1fr 30px 1fr" : "0px 0px 1fr", height: "350px" }}>
+                `, gridTemplateColumns: editMode ? "1fr 30px 1fr" : "0px 0px 1fr" }}>
                         {
                             editMode && (
                                 <>
@@ -260,7 +260,7 @@ export const AssociationManagementDialog = ({
                         }
                         <Box sx={{gridArea: "assigned"}}>
                             <AssociationTableDisplay secondaryItems={secondaryItemsAssigned} secondaryItemsResults={secondaryItemsAssignedResults}
-                                tableCaption={<>Current {secondaryPluralCapitalized} for {summarizedSelection}</>}
+                                tableCaption={editMode && <>Current {secondaryPluralCapitalized} for {summarizedSelection}</>}
                             >
                                 {assignedTable}
                             </AssociationTableDisplay>
