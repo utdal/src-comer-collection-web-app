@@ -1,11 +1,10 @@
 import React, { useCallback, useMemo, useState } from "react";
 import {
-    Stack, Dialog,
-    DialogTitle,
+    Stack, Dialog, DialogTitle,
     DialogContent,
     DialogActions,
     Button,
-    Typography, DialogContentText, Divider, Box
+    Typography, DialogContentText, Box
 } from "@mui/material";
 import { CheckIcon, InfoIcon, SearchIcon } from "../../Imports/Icons.js";
 import { DataTable } from "../DataTable.js";
@@ -35,10 +34,10 @@ const AssociationTableDisplay = ({secondaryItems, secondaryItemsResults, tableCa
             display: "grid", gridTemplateAreas: `
             "caption"
             "table"
-        `, gridTemplateRows: "50px 300px"
+        `, gridTemplateRows: tableCaption ? "50px 300px" : "0px 350px"
         }}>
-            <Stack direction="row" justifyContent="center">
-                {tableCaption && <Typography variant="h5" sx={{ gridArea: "caption" }}>{tableCaption}</Typography>}
+            <Stack direction="row" justifyContent="center" sx={{ gridArea: "caption" }}>
+                {tableCaption && <Typography variant="h5" align="center">{tableCaption}</Typography>}
             </Stack>
             <Box sx={{ gridArea: "table", height: "100%", overflowY: "auto" }}>
                 {secondaryItems.length > 0 && secondaryItemsResults.length > 0 &&
@@ -224,45 +223,47 @@ export const AssociationManagementDialog = ({
             }}
         >
             <DialogTitle textAlign="center" variant="h4" sx={{ textOverflow: "ellipsis", wordWrap: "break-word" }}>
-                {primaryItems.length == 1 ?
-                    `${editMode ? "Manage" : "View"} ${associationPluralCapitalized} for ${primaryItems[0].safe_display_name}` :
-                    `${editMode ? "Manage" : "View"} ${associationPluralCapitalized} for ${primaryItems.length} Selected ${primaryPluralCapitalized}`}
+                {editMode ? "Manage" : "View"} {associationPluralCapitalized} for {
+                    primaryItems.length == 1 && (
+                        <b>{primaryItems[0].safe_display_name}</b>
+                    ) || primaryItems.length > 1 && (
+                        `${primaryItems.length} Selected ${primaryPluralCapitalized}`
+                    )
+                }
             </DialogTitle>
             <DialogContent>
                 <DialogContentText variant="body1">{dialogInstructions}</DialogContentText>
-                <Stack direction="column" padding={1}>
+                <Stack direction="column" padding={1} spacing={2}>
                     {secondarySearchFields?.length > 0 && (
                         <SearchBox width="100%" placeholder={secondarySearchBoxPlaceholder ?? "Search"}
                             searchQuery={secondarySearchQuery}
                             setSearchQuery={setSecondarySearchQuery}
                         />
                     )}
-                </Stack>
-                <Stack spacing={2} direction="row" padding={2} sx={{ height: "350px" }}>
-                    {
-                        editMode && (
-                            <>
-                                <AssociationTableDisplay secondaryItems={secondaryItemsAll} secondaryItemsResults={secondaryItemsAllResults} 
-                                    tableCaption={`All ${secondaryPluralCapitalized}`}>
-                                    {allTable}
-                                </AssociationTableDisplay>
-                                <Divider sx={{ borderWidth: "2px" }} />
-                            </>
-                        )
-                    }
-                    <Box sx={{
-                        display: "grid", gridTemplateAreas: `
-                            "caption"
-                            "table"
-                        `, gridTemplateRows: "50px 300px"
-                    }}>
-                        <AssociationTableDisplay secondaryItems={secondaryItemsAssigned} secondaryItemsResults={secondaryItemsAssignedResults}
-                            tableCaption={editMode && `Current ${secondaryPluralCapitalized} for Selected ${primaryPluralCapitalized}`}
-                        >
-                            {assignedTable}
-                        </AssociationTableDisplay>
-                    </Box>
+                    <Box spacing={2} sx={{ display: "grid", gridTemplateAreas: `
+                    "all divider assigned"
+                `, gridTemplateColumns: editMode ? "1fr 30px 1fr" : "0px 0px 1fr", height: "350px" }}>
+                        {
+                            editMode && (
+                                <>
+                                    <Box sx={{gridArea: "all"}}>
+                                        <AssociationTableDisplay secondaryItems={secondaryItemsAll} secondaryItemsResults={secondaryItemsAllResults} 
+                                            tableCaption={`All ${secondaryPluralCapitalized}`}>
+                                            {allTable}
+                                        </AssociationTableDisplay>
+                                    </Box>
+                                </>
+                            )
+                        }
+                        <Box sx={{gridArea: "assigned"}}>
+                            <AssociationTableDisplay secondaryItems={secondaryItemsAssigned} secondaryItemsResults={secondaryItemsAssignedResults}
+                                tableCaption={editMode && `Current ${secondaryPluralCapitalized} for Selected ${primaryPluralCapitalized}`}
+                            >
+                                {assignedTable}
+                            </AssociationTableDisplay>
+                        </Box>
 
+                    </Box>
                 </Stack>
             </DialogContent>
             <DialogActions>
