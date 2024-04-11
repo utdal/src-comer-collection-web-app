@@ -3,6 +3,7 @@ import { Entity } from "../Entity.js";
 import React from "react";
 import { Button, Stack, Typography } from "@mui/material";
 import { PhotoCameraBackIcon } from "../../Imports/Icons.js";
+import { useAppUser } from "../../ContextProviders/AppUser.js";
 
 class Image extends Entity {
     static baseUrl = "/api/admin/images";
@@ -111,11 +112,13 @@ class Image extends Entity {
 
     static TableCells = {
         ImageExhibitionCountButton({ image, onClick }) {
+            const [appUser] = useAppUser();
             return (
                 <Stack direction="row" spacing={1}>
                     <Button variant="text" sx={{ textTransform: "unset" }}
-                        color="lightgrey"
+                        color="primary"
                         startIcon={<PhotoCameraBackIcon />}
+                        disabled={!appUser.is_admin}
                         {...{onClick}}
                     >
                         <Typography variant="body1">{image.Exhibitions.length}</Typography>
