@@ -28,6 +28,50 @@ const computeSecondaryItemsAssigned = (secondaryItemsAll, secondariesByPrimary, 
     });
 };
 
+
+const AssociationTableDisplay = ({secondaryItems, secondaryItemsResults, tableCaption, children }) => {
+    return (
+        <Box sx={{
+            display: "grid", gridTemplateAreas: `
+            "caption"
+            "table"
+        `, gridTemplateRows: "50px 300px"
+        }}>
+            <Stack direction="row" justifyContent="center">
+                {tableCaption && <Typography variant="h5" sx={{ gridArea: "caption" }}>{tableCaption}</Typography>}
+            </Stack>
+            <Box sx={{ gridArea: "table", height: "100%", overflowY: "auto" }}>
+                {secondaryItems.length > 0 && secondaryItemsResults.length > 0 &&
+                    children
+                    || secondaryItems.length > 0 && secondaryItemsResults.length == 0 && (
+                        <Box sx={{ width: "100%" }}>
+                            <Stack direction="column" alignItems="center" justifyContent="center" paddingTop={2} spacing={2} sx={{ height: "100%", opacity: 0.5 }}>
+                                <SearchIcon sx={{ fontSize: "150pt" }} />
+                                <Typography variant="h4">No results</Typography>
+                            </Stack>
+                        </Box>
+                    ) || secondaryItems.length == 0 && (
+                    <Box sx={{ width: "100%" }}>
+                        <Stack direction="column" alignItems="center" justifyContent="center" paddingTop={2} spacing={2} sx={{ height: "100%", opacity: 0.5 }}>
+                            <InfoIcon sx={{ fontSize: "150pt" }} />
+                            <Typography variant="h4">This list is empty</Typography>
+                        </Stack>
+                    </Box>
+                )}
+            </Box>
+        </Box>
+    );
+};
+
+AssociationTableDisplay.propTypes = {
+    secondaryItems: PropTypes.array,
+    secondaryItemsResults: PropTypes.array,
+    tableCaption: PropTypes.string,
+    children: PropTypes.node
+};
+
+
+
 export const AssociationManagementDialog = ({
     Association, editMode, primaryItems,
     secondaryItemsAll, secondariesByPrimary,
@@ -143,19 +187,21 @@ export const AssociationManagementDialog = ({
     const secondaryItemsAssignedResults = useMemo(() => searchItems(secondarySearchQuery, secondaryItemsAssignedWithQuantities, secondarySearchFields ?? []), [secondarySearchQuery, secondaryItemsAssigned]);
 
     const allTable = useMemo(() => {
-        return <DataTable
-            nonEmptyHeight="300px"
-            tableFields={secondaryTableFieldsAll}
-            items={secondaryItemsAllWithQuantities}
-            visibleItems={secondaryItemsAllResults}
-            defaultSortColumn={defaultSortColumn}
-            defaultSortAscending={defaultSortAscending}
-        />;
+        return (
+            <Box sx={{ height: "100%" }}>
+                <DataTable
+                    tableFields={secondaryTableFieldsAll}
+                    items={secondaryItemsAllWithQuantities}
+                    visibleItems={secondaryItemsAllResults}
+                    defaultSortColumn={defaultSortColumn}
+                    defaultSortAscending={defaultSortAscending}
+                />
+            </Box>
+        );
     }, [secondaryItemsAllResults, primaryItems, secondariesByPrimary]);
 
     const assignedTable = useMemo(() => {
         return <DataTable
-            nonEmptyHeight="300px"
             tableFields={secondaryTableFieldsAssignedOnly}
             items={secondaryItemsAssignedWithQuantities}
             visibleItems={secondaryItemsAssignedResults}
@@ -192,57 +238,30 @@ export const AssociationManagementDialog = ({
                         />
                     )}
                 </Stack>
-                <Stack spacing={2} direction="row" padding={2}>
+                <Stack spacing={2} direction="row" padding={2} sx={{ height: "350px" }}>
                     {
                         editMode && (
                             <>
-                                <Stack sx={{ width: "50%", wordWrap: "break-word" }} spacing={2} textAlign="center">
-                                    <Typography variant="h5">All {secondaryPluralCapitalized}</Typography>
-                                    <Box maxHeight="350px">
-                                        {secondaryItemsAll.length > 0 && secondaryItemsAllResults.length > 0 &&
-                                allTable
-                                || secondaryItemsAll.length > 0 && secondaryItemsAllResults.length == 0 && (
-                                    <Box sx={{ width: "100%", height: "100%" }}>
-                                        <Stack direction="column" alignItems="center" justifyContent="center" paddingTop={2} spacing={2} sx={{ height: "100%", opacity: 0.5 }}>
-                                            <SearchIcon sx={{ fontSize: "150pt" }} />
-                                            <Typography variant="h4">No results</Typography>
-                                        </Stack>
-                                    </Box>
-                                ) || secondaryItemsAll.length == 0 && (
-                                            <Box sx={{ width: "100%", height: "100%" }}>
-                                                <Stack direction="column" alignItems="center" justifyContent="center" paddingTop={2} spacing={2} sx={{ height: "100%", opacity: 0.5 }}>
-                                                    <InfoIcon sx={{ fontSize: "150pt" }} />
-                                                    <Typography variant="h4">This list is empty</Typography>
-                                                </Stack>
-                                            </Box>
-                                        )}
-                                    </Box>
-                                </Stack>
+                                <AssociationTableDisplay secondaryItems={secondaryItemsAll} secondaryItemsResults={secondaryItemsAllResults} 
+                                    tableCaption={`All ${secondaryPluralCapitalized}`}>
+                                    {allTable}
+                                </AssociationTableDisplay>
                                 <Divider sx={{ borderWidth: "2px" }} />
                             </>
                         )
                     }
-                    <Stack sx={{ width: editMode ? "50%" : "100%", wordWrap: "break-word" }} spacing={2} textAlign="center">
-                        {editMode && <Typography variant="h5">Current {secondaryPluralCapitalized} for Selected {primaryPluralCapitalized}</Typography>}
-                        <Box maxHeight="350px">
-                            {secondaryItemsAssigned.length > 0 && secondaryItemsAssignedResults.length > 0 && assignedTable
-                                || secondaryItemsAssigned.length > 0 && secondaryItemsAssignedResults.length == 0 && (
-                                    <Box sx={{ width: "100%", height: "100%" }}>
-                                        <Stack direction="column" alignItems="center" justifyContent="center" paddingTop={2} spacing={2} sx={{ height: "100%", opacity: 0.5 }}>
-                                            <SearchIcon sx={{ fontSize: "150pt" }} />
-                                            <Typography variant="h4">No results</Typography>
-                                        </Stack>
-                                    </Box>
-                                ) || secondaryItemsAssigned.length == 0 && (
-                                <Box sx={{ width: "100%", height: "100%" }}>
-                                    <Stack direction="column" alignItems="center" justifyContent="center" paddingTop={2} spacing={2} sx={{ height: "100%", opacity: 0.5 }}>
-                                        <InfoIcon sx={{ fontSize: "150pt" }} />
-                                        <Typography variant="h4">This list is empty</Typography>
-                                    </Stack>
-                                </Box>
-                            )}
-                        </Box>
-                    </Stack>
+                    <Box sx={{
+                        display: "grid", gridTemplateAreas: `
+                            "caption"
+                            "table"
+                        `, gridTemplateRows: "50px 300px"
+                    }}>
+                        <AssociationTableDisplay secondaryItems={secondaryItemsAssigned} secondaryItemsResults={secondaryItemsAssignedResults}
+                            tableCaption={editMode && `Current ${secondaryPluralCapitalized} for Selected ${primaryPluralCapitalized}`}
+                        >
+                            {assignedTable}
+                        </AssociationTableDisplay>
+                    </Box>
 
                 </Stack>
             </DialogContent>

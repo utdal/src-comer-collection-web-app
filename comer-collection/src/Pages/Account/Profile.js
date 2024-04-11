@@ -142,11 +142,13 @@ const Profile = () => {
                         <AccountCircleIcon fontSize="large" />
                         <Typography variant="h4">Profile Information</Typography>
                     </Stack>
-                    <DataTable
-                        items={[appUser]}
-                        visibleItems={[appUser]}
-                        tableFields={userTableFields}
-                    />
+                    <Box sx={{height: "100px"}}>
+                        <DataTable
+                            items={[appUser]}
+                            visibleItems={[appUser]}
+                            tableFields={userTableFields}
+                        />
+                    </Box>
                 </Stack>
             </Stack>
             <Stack spacing={4} paddingTop={5} paddingLeft={5} paddingRight={5} height="400px">

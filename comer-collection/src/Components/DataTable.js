@@ -18,6 +18,11 @@ const DataTableCell = ({tf, itemAsString}) => {
     }, [itemAsString]);
 };
 
+DataTableCell.propTypes = {
+    tf: PropTypes.object,
+    itemAsString: PropTypes.string
+};
+
 
 const DataTableFieldCells = ({tableFields, item: itemAsString}) => {
     return useMemo(() => {
@@ -152,9 +157,15 @@ export const DataTable = ({ tableFields, items,
 
 
     return (
-        <TableContainer component={Paper} sx={{ width: "100%", height: "100%" }}>
+        <TableContainer component={Paper} sx={{ width: "100%", height: "100%", display: "grid", 
+            gridTemplateAreas: `
+                "header"
+                "rows"
+            `,
+            gridTemplateRows: "40px calc(100% - 40px)"
+        }}>
             <Table stickyHeader size="small">
-                <TableHead>
+                <TableHead sx={{gridArea: "header"}}>
                     <TableRow>
                         {Boolean(rowSelectionEnabled) && (
                             <TableCell sx={{backgroundColor: theme.palette.grey.translucent}}>
@@ -198,7 +209,7 @@ export const DataTable = ({ tableFields, items,
                     </TableRow>
                 </TableHead>
 
-                <TableBody>
+                <TableBody sx={{gridArea: "rows"}}>
                     {itemsInFinalDisplayOrder}
                 </TableBody>
             </Table>
