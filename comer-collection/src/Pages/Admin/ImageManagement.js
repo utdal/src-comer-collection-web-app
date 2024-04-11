@@ -790,7 +790,7 @@ const ImageManagement = () => {
                 refreshAllItems={fetchData}
                 dialogButtonForSecondaryManagement={<>
                     <Button variant="outlined" onClick={() => {
-                        navigate("/Account/ExhibitionManagement");
+                        navigate("/Account/Admin/Exhibitions");
                     }}>
                         <Typography>Go to exhibition management</Typography>
                     </Button>

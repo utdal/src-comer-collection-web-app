@@ -327,7 +327,7 @@ const CourseManagement = () => {
                 secondariesByPrimary={usersByCourse}
                 dialogButtonForSecondaryManagement={<>
                     <Button variant="outlined" onClick={() => {
-                        navigate("/Account/UserManagement");
+                        navigate("/Account/Admin/Users");
                     }}>
                         <Typography>Go to user management</Typography>
                     </Button>
