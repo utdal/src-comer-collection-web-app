@@ -4,19 +4,18 @@ import { SwapVertIcon, ArrowUpwardIcon, ArrowDownwardIcon } from "../../Imports/
 import PropTypes from "prop-types";
 
 export const ColumnSortButton = ({ columnName, sortColumn, setSortColumn, sortAscending, setSortAscending }) => {
-
     return (
-        <IconButton color={sortColumn == columnName ? "primary" : "grey"} size="medium" onClick={() => {
-            if (sortColumn == columnName)
-                setSortAscending((current) => !current);
-            else {
+        <IconButton color={sortColumn === columnName ? "primary" : "grey"} size="medium" onClick={() => {
+            if (sortColumn === columnName) { setSortAscending((current) => !current); } else {
                 setSortColumn(columnName);
                 setSortAscending(true);
             }
         }}>
-            {sortColumn == columnName ? (
-                sortAscending ? (<ArrowUpwardIcon fontSize="medium" />) : (<ArrowDownwardIcon fontSize="medium" />)
-            ) : (<SwapVertIcon fontSize="medium" />)} 
+            {sortColumn === columnName
+                ? (
+                    sortAscending ? (<ArrowUpwardIcon fontSize="medium" />) : (<ArrowDownwardIcon fontSize="medium" />)
+                )
+                : (<SwapVertIcon fontSize="medium" />)}
         </IconButton>
     );
 };
