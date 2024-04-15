@@ -1,158 +1,138 @@
 import * as THREE from "three";
 import { createBoundingBoxes } from "./BoundingBox.js";
 
-export const setupMainWalls = (scene, texture_loader, wall_width, wall_length, gallery_height, gallery_depth, main_color) => {
-
+export const setupMainWalls = (scene, textureLoader, wallWidth, wallLength, galleryHeight, galleryDepth, mainColor) => {
     return new Promise((resolve, reject) => {
-
         try {
-
             // clean up any existing main walls
-            scene.children = scene.children.filter((c) => c.name != "group_main_walls");
+            scene.children = scene.children.filter((c) => c.name !== "groupMainWalls");
             // create a group for walls for bounding box and adding to scene
-            let wall_group = new THREE.Group();
-            wall_group.name = "group_main_walls";
-            scene.add(wall_group);
-        
+            const wallGroup = new THREE.Group();
+            wallGroup.name = "groupMainWalls";
+            scene.add(wallGroup);
+
             // determine wall height
-            let wall_height = gallery_height + gallery_depth;
-        
+            const wallHeight = galleryHeight + galleryDepth;
+
             // walls need an amount >0 thickness to be visible
-            let wall_thick = 0.001;
-        
+            const wallThick = 0.001;
+
             // gallery is set up to be a rectangle in any form
             // we create parallel sides at a time so they can use the same loaded texture with correct wrapping specification
-        
+
             // front and back wall texture set up
-            texture_loader.load("/images/textures/wall.jpg", (wall_texture_frontback) => {
-        
-                wall_texture_frontback.wrapS = THREE.RepeatWrapping; // horizontal wrap
-                wall_texture_frontback.wrapT = THREE.RepeatWrapping; // vertical wrap
-                wall_texture_frontback.repeat.set(wall_width, wall_height); // repeat texture (width, height)
-            
+            textureLoader.load("/images/textures/wall.jpg", (wallTextureFrontback) => {
+                wallTextureFrontback.wrapS = THREE.RepeatWrapping; // horizontal wrap
+                wallTextureFrontback.wrapT = THREE.RepeatWrapping; // vertical wrap
+                wallTextureFrontback.repeat.set(wallWidth, wallHeight); // repeat texture (width, height)
+
                 // front and back wall construction
-                const front_wall = new THREE.Mesh(
-                    new THREE.BoxGeometry(wall_width, wall_height, wall_thick),
+                const frontWall = new THREE.Mesh(
+                    new THREE.BoxGeometry(wallWidth, wallHeight, wallThick),
                     new THREE.MeshLambertMaterial({
-                        map: wall_texture_frontback,
-                        color: main_color,
-                    }),
+                        map: wallTextureFrontback,
+                        color: mainColor
+                    })
                 );
-            
-                const back_wall = new THREE.Mesh(
-                    new THREE.BoxGeometry(wall_width, wall_height, wall_thick),
+
+                const backWall = new THREE.Mesh(
+                    new THREE.BoxGeometry(wallWidth, wallHeight, wallThick),
                     new THREE.MeshLambertMaterial({
-                        map: wall_texture_frontback,
-                        color: main_color,
-                    }),
+                        map: wallTextureFrontback,
+                        color: mainColor
+                    })
                 );
-            
+
                 // adjust walls to be in proper places according to adjacent sides
-                let wall_position_adjustment_frontback = wall_length / 2;
-            
-                // adjust positions 
-                front_wall.position.z = -wall_position_adjustment_frontback;
-                back_wall.position.z = wall_position_adjustment_frontback;
-            
+                const wallPositionAdjustmentFrontback = wallLength / 2;
+
+                // adjust positions
+                frontWall.position.z = -wallPositionAdjustmentFrontback;
+                backWall.position.z = wallPositionAdjustmentFrontback;
+
                 // adjust walls to be flush with floor and ceiling
-                wall_group.position.set(0, (gallery_height - gallery_depth) / 2, 0);
-            
+                wallGroup.position.set(0, (galleryHeight - galleryDepth) / 2, 0);
+
                 // add walls to the group
-                wall_group.add(front_wall, back_wall);
-                createBoundingBoxes(wall_group);
-        
+                wallGroup.add(frontWall, backWall);
+                createBoundingBoxes(wallGroup);
+
                 // return walls so that BoundingBox.js can use them
-                resolve(wall_group);
-                
+                resolve(wallGroup);
             });
-        
-        } catch(e) {
-            reject();
-        }
-
-    });
-
-
-
-};
-
-
-export const setupSideWalls = (scene, texture_loader, wall_width, wall_length, gallery_height, gallery_depth, side_color) => {
-
-    return new Promise((resolve, reject) => {
-
-        try {
-            // clean up any existing side walls
-            scene.children = scene.children.filter((c) => c.name != "group_side_walls");
-            // create a group for walls for bounding box and adding to scene
-            let wall_group = new THREE.Group();
-            wall_group.name = "group_side_walls";
-            scene.add(wall_group); 
-        
-            // determine wall height
-            let wall_height = gallery_height + gallery_depth;
-        
-            // walls need an amount >0 thickness to be visible
-            let wall_thick = 0.001;
-        
-            // gallery is set up to be a rectangle in any form
-            // we create parallel sides at a time so they can use the same loaded texture with correct wrapping specification
-        
-            // left and right wall texture set up
-            texture_loader.load("/images/textures/wall.jpg", (wall_texture_leftright) => {
-        
-                wall_texture_leftright.wrapS = THREE.RepeatWrapping; // horizontal wrap
-                wall_texture_leftright.wrapT = THREE.RepeatWrapping; // vertical wrap
-                wall_texture_leftright.repeat.set(wall_length, wall_height); // repeat texture (width, height)
-            
-                // left and right wall construction
-                const left_wall = new THREE.Mesh(
-                    new THREE.BoxGeometry(wall_length, wall_height, wall_thick),
-                    new THREE.MeshLambertMaterial({
-                        map: wall_texture_leftright,
-                        color: side_color,
-                    }),
-                );
-            
-                const right_wall = new THREE.Mesh(
-                    new THREE.BoxGeometry(wall_length, wall_height, wall_thick),
-                    new THREE.MeshLambertMaterial({
-                        map: wall_texture_leftright,
-                        color: side_color,
-                    }),
-                );
-            
-                // adjust walls to be in proper places according to adjacent sides
-                let wall_position_adjustment_leftright = wall_width / 2;
-            
-                // adjust positions 
-                left_wall.position.x = -wall_position_adjustment_leftright;
-                right_wall.position.x = wall_position_adjustment_leftright;
-            
-                // rotate left right walls in radians
-                let wall_rotation_adjustment = Math.PI / 2;
-            
-                left_wall.rotation.y = wall_rotation_adjustment;
-                right_wall.rotation.y = wall_rotation_adjustment;
-            
-                // adjust walls to be flush with floor and ceiling
-                wall_group.position.set(0, (gallery_height - gallery_depth) / 2, 0);
-            
-                // add walls to the group
-                wall_group.add(left_wall, right_wall);
-        
-                createBoundingBoxes(wall_group);
-                // return walls so that BoundingBox.js can use them
-                resolve(wall_group);
-            });
-        }
-
-        catch(e) {
+        } catch (e) {
             reject(e);
         }
-
-    
     });
-
 };
 
+export const setupSideWalls = (scene, textureLoader, wallWidth, wallLength, galleryHeight, galleryDepth, sideColor) => {
+    return new Promise((resolve, reject) => {
+        try {
+            // clean up any existing side walls
+            scene.children = scene.children.filter((c) => c.name !== "groupSideWalls");
+            // create a group for walls for bounding box and adding to scene
+            const wallGroup = new THREE.Group();
+            wallGroup.name = "groupSideWalls";
+            scene.add(wallGroup);
+
+            // determine wall height
+            const wallHeight = galleryHeight + galleryDepth;
+
+            // walls need an amount >0 thickness to be visible
+            const wallThick = 0.001;
+
+            // gallery is set up to be a rectangle in any form
+            // we create parallel sides at a time so they can use the same loaded texture with correct wrapping specification
+
+            // left and right wall texture set up
+            textureLoader.load("/images/textures/wall.jpg", (wallTextureLeftright) => {
+                wallTextureLeftright.wrapS = THREE.RepeatWrapping; // horizontal wrap
+                wallTextureLeftright.wrapT = THREE.RepeatWrapping; // vertical wrap
+                wallTextureLeftright.repeat.set(wallLength, wallHeight); // repeat texture (width, height)
+
+                // left and right wall construction
+                const leftWall = new THREE.Mesh(
+                    new THREE.BoxGeometry(wallLength, wallHeight, wallThick),
+                    new THREE.MeshLambertMaterial({
+                        map: wallTextureLeftright,
+                        color: sideColor
+                    })
+                );
+
+                const rightWall = new THREE.Mesh(
+                    new THREE.BoxGeometry(wallLength, wallHeight, wallThick),
+                    new THREE.MeshLambertMaterial({
+                        map: wallTextureLeftright,
+                        color: sideColor
+                    })
+                );
+
+                // adjust walls to be in proper places according to adjacent sides
+                const wallPositionAdjustmentLeftright = wallWidth / 2;
+
+                // adjust positions
+                leftWall.position.x = -wallPositionAdjustmentLeftright;
+                rightWall.position.x = wallPositionAdjustmentLeftright;
+
+                // rotate left right walls in radians
+                const wallRotationAdjustment = Math.PI / 2;
+
+                leftWall.rotation.y = wallRotationAdjustment;
+                rightWall.rotation.y = wallRotationAdjustment;
+
+                // adjust walls to be flush with floor and ceiling
+                wallGroup.position.set(0, (galleryHeight - galleryDepth) / 2, 0);
+
+                // add walls to the group
+                wallGroup.add(leftWall, rightWall);
+
+                createBoundingBoxes(wallGroup);
+                // return walls so that BoundingBox.js can use them
+                resolve(wallGroup);
+            });
+        } catch (e) {
+            reject(e);
+        }
+    });
+};

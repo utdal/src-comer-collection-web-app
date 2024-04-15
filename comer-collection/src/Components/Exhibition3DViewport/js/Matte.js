@@ -1,13 +1,13 @@
 import * as THREE from "three";
 
-export function createMatte(matte_width, matte_height, matte_color) {
-
+export function createMatte (matteWidth, matteHeight, matteColor) {
     // create matte
     const matte = new THREE.Mesh(
-        new THREE.PlaneGeometry(matte_width / 12, matte_height / 12),
-        new THREE.MeshLambertMaterial({ color: matte_color, 
-            side: THREE.DoubleSide,
-        }),
+        new THREE.PlaneGeometry(matteWidth / 12, matteHeight / 12),
+        new THREE.MeshLambertMaterial({
+            color: matteColor,
+            side: THREE.DoubleSide
+        })
     );
 
     return matte;
