@@ -65,11 +65,13 @@ export const ExhibitionBrowser = () => {
 
     return (
         <Box component={Paper} square justifyItems="center" sx={{
-            height: "calc(100vh - 64px)"
+            height: "calc(100vh - 64px)",
+            width: "100vw",
+            boxSizing: "border-box"
         }} >
             <Stack spacing={4} sx={{
-                paddingLeft: "300px",
-                paddingRight: "300px",
+                paddingLeft: "200px",
+                paddingRight: "200px",
                 paddingTop: "50px"
             }}>
                 <Stack direction="row" paddingLeft={1} spacing={2} justifyContent="space-between">
@@ -78,14 +80,16 @@ export const ExhibitionBrowser = () => {
                         <Typography variant="h4">Public Exhibitions</Typography>
                     </Stack>
                 </Stack>
-                <DataTable items={exhibitions} visibleItems={exhibitions} tableFields={exhibitionTableFields}
-                    defaultSortAscending={false} defaultSortColumn="Last Updated"
-                    nonEmptyHeight="500px" emptyMinHeight="500px" NoContentIcon={PhotoCameraBackIcon}
-                    noContentButtonAction={() => {
-                        navigate("/BrowseCollection");
-                    }}
-                    noContentButtonText="Browse Collection"
-                />
+                <Box sx={{ height: "calc(80vh - 64px)" }}>
+                    <DataTable items={exhibitions} visibleItems={exhibitions} tableFields={exhibitionTableFields}
+                        defaultSortAscending={false} defaultSortColumn="Last Updated"
+                        nonEmptyHeight="500px" emptyMinHeight="500px" NoContentIcon={PhotoCameraBackIcon}
+                        noContentButtonAction={() => {
+                            navigate("/BrowseCollection");
+                        }}
+                        noContentButtonText="Browse Collection"
+                    />
+                </Box>
             </Stack>
         </Box>
 
