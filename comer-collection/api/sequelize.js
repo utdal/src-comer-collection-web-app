@@ -1,6 +1,13 @@
 // Initialize sequelize
 import Sequelize from "sequelize";
 
+import ArtistModel from "./models/artist.js";
+import ImageModel from "./models/image.js";
+import TagModel from "./models/tag.js";
+import UserModel from "./models/user.js";
+import CourseModel from "./models/course.js";
+import ExhibitionModel from "./models/exhibition.js";
+
 const { DB_HOST, DB_PORT, DB_SCHEMA, DB_USER, DB_PASSWORD } = process.env;
 
 // Authentication object for querying from database
@@ -27,16 +34,9 @@ sequelize.authenticate().then(() => {
 });
 
 const db = {
-    Sequelize: Sequelize,
-    sequelize: sequelize
+    Sequelize,
+    sequelize
 };
-
-import ArtistModel from "./models/artist.js";
-import ImageModel from "./models/image.js";
-import TagModel from "./models/tag.js";
-import UserModel from "./models/user.js";
-import CourseModel from "./models/course.js";
-import ExhibitionModel from "./models/exhibition.js";
 
 db.Artist = ArtistModel(db);
 db.Image = ImageModel(db);
@@ -64,6 +64,5 @@ db.Exhibition.belongsTo(db.User, { foreignKey: "exhibition_owner", inverse: { as
 // Exhibitions with images can be deleted, but images with exhibitions cannot be deleted
 db.Exhibition.belongsToMany(db.Image, { through: "comer_image_appearances", foreignKey: "exhibition_id", onDelete: "CASCADE" });
 db.Image.belongsToMany(db.Exhibition, { through: "comer_image_appearances", foreignKey: "image_id", onDelete: "RESTRICT" });
-
 
 export default db;
