@@ -1,8 +1,6 @@
 import db from "../sequelize.js";
-const { Artist, Image, } = db;
 import { updateItem, deleteItem, listItems, createItem, getItem } from "./items.js";
-
-
+const { Artist, Image } = db;
 
 const listArtists = async (req, res, next) => {
     await listItems(req, res, next, Artist, [Image], req.params.artistId);

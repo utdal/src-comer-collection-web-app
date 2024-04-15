@@ -1,18 +1,16 @@
 import createError from "http-errors";
 import db from "../sequelize.js";
-const { User, Course, Exhibition, sequelize } = db;
 import { canUserCreateExhibition } from "./users.js";
 import { listItems, getItem, createItem, updateItem, deleteItem } from "./items.js";
+const { User, Course, Exhibition, sequelize } = db;
 
-
-const isAppUserExhibitionOwner = (app_user, exhibition_id) => {
-    // Exhibitions owned by current app user are already included 
+const isAppUserExhibitionOwner = (appUser, exhibitionId) => {
+    // Exhibitions owned by current app user are already included
     // during authentication process.  Scan that list to determine
     // whether the exhibition being edited is owned by the current user.
-    return Boolean(app_user.Exhibitions
-        .filter((ex) => ex.id == exhibition_id).length);
+    return Boolean(appUser.Exhibitions
+        .filter((ex) => ex.id === exhibitionId).length);
 };
-
 
 const listExhibitions = async (req, res, next) => {
     await listItems(req, res, next, Exhibition, {
@@ -67,7 +65,6 @@ const ownerDeleteExhibition = async (req, res, next) => {
     }
     await deleteItem(req, res, next, Exhibition, req.params.exhibitionId);
 };
-
 
 const adminEditExhibitionSettings = async (req, res, next) => {
     await updateItem(req, res, next, Exhibition, req.params.exhibitionId, [
@@ -137,8 +134,7 @@ const loadExhibitionPublic = async (req, res, next) => {
         });
         if (!exhibition) {
             next(createError(401));
-        }
-        else {
+        } else {
             res.status(200).json({
                 data: {
                     ...exhibition.toJSON(),
@@ -151,16 +147,13 @@ const loadExhibitionPublic = async (req, res, next) => {
     }
 };
 
-
 const saveExhibition = async (req, res, next) => {
     try {
         await sequelize.transaction(async (t) => {
             const exhibition = await Exhibition.findByPk(req.params.exhibitionId, {
                 transaction: t
             });
-            if (!exhibition)
-                next(createError(404));
-            else {
+            if (!exhibition) { next(createError(404)); } else {
                 await exhibition.update({
                     data: req.body.data,
                     date_modified: Date.now()
@@ -176,14 +169,12 @@ const saveExhibition = async (req, res, next) => {
     }
 };
 
-
 const saveExhibitionOwner = async (req, res, next) => {
     if (!isAppUserExhibitionOwner(req.app_user, req.params.exhibitionId)) {
         return next(createError(403));
     }
     await saveExhibition(req, res, next);
 };
-
 
 const saveExhibitionAdmin = async (req, res, next) => {
     await saveExhibition(req, res, next);

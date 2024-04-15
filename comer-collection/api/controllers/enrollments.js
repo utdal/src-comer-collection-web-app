@@ -1,6 +1,6 @@
 import db from "../sequelize.js";
-const { User } = db;
 import { manageManyToManyAssociation } from "./associations.js";
+const { User } = db;
 
 const manageUserCourses = async (req, res, next) => {
     const { users, courses } = req.body;

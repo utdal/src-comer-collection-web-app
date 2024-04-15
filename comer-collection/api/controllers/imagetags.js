@@ -1,6 +1,6 @@
 import db from "../sequelize.js";
-const { Image } = db;
 import { manageManyToManyAssociation } from "./associations.js";
+const { Image } = db;
 
 const manageImageTags = async (req, res, next) => {
     const { images, tags } = req.body;

@@ -1,16 +1,15 @@
 import createError from "http-errors";
 import db from "../sequelize.js";
-const { sequelize } = db;
 import { Op } from "sequelize";
-
+const { sequelize } = db;
 
 const manageManyToManyAssociation = async (req, res, next, model, association, primaryIds, secondaryIds) => {
     const action = req.body.action;
     try {
         if (!Array.isArray(primaryIds)) {
-            throw "primaryIds must be an array";
+            throw new Error("primaryIds must be an array");
         } else if (!Array.isArray(secondaryIds)) {
-            throw "secondaryIds must be an array";
+            throw new Error("secondaryIds must be an array");
         }
         await sequelize.transaction(async (t) => {
             const primaries = Array.from(await model.findAll({
@@ -22,7 +21,7 @@ const manageManyToManyAssociation = async (req, res, next, model, association, p
                 transaction: t
             }));
             const { set, addMultiple, removeMultiple } = association.accessors;
-            for (let p of primaries) {
+            for (const p of primaries) {
                 switch (action) {
                 case "set":
                     await p[set](secondaryIds);
@@ -34,7 +33,7 @@ const manageManyToManyAssociation = async (req, res, next, model, association, p
                     await p[removeMultiple](secondaryIds);
                     break;
                 default:
-                    throw "Invalid action for M:N association";
+                    throw new Error("Invalid action for M:N association");
                 }
             }
         });
@@ -43,6 +42,5 @@ const manageManyToManyAssociation = async (req, res, next, model, association, p
         next(createError(400, { debugMessage: e.message + "\n" + e.stack }));
     }
 };
-
 
 export { manageManyToManyAssociation };

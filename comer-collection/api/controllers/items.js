@@ -2,7 +2,6 @@ import createError from "http-errors";
 import db from "../sequelize.js";
 const { sequelize } = db;
 
-
 const getItem = async (req, res, next, model, include, itemId, itemFunctions = {}) => {
     try {
         if (req.body.id) {
@@ -12,8 +11,8 @@ const getItem = async (req, res, next, model, include, itemId, itemFunctions = {
         if (!item) {
             next(createError(404));
         }
-        let i = item.toJSON();
-        for (let f in itemFunctions) {
+        const i = item.toJSON();
+        for (const f in itemFunctions) {
             i[f] = itemFunctions[f](i);
         }
         res.status(200).json({ data: i });
@@ -22,12 +21,11 @@ const getItem = async (req, res, next, model, include, itemId, itemFunctions = {
     }
 };
 
-
 const listItems = async (req, res, next, model, include, where, itemFunctions = {}) => {
     try {
         const items = Array.from(await model.findAll({ include, where })).map((i) => {
             i = i.toJSON();
-            for (let f in itemFunctions) {
+            for (const f in itemFunctions) {
                 i[f] = itemFunctions[f](i);
             }
             return i;
@@ -38,14 +36,12 @@ const listItems = async (req, res, next, model, include, where, itemFunctions = 
     }
 };
 
-
 const createItem = async (req, res, next, model, restrictFields = null) => {
     try {
         if (req.body.id) {
             throw new Error("The request body should not contain an ID.  Put the ID in the URL.");
-        }
-        else if (restrictFields) {
-            for (let f in req.body) {
+        } else if (restrictFields) {
+            for (const f in req.body) {
                 if (restrictFields.indexOf(f) < 0) {
                     throw new Error(`Request body contains field ${f} which is not in restrictFields`);
                 }
@@ -62,14 +58,12 @@ const createItem = async (req, res, next, model, restrictFields = null) => {
     }
 };
 
-
 const updateItem = async (req, res, next, model, itemId, restrictFields = null) => {
     try {
         if (req.body.id) {
             throw new Error("The request body should not contain an ID.  Put the ID in the URL.");
-        }
-        else if (restrictFields) {
-            for (let f in req.body) {
+        } else if (restrictFields) {
+            for (const f in req.body) {
                 if (restrictFields.indexOf(f) < 0) {
                     throw new Error(`Request body contains field ${f} which is not in restrictFields`);
                 }

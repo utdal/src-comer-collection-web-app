@@ -1,7 +1,6 @@
 import db from "../sequelize.js";
-const { User, Course } = db;
 import { deleteItem, updateItem, createItem, listItems, getItem } from "./items.js";
-
+const { User, Course } = db;
 
 const listCourses = async (req, res, next) => {
     await listItems(req, res, next, Course, [User], {});
@@ -22,6 +21,5 @@ const updateCourse = async (req, res, next) => {
 const deleteCourse = async (req, res, next) => {
     await deleteItem(req, res, next, Course, req.params.courseId);
 };
-
 
 export { createCourse, getCourse, listCourses, deleteCourse, updateCourse };
