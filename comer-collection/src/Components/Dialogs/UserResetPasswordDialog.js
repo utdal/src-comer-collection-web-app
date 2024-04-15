@@ -12,31 +12,26 @@ import { useSnackbar } from "../../ContextProviders/AppFeatures.js";
 import PropTypes from "prop-types";
 import { User } from "../../Classes/Entities/User.js";
 
-
 const randomPassword = () => {
     const password = Math.random().toString(36).slice(-8) + Math.random().toString(36).slice(-8);
     return password;
 };
 
-
 export const UserResetPasswordDialog = ({ dialogUser, dialogIsOpen, setDialogIsOpen }) => {
-
     const [newPassword, setNewPassword] = useState("");
     const [editMode, setEditMode] = useState(true);
     const [hasCopied, setHasCopied] = useState(false);
 
     const showSnackbar = useSnackbar();
     const themeColor = dialogUser?.is_admin_or_collection_manager ? "secondary" : "primary";
-    
 
     return (
-        <Dialog fullWidth={true} maxWidth="sm" component="form" sx={{zIndex: 10000}}
+        <Dialog fullWidth={true} maxWidth="sm" component="form" sx={{ zIndex: 10000 }}
             open={dialogIsOpen} disableEscapeKeyDown
             onClose={(event, reason) => {
-                if (reason == "backdropClick")
-                    return;
+                if (reason === "backdropClick") { return; }
                 setDialogIsOpen(false);
-            }} 
+            }}
             onSubmit={(e) => {
                 e.preventDefault();
                 User.handleResetPassword(dialogUser?.id, newPassword).then((msg) => {
@@ -51,12 +46,12 @@ export const UserResetPasswordDialog = ({ dialogUser, dialogIsOpen, setDialogIsO
 
             <DialogContent>
                 <Stack direction="column" spacing={2}>
-                    {editMode && (
+                    {(editMode &&
                         <>
                             <DialogContentText variant="body1">
-                                {dialogUser?.has_password && (
+                                {(dialogUser?.has_password &&
                                     `You are about to reset the password for ${dialogUser?.safe_display_name}, which will invalidate all current access tokens for this user.`
-                                ) || !dialogUser?.has_password && (
+                                ) || (!dialogUser?.has_password &&
                                     `You are about to set a password for ${dialogUser?.safe_display_name}.`
                                 )}
                             </DialogContentText>
@@ -64,21 +59,21 @@ export const UserResetPasswordDialog = ({ dialogUser, dialogIsOpen, setDialogIsO
               Please type a password of your choice or generate a random password for the user.
                             </DialogContentText>
                         </>
-                    ) || !editMode && (
+                    ) || (!editMode &&
                         <DialogContentText variant="body1">
             The new password has been set.  Please copy the password below so you can send it to the user.  You will not be able to see the password again after you close this dialog.
                         </DialogContentText>
                     )}
                     <Stack direction="row" spacing={2}>
                         <TextField label="New Password" disabled={!editMode} type="password" color={themeColor}
-                            sx={{width: "80%"}}
+                            sx={{ width: "80%" }}
                             onChange={(e) => {
                                 setNewPassword(e.target.value);
                             }}
                             value={newPassword}
                         ></TextField>
-                        {editMode && (
-                            <Button variant={newPassword ? "outlined" : "contained"} 
+                        {(editMode &&
+                            <Button variant={newPassword ? "outlined" : "contained"}
                                 startIcon={<SyncIcon />}
                                 color={themeColor}
                                 onClick={() => {
@@ -87,7 +82,7 @@ export const UserResetPasswordDialog = ({ dialogUser, dialogIsOpen, setDialogIsO
                             >
                                 <Typography>Random</Typography>
                             </Button>
-                        ) || !editMode && (
+                        ) || (!editMode &&
                             <Button variant={hasCopied ? "outlined" : "contained"}
                                 startIcon={<ContentCopyIcon />}
                                 color={themeColor}
@@ -96,7 +91,7 @@ export const UserResetPasswordDialog = ({ dialogUser, dialogIsOpen, setDialogIsO
                                         navigator.clipboard.writeText(newPassword);
                                         showSnackbar("Copied to clipboard", "success");
                                         setHasCopied(true);
-                                    } catch(e) {
+                                    } catch (e) {
                                         showSnackbar("Error copying to clipboard", "error");
                                     }
                                 }}
@@ -109,10 +104,10 @@ export const UserResetPasswordDialog = ({ dialogUser, dialogIsOpen, setDialogIsO
             </DialogContent>
             <DialogActions>
                 <Stack direction="row" justifyContent="space-between" spacing={1} sx={{ width: "100%" }}>
-                    {editMode && (
+                    {(editMode &&
                         <>
                             <Button sx={{ width: "100%" }}
-                                color={themeColor} variant="outlined"  onClick={() => {
+                                color={themeColor} variant="outlined" onClick={() => {
                                     setDialogIsOpen(false);
                                     setEditMode(true);
                                     setHasCopied(false);
@@ -120,13 +115,13 @@ export const UserResetPasswordDialog = ({ dialogUser, dialogIsOpen, setDialogIsO
                                 }}>
                                 <Typography variant="body1">Cancel</Typography>
                             </Button>
-                            <Button color={themeColor} variant="contained" size="large" type="submit" 
+                            <Button color={themeColor} variant="contained" size="large" type="submit"
                                 disabled={!newPassword}
                                 sx={{ width: "100%" }}>
                                 <Typography variant="body1">{dialogUser?.has_password ? "Reset Password" : "Set Password"}</Typography>
                             </Button>
                         </>
-                    ) || !editMode && (
+                    ) || (!editMode &&
                         <Button color={themeColor} variant="contained" size="large"
                             disabled={!hasCopied}
                             sx={{ width: "100%" }}

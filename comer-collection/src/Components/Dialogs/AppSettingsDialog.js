@@ -11,7 +11,6 @@ import { useAppDarkTheme } from "../../ContextProviders/AppFeatures.js";
 import { DarkModeIcon, LightModeIcon } from "../../Imports/Icons.js";
 import PropTypes from "prop-types";
 
-
 const Option = ({ description, children }) => {
     return (
         <>
@@ -28,17 +27,13 @@ Option.propTypes = {
     children: PropTypes.node
 };
 
-
-
 export const AppSettingsDialog = ({ appSettingsDialogIsOpen, setAppSettingsDialogIsOpen }) => {
-    
     const { appDarkTheme, setAppDarkTheme } = useAppDarkTheme();
     return (
         <Dialog component="form" sx={{ zIndex: 10000 }}
             open={appSettingsDialogIsOpen} disableEscapeKeyDown
             onClose={(event, reason) => {
-                if (reason == "backdropClick")
-                    return;
+                if (reason === "backdropClick") { return; }
                 setAppSettingsDialogIsOpen(false);
             }}
         >
@@ -81,7 +76,6 @@ export const AppSettingsDialog = ({ appSettingsDialogIsOpen, setAppSettingsDialo
         </Dialog>
     );
 };
-
 
 AppSettingsDialog.propTypes = {
     appSettingsDialogIsOpen: PropTypes.bool,

@@ -11,15 +11,13 @@ import { DeleteIcon } from "../../../IconImports.js";
 import PropTypes from "prop-types";
 
 export const ItemMultiDeleteDialog = ({ entityPlural, deleteDialogItems, deleteDialogIsOpen, setDeleteDialogIsOpen, handleDelete }) => {
-
     const [confirmText, setConfirmText] = useState("");
-  
+
     return (
-        <Dialog component="form" fullWidth={true} maxWidth="sm" sx={{zIndex: 10000}}
+        <Dialog component="form" fullWidth={true} maxWidth="sm" sx={{ zIndex: 10000 }}
             open={deleteDialogIsOpen} disableEscapeKeyDown
             onClose={(event, reason) => {
-                if (reason == "backdropClick")
-                    return;
+                if (reason === "backdropClick") { return; }
                 setDeleteDialogIsOpen(false);
             }}
             onSubmit={(e) => {
@@ -49,8 +47,8 @@ export const ItemMultiDeleteDialog = ({ entityPlural, deleteDialogItems, deleteD
                     }}>
                         <Typography variant="body1">Cancel</Typography>
                     </Button>
-                    <Button color="error" type="submit" 
-                        disabled={confirmText?.toLowerCase() != "delete"}
+                    <Button color="error" type="submit"
+                        disabled={confirmText?.toLowerCase() !== "delete"}
                         variant="contained" size="large" startIcon={<DeleteIcon />} sx={{ width: "100%" }} >
                         <Typography variant="body1">Delete ({deleteDialogItems.length})</Typography>
                     </Button>

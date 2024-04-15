@@ -13,57 +13,45 @@ import PropTypes from "prop-types";
 import { useSnackbar } from "../../ContextProviders/AppFeatures.js";
 
 export const ItemMultiCreateDialog = ({ Entity, refreshAllItems, dialogInstructions, dialogIsOpen, setDialogIsOpen }) => {
-
-
     const createDialogReducer = useCallback((createDialogItems, action) => {
         switch (action.type) {
         case "add":
             return [...createDialogItems, getBlankItemFields(Entity.fieldDefinitions)];
-  
+
         case "change":
             return createDialogItems.map((r, i) => {
-                if (action.index == i)
-                    return { ...r, [action.field]: action.newValue };
-  
-                else
-                    return r;
+                if (action.index === i) { return { ...r, [action.field]: action.newValue }; } else { return r; }
             });
-  
+
         case "remove":
             return createDialogItems.filter((r, i) => {
-                return action.index != i;
+                return action.index !== i;
             });
-  
+
         case "set":
             return action.newArray;
-  
+
         default:
             throw Error("Unknown action type");
         }
     }, []);
 
-
     const [createDialogItems, createDialogDispatch] = useReducer(createDialogReducer, []);
     const [submitEnabled, setSubmitEnabled] = useState(true);
 
     const showSnackbar = useSnackbar();
-    
 
     useEffect(() => {
-        if(dialogIsOpen)
-            setSubmitEnabled(true);
+        if (dialogIsOpen) { setSubmitEnabled(true); }
     }, [dialogIsOpen]);
-
 
     const pluralCapitalized = Entity?.plural.substr(0, 1).toUpperCase() + Entity?.plural.substr(1).toLowerCase();
 
-
     return (
-        <Dialog component="form" fullWidth={true} maxWidth="lg" sx={{zIndex: 10000}}
+        <Dialog component="form" fullWidth={true} maxWidth="lg" sx={{ zIndex: 10000 }}
             open={dialogIsOpen} disableEscapeKeyDown
             onClose={(event, reason) => {
-                if (reason == "backdropClick")
-                    return;
+                if (reason === "backdropClick") { return; }
                 setDialogIsOpen(false);
             }}
             onSubmit={(e) => {
@@ -77,20 +65,18 @@ export const ItemMultiCreateDialog = ({ Entity, refreshAllItems, dialogInstructi
                         type: "set",
                         newArray: itemsWithErrors
                     });
-                    if(itemsWithErrors.length > 0) {
+                    if (itemsWithErrors.length > 0) {
                         setSubmitEnabled(true);
-                        if(itemsWithErrors.length == createDialogItems.length) {
-                            showSnackbar(`Could not create ${createDialogItems.length == 1 ? Entity.singular : Entity.plural}`, "error");
-                        }
-                        else if(itemsWithErrors.length < createDialogItems.length) {
+                        if (itemsWithErrors.length === createDialogItems.length) {
+                            showSnackbar(`Could not create ${createDialogItems.length === 1 ? Entity.singular : Entity.plural}`, "error");
+                        } else if (itemsWithErrors.length < createDialogItems.length) {
                             showSnackbar(`${createDialogItems.length - itemsWithErrors.length} of ${createDialogItems.length} ${Entity.plural} created`, "warning");
                         }
                     } else {
                         refreshAllItems();
                         setDialogIsOpen(false);
-                        showSnackbar(`${createDialogItems.length} ${createDialogItems.length == 1 ? Entity.singular : Entity.plural} created`, "success");
+                        showSnackbar(`${createDialogItems.length} ${createDialogItems.length === 1 ? Entity.singular : Entity.plural} created`, "success");
                     }
-
                 });
             }}
         >
@@ -103,16 +89,16 @@ export const ItemMultiCreateDialog = ({ Entity, refreshAllItems, dialogInstructi
                             <Divider />
                             <Stack direction="row" spacing={2} alignItems="center" justifyItems="center">
                                 <DialogContentText variant="body1">{index + 1}</DialogContentText>
-                                <Stack key={index} direction="row" spacing={{xs: 1, sm: 2}} alignItems="center" useFlexGap flexWrap="wrap">
+                                <Stack key={index} direction="row" spacing={{ xs: 1, sm: 2 }} alignItems="center" useFlexGap flexWrap="wrap">
                                     {Entity.fieldDefinitions.map((f, fi) => (
-                                        <TextField key={f.fieldName} 
-                                            name={f.fieldName} 
-                                            label={f.displayName ?? ""} 
-                                            autoFocus={fi==0} 
-                                            value={u[f.fieldName]} 
+                                        <TextField key={f.fieldName}
+                                            name={f.fieldName}
+                                            label={f.displayName ?? ""}
+                                            autoFocus={fi === 0}
+                                            value={u[f.fieldName]}
                                             multiline={f.multiline}
                                             minRows={2}
-                                            sx={{ 
+                                            sx={{
                                                 minWidth: "330px"
                                             }}
                                             inputProps={{
@@ -122,22 +108,19 @@ export const ItemMultiCreateDialog = ({ Entity, refreshAllItems, dialogInstructi
                                             }}
                                             InputLabelProps={
                                                 (() => {
-                                                    if(f.inputType == "datetime-local") {
+                                                    if (f.inputType === "datetime-local") {
                                                         return {
-                                                            "shrink": true
+                                                            shrink: true
                                                         };
                                                     }
                                                 })()
-                                                // {
-                                                //   [f.inputType == "datetime-local" ? "shrink" : ""]: true
-                                                // }
                                             }
                                             required={Boolean(f.isRequired)}
                                             onChange={(e) => {
                                                 createDialogDispatch({
                                                     type: "change",
                                                     field: f.fieldName,
-                                                    index: index,
+                                                    index,
                                                     newValue: e.target.value
                                                 });
                                             }} />
@@ -146,7 +129,7 @@ export const ItemMultiCreateDialog = ({ Entity, refreshAllItems, dialogInstructi
                                 <IconButton onClick={() => {
                                     createDialogDispatch({
                                         type: "remove",
-                                        index: index
+                                        index
                                     });
                                 }}>
                                     <DeleteIcon />
@@ -181,7 +164,7 @@ export const ItemMultiCreateDialog = ({ Entity, refreshAllItems, dialogInstructi
                             <Typography variant="body1">{createDialogItems.length ? `Add another ${Entity.singular}` : `Add ${Entity.singular}`}</Typography>
                         </Button>
                         <Button type="submit" color="primary" variant="contained" size="large" sx={{ width: "100%" }}
-                            disabled={!submitEnabled || createDialogItems.length == 0}>
+                            disabled={!submitEnabled || createDialogItems.length === 0}>
                             <Typography variant="body1">{createDialogItems.length >= 2 ? `Create (${createDialogItems.length})` : "Create"}</Typography>
                         </Button>
                     </Stack>

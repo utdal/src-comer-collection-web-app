@@ -17,31 +17,30 @@ import { ItemSingleEditDialog } from "./ItemSingleEditDialog.js";
 import PropTypes from "prop-types";
 import { useSnackbar } from "../../ContextProviders/AppFeatures.js";
 
-export const EntityManageDialog = ({ Entity,
+export const EntityManageDialog = ({
+    Entity,
     dialogItems, setDialogItems,
     dialogTableFields,
     dialogIsOpen, setDialogIsOpen,
     searchBoxFields, searchBoxPlaceholder, itemSearchQuery, setItemSearchQuery,
 
     internalDeleteDialogIsOpen, setInternalDeleteDialogIsOpen,
-    internalDeleteDialogItem, 
+    internalDeleteDialogItem,
 
     internalEditDialogIsOpen, setInternalEditDialogIsOpen,
-    internalEditDialogItem, 
+    internalEditDialogItem,
 
     refreshAllItems,
 
     onClose
 }) => {
-
     const blankItem = getBlankItemFields(Entity.fieldDefinitions);
     const [itemToAdd, setItemToAdd] = useState(blankItem);
     const showSnackbar = useSnackbar();
 
-
     // const [internalEditDialogItem, setInternalEditDialogItem] = useState(null);
     // const [internalEditDialogIsOpen, setInternalEditDialogIsOpen] = useState(false);
-    
+
     // const [internalDeleteDialogItem, setInternalDeleteDialogItem] = useState(null);
     // const [internalDeleteDialogIsOpen, setInternalDeleteDialogIsOpen] = useState(false);
 
@@ -63,8 +62,7 @@ export const EntityManageDialog = ({ Entity,
             <Dialog fullWidth={true} maxWidth="lg" sx={{ zIndex: 10000 }}
                 open={dialogIsOpen} disableEscapeKeyDown
                 onClose={(event, reason) => {
-                    if (reason == "backdropClick")
-                        return;
+                    if (reason === "backdropClick") { return; }
                     setDialogIsOpen(false);
                 }}
             >
@@ -104,8 +102,8 @@ export const EntityManageDialog = ({ Entity,
                                 <Stack component="form"
                                     onSubmit={(e) => {
                                         e.preventDefault();
-                                        Entity.handleMultiCreate([itemToAdd]).then(([{status}]) => {
-                                            if(status == "fulfilled") {
+                                        Entity.handleMultiCreate([itemToAdd]).then(([{ status }]) => {
+                                            if (status === "fulfilled") {
                                                 refreshAllItems();
                                                 showSnackbar(`${singularCapitalized} created`, "success");
                                             } else {
@@ -120,7 +118,7 @@ export const EntityManageDialog = ({ Entity,
                                             <TextField key={f.fieldName}
                                                 name={f.fieldName}
                                                 label={f.displayName}
-                                                autoFocus={fi == 0}
+                                                autoFocus={fi === 0}
                                                 value={itemToAdd[f.fieldName]}
                                                 sx={{
                                                     minWidth: "200px"
@@ -131,7 +129,7 @@ export const EntityManageDialog = ({ Entity,
                                                     type: f.inputType ?? "text",
                                                     sx: {
                                                         ...{
-                                                            textAlign: f.inputType == "datetime-local" ? "center" : ""
+                                                            textAlign: f.inputType === "datetime-local" ? "center" : ""
                                                         }
                                                     }
                                                 }}
@@ -158,13 +156,12 @@ export const EntityManageDialog = ({ Entity,
                 </DialogContent>
                 <DialogActions>
                     <Stack direction="row" justifyContent="space-between" width="100%">
-                        <Typography paddingLeft={4} variant="h6" sx={{ opacity: 0.5 }}>{dialogItems.length} {dialogItems.length == 1 ? Entity.singular : Entity.plural}</Typography>
+                        <Typography paddingLeft={4} variant="h6" sx={{ opacity: 0.5 }}>{dialogItems.length} {dialogItems.length === 1 ? Entity.singular : Entity.plural}</Typography>
                         <Button sx={{
                             width: "30%"
                         }} color="primary" variant="contained" size="large"
                         onClick={() => {
-                            if (onClose)
-                                onClose();
+                            if (onClose) { onClose(); }
                             setDialogIsOpen(false);
                         }}
                         >
@@ -174,14 +171,12 @@ export const EntityManageDialog = ({ Entity,
                 </DialogActions>
             </Dialog>
 
-
             <ItemSingleEditDialog
-                {...{Entity, refreshAllItems}}
+                {...{ Entity, refreshAllItems }}
                 editDialogIsOpen={internalEditDialogIsOpen}
                 setEditDialogIsOpen={setInternalEditDialogIsOpen}
                 editDialogItem={internalEditDialogItem}
             />
-
 
             <ItemSingleDeleteDialog
                 allItems={dialogItems}
@@ -190,13 +185,12 @@ export const EntityManageDialog = ({ Entity,
                 setDeleteDialogIsOpen={setInternalDeleteDialogIsOpen}
                 deleteDialogItem={internalDeleteDialogItem}
                 dialogTitle={`Delete ${Entity.singular[0].toUpperCase()}${Entity.singular.substring(1)}`}
-                {...{Entity}}
+                {...{ Entity }}
             />
 
         </>
     );
 };
-
 
 EntityManageDialog.propTypes = {
     Entity: PropTypes.any,

@@ -16,8 +16,7 @@ import { capitalized } from "../../Classes/Entity.js";
 import { User } from "../../Classes/Entities/User.js";
 
 const computeSecondaryItemsAssigned = (secondaryItemsAll, secondariesByPrimary, primaryItems) => {
-    if (primaryItems?.length == 0)
-        return [];
+    if (primaryItems?.length === 0) { return []; }
     return secondaryItemsAll.filter((si) => {
         return (
             Object.entries(secondariesByPrimary)
@@ -27,29 +26,30 @@ const computeSecondaryItemsAssigned = (secondaryItemsAll, secondariesByPrimary, 
     });
 };
 
-
-const AssociationTableDisplay = ({secondaryItems, secondaryItemsResults, tableCaption, children }) => {
+const AssociationTableDisplay = ({ secondaryItems, secondaryItemsResults, tableCaption, children }) => {
     return (
         <Box sx={{
-            display: "grid", gridTemplateAreas: `
+            display: "grid",
+            gridTemplateAreas: `
             "caption"
             "table"
-        `, gridTemplateRows: tableCaption ? "50px 300px" : "0px 300px"
+        `,
+            gridTemplateRows: tableCaption ? "50px 300px" : "0px 300px"
         }}>
             <Stack direction="row" justifyContent="center" sx={{ gridArea: "caption" }}>
                 {tableCaption && <Typography variant="h5" align="center">{tableCaption}</Typography>}
             </Stack>
             <Box sx={{ gridArea: "table", height: "100%", overflowY: "auto" }}>
-                {secondaryItems.length > 0 && secondaryItemsResults.length > 0 &&
-                    children
-                    || secondaryItems.length > 0 && secondaryItemsResults.length == 0 && (
+                {(secondaryItems.length > 0 && secondaryItemsResults.length > 0 &&
+                    children) ||
+                    (secondaryItems.length > 0 && secondaryItemsResults.length === 0 &&
                         <Box sx={{ width: "100%" }}>
                             <Stack direction="column" alignItems="center" justifyContent="center" paddingTop={2} spacing={2} sx={{ height: "100%", opacity: 0.5 }}>
                                 <SearchIcon sx={{ fontSize: "150pt" }} />
                                 <Typography variant="h4">No results</Typography>
                             </Stack>
                         </Box>
-                    ) || secondaryItems.length == 0 && (
+                    ) || (secondaryItems.length === 0 &&
                     <Box sx={{ width: "100%" }}>
                         <Stack direction="column" alignItems="center" justifyContent="center" paddingTop={2} spacing={2} sx={{ height: "100%", opacity: 0.5 }}>
                             <InfoIcon sx={{ fontSize: "150pt" }} />
@@ -69,8 +69,6 @@ AssociationTableDisplay.propTypes = {
     children: PropTypes.node
 };
 
-
-
 export const AssociationManagementDialog = ({
     Association, editMode, primaryItems,
     secondaryItemsAll, secondariesByPrimary,
@@ -81,18 +79,17 @@ export const AssociationManagementDialog = ({
     defaultSortColumn, defaultSortAscending,
     refreshAllItems
 }) => {
-
     const showSnackbar = useSnackbar();
 
     const assignButtonColumnDefinition = {
         generateTableCell: (secondaryItem) => {
-            const buttonColor = Association.secondary == User && secondaryItem.is_admin_or_collection_manager ? "secondary" : "primary";
+            const buttonColor = Association.secondary === User && secondaryItem.is_admin_or_collection_manager ? "secondary" : "primary";
             const quantity = secondaryItem.quantity_assigned;
-            if (quantity == primaryItems.length) {
+            if (quantity === primaryItems.length) {
                 const buttonText = (
-                    primaryItems.length == 1 ?
-                        `${Association.assignPast} ${Association.primary.singular}` :
-                        `${Association.assignPast} ${quantity} ${Association.primary.plural}`
+                    primaryItems.length === 1
+                        ? `${Association.assignPast} ${Association.primary.singular}`
+                        : `${Association.assignPast} ${quantity} ${Association.primary.plural}`
                 );
                 return (
                     <Button variant="text" color={buttonColor} disabled startIcon={<CheckIcon />}>
@@ -101,11 +98,11 @@ export const AssociationManagementDialog = ({
                 );
             } else if (quantity < primaryItems.length) {
                 const buttonText = (
-                    primaryItems.length == 1 ?
-                        `${Association.assignPresent} ${Association.primary.singular}` :
-                        quantity > 0 ?
-                            `${Association.assignPresent} ${primaryItems.length - quantity} more ${primaryItems.length - quantity != 1 ? Association.primary.plural : Association.primary.singular}` :
-                            `${Association.assignPresent} ${primaryItems.length - quantity} ${primaryItems.length - quantity != 1 ? Association.primary.plural : Association.primary.singular}`
+                    primaryItems.length === 1
+                        ? `${Association.assignPresent} ${Association.primary.singular}`
+                        : quantity > 0
+                            ? `${Association.assignPresent} ${primaryItems.length - quantity} more ${primaryItems.length - quantity !== 1 ? Association.primary.plural : Association.primary.singular}`
+                            : `${Association.assignPresent} ${primaryItems.length - quantity} ${primaryItems.length - quantity !== 1 ? Association.primary.plural : Association.primary.singular}`
                 );
                 return (
                     <Button variant="outlined" color={buttonColor} startIcon={<Association.AssignIcon />} onClick={() => {
@@ -114,7 +111,7 @@ export const AssociationManagementDialog = ({
                             showSnackbar(msg, "success");
                             refreshAllItems();
                         }).catch((err) => {
-                            showSnackbar(err, "error");
+                            showSnackbar(err.message, "error");
                         });
                     }}>
                         <Typography variant="body1">
@@ -128,12 +125,12 @@ export const AssociationManagementDialog = ({
 
     const unassignButtonColumnDefinition = {
         generateTableCell: (secondaryItem) => {
-            const buttonColor = Association.secondary == User && secondaryItem.is_admin_or_collection_manager ? "secondary" : "primary";
+            const buttonColor = Association.secondary === User && secondaryItem.is_admin_or_collection_manager ? "secondary" : "primary";
             const quantity = secondaryItem.quantity_assigned;
             const buttonText = (
-                primaryItems.length == 1 ?
-                    `${capitalized(Association.unassignPresent)} ${Association.primary.singular}` :
-                    `${capitalized(Association.unassignPresent)} ${quantity} ${quantity == 1 ? Association.primary.singular : Association.primary.plural}`
+                primaryItems.length === 1
+                    ? `${capitalized(Association.unassignPresent)} ${Association.primary.singular}`
+                    : `${capitalized(Association.unassignPresent)} ${quantity} ${quantity === 1 ? Association.primary.singular : Association.primary.plural}`
             );
             return (
                 <Button variant="outlined" color={buttonColor} startIcon={<Association.UnassignIcon />} onClick={() => {
@@ -142,7 +139,7 @@ export const AssociationManagementDialog = ({
                         showSnackbar(msg, "success");
                         refreshAllItems();
                     }).catch((err) => {
-                        showSnackbar(err, "error");
+                        showSnackbar(err.message, "error");
                     });
                 }}>
                     <Typography variant="body1">{buttonText}</Typography>
@@ -165,7 +162,6 @@ export const AssociationManagementDialog = ({
                 secondaries.map((si) => si.id).includes(secondary.id)
             )).length;
     }, [secondariesByPrimary, primaryItems]);
-
 
     const secondaryItemsAssigned = useMemo(() => {
         return computeSecondaryItemsAssigned(secondaryItemsAll, secondariesByPrimary, primaryItems);
@@ -212,20 +208,18 @@ export const AssociationManagementDialog = ({
     const secondaryPluralCapitalized = Association.secondary.plural.substr(0, 1).toUpperCase() + Association.secondary.plural.substr(1);
 
     const summarizedSelection = (
-        primaryItems.length == 1 && (
+        (primaryItems.length === 1 &&
             <b>{primaryItems[0].safe_display_name}</b>
-        ) || primaryItems.length > 1 && (
+        ) || (primaryItems.length > 1 &&
             `${primaryItems.length} Selected ${primaryPluralCapitalized}`
         )
     );
-    
 
     return (
         <Dialog fullWidth={true} maxWidth={editMode ? "lg" : "md"} sx={{ zIndex: 10000 }}
             open={dialogIsOpen} disableEscapeKeyDown
             onClose={(event, reason) => {
-                if (reason == "backdropClick")
-                    return;
+                if (reason === "backdropClick") { return; }
                 setDialogIsOpen(false);
             }}
         >
@@ -241,14 +235,18 @@ export const AssociationManagementDialog = ({
                             setSearchQuery={setSecondarySearchQuery}
                         />
                     )}
-                    <Box spacing={2} sx={{ display: "grid", gridTemplateAreas: `
+                    <Box spacing={2} sx={{
+                        display: "grid",
+                        gridTemplateAreas: `
                     "all divider assigned"
-                `, gridTemplateColumns: editMode ? "1fr 30px 1fr" : "0px 0px 1fr" }}>
+                `,
+                        gridTemplateColumns: editMode ? "1fr 30px 1fr" : "0px 0px 1fr"
+                    }}>
                         {
                             editMode && (
                                 <>
-                                    <Box sx={{gridArea: "all"}}>
-                                        <AssociationTableDisplay secondaryItems={secondaryItemsAll} secondaryItemsResults={secondaryItemsAllResults} 
+                                    <Box sx={{ gridArea: "all" }}>
+                                        <AssociationTableDisplay secondaryItems={secondaryItemsAll} secondaryItemsResults={secondaryItemsAllResults}
                                             tableCaption={`All ${secondaryPluralCapitalized}`}>
                                             {allTable}
                                         </AssociationTableDisplay>
@@ -256,7 +254,7 @@ export const AssociationManagementDialog = ({
                                 </>
                             )
                         }
-                        <Box sx={{gridArea: "assigned"}}>
+                        <Box sx={{ gridArea: "assigned" }}>
                             <AssociationTableDisplay secondaryItems={secondaryItemsAssigned} secondaryItemsResults={secondaryItemsAssignedResults}
                                 tableCaption={editMode && <>Current {secondaryPluralCapitalized} for {summarizedSelection}</>}
                             >

@@ -12,36 +12,32 @@ import PropTypes from "prop-types";
 import { useSnackbar } from "../../ContextProviders/AppFeatures.js";
 
 export const ItemSingleDeleteDialog = ({ requireTypedConfirmation, allItems, setAllItems, Entity, deleteDialogItem, deleteDialogIsOpen, setDeleteDialogIsOpen }) => {
-
     const [deleteConfirmation, setDeleteConfirmation] = useState("");
     const [submitEnabled, setSubmitEnabled] = useState(true);
     const showSnackbar = useSnackbar();
 
     useEffect(() => {
-        if(deleteDialogIsOpen)
-            setSubmitEnabled(true);
+        if (deleteDialogIsOpen) { setSubmitEnabled(true); }
     }, [deleteDialogIsOpen]);
-  
+
     return (
-        <Dialog fullWidth={true} maxWidth="sm" component="form" sx={{zIndex: 10000}}
+        <Dialog fullWidth={true} maxWidth="sm" component="form" sx={{ zIndex: 10000 }}
             open={deleteDialogIsOpen} disableEscapeKeyDown
             onClose={(event, reason) => {
-                if (reason == "backdropClick")
-                    return;
+                if (reason === "backdropClick") { return; }
                 setDeleteDialogIsOpen(false);
             }}
             onSubmit={(e) => {
                 e.preventDefault();
                 setSubmitEnabled(false);
-                if(deleteDialogItem)
-                {
+                if (deleteDialogItem) {
                     Entity.handleDelete(deleteDialogItem.id).then((msg) => {
                         setAllItems(allItems.filter((i) => i.id !== deleteDialogItem.id));
                         showSnackbar(msg, "success");
                         setDeleteDialogIsOpen(false);
                     }).catch((err) => {
                         setSubmitEnabled(true);
-                        showSnackbar(err, "error");
+                        showSnackbar(err.message, "error");
                     });
                 }
                 setDeleteConfirmation("");
@@ -51,7 +47,7 @@ export const ItemSingleDeleteDialog = ({ requireTypedConfirmation, allItems, set
 
             <DialogContent>
                 <Stack spacing={2}>
-                    <DialogContentText variant="body1" sx={{wordWrap: "break-word"}}>Are you sure you want to delete the {Entity?.singular} <i>{deleteDialogItem?.safe_display_name}</i>?</DialogContentText>
+                    <DialogContentText variant="body1" sx={{ wordWrap: "break-word" }}>Are you sure you want to delete the {Entity?.singular} <i>{deleteDialogItem?.safe_display_name}</i>?</DialogContentText>
                     {requireTypedConfirmation && (
                         <TextField autoComplete="off" value={deleteConfirmation} onChange={(e) => {
                             setDeleteConfirmation(e.target.value);
@@ -67,7 +63,7 @@ export const ItemSingleDeleteDialog = ({ requireTypedConfirmation, allItems, set
                     }}>
                         <Typography variant="body1">Cancel</Typography>
                     </Button>
-                    <Button color="error" disabled={!submitEnabled || requireTypedConfirmation && deleteConfirmation.toLowerCase() != "delete"} 
+                    <Button color="error" disabled={!submitEnabled || (requireTypedConfirmation && deleteConfirmation.toLowerCase() !== "delete")}
                         type="submit" variant="contained" size="large" startIcon={<DeleteIcon />} sx={{ width: "100%" }}>
                         <Typography variant="body1">Delete</Typography>
 

@@ -12,7 +12,6 @@ import PropTypes from "prop-types";
 import { User } from "../../Classes/Entities/User.js";
 import { useSnackbar } from "../../ContextProviders/AppFeatures.js";
 
-
 const userPrivilegeOptions = () => [
     {
         value: "ADMINISTRATOR",
@@ -37,19 +36,17 @@ const userPrivilegeOptions = () => [
     }
 ];
 
-
 export const UserChangePrivilegesDialog = ({ dialogUser, dialogIsOpen, setDialogIsOpen, refreshAllItems }) => {
-
     const [confirmAction, setConfirmAction] = useState(false);
     const [newAccess, setNewAccess] = useState(null);
     const [submitEnabled, setSubmitEnabled] = useState(true);
 
     const showSnackbar = useSnackbar();
 
-    const themeColor = newAccess == "CURATOR" ? "primary" : "secondary";
+    const themeColor = newAccess === "CURATOR" ? "primary" : "secondary";
 
     useEffect(() => {
-        if(dialogIsOpen) {
+        if (dialogIsOpen) {
             setNewAccess(dialogUser?.access_level);
             setSubmitEnabled(true);
             setConfirmAction(false);
@@ -57,14 +54,13 @@ export const UserChangePrivilegesDialog = ({ dialogUser, dialogIsOpen, setDialog
     }, [dialogUser, dialogIsOpen]);
 
     return (
-        <Dialog fullWidth={true} maxWidth="sm" component="form" sx={{zIndex: 10000}}
+        <Dialog fullWidth={true} maxWidth="sm" component="form" sx={{ zIndex: 10000 }}
             open={dialogIsOpen} disableEscapeKeyDown
             onClose={(event, reason) => {
-                if (reason == "backdropClick")
-                    return;
+                if (reason === "backdropClick") { return; }
                 setDialogIsOpen(false);
                 setConfirmAction(false);
-            }} 
+            }}
             onSubmit={(e) => {
                 e.preventDefault();
                 setSubmitEnabled(false);
@@ -86,25 +82,25 @@ export const UserChangePrivilegesDialog = ({ dialogUser, dialogIsOpen, setDialog
                 <Stack direction="column" spacing={2}>
                     <ToggleButtonGroup required exclusive orientation="vertical" value={newAccess}
                         onChange={(e, next) => {
-                            if(next) {
+                            if (next) {
                                 setNewAccess(next);
                                 setConfirmAction(false);
                             }
                         }}>
                         {userPrivilegeOptions().map((option) => (
-                            <ToggleButton disabled={!submitEnabled} color={option.color} key={option.value} value={option.value} sx={{textTransform: "unset", minHeight: "100px"}}>
+                            <ToggleButton disabled={!submitEnabled} color={option.color} key={option.value} value={option.value} sx={{ textTransform: "unset", minHeight: "100px" }}>
                                 <Stack direction="row" alignItems="center" spacing={2} paddingLeft={1}>
                                     <option.icon fontSize="large" />
-                                    <Stack direction="column" sx={{width: "460px"}} justifyContent="left">
+                                    <Stack direction="column" sx={{ width: "460px" }} justifyContent="left">
                                         <Typography color="white" fontWeight="bold">{option.displayText}</Typography>
-                                        <Typography color="white" sx={{opacity: 0.5}}>{option.caption}</Typography>
+                                        <Typography color="white" sx={{ opacity: 0.5 }}>{option.caption}</Typography>
                                     </Stack>
                                 </Stack>
                             </ToggleButton>
                         ))}
                     </ToggleButtonGroup>
                     <Stack direction="row" alignItems="center" spacing={1}>
-                        <Checkbox disabled={!submitEnabled || newAccess == dialogUser?.access_level} checked={confirmAction}  color={themeColor} size="large"
+                        <Checkbox disabled={!submitEnabled || newAccess === dialogUser?.access_level} checked={confirmAction} color={themeColor} size="large"
                             onChange={(e) => {
                                 setConfirmAction(e.target.checked);
                             }}
@@ -123,7 +119,7 @@ export const UserChangePrivilegesDialog = ({ dialogUser, dialogIsOpen, setDialog
                     }}>
                         <Typography variant="body1">Cancel</Typography>
                     </Button>
-                    <Button color={themeColor} variant="contained" size="large" type="submit" disabled={!confirmAction || !submitEnabled || newAccess == dialogUser?.access_level} sx={{ width: "100%" }}>
+                    <Button color={themeColor} variant="contained" size="large" type="submit" disabled={!confirmAction || !submitEnabled || newAccess === dialogUser?.access_level} sx={{ width: "100%" }}>
                         <Typography variant="body1">Change Access</Typography>
                     </Button>
                 </Stack>

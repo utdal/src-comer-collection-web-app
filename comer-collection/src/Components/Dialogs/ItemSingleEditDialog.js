@@ -15,8 +15,6 @@ import { useAppUser } from "../../ContextProviders/AppUser.js";
 import { User } from "../../Classes/Entities/User.js";
 
 export const ItemSingleEditDialog = ({ Entity, editDialogItem, refreshAllItems, editDialogIsOpen, setEditDialogIsOpen }) => {
-
-
     const editDialogFieldRefs = useRef([]);
 
     editDialogFieldRefs.current = [];
@@ -27,15 +25,15 @@ export const ItemSingleEditDialog = ({ Entity, editDialogItem, refreshAllItems, 
                 return (
                     <TextField multiline={f.multiline}
                         minRows={2}
-                        key={f.fieldName} 
-                        name={f.fieldName} 
-                        label={f.displayName} 
+                        key={f.fieldName}
+                        name={f.fieldName}
+                        label={f.displayName}
                         required={f.isRequired}
                         inputRef={(element) => editDialogFieldRefs.current.push(element)}
                         defaultValue={
-                            f.inputType == "datetime-local" ?
-                                getLocalISOString(editDialogItem?.[f.fieldName]) :
-                                editDialogItem?.[f.fieldName]
+                            f.inputType === "datetime-local"
+                                ? getLocalISOString(editDialogItem?.[f.fieldName])
+                                : editDialogItem?.[f.fieldName]
                         }
                         inputProps={{
                             type: f.inputType,
@@ -48,25 +46,22 @@ export const ItemSingleEditDialog = ({ Entity, editDialogItem, refreshAllItems, 
         );
     }, [editDialogItem]);
 
-
     const singularCapitalized = Entity?.singular.substr(0, 1).toUpperCase() + Entity?.singular.substr(1).toLowerCase();
 
     const showSnackbar = useSnackbar();
     const [appUser, , initializeAppUser] = useAppUser();
-    
-  
+
     return (
-        <Dialog component="form" sx={{zIndex: 10000}}
+        <Dialog component="form" sx={{ zIndex: 10000 }}
             open={editDialogIsOpen} disableEscapeKeyDown
             onClose={(event, reason) => {
-                if (reason == "backdropClick")
-                    return;
+                if (reason === "backdropClick") { return; }
                 setEditDialogIsOpen(false);
             }}
             onSubmit={(e) => {
                 e.preventDefault();
                 const editDialogFieldData = {};
-                for(const r of editDialogFieldRefs.current) {
+                for (const r of editDialogFieldRefs.current) {
                     editDialogFieldData[r.name] = r.value;
                 }
                 Entity.handleEdit(editDialogItem.id, editDialogFieldData).then((msg) => {
@@ -74,19 +69,19 @@ export const ItemSingleEditDialog = ({ Entity, editDialogItem, refreshAllItems, 
                     showSnackbar(msg, "success");
                     refreshAllItems();
                     setEditDialogIsOpen(false);
-                    if(Entity === User && editDialogItem.id == appUser.id) {
+                    if (Entity === User && editDialogItem.id === appUser.id) {
                         initializeAppUser();
                     }
                 }).catch((err) => {
                     // setSubmitEnabled(true);
-                    showSnackbar(err, "error");
+                    showSnackbar(err.message, "error");
                 });
             }}
         >
             <DialogTitle variant="h4" textAlign="center">Edit {singularCapitalized}</DialogTitle>
             <DialogContent
                 sx={{
-                    width: "500px",
+                    width: "500px"
                 }}>
                 <Stack spacing={2}>
                     <DialogContentText variant="body1">Edit the {Entity.singular} fields, then click &lsquo;Save {singularCapitalized}&rsquo;.</DialogContentText>
