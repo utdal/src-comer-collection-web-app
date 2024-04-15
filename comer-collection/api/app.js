@@ -13,8 +13,7 @@ import { rateLimit } from "express-rate-limit";
 
 import apiRouterMain from "./router_main.js";
 
-var app = express();
-
+const app = express();
 
 const limiter = rateLimit({
     windowMs: 1000,
@@ -26,7 +25,6 @@ const limiter = rateLimit({
 
 app.use(limiter);
 
-
 app.use((req, res, next) => {
     if (toobusy()) {
         next(createError(503));
@@ -34,8 +32,6 @@ app.use((req, res, next) => {
         next();
     }
 });
-
-
 
 // view engine setup
 app.use(cors());
@@ -48,7 +44,6 @@ app.use(cookieParser());
 // app.use("/static", static(join(__dirname, "static")));
 app.use(helmet());
 
-
 app.use(contentSecurityPolicy({
     useDefaults: false,
     directives: {
@@ -60,12 +55,10 @@ app.use(frameguard({
     action: "deny"
 }));
 
-
 app.set("json replacer", (k, v) => (v === null ? undefined : v));
 
 // Routes for querying data
 app.use("/api", apiRouterMain);
-
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
@@ -75,22 +68,20 @@ app.use(function (req, res, next) {
 // error handler
 // eslint-disable-next-line no-unused-vars
 app.use(function (err, req, res, next) {
-    const res_status = err.status || 500;
-    res.status(res_status);
+    const responseStatus = err.status || 500;
+    res.status(responseStatus);
     res.json({
         error: {
-            status: res_status,
+            status: responseStatus,
             message: err.message,
             debugMessage: req.app.get("env") === "development" ? (err.debugMessage + "\n" + err.stack) : ""
         }
     });
 });
 
-
-
 // module.exports = app;
 app.set("port", process.env.PORT || 9000);
 
-var server = app.listen(app.get("port"), function () {
+const server = app.listen(app.get("port"), function () {
     console.log("Express server listening on port " + server.address().port);
 });
