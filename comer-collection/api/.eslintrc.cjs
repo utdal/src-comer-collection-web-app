@@ -4,8 +4,8 @@ module.exports = {
         node: true
     },
     extends: [
-        'standard',
-        'plugin:react/recommended'
+        "standard",
+        "plugin:react/recommended"
     ],
     overrides: [
         {
@@ -13,21 +13,23 @@ module.exports = {
                 node: true
             },
             files: [
-                '.eslintrc.{js,cjs}'
+                ".eslintrc.{js,cjs}"
             ],
             parserOptions: {
-                sourceType: 'script'
+                sourceType: "script"
             }
         }
     ],
     parserOptions: {
-        ecmaVersion: 'latest',
-        sourceType: 'module'
+        ecmaVersion: "latest",
+        sourceType: "module"
     },
     plugins: [
-        'react'
+        "react"
     ],
     rules: {
-        indent: ['error', 4]
+        indent: ["error", 4],
+        semi: [2, "always"],
+        quotes: [2, "double"]
     }
-}
+};
