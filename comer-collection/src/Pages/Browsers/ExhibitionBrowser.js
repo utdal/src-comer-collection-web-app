@@ -6,21 +6,15 @@ import { PhotoCameraBackIcon } from "../../Imports/Icons.js";
 import { useNavigate } from "react-router";
 import { useTitle } from "../../ContextProviders/AppFeatures.js";
 
-  
 export const ExhibitionBrowser = () => {
-
     const [exhibitions, setExhibitions] = useState([]);
 
-
     const setTitleText = useTitle();
-  
-  
 
-    const fetchPublicExhibitionData = async() => {
+    const fetchPublicExhibitionData = async () => {
         try {
             const imageData = await sendAuthenticatedRequest("GET", "/api/public/exhibitions");
             setExhibitions(imageData.data);
-      
         } catch (error) {
             console.error("Error fetching image metadata:", error);
         }
@@ -32,7 +26,7 @@ export const ExhibitionBrowser = () => {
     }, []);
 
     const navigate = useNavigate();
-  
+
     const exhibitionTableFields = [
         {
             columnDescription: "Title",
@@ -52,9 +46,9 @@ export const ExhibitionBrowser = () => {
         {
             columnDescription: "Last Updated",
             generateTableCell: (exhibition) => (
-                <Typography variant="body1">{new Date (exhibition.date_modified).toLocaleString()}</Typography>
+                <Typography variant="body1">{new Date(exhibition.date_modified).toLocaleString()}</Typography>
             ),
-            generateSortableValue: (exhibition) => new Date (exhibition.date_modified)
+            generateSortableValue: (exhibition) => new Date(exhibition.date_modified)
         },
         {
             columnDescription: "Open",
@@ -66,10 +60,8 @@ export const ExhibitionBrowser = () => {
                     <Typography variant="body1">Open</Typography>
                 </Button>
             )
-        },
+        }
     ];
-    
-      
 
     return (
         <Box component={Paper} square justifyItems="center" sx={{
@@ -86,7 +78,7 @@ export const ExhibitionBrowser = () => {
                         <Typography variant="h4">Public Exhibitions</Typography>
                     </Stack>
                 </Stack>
-                <DataTable items={exhibitions} visibleItems={exhibitions} tableFields={exhibitionTableFields} 
+                <DataTable items={exhibitions} visibleItems={exhibitions} tableFields={exhibitionTableFields}
                     defaultSortAscending={false} defaultSortColumn="Last Updated"
                     nonEmptyHeight="500px" emptyMinHeight="500px" NoContentIcon={PhotoCameraBackIcon}
                     noContentButtonAction={() => {
