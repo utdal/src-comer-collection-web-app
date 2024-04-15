@@ -1,11 +1,11 @@
 import { Router } from "express";
 const router = Router();
 
-import { listArtists, createArtist, updateArtist, deleteArtist, getArtist } from "./controllers/artists.js";
-import { deleteImage, updateImage, listImages, getImage, createImage } from "./controllers/images.js";
-import { deleteTag, listTags, getTag, createTag, updateTag } from "./controllers/tags.js";
-import { manageImageTags } from "./controllers/imagetags.js";
-import { manageImageArtists } from "./controllers/imageartists.js";
+import { listArtists, createArtist, updateArtist, deleteArtist, getArtist } from "../controllers/artists.js";
+import { deleteImage, updateImage, listImages, getImage, createImage } from "../controllers/images.js";
+import { deleteTag, listTags, getTag, createTag, updateTag } from "../controllers/tags.js";
+import { manageImageTags } from "../controllers/imagetags.js";
+import { manageImageArtists } from "../controllers/imageartists.js";
 
 
 // Handle artists

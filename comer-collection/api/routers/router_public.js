@@ -1,11 +1,11 @@
 import { Router } from "express";
 const router = Router();
 
-import { listArtists, getArtist } from "./controllers/artists.js";
-import { listTags, getTag } from "./controllers/tags.js";
-import { listImagesPublic, getImagePublic, downloadImagePublic } from "./controllers/images.js";
-import { listPublicExhibitions, loadExhibitionPublic } from "./controllers/exhibitions.js";
-import { signIn } from "./controllers/users.js";
+import { listArtists, getArtist } from "../controllers/artists.js";
+import { listTags, getTag } from "../controllers/tags.js";
+import { listImagesPublic, getImagePublic, downloadImagePublic } from "../controllers/images.js";
+import { listPublicExhibitions, loadExhibitionPublic } from "../controllers/exhibitions.js";
+import { signIn } from "../controllers/users.js";
 
 
 // Authentication

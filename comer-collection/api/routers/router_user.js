@@ -1,7 +1,7 @@
 import { Router } from "express";
 const router = Router();
 
-import { createExhibition, ownerEditExhibitionSettings, ownerDeleteExhibition, loadExhibitionOwner, saveExhibitionOwner } from "./controllers/exhibitions.js";
+import { createExhibition, ownerEditExhibitionSettings, ownerDeleteExhibition, loadExhibitionOwner, saveExhibitionOwner } from "../controllers/exhibitions.js";
 
 
 

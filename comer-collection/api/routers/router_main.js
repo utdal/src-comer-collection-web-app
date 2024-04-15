@@ -10,7 +10,7 @@ import apiRouterUser from "./router_user.js";
 import apiRouterCollectionManager from "./router_collection_manager.js";
 import apiRouterAdmin from "./router_admin.js";
 
-import db from "./sequelize.js";
+import db from "../sequelize.js";
 const { User, Course, Exhibition } = db;
 
 

@@ -1,7 +1,7 @@
 import { Router } from "express";
 const router = Router();
 
-import { getCurrentUser, changePassword } from "./controllers/users.js";
+import { getCurrentUser, changePassword } from "../controllers/users.js";
 
 
 // Get current user

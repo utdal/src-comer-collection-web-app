@@ -1,10 +1,10 @@
 import { Router } from "express";
 const router = Router();
 
-import { deleteUser, updateUser, createUser, listUsers, deactivateUser, activateUser, getUser, resetUserPassword, changeUserAccess } from "./controllers/users.js";
-import { deleteCourse, updateCourse, createCourse, listCourses, getCourse } from "./controllers/courses.js";
-import { manageUserCourses } from "./controllers/enrollments.js";
-import { listExhibitions, getExhibition, adminEditExhibitionSettings, adminDeleteExhibition, loadExhibitionAdmin, saveExhibitionAdmin } from "./controllers/exhibitions.js";
+import { deleteUser, updateUser, createUser, listUsers, deactivateUser, activateUser, getUser, resetUserPassword, changeUserAccess } from "../controllers/users.js";
+import { deleteCourse, updateCourse, createCourse, listCourses, getCourse } from "../controllers/courses.js";
+import { manageUserCourses } from "../controllers/enrollments.js";
+import { listExhibitions, getExhibition, adminEditExhibitionSettings, adminDeleteExhibition, loadExhibitionAdmin, saveExhibitionAdmin } from "../controllers/exhibitions.js";
 
 
 
