@@ -7,23 +7,20 @@ import Exhibition3DViewport from "../Components/Exhibition3DViewport/Exhibition3
 import { sendAuthenticatedRequest } from "../Helpers/APICalls.js";
 import { useAppUser } from "../ContextProviders/AppUser.js";
 import { FullPageMessage } from "../Components/FullPageMessage.js";
-import { useSnackbar } from "../ContextProviders/AppFeatures.js";
-import { useTitle } from "../ContextProviders/AppFeatures.js";
+import { useSnackbar, useTitle } from "../ContextProviders/AppFeatures.js";
+
 import { AccessTimeIcon, InfoIcon } from "../Imports/Icons.js";
 
-
 const ExhibitionPage = () => {
-    
-    const onUnload = async() => {
+    const onUnload = async () => {
         await saveExhibition();
         return false;
     };
-    
 
     const { exhibitionId } = useParams();
 
-    const [globalImageCatalog, setGlobalImageCatalog] = useState([]);   
-    
+    const [globalImageCatalog, setGlobalImageCatalog] = useState([]);
+
     const [exhibitionMetadata, setExhibitionMetadata] = useState(null);
 
     const [exhibitionState, exhibitionEditDispatch] = useReducer(exhibitionEditReducer, blankExhibitionData);
@@ -32,7 +29,7 @@ const ExhibitionPage = () => {
     const [exhibitionIsEditable, setExhibitionIsEditable] = useState(false);
     const [editModeActive, setEditModeActive] = useState(false);
 
-    const loadCatalog = async() => {
+    const loadCatalog = async () => {
         const catalogData = await sendAuthenticatedRequest("GET", "/api/public/images");
         setGlobalImageCatalog(catalogData.data);
     };
@@ -41,18 +38,17 @@ const ExhibitionPage = () => {
     const showSnackbar = useSnackbar();
     const setTitleText = useTitle();
 
-    
     const getSaveUrl = () => {
-        if(appUser?.Exhibitions.filter((ex) => ex.id == exhibitionId).length) {
+        if (appUser?.Exhibitions.filter((ex) => ex.id === exhibitionId).length) {
             return `/api/user/exhibitions/${exhibitionId}/save`;
-        } else if(appUser?.is_admin) {
+        } else if (appUser?.is_admin) {
             return `/api/admin/exhibitions/${exhibitionId}/save`;
         } else {
             throw Error("Save operation is not permitted");
         }
     };
 
-    const saveExhibition = async() => {
+    const saveExhibition = async () => {
         try {
             const saveUrl = getSaveUrl();
             try {
@@ -61,50 +57,48 @@ const ExhibitionPage = () => {
                 });
                 window.onbeforeunload = null;
                 showSnackbar("Exhibition saved", "success");
-            } catch(e) {
+            } catch (e) {
                 console.log("Error saving exhibition", e.message);
                 showSnackbar("Could not save exhibition", "error");
             }
-        } catch(e) {
+        } catch (e) {
             console.log("No save URL available", e.message);
         }
     };
 
-
     const getLoadUrl = () => {
-        if(appUser?.Exhibitions.filter((ex) => ex.id == exhibitionId).length) {
+        if (appUser?.Exhibitions.filter((ex) => ex.id === exhibitionId).length) {
             return `/api/user/exhibitions/${exhibitionId}/load`;
-        } else if(appUser?.is_admin) {
+        } else if (appUser?.is_admin) {
             return `/api/admin/exhibitions/${exhibitionId}/load`;
         } else {
             return `/api/public/exhibitions/${exhibitionId}/load`;
         }
     };
-    
-    const loadExhibition = async() => {
+
+    const loadExhibition = async () => {
         try {
             const exhibitionData = await sendAuthenticatedRequest("GET", getLoadUrl());
 
             setIsPermissionGranted(true);
 
-            if(exhibitionData.data) {
+            if (exhibitionData.data) {
                 setExhibitionMetadata(exhibitionData.data);
 
-                if(exhibitionData.data?.data) {
+                if (exhibitionData.data?.data) {
                     exhibitionEditDispatch({
                         scope: "exhibition",
                         type: "set_everything",
                         newExhibition: JSON.parse(exhibitionData.data.data)
                     });
                 }
-                if(exhibitionData.data?.isEditable) {
+                if (exhibitionData.data?.isEditable) {
                     setExhibitionIsEditable(true);
                 }
                 setTitleText(exhibitionData.data?.title);
                 setExhibitionIsLoaded(true);
             }
-            
-        } catch(e) {
+        } catch (e) {
             console.log("Error getting permission to open exhibition");
             setIsPermissionGranted(false);
             setTitleText("Exhibition Unavailable");
@@ -115,16 +109,14 @@ const ExhibitionPage = () => {
         loadExhibition();
     }, [appUser]);
 
-
     useEffect(() => {
-        if(isPermissionGranted) {
+        if (isPermissionGranted) {
             loadCatalog();
         }
     }, [isPermissionGranted]);
-    
 
     useEffect(() => {
-        if(exhibitionIsLoaded) {
+        if (exhibitionIsLoaded) {
             window.onbeforeunload = onUnload;
             return () => {
                 window.onbeforeunload = null;
@@ -132,22 +124,19 @@ const ExhibitionPage = () => {
         }
     }, [exhibitionState]);
 
-    
     useEffect(() => {
-        if(exhibitionIsLoaded && !editModeActive)
-            saveExhibition();
+        if (exhibitionIsLoaded && !editModeActive) { saveExhibition(); }
     }, [editModeActive]);
 
-
     const handleControlS = (e) => {
-        if((e.ctrlKey || e.metaKey) && e.key.toLowerCase() == "s") {
+        if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "s") {
             e.preventDefault();
             saveExhibition();
         }
     };
-        
+
     useEffect(() => {
-        if(editModeActive) {
+        if (editModeActive) {
             document.addEventListener("keydown", handleControlS);
             return () => {
                 document.removeEventListener("keydown", handleControlS);
@@ -155,17 +144,15 @@ const ExhibitionPage = () => {
         }
     }, [editModeActive]);
 
-
-
-    return !appUserIsLoaded && (
+    return (!appUserIsLoaded &&
         <FullPageMessage message="Loading exhibition..." Icon={AccessTimeIcon} />
-    ) || appUserIsLoaded && !isPermissionGranted && (
-        <FullPageMessage message="This exhibition is not available" buttonText="View Public Exhibitions" 
+    ) || (appUserIsLoaded && !isPermissionGranted &&
+        <FullPageMessage message="This exhibition is not available" buttonText="View Public Exhibitions"
             buttonDestination="/Exhibitions" Icon={InfoIcon} />
-    ) || appUserIsLoaded && isPermissionGranted && (
-        <Box 
+    ) || (appUserIsLoaded && isPermissionGranted &&
+        <Box
             sx={{
-                width: "100%", 
+                width: "100%",
                 height: "100%",
                 display: "grid",
                 gridTemplateRows: "1fr",
@@ -175,19 +162,18 @@ const ExhibitionPage = () => {
                 `
             }}>
 
-            <Exhibition3DViewport {...{exhibitionState, exhibitionMetadata, exhibitionIsLoaded, globalImageCatalog, exhibitionIsEditable, editModeActive, setEditModeActive}}
-                sx={{gridArea: "viewer", width: "100%", height: "calc(100vh - 64px)"}}
+            <Exhibition3DViewport {...{ exhibitionState, exhibitionMetadata, exhibitionIsLoaded, globalImageCatalog, exhibitionIsEditable, editModeActive, setEditModeActive }}
+                sx={{ gridArea: "viewer", width: "100%", height: "calc(100vh - 64px)" }}
             />
 
             {editModeActive && (
-                <ExhibitionEditPane {...{exhibitionId, exhibitionMetadata, exhibitionIsLoaded, exhibitionState, exhibitionEditDispatch, globalImageCatalog, editModeActive, setEditModeActive, saveExhibition}} 
+                <ExhibitionEditPane {...{ exhibitionId, exhibitionMetadata, exhibitionIsLoaded, exhibitionState, exhibitionEditDispatch, globalImageCatalog, editModeActive, setEditModeActive, saveExhibition }}
                     sx={{
                         gridArea: "editpane",
                         display: editModeActive ? "" : "none"
-                    }} 
+                    }}
                 />
             )}
-            
 
         </Box>
     );
