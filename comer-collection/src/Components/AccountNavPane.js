@@ -24,7 +24,7 @@ const navLinks = [
         title: "Change Password",
         Icon: LockIcon,
         link: "/Account/ChangePassword"
-    },
+    }
 ];
 
 const collectionManagerNavLinks = [
@@ -62,7 +62,6 @@ const adminNavLinks = [
 
 ];
 
-
 const AccountNavSection = ({ sectionTitle, linkDefinitions }) => {
     const [selectedNavItem, setSelectedNavItem] = useAccountNav();
 
@@ -81,9 +80,9 @@ const AccountNavSection = ({ sectionTitle, linkDefinitions }) => {
                             navigate(item.link);
                         }}
                         sx={{
-                            backgroundColor: selectedNavItem == item.title ? theme.palette.secondary.main : "unset",
+                            backgroundColor: selectedNavItem === item.title ? theme.palette.secondary.main : "unset",
                             "&:hover": {
-                                backgroundColor: selectedNavItem == item.title ? theme.palette.secondary.main : theme.palette.grey.main,
+                                backgroundColor: selectedNavItem === item.title ? theme.palette.secondary.main : theme.palette.grey.main,
                                 textDecoration: "underline"
                             }
                         }}
@@ -110,10 +109,7 @@ AccountNavSection.propTypes = {
     linkDefinitions: PropTypes.arrayOf(PropTypes.object).isRequired
 };
 
-
-
 export const AccountNavPane = () => {
-
     const [appUser] = useAppUser();
     const theme = useTheme();
 
