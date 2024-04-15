@@ -18,9 +18,9 @@ import { EntityManageDialog } from "../../Components/Dialogs/EntityManageDialog.
 import { SelectionSummary } from "../../Components/SelectionSummary.js";
 import { AssociationManagementDialog } from "../../Components/Dialogs/AssociationManagementDialog.js";
 import { sendAuthenticatedRequest } from "../../Helpers/APICalls.js";
-import { useSnackbar } from "../../ContextProviders/AppFeatures.js";
+import { useSnackbar, useTitle } from "../../ContextProviders/AppFeatures.js";
 import { useAppUser } from "../../ContextProviders/AppUser.js";
-import { useTitle } from "../../ContextProviders/AppFeatures.js";
+
 import { useAccountNav } from "../../ContextProviders/AccountNavProvider.js";
 import { Image } from "../../Classes/Entities/Image.js";
 import { Artist } from "../../Classes/Entities/Artist.js";
@@ -29,7 +29,6 @@ import { ImageArtist } from "../../Classes/Associations/ImageArtist.js";
 import { ImageTag } from "../../Classes/Associations/ImageTag.js";
 import { ImageExhibition } from "../../Classes/Associations/ImageExhibition.js";
 import { Exhibition } from "../../Classes/Entities/Exhibition.js";
-
 
 const ImageManagement = () => {
     const [images, setImages] = useState([]);
@@ -86,13 +85,11 @@ const ImageManagement = () => {
         setSearchQuery("");
     };
 
-
     const [, setSelectedNavItem] = useAccountNav();
     const showSnackbar = useSnackbar();
     const [appUser] = useAppUser();
     const setTitleText = useTitle();
     const navigate = useNavigate();
-
 
     useEffect(() => {
         setSelectedNavItem("Image Management");
@@ -108,7 +105,7 @@ const ImageManagement = () => {
         );
     }, [searchQuery]);
 
-    const fetchData = async() => {
+    const fetchData = async () => {
         setIsError(false);
         Promise.all([
             fetchImages(),
@@ -119,7 +116,6 @@ const ImageManagement = () => {
         }).catch(() => {
             setIsError(true);
         });
-
     };
 
     const fetchImages = async () => {
@@ -151,29 +147,24 @@ const ImageManagement = () => {
         setExhibitionsByImage({ ...exhibitionsByImageDraft });
     };
 
-
     const fetchArtists = async () => {
         const artistData = await sendAuthenticatedRequest("GET", "/api/admin/artists");
         setArtists(artistData.data);
     };
-
 
     const fetchTags = async () => {
         const tagData = await sendAuthenticatedRequest("GET", "/api/admin/tags");
         setTags(tagData.data);
     };
 
-
     const handleCopyToClipboard = useCallback((item, fieldName) => {
         try {
             navigator.clipboard.writeText(item[fieldName]);
             showSnackbar("Text copied to clipboard", "success");
-
         } catch (error) {
             showSnackbar("Error copying text to clipboard", "error");
         }
     }, []);
-
 
     const artistTableFields = [
         {
@@ -217,9 +208,9 @@ const ImageManagement = () => {
         {
             columnDescription: "Notes",
             generateTableCell: (artist) => (
-                artist.notes && (
+                (artist.notes &&
                     <Typography variant="body1">{artist.notes}</Typography>
-                ) || !artist.notes && (
+                ) || (!artist.notes &&
                     <Typography variant="body1" sx={{ opacity: 0.5 }}></Typography>
                 )
             )
@@ -249,8 +240,6 @@ const ImageManagement = () => {
             )
         }
     ];
-
-
 
     const tagTableFields = [
         {
@@ -283,9 +272,9 @@ const ImageManagement = () => {
         {
             columnDescription: "Notes",
             generateTableCell: (tag) => (
-                tag.notes && (
+                (tag.notes &&
                     <Typography variant="body1">{tag.notes}</Typography>
-                ) || !tag.notes && (
+                ) || (!tag.notes &&
                     <Typography variant="body1" sx={{ opacity: 0.5 }}></Typography>
                 )
             )
@@ -316,7 +305,6 @@ const ImageManagement = () => {
         }
     ];
 
-
     const imageTableFields = [
         {
             columnDescription: "ID",
@@ -337,7 +325,7 @@ const ImageManagement = () => {
             generateTableCell: (image) => (
                 <Stack direction="row" sx={{ height: "50px", maxWidth: "100px" }}
                     justifyContent="center" alignItems="center">
-                    {(image.thumbnailUrl) && (
+                    {(image.thumbnailUrl &&
                         <Button
                             onClick={() => {
                                 setPreviewerImage(image);
@@ -346,7 +334,7 @@ const ImageManagement = () => {
                         >
                             <img height="50px" src={`${process.env.REACT_APP_API_HOST}/api/public/images/${image.id}/download`} loading="lazy" />
                         </Button>
-                    ) || image.url && (
+                    ) || (image.url &&
                         <Button variant="outlined" color="primary"
                             startIcon={<VisibilityIcon />}
                             onClick={() => {
@@ -422,7 +410,7 @@ const ImageManagement = () => {
         {
             columnDescription: "Exhibitions",
             generateTableCell: (image) => (
-                <Image.TableCells.ImageExhibitionCountButton {...{image}} onClick={() => {
+                <Image.TableCells.ImageExhibitionCountButton {...{ image }} onClick={() => {
                     setViewImageExhibitionDialogImages([image]);
                     setViewImageExhibitionDialogIsOpen(true);
                 }} />
@@ -454,7 +442,6 @@ const ImageManagement = () => {
         }
     ];
 
-
     const artistTableFieldsForDialog = useMemo(() => [
         {
             columnDescription: "ID",
@@ -476,7 +463,6 @@ const ImageManagement = () => {
             )
         }
     ], []);
-
 
     const tagTableFieldsForDialog = useMemo(() => [
         {
@@ -507,55 +493,52 @@ const ImageManagement = () => {
         {
             columnDescription: "ID",
             generateTableCell: (exhibition) => (
-                <Exhibition.TableCells.ID {...{exhibition}} />
+                <Exhibition.TableCells.ID {...{ exhibition }} />
             )
         },
         {
             columnDescription: "Title",
             generateTableCell: (exhibition) => (
-                <Exhibition.TableCells.Title {...{exhibition}} />
+                <Exhibition.TableCells.Title {...{ exhibition }} />
             )
         },
         {
             columnDescription: "Open",
             generateTableCell: (exhibition) => (
-                <Exhibition.TableCells.OpenInNewTab {...{exhibition}} />
+                <Exhibition.TableCells.OpenInNewTab {...{ exhibition }} />
             )
         },
         {
             columnDescription: "Created",
             generateTableCell: (exhibition) => (
-                <Exhibition.TableCells.DateCreatedStacked {...{exhibition}} />
+                <Exhibition.TableCells.DateCreatedStacked {...{ exhibition }} />
             )
         },
         {
             columnDescription: "Modified",
             generateTableCell: (exhibition) => (
-                <Exhibition.TableCells.DateModifiedStacked {...{exhibition}} />
+                <Exhibition.TableCells.DateModifiedStacked {...{ exhibition }} />
             )
         },
         {
             columnDescription: "Access",
             generateTableCell: (exhibition) => (
-                <Exhibition.TableCells.Access {...{exhibition}} />
+                <Exhibition.TableCells.Access {...{ exhibition }} />
             )
         }
     ];
-
-
 
     const visibleImages = useMemo(() => images.filter((image) => {
         return imageFilterFunction(image);
     }), [images, searchQuery]);
 
-
-    return !appUser.is_admin_or_collection_manager && (
+    return (!appUser.is_admin_or_collection_manager &&
         <FullPageMessage message="Insufficient Privileges" Icon={LockIcon} buttonText="Return to Profile" buttonDestination="/Account/Profile" />
-    ) || appUser.pw_change_required && (
+    ) || (appUser.pw_change_required &&
         <Navigate to="/Account/ChangePassword" />
-    ) || isError && (
+    ) || (isError &&
         <FullPageMessage message="Error loading images" Icon={WarningIcon} buttonText="Retry" buttonAction={fetchData} />
-    ) || !isLoaded && (
+    ) || (!isLoaded &&
         <FullPageMessage message="Loading images..." Icon={AccessTimeIcon} />
     ) || (
         <Box component={Paper} square={true} sx={{
@@ -579,7 +562,7 @@ const ImageManagement = () => {
                         <Typography variant="body1">Refresh</Typography>
                     </Button>
                     <Button color="primary" variant="outlined" startIcon={<FilterAltOffOutlinedIcon />} onClick={clearFilters}
-                        disabled={searchQuery == ""}>
+                        disabled={searchQuery === ""}>
                         <Typography variant="body1">Clear Filters</Typography>
                     </Button>
                     <Button color="primary" variant="outlined" startIcon={<SellIcon />}
@@ -606,26 +589,28 @@ const ImageManagement = () => {
                 </Stack>
             </Stack>
 
-            {!isLoaded && (
+            {(!isLoaded &&
                 <FullPageMessage message="Loading images..." Icon={AccessTimeIcon} />
-            ) || isLoaded && <DataTable items={images} visibleItems={visibleImages}
+            ) || (isLoaded && <DataTable items={images} visibleItems={visibleImages}
                 tableFields={imageTableFields}
                 rowSelectionEnabled={true}
                 selectedItems={selectedImages}
                 setSelectedItems={setSelectedImages}
                 emptyMinHeight="300px"
-                {...visibleImages.length == images.length && {
-                    noContentMessage: "No images yet",
-                    noContentButtonAction: () => { setDialogIsOpen(true); },
-                    noContentButtonText: "Create an image",
-                    NoContentIcon: InfoIcon
-                } || visibleImages.length < images.length && {
-                    noContentMessage: "No results",
-                    noContentButtonAction: clearFilters,
-                    noContentButtonText: "Clear Filters",
-                    NoContentIcon: SearchIcon
-                }}
-            />}
+                {...
+                    (visibleImages.length === images.length && {
+                        noContentMessage: "No images yet",
+                        noContentButtonAction: () => { setDialogIsOpen(true); },
+                        noContentButtonText: "Create an image",
+                        NoContentIcon: InfoIcon
+                    }) || (visibleImages.length < images.length && {
+                        noContentMessage: "No results",
+                        noContentButtonAction: clearFilters,
+                        noContentButtonText: "Clear Filters",
+                        NoContentIcon: SearchIcon
+                    })
+                }
+            />)}
 
             <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={2} padding={2} sx={{ gridArea: "bottom" }}>
                 <SelectionSummary
@@ -638,22 +623,22 @@ const ImageManagement = () => {
                 />
                 <Stack direction="row" spacing={2} >
                     <Button variant="outlined"
-                        disabled={selectedImages.length == 0}
+                        disabled={selectedImages.length === 0}
                         startIcon={<BrushIcon />}
                         onClick={() => {
                             setAssignArtistDialogImages([...selectedImages]);
                             setAssignArtistDialogIsOpen(true);
                         }}>
-                        <Typography variant="body1">Manage Credits for {selectedImages.length} {selectedImages.length == 1 ? "image" : "images"}</Typography>
+                        <Typography variant="body1">Manage Credits for {selectedImages.length} {selectedImages.length === 1 ? "image" : "images"}</Typography>
                     </Button>
                     <Button variant="outlined"
-                        disabled={selectedImages.length == 0}
+                        disabled={selectedImages.length === 0}
                         startIcon={<SellIcon />}
                         onClick={() => {
                             setAssignTagDialogImages([...selectedImages]);
                             setAssignTagDialogIsOpen(true);
                         }}>
-                        <Typography variant="body1">Manage Tags for {selectedImages.length} {selectedImages.length == 1 ? "image" : "images"}</Typography>
+                        <Typography variant="body1">Manage Tags for {selectedImages.length} {selectedImages.length === 1 ? "image" : "images"}</Typography>
                     </Button>
                 </Stack>
             </Stack>
@@ -679,7 +664,6 @@ const ImageManagement = () => {
                 dialogTitle="Delete Image"
                 deleteDialogItem={deleteDialogImage}
                 {...{ deleteDialogIsOpen, setDeleteDialogIsOpen }} />
-
 
             <EntityManageDialog
                 Entity={Artist}
@@ -732,7 +716,6 @@ const ImageManagement = () => {
                 setPreviewerOpen={setPreviewerOpen}
             />
 
-
             <AssociationManagementDialog
                 Association={ImageArtist}
                 editMode={true}
@@ -756,7 +739,6 @@ const ImageManagement = () => {
                 refreshAllItems={fetchData}
             />
 
-
             <AssociationManagementDialog
                 Association={ImageTag}
                 editMode={true}
@@ -779,7 +761,6 @@ const ImageManagement = () => {
                 secondarySearchBoxPlaceholder={"Search tags by name or notes"}
                 refreshAllItems={fetchData}
             />
-            
 
             <AssociationManagementDialog
                 Association={ImageExhibition}
@@ -802,11 +783,9 @@ const ImageManagement = () => {
                 secondarySearchBoxPlaceholder="Search exhibitions by title"
             />
 
-
         </Box>
 
     );
 };
-
 
 export default ImageManagement;

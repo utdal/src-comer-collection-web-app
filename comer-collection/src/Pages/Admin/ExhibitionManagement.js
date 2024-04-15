@@ -13,11 +13,11 @@ import { Navigate } from "react-router";
 import { SelectionSummary } from "../../Components/SelectionSummary.js";
 import { sendAuthenticatedRequest } from "../../Helpers/APICalls.js";
 import { ExhibitionSettingsDialog } from "../../Components/Dialogs/ExhibitionSettingsDialog.js";
-import { useSnackbar } from "../../ContextProviders/AppFeatures.js";
+import { useSnackbar, useTitle } from "../../ContextProviders/AppFeatures.js";
 import { useAppUser } from "../../ContextProviders/AppUser.js";
 import { doesItemMatchSearchQuery } from "../../Helpers/SearchUtilities.js";
 import { CourseFilterMenu } from "../../Components/Menus/CourseFilterMenu.js";
-import { useTitle } from "../../ContextProviders/AppFeatures.js";
+
 import { useAccountNav } from "../../ContextProviders/AccountNavProvider.js";
 import { Exhibition } from "../../Classes/Entities/Exhibition.js";
 import { User } from "../../Classes/Entities/User.js";
@@ -45,21 +45,17 @@ const ExhibitionManagement = () => {
     const [sortColumn, setSortColumn] = useState("Modified");
     const [sortAscending, setSortAscending] = useState(false);
 
-
     const [, setSelectedNavItem] = useAccountNav();
     const [appUser] = useAppUser();
     const showSnackbar = useSnackbar();
     const setTitleText = useTitle();
 
-
     const [userCourseIdFilter, setUserCourseIdFilter] = useState(null);
-
 
     const clearFilters = () => {
         setUserCourseIdFilter(null);
         setSearchQuery("");
     };
-
 
     useEffect(() => {
         setSelectedNavItem("Exhibition Management");
@@ -68,7 +64,6 @@ const ExhibitionManagement = () => {
             fetchData();
         }
     }, []);
-
 
     const fetchData = async () => {
         try {
@@ -81,8 +76,8 @@ const ExhibitionManagement = () => {
             )));
 
             const coursesById = {};
-            for(let ex of exhibitionData.data) {
-                for(let c of ex.User.Courses) {
+            for (const ex of exhibitionData.data) {
+                for (const c of ex.User.Courses) {
                     coursesById[c.id] = c;
                 }
             }
@@ -96,25 +91,20 @@ const ExhibitionManagement = () => {
             }, 1000);
 
             setIsLoaded(true);
-
-
         } catch (error) {
             setIsError(true);
         }
     };
 
-
-
     const exhibitionFilterFunction = useCallback((exhibition) => {
         return (
-            !userCourseIdFilter || userCourseIdFilter && exhibition.User.Courses.map((c) => c.id).includes(userCourseIdFilter.id)
+            !userCourseIdFilter || (userCourseIdFilter && exhibition.User.Courses.map((c) => c.id).includes(userCourseIdFilter.id))
         ) && doesItemMatchSearchQuery(searchQuery, exhibition, ["title"]);
     });
 
     const visibleExhibitions = useMemo(() => exhibitions.filter((exhibition) => {
         return exhibitionFilterFunction(exhibition);
     }), [exhibitions, searchQuery, userCourseIdFilter]);
-
 
     const handleExhibitionEditByAdmin = async (exhibitionId, title, privacy) => {
         try {
@@ -131,7 +121,6 @@ const ExhibitionManagement = () => {
         fetchData();
     };
 
-
     const exhibitionTableFields = [
         {
             columnDescription: "ID",
@@ -146,11 +135,13 @@ const ExhibitionManagement = () => {
             columnDescription: "Title",
             maxWidth: "150px",
             generateTableCell: (exhibition) => (
-                exhibition.title ? (
-                    <Typography variant="body1">{exhibition.title}</Typography>
-                ) : (
-                    <Typography variant="body1" sx={{ opacity: 0.5 }}>Not set</Typography>
-                )
+                exhibition.title
+                    ? (
+                        <Typography variant="body1">{exhibition.title}</Typography>
+                    )
+                    : (
+                        <Typography variant="body1" sx={{ opacity: 0.5 }}>Not set</Typography>
+                    )
             ),
             generateSortableValue: (exhibition) => exhibition.title?.toLowerCase()
         },
@@ -164,21 +155,21 @@ const ExhibitionManagement = () => {
         {
             columnDescription: "Created",
             generateTableCell: (exhibition) => (
-                <Exhibition.TableCells.DateCreatedStacked {...{exhibition}} />
+                <Exhibition.TableCells.DateCreatedStacked {...{ exhibition }} />
             ),
             generateSortableValue: (exhibition) => new Date(exhibition.date_created)
         },
         {
             columnDescription: "Modified",
             generateTableCell: (exhibition) => (
-                <Exhibition.TableCells.DateModifiedStacked {...{exhibition}} />
+                <Exhibition.TableCells.DateModifiedStacked {...{ exhibition }} />
             ),
             generateSortableValue: (exhibition) => new Date(exhibition.date_modified)
         },
         {
             columnDescription: "Access",
             generateTableCell: (exhibition) => (
-                <Exhibition.TableCells.Access {...{exhibition}} />
+                <Exhibition.TableCells.Access {...{ exhibition }} />
             )
         },
         {
@@ -211,16 +202,13 @@ const ExhibitionManagement = () => {
         }
     ];
 
-
-
-
-    return !appUser.is_admin && (
+    return (!appUser.is_admin &&
         <FullPageMessage message="Insufficient Privileges" Icon={LockIcon} buttonText="Return to Profile" buttonDestination="/Account/Profile" />
-    ) || appUser.pw_change_required && (
+    ) || (appUser.pw_change_required &&
         <Navigate to="/Account/ChangePassword" />
-    ) || isError && (
+    ) || (isError &&
         <FullPageMessage message="Error loading exhibitions" Icon={WarningIcon} buttonText="Retry" buttonAction={fetchData} />
-    ) || !isLoaded && (
+    ) || (!isLoaded &&
         <FullPageMessage message="Loading exhibitions..." Icon={AccessTimeIcon} />
     ) || (
         <Box component={Paper} square sx={{
@@ -262,15 +250,17 @@ const ExhibitionManagement = () => {
                     defaultSortColumn="Modified"
                     defaultSortAscending={false}
                     {...{ sortColumn, setSortColumn, sortAscending, setSortAscending }}
-                    {...visibleExhibitions.length == exhibitions.length && {
-                        noContentMessage: "No exhibitions yet",
-                        NoContentIcon: InfoIcon
-                    } || visibleExhibitions.length < exhibitions.length && {
-                        noContentMessage: "No results",
-                        noContentButtonAction: clearFilters,
-                        noContentButtonText: "Clear Filters",
-                        NoContentIcon: SearchIcon
-                    }}
+                    {...
+                        (visibleExhibitions.length === exhibitions.length && {
+                            noContentMessage: "No exhibitions yet",
+                            NoContentIcon: InfoIcon
+                        }) || (visibleExhibitions.length < exhibitions.length && {
+                            noContentMessage: "No results",
+                            noContentButtonAction: clearFilters,
+                            noContentButtonText: "Clear Filters",
+                            NoContentIcon: SearchIcon
+                        })
+                    }
                 />
             </Box>
             <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={2} padding={2} sx={{ gridArea: "bottom" }}>
@@ -283,7 +273,6 @@ const ExhibitionManagement = () => {
                     entityPlural="exhibitions"
                 />
             </Stack>
-
 
             <ExhibitionSettingsDialog
                 editMode={true}
@@ -308,10 +297,8 @@ const ExhibitionManagement = () => {
                 setDeleteDialogIsOpen={setDeleteDialogIsOpen}
             />
 
-
         </Box>
     );
 };
-
 
 export default ExhibitionManagement;

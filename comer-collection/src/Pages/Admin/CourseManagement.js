@@ -31,7 +31,6 @@ import { Course } from "../../Classes/Entities/Course.js";
 import { User } from "../../Classes/Entities/User.js";
 import { EnrollmentCoursePrimary } from "../../Classes/Associations/Enrollment.js";
 
-
 const CourseManagement = () => {
     const [courses, setCourses] = useState([]);
     const [users, setUsers] = useState([]);
@@ -59,16 +58,13 @@ const CourseManagement = () => {
         setSearchQuery("");
     };
 
-
     const [sortColumn, setSortColumn] = useState("ID");
     const [sortAscending, setSortAscending] = useState(true);
-
 
     const [, setSelectedNavItem] = useAccountNav();
     const [appUser] = useAppUser();
     const navigate = useNavigate();
     const setTitleText = useTitle();
-
 
     useEffect(() => {
         setSelectedNavItem("Course Management");
@@ -78,11 +74,9 @@ const CourseManagement = () => {
         }
     }, []);
 
-
     const courseFilterFunction = useCallback((course) => {
         return doesItemMatchSearchQuery(searchQuery, course, ["name", "notes"]);
     }, [searchQuery]);
-
 
     const fetchData = async () => {
         try {
@@ -94,7 +88,6 @@ const CourseManagement = () => {
                 courseData.data.map((c) => c.id).includes(parseInt(sc.id))
             )));
 
-
             const userData = await sendAuthenticatedRequest("GET", "/api/admin/users");
             setUsers(userData.data);
 
@@ -102,31 +95,26 @@ const CourseManagement = () => {
                 setRefreshInProgress(false);
             }, 1000);
 
-
             const usersByCourseDraft = {};
             for (const c of courseData.data) {
                 usersByCourseDraft[c.id] = c.Users;
             }
             setUsersByCourse({ ...usersByCourseDraft });
             setIsLoaded(true);
-
         } catch (error) {
             setIsError(true);
         }
     };
 
-
     const visibleCourses = useMemo(() => courses.filter((course) => {
         return courseFilterFunction(course);
     }), [courses, searchQuery]);
-
-
 
     const courseTableFields = [
         {
             columnDescription: "ID",
             generateTableCell: (course) => (
-                <Course.TableCells.ID {...{course}} />
+                <Course.TableCells.ID {...{ course }} />
             ),
             generateSortableValue: (course) => course.id
         },
@@ -141,27 +129,27 @@ const CourseManagement = () => {
         {
             columnDescription: "Start",
             generateTableCell: (course) => (
-                <Course.TableCells.StartDateTimeStacked {...{course}} />
+                <Course.TableCells.StartDateTimeStacked {...{ course }} />
             ),
             generateSortableValue: (course) => new Date(course.date_start)
         },
         {
             columnDescription: "End",
             generateTableCell: (course) => (
-                <Course.TableCells.EndDateTimeStacked {...{course}} />
+                <Course.TableCells.EndDateTimeStacked {...{ course }} />
             ),
             generateSortableValue: (course) => new Date(course.date_end)
         },
         {
             columnDescription: "Status",
             generateTableCell: (course) => (
-                <Course.TableCells.Status {...{course}} />
+                <Course.TableCells.Status {...{ course }} />
             )
         },
         {
             columnDescription: "Enrollment",
             generateTableCell: (course) => (
-                <Course.TableCells.UserAssignmentButton {...{course}} onClick={() => {
+                <Course.TableCells.UserAssignmentButton {...{ course }} onClick={() => {
                     setAssignUserDialogCourses([course]);
                     setAssignUserDialogIsOpen(true);
                 }} />
@@ -170,19 +158,19 @@ const CourseManagement = () => {
         {
             columnDescription: "Notes",
             generateTableCell: (course) => (
-                <Course.TableCells.Notes {...{course}} />
+                <Course.TableCells.Notes {...{ course }} />
             )
         },
         {
             columnDescription: "Options",
             generateTableCell: (course) => (
                 <>
-                    <Course.TableCells.EditButton 
+                    <Course.TableCells.EditButton
                         onClick={() => {
                             setEditDialogCourse(course);
                             setEditDialogIsOpen(true);
                         }} />
-                    <Course.TableCells.DeleteButton {...{course}}
+                    <Course.TableCells.DeleteButton {...{ course }}
                         onClick={() => {
                             setDeleteDialogCourse(course);
                             setDeleteDialogIsOpen(true);
@@ -192,33 +180,30 @@ const CourseManagement = () => {
         }
     ];
 
-
     const userTableFieldsForDialog = [
         {
             columnDescription: "ID",
             generateTableCell: (user) => (
-                <User.TableCells.IDWithAccessIcon {...{user}} />
+                <User.TableCells.IDWithAccessIcon {...{ user }} />
             ),
             generateSortableValue: (user) => user.id
         },
         {
             columnDescription: "User",
             generateTableCell: (user) => (
-                <User.TableCells.StackedNameEmail {...{user}} />
+                <User.TableCells.StackedNameEmail {...{ user }} />
             ),
             generateSortableValue: (user) => user.full_name_reverse?.toLowerCase() ?? ""
         }
     ];
 
-
-
-    return !appUser.is_admin && (
+    return (!appUser.is_admin &&
         <FullPageMessage message="Insufficient Privileges" Icon={LockIcon} buttonText="Return to Profile" buttonDestination="/Account/Profile" />
-    ) || appUser.pw_change_required && (
+    ) || (appUser.pw_change_required &&
         <Navigate to="/Account/ChangePassword" />
-    ) || isError && (
+    ) || (isError &&
         <FullPageMessage message="Error loading courses" Icon={WarningIcon} buttonText="Retry" buttonAction={fetchData} />
-    ) || !isLoaded && (
+    ) || (!isLoaded &&
         <FullPageMessage message="Loading courses..." Icon={AccessTimeIcon} />
     ) || (
         <Box component={Paper} square sx={{
@@ -263,17 +248,19 @@ const CourseManagement = () => {
                 {...{ sortColumn, setSortColumn, sortAscending, setSortAscending }}
                 sx={{ gridArea: "table" }}
                 emptyMinHeight="300px"
-                {...visibleCourses.length == courses.length && {
-                    noContentMessage: "No courses yet",
-                    noContentButtonAction: () => { setDialogIsOpen(true); },
-                    noContentButtonText: "Create a course",
-                    NoContentIcon: InfoIcon
-                } || visibleCourses.length < courses.length && {
-                    noContentMessage: "No results",
-                    noContentButtonAction: clearFilters,
-                    noContentButtonText: "Clear Filters",
-                    NoContentIcon: SearchIcon
-                }}
+                {...
+                    (visibleCourses.length === courses.length && {
+                        noContentMessage: "No courses yet",
+                        noContentButtonAction: () => { setDialogIsOpen(true); },
+                        noContentButtonText: "Create a course",
+                        NoContentIcon: InfoIcon
+                    }) || (visibleCourses.length < courses.length && {
+                        noContentMessage: "No results",
+                        noContentButtonAction: clearFilters,
+                        noContentButtonText: "Clear Filters",
+                        NoContentIcon: SearchIcon
+                    })
+                }
             />
             <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={2} padding={2} sx={{ gridArea: "bottom" }}>
                 <SelectionSummary
@@ -286,13 +273,13 @@ const CourseManagement = () => {
                 />
                 <Stack direction="row" spacing={2} >
                     <Button variant="outlined"
-                        disabled={selectedCourses.length == 0}
+                        disabled={selectedCourses.length === 0}
                         startIcon={<GroupAddIcon />}
                         onClick={() => {
                             setAssignUserDialogCourses([...selectedCourses]);
                             setAssignUserDialogIsOpen(true);
                         }}>
-                        <Typography variant="body1">Manage User Enrollments for {selectedCourses.length} {selectedCourses.length == 1 ? "course" : "courses"}</Typography>
+                        <Typography variant="body1">Manage User Enrollments for {selectedCourses.length} {selectedCourses.length === 1 ? "course" : "courses"}</Typography>
                     </Button>
                 </Stack>
             </Stack>
@@ -315,7 +302,6 @@ const CourseManagement = () => {
                 setAllItems={setCourses}
                 deleteDialogItem={deleteDialogCourse}
                 {...{ deleteDialogIsOpen, setDeleteDialogIsOpen }} />
-
 
             <AssociationManagementDialog
                 Association={EnrollmentCoursePrimary}
@@ -346,6 +332,5 @@ const CourseManagement = () => {
         </Box>
     );
 };
-
 
 export default CourseManagement;

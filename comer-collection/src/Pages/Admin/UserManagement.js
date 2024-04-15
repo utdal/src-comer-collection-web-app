@@ -18,9 +18,9 @@ import { UserChangePrivilegesDialog } from "../../Components/Dialogs/UserChangeP
 import { SelectionSummary } from "../../Components/SelectionSummary.js";
 import { sendAuthenticatedRequest } from "../../Helpers/APICalls.js";
 import { CourseFilterMenu } from "../../Components/Menus/CourseFilterMenu.js";
-import { useSnackbar } from "../../ContextProviders/AppFeatures.js";
+import { useSnackbar, useTitle } from "../../ContextProviders/AppFeatures.js";
 import { useAppUser } from "../../ContextProviders/AppUser.js";
-import { useTitle } from "../../ContextProviders/AppFeatures.js";
+
 import { UserResetPasswordDialog } from "../../Components/Dialogs/UserResetPasswordDialog.js";
 import { useAccountNav } from "../../ContextProviders/AccountNavProvider.js";
 import { User } from "../../Classes/Entities/User.js";
@@ -28,7 +28,6 @@ import { Entity } from "../../Classes/Entity.js";
 import { EnrollmentUserPrimary } from "../../Classes/Associations/Enrollment.js";
 import { UserExhibition } from "../../Classes/Associations/UserExhibition.js";
 import { Exhibition } from "../../Classes/Entities/Exhibition.js";
-
 
 const UserManagement = () => {
     const [users, setUsers] = useState([]);
@@ -56,7 +55,6 @@ const UserManagement = () => {
     const [assignCourseDialogUsers, setAssignCourseDialogUsers] = useState([]);
     const [viewUserExhibitionDialogUsers, setViewUserExhibitionDialogUsers] = useState([]);
 
-
     const [coursesByUser, setCoursesByUser] = useState({});
     const [exhibitionsByUser, setExhibitionsByUser] = useState({});
 
@@ -69,10 +67,7 @@ const UserManagement = () => {
         setUserCourseIdFilter(null);
     };
 
-
-
     const [userCourseIdFilter, setUserCourseIdFilter] = useState(null);
-
 
     const [, setSelectedNavItem] = useAccountNav();
     const [appUser] = useAppUser();
@@ -88,24 +83,22 @@ const UserManagement = () => {
         }
     }, []);
 
-
     const fetchData = async () => {
         try {
             setIsError(false);
             const userData = await sendAuthenticatedRequest("GET", "/api/admin/users");
             setUsers(userData.data);
-    
+
             const courseData = await sendAuthenticatedRequest("GET", "/api/admin/courses");
             setCourses(courseData.data);
 
             const exhibitionData = await sendAuthenticatedRequest("GET", "/api/admin/exhibitions");
             setExhibitions(exhibitionData.data);
-    
+
             setTimeout(() => {
                 setRefreshInProgress(false);
             }, 1000);
-    
-    
+
             const coursesByUserDraft = {};
             for (const c of userData.data) {
                 coursesByUserDraft[c.id] = c.Courses;
@@ -122,43 +115,37 @@ const UserManagement = () => {
             console.log(exhibitionsByUserDraft);
 
             setIsLoaded(true);
-        }
-        catch(e) {
+        } catch (e) {
             setIsError(true);
         }
     };
 
-
-
     const userFilterFunction = useCallback((user) => {
         return (
-            !userCourseIdFilter || userCourseIdFilter && user.Courses.map((c) => c.id).includes(userCourseIdFilter.id)
+            !userCourseIdFilter || (userCourseIdFilter && user.Courses.map((c) => c.id).includes(userCourseIdFilter.id))
         ) && (
             doesItemMatchSearchQuery(searchQuery, user, ["full_name", "full_name_reverse", "email_without_domain"])
         );
     }, [userCourseIdFilter, searchQuery]);
 
-
     const handleCopyToClipboard = useCallback((user, fieldName) => {
         try {
             navigator.clipboard.writeText(user[fieldName]);
-            if (fieldName == "email") {
+            if (fieldName === "email") {
                 showSnackbar(`Email address for user ${user.id} copied to clipboard`, "success");
             } else {
                 showSnackbar("Text copied to clipboard", "success");
             }
-
         } catch (error) {
             showSnackbar("Error copying text to clipboard", "error");
         }
     }, []);
 
-
     const userTableFields = [
         {
             columnDescription: "ID",
             generateTableCell: (user) => (
-                <User.TableCells.ID {...{user}} />
+                <User.TableCells.ID {...{ user }} />
             ),
             generateSortableValue: (user) => user.id
         },
@@ -166,14 +153,14 @@ const UserManagement = () => {
             columnDescription: "Name",
             maxWidth: "150px",
             generateTableCell: (user) => (
-                <User.TableCells.Name {...{user}} />
+                <User.TableCells.Name {...{ user }} />
             ),
             generateSortableValue: (user) => user.full_name_reverse.toLowerCase()
         },
         {
             columnDescription: "Email",
             generateTableCell: (user) => (
-                <User.TableCells.Email {...{user}} onClick={() => { 
+                <User.TableCells.Email {...{ user }} onClick={() => {
                     handleCopyToClipboard(user, "email");
                 }} />
             ),
@@ -183,23 +170,25 @@ const UserManagement = () => {
             columnDescription: "Password",
             generateTableCell: (user) => (
                 <>
-                    {appUser.id == user.id ? (
-                        <User.TableCells.PasswordChangeCurrentAdmin {...{user}} onClick={() => {
-                            navigate("/Account/ChangePassword");
-                        }} />
-                    ) : (
-                        <User.TableCells.PasswordSetOrReset {...{user}} onClick={() => {
-                            setResetPasswordDialogUser(user);
-                            setResetPasswordDialogIsOpen(true);
-                        }} />
-                    )}
+                    {appUser.id === user.id
+                        ? (
+                            <User.TableCells.PasswordChangeCurrentAdmin {...{ user }} onClick={() => {
+                                navigate("/Account/ChangePassword");
+                            }} />
+                        )
+                        : (
+                            <User.TableCells.PasswordSetOrReset {...{ user }} onClick={() => {
+                                setResetPasswordDialogUser(user);
+                                setResetPasswordDialogIsOpen(true);
+                            }} />
+                        )}
                 </>
             )
         },
         {
             columnDescription: "Courses",
             generateTableCell: (user) => (
-                <User.TableCells.CourseAssignmentButton {...{user}} onClick={() => {
+                <User.TableCells.CourseAssignmentButton {...{ user }} onClick={() => {
                     setAssignCourseDialogUsers([user]);
                     setAssignCourseDialogIsOpen(true);
                 }} />
@@ -208,7 +197,7 @@ const UserManagement = () => {
         {
             columnDescription: "Exhibitions",
             generateTableCell: (user) => (
-                <User.TableCells.UserExhibitionCountButton {...{user}} onClick={() => {
+                <User.TableCells.UserExhibitionCountButton {...{ user }} onClick={() => {
                     setViewUserExhibitionDialogUsers([user]);
                     setViewUserExhibitionDialogIsOpen(true);
                 }} />
@@ -217,7 +206,7 @@ const UserManagement = () => {
         {
             columnDescription: "User Type",
             generateTableCell: (user) => (
-                <User.TableCells.UserTypeButton {...{user}} onClick={() => {
+                <User.TableCells.UserTypeButton {...{ user }} onClick={() => {
                     setPrivilegesDialogUser(user);
                     setPrivilegesDialogIsOpen(true);
                 }} />
@@ -226,7 +215,7 @@ const UserManagement = () => {
         {
             columnDescription: "Active",
             generateTableCell: (user) => (
-                <User.TableCells.UserActivationSwitch {...{user}} onClick={(e) => {
+                <User.TableCells.UserActivationSwitch {...{ user }} onClick={(e) => {
                     User.handleChangeUserActivationStatus(user.id, e.target.checked).then((msg) => {
                         fetchData();
                         showSnackbar(msg, "success");
@@ -244,7 +233,7 @@ const UserManagement = () => {
                         setEditDialogUser(user);
                         setEditDialogIsOpen(true);
                     }} />
-                    <User.TableCells.DeleteButton {...{user}}
+                    <User.TableCells.DeleteButton {...{ user }}
                         onClick={() => {
                             setDeleteDialogUser(user);
                             setDeleteDialogIsOpen(true);
@@ -258,37 +247,37 @@ const UserManagement = () => {
         {
             columnDescription: "ID",
             generateTableCell: (exhibition) => (
-                <Exhibition.TableCells.ID {...{exhibition}} />
+                <Exhibition.TableCells.ID {...{ exhibition }} />
             )
         },
         {
             columnDescription: "Title",
             generateTableCell: (exhibition) => (
-                <Exhibition.TableCells.Title {...{exhibition}} />
+                <Exhibition.TableCells.Title {...{ exhibition }} />
             )
         },
         {
             columnDescription: "Open",
             generateTableCell: (exhibition) => (
-                <Exhibition.TableCells.OpenInNewTab {...{exhibition}} />
+                <Exhibition.TableCells.OpenInNewTab {...{ exhibition }} />
             )
         },
         {
             columnDescription: "Created",
             generateTableCell: (exhibition) => (
-                <Exhibition.TableCells.DateCreatedStacked {...{exhibition}} />
+                <Exhibition.TableCells.DateCreatedStacked {...{ exhibition }} />
             )
         },
         {
             columnDescription: "Modified",
             generateTableCell: (exhibition) => (
-                <Exhibition.TableCells.DateModifiedStacked {...{exhibition}} />
+                <Exhibition.TableCells.DateModifiedStacked {...{ exhibition }} />
             )
         },
         {
             columnDescription: "Access",
             generateTableCell: (exhibition) => (
-                <Exhibition.TableCells.Access {...{exhibition}} />
+                <Exhibition.TableCells.Access {...{ exhibition }} />
             )
         }
     ];
@@ -324,15 +313,13 @@ const UserManagement = () => {
         return userFilterFunction(user);
     }), [users, searchQuery, userCourseIdFilter]);
 
-
-
-    return !appUser.is_admin && (
+    return (!appUser.is_admin &&
         <FullPageMessage message="Insufficient Privileges" Icon={LockIcon} buttonText="Return to Profile" buttonDestination="/Account/Profile" />
-    ) || appUser.pw_change_required && (
+    ) || (appUser.pw_change_required &&
         <Navigate to="/Account/ChangePassword" />
-    ) || isError && (
+    ) || (isError &&
         <FullPageMessage message="Error loading users" Icon={WarningIcon} buttonText="Retry" buttonAction={fetchData} />
-    ) || !isLoaded && (
+    ) || (!isLoaded &&
         <FullPageMessage message="Loading users..." Icon={AccessTimeIcon} />
     ) || (
         <Box component={Paper} square sx={{
@@ -379,17 +366,19 @@ const UserManagement = () => {
                 visibleItems={visibleUsers}
                 sx={{ gridArea: "table" }}
                 emptyMinHeight="300px"
-                {...visibleUsers.length == users.length && {
-                    noContentMessage: "No users yet",
-                    noContentButtonAction: () => { setDialogIsOpen(true); },
-                    noContentButtonText: "Create a user",
-                    NoContentIcon: InfoIcon
-                } || visibleUsers.length < users.length && {
-                    noContentMessage: "No results",
-                    noContentButtonAction: clearFilters,
-                    noContentButtonText: "Clear Filters",
-                    NoContentIcon: SearchIcon
-                }}
+                {...
+                    (visibleUsers.length === users.length && {
+                        noContentMessage: "No users yet",
+                        noContentButtonAction: () => { setDialogIsOpen(true); },
+                        noContentButtonText: "Create a user",
+                        NoContentIcon: InfoIcon
+                    }) || (visibleUsers.length < users.length && {
+                        noContentMessage: "No results",
+                        noContentButtonAction: clearFilters,
+                        noContentButtonText: "Clear Filters",
+                        NoContentIcon: SearchIcon
+                    })
+                }
             />
             <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={2} padding={2} sx={{ gridArea: "bottom" }}>
                 <SelectionSummary
@@ -403,14 +392,14 @@ const UserManagement = () => {
                 <Stack direction="row" spacing={2} >
                     <Button variant="outlined"
                         sx={{
-                            display: selectedUsers.length == 0 ? "none" : ""
+                            display: selectedUsers.length === 0 ? "none" : ""
                         }}
                         startIcon={<SchoolIcon />}
                         onClick={() => {
                             setAssignCourseDialogUsers([...selectedUsers]);
                             setAssignCourseDialogIsOpen(true);
                         }}>
-                        <Typography variant="body1">Manage Course Enrollments for {selectedUsers.length} {selectedUsers.length == 1 ? "user" : "users"}</Typography>
+                        <Typography variant="body1">Manage Course Enrollments for {selectedUsers.length} {selectedUsers.length === 1 ? "user" : "users"}</Typography>
                     </Button>
                 </Stack>
             </Stack>
@@ -476,7 +465,7 @@ const UserManagement = () => {
                 secondarySearchFields={["title"]}
                 secondarySearchBoxPlaceholder="Search exhibitions by title"
             />
-            
+
             <UserChangePrivilegesDialog
                 dialogUser={privilegesDialogUser}
                 dialogIsOpen={privilegesDialogIsOpen}
@@ -493,6 +482,5 @@ const UserManagement = () => {
         </Box>
     );
 };
-
 
 export default UserManagement;
