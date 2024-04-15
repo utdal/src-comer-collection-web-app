@@ -15,7 +15,6 @@ AccountNavProvider.propTypes = {
     children: PropTypes.node
 };
 
-
 export const useAccountNav = () => {
     const { selectedNavItem, setSelectedNavItem } = useContext(AccountNavContext);
     return [selectedNavItem, setSelectedNavItem];

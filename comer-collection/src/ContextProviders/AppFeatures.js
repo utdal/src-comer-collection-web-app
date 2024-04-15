@@ -1,12 +1,11 @@
-import { Snackbar, Alert, Stack, Typography } from "@mui/material";
-import React, { useCallback, useContext, useState } from "react";
-import { createContext } from "react";
+import { Snackbar, Alert, Stack, Typography, ThemeProvider, createTheme } from "@mui/material";
+import React, { useCallback, useContext, useState, createContext } from "react";
+
 import PropTypes from "prop-types";
-import { ThemeProvider, createTheme } from "@mui/material";
+
 import { green, grey, orange } from "@mui/material/colors/index.js";
 
-let defaultTitleSuffix = "Comer Collection";
-
+const defaultTitleSuffix = "Comer Collection";
 
 const primaryColor = green;
 const secondaryColor = orange;
@@ -14,7 +13,6 @@ const secondaryColor = orange;
 const AppFeatureContext = createContext();
 
 export const AppFeatureProvider = ({ children }) => {
-
     const [snackbarOpen, setSnackbarOpen] = useState(false);
     const [snackbarText, setSnackbarText] = useState("");
     const [snackbarSeverity, setSnackbarSeverity] = useState("success");
@@ -22,8 +20,6 @@ export const AppFeatureProvider = ({ children }) => {
     const [titleText, setTitleText] = useState(null);
 
     const [appDarkTheme, setAppDarkTheme] = useState(JSON.parse(localStorage.getItem("appDarkTheme")) ?? false);
-
-    
 
     const theme = createTheme({
         typography: {
@@ -40,16 +36,16 @@ export const AppFeatureProvider = ({ children }) => {
                 main: appDarkTheme ? primaryColor["700"] : primaryColor["900"],
                 light: primaryColor["500"],
                 contrastText: "white",
-                "200": primaryColor["200"],
-                "100": primaryColor["100"],
+                200: primaryColor["200"],
+                100: primaryColor["100"],
                 translucent: `${primaryColor["700"]}40`,
                 veryTranslucent: `${primaryColor["700"]}20`
             },
             secondary: {
                 main: secondaryColor["700"],
                 contrastText: "white",
-                "200": secondaryColor["200"],
-                "100": secondaryColor["100"],
+                200: secondaryColor["200"],
+                100: secondaryColor["100"],
                 translucent: `${secondaryColor["700"]}40`,
                 veryTranslucent: `${secondaryColor["700"]}20`
             },
@@ -57,15 +53,13 @@ export const AppFeatureProvider = ({ children }) => {
                 main: grey["600"],
                 contrastText: appDarkTheme ? "white" : "black",
                 translucent: appDarkTheme ? grey["800"] : "#CCC",
-                veryTranslucent: appDarkTheme ? "#333" : "#EEE",
+                veryTranslucent: appDarkTheme ? "#333" : "#EEE"
             },
             lightgrey: {
                 main: appDarkTheme ? grey["500"] : grey["700"]
             }
         }
     });
-
-
 
     if (!titleText) {
         document.title = defaultTitleSuffix;
@@ -81,10 +75,12 @@ export const AppFeatureProvider = ({ children }) => {
 
     return (
         <AppFeatureContext.Provider value={{
-            showSnackbar, setTitleText, 
-            appDarkTheme, setAppDarkTheme
+            showSnackbar,
+            setTitleText,
+            appDarkTheme,
+            setAppDarkTheme
         }}>
-            
+
             <ThemeProvider theme={theme}>
                 {children}
                 <Snackbar
@@ -116,12 +112,10 @@ AppFeatureProvider.propTypes = {
     children: PropTypes.node
 };
 
-
 export const useSnackbar = () => {
     const { showSnackbar } = useContext(AppFeatureContext);
     return showSnackbar;
 };
-
 
 export const useTitle = () => {
     const { setTitleText } = useContext(AppFeatureContext);
