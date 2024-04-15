@@ -12,14 +12,14 @@ import {
     BrokenImageIcon,
     ArrowBackIcon,
     ArrowForwardIcon,
-    SecurityIcon,
+    SecurityIcon
 } from "../../Imports/Icons.js";
 import { useAppUser } from "../../ContextProviders/AppUser.js";
 import PropTypes from "prop-types";
 
-const ColorInput = ({value, onChange, disabled}) => {
+const ColorInput = ({ value, onChange, disabled }) => {
     return (
-        <input type="color" value={value ?? ""} {...{onChange, disabled}} />
+        <input type="color" value={value ?? ""} {...{ onChange, disabled }} />
     );
 };
 
@@ -29,7 +29,7 @@ ColorInput.propTypes = {
     disabled: PropTypes.bool
 };
 
-const AccordionSubHeading = ({text}) => {
+const AccordionSubHeading = ({ text }) => {
     const theme = useTheme();
     return (
         <>
@@ -62,7 +62,6 @@ const moodinessOptions = [
     }
 ];
 
-
 const directionOptions = [
     {
         value: 1,
@@ -81,7 +80,6 @@ const directionOptions = [
         displayText: "Left"
     }
 ];
-
 
 const textureOptions = [
     {
@@ -114,9 +112,9 @@ const textureOptions = [
     }
 ];
 
-const ExhibitionOption = ({description, children, vertical}) => {
+const ExhibitionOption = ({ description, children, vertical }) => {
     return (
-        <Stack direction={vertical ? "column" : "row"} alignItems={vertical ? "" : "center"} spacing={1} 
+        <Stack direction={vertical ? "column" : "row"} alignItems={vertical ? "" : "center"} spacing={1}
             justifyContent="space-between"
         >
             <Typography variant="body1">{description}</Typography>
@@ -125,20 +123,17 @@ const ExhibitionOption = ({description, children, vertical}) => {
     );
 };
 
-
 ExhibitionOption.propTypes = {
     description: PropTypes.string,
     children: PropTypes.node,
     vertical: PropTypes.bool
 };
 
-
-const ExhibitionOptionGroup = ({id, description, expandedSection, setExpandedSection, children}) => {
-
+const ExhibitionOptionGroup = ({ id, description, expandedSection, setExpandedSection, children }) => {
     const theme = useTheme();
-    
+
     return (
-        <Accordion disableGutters expanded={expandedSection == id}>
+        <Accordion disableGutters expanded={expandedSection === id}>
             <Box square sx={{
                 width: "100%",
                 position: "sticky",
@@ -151,11 +146,11 @@ const ExhibitionOptionGroup = ({id, description, expandedSection, setExpandedSec
                 <ListItemButton
                     onClick={() => {
                         setExpandedSection((expandedSection) => (
-                            expandedSection == id ? null : id
+                            expandedSection === id ? null : id
                         ));
                     }}
-                > 
-                    <AccordionSummary sx={{width: "100%"}}
+                >
+                    <AccordionSummary sx={{ width: "100%" }}
                         expandIcon={<ExpandMoreIcon />}
                     >
                         <Typography variant="h6">{description}</Typography>
@@ -168,7 +163,7 @@ const ExhibitionOptionGroup = ({id, description, expandedSection, setExpandedSec
                     {children}
                 </Stack>
             </AccordionDetails>
-            
+
         </Accordion>
 
     );
@@ -182,12 +177,10 @@ ExhibitionOptionGroup.propTypes = {
     description: PropTypes.string.isRequired
 };
 
-
 const getSwappedImageArray = (images, imageIdA, imageIdB) => {
-    const imageA = images.find((image) => image.image_id == imageIdA);
-    const imageB = images.find((image) => image.image_id == imageIdB);
-    if(!imageA || !imageB)
-        return images;
+    const imageA = images.find((image) => image.image_id === imageIdA);
+    const imageB = images.find((image) => image.image_id === imageIdB);
+    if (!imageA || !imageB) { return images; }
 
     return images.map((image) => {
         switch (image.image_id) {
@@ -201,15 +194,10 @@ const getSwappedImageArray = (images, imageIdA, imageIdB) => {
     });
 };
 
-
-
-
-
-export const ImageRearrangeDialog = ({imageRearrangerIsOpen, setImageRearrangerIsOpen, exhibitionState, exhibitionEditDispatch, globalImageCatalog}) => {
-
+export const ImageRearrangeDialog = ({ imageRearrangerIsOpen, setImageRearrangerIsOpen, exhibitionState, exhibitionEditDispatch, globalImageCatalog }) => {
     const [currentWall, setCurrentWall] = useState(1);
 
-    const imagesOnWall = exhibitionState.images.filter((i) => i.metadata?.direction == currentWall);
+    const imagesOnWall = exhibitionState.images.filter((i) => i.metadata?.direction === currentWall);
 
     const handleImageSwap = (aId, bId) => {
         const newArray = getSwappedImageArray(exhibitionState.images, aId, bId);
@@ -222,7 +210,7 @@ export const ImageRearrangeDialog = ({imageRearrangerIsOpen, setImageRearrangerI
 
     return (
         <Dialog open={imageRearrangerIsOpen}
-            sx={{zIndex: 10000}} fullWidth maxWidth="md"
+            sx={{ zIndex: 10000 }} fullWidth maxWidth="md"
         >
             <DialogTitle>Rearrange images</DialogTitle>
             <DialogContent>
@@ -231,7 +219,7 @@ export const ImageRearrangeDialog = ({imageRearrangerIsOpen, setImageRearrangerI
                     width: "100%"
                 }}>
                     {directionOptions.map((option) => (
-                        <ToggleButton key={option.value} selected={option.value == currentWall} value={option.value} sx={{
+                        <ToggleButton key={option.value} selected={option.value === currentWall} value={option.value} sx={{
                             textTransform: "unset",
                             width: "100%"
                         }}
@@ -246,8 +234,8 @@ export const ImageRearrangeDialog = ({imageRearrangerIsOpen, setImageRearrangerI
             </DialogContent>
             <DialogContent>
                 <Stack direction="row" width="100%" spacing={2}>
-                    {imagesOnWall.length > 0 && imagesOnWall.map((i, index) => {
-                        const catalogImage = globalImageCatalog.find((gi) => gi.id == i.image_id);
+                    {(imagesOnWall.length > 0 && imagesOnWall.map((i, index) => {
+                        const catalogImage = globalImageCatalog.find((gi) => gi.id === i.image_id);
                         return (
                             <Stack key={i.image_id} direction="column" justifyItems="center" alignItems="center" spacing={2}>
                                 <Box width="150px" height="150px" sx={{
@@ -266,24 +254,23 @@ export const ImageRearrangeDialog = ({imageRearrangerIsOpen, setImageRearrangerI
                                 </Box>
                                 <Typography>{catalogImage.title}</Typography>
                                 <Stack direction="row">
-                                    <IconButton disabled={index == 0} onClick={() => {
+                                    <IconButton disabled={index === 0} onClick={() => {
                                         handleImageSwap(imagesOnWall[index - 1].image_id, i.image_id);
                                     }}>
                                         <ArrowBackIcon />
                                     </IconButton>
-                                    <IconButton disabled={index == imagesOnWall.length - 1} onClick={() => {
+                                    <IconButton disabled={index === imagesOnWall.length - 1} onClick={() => {
                                         handleImageSwap(imagesOnWall[index + 1].image_id, i.image_id);
                                     }}>
                                         <ArrowForwardIcon />
                                     </IconButton>
                                 </Stack>
-                            </Stack> 
+                            </Stack>
                         );
-                    })
-                    || imagesOnWall.length == 0 && (
+                    })) || (imagesOnWall.length === 0 &&
                         <Stack spacing={1}>
                             <Typography>The selected wall contains no images.</Typography>
-                            
+
                         </Stack>
 
                     )
@@ -318,13 +305,12 @@ ImageRearrangeDialog.propTypes = {
     globalImageCatalog: PropTypes.arrayOf(PropTypes.object)
 };
 
-export const ImageChooserDialog = ({imageChooserIsOpen, setImageChooserIsOpen, exhibitionState, setSelectedImageId, exhibitionEditDispatch}) => {
-    
+export const ImageChooserDialog = ({ imageChooserIsOpen, setImageChooserIsOpen, exhibitionState, setSelectedImageId, exhibitionEditDispatch }) => {
     const [imageChooserSelectedImage, setImageChooserSelectedImage] = useState(null);
 
     return (
-        <Dialog component="form" open={imageChooserIsOpen} 
-            sx={{zIndex: 10000}} fullWidth maxWidth="xl" onSubmit={(e) => {
+        <Dialog component="form" open={imageChooserIsOpen}
+            sx={{ zIndex: 10000 }} fullWidth maxWidth="xl" onSubmit={(e) => {
                 e.preventDefault();
                 exhibitionEditDispatch({
                     scope: "exhibition",
@@ -368,8 +354,7 @@ ImageChooserDialog.propTypes = {
     exhibitionEditDispatch: PropTypes.func.isRequired
 };
 
-export const ExhibitionEditPane = ({exhibitionMetadata, exhibitionState, exhibitionEditDispatch, globalImageCatalog, saveExhibition}) => {
-    
+export const ExhibitionEditPane = ({ exhibitionMetadata, exhibitionState, exhibitionEditDispatch, globalImageCatalog, saveExhibition }) => {
     const [expandedSection, setExpandedSection] = useState(null);
 
     const [selectedImageId, setSelectedImageId] = useState(null);
@@ -382,7 +367,6 @@ export const ExhibitionEditPane = ({exhibitionMetadata, exhibitionState, exhibit
     const theme = useTheme();
     const [appUser] = useAppUser();
 
-
     useEffect(() => {
         const saveInterval = setInterval(saveExhibition, 30000);
         return () => {
@@ -390,9 +374,8 @@ export const ExhibitionEditPane = ({exhibitionMetadata, exhibitionState, exhibit
         };
     });
 
-
     return (
-        
+
         <Box component={Paper} square
             sx={{
                 display: "grid",
@@ -414,16 +397,16 @@ export const ExhibitionEditPane = ({exhibitionMetadata, exhibitionState, exhibit
                 <Typography variant="h5" align="center">{exhibitionMetadata.title}</Typography>
             </Box>
 
-            <Box sx={{gridArea: "accordions", overflowY: "scroll"}} >
+            <Box sx={{ gridArea: "accordions", overflowY: "scroll" }} >
 
-                <ExhibitionOptionGroup 
+                <ExhibitionOptionGroup
                     id="exhibition_settings"
                     description="Exhibition Settings"
-                    {...{expandedSection, setExpandedSection}}
+                    {...{ expandedSection, setExpandedSection }}
                 >
                     <AccordionSubHeading text="Room Appearance" />
                     <ExhibitionOption description="Main Wall Color">
-                        <ColorInput value={exhibitionState.appearance.main_wall_color} 
+                        <ColorInput value={exhibitionState.appearance.main_wall_color}
                             onChange={(e) => {
                                 exhibitionEditDispatch({
                                     scope: "exhibition",
@@ -434,7 +417,7 @@ export const ExhibitionEditPane = ({exhibitionMetadata, exhibitionState, exhibit
                             }} />
                     </ExhibitionOption>
                     <ExhibitionOption description="Side Wall Color">
-                        <ColorInput value={exhibitionState.appearance.side_wall_color} 
+                        <ColorInput value={exhibitionState.appearance.side_wall_color}
                             onChange={(e) => {
                                 exhibitionEditDispatch({
                                     scope: "exhibition",
@@ -445,7 +428,7 @@ export const ExhibitionEditPane = ({exhibitionMetadata, exhibitionState, exhibit
                             }} />
                     </ExhibitionOption>
                     <ExhibitionOption description="Floor Color">
-                        <ColorInput value={exhibitionState.appearance.floor_color} 
+                        <ColorInput value={exhibitionState.appearance.floor_color}
                             onChange={(e) => {
                                 exhibitionEditDispatch({
                                     scope: "exhibition",
@@ -456,7 +439,7 @@ export const ExhibitionEditPane = ({exhibitionMetadata, exhibitionState, exhibit
                             }} />
                     </ExhibitionOption>
                     <ExhibitionOption description="Ceiling Color">
-                        <ColorInput value={exhibitionState.appearance.ceiling_color} 
+                        <ColorInput value={exhibitionState.appearance.ceiling_color}
                             onChange={(e) => {
                                 exhibitionEditDispatch({
                                     scope: "exhibition",
@@ -467,7 +450,7 @@ export const ExhibitionEditPane = ({exhibitionMetadata, exhibitionState, exhibit
                             }} />
                     </ExhibitionOption>
                     <ExhibitionOption description="Floor Texture">
-                        <Select value={exhibitionState.appearance.floor_texture ?? ""} 
+                        <Select value={exhibitionState.appearance.floor_texture ?? ""}
                             onChange={(e) => {
                                 exhibitionEditDispatch({
                                     scope: "exhibition",
@@ -481,11 +464,11 @@ export const ExhibitionEditPane = ({exhibitionMetadata, exhibitionState, exhibit
                             ))}
                         </Select>
                     </ExhibitionOption>
-                    
+
                     <AccordionSubHeading text="Ambient Lighting" />
 
                     <ExhibitionOption description="Moodiness">
-                        <Select value={exhibitionState.appearance.moodiness ?? ""} 
+                        <Select value={exhibitionState.appearance.moodiness ?? ""}
                             onChange={(e) => {
                                 exhibitionEditDispatch({
                                     scope: "exhibition",
@@ -500,7 +483,7 @@ export const ExhibitionEditPane = ({exhibitionMetadata, exhibitionState, exhibit
                         </Select>
                     </ExhibitionOption>
                     <ExhibitionOption description="Ambient Light Color">
-                        <ColorInput value={exhibitionState.appearance.ambient_light_color} 
+                        <ColorInput value={exhibitionState.appearance.ambient_light_color}
                             onChange={(e) => {
                                 exhibitionEditDispatch({
                                     scope: "exhibition",
@@ -552,12 +535,11 @@ export const ExhibitionEditPane = ({exhibitionMetadata, exhibitionState, exhibit
                 <ExhibitionOptionGroup
                     id="image_settings"
                     description="Image Settings"
-                    {...{expandedSection, setExpandedSection, selectedImageId, setSelectedImageId}}
+                    {...{ expandedSection, setExpandedSection, selectedImageId, setSelectedImageId }}
                 >
 
-
                     <ExhibitionOption>
-                        
+
                         <Button variant="contained" sx={{
                             width: "100%"
                         }}
@@ -571,8 +553,8 @@ export const ExhibitionEditPane = ({exhibitionMetadata, exhibitionState, exhibit
                     </ExhibitionOption>
 
                     <ExhibitionOption>
-                        
-                        <Button variant="outlined"  sx={{
+
+                        <Button variant="outlined" sx={{
                             width: "100%"
                         }}
                         startIcon={<CollectionsIcon />}
@@ -585,19 +567,18 @@ export const ExhibitionEditPane = ({exhibitionMetadata, exhibitionState, exhibit
 
                     </ExhibitionOption>
 
-
                     <ExhibitionOption>
 
-                        <Select sx={{width: "100%", minHeight: "70px"}} 
+                        <Select sx={{ width: "100%", minHeight: "70px" }}
                             disabled={!exhibitionState.images?.length}
-                            value={selectedImageId ?? ""} 
+                            value={selectedImageId ?? ""}
                             onChange={(e) => {
                                 setSelectedImageId(e.target.value);
                             }}
                         >
                             {(exhibitionState.images ?? []).map((image) => {
-                                const catalogImage = globalImageCatalog?.find((i) => i.id == image.image_id);
-                                const image_title = catalogImage?.title;
+                                const catalogImage = globalImageCatalog?.find((i) => i.id === image.image_id);
+                                const imageTitle = catalogImage?.title;
                                 return (
                                     <MenuItem key={image.image_id} value={image.image_id ?? ""}>
                                         <Stack direction="row" alignItems="center" spacing={1}>
@@ -607,13 +588,13 @@ export const ExhibitionEditPane = ({exhibitionMetadata, exhibitionState, exhibit
                                                 backgroundRepeat: "no-repeat",
                                                 backgroundPosition: "center"
                                             }} />
-                                            <Typography>{image_title}</Typography>
+                                            <Typography>{imageTitle}</Typography>
                                         </Stack>
                                     </MenuItem>
                                 );
                             })}
                         </Select>
-                        
+
                         <IconButton variant="contained" disabled={!selectedImageId}
                             onClick={() => {
                                 setDeleteImageDialogIsOpen(true);
@@ -624,12 +605,11 @@ export const ExhibitionEditPane = ({exhibitionMetadata, exhibitionState, exhibit
 
                     </ExhibitionOption>
 
-                    
-                    { selectedImageId && ( <>
+                    { selectedImageId && (<>
                         <AccordionSubHeading text="Position" />
 
                         <ExhibitionOption description="Wall">
-                            <Select value={getImageStateById(exhibitionState, selectedImageId)?.metadata.direction ?? ""} 
+                            <Select value={getImageStateById(exhibitionState, selectedImageId)?.metadata.direction ?? ""}
                                 onChange={(e) => {
                                     exhibitionEditDispatch({
                                         scope: "image",
@@ -647,10 +627,9 @@ export const ExhibitionEditPane = ({exhibitionMetadata, exhibitionState, exhibit
                         </ExhibitionOption>
 
                         <ExhibitionOption description="Custom Position">
-                        
 
-                            <Checkbox 
-                                checked={Boolean(getImageStateById(exhibitionState, selectedImageId)?.position.custom_position)} 
+                            <Checkbox
+                                checked={Boolean(getImageStateById(exhibitionState, selectedImageId)?.position.custom_position)}
                                 onChange={(e) => {
                                     exhibitionEditDispatch({
                                         scope: "image",
@@ -660,7 +639,7 @@ export const ExhibitionEditPane = ({exhibitionMetadata, exhibitionState, exhibit
                                     });
                                 }}
                             />
-                        
+
                             <Input type="number"
                                 value={getImageStateById(exhibitionState, selectedImageId)?.position.custom_x ?? ""}
                                 disabled={!getImageStateById(exhibitionState, selectedImageId)?.position.custom_position}
@@ -691,7 +670,7 @@ export const ExhibitionEditPane = ({exhibitionMetadata, exhibitionState, exhibit
 
                         <AccordionSubHeading text="Matte" />
                         <ExhibitionOption description="Color">
-                            <ColorInput value={getImageStateById(exhibitionState, selectedImageId)?.matte.color} 
+                            <ColorInput value={getImageStateById(exhibitionState, selectedImageId)?.matte.color}
                                 onChange={(e) => {
                                     exhibitionEditDispatch({
                                         scope: "image",
@@ -705,9 +684,9 @@ export const ExhibitionEditPane = ({exhibitionMetadata, exhibitionState, exhibit
                         </ExhibitionOption>
 
                         <ExhibitionOption description="Custom Weight">
-                        
-                            <Checkbox 
-                                checked={Boolean(getImageStateById(exhibitionState, selectedImageId)?.matte.weighted)} 
+
+                            <Checkbox
+                                checked={Boolean(getImageStateById(exhibitionState, selectedImageId)?.matte.weighted)}
                                 onChange={(e) => {
                                     exhibitionEditDispatch({
                                         scope: "image",
@@ -717,7 +696,7 @@ export const ExhibitionEditPane = ({exhibitionMetadata, exhibitionState, exhibit
                                     });
                                 }}
                             />
-                        
+
                             <Input type="number"
                                 value={getImageStateById(exhibitionState, selectedImageId)?.matte.weighted_value ?? ""}
                                 disabled={!getImageStateById(exhibitionState, selectedImageId)?.matte.weighted}
@@ -734,8 +713,8 @@ export const ExhibitionEditPane = ({exhibitionMetadata, exhibitionState, exhibit
 
                         <AccordionSubHeading text="Frame" />
                         <ExhibitionOption description="Custom Frame">
-                            <Checkbox 
-                                checked={Boolean(getImageStateById(exhibitionState, selectedImageId)?.frame.custom)} 
+                            <Checkbox
+                                checked={Boolean(getImageStateById(exhibitionState, selectedImageId)?.frame.custom)}
                                 onChange={(e) => {
                                     exhibitionEditDispatch({
                                         scope: "image",
@@ -749,7 +728,7 @@ export const ExhibitionEditPane = ({exhibitionMetadata, exhibitionState, exhibit
                         </ExhibitionOption>
 
                         <ExhibitionOption description="Color">
-                            <ColorInput value={getImageStateById(exhibitionState, selectedImageId)?.frame.color} 
+                            <ColorInput value={getImageStateById(exhibitionState, selectedImageId)?.frame.color}
                                 disabled={!getImageStateById(exhibitionState, selectedImageId)?.frame.custom}
                                 onChange={(e) => {
                                     exhibitionEditDispatch({
@@ -795,7 +774,7 @@ export const ExhibitionEditPane = ({exhibitionMetadata, exhibitionState, exhibit
 
                         <AccordionSubHeading text="Spotlight" />
                         <ExhibitionOption description="Color">
-                            <ColorInput value={getImageStateById(exhibitionState, selectedImageId)?.light.color} 
+                            <ColorInput value={getImageStateById(exhibitionState, selectedImageId)?.light.color}
                                 onChange={(e) => {
                                     exhibitionEditDispatch({
                                         scope: "image",
@@ -820,7 +799,7 @@ export const ExhibitionEditPane = ({exhibitionMetadata, exhibitionState, exhibit
                                 }}
                             />
                         </ExhibitionOption>
-                    
+
                         <AccordionSubHeading text="Curator's Notes" />
                         <ExhibitionOption vertical description="Description">
                             <TextField type="textarea" multiline rows={4}
@@ -853,40 +832,44 @@ export const ExhibitionEditPane = ({exhibitionMetadata, exhibitionState, exhibit
                         </ExhibitionOption>
                     </>
                     )}
-                    
+
                 </ExhibitionOptionGroup>
 
             </Box>
 
-            <Stack direction="row" 
-                alignItems="center" 
-                justifyContent="center" 
+            <Stack direction="row"
+                alignItems="center"
+                justifyContent="center"
                 sx={{
-                    width: "100%", 
-                    height: "100%", 
+                    width: "100%",
+                    height: "100%",
                     gridArea: "footer",
                     backgroundColor: theme.palette.grey.veryTranslucent
-                }} 
+                }}
             >
-                
+
                 <Button variant="contained" startIcon={
-                    appUser.is_admin && appUser.id != exhibitionMetadata.exhibition_owner ? <SecurityIcon /> : <CloudUploadIcon />
+                    appUser.is_admin && appUser.id !== exhibitionMetadata.exhibition_owner ? <SecurityIcon /> : <CloudUploadIcon />
                 } color={
-                    appUser.is_admin && appUser.id != exhibitionMetadata.exhibition_owner ? "secondary" : "primary"
+                    appUser.is_admin && appUser.id !== exhibitionMetadata.exhibition_owner ? "secondary" : "primary"
                 } onClick={saveExhibition} >
                     <Typography variant="body1">Save</Typography>
                 </Button>
-                
+
             </Stack>
 
+            <ImageChooserDialog {...{
+                imageChooserIsOpen,
+                setImageChooserIsOpen,
+                setSelectedImageId,
+                exhibitionState,
+                exhibitionEditDispatch
+            }} />
 
-            <ImageChooserDialog {...{imageChooserIsOpen, setImageChooserIsOpen, setSelectedImageId,
-                exhibitionState, exhibitionEditDispatch}} />
+            <ImageRearrangeDialog {...{ imageRearrangerIsOpen, setImageRearrangerIsOpen, exhibitionState, exhibitionEditDispatch, globalImageCatalog }} />
 
-            <ImageRearrangeDialog {...{imageRearrangerIsOpen, setImageRearrangerIsOpen, exhibitionState, exhibitionEditDispatch, globalImageCatalog}} />
-
-            <Dialog component="form" open={deleteImageDialogIsOpen} 
-                sx={{zIndex: 10000}}onSubmit={(e) => {
+            <Dialog component="form" open={deleteImageDialogIsOpen}
+                sx={{ zIndex: 10000 }}onSubmit={(e) => {
                     e.preventDefault();
                     exhibitionEditDispatch({
                         scope: "exhibition",
@@ -917,11 +900,9 @@ export const ExhibitionEditPane = ({exhibitionMetadata, exhibitionState, exhibit
                 </DialogActions>
             </Dialog>
 
-
         </Box>
     );
 };
-
 
 ExhibitionEditPane.propTypes = {
     exhibitionMetadata: PropTypes.object.isRequired,

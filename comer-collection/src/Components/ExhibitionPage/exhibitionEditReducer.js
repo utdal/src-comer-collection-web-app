@@ -1,24 +1,24 @@
 export const blankExhibitionData = {
-    "appearance": {
-        "main_wall_color": "#ffffff",
-        "side_wall_color": "#ffffff",
-        "floor_color": "#ffffff",
-        "ceiling_color": "#ffffff",
-        "floor_texture": "parquet_wood.jpg",
-        "moodiness": "moody dark",
-        "ambient_light_color": "#ffffff"
+    appearance: {
+        main_wall_color: "#ffffff",
+        side_wall_color: "#ffffff",
+        floor_color: "#ffffff",
+        ceiling_color: "#ffffff",
+        floor_texture: "parquet_wood.jpg",
+        moodiness: "moody dark",
+        ambient_light_color: "#ffffff"
     },
-    "size": {
-        "length_ft": 25,
-        "width_ft": 25,
-        "height_ft": 10
+    size: {
+        length_ft: 25,
+        width_ft: 25,
+        height_ft: 10
     },
     images: []
 };
 
-export const getBlankExhibitionImageData = (image_id) => {
+export const getBlankExhibitionImageData = (imageId) => {
     return {
-        image_id,
+        image_id: imageId,
         position: {
             custom_position: false,
             custom_x: 0,
@@ -55,24 +55,21 @@ export const getBlankExhibitionImageData = (image_id) => {
     };
 };
 
-export const getImageStateById = (exhibitionData, image_id) => {
-    for(const i of (exhibitionData.images ?? [])) {
-        if(i.image_id == image_id)
-            return i;
+export const getImageStateById = (exhibitionData, imageId) => {
+    for (const i of (exhibitionData.images ?? [])) {
+        if (i.image_id === imageId) { return i; }
     }
     return null;
 };
 
-
-const width_ft_min = 10;
-const height_ft_min = 4;
-const length_ft_min = 10;
-
+const widthFtMin = 10;
+const heightFtMin = 4;
+const lengthFtMin = 10;
 
 export const exhibitionEditReducer = (exhibitionData, action) => {
     switch (action.scope) {
     case "exhibition":
-            
+
         switch (action.type) {
         case "set_everything":
             return {
@@ -139,7 +136,7 @@ export const exhibitionEditReducer = (exhibitionData, action) => {
                 ...exhibitionData,
                 size: {
                     ...exhibitionData.size,
-                    length_ft: action.newValue >= length_ft_min ? action.newValue : length_ft_min
+                    length_ft: action.newValue >= lengthFtMin ? action.newValue : lengthFtMin
                 }
             };
         case "set_width":
@@ -147,7 +144,7 @@ export const exhibitionEditReducer = (exhibitionData, action) => {
                 ...exhibitionData,
                 size: {
                     ...exhibitionData.size,
-                    width_ft: action.newValue >= width_ft_min ? action.newValue : width_ft_min
+                    width_ft: action.newValue >= widthFtMin ? action.newValue : widthFtMin
                 }
             };
         case "set_height":
@@ -155,7 +152,7 @@ export const exhibitionEditReducer = (exhibitionData, action) => {
                 ...exhibitionData,
                 size: {
                     ...exhibitionData.size,
-                    height_ft: action.newValue >= height_ft_min ? action.newValue : height_ft_min
+                    height_ft: action.newValue >= heightFtMin ? action.newValue : heightFtMin
                 }
             };
         case "add_image":
@@ -170,7 +167,7 @@ export const exhibitionEditReducer = (exhibitionData, action) => {
             return {
                 ...exhibitionData,
                 images: exhibitionData.images.filter((image) => {
-                    return image.image_id != action.image_id;
+                    return image.image_id !== action.image_id;
                 })
             };
         case "set_images":
@@ -182,17 +179,16 @@ export const exhibitionEditReducer = (exhibitionData, action) => {
             console.log("Unrecognized exhibition edit action: ", action.type, action);
             return exhibitionData;
         }
-        
+
     case "image":
-        if(!action.image_id) {
+        if (!action.image_id) {
             console.log(`image ID ${action.image_id} is not valid`);
             return exhibitionData;
         }
         return {
             ...exhibitionData,
             images: exhibitionData.images.map((image) => {
-                if(image.image_id != action.image_id)
-                    return image;
+                if (image.image_id !== action.image_id) { return image; }
 
                 switch (action.type) {
                 case "set_position_custom_x":
@@ -203,7 +199,7 @@ export const exhibitionEditReducer = (exhibitionData, action) => {
                             custom_x: action.newValue
                         }
                     };
-                    
+
                 case "set_position_custom_y":
                     return {
                         ...image,
@@ -212,7 +208,7 @@ export const exhibitionEditReducer = (exhibitionData, action) => {
                             custom_y: action.newValue
                         }
                     };
-                    
+
                 case "set_position_custom_enabled":
                     return {
                         ...image,
@@ -221,7 +217,7 @@ export const exhibitionEditReducer = (exhibitionData, action) => {
                             custom_position: action.isEnabled
                         }
                     };
-                    
+
                 case "set_matte_color":
                     return {
                         ...image,
@@ -230,7 +226,7 @@ export const exhibitionEditReducer = (exhibitionData, action) => {
                             color: action.newColor
                         }
                     };
-                    
+
                 case "set_matte_weight_enabled":
                     return {
                         ...image,
@@ -239,7 +235,7 @@ export const exhibitionEditReducer = (exhibitionData, action) => {
                             weighted: action.isEnabled
                         }
                     };
-                    
+
                 case "set_matte_weight_value":
                     return {
                         ...image,
@@ -248,7 +244,7 @@ export const exhibitionEditReducer = (exhibitionData, action) => {
                             weighted_value: action.newValue
                         }
                     };
-                    
+
                 case "set_frame_custom_enabled":
                     return {
                         ...image,
@@ -257,7 +253,7 @@ export const exhibitionEditReducer = (exhibitionData, action) => {
                             custom: action.isEnabled
                         }
                     };
-                    
+
                 case "set_frame_width":
                     return {
                         ...image,
@@ -266,7 +262,7 @@ export const exhibitionEditReducer = (exhibitionData, action) => {
                             width: action.newValue
                         }
                     };
-                    
+
                 case "set_frame_height":
                     return {
                         ...image,
@@ -275,7 +271,7 @@ export const exhibitionEditReducer = (exhibitionData, action) => {
                             height: action.newValue
                         }
                     };
-                    
+
                 case "set_frame_color":
                     return {
                         ...image,
@@ -284,7 +280,7 @@ export const exhibitionEditReducer = (exhibitionData, action) => {
                             color: action.newColor
                         }
                     };
-                    
+
                 case "set_light_intensity":
                     return {
                         ...image,
@@ -293,7 +289,7 @@ export const exhibitionEditReducer = (exhibitionData, action) => {
                             intensity: action.newValue
                         }
                     };
-                    
+
                 case "set_light_color":
                     return {
                         ...image,
@@ -302,7 +298,7 @@ export const exhibitionEditReducer = (exhibitionData, action) => {
                             color: action.newColor
                         }
                     };
-                    
+
                 case "set_description":
                     return {
                         ...image,
@@ -311,7 +307,7 @@ export const exhibitionEditReducer = (exhibitionData, action) => {
                             description: action.newValue
                         }
                     };
-                    
+
                 case "set_additional_information":
                     return {
                         ...image,
@@ -320,7 +316,7 @@ export const exhibitionEditReducer = (exhibitionData, action) => {
                             additional_information: action.newValue
                         }
                     };
-                    
+
                 case "set_direction":
                     return {
                         ...image,
@@ -329,16 +325,14 @@ export const exhibitionEditReducer = (exhibitionData, action) => {
                             direction: action.newValue
                         }
                     };
-                    
+
                 default:
                     console.log("Unrecognized image edit action: ", action.type, action);
                     return exhibitionData;
-
                 }
-                    
             })
         };
-    
+
     default:
         console.log("Unrecognized exhibition edit scope: ", action.scope, action);
         return exhibitionData;
