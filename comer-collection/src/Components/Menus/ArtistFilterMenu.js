@@ -18,17 +18,16 @@ const artistDisplayFunction = (artist) => {
 
 export const ArtistFilterMenu = ({ filterValue, setFilterValue, artists }) => {
     return (
-        <SecondaryFilterMenu SecondaryIcon={BrushIcon} displayFunction={artistDisplayFunction} 
-            helpMessage="Filter images by artist" 
-            emptyMessage="No artist filters available" 
+        <SecondaryFilterMenu SecondaryIcon={BrushIcon} displayFunction={artistDisplayFunction}
+            helpMessage="Filter images by artist"
+            emptyMessage="No artist filters available"
             nullMessage="Do not filter by artist"
             sortFunction={artistSortFunction}
             secondaries={artists}
-            {...{filterValue, setFilterValue}}
+            {...{ filterValue, setFilterValue }}
         />
     );
 };
-
 
 ArtistFilterMenu.propTypes = {
     filterValue: PropTypes.object,

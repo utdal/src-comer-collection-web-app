@@ -8,35 +8,34 @@ export const SecondaryFilterMenu = ({ filterValue, setFilterValue, secondaries, 
         <Select displayEmpty value={filterValue?.id ?? ""}
             variant="outlined"
             sx={{
-                wordWrap: "break-word", 
+                wordWrap: "break-word",
                 width: "300px"
             }}
             renderValue={(selected) => {
                 return (
                     <Stack direction="row" alignItems="center" spacing={2}>
                         <SecondaryIcon />
-                        {secondaries.find((i) => i.id == selected) && (
+                        {(secondaries.find((i) => i.id === selected) &&
                             <Typography variant="body1" sx={{ minWidth: "120px" }}>
-                                {secondaries.find((c) => c.id == selected)?.safe_display_name}
+                                {secondaries.find((c) => c.id === selected)?.safe_display_name}
                             </Typography>
                         ) || (
                             <Typography variant="body1" sx={{ minWidth: "120px", opacity: 0.5 }}>{helpMessage}</Typography>
                         )}
                     </Stack>
                 );
-
             }}
             placeholder="All secondaries"
         >
-            
-            {!secondaries.length && (
+
+            {(!secondaries.length &&
                 <ListItemButton key={""} value={""} disabled={true} >
                     <Stack direction="row" alignItems="center" spacing={2}>
                         <RemoveCircleOutlineIcon />
                         <Typography variant="body1" sx={{ minWidth: "120px" }}>{emptyMessage}</Typography>
                     </Stack>
                 </ListItemButton>
-            ) || secondaries.length && (
+            ) || (secondaries.length &&
                 <div>
                     <ListItemButton key={""} value={""}
                         onClick={() => {
@@ -47,14 +46,14 @@ export const SecondaryFilterMenu = ({ filterValue, setFilterValue, secondaries, 
                             <Typography variant="body1" sx={{ minWidth: "120px" }}>{nullMessage}</Typography>
                         </Stack>
                     </ListItemButton>
-                    <Divider sx={{padding: "4px"}} />
+                    <Divider sx={{ padding: "4px" }} />
                     {secondaries.sort(sortFunction).map((secondary) => (
                         <ListItemButton key={secondary.id} value={secondary.id}
                             onClick={() => {
                                 setFilterValue(secondary);
                             }}>
                             <Stack direction="row" alignItems="center" spacing={2}>
-                                <CheckIcon sx={{ visibility: filterValue?.id == secondary.id ? "" : "hidden" }} />
+                                <CheckIcon sx={{ visibility: filterValue?.id === secondary.id ? "" : "hidden" }} />
                                 <Stack direction="column" alignItems="left" spacing={0} sx={{}}>
                                     {displayFunction(secondary)}
                                 </Stack>
@@ -66,7 +65,6 @@ export const SecondaryFilterMenu = ({ filterValue, setFilterValue, secondaries, 
         </Select>
     );
 };
-
 
 SecondaryFilterMenu.propTypes = {
     filterValue: PropTypes.object,
