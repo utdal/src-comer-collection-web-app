@@ -19,7 +19,6 @@ class Tag extends Entity {
             multiline: true
         }
     ];
-    
 }
 
 export { Tag };

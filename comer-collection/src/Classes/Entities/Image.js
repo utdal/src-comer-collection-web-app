@@ -111,7 +111,7 @@ class Image extends Entity {
     ];
 
     static TableCells = {
-        ImageExhibitionCountButton({ image, onClick }) {
+        ImageExhibitionCountButton ({ image, onClick }) {
             const [appUser] = useAppUser();
             return (
                 <Stack direction="row" spacing={1}>
@@ -119,15 +119,14 @@ class Image extends Entity {
                         color="primary"
                         startIcon={<PhotoCameraBackIcon />}
                         disabled={!appUser.is_admin}
-                        {...{onClick}}
+                        {...{ onClick }}
                     >
                         <Typography variant="body1">{image.Exhibitions.length}</Typography>
                     </Button>
                 </Stack>
             );
         }
-    };    
-    
+    };
 }
 
 export { Image };

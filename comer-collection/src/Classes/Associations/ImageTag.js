@@ -14,7 +14,6 @@ class ImageTag extends Association {
     static assignPast = "tagged";
     static unassignPresent = "untag";
     static unassignPast = "untagged";
-
 }
 
 export { ImageTag };

@@ -9,12 +9,10 @@ export const capitalized = (string) => {
 };
 
 class Entity {
-
     static baseUrl = null;
 
     static singular = "item";
     static plural = "items";
-
 
     static fieldDefinitions = [
         {
@@ -22,7 +20,6 @@ class Entity {
             displayName: "ID"
         }
     ];
-
 
     static formatDate = (date) => {
         return new Date(date).toLocaleDateString([], {
@@ -42,24 +39,23 @@ class Entity {
     };
 
     static TableCells = {
-        EditButton({ onClick, disabled }) {
+        EditButton ({ onClick, disabled }) {
             return (
-                <IconButton {...{onClick, disabled}}>
+                <IconButton {...{ onClick, disabled }}>
                     <EditIcon />
                 </IconButton>
             );
         },
-        DeleteButton({ onClick, disabled }) {
+        DeleteButton ({ onClick, disabled }) {
             return (
-                <IconButton {...{onClick, disabled}}>
+                <IconButton {...{ onClick, disabled }}>
                     <DeleteIcon />
                 </IconButton>
             );
         }
     };
 
-
-    static handleMultiCreate([...newItems]) {
+    static handleMultiCreate ([...newItems]) {
         return Promise.allSettled(newItems.map((newItem) => {
             return new Promise((resolve, reject) => {
                 sendAuthenticatedRequest("POST", `${this.baseUrl}`, newItem).then(() => {
@@ -71,28 +67,25 @@ class Entity {
         }));
     }
 
-
-    static handleDelete(itemId) {
+    static handleDelete (itemId) {
         return new Promise((resolve, reject) => {
             sendAuthenticatedRequest("DELETE", `${this.baseUrl}/${itemId}`).then(() => {
                 resolve(`${capitalized(this.singular)} deleted`);
             }).catch(() => {
-                reject(`Failed to delete ${this.singular.toLowerCase()}`);
+                reject(new Error(`Failed to delete ${this.singular.toLowerCase()}`));
             });
         });
     }
 
-
-    static handleEdit(itemId, updateFields) {
+    static handleEdit (itemId, updateFields) {
         return new Promise((resolve, reject) => {
             sendAuthenticatedRequest("PUT", `${this.baseUrl}/${itemId}`, updateFields).then(() => {
                 resolve(`${capitalized(this.singular)} updated`);
             }).catch(() => {
-                reject(`Failed to update ${this.singular.toLowerCase()}`);
+                reject(new Error(`Failed to update ${this.singular.toLowerCase()}`));
             });
         });
     }
-    
 }
 
 export { Entity };

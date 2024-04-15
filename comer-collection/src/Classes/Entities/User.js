@@ -37,49 +37,51 @@ class User extends Entity {
     ];
 
     static TableCells = {
-        ID({ user }) {
+        ID ({ user }) {
             const [appUser] = useAppUser();
             return (
                 <Stack direction="row" alignItems="center" spacing={1}>
                     <Typography variant="body1">{user.id}</Typography>
-                    {user.id == appUser.id && (
+                    {user.id === appUser.id && (
                         <PersonIcon color="secondary" />
                     )}
                 </Stack>
             );
         },
-        IDWithAccessIcon({ user }) {
+        IDWithAccessIcon ({ user }) {
             return (
                 <Stack direction="row" spacing={1} alignItems="center">
                     <Typography variant="body1">{user.id} </Typography>
                     {
-                        user.is_admin && (<SecurityIcon color="secondary" />) ||
-                        user.is_collection_manager && (<CollectionManagerIcon color="secondary" />)
+                        (user.is_admin && <SecurityIcon color="secondary" />) ||
+                        (user.is_collection_manager && <CollectionManagerIcon color="secondary" />)
                     }
                 </Stack>
             );
         },
-        Name({ user }) {
+        Name ({ user }) {
             return (
-                user.has_name ? (
-                    <Typography variant="body1">{user.full_name_reverse}</Typography>
-                ) : (
-                    <Typography variant="body1" sx={{ opacity: 0.5 }}>Not set</Typography>
-                )
+                user.has_name
+                    ? (
+                        <Typography variant="body1">{user.full_name_reverse}</Typography>
+                    )
+                    : (
+                        <Typography variant="body1" sx={{ opacity: 0.5 }}>Not set</Typography>
+                    )
             );
         },
-        Email({ user, onClick }) {
-            return onClick && (
+        Email ({ user, onClick }) {
+            return (onClick &&
                 <Button color="grey"
                     variant="text" sx={{ textTransform: "unset" }}
                     onClick={onClick}>
                     <Typography variant="body1">{user.email}</Typography>
                 </Button>
-            ) || !onClick && (
+            ) || (!onClick &&
                 <Typography variant="body1" color="grey">{user.email}</Typography>
             );
         },
-        StackedNameEmail({ user }) {
+        StackedNameEmail ({ user }) {
             return (
                 <Stack direction="column" paddingTop={1} paddingBottom={1}>
                     <Typography variant="body1">{user.full_name_reverse}</Typography>
@@ -87,7 +89,7 @@ class User extends Entity {
                 </Stack>
             );
         },
-        PasswordChangeCurrentAdmin({ user, onClick }) {
+        PasswordChangeCurrentAdmin ({ user, onClick }) {
             return (
                 <Button startIcon={<OpenInNewIcon />} color={user.is_admin_or_collection_manager ? "secondary" : "primary"}
                     variant="outlined"
@@ -96,7 +98,7 @@ class User extends Entity {
                 </Button>
             );
         },
-        PasswordSetOrReset({ user, onClick }) {
+        PasswordSetOrReset ({ user, onClick }) {
             return (
                 <Button
                     startIcon={user.has_password ? <LockResetIcon /> : <LockIcon />}
@@ -110,7 +112,7 @@ class User extends Entity {
                 </Button>
             );
         },
-        CourseAssignmentButton({ user, onClick }) {
+        CourseAssignmentButton ({ user, onClick }) {
             return (
                 <Stack direction="row" spacing={1} alignItems="center">
                     <Button variant="text"
@@ -123,28 +125,28 @@ class User extends Entity {
                 </Stack>
             );
         },
-        UserExhibitionCountButton({ user, onClick }) {
+        UserExhibitionCountButton ({ user, onClick }) {
             return (
                 <Stack direction="row" spacing={1}>
                     <Button variant="text" sx={{ textTransform: "unset" }}
                         color="lightgrey"
                         startIcon={<PhotoCameraBackIcon />}
-                        {...{onClick}}
+                        {...{ onClick }}
                     >
                         <Typography variant="body1">{user.Exhibitions.length} of {user.exhibition_quota}</Typography>
                     </Button>
                 </Stack>
             );
         },
-        UserTypeButton({ user, onClick }) {
+        UserTypeButton ({ user, onClick }) {
             const [appUser] = useAppUser();
             return (
                 <Button color="lightgrey" sx={{ textTransform: "unset" }}
-                    disabled={user.id == appUser.id}
-                    {...{onClick}}
+                    disabled={user.id === appUser.id}
+                    {...{ onClick }}
                     startIcon={
-                        user.is_admin && (<SecurityIcon color="secondary" />) || 
-                        user.is_collection_manager && (<CollectionManagerIcon color="secondary" />) || 
+                        (user.is_admin && <SecurityIcon color="secondary" />) ||
+                        (user.is_collection_manager && <CollectionManagerIcon color="secondary" />) ||
                         (<PersonIcon color="primary" />)
                     }
                 >
@@ -152,53 +154,53 @@ class User extends Entity {
                 </Button>
             );
         },
-        UserActivationSwitch({ user, onClick }) {
+        UserActivationSwitch ({ user, onClick }) {
             const [appUser] = useAppUser();
             return (
                 <Switch
                     itemID={user.id}
                     checked={user.is_active && user.has_password}
-                    disabled={user.id == appUser.id || !user.has_password}
+                    disabled={user.id === appUser.id || !user.has_password}
                     color={user.is_admin_or_collection_manager ? "secondary" : "primary"}
-                    {...{onClick}}
+                    {...{ onClick }}
                 />
             );
         },
-        DeleteButton({ user, onClick }) {
+        DeleteButton ({ user, onClick }) {
             const appUser = useAppUser();
-            const disabled = Boolean(user.Courses.length || user.Exhibitions.length || user.id == appUser.id);
+            const disabled = Boolean(user.Courses.length || user.Exhibitions.length || user.id === appUser.id);
             return (
-                <Entity.TableCells.DeleteButton {...{onClick, disabled}} />
+                <Entity.TableCells.DeleteButton {...{ onClick, disabled }} />
             );
         }
     };
 
-    static handleChangeUserAccess(userId, newAccess) {
+    static handleChangeUserAccess (userId, newAccess) {
         return new Promise((resolve, reject) => {
             sendAuthenticatedRequest("PUT", `${this.baseUrl}/${userId}/access`, { access_level: newAccess }).then(() => {
                 resolve("User access updated");
             }).catch(() => {
-                reject("Failed to update user access");
+                reject(new Error("Failed to update user access"));
             });
         });
     }
 
-    static handleChangeUserActivationStatus(userId, newActivationStatus) {
+    static handleChangeUserActivationStatus (userId, newActivationStatus) {
         return new Promise((resolve, reject) => {
             sendAuthenticatedRequest("PUT", `${this.baseUrl}/${userId}/${newActivationStatus ? "activate" : "deactivate"}`).then(() => {
                 resolve(newActivationStatus ? "User activated" : "User deactivated");
             }).catch(() => {
-                reject(newActivationStatus ? "Failed to activate user" : "Failed to deactivate user");
+                reject(new Error(newActivationStatus ? "Failed to activate user" : "Failed to deactivate user"));
             });
         });
     }
 
-    static handleResetPassword(userId, newPassword) {
+    static handleResetPassword (userId, newPassword) {
         return new Promise((resolve, reject) => {
             sendAuthenticatedRequest("PUT", `${this.baseUrl}/${userId}/password`, { newPassword }).then(() => {
                 resolve("Password reset");
             }).catch(() => {
-                reject("Failed to reset password");
+                reject(new Error("Failed to reset password"));
             });
         });
     }

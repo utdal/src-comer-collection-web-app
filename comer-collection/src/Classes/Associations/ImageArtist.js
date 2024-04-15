@@ -14,7 +14,6 @@ class ImageArtist extends Association {
     static assignPast = "added to";
     static unassignPresent = "remove from";
     static unassignPast = "removed from";
-
 }
 
 export { ImageArtist };

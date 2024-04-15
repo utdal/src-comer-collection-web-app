@@ -37,36 +37,36 @@ class Course extends Entity {
     ];
 
     static TableCells = {
-        ID({ course }) {
+        ID ({ course }) {
             return (
                 <Typography variant="body1">{course.id}</Typography>
             );
         },
-        Name({ course }) {
+        Name ({ course }) {
             return (
                 <Typography variant="body1">{course.name}</Typography>
             );
         },
-        Status({ course }) {
+        Status ({ course }) {
             return (
                 <Stack direction="row" spacing={1}>
                     {
-                        course.status == "Active" && <CheckIcon color="grey"/> ||
-                        course.status == "Upcoming" && <AccessTimeIcon color="grey"/> ||
-                        course.status == "Expired" && <ExpiredIcon color="grey"/>
+                        (course.status === "Active" && <CheckIcon color="grey"/>) ||
+                        (course.status === "Upcoming" && <AccessTimeIcon color="grey"/>) ||
+                        (course.status === "Expired" && <ExpiredIcon color="grey"/>)
                     }
                     <Typography variant="body1">{course.status}</Typography>
                 </Stack>
             );
         },
-        StartDateTime({ course }) {
+        StartDateTime ({ course }) {
             return (
                 <Typography variant="body1">
                     {Course.formatDate(course.date_start)}, {Course.formatTime(course.date_start)}
                 </Typography>
             );
         },
-        StartDateTimeStacked({ course }) {
+        StartDateTimeStacked ({ course }) {
             return (
                 <Stack direction="column" padding={0}>
                     <Typography variant="body1">
@@ -78,14 +78,14 @@ class Course extends Entity {
                 </Stack>
             );
         },
-        EndDateTime({ course }) {
+        EndDateTime ({ course }) {
             return (
                 <Typography variant="body1">
                     {Course.formatDate(course.date_end)}, {Course.formatTime(course.date_end)}
                 </Typography>
             );
         },
-        EndDateTimeStacked({ course }) {
+        EndDateTimeStacked ({ course }) {
             return (
                 <Stack direction="column" padding={0}>
                     <Typography variant="body1">
@@ -97,36 +97,35 @@ class Course extends Entity {
                 </Stack>
             );
         },
-        UserAssignmentButton({ course, onClick }) {
+        UserAssignmentButton ({ course, onClick }) {
             return (
                 <Stack direction="row" spacing={1} alignItems="center">
                     <Button variant="outlined" color="primary" startIcon={<PersonIcon />}
-                        {...{onClick}}
+                        {...{ onClick }}
                     >
                         <Typography variant="body1">{course.Users.length}</Typography>
                     </Button>
                 </Stack>
             );
         },
-        Notes({ course }) {
+        Notes ({ course }) {
             return (
                 <Typography variant="body1">{course.notes}</Typography>
             );
         },
-        EditButton({ onClick }) {
+        EditButton ({ onClick }) {
             return (
-                <Entity.TableCells.EditButton {...{onClick}} />
+                <Entity.TableCells.EditButton {...{ onClick }} />
             );
         },
-        DeleteButton({ course, onClick }) {
+        DeleteButton ({ course, onClick }) {
             return (
-                <Entity.TableCells.DeleteButton 
+                <Entity.TableCells.DeleteButton
                     disabled={course.Users.length > 0}
-                    {...{onClick}} />
+                    {...{ onClick }} />
             );
         }
     };
-    
 }
 
 export { Course };

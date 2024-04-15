@@ -9,7 +9,6 @@ class UserExhibition extends Association {
 
     static singular = "exhibition";
     static plural = "exhibitions";
-
 }
 
 export { UserExhibition };

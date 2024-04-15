@@ -9,39 +9,39 @@ class Exhibition extends Entity {
     static singular = "exhibition";
     static plural = "exhibitions";
 
-    static handleMultiCreate() {
-        return Promise.reject("MultiCreate is not allowed for exhibitions");
+    static handleMultiCreate () {
+        return Promise.reject(new Error("MultiCreate is not allowed for exhibitions"));
     }
 
     static TableCells = {
-        ID({ exhibition }) {
+        ID ({ exhibition }) {
             return (
                 <Typography variant="body1">{exhibition.id}</Typography>
             );
         },
-        Title({ exhibition }) {
+        Title ({ exhibition }) {
             return (
                 <Typography variant="body1">{exhibition.title}</Typography>
             );
         },
-        OpenInNewTab({ exhibition }) {
+        OpenInNewTab ({ exhibition }) {
             return (
                 <Button variant="outlined" endIcon={<OpenInNewIcon />} href={`/Exhibitions/${exhibition.id}`} target="_blank">
                     <Typography variant="body1">Open</Typography>
                 </Button>
             );
         },
-        DateCreated({ exhibition }) {
+        DateCreated ({ exhibition }) {
             return (
                 <Typography variant="body1">{Entity.formatDate(exhibition.date_created)}, {Entity.formatTime(exhibition.date_created)}</Typography>
             );
         },
-        DateModified({ exhibition }) {
+        DateModified ({ exhibition }) {
             return (
                 <Typography variant="body1">{Entity.formatDate(exhibition.date_modified)}, {Entity.formatTime(exhibition.date_modified)}</Typography>
             );
         },
-        DateCreatedStacked({ exhibition }) {
+        DateCreatedStacked ({ exhibition }) {
             return (
                 <Stack direction="column" padding={0}>
                     <Typography variant="body1">
@@ -53,7 +53,7 @@ class Exhibition extends Entity {
                 </Stack>
             );
         },
-        DateModifiedStacked({ exhibition }) {
+        DateModifiedStacked ({ exhibition }) {
             return (
                 <Stack direction="column" padding={0}>
                     <Typography variant="body1">
@@ -65,21 +65,21 @@ class Exhibition extends Entity {
                 </Stack>
             );
         },
-        Access({ exhibition }) {
+        Access ({ exhibition }) {
             return (
                 <Stack direction="row" spacing={1} alignItems="center">
-                    {exhibition.privacy == "PRIVATE" && (
+                    {(exhibition.privacy === "PRIVATE" &&
                         <LockIcon color="grey" />
-                    ) || exhibition.privacy == "PUBLIC_ANONYMOUS" && (
+                    ) || (exhibition.privacy === "PUBLIC_ANONYMOUS" &&
                         <VpnLockIcon color="grey" />
-                    ) || exhibition.privacy == "PUBLIC" && (
+                    ) || (exhibition.privacy === "PUBLIC" &&
                         <PublicIcon color="grey" />
                     )}
-                    <Typography variant="body1">{exhibition.privacy == "PRIVATE" && (
+                    <Typography variant="body1">{(exhibition.privacy === "PRIVATE" &&
                         "Private"
-                    ) || exhibition.privacy == "PUBLIC_ANONYMOUS" && (
+                    ) || (exhibition.privacy === "PUBLIC_ANONYMOUS" &&
                         "Public Anonymous"
-                    ) || exhibition.privacy == "PUBLIC" && (
+                    ) || (exhibition.privacy === "PUBLIC" &&
                         "Public"
                     )}</Typography>
                 </Stack>

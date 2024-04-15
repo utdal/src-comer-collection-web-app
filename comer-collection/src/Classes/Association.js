@@ -5,7 +5,6 @@ import { capitalized } from "./Entity.js";
 import { sendAuthenticatedRequest } from "../Helpers/APICalls.js";
 
 class Association {
-
     static url = null;
     static primary = null;
     static secondary = null;
@@ -18,12 +17,10 @@ class Association {
     static unassignPresent = "unassign";
     static unassignPast = "unassigned";
 
-
     static AssignIcon = AddIcon;
     static UnassignIcon = RemoveIcon;
 
-
-    static handleAssign([...primaries], [...secondaries]) {
+    static handleAssign ([...primaries], [...secondaries]) {
         return new Promise((resolve, reject) => {
             sendAuthenticatedRequest("PUT", `${this.url}`, {
                 action: "assign",
@@ -32,13 +29,12 @@ class Association {
             }).then(() => {
                 resolve(`${capitalized(primaries.length > 1 || secondaries.length > 1 ? this.plural : this.singular)} updated`);
             }).catch(() => {
-                reject(`Failed to update ${this.plural.toLowerCase()}`);
+                reject(new Error(`Failed to update ${this.plural.toLowerCase()}`));
             });
         });
     }
 
-
-    static handleUnassign([...primaries], [...secondaries]) {
+    static handleUnassign ([...primaries], [...secondaries]) {
         return new Promise((resolve, reject) => {
             sendAuthenticatedRequest("PUT", `${this.url}`, {
                 action: "unassign",
@@ -47,12 +43,10 @@ class Association {
             }).then(() => {
                 resolve(`${capitalized(primaries.length > 1 || secondaries.length > 1 ? this.plural : this.singular)} updated`);
             }).catch(() => {
-                reject(`Failed to update ${this.plural.toLowerCase()}`);
+                reject(new Error(`Failed to update ${this.plural.toLowerCase()}`));
             });
         });
     }
-    
-
 }
 
 export { Association };

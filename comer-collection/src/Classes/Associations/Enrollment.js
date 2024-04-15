@@ -16,7 +16,6 @@ class Enrollment extends Association {
 
     static AssignIcon = PersonAddIcon;
     static UnassignIcon = PersonRemoveIcon;
-
 }
 
 class EnrollmentUserPrimary extends Enrollment {
