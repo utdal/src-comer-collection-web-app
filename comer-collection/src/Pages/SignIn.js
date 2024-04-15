@@ -5,9 +5,7 @@ import { sendAuthenticatedRequest } from "../Helpers/APICalls.js";
 import { useAppUser } from "../ContextProviders/AppUser.js";
 import { useTitle } from "../ContextProviders/AppFeatures.js";
 
-
 const SignIn = () => {
-  
     const [appUser, setAppUser] = useAppUser();
 
     const [email, setEmail] = useState("");
@@ -26,37 +24,34 @@ const SignIn = () => {
             const response = await sendAuthenticatedRequest("PUT", "/api/public/signin", {
                 email, password
             });
-  
-            if(response.token) {
+
+            if (response.token) {
                 localStorage.setItem("token", response.token);
                 const profileResponse = await sendAuthenticatedRequest("GET", "/api/user/profile");
                 setAppUser(profileResponse.data);
                 navigate("/Account");
             }
-        }
-        catch(e) {
+        } catch (e) {
             setAppUser(null);
             localStorage.removeItem("token");
             setPassword("");
             setFormEnabled(true);
             setError(true);
         }
-
-    
     };
 
     useEffect(() => {
         setTitleText("Sign In");
     });
 
-    return appUser && 
-        <Navigate to="/Account" replace />
-    || !appUser && (
-        <Box component={Paper} square sx={{height: "100%"}}>
-            <Box component="form" sx={{height: "100%"}} onSubmit={handleSignIn}>
-                <Stack direction="column" spacing={2} alignItems="center" justifyContent="center" 
-                    sx={{width: "100%", height: "100%"}}>
-                    <TextField sx={{minWidth: "400px"}} autoFocus
+    return (appUser &&
+        <Navigate to="/Account" replace />) ||
+    (!appUser &&
+        <Box component={Paper} square sx={{ height: "100%" }}>
+            <Box component="form" sx={{ height: "100%" }} onSubmit={handleSignIn}>
+                <Stack direction="column" spacing={2} alignItems="center" justifyContent="center"
+                    sx={{ width: "100%", height: "100%" }}>
+                    <TextField sx={{ minWidth: "400px" }} autoFocus
                         error={Boolean(error)}
                         disabled={!formEnabled}
                         label="Email"
@@ -69,7 +64,7 @@ const SignIn = () => {
                         }}
                         required
                     />
-                    <TextField sx={{minWidth: "400px"}}
+                    <TextField sx={{ minWidth: "400px" }}
                         error={Boolean(error)}
                         disabled={!formEnabled}
                         label="Password"
@@ -83,9 +78,9 @@ const SignIn = () => {
                         required
                     />
                     <Divider />
-                    <Button type="submit" 
-                        variant="contained" 
-                        sx={{minWidth: "400px"}} 
+                    <Button type="submit"
+                        variant="contained"
+                        sx={{ minWidth: "400px" }}
                         disabled={!(email && password && formEnabled)}
                     >
                         <Typography variant="body1">Sign In</Typography>
