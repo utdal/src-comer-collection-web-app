@@ -3,8 +3,7 @@ import { DataTypes } from "sequelize";
 export default (db) => {
     const { sequelize, Sequelize } = db;
 
-
-    const public_curator_subquery = [
+    const publicCuratorSubquery = [
         sequelize.literal(`(
             SELECT if(exhibition.exhibition_privacy = 'PUBLIC',
                 concat(user_given_name, ' ', user_family_name), ''
@@ -14,7 +13,6 @@ export default (db) => {
                 user.user_id = exhibition.exhibition_owner
         )`), "curator"
     ];
-
 
     const Exhibition = sequelize.define("Exhibition", {
         id: {
@@ -33,7 +31,7 @@ export default (db) => {
             type: Sequelize.BLOB("medium"),
             field: "exhibition_data",
             allowNull: true,
-            get() {
+            get () {
                 return this.getDataValue("data")?.toString("utf-8");
             }
         },
@@ -58,14 +56,14 @@ export default (db) => {
         },
         safe_display_name: {
             type: DataTypes.VIRTUAL,
-            get() {
+            get () {
                 return this.title;
             }
         }
     }, {
         defaultScope: {
             attributes: {
-                exclude: ["data"],
+                exclude: ["data"]
             }
         },
         scopes: {
@@ -73,7 +71,7 @@ export default (db) => {
             },
             with_public_curators: {
                 attributes: {
-                    include: [public_curator_subquery]
+                    include: [publicCuratorSubquery]
                 }
             }
         },

@@ -18,7 +18,7 @@ export default (db) => {
         },
         email_without_domain: {
             type: DataTypes.VIRTUAL,
-            get() {
+            get () {
                 return `${this.email?.substr(0, this.email?.lastIndexOf("@"))}`;
             }
         },
@@ -32,25 +32,25 @@ export default (db) => {
         },
         full_name: {
             type: DataTypes.VIRTUAL,
-            get() {
+            get () {
                 return `${this.given_name} ${this.family_name}`;
             }
         },
         full_name_reverse: {
             type: DataTypes.VIRTUAL,
-            get() {
+            get () {
                 return `${this.family_name}, ${this.given_name}`;
             }
         },
         safe_display_name: {
             type: DataTypes.VIRTUAL,
-            get() {
+            get () {
                 return this.has_name ? `${this.full_name}` : `${this.email}`;
             }
         },
         has_name: {
             type: DataTypes.VIRTUAL,
-            get() {
+            get () {
                 return Boolean(this.family_name || this.given_name);
             }
         },
@@ -79,7 +79,7 @@ export default (db) => {
         },
         has_password: {
             type: DataTypes.VIRTUAL,
-            get() {
+            get () {
                 return Boolean(this.pw_updated);
             }
         },
@@ -102,19 +102,19 @@ export default (db) => {
         },
         is_admin: {
             type: DataTypes.VIRTUAL,
-            get() {
-                return Boolean(this.access_level == "ADMINISTRATOR");
+            get () {
+                return Boolean(this.access_level === "ADMINISTRATOR");
             }
         },
         is_collection_manager: {
             type: DataTypes.VIRTUAL,
-            get() {
-                return Boolean(this.access_level == "COLLECTION_MANAGER");
+            get () {
+                return Boolean(this.access_level === "COLLECTION_MANAGER");
             }
         },
         is_admin_or_collection_manager: {
             type: DataTypes.VIRTUAL,
-            get() {
+            get () {
                 return Boolean(this.is_admin || this.is_collection_manager);
             }
         }

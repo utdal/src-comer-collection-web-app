@@ -22,33 +22,33 @@ export default (db) => {
         },
         fullName: {
             type: DataTypes.VIRTUAL,
-            get() {
+            get () {
                 return `${this.givenName} ${this.familyName}`;
             }
         },
         fullNameReverse: {
             type: DataTypes.VIRTUAL,
-            get() {
+            get () {
                 return `${this.familyName}, ${this.givenName}`;
             }
         },
         website: {
             type: Sequelize.TEXT("tiny"),
             field: "artist_website",
-            set(value) {
-                this.setDataValue("website", value ? value : null);
+            set (value) {
+                this.setDataValue("website", value || null);
             }
         },
         notes: {
             type: Sequelize.TEXT("tiny"),
             field: "artist_notes",
-            set(value) {
-                this.setDataValue("notes", value ? value : null);
+            set (value) {
+                this.setDataValue("notes", value || null);
             }
         },
         safe_display_name: {
             type: DataTypes.VIRTUAL,
-            get() {
+            get () {
                 return (this.familyName || this.givenName) ? `${this.fullName}` : `Artist ${this.id}`;
             }
         }

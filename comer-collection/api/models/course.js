@@ -27,36 +27,30 @@ export default (db) => {
         },
         status: {
             type: DataTypes.VIRTUAL,
-            get() {
+            get () {
                 const now = Date.now();
-                if (this.date_end < now)
-                    return "Expired";
-                else if (this.date_start > now)
-                    return "Upcoming";
-                else if (this.date_start <= now && this.date_end >= now)
-                    return "Active";
+                if (this.date_end < now) { return "Expired"; } else if (this.date_start > now) { return "Upcoming"; } else if (this.date_start <= now && this.date_end >= now) { return "Active"; }
                 return "Invalid status";
             }
         },
         notes: {
             type: Sequelize.TEXT("tiny"),
             field: "course_notes",
-            set(value) {
-                this.setDataValue("course_notes", value ? value : null);
+            set (value) {
+                this.setDataValue("course_notes", value || null);
             }
         },
         safe_display_name: {
             type: DataTypes.VIRTUAL,
-            get() {
+            get () {
                 return this.name ? this.name : `Course ${this.id}`;
             }
         }
     }, {
         tableName: "comer_courses",
         validate: {
-            dateRange() {
-                if (this.date_start > this.date_end)
-                    throw new Error("Course end time must be after course start time");
+            dateRange () {
+                if (this.date_start > this.date_end) { throw new Error("Course end time must be after course start time"); }
             }
         }
     });

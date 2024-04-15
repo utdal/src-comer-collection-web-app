@@ -21,8 +21,8 @@ export default (db) => {
         },
         safe_display_name: {
             type: DataTypes.VIRTUAL,
-            get() {
-                return (this.data != "" ? this.data : `Tag ${this.id}`);
+            get () {
+                return (this.data !== "" ? this.data : `Tag ${this.id}`);
             }
         }
     }, {
