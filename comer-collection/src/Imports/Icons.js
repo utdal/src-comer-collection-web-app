@@ -1,5 +1,4 @@
-
-// This file imports all the necessary icons from @mui/icons-material 
+// This file imports all the necessary icons from @mui/icons-material
 // and makes them available to the other components without
 // having to specify a different package for each type of icon.
 
