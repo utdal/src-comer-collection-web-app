@@ -5,9 +5,8 @@ export const searchItems = (searchQuery, itemsToSearch, fieldsToSearch) => {
 };
 
 export const doesItemMatchSearchQuery = (searchQuery, item, fieldsToSearch) => {
-    if(fieldsToSearch?.length == 0)
-        return true;
-    for (let f of fieldsToSearch) {
+    if (fieldsToSearch?.length === 0) { return true; }
+    for (const f of fieldsToSearch) {
         if (item[f] && Boolean((item[f]).toLowerCase().includes(searchQuery.toLowerCase()))) {
             return true;
         }
