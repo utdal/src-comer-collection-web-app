@@ -15,14 +15,12 @@ import createCache from "@emotion/cache";
 import { FullPageMessage } from "./Components/FullPageMessage.js";
 import { AccessTimeIcon } from "./Imports/Icons.js";
 
-
 const ExhibitionPage = lazy(() => import("./Pages/ExhibitionPage.js"));
 const ExhibitionPageWrapper = () => (
     <Suspense fallback={<FullPageMessage message="Loading exhibition viewer..." Icon={AccessTimeIcon} />}>
         <ExhibitionPage />
     </Suspense>
 );
-
 
 const Account = lazy(() => import("./Pages/Account.js"));
 const AccountWrapper = () => (
@@ -31,9 +29,7 @@ const AccountWrapper = () => (
     </Suspense>
 );
 
-
 const App = () => {
-
     const cache = createCache({
         key: "comer-emotion-nonce-cache",
         nonce: Math.random().toString(36).slice(2)
@@ -43,7 +39,7 @@ const App = () => {
         <CacheProvider value={cache}>
             <HelmetProvider>
                 <Helmet>
-                    <meta httpEquiv='Content-Security-Policy' 
+                    <meta httpEquiv='Content-Security-Policy'
                         content={`default-src 'none'; script-src 'self'; style-src 'nonce-${cache.nonce}'; img-src 'self' ${process.env.REACT_APP_API_HOST}; connect-src 'self' ${process.env.REACT_APP_API_HOST}`} />
                 </Helmet>
             </HelmetProvider>
@@ -52,7 +48,7 @@ const App = () => {
                 <AppUserProvider>
                     <BrowserRouter>
                         <Box sx={{
-                            height: "100vh", 
+                            height: "100vh",
                             display: "grid",
                             gridTemplateColumns: "1fr",
                             gridTemplateRows: "64px calc(100vh - 64px)",
@@ -64,9 +60,9 @@ const App = () => {
                             <NavBar sx={{ gridArea: "header" }} />
                             <Box sx={{ gridArea: "body", position: "relative" }} >
                                 <Routes>
-          
+
                                     <Route index element={<Navigate to="/SignIn" />} />
-          
+
                                     <Route path="/BrowseCollection" element={<CollectionBrowser isDialogMode={false} />} />
                                     <Route path="/Exhibitions" element={<ExhibitionBrowser />} />
                                     <Route path="/Exhibitions/:exhibitionId" element={<ExhibitionPageWrapper />} />
@@ -75,12 +71,12 @@ const App = () => {
 
                                     <Route path="/SignIn" element={<SignIn />} />
                                     <Route path="*" element={<Navigate to="/SignIn" />} replace />
-              
+
                                 </Routes>
-                                    
+
                             </Box>
                         </Box>
-        
+
                     </BrowserRouter>
 
                 </AppUserProvider>
