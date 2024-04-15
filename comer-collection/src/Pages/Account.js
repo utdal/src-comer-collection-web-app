@@ -14,14 +14,12 @@ import { useAppUser } from "../ContextProviders/AppUser.js";
 import { AccessTimeIcon, LockIcon } from "../Imports/Icons.js";
 import { AccountNavProvider } from "../ContextProviders/AccountNavProvider.js";
 
-
 const Account = () => {
-
     const [appUser, , , appUserIsLoaded] = useAppUser();
 
-    return !appUserIsLoaded && (
+    return (!appUserIsLoaded &&
         <FullPageMessage Icon={AccessTimeIcon} message="Loading" />
-    ) || appUserIsLoaded && appUser && (
+    ) || (appUserIsLoaded && appUser &&
         <AccountNavProvider>
 
             <Box sx={{
@@ -33,15 +31,14 @@ const Account = () => {
                 height: "100%"
             }}>
 
-
                 <AccountNavPane sx={{ gridArea: "sidebar" }} />
 
                 <Box sx={{ gridArea: "main", position: "relative", overflowY: "hidden", height: "100%" }}>
 
                     <Routes>
                         <Route index element={
-                            !appUser.pw_change_required && (<Navigate to='Profile' replace />) ||
-                            appUser.pw_change_required && (<Navigate to='ChangePassword' replace />)
+                            (!appUser.pw_change_required && <Navigate to='Profile' replace />) ||
+                            (appUser.pw_change_required && <Navigate to='ChangePassword' replace />)
                         } />
                         <Route path="Profile" element={<Profile />} />
                         <Route path="ChangePassword" element={<ChangePassword />} />
@@ -58,7 +55,7 @@ const Account = () => {
 
             </Box>
         </AccountNavProvider>
-    ) || appUserIsLoaded && !appUser && (
+    ) || (appUserIsLoaded && !appUser &&
         <FullPageMessage Icon={LockIcon} message="Unauthorized" buttonDestination="/SignIn" buttonText="Sign In" />
     );
 };
