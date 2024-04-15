@@ -5,7 +5,7 @@ import PropTypes from "prop-types";
 
 const SearchBox = ({ searchQuery, setSearchQuery, width, placeholder }) => {
     return (
-        <TextField variant="outlined" placeholder={placeholder ?? "Search"} value={searchQuery} sx={{width}}
+        <TextField variant="outlined" placeholder={placeholder ?? "Search"} value={searchQuery} sx={{ width }}
             onChange={(e) => {
                 setSearchQuery(e.target.value);
             }}
@@ -21,7 +21,7 @@ const SearchBox = ({ searchQuery, setSearchQuery, width, placeholder }) => {
                 endAdornment: (
                     <InputAdornment position="end">
                         <IconButton sx={{
-                            display: searchQuery == "" ? "none" : ""
+                            display: searchQuery === "" ? "none" : ""
                         }} onClick={() => {
                             setSearchQuery("");
                         }}>

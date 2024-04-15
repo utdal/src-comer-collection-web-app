@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 
-import { AppBar, Toolbar, Typography, Button } from "@mui/material";
+import { AppBar, Toolbar, Typography, Button, Divider, Menu, MenuItem, IconButton, Stack } from "@mui/material";
 
 import { useNavigate } from "react-router-dom";
-import { Divider, Menu, MenuItem, IconButton, Stack } from "@mui/material";
+
 import { useTheme } from "@emotion/react";
 import { useAppUser } from "../ContextProviders/AppUser.js";
 import {
@@ -16,9 +16,7 @@ import {
 import PropTypes from "prop-types";
 import { AppSettingsDialog } from "./Dialogs/AppSettingsDialog.js";
 
-
 const NavBarUserMenu = () => {
-
     const [anchorElement, setAnchorElement] = useState(null);
     const [appUser, setAppUser] = useAppUser();
     const navigate = useNavigate();
@@ -92,13 +90,11 @@ const NavBarUserMenu = () => {
     );
 };
 
-
 const NavBarButton = ({ href, text }) => {
-
     const navigate = useNavigate();
     const theme = useTheme();
 
-    const isPageActive = document.location.pathname == href;
+    const isPageActive = document.location.pathname === href;
 
     return (
         <Button spacing={1} color="secondary" sx={{
@@ -117,9 +113,7 @@ NavBarButton.propTypes = {
     text: PropTypes.string.isRequired
 };
 
-
 const NavBar = () => {
-
     const [appUser] = useAppUser();
     const navigate = useNavigate();
 
@@ -140,13 +134,13 @@ const NavBar = () => {
                             <NavBarButton href="/BrowseCollection" text="Collection" />
                             <NavBarButton href="/Exhibitions" text="Exhibitions" />
                         </Stack>
-                        {appUser && <>
+                        {(appUser && <>
                             <Divider sx={{
                                 borderWidth: "1px"
                             }} />
                             <NavBarUserMenu />
-                        </> ||
-                            !appUser && (
+                        </>) ||
+                            (!appUser &&
                                 <Stack direction="column" sx={{
                                     justifyContent: "center"
                                 }}>
@@ -159,14 +153,14 @@ const NavBar = () => {
 
                             )}
                     </Stack>
-                    <IconButton sx={{color: "white", marginLeft: 2}} onClick={() => {
+                    <IconButton sx={{ color: "white", marginLeft: 2 }} onClick={() => {
                         setAppSettingsDialogIsOpen(true);
                     }}>
                         <SettingsIcon />
                     </IconButton>
                 </Toolbar>
             </Stack>
-            <AppSettingsDialog {...{appSettingsDialogIsOpen, setAppSettingsDialogIsOpen}} />
+            <AppSettingsDialog {...{ appSettingsDialogIsOpen, setAppSettingsDialogIsOpen }} />
         </AppBar>
     );
 };
