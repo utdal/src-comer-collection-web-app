@@ -9,13 +9,12 @@ import { Navigate, useNavigate } from "react-router";
 import { DataTable } from "../../Components/DataTable.js";
 import { SecurityIcon, PersonIcon, AccountCircleIcon, SchoolIcon, PhotoCameraBackIcon, CollectionManagerIcon } from "../../Imports/Icons.js";
 import { useAppUser } from "../../ContextProviders/AppUser.js";
-import { useSnackbar } from "../../ContextProviders/AppFeatures.js";
-import { useTitle } from "../../ContextProviders/AppFeatures.js";
+import { useSnackbar, useTitle } from "../../ContextProviders/AppFeatures.js";
+
 import { useAccountNav } from "../../ContextProviders/AccountNavProvider.js";
 import { Course } from "../../Classes/Entities/Course.js";
 
 const Profile = () => {
-
     const [, setSelectedNavItem] = useAccountNav();
 
     const [appUser] = useAppUser();
@@ -29,8 +28,6 @@ const Profile = () => {
         setTitleText("Profile");
     }, []);
 
-
-  
     const courseTableFields = [
         {
             columnDescription: "Course Name",
@@ -41,19 +38,19 @@ const Profile = () => {
         {
             columnDescription: "Start",
             generateTableCell: (course) => (
-                <Course.TableCells.StartDateTime {...{course}} />
+                <Course.TableCells.StartDateTime {...{ course }} />
             )
         },
         {
             columnDescription: "End",
             generateTableCell: (course) => (
-                <Course.TableCells.EndDateTime {...{course}} />
+                <Course.TableCells.EndDateTime {...{ course }} />
             )
         },
         {
             columnDescription: "Status",
             generateTableCell: (course) => (
-                <Course.TableCells.Status {...{course}} />
+                <Course.TableCells.Status {...{ course }} />
             )
         },
         {
@@ -65,24 +62,25 @@ const Profile = () => {
         }
     ];
 
-  
     const userTableFields = [
         {
             columnDescription: "Name",
             generateTableCell: (user) => (
-                user.has_name ? (
-                    <Typography variant="body1">{user.full_name}</Typography>
-                ) : (
-                    <Typography variant="body1" sx={{opacity: 0.5}}>Not set</Typography>
-                )
+                user.has_name
+                    ? (
+                        <Typography variant="body1">{user.full_name}</Typography>
+                    )
+                    : (
+                        <Typography variant="body1" sx={{ opacity: 0.5 }}>Not set</Typography>
+                    )
             )
         },
         {
             columnDescription: "Email",
             generateTableCell: (user) => (
                 <Button color="grey"
-                    variant="text" sx={{textTransform: "unset"}}
-                    onClick={() => {handleCopyToClipboard(user, "email");}}>
+                    variant="text" sx={{ textTransform: "unset" }}
+                    onClick={() => { handleCopyToClipboard(user, "email"); }}>
                     <Typography variant="body1">{user.email}</Typography>
                 </Button>
             )
@@ -132,17 +130,17 @@ const Profile = () => {
         }
     }, []);
 
-    return appUser.pw_change_required && (
+    return (appUser.pw_change_required &&
         <Navigate to="/Account/ChangePassword" />
-    ) || !appUser.pw_change_required && (
-        <Box component={Paper} square sx={{height: "100%", overflowY: "auto"}}>
+    ) || (!appUser.pw_change_required &&
+        <Box component={Paper} square sx={{ height: "100%", overflowY: "auto" }}>
             <Stack spacing={4} paddingTop={5} paddingLeft={5} paddingRight={5}>
                 <Stack spacing={2}>
                     <Stack direction="row" paddingLeft={1} spacing={2} alignItems="center">
                         <AccountCircleIcon fontSize="large" />
                         <Typography variant="h4">Profile Information</Typography>
                     </Stack>
-                    <Box sx={{height: "100px"}}>
+                    <Box sx={{ height: "100px" }}>
                         <DataTable
                             items={[appUser]}
                             visibleItems={[appUser]}
@@ -152,7 +150,7 @@ const Profile = () => {
                 </Stack>
             </Stack>
             <Stack spacing={4} paddingTop={5} paddingLeft={5} paddingRight={5} height="400px">
-                <Stack spacing={2}  sx={{
+                <Stack spacing={2} sx={{
                     display: "grid",
                     gridTemplateRows: "50px 350px",
                     gridTemplateColumns: "1fr",
@@ -160,13 +158,13 @@ const Profile = () => {
           "title"
           "content"
         `
-                }}  overflow="hidden">
+                }} overflow="hidden">
                     <Stack direction="row" paddingLeft={1} spacing={2} alignItems="center"
-                        sx={{gridArea: "title"}}>
+                        sx={{ gridArea: "title" }}>
                         <SchoolIcon fontSize="large" />
                         <Typography variant="h4">My Courses</Typography>
                     </Stack>
-                    <DataTable sx={{overflow: "scroll"}}
+                    <DataTable sx={{ overflow: "scroll" }}
                         items={appUser.Courses}
                         visibleItems={appUser.Courses}
                         tableFields={courseTableFields}

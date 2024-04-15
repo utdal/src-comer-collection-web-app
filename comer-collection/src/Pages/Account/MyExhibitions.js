@@ -8,15 +8,13 @@ import { PhotoCameraBackIcon, AddIcon, InfoIcon, SettingsIcon, DeleteIcon, Secur
 import { sendAuthenticatedRequest } from "../../Helpers/APICalls.js";
 import { ExhibitionSettingsDialog } from "../../Components/Dialogs/ExhibitionSettingsDialog.js";
 import { ItemSingleDeleteDialog } from "../../Components/Dialogs/ItemSingleDeleteDialog.js";
-import { useSnackbar } from "../../ContextProviders/AppFeatures.js";
+import { useSnackbar, useTitle } from "../../ContextProviders/AppFeatures.js";
 import { useAppUser } from "../../ContextProviders/AppUser.js";
-import { useTitle } from "../../ContextProviders/AppFeatures.js";
+
 import { useAccountNav } from "../../ContextProviders/AccountNavProvider.js";
 import { Exhibition, MyExhition } from "../../Classes/Entities/Exhibition.js";
 
-
 const MyExhibitions = () => {
-
     const [, setSelectedNavItem] = useAccountNav();
     const showSnackbar = useSnackbar();
     const setTitleText = useTitle();
@@ -29,11 +27,8 @@ const MyExhibitions = () => {
     const [dialogExhibitionAccess, setDialogExhibitionAccess] = useState(null);
     const [isDialogInEditMode, setDialogIsEditMode] = useState(false);
 
-
-
     const [deleteDialogIsOpen, setDeleteDialogIsOpen] = useState(false);
     const [deleteDialogExhibition, setDeleteDialogExhibition] = useState(null);
-
 
     useEffect(() => {
         setSelectedNavItem("My Exhibitions");
@@ -42,40 +37,36 @@ const MyExhibitions = () => {
 
     const navigate = useNavigate();
 
-
-
-    const handleExhibitionCreate = async(title, privacy) => {
+    const handleExhibitionCreate = async (title, privacy) => {
         try {
-            await sendAuthenticatedRequest("POST", "/api/user/exhibitions", {title, privacy});
+            await sendAuthenticatedRequest("POST", "/api/user/exhibitions", { title, privacy });
             setDialogIsOpen(false);
             setDialogExhibitionId(null);
             setDialogExhibitionTitle("");
             setDialogExhibitionAccess(null);
             showSnackbar("Exhibition created", "success");
-        }
-        catch(e) {
+        } catch (e) {
             console.log(`Error creating exhibition: ${e.message}`);
             showSnackbar("Error creating exhibition.", "error");
         }
         initializeAppUser();
     };
 
-    const handleExhibitionEditByOwner = async(exhibitionId, title, privacy) => {
+    const handleExhibitionEditByOwner = async (exhibitionId, title, privacy) => {
         try {
-            await sendAuthenticatedRequest("PUT", `/api/user/exhibitions/${exhibitionId}`, {title, privacy});
+            await sendAuthenticatedRequest("PUT", `/api/user/exhibitions/${exhibitionId}`, { title, privacy });
             setDialogIsOpen(false);
             setDialogExhibitionId(null);
             setDialogExhibitionTitle("");
             setDialogExhibitionAccess(null);
             showSnackbar("Exhibition updated", "success");
-        } catch(e) {
+        } catch (e) {
             console.log(`Error updating exhibition: ${e.message}`);
             showSnackbar("Error updating exhibition", "error");
         }
         initializeAppUser();
     };
 
-  
     const exhibitionTableFields = [
         {
             columnDescription: "Title",
@@ -89,27 +80,27 @@ const MyExhibitions = () => {
             columnDescription: "Open",
             columnHeaderLabel: "",
             generateTableCell: (exhibition) => (
-                <Exhibition.TableCells.OpenInNewTab {...{exhibition}} />
+                <Exhibition.TableCells.OpenInNewTab {...{ exhibition }} />
             )
         },
         {
             columnDescription: "Date Created",
             generateTableCell: (exhibition) => (
-                <Exhibition.TableCells.DateCreated {...{exhibition}} />
+                <Exhibition.TableCells.DateCreated {...{ exhibition }} />
             ),
             generateSortableValue: (exhibition) => new Date(exhibition.date_created)
         },
         {
             columnDescription: "Date Modified",
             generateTableCell: (exhibition) => (
-                <Exhibition.TableCells.DateModified {...{exhibition}} />
+                <Exhibition.TableCells.DateModified {...{ exhibition }} />
             ),
             generateSortableValue: (exhibition) => new Date(exhibition.date_modified)
         },
         {
             columnDescription: "Access",
             generateTableCell: (exhibition) => (
-                <Exhibition.TableCells.Access {...{exhibition}} />
+                <Exhibition.TableCells.Access {...{ exhibition }} />
             )
         },
         {
@@ -117,7 +108,7 @@ const MyExhibitions = () => {
             generateTableCell: (exhibition) => (
                 <Stack direction="row" spacing={2}>
 
-                    <IconButton 
+                    <IconButton
                         onClick={() => {
                             setDialogIsEditMode(true);
                             setDialogExhibitionId(exhibition.id);
@@ -129,7 +120,7 @@ const MyExhibitions = () => {
                         <SettingsIcon />
                     </IconButton>
 
-                    <IconButton 
+                    <IconButton
                         onClick={() => {
                             setDeleteDialogExhibition(exhibition);
                             setDeleteDialogIsOpen(true);
@@ -143,26 +134,27 @@ const MyExhibitions = () => {
         }
     ];
 
-  
-
-
-    return appUser.pw_change_required && (
+    return (appUser.pw_change_required &&
         <Navigate to="/Account/ChangePassword" />
-    ) || !appUser.pw_change_required && (
-        <Box component={Paper} square sx={{overflowY: "auto", padding: "50px", display: "grid", 
+    ) || (!appUser.pw_change_required &&
+        <Box component={Paper} square sx={{
+            overflowY: "auto",
+            padding: "50px",
+            display: "grid",
             gridTemplateColumns: "1fr",
             gridTemplateRows: "40px 80px calc(100vh - 284px)",
             gridTemplateAreas: `
             "header"
             "comment"
             "table"
-        `}}>
-            <Stack direction="row" justifyContent="space-between" sx={{gridArea: "header"}}>
+        `
+        }}>
+            <Stack direction="row" justifyContent="space-between" sx={{ gridArea: "header" }}>
                 <Stack direction="row" alignItems="center" spacing={2} >
                     <PhotoCameraBackIcon fontSize="large" />
                     <Typography variant="h4">My Exhibitions</Typography>
                 </Stack>
-                <Button color="primary" disabled={!appUser.can_create_exhibition} variant="contained" startIcon={<AddIcon/>} 
+                <Button color="primary" disabled={!appUser.can_create_exhibition} variant="contained" startIcon={<AddIcon/>}
                     onClick={() => {
                         setDialogIsEditMode(false);
                         setDialogExhibitionId(null);
@@ -172,14 +164,14 @@ const MyExhibitions = () => {
                     <Typography variant="body1">Create Exhibition</Typography>
                 </Button>
             </Stack>
-            <Stack direction="column" spacing={2} sx={{gridArea: "comment", justifyContent: "center"}}>
+            <Stack direction="column" spacing={2} sx={{ gridArea: "comment", justifyContent: "center" }}>
                 {appUser.is_admin && (
                     <Stack direction="row" spacing={2} color="gray">
                         <SecurityIcon color="secondary" />
                         <Typography variant="body1">Restrictions on exhibition creation are removed for administrators.</Typography>
                     </Stack>
                 )}
-                {!appUser.is_admin && appUser.Courses.filter((c) => c.status == "Active").length == 0 && (
+                {!appUser.is_admin && appUser.Courses.filter((c) => c.status === "Active").length === 0 && (
                     <Stack direction="row" spacing={2} color="gray">
                         <InfoIcon />
                         <Typography variant="body1">You must be enrolled in at least one active course to create exhibitions.</Typography>
@@ -192,7 +184,7 @@ const MyExhibitions = () => {
                     </Stack>
                 )}
             </Stack>
-            <Box sx={{gridArea: "table"}}>
+            <Box sx={{ gridArea: "table" }}>
                 <DataTable
                     items={appUser.Exhibitions}
                     visibleItems={appUser.Exhibitions}
@@ -208,7 +200,7 @@ const MyExhibitions = () => {
                 />
             </Box>
 
-            <ItemSingleDeleteDialog 
+            <ItemSingleDeleteDialog
                 deleteDialogIsOpen={deleteDialogIsOpen}
                 deleteDialogItem={deleteDialogExhibition}
                 Entity={MyExhition}
@@ -220,11 +212,18 @@ const MyExhibitions = () => {
                 setDeleteDialogIsOpen={setDeleteDialogIsOpen}
             />
 
-            <ExhibitionSettingsDialog editMode={isDialogInEditMode} 
+            <ExhibitionSettingsDialog editMode={isDialogInEditMode}
                 dialogIsOpen={dialogIsOpen && (isDialogInEditMode || appUser.can_create_exhibition)}
-                {...{dialogExhibitionId, dialogExhibitionAccess, setDialogExhibitionAccess, 
-                    dialogExhibitionTitle, setDialogExhibitionTitle, 
-                    setDialogIsOpen, handleExhibitionCreate, handleExhibitionEdit: handleExhibitionEditByOwner}} />
+                {...{
+                    dialogExhibitionId,
+                    dialogExhibitionAccess,
+                    setDialogExhibitionAccess,
+                    dialogExhibitionTitle,
+                    setDialogExhibitionTitle,
+                    setDialogIsOpen,
+                    handleExhibitionCreate,
+                    handleExhibitionEdit: handleExhibitionEditByOwner
+                }} />
         </Box>
     );
 };
