@@ -11,8 +11,6 @@ import { EditIcon, SecurityIcon, VisibilityIcon } from "../../Imports/Icons.js";
 import { useAppUser } from "../../ContextProviders/AppUser.js";
 import PropTypes from "prop-types";
 
-
-
 const getAmbientLightIntensity = (moodiness) => {
     switch (moodiness) {
     case "dark":
@@ -26,24 +24,19 @@ const getAmbientLightIntensity = (moodiness) => {
     default:
         return 1.5;
     }
-
 };
 
-const get_canvas_dimensions = (boundingBoxElement) => {
-    if(boundingBoxElement) {
-        const { height: canvas_height, width: canvas_width } = boundingBoxElement.getBoundingClientRect();
-        return [canvas_height, canvas_width];
+const getCanvasDimensions = (boundingBoxElement) => {
+    if (boundingBoxElement) {
+        const { height: canvasHeight, width: canvasWidth } = boundingBoxElement.getBoundingClientRect();
+        return [canvasHeight, canvasWidth];
     }
     return [0, 0];
 };
 
-
-const Exhibition3DViewport = ({exhibitionState: primary_json, exhibitionMetadata, exhibitionIsLoaded, exhibitionIsEditable, globalImageCatalog, editModeActive, setEditModeActive}) => {
-
-        
+const Exhibition3DViewport = ({ exhibitionState, exhibitionMetadata, exhibitionIsLoaded, exhibitionIsEditable, globalImageCatalog, editModeActive, setEditModeActive }) => {
     const containerRef = useRef(null);
     const canvasRef = useRef(null);
-
 
     const [keysPressed, setKeysPressed] = useState({
         arrowup: false,
@@ -53,9 +46,8 @@ const Exhibition3DViewport = ({exhibitionState: primary_json, exhibitionMetadata
         w: false,
         a: false,
         s: false,
-        d: false,
+        d: false
     });
-
 
     const [myRenderer, setMyRenderer] = useState(null);
     const [myScene, setMyScene] = useState(null);
@@ -71,9 +63,7 @@ const Exhibition3DViewport = ({exhibitionState: primary_json, exhibitionMetadata
         height: null
     });
 
-
     const [appUser] = useAppUser();
-
 
     const [dialogIsOpen, setDialogIsOpen] = useState(true);
 
@@ -82,79 +72,74 @@ const Exhibition3DViewport = ({exhibitionState: primary_json, exhibitionMetadata
     };
 
     const handleWindowResize = () => {
-        if(containerRef.current) {
-            const [canvas_height, canvas_width] = get_canvas_dimensions(containerRef.current);
+        if (containerRef.current) {
+            const [canvasHeight, canvasWidth] = getCanvasDimensions(containerRef.current);
             setCanvasDimensions({
-                width: canvas_width,
-                height: canvas_height
+                width: canvasWidth,
+                height: canvasHeight
             });
         }
     };
 
     const handleKeydown = (e) => {
         const keyPressed = e.key.toLowerCase();
-        if(keyPressed in keysPressed) {
-            setKeysPressed({...keysPressed, [keyPressed]: true});
+        if (keyPressed in keysPressed) {
+            setKeysPressed({ ...keysPressed, [keyPressed]: true });
         }
     };
 
     const handleKeyup = (e) => {
         const keyPressed = e.key.toLowerCase();
-        if(keyPressed in keysPressed) {
-            setKeysPressed({...keysPressed, [keyPressed]: false});
+        if (keyPressed in keysPressed) {
+            setKeysPressed({ ...keysPressed, [keyPressed]: false });
         }
     };
 
-
     useEffect(() => {
-
-        if(exhibitionIsLoaded) {
-
+        if (exhibitionIsLoaded) {
             const scene = new THREE.Scene();
-    
-            if(!containerRef || !containerRef.current){
+
+            if (!containerRef || !containerRef.current) {
                 return;
             }
-    
-            let [canvas_height, canvas_width] = get_canvas_dimensions(containerRef.current);
-    
+
+            const [canvasHeight, canvasWidth] = getCanvasDimensions(containerRef.current);
+
             // camera set up
-            let camera = new THREE.PerspectiveCamera(
+            const camera = new THREE.PerspectiveCamera(
                 60, // field of view: 60-90 is normal for viewing on a monitor
-                canvas_width / canvas_height, // aspect ratio: assumption that ar should be the current window size
-                0.1,  // near setting for camera frustum
+                canvasWidth / canvasHeight, // aspect ratio: assumption that ar should be the current window size
+                0.1, // near setting for camera frustum
                 1000 // far setting for camera frustum
             );
-        
+
             scene.add(camera);
-        
+
             // set camera slighly back from middle of gallery
-            camera.position.set(0, 0, primary_json.size.length_ft / 4);
+            camera.position.set(0, 0, exhibitionState.size.length_ft / 4);
             camera.updateProjectionMatrix();
-        
+
             // enable antialiasing
-            let renderer = new THREE.WebGLRenderer({
+            const renderer = new THREE.WebGLRenderer({
                 antialias: true
             });
-        
+
             // set initial canvas size
-            renderer.setSize(canvas_width, canvas_height);
-            
-        
+            renderer.setSize(canvasWidth, canvasHeight);
+
             // render options
-        
+
             renderer.outputColorSpace = THREE.LinearSRGBColorSpace;
-        
+
             // add mouse controls
-            let controls = new PointerLockControls(camera, renderer.domElement);
+            const controls = new PointerLockControls(camera, renderer.domElement);
             scene.add(controls.getObject());
-        
+
             // resize window when window is resized
             window.addEventListener("resize", handleWindowResize);
-            
+
             const clock = new THREE.Clock();
             clock.getDelta();
-
 
             setMyRenderer(renderer);
             setMyCamera(camera);
@@ -162,16 +147,14 @@ const Exhibition3DViewport = ({exhibitionState: primary_json, exhibitionMetadata
             setMyControls(controls);
             setMyClock(clock);
 
-    
             controls.addEventListener("unlock", restoreMenu);
 
             window.addEventListener("keydown", handleKeydown);
             window.addEventListener("keyup", handleKeyup);
-    
-            const texture_loader = new THREE.TextureLoader();
-            setMyTextureLoader(texture_loader);
-    
-    
+
+            const textureLoader = new THREE.TextureLoader();
+            setMyTextureLoader(textureLoader);
+
             return () => {
                 controls.removeEventListener("unlock", restoreMenu);
                 window.removeEventListener("keydown", handleKeydown);
@@ -179,27 +162,22 @@ const Exhibition3DViewport = ({exhibitionState: primary_json, exhibitionMetadata
                 setMyRenderer(null);
                 setMyCamera(null);
                 setMyScene(null);
-                setMyControls(null);  
-    
+                setMyControls(null);
             };
-            
         }
-
-
     }, [exhibitionIsLoaded]);
-
 
     // Manage movement based on key presses
     // and constrain camera position to exhibition boundaries
     useEffect(() => {
-        const distance_threshold = 5;
+        const distanceThreshold = 5;
 
         // manage camera movement
-        if(myControls?.isLocked) {
+        if (myControls?.isLocked) {
             const factor = 5;
             let delta = myClock.getDelta();
             let speed;
-            if(delta > 0.05) {
+            if (delta > 0.05) {
                 delta = myClock.getDelta();
                 speed = 0.05;
             } else {
@@ -229,11 +207,11 @@ const Exhibition3DViewport = ({exhibitionState: primary_json, exhibitionMetadata
 
         // manage camera constraints
         const minDistanceFromWalls = 1;
-        const minZ = -primary_json.size.length_ft / 2 + minDistanceFromWalls;
-        const maxZ = primary_json.size.length_ft / 2 - minDistanceFromWalls;
-        const minX = -primary_json.size.width_ft / 2 + minDistanceFromWalls;
-        const maxX = primary_json.size.width_ft / 2 - minDistanceFromWalls;
-        if(myCamera && myRenderer) {
+        const minZ = -exhibitionState.size.length_ft / 2 + minDistanceFromWalls;
+        const maxZ = exhibitionState.size.length_ft / 2 - minDistanceFromWalls;
+        const minX = -exhibitionState.size.width_ft / 2 + minDistanceFromWalls;
+        const maxX = exhibitionState.size.width_ft / 2 - minDistanceFromWalls;
+        if (myCamera && myRenderer) {
             switch (true) {
             case myCamera.position.z < minZ:
                 myCamera.position.z = minZ;
@@ -260,27 +238,21 @@ const Exhibition3DViewport = ({exhibitionState: primary_json, exhibitionMetadata
 
         // manage art info display
         let closeImage = null;
-        for(const [image_id, image_position] of Object.entries(myArtPositionsByImageId ?? {})) {
-            const distance_to_art = myCamera.position.distanceTo(image_position);
-            if(distance_to_art < distance_threshold) {
-                closeImage = image_id;
+        for (const [imageId, imagePosition] of Object.entries(myArtPositionsByImageId ?? {})) {
+            const distanceToArt = myCamera.position.distanceTo(imagePosition);
+            if (distanceToArt < distanceThreshold) {
+                closeImage = imageId;
             }
         }
         setInfoMenuImageId(closeImage);
-
-
-    }, [keysPressed, myCamera?.position.x, myCamera?.position.z, primary_json.size, primary_json.images]);
-
-
+    }, [keysPressed, myCamera?.position.x, myCamera?.position.z, exhibitionState.size, exhibitionState.images]);
 
     useEffect(() => {
         handleWindowResize();
     }, [editModeActive]);
 
-
-
     useEffect(() => {
-        if(myCamera && myRenderer) {
+        if (myCamera && myRenderer) {
             myCamera.aspect = canvasDimensions.width / canvasDimensions.height;
             myCamera.updateProjectionMatrix();
             myRenderer.setSize(canvasDimensions.width, canvasDimensions.height);
@@ -288,18 +260,14 @@ const Exhibition3DViewport = ({exhibitionState: primary_json, exhibitionMetadata
         }
     }, [canvasDimensions]);
 
-
     // function to re-render scene when camera is rotated
     const handleControlsChange = () => {
         myRenderer.render(myScene, myCamera);
     };
 
-
     // set up event handlers for camera rotation
     useEffect(() => {
-    
-        if(canvasRef.current && myScene) {
-            
+        if (canvasRef.current && myScene) {
             canvasRef.current.appendChild(myRenderer.domElement);
             canvasRef.current.addEventListener("click", () => {
                 myControls.lock();
@@ -308,84 +276,65 @@ const Exhibition3DViewport = ({exhibitionState: primary_json, exhibitionMetadata
 
             return () => {
                 myControls.removeEventListener("change", handleControlsChange);
-                if(canvasRef.current)
-                    canvasRef.current.removeChild(myRenderer.domElement);
-            }; 
+                if (canvasRef.current) { canvasRef.current.removeChild(myRenderer.domElement); }
+            };
         }
-    }, [myControls, myScene, myRenderer]); 
-
+    }, [myControls, myScene, myRenderer]);
 
     useEffect(() => {
+        if (myScene) {
+            let photosOn1 = 0;
+            let photosOn2 = 0;
+            let photosOn3 = 0;
+            let photosOn4 = 0;
 
-        if(myScene) {
-
-                
-            let photos_on_1 = 0,
-                photos_on_2 = 0,
-                photos_on_3 = 0,
-                photos_on_4 = 0;
-        
             // count photos on walls
-            primary_json.images.forEach((image) => {
-                if (image.metadata.direction == 1) { photos_on_1++; }
-                else if (image.metadata.direction == 2) { photos_on_2++; }
-                else if (image.metadata.direction == 3) { photos_on_3++; }
-                else if (image.metadata.direction == 4) { photos_on_4++; }
+            exhibitionState.images.forEach((image) => {
+                if (image.metadata.direction === 1) { photosOn1++; } else if (image.metadata.direction === 2) { photosOn2++; } else if (image.metadata.direction === 3) { photosOn3++; } else if (image.metadata.direction === 4) { photosOn4++; }
             });
-        
-        
+
             // kind of a last minute add, but scene needs to be here for lighting, even though
             // art is not added to the scene here
             // ambient_light_intensity is added for safety in light creation
-            const {all_arts_group, artPositionsByImageId} = createArt(myTextureLoader, 
-                photos_on_1, photos_on_2, photos_on_3, photos_on_4, 
-                primary_json.size.width_ft, primary_json.size.length_ft, primary_json.size.height_ft, 1/12, 
-                getAmbientLightIntensity(primary_json.appearance.moodiness), myScene, myRenderer, myCamera, primary_json, globalImageCatalog);
-        
+            const { all_arts_group: allArtsGroup, artPositionsByImageId } = createArt(myTextureLoader,
+                photosOn1, photosOn2, photosOn3, photosOn4,
+                exhibitionState.size.width_ft, exhibitionState.size.length_ft, exhibitionState.size.height_ft, 1 / 12,
+                getAmbientLightIntensity(exhibitionState.appearance.moodiness), myScene, myRenderer, myCamera, exhibitionState, globalImageCatalog);
+
             setMyArtPositionsByImageId(artPositionsByImageId);
-        
-            // setupRendering(myScene, myCamera, myRenderer, all_arts_group.children, myControls, primary_json.size.width_ft, primary_json.size.length_ft);
 
-
+            // setupRendering(myScene, myCamera, myRenderer, all_arts_group.children, myControls, exhibitionState.size.width_ft, exhibitionState.size.length_ft);
 
             return () => {
-                myScene.remove(all_arts_group);
+                myScene.remove(allArtsGroup);
             };
-        
         }
-
     }, [myCamera, myControls, myScene, myTextureLoader, myRenderer,
-        primary_json.images,
-        primary_json.size
+        exhibitionState.images,
+        exhibitionState.size
     ]);
-
-
-
 
     // Update all walls on resize
     useEffect(() => {
-        if(myScene) { 
+        if (myScene) {
             Promise.all([
-                setupMainWalls(myScene, myTextureLoader, primary_json.size.width_ft, primary_json.size.length_ft, primary_json.size.height_ft, 5, primary_json.appearance.main_wall_color),
-                setupSideWalls(myScene, myTextureLoader, primary_json.size.width_ft, primary_json.size.length_ft, primary_json.size.height_ft, 5, primary_json.appearance.side_wall_color),
-                setupFloor(myScene, myTextureLoader, primary_json.size.width_ft, primary_json.size.length_ft, 5, primary_json.appearance.floor_color, primary_json.appearance.floor_texture),
-                setupCeiling(myScene, myTextureLoader, primary_json.size.width_ft, primary_json.size.length_ft, primary_json.size.height_ft, primary_json.appearance.ceiling_color)
+                setupMainWalls(myScene, myTextureLoader, exhibitionState.size.width_ft, exhibitionState.size.length_ft, exhibitionState.size.height_ft, 5, exhibitionState.appearance.main_wall_color),
+                setupSideWalls(myScene, myTextureLoader, exhibitionState.size.width_ft, exhibitionState.size.length_ft, exhibitionState.size.height_ft, 5, exhibitionState.appearance.side_wall_color),
+                setupFloor(myScene, myTextureLoader, exhibitionState.size.width_ft, exhibitionState.size.length_ft, 5, exhibitionState.appearance.floor_color, exhibitionState.appearance.floor_texture),
+                setupCeiling(myScene, myTextureLoader, exhibitionState.size.width_ft, exhibitionState.size.length_ft, exhibitionState.size.height_ft, exhibitionState.appearance.ceiling_color)
             ]).then(() => {
                 myRenderer.render(myScene, myCamera);
             }).catch((e) => {
                 console.warn(e.message);
             });
         }
-    }, [myCamera, myControls, myScene, myTextureLoader, myRenderer, primary_json.size]);
-
-
-
+    }, [myCamera, myControls, myScene, myTextureLoader, myRenderer, exhibitionState.size]);
 
     // Update main wall color
     useEffect(() => {
-        if(myScene) { 
-            setupMainWalls(myScene, myTextureLoader, 
-                primary_json.size.width_ft, primary_json.size.length_ft, primary_json.size.height_ft, 5, primary_json.appearance.main_wall_color
+        if (myScene) {
+            setupMainWalls(myScene, myTextureLoader,
+                exhibitionState.size.width_ft, exhibitionState.size.length_ft, exhibitionState.size.height_ft, 5, exhibitionState.appearance.main_wall_color
             ).then(() => {
                 myRenderer.render(myScene, myCamera);
             }).catch((e) => {
@@ -393,29 +342,29 @@ const Exhibition3DViewport = ({exhibitionState: primary_json, exhibitionMetadata
             });
         }
     }, [myCamera, myControls, myScene, myTextureLoader, myRenderer,
-        primary_json.appearance.main_wall_color
+        exhibitionState.appearance.main_wall_color
     ]);
 
     // Update side wall color
     useEffect(() => {
-        if(myScene) { 
-            setupSideWalls(myScene, myTextureLoader, 
-                primary_json.size.width_ft, primary_json.size.length_ft, primary_json.size.height_ft, 5, primary_json.appearance.side_wall_color).then(() => {
+        if (myScene) {
+            setupSideWalls(myScene, myTextureLoader,
+                exhibitionState.size.width_ft, exhibitionState.size.length_ft, exhibitionState.size.height_ft, 5, exhibitionState.appearance.side_wall_color).then(() => {
                 myRenderer.render(myScene, myCamera);
             }).catch((e) => {
                 console.warn(e.message);
             });
         }
     }, [myCamera, myControls, myScene, myTextureLoader, myRenderer,
-        primary_json.appearance.side_wall_color
+        exhibitionState.appearance.side_wall_color
     ]);
 
     // Update floor
     useEffect(() => {
-        if(myScene) {
-            setupFloor(myScene, myTextureLoader, 
-                primary_json.size.width_ft, primary_json.size.length_ft, 5, 
-                primary_json.appearance.floor_color, primary_json.appearance.floor_texture
+        if (myScene) {
+            setupFloor(myScene, myTextureLoader,
+                exhibitionState.size.width_ft, exhibitionState.size.length_ft, 5,
+                exhibitionState.appearance.floor_color, exhibitionState.appearance.floor_texture
             ).then(() => {
                 myRenderer.render(myScene, myCamera);
             }).catch((e) => {
@@ -423,67 +372,60 @@ const Exhibition3DViewport = ({exhibitionState: primary_json, exhibitionMetadata
             });
         }
     }, [myCamera, myControls, myScene, myTextureLoader, myRenderer,
-        primary_json.appearance.floor_color,
-        primary_json.appearance.floor_texture
+        exhibitionState.appearance.floor_color,
+        exhibitionState.appearance.floor_texture
     ]);
 
     // Update ceiling
     useEffect(() => {
-        if(myScene) {
-            setupCeiling(myScene, myTextureLoader, 
-                primary_json.size.width_ft, primary_json.size.length_ft, primary_json.size.height_ft, 
-                primary_json.appearance.ceiling_color).then(() => {
+        if (myScene) {
+            setupCeiling(myScene, myTextureLoader,
+                exhibitionState.size.width_ft, exhibitionState.size.length_ft, exhibitionState.size.height_ft,
+                exhibitionState.appearance.ceiling_color).then(() => {
                 myRenderer.render(myScene, myCamera);
             }).catch((e) => {
                 console.warn(e.message);
             });
         }
     }, [myCamera, myControls, myScene, myTextureLoader, myRenderer,
-        primary_json.appearance.ceiling_color
+        exhibitionState.appearance.ceiling_color
     ]);
 
-
-
     useEffect(() => {
-        if(myScene) {
-            const ambient_light = new THREE.AmbientLight(primary_json.appearance.ambient_light_color, getAmbientLightIntensity(primary_json.appearance.moodiness));
-            myScene.add(ambient_light); 
+        if (myScene) {
+            const ambientLight = new THREE.AmbientLight(exhibitionState.appearance.ambient_light_color, getAmbientLightIntensity(exhibitionState.appearance.moodiness));
+            myScene.add(ambientLight);
             myRenderer.render(myScene, myCamera);
 
             return () => {
-                myScene.remove(ambient_light); 
+                myScene.remove(ambientLight);
             };
-            
         }
     }, [myCamera, myControls, myScene, myTextureLoader, myRenderer,
-        primary_json.appearance.ambient_light_color, primary_json.appearance.moodiness]);
-
-
-
+        exhibitionState.appearance.ambient_light_color, exhibitionState.appearance.moodiness]);
 
     return (
-        <Box width="100%" height="calc(100vh - 64px)" ref={containerRef} sx={{position: "relative"}}>
+        <Box width="100%" height="calc(100vh - 64px)" ref={containerRef} sx={{ position: "relative" }}>
             <div id="exhibition-canvas" ref={canvasRef}>
             </div>
             {exhibitionIsEditable && (
                 <Fab variant="extended" color={
-                    appUser.is_admin && appUser.id != exhibitionMetadata.exhibition_owner ? "secondary" : "primary"
-                } sx={{position: "absolute", right: 20, bottom: 20, zIndex: 1500}}
+                    appUser.is_admin && appUser.id !== exhibitionMetadata.exhibition_owner ? "secondary" : "primary"
+                } sx={{ position: "absolute", right: 20, bottom: 20, zIndex: 1500 }}
                 onClick={() => {
-                    if(editModeActive) {
+                    if (editModeActive) {
                         setEditModeActive(false);
-                    }
-                    else {
+                    } else {
                         setEditModeActive(true);
                     }
                 }}>
                     <Stack direction="row" spacing={1} alignItems="center">
-                        {editModeActive && (
+                        {(editModeActive &&
                             <VisibilityIcon fontSize="large" />
-                        ) || !editModeActive && (
-                            appUser.is_admin && appUser.id != exhibitionMetadata.exhibition_owner ? 
-                                <SecurityIcon fontSize="large" /> :
-                                <EditIcon fontSize="large" />
+                        ) || (!editModeActive &&
+                            appUser.is_admin && appUser.id !== exhibitionMetadata.exhibition_owner
+                            ? <SecurityIcon fontSize="large" />
+                            : <EditIcon fontSize="large" />
                         )}
                         <Typography variant="h6">
                             {editModeActive ? "Preview" : "Edit"}
@@ -491,13 +433,12 @@ const Exhibition3DViewport = ({exhibitionState: primary_json, exhibitionMetadata
                     </Stack>
                 </Fab>
             )}
-            {!editModeActive && (<ExhibitionIntro {...{dialogIsOpen, setDialogIsOpen}} controls={myControls} {...{exhibitionMetadata}} />)}
-            <ArtInfoPopup {...{globalImageCatalog}} exhibitionState={primary_json} image_id={infoMenuImageId} />
-            
+            {!editModeActive && (<ExhibitionIntro {...{ dialogIsOpen, setDialogIsOpen }} controls={myControls} {...{ exhibitionMetadata }} />)}
+            <ArtInfoPopup {...{ globalImageCatalog }} exhibitionState={exhibitionState} imageId={infoMenuImageId} />
+
         </Box>
     );
 };
-
 
 Exhibition3DViewport.propTypes = {
     exhibitionState: PropTypes.object.isRequired,
@@ -509,16 +450,17 @@ Exhibition3DViewport.propTypes = {
     setEditModeActive: PropTypes.func.isRequired
 };
 
-const ArtInfoPopup = ({globalImageCatalog, image_id, exhibitionState}) => {
-    const infoFromCatalog = globalImageCatalog.find((i) => i.id == image_id);
-    const infoFromExhibition = exhibitionState.images.find((i) => i.image_id == image_id);
+const ArtInfoPopup = ({ globalImageCatalog, imageId, exhibitionState }) => {
+    const infoFromCatalog = globalImageCatalog.find((i) => i.id === imageId);
+    const infoFromExhibition = exhibitionState.images.find((i) => i.imageId === imageId);
     return (
         <Card raised={true} component={Paper} sx={{
-            position: "absolute", 
-            top: 10, left: 10, 
+            position: "absolute",
+            top: 10,
+            left: 10,
             width: "calc(30vw - 90px)",
             opacity: 0.8,
-            visibility: image_id ? "" : "hidden"
+            visibility: imageId ? "" : "hidden"
         }}>
             <CardContent>
                 <Stack spacing={2}>
@@ -554,34 +496,32 @@ const ArtInfoPopup = ({globalImageCatalog, image_id, exhibitionState}) => {
     );
 };
 
-
 ArtInfoPopup.propTypes = {
     globalImageCatalog: PropTypes.arrayOf(PropTypes.object).isRequired,
-    image_id: PropTypes.number,
+    imageId: PropTypes.number,
     exhibitionState: PropTypes.object.isRequired
 };
 
-const ExhibitionIntro = ({exhibitionMetadata, controls, dialogIsOpen, setDialogIsOpen}) => {
-
+const ExhibitionIntro = ({ exhibitionMetadata, controls, dialogIsOpen, setDialogIsOpen }) => {
     return (
         <Dialog open={dialogIsOpen} className="background_menu" fullWidth maxWidth="md"
             hideBackdrop disablePortal
-            sx={{position: "absolute"}}>
+            sx={{ position: "absolute" }}>
             <DialogContent>
                 <Stack alignItems="center" spacing={2}>
-                    <img src="/images/logo_square_orange.png" style={{maxWidth: "200px"}}/>
+                    <img src="/images/logo_square_orange.png" style={{ maxWidth: "200px" }}/>
                     <Typography variant="h4">{exhibitionMetadata.title}</Typography>
                     {exhibitionMetadata.curator && (
                         <Typography variant="h5">Curated by {exhibitionMetadata.curator}</Typography>
                     )}
-                        
-                    <Stack sx={{opacity: 0.5}} alignItems="center">
+
+                    <Stack sx={{ opacity: 0.5 }} alignItems="center">
                         <Typography>Controls are paused while this menu is open.</Typography>
                         <Typography>This menu will reappear whenever you press ESCAPE.</Typography>
                         <Typography>Explore the gallery using the W-A-S-D or arrow keys on your keyboard.</Typography>
                         <Typography>Take a look around and turn by using your mouse or mousepad.</Typography>
                     </Stack>
-                    <Button variant="contained" color="grey" size="large" id="play_button" 
+                    <Button variant="contained" color="grey" size="large" id="play_button"
                         onClick={() => {
                             setDialogIsOpen(false);
                             controls.lock();
