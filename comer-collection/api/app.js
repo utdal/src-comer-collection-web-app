@@ -1,4 +1,3 @@
-// require("dotenv").config();
 import "dotenv/config.js";
 import "express-async-errors";
 import createError from "http-errors";
