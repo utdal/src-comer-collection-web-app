@@ -12,6 +12,13 @@ import db from "../sequelize.js";
 const router = Router();
 const { User, Course, Exhibition } = db;
 
+/**
+ * @description Check the request for a valid JSON web token.  If the token is valid,
+ * attach information about the associated user to the request: req.app_user.
+ * @param {import("express").Request} req
+ * @param {import("express").Response} res
+ * @param {import("express").NextFunction} next
+ */
 const requireAuthenticatedUser = async (req, res, next) => {
     try {
         const header = req.get("Authorization");
@@ -41,6 +48,12 @@ const requireAuthenticatedUser = async (req, res, next) => {
     }
 };
 
+/**
+ * Ensure the current app user is a collection manager or administrator
+ * @param {import("express").Request} req
+ * @param {import("express").Response} res
+ * @param {import("express").NextFunction} next
+ */
 const requireAtLeastCollectionManager = async (req, res, next) => {
     const { app_user: appUser } = req;
     if (appUser?.is_collection_manager || appUser?.is_admin) {
@@ -50,6 +63,12 @@ const requireAtLeastCollectionManager = async (req, res, next) => {
     }
 };
 
+/**
+ * Ensure the current app user is an administrator
+ * @param {import("express").Request} req
+ * @param {import("express").Response} res
+ * @param {import("express").NextFunction} next
+ */
 const requireAdmin = async (req, res, next) => {
     const { app_user: appUser } = req;
     if (appUser?.is_admin) {
@@ -59,6 +78,12 @@ const requireAdmin = async (req, res, next) => {
     }
 };
 
+/**
+ * Ensure the current app user does not have a password change requirement
+ * @param {import("express").Request} req
+ * @param {import("express").Response} res
+ * @param {import("express").NextFunction} next
+ */
 const requirePermanentPassword = async (req, res, next) => {
     const { app_user: appUser } = req;
     if (appUser && !appUser.pw_change_required) {
