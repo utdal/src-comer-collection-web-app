@@ -1,22 +1,24 @@
 import { DataTypes } from "sequelize";
 
-export default (db) => {
-    const { sequelize, Sequelize } = db;
+/**
+ * @param {import("sequelize").Sequelize} sequelize
+ */
+export default (sequelize) => {
     const Artist = sequelize.define("Artist", {
         id: {
-            type: Sequelize.INTEGER,
+            type: DataTypes.INTEGER,
             autoIncrement: true,
             initialAutoIncrement: 1,
             primaryKey: true,
             field: "artist_id"
         },
         familyName: {
-            type: Sequelize.TEXT("tiny"),
+            type: DataTypes.TEXT("tiny"),
             allowNull: false,
             field: "artist_familyname"
         },
         givenName: {
-            type: Sequelize.TEXT("tiny"),
+            type: DataTypes.TEXT("tiny"),
             allowNull: false,
             field: "artist_givenname"
         },
@@ -33,14 +35,14 @@ export default (db) => {
             }
         },
         website: {
-            type: Sequelize.TEXT("tiny"),
+            type: DataTypes.TEXT("tiny"),
             field: "artist_website",
             set (value) {
                 this.setDataValue("website", value || null);
             }
         },
         notes: {
-            type: Sequelize.TEXT("tiny"),
+            type: DataTypes.TEXT("tiny"),
             field: "artist_notes",
             set (value) {
                 this.setDataValue("notes", value || null);

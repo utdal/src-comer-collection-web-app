@@ -39,8 +39,6 @@ app.use(logger("dev"));
 app.use(json());
 app.use(urlencoded({ extended: false }));
 app.use(cookieParser());
-// This line allows the public files to be read from/rendered by path in the front end
-// app.use("/static", static(join(__dirname, "static")));
 app.use(helmet());
 
 app.use(contentSecurityPolicy({
@@ -54,6 +52,10 @@ app.use(frameguard({
     action: "deny"
 }));
 
+/**
+ * Exclude null values from JSON responses to decrease the response size.
+ * The front-end will generally interpret absent values the same as null values.
+ */
 app.set("json replacer", (k, v) => (v === null ? undefined : v));
 
 // Routes for querying data
@@ -78,7 +80,6 @@ app.use(function (err, req, res, next) {
     });
 });
 
-// module.exports = app;
 app.set("port", process.env.PORT || 9000);
 
 const server = app.listen(app.get("port"), function () {

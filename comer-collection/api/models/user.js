@@ -1,17 +1,19 @@
 import { DataTypes } from "sequelize";
 
-export default (db) => {
-    const { sequelize, Sequelize } = db;
+/**
+ * @param {import("sequelize").Sequelize} sequelize
+ */
+export default (sequelize) => {
     const User = sequelize.define("User", {
         id: {
-            type: Sequelize.INTEGER,
+            type: DataTypes.INTEGER,
             autoIncrement: true,
             initialAutoIncrement: 1,
             primaryKey: true,
             field: "user_id"
         },
         email: {
-            type: Sequelize.STRING(255),
+            type: DataTypes.STRING(255),
             allowNull: false,
             unique: true,
             field: "user_email"
@@ -23,11 +25,11 @@ export default (db) => {
             }
         },
         family_name: {
-            type: Sequelize.TEXT("tiny"),
+            type: DataTypes.TEXT("tiny"),
             field: "user_family_name"
         },
         given_name: {
-            type: Sequelize.TEXT("tiny"),
+            type: DataTypes.TEXT("tiny"),
             field: "user_given_name"
         },
         full_name: {
@@ -73,7 +75,7 @@ export default (db) => {
             defaultValue: "CURATOR"
         },
         pw_hash: {
-            type: Sequelize.TEXT("tiny"),
+            type: DataTypes.TEXT("tiny"),
             field: "user_pw_hash",
             defaultValue: null
         },
@@ -84,18 +86,18 @@ export default (db) => {
             }
         },
         pw_change_required: {
-            type: Sequelize.BOOLEAN,
+            type: DataTypes.BOOLEAN,
             field: "user_pw_change_required",
             allowNull: false,
             defaultValue: true
         },
         pw_updated: {
-            type: Sequelize.DATE(3),
+            type: DataTypes.DATE(3),
             field: "user_pw_last_updated",
             defaultValue: null
         },
         is_active: {
-            type: Sequelize.BOOLEAN,
+            type: DataTypes.BOOLEAN,
             field: "user_is_active",
             allowNull: false,
             defaultValue: true

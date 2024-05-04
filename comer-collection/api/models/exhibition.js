@@ -1,8 +1,13 @@
 import { DataTypes } from "sequelize";
 
-export default (db) => {
-    const { sequelize, Sequelize } = db;
-
+/**
+ * @param {import("sequelize").Sequelize} sequelize
+ */
+export default (sequelize) => {
+    /**
+     * @description The subquery that returns curator names based on exhibition privacy settings
+     * @type {[import("sequelize").Utils.Literal, string]}
+     */
     const publicCuratorSubquery = [
         sequelize.literal(`(
             SELECT if(exhibition.exhibition_privacy = 'PUBLIC',
@@ -16,19 +21,19 @@ export default (db) => {
 
     const Exhibition = sequelize.define("Exhibition", {
         id: {
-            type: Sequelize.INTEGER,
+            type: DataTypes.INTEGER,
             autoIncrement: true,
             initialAutoIncrement: 1,
             primaryKey: true,
             field: "exhibition_id"
         },
         title: {
-            type: Sequelize.TEXT("tiny"),
+            type: DataTypes.TEXT("tiny"),
             allowNull: false,
             field: "exhibition_title"
         },
         data: {
-            type: Sequelize.BLOB("medium"),
+            type: DataTypes.BLOB("medium"),
             field: "exhibition_data",
             allowNull: true,
             get () {
@@ -36,17 +41,17 @@ export default (db) => {
             }
         },
         date_created: {
-            type: Sequelize.DATE(3),
+            type: DataTypes.DATE(3),
             field: "exhibition_date_created",
             allowNull: false
         },
         date_modified: {
-            type: Sequelize.DATE(3),
+            type: DataTypes.DATE(3),
             field: "exhibition_date_modified",
             allowNull: false
         },
         privacy: {
-            type: Sequelize.STRING(20),
+            type: DataTypes.STRING(20),
             field: "exhibition_privacy",
             allowNull: false,
             validate: {

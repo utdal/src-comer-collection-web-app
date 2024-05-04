@@ -1,22 +1,24 @@
 import { DataTypes } from "sequelize";
 
-export default (db) => {
-    const { sequelize, Sequelize } = db;
+/**
+ * @param {import("sequelize").Sequelize} sequelize
+ */
+export default (sequelize) => {
     const Tag = sequelize.define("Tag", {
         id: {
-            type: Sequelize.INTEGER,
+            type: DataTypes.INTEGER,
             autoIncrement: true,
             initialAutoIncrement: 1,
             primaryKey: true,
             field: "tag_id"
         },
         data: {
-            type: Sequelize.TEXT("tiny"),
+            type: DataTypes.TEXT("tiny"),
             allowNull: false,
             field: "tag_data"
         },
         notes: {
-            type: Sequelize.TEXT("tiny"),
+            type: DataTypes.TEXT("tiny"),
             field: "tag_notes"
         },
         safe_display_name: {

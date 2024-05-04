@@ -10,7 +10,10 @@ import ExhibitionModel from "./models/exhibition.js";
 
 const { DB_HOST, DB_PORT, DB_SCHEMA, DB_USER, DB_PASSWORD } = process.env;
 
-// Authentication object for querying from database
+/**
+ * Authentication object for querying from database
+ * @type {Sequelize.Sequelize}
+ */
 const sequelize = new Sequelize(DB_SCHEMA, DB_USER, DB_PASSWORD, {
     dialect: "mysql",
     dialectOptions: {
@@ -38,12 +41,12 @@ const db = {
     sequelize
 };
 
-db.Artist = ArtistModel(db);
-db.Image = ImageModel(db);
-db.Tag = TagModel(db);
-db.User = UserModel(db);
-db.Course = CourseModel(db);
-db.Exhibition = ExhibitionModel(db);
+db.Artist = ArtistModel(sequelize);
+db.Image = ImageModel(sequelize);
+db.Tag = TagModel(sequelize);
+db.User = UserModel(sequelize);
+db.Course = CourseModel(sequelize);
+db.Exhibition = ExhibitionModel(sequelize);
 
 // Images with artists can be deleted, but artists with images cannot be deleted
 db.Artist.belongsToMany(db.Image, { through: "comer_image_credits", foreignKey: "artist_id", onDelete: "RESTRICT" });
