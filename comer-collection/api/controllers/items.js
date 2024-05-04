@@ -2,6 +2,16 @@ import createError from "http-errors";
 import db from "../sequelize.js";
 const { sequelize } = db;
 
+/**
+ * Generic GET function for database items
+ * @param {import("express").Request} req
+ * @param {import("express").Response} res
+ * @param {import("express").NextFunction} next
+ * @param {import("sequelize").Model} model The Sequelize model to query
+ * @param {import("sequelize").IncludeOptions} include The include options to pass to findByPk
+ * @param {String | number} itemId The primary key of the item to retrieve
+ * @param {Object} itemFunctions Additional calculations to perform on the item and include in the returned item
+ */
 const getItem = async (req, res, next, model, include, itemId, itemFunctions = {}) => {
     try {
         if (req.body.id) {
@@ -21,6 +31,16 @@ const getItem = async (req, res, next, model, include, itemId, itemFunctions = {
     }
 };
 
+/**
+ * Generic LIST function for database items
+ * @param {import("express").Request} req
+ * @param {import("express").Response} res
+ * @param {import("express").NextFunction} next
+ * @param {import("sequelize").Model} model The Sequelize model to query
+ * @param {import("sequelize").IncludeOptions} include The include options to pass to findAll
+ * @param {import("sequelize").WhereOptions} where The where options to pass to findAll
+ * @param {Object} itemFunctions Additional calculations to perform on the items and include in the returned items
+ */
 const listItems = async (req, res, next, model, include, where, itemFunctions = {}) => {
     try {
         const items = Array.from(await model.findAll({ include, where })).map((i) => {
@@ -36,6 +56,14 @@ const listItems = async (req, res, next, model, include, where, itemFunctions = 
     }
 };
 
+/**
+ * Generic CREATE function for database items
+ * @param {import("express").Request} req
+ * @param {import("express").Response} res
+ * @param {import("express").NextFunction} next
+ * @param {import("sequelize").Model} model The Sequelize model to query
+ * @param {String[] | null} restrictFields If set, will cause an error if any field not on the list exists in the request body
+ */
 const createItem = async (req, res, next, model, restrictFields = null) => {
     try {
         if (req.body.id) {
@@ -58,6 +86,15 @@ const createItem = async (req, res, next, model, restrictFields = null) => {
     }
 };
 
+/**
+ * Generic UPDATE function for database items
+ * @param {import("express").Request} req
+ * @param {import("express").Response} res
+ * @param {import("express").NextFunction} next
+ * @param {import("sequelize").Model} model The Sequelize model to query
+ * @param {String | number} itemId The primary key of the item to update
+ * @param {String[] | null} restrictFields If set, will cause an error if any field not on the list exists in the request body
+ */
 const updateItem = async (req, res, next, model, itemId, restrictFields = null) => {
     try {
         if (req.body.id) {
@@ -84,6 +121,14 @@ const updateItem = async (req, res, next, model, itemId, restrictFields = null) 
     }
 };
 
+/**
+ * Generic DELETE function for database items
+ * @param {import("express").Request} req
+ * @param {import("express").Response} res
+ * @param {import("express").NextFunction} next
+ * @param {import("sequelize").Model} model The Sequelize model to query
+ * @param {String | number} itemId The primary key of the item to update
+ */
 const deleteItem = async (req, res, next, model, itemId) => {
     try {
         if (req.body.id) {
