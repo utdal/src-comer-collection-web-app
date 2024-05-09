@@ -2,11 +2,11 @@ import React, { useCallback, useEffect, useMemo, useState } from "react";
 import {
     Stack,
     Button,
-    Typography, Box, IconButton, Paper
+    Typography, Box, Paper
 } from "@mui/material";
 import { FullPageMessage } from "../../Components/FullPageMessage.js";
 import SearchBox from "../../Components/SearchBox.js";
-import { LockIcon, RefreshIcon, DeleteIcon, SearchIcon, InfoIcon, SettingsIcon, OpenInNewIcon, FilterAltOffOutlinedIcon, WarningIcon, AccessTimeIcon } from "../../Imports/Icons.js";
+import { LockIcon, RefreshIcon, SearchIcon, InfoIcon, FilterAltOffOutlinedIcon, WarningIcon, AccessTimeIcon } from "../../Imports/Icons.js";
 import { ItemSingleDeleteDialog } from "../../Components/Dialogs/ItemSingleDeleteDialog.js";
 import { DataTable } from "../../Components/DataTable.js";
 import { Navigate } from "react-router";
@@ -20,7 +20,44 @@ import { CourseFilterMenu } from "../../Components/Menus/CourseFilterMenu.js";
 
 import { useAccountNav } from "../../ContextProviders/AccountNavProvider.js";
 import { Exhibition } from "../../Classes/Entities/Exhibition.js";
-import { User } from "../../Classes/Entities/User.js";
+import { ManagementPageProvider } from "../../ContextProviders/ManagementPageProvider.js";
+
+const exhibitionTableFields = [
+    {
+        columnDescription: "ID",
+        TableCellComponent: Exhibition.TableCells.ID,
+        generateSortableValue: (exhibition) => exhibition.id
+    },
+    {
+        columnDescription: "Title",
+        maxWidth: "150px",
+        TableCellComponent: Exhibition.TableCells.Title,
+        generateSortableValue: (exhibition) => exhibition.title?.toLowerCase()
+    },
+    {
+        columnDescription: "Owner",
+        TableCellComponent: Exhibition.TableCells.OwnerStackedNameEmail,
+        generateSortableValue: (exhibition) => exhibition.User.full_name_reverse?.toLowerCase()
+    },
+    {
+        columnDescription: "Created",
+        TableCellComponent: Exhibition.TableCells.DateCreatedStacked,
+        generateSortableValue: (exhibition) => new Date(exhibition.date_created)
+    },
+    {
+        columnDescription: "Modified",
+        TableCellComponent: Exhibition.TableCells.DateModifiedStacked,
+        generateSortableValue: (exhibition) => new Date(exhibition.date_modified)
+    },
+    {
+        columnDescription: "Access",
+        TableCellComponent: Exhibition.TableCells.Access
+    },
+    {
+        columnDescription: "Options",
+        TableCellComponent: Exhibition.TableCells.ExhibitionOptions
+    }
+];
 
 const ExhibitionManagement = () => {
     const [courses, setCourses] = useState([]);
@@ -83,9 +120,6 @@ const ExhibitionManagement = () => {
             }
             setCourses(Object.values(coursesById));
 
-            // const courseData = await sendAuthenticatedRequest("GET", "/api/admin/courses");
-            // setCourses(courseData.data);
-
             setTimeout(() => {
                 setRefreshInProgress(false);
             }, 1000);
@@ -121,86 +155,17 @@ const ExhibitionManagement = () => {
         fetchData();
     };
 
-    const exhibitionTableFields = [
-        {
-            columnDescription: "ID",
-            generateTableCell: (exhibition) => (
-                <Stack direction="row" alignItems="center" spacing={1}>
-                    <Typography variant="body1">{exhibition.id}</Typography>
-                </Stack>
-            ),
-            generateSortableValue: (exhibition) => exhibition.id
-        },
-        {
-            columnDescription: "Title",
-            maxWidth: "150px",
-            generateTableCell: (exhibition) => (
-                exhibition.title
-                    ? (
-                        <Typography variant="body1">{exhibition.title}</Typography>
-                    )
-                    : (
-                        <Typography variant="body1" sx={{ opacity: 0.5 }}>Not set</Typography>
-                    )
-            ),
-            generateSortableValue: (exhibition) => exhibition.title?.toLowerCase()
-        },
-        {
-            columnDescription: "Owner",
-            generateTableCell: (exhibition) => (
-                <User.TableCells.StackedNameEmail user={exhibition.User} />
-            ),
-            generateSortableValue: (exhibition) => exhibition.User.full_name_reverse?.toLowerCase()
-        },
-        {
-            columnDescription: "Created",
-            generateTableCell: (exhibition) => (
-                <Exhibition.TableCells.DateCreatedStacked {...{ exhibition }} />
-            ),
-            generateSortableValue: (exhibition) => new Date(exhibition.date_created)
-        },
-        {
-            columnDescription: "Modified",
-            generateTableCell: (exhibition) => (
-                <Exhibition.TableCells.DateModifiedStacked {...{ exhibition }} />
-            ),
-            generateSortableValue: (exhibition) => new Date(exhibition.date_modified)
-        },
-        {
-            columnDescription: "Access",
-            generateTableCell: (exhibition) => (
-                <Exhibition.TableCells.Access {...{ exhibition }} />
-            )
-        },
-        {
-            columnDescription: "Options",
-            generateTableCell: (exhibition) => (
-                <Stack direction="row" spacing={1}>
-                    <Button variant="outlined" endIcon={<OpenInNewIcon />} href={`/Exhibitions/${exhibition.id}`} target="_blank">
-                        <Typography variant="body1">Open</Typography>
-                    </Button>
-                    <IconButton
-                        onClick={() => {
-                            setEditDialogExhibitionId(exhibition.id);
-                            setEditDialogExhibitionAccess(exhibition.privacy);
-                            setEditDialogExhibitionTitle(exhibition.title);
-                            setEditDialogIsOpen(true);
-                        }}
-                    >
-                        <SettingsIcon />
-                    </IconButton>
-                    <IconButton
-                        onClick={() => {
-                            setDeleteDialogExhibition(exhibition);
-                            setDeleteDialogIsOpen(true);
-                        }}
-                    >
-                        <DeleteIcon />
-                    </IconButton>
-                </Stack>
-            )
-        }
-    ];
+    const handleOpenExhibitionSettings = useCallback((exhibition) => {
+        setEditDialogExhibitionId(exhibition.id);
+        setEditDialogExhibitionAccess(exhibition.privacy);
+        setEditDialogExhibitionTitle(exhibition.title);
+        setEditDialogIsOpen(true);
+    }, [setEditDialogExhibitionId, setEditDialogExhibitionAccess, setEditDialogExhibitionTitle]);
+
+    const handleOpenExhibitionDeleteDialog = useCallback((exhibition) => {
+        setDeleteDialogExhibition(exhibition);
+        setDeleteDialogIsOpen(true);
+    }, [setDeleteDialogExhibition, setDeleteDialogIsOpen]);
 
     return (!appUser.is_admin &&
         <FullPageMessage message="Insufficient Privileges" Icon={LockIcon} buttonText="Return to Profile" buttonDestination="/Account/Profile" />
@@ -211,93 +176,99 @@ const ExhibitionManagement = () => {
     ) || (!isLoaded &&
         <FullPageMessage message="Loading exhibitions..." Icon={AccessTimeIcon} />
     ) || (
-        <Box component={Paper} square sx={{
-            display: "grid",
-            gridTemplateColumns: "1fr",
-            gridTemplateRows: "80px calc(100vh - 224px) 80px",
-            gridTemplateAreas: `
-        "top"
-        "table"
-        "bottom"
-      `
+        <ManagementPageProvider managementCallbacks={{
+            handleOpenExhibitionSettings,
+            handleOpenExhibitionDeleteDialog
         }}>
-            <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={2} padding={2} sx={{ gridArea: "top" }}>
-                <SearchBox {...{ searchQuery, setSearchQuery }} placeholder="Search by user name or email" width="30%" />
-                <CourseFilterMenu filterValue={userCourseIdFilter} setFilterValue={setUserCourseIdFilter} {...{ courses }} />
+            <Box component={Paper} square sx={{
+                display: "grid",
+                gridTemplateColumns: "1fr",
+                gridTemplateRows: "80px calc(100vh - 224px) 80px",
+                gridTemplateAreas: `
+            "top"
+            "table"
+            "bottom"
+        `
+            }}>
+                <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={2} padding={2} sx={{ gridArea: "top" }}>
+                    <SearchBox {...{ searchQuery, setSearchQuery }} placeholder="Search by user name or email" width="30%" />
+                    <CourseFilterMenu filterValue={userCourseIdFilter} setFilterValue={setUserCourseIdFilter} {...{ courses }} />
 
-                <Stack direction="row" spacing={2}>
-                    <Button color="primary" variant="outlined" startIcon={<RefreshIcon />} onClick={() => {
-                        setRefreshInProgress(true);
-                        fetchData();
-                    }}
-                    disabled={refreshInProgress}>
-                        <Typography variant="body1">Refresh</Typography>
-                    </Button>
-                    <Button color="primary" variant={
-                        visibleExhibitions.length > 0 ? "outlined" : "contained"
-                    } startIcon={<FilterAltOffOutlinedIcon />} onClick={clearFilters}
-                    disabled={
-                        !(searchQuery || userCourseIdFilter)
-                    }>
-                        <Typography variant="body1">Clear Filters</Typography>
-                    </Button>
+                    <Stack direction="row" spacing={2}>
+                        <Button color="primary" variant="outlined" startIcon={<RefreshIcon />} onClick={() => {
+                            setRefreshInProgress(true);
+                            fetchData();
+                        }}
+                        disabled={refreshInProgress}>
+                            <Typography variant="body1">Refresh</Typography>
+                        </Button>
+                        <Button color="primary" variant={
+                            visibleExhibitions.length > 0 ? "outlined" : "contained"
+                        } startIcon={<FilterAltOffOutlinedIcon />} onClick={clearFilters}
+                        disabled={
+                            !(searchQuery || userCourseIdFilter)
+                        }>
+                            <Typography variant="body1">Clear Filters</Typography>
+                        </Button>
+                    </Stack>
                 </Stack>
-            </Stack>
-            <Box sx={{ gridArea: "table" }}>
-                <DataTable items={exhibitions} visibleItems={visibleExhibitions} tableFields={exhibitionTableFields}
-                    rowSelectionEnabled={true}
-                    selectedItems={selectedExhibitions} setSelectedItems={setSelectedExhibitions}
-                    defaultSortColumn="Modified"
-                    defaultSortAscending={false}
-                    {...{ sortColumn, setSortColumn, sortAscending, setSortAscending }}
-                    {...
-                        (visibleExhibitions.length === exhibitions.length && {
-                            noContentMessage: "No exhibitions yet",
-                            NoContentIcon: InfoIcon
-                        }) || (visibleExhibitions.length < exhibitions.length && {
-                            noContentMessage: "No results",
-                            noContentButtonAction: clearFilters,
-                            noContentButtonText: "Clear Filters",
-                            NoContentIcon: SearchIcon
-                        })
-                    }
+                <Box sx={{ gridArea: "table" }}>
+                    <DataTable items={exhibitions} visibleItems={visibleExhibitions} tableFields={exhibitionTableFields}
+                        rowSelectionEnabled={true}
+                        selectedItems={selectedExhibitions} setSelectedItems={setSelectedExhibitions}
+                        defaultSortColumn="Modified"
+                        defaultSortAscending={false}
+                        {...{ sortColumn, setSortColumn, sortAscending, setSortAscending }}
+                        {...
+                            (visibleExhibitions.length === exhibitions.length && {
+                                noContentMessage: "No exhibitions yet",
+                                NoContentIcon: InfoIcon
+                            }) || (visibleExhibitions.length < exhibitions.length && {
+                                noContentMessage: "No results",
+                                noContentButtonAction: clearFilters,
+                                noContentButtonText: "Clear Filters",
+                                NoContentIcon: SearchIcon
+                            })
+                        }
+                    />
+                </Box>
+                <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={2} padding={2} sx={{ gridArea: "bottom" }}>
+                    <SelectionSummary
+                        items={exhibitions}
+                        selectedItems={selectedExhibitions}
+                        setSelectedItems={setSelectedExhibitions}
+                        visibleItems={visibleExhibitions}
+                        entitySingular="exhibition"
+                        entityPlural="exhibitions"
+                    />
+                </Stack>
+
+                <ExhibitionSettingsDialog
+                    editMode={true}
+                    adminMode={true}
+                    dialogExhibitionAccess={editDialogExhibitionAccess}
+                    setDialogExhibitionAccess={setEditDialogExhibitionAccess}
+                    dialogExhibitionId={editDialogExhibitionId}
+                    dialogExhibitionTitle={editDialogExhibitionTitle}
+                    setDialogExhibitionTitle={setEditDialogExhibitionTitle}
+                    dialogIsOpen={editDialogIsOpen}
+                    setDialogIsOpen={setEditDialogIsOpen}
+                    handleExhibitionEdit={handleExhibitionEditByAdmin}
                 />
+
+                <ItemSingleDeleteDialog
+                    Entity={Exhibition}
+                    deleteDialogIsOpen={deleteDialogIsOpen}
+                    deleteDialogItem={deleteDialogExhibition}
+                    requireTypedConfirmation={true}
+                    allItems={exhibitions}
+                    setAllItems={setExhibitions}
+                    setDeleteDialogIsOpen={setDeleteDialogIsOpen}
+                />
+
             </Box>
-            <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={2} padding={2} sx={{ gridArea: "bottom" }}>
-                <SelectionSummary
-                    items={exhibitions}
-                    selectedItems={selectedExhibitions}
-                    setSelectedItems={setSelectedExhibitions}
-                    visibleItems={visibleExhibitions}
-                    entitySingular="exhibition"
-                    entityPlural="exhibitions"
-                />
-            </Stack>
 
-            <ExhibitionSettingsDialog
-                editMode={true}
-                adminMode={true}
-                dialogExhibitionAccess={editDialogExhibitionAccess}
-                setDialogExhibitionAccess={setEditDialogExhibitionAccess}
-                dialogExhibitionId={editDialogExhibitionId}
-                dialogExhibitionTitle={editDialogExhibitionTitle}
-                setDialogExhibitionTitle={setEditDialogExhibitionTitle}
-                dialogIsOpen={editDialogIsOpen}
-                setDialogIsOpen={setEditDialogIsOpen}
-                handleExhibitionEdit={handleExhibitionEditByAdmin}
-            />
-
-            <ItemSingleDeleteDialog
-                Entity={Exhibition}
-                deleteDialogIsOpen={deleteDialogIsOpen}
-                deleteDialogItem={deleteDialogExhibition}
-                requireTypedConfirmation={true}
-                allItems={exhibitions}
-                setAllItems={setExhibitions}
-                setDeleteDialogIsOpen={setDeleteDialogIsOpen}
-            />
-
-        </Box>
+        </ManagementPageProvider>
     );
 };
 

@@ -45,6 +45,10 @@ AppUserProvider.propTypes = {
     children: PropTypes.node
 };
 
+/**
+ * Hook to retrieve current app user within AppUserContext
+ * @returns {[object, function, function, boolean]} [appUser, setAppUser, initializeAppUser, appUserIsLoaded]
+ */
 export const useAppUser = () => {
     const { appUser, setAppUser, initializeAppUser, appUserIsLoaded } = useContext(AppUserContext);
     return [appUser, setAppUser, initializeAppUser, appUserIsLoaded];

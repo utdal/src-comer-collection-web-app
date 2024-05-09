@@ -1,8 +1,10 @@
 /* eslint-disable react/prop-types */
-import { Button, Stack, Typography } from "@mui/material";
+import { Button, IconButton, Stack, Typography } from "@mui/material";
 import { Entity } from "../Entity.js";
-import React from "react";
-import { LockIcon, OpenInNewIcon, PublicIcon, VpnLockIcon } from "../../Imports/Icons.js";
+import React, { useCallback } from "react";
+import { LockIcon, OpenInNewIcon, PublicIcon, SettingsIcon, VpnLockIcon } from "../../Imports/Icons.js";
+import { useTableRowItem } from "../../ContextProviders/TableRowProvider.js";
+import { useManagementCallbacks } from "../../ContextProviders/ManagementPageProvider.js";
 
 class Exhibition extends Entity {
     static baseUrl = "/api/admin/exhibitions";
@@ -14,34 +16,51 @@ class Exhibition extends Entity {
     }
 
     static TableCells = {
-        ID ({ exhibition }) {
+        ID () {
+            const exhibition = useTableRowItem();
             return (
                 <Typography variant="body1">{exhibition.id}</Typography>
             );
         },
-        Title ({ exhibition }) {
+        Title () {
+            const exhibition = useTableRowItem();
             return (
-                <Typography variant="body1">{exhibition.title}</Typography>
+                exhibition.title
+                    ? <Typography variant="body1">{exhibition.title}</Typography>
+                    : <Typography variant="body1" sx={{ opacity: 0.5 }}>Not set</Typography>
             );
         },
-        OpenInNewTab ({ exhibition }) {
+        OwnerStackedNameEmail () {
+            const { User: owner } = useTableRowItem();
+            return (
+                <Stack direction="column" paddingTop={1} paddingBottom={1}>
+                    <Typography variant="body1">{owner.full_name_reverse}</Typography>
+                    <Typography variant="body1" sx={{ opacity: 0.5 }}>{owner.email}</Typography>
+                </Stack>
+            );
+        },
+        OpenInNewTab () {
+            const exhibition = useTableRowItem();
             return (
                 <Button variant="outlined" endIcon={<OpenInNewIcon />} href={`/Exhibitions/${exhibition.id}`} target="_blank">
                     <Typography variant="body1">Open</Typography>
                 </Button>
             );
         },
-        DateCreated ({ exhibition }) {
+        DateCreated () {
+            const exhibition = useTableRowItem();
             return (
                 <Typography variant="body1">{Entity.formatDate(exhibition.date_created)}, {Entity.formatTime(exhibition.date_created)}</Typography>
             );
         },
-        DateModified ({ exhibition }) {
+        DateModified () {
+            const exhibition = useTableRowItem();
             return (
                 <Typography variant="body1">{Entity.formatDate(exhibition.date_modified)}, {Entity.formatTime(exhibition.date_modified)}</Typography>
             );
         },
-        DateCreatedStacked ({ exhibition }) {
+        DateCreatedStacked () {
+            const exhibition = useTableRowItem();
             return (
                 <Stack direction="column" padding={0}>
                     <Typography variant="body1">
@@ -53,7 +72,8 @@ class Exhibition extends Entity {
                 </Stack>
             );
         },
-        DateModifiedStacked ({ exhibition }) {
+        DateModifiedStacked () {
+            const exhibition = useTableRowItem();
             return (
                 <Stack direction="column" padding={0}>
                     <Typography variant="body1">
@@ -65,7 +85,8 @@ class Exhibition extends Entity {
                 </Stack>
             );
         },
-        Access ({ exhibition }) {
+        Access () {
+            const exhibition = useTableRowItem();
             return (
                 <Stack direction="row" spacing={1} alignItems="center">
                     {(exhibition.privacy === "PRIVATE" &&
@@ -82,6 +103,41 @@ class Exhibition extends Entity {
                     ) || (exhibition.privacy === "PUBLIC" &&
                         "Public"
                     )}</Typography>
+                </Stack>
+            );
+        },
+        ExhibitionSettingsButton ({ onClick, disabled }) {
+            return (
+                <IconButton {...{ onClick, disabled }}>
+                    <SettingsIcon />
+                </IconButton>
+            );
+        },
+        DeleteButton ({ onClick }) {
+            return (
+                <Entity.TableCells.DeleteButton {...{ onClick }} />
+            );
+        },
+        ExhibitionOptions () {
+            const exhibition = useTableRowItem();
+            const { handleOpenExhibitionSettings, handleOpenExhibitionDeleteDialog } = useManagementCallbacks();
+            const handleOpenSettings = useCallback(() => {
+                handleOpenExhibitionSettings(exhibition);
+            });
+            const handleOpenDeleteDialog = useCallback(() => {
+                handleOpenExhibitionDeleteDialog(exhibition);
+            });
+            return (
+                <Stack direction="row" spacing={1}>
+                    <Button variant="outlined" endIcon={<OpenInNewIcon />} href={`/Exhibitions/${exhibition.id}`} target="_blank">
+                        <Typography variant="body1">Open</Typography>
+                    </Button>
+                    <Exhibition.TableCells.ExhibitionSettingsButton
+                        onClick={handleOpenSettings}
+                    />
+                    <Exhibition.TableCells.DeleteButton
+                        onClick={handleOpenDeleteDialog}
+                    />
                 </Stack>
             );
         }

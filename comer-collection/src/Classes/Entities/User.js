@@ -5,6 +5,7 @@ import { Entity } from "../Entity.js";
 import React from "react";
 import { useAppUser } from "../../ContextProviders/AppUser.js";
 import { CollectionManagerIcon, LockIcon, LockResetIcon, OpenInNewIcon, PersonIcon, PhotoCameraBackIcon, SchoolIcon, SecurityIcon } from "../../Imports/Icons.js";
+import { useTableRowItem } from "../../ContextProviders/TableRowProvider.js";
 
 class User extends Entity {
     static baseUrl = "/api/admin/users";
@@ -37,7 +38,8 @@ class User extends Entity {
     ];
 
     static TableCells = {
-        ID ({ user }) {
+        ID () {
+            const user = useTableRowItem();
             const [appUser] = useAppUser();
             return (
                 <Stack direction="row" alignItems="center" spacing={1}>
@@ -48,7 +50,8 @@ class User extends Entity {
                 </Stack>
             );
         },
-        IDWithAccessIcon ({ user }) {
+        IDWithAccessIcon () {
+            const user = useTableRowItem();
             return (
                 <Stack direction="row" spacing={1} alignItems="center">
                     <Typography variant="body1">{user.id} </Typography>
@@ -59,7 +62,8 @@ class User extends Entity {
                 </Stack>
             );
         },
-        Name ({ user }) {
+        Name () {
+            const user = useTableRowItem();
             return (
                 user.has_name
                     ? (
@@ -70,7 +74,8 @@ class User extends Entity {
                     )
             );
         },
-        Email ({ user, onClick }) {
+        Email ({ onClick }) {
+            const user = useTableRowItem();
             return (onClick &&
                 <Button color="grey"
                     variant="text" sx={{ textTransform: "unset" }}
@@ -81,7 +86,8 @@ class User extends Entity {
                 <Typography variant="body1" color="grey">{user.email}</Typography>
             );
         },
-        StackedNameEmail ({ user }) {
+        StackedNameEmail () {
+            const user = useTableRowItem();
             return (
                 <Stack direction="column" paddingTop={1} paddingBottom={1}>
                     <Typography variant="body1">{user.full_name_reverse}</Typography>
@@ -89,7 +95,8 @@ class User extends Entity {
                 </Stack>
             );
         },
-        PasswordChangeCurrentAdmin ({ user, onClick }) {
+        PasswordChangeCurrentAdmin ({ onClick }) {
+            const user = useTableRowItem();
             return (
                 <Button startIcon={<OpenInNewIcon />} color={user.is_admin_or_collection_manager ? "secondary" : "primary"}
                     variant="outlined"
@@ -98,7 +105,8 @@ class User extends Entity {
                 </Button>
             );
         },
-        PasswordSetOrReset ({ user, onClick }) {
+        PasswordSetOrReset ({ onClick }) {
+            const user = useTableRowItem();
             return (
                 <Button
                     startIcon={user.has_password ? <LockResetIcon /> : <LockIcon />}
@@ -112,7 +120,8 @@ class User extends Entity {
                 </Button>
             );
         },
-        CourseAssignmentButton ({ user, onClick }) {
+        CourseAssignmentButton ({ onClick }) {
+            const user = useTableRowItem();
             return (
                 <Stack direction="row" spacing={1} alignItems="center">
                     <Button variant="text"
@@ -125,7 +134,8 @@ class User extends Entity {
                 </Stack>
             );
         },
-        UserExhibitionCountButton ({ user, onClick }) {
+        UserExhibitionCountButton ({ onClick }) {
+            const user = useTableRowItem();
             return (
                 <Stack direction="row" spacing={1}>
                     <Button variant="text" sx={{ textTransform: "unset" }}
@@ -138,7 +148,8 @@ class User extends Entity {
                 </Stack>
             );
         },
-        UserTypeButton ({ user, onClick }) {
+        UserTypeButton ({ onClick }) {
+            const user = useTableRowItem();
             const [appUser] = useAppUser();
             return (
                 <Button color="lightgrey" sx={{ textTransform: "unset" }}
@@ -154,7 +165,8 @@ class User extends Entity {
                 </Button>
             );
         },
-        UserActivationSwitch ({ user, onClick }) {
+        UserActivationSwitch ({ onClick }) {
+            const user = useTableRowItem();
             const [appUser] = useAppUser();
             return (
                 <Switch
@@ -166,7 +178,8 @@ class User extends Entity {
                 />
             );
         },
-        DeleteButton ({ user, onClick }) {
+        DeleteButton ({ onClick }) {
+            const user = useTableRowItem();
             const appUser = useAppUser();
             const disabled = Boolean(user.Courses.length || user.Exhibitions.length || user.id === appUser.id);
             return (

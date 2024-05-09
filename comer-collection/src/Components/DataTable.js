@@ -6,12 +6,14 @@ import PropTypes from "prop-types";
 import { InView } from "react-intersection-observer";
 import { useAppDarkTheme } from "../ContextProviders/AppFeatures.js";
 import { FullPageMessage } from "../Components/FullPageMessage.js";
+import { TableRowProvider } from "../ContextProviders/TableRowProvider.js";
 
 const DataTableCell = ({ tf, itemAsString }) => {
     return useMemo(() => {
         return (
             <TableCell sx={{ maxWidth: tf.maxWidth ?? "unset", wordWrap: tf.maxWidth ? "break-word" : "unset" }}>
-                {tf.generateTableCell(JSON.parse(itemAsString))}
+                <tf.TableCellComponent />
+                {/* {tf.generateTableCell(JSON.parse(itemAsString))} */}
             </TableCell>
         );
     }, [itemAsString]);
@@ -91,33 +93,35 @@ export const DataTable = ({
                 const renderedTableRow = (
                     <InView key={item.id} triggerOnce={true}>
                         {({ inView, ref }) => (
-                            <TableRow ref={ref} sx={{
-                                "&:hover": {
-                                    backgroundColor: isSelected ? theme.palette[themeColor].translucent : theme.palette.grey.veryTranslucent
+                            <TableRowProvider {...{ item }} >
+                                <TableRow ref={ref} sx={{
+                                    "&:hover": {
+                                        backgroundColor: isSelected ? theme.palette[themeColor].translucent : theme.palette.grey.veryTranslucent
 
-                                },
-                                "&:not(:hover)": {
-                                    backgroundColor: isSelected ? theme.palette[themeColor].veryTranslucent : ""
-                                }
-                            }}>
-                                {Boolean(rowSelectionEnabled) && (<TableCell width="10px">
-                                    <Checkbox checked={isSelected}
-                                        color={themeColor}
-                                        onChange={(e) => {
-                                            if (e.target.checked) {
-                                                setSelectedItems([...selectedItems, item]);
-                                            } else {
-                                                setSelectedItems(selectedItems.filter((si) => si.id !== item.id));
-                                            }
-                                        }}
-                                        size="large" />
-                                </TableCell>)}
-                                {(inView && <React.Fragment>
-                                    <DataTableFieldCells item={JSON.stringify(item)} {...{ tableFields }} />
-                                </React.Fragment>) || (!inView && (
-                                    <TableRowPlaceholder colSpan={tableFields.length} />
-                                ))}
-                            </TableRow>
+                                    },
+                                    "&:not(:hover)": {
+                                        backgroundColor: isSelected ? theme.palette[themeColor].veryTranslucent : ""
+                                    }
+                                }}>
+                                    {Boolean(rowSelectionEnabled) && (<TableCell width="10px">
+                                        <Checkbox checked={isSelected}
+                                            color={themeColor}
+                                            onChange={(e) => {
+                                                if (e.target.checked) {
+                                                    setSelectedItems([...selectedItems, item]);
+                                                } else {
+                                                    setSelectedItems(selectedItems.filter((si) => si.id !== item.id));
+                                                }
+                                            }}
+                                            size="large" />
+                                    </TableCell>)}
+                                    {(inView && <React.Fragment>
+                                        <DataTableFieldCells item={JSON.stringify(item)} {...{ tableFields }} />
+                                    </React.Fragment>) || (!inView && (
+                                        <TableRowPlaceholder colSpan={tableFields.length} />
+                                    ))}
+                                </TableRow>
+                            </TableRowProvider>
                         )}
                     </InView>
                 );

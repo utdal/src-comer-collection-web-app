@@ -3,6 +3,7 @@ import { Button, Stack, Typography } from "@mui/material";
 import { Entity } from "../Entity.js";
 import React from "react";
 import { AccessTimeIcon, CheckIcon, ExpiredIcon, PersonIcon } from "../../Imports/Icons.js";
+import { useTableRowItem } from "../../ContextProviders/TableRowProvider.js";
 
 class Course extends Entity {
     static baseUrl = "/api/admin/courses";
@@ -37,17 +38,20 @@ class Course extends Entity {
     ];
 
     static TableCells = {
-        ID ({ course }) {
+        ID () {
+            const course = useTableRowItem();
             return (
                 <Typography variant="body1">{course.id}</Typography>
             );
         },
-        Name ({ course }) {
+        Name () {
+            const course = useTableRowItem();
             return (
                 <Typography variant="body1">{course.name}</Typography>
             );
         },
-        Status ({ course }) {
+        Status () {
+            const course = useTableRowItem();
             return (
                 <Stack direction="row" spacing={1}>
                     {
@@ -59,14 +63,16 @@ class Course extends Entity {
                 </Stack>
             );
         },
-        StartDateTime ({ course }) {
+        StartDateTime () {
+            const course = useTableRowItem();
             return (
                 <Typography variant="body1">
                     {Course.formatDate(course.date_start)}, {Course.formatTime(course.date_start)}
                 </Typography>
             );
         },
-        StartDateTimeStacked ({ course }) {
+        StartDateTimeStacked () {
+            const course = useTableRowItem();
             return (
                 <Stack direction="column" padding={0}>
                     <Typography variant="body1">
@@ -78,14 +84,16 @@ class Course extends Entity {
                 </Stack>
             );
         },
-        EndDateTime ({ course }) {
+        EndDateTime () {
+            const course = useTableRowItem();
             return (
                 <Typography variant="body1">
                     {Course.formatDate(course.date_end)}, {Course.formatTime(course.date_end)}
                 </Typography>
             );
         },
-        EndDateTimeStacked ({ course }) {
+        EndDateTimeStacked () {
+            const course = useTableRowItem();
             return (
                 <Stack direction="column" padding={0}>
                     <Typography variant="body1">
@@ -97,7 +105,8 @@ class Course extends Entity {
                 </Stack>
             );
         },
-        UserAssignmentButton ({ course, onClick }) {
+        UserAssignmentButton ({ onClick }) {
+            const course = useTableRowItem();
             return (
                 <Stack direction="row" spacing={1} alignItems="center">
                     <Button variant="outlined" color="primary" startIcon={<PersonIcon />}
@@ -108,7 +117,8 @@ class Course extends Entity {
                 </Stack>
             );
         },
-        Notes ({ course }) {
+        Notes () {
+            const course = useTableRowItem();
             return (
                 <Typography variant="body1">{course.notes}</Typography>
             );
@@ -118,7 +128,8 @@ class Course extends Entity {
                 <Entity.TableCells.EditButton {...{ onClick }} />
             );
         },
-        DeleteButton ({ course, onClick }) {
+        DeleteButton ({ onClick }) {
+            const course = useTableRowItem();
             return (
                 <Entity.TableCells.DeleteButton
                     disabled={course.Users.length > 0}
