@@ -46,13 +46,13 @@ export const EntityManageDialog = ({
 
     const visibleItems = useMemo(() => {
         return searchItems(itemSearchQuery, dialogItems, searchBoxFields);
-    }, [dialogItems]);
+    }, [dialogItems, itemSearchQuery, searchBoxFields]);
 
     const entityDataTable = useMemo(() => {
         return (
             <DataTable tableFields={dialogTableFields} items={dialogItems} visibleItems={visibleItems} />
         );
-    }, [dialogItems, visibleItems]);
+    }, [dialogItems, visibleItems, dialogTableFields]);
 
     const singularCapitalized = Entity?.singular.substr(0, 1).toUpperCase() + Entity?.singular.substr(1).toLowerCase();
     const pluralCapitalized = Entity?.plural.substr(0, 1).toUpperCase() + Entity?.plural.substr(1).toLowerCase();

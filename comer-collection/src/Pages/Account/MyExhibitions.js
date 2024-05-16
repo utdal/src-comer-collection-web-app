@@ -33,7 +33,7 @@ const MyExhibitions = () => {
     useEffect(() => {
         setSelectedNavItem("My Exhibitions");
         setTitleText("My Exhibitions");
-    }, []);
+    }, [setSelectedNavItem, setTitleText]);
 
     const navigate = useNavigate();
 

@@ -34,7 +34,7 @@ export const ItemMultiCreateDialog = ({ Entity, refreshAllItems, dialogInstructi
         default:
             throw Error("Unknown action type");
         }
-    }, []);
+    }, [Entity.fieldDefinitions]);
 
     const [createDialogItems, createDialogDispatch] = useReducer(createDialogReducer, []);
     const [submitEnabled, setSubmitEnabled] = useState(true);

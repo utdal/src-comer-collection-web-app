@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useCallback } from "react";
 import {
     Stack,
     Button,
@@ -6,11 +6,17 @@ import {
 } from "@mui/material";
 import { CheckIcon, ArrowUpwardIcon, DeselectIcon } from "../Imports/Icons.js";
 import PropTypes from "prop-types";
+import { useItems, useSelectedItems, useSelectedVisibleItems, useVisibleItems } from "../ContextProviders/ManagementPageProvider.js";
 
-export const SelectionSummary = ({ items, selectedItems, setSelectedItems, visibleItems, entitySingular, entityPlural }) => {
-    const visibleSelectedItems = selectedItems.filter((si) => (
-        visibleItems.map((vi) => vi.id).includes(parseInt(si.id))
-    ));
+export const SelectionSummary = ({ entitySingular, entityPlural }) => {
+    const [items] = useItems();
+    const [selectedItems, setSelectedItems] = useSelectedItems();
+    const [visibleItems] = useVisibleItems();
+    const selectedVisibleItems = useSelectedVisibleItems();
+
+    const clearSelectedItems = useCallback(() => {
+        setSelectedItems([]);
+    }, [setSelectedItems]);
 
     return (
         <Stack direction="row" alignItems="center" spacing={2}>
@@ -27,8 +33,8 @@ export const SelectionSummary = ({ items, selectedItems, setSelectedItems, visib
                 </Typography>
                 {(selectedItems.length > 0 &&
                     <Typography variant="body1">{selectedItems.length} {selectedItems.length === 1 ? entitySingular : entityPlural} selected
-                        {visibleSelectedItems.length < selectedItems.length
-                            ? ` (${visibleSelectedItems.length} shown)`
+                        {selectedVisibleItems.length < selectedItems.length
+                            ? ` (${selectedVisibleItems.length} shown)`
                             : ""
                         }
                     </Typography>
@@ -38,9 +44,7 @@ export const SelectionSummary = ({ items, selectedItems, setSelectedItems, visib
 
             </Stack>
             {selectedItems.length > 0 && (
-                <Button variant="outlined" startIcon={<DeselectIcon />} onClick={() => {
-                    setSelectedItems([]);
-                }}>
+                <Button variant="outlined" startIcon={<DeselectIcon />} onClick={clearSelectedItems}>
                     <Typography variant="body1">Clear Selection</Typography>
                 </Button>
             )}

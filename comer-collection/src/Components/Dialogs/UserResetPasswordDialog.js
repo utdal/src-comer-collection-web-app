@@ -8,7 +8,7 @@ import {
     Typography, DialogContentText, TextField
 } from "@mui/material";
 import { ContentCopyIcon, SyncIcon } from "../../Imports/Icons.js";
-import { useSnackbar } from "../../ContextProviders/AppFeatures.js";
+import { useClipboard, useSnackbar } from "../../ContextProviders/AppFeatures.js";
 import PropTypes from "prop-types";
 import { User } from "../../Classes/Entities/User.js";
 
@@ -24,12 +24,15 @@ export const UserResetPasswordDialog = ({ dialogUser, dialogIsOpen, setDialogIsO
 
     const showSnackbar = useSnackbar();
     const themeColor = dialogUser?.is_admin_or_collection_manager ? "secondary" : "primary";
+    const clipboard = useClipboard();
 
     return (
         <Dialog fullWidth={true} maxWidth="sm" component="form" sx={{ zIndex: 10000 }}
             open={dialogIsOpen} disableEscapeKeyDown
             onClose={(event, reason) => {
-                if (reason === "backdropClick") { return; }
+                if (reason === "backdropClick") {
+                    return;
+                }
                 setDialogIsOpen(false);
             }}
             onSubmit={(e) => {
@@ -87,13 +90,8 @@ export const UserResetPasswordDialog = ({ dialogUser, dialogIsOpen, setDialogIsO
                                 startIcon={<ContentCopyIcon />}
                                 color={themeColor}
                                 onClick={() => {
-                                    try {
-                                        navigator.clipboard.writeText(newPassword);
-                                        showSnackbar("Copied to clipboard", "success");
-                                        setHasCopied(true);
-                                    } catch (e) {
-                                        showSnackbar("Error copying to clipboard", "error");
-                                    }
+                                    clipboard(newPassword);
+                                    setHasCopied(true);
                                 }}
                             >
                                 <Typography>Copy</Typography>

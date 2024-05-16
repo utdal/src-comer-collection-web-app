@@ -130,3 +130,15 @@ export const useAppDarkTheme = () => {
     }, [setAppDarkTheme]);
     return { appDarkTheme, setAppDarkTheme: handleDarkThemeChange };
 };
+
+export const useClipboard = () => {
+    const { showSnackbar } = useContext(AppFeatureContext);
+    return useCallback((textToCopy) => {
+        try {
+            navigator.clipboard.writeText(textToCopy);
+            showSnackbar("Copied to clipboard", "success");
+        } catch (error) {
+            showSnackbar("Error copying text to clipboard", "error");
+        }
+    }, [showSnackbar]);
+};

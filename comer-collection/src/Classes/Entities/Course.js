@@ -1,9 +1,10 @@
 /* eslint-disable react/prop-types */
 import { Button, Stack, Typography } from "@mui/material";
 import { Entity } from "../Entity.js";
-import React from "react";
+import React, { useCallback } from "react";
 import { AccessTimeIcon, CheckIcon, ExpiredIcon, PersonIcon } from "../../Imports/Icons.js";
 import { useTableRowItem } from "../../ContextProviders/TableRowProvider.js";
+import { useManagementCallbacks } from "../../ContextProviders/ManagementPageProvider.js";
 
 class Course extends Entity {
     static baseUrl = "/api/admin/courses";
@@ -105,13 +106,12 @@ class Course extends Entity {
                 </Stack>
             );
         },
-        UserAssignmentButton ({ onClick }) {
+        UserAssignmentButton () {
             const course = useTableRowItem();
+            const { handleOpenAssignUserDialog } = useManagementCallbacks();
             return (
                 <Stack direction="row" spacing={1} alignItems="center">
-                    <Button variant="outlined" color="primary" startIcon={<PersonIcon />}
-                        {...{ onClick }}
-                    >
+                    <Button variant="outlined" color="primary" startIcon={<PersonIcon />} onClick={handleOpenAssignUserDialog}>
                         <Typography variant="body1">{course.Users.length}</Typography>
                     </Button>
                 </Stack>
@@ -123,17 +123,34 @@ class Course extends Entity {
                 <Typography variant="body1">{course.notes}</Typography>
             );
         },
-        EditButton ({ onClick }) {
+        EditButton () {
+            const course = useTableRowItem();
+            const { handleOpenCourseEditDialog } = useManagementCallbacks();
+            const handleOpenEditDialog = useCallback(() => {
+                handleOpenCourseEditDialog(course);
+            }, [course, handleOpenCourseEditDialog]);
             return (
-                <Entity.TableCells.EditButton {...{ onClick }} />
+                <Entity.TableCells.EditButton onClick={handleOpenEditDialog} />
             );
         },
-        DeleteButton ({ onClick }) {
+        DeleteButton () {
             const course = useTableRowItem();
+            const { handleOpenCourseDeleteDialog } = useManagementCallbacks();
+            const handleOpenDeleteDialog = useCallback(() => {
+                handleOpenCourseDeleteDialog(course);
+            }, [course, handleOpenCourseDeleteDialog]);
             return (
                 <Entity.TableCells.DeleteButton
                     disabled={course.Users.length > 0}
-                    {...{ onClick }} />
+                    onClick={handleOpenDeleteDialog} />
+            );
+        },
+        OptionsArray () {
+            return (
+                <>
+                    <Course.TableCells.EditButton />
+                    <Course.TableCells.DeleteButton />
+                </>
             );
         }
     };

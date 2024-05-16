@@ -6,7 +6,8 @@ module.exports = {
     },
     extends: [
         "standard",
-        "plugin:react/recommended"
+        "plugin:react/recommended",
+        "plugin:react-hooks/recommended"
     ],
     overrides: [
         {
@@ -26,11 +27,13 @@ module.exports = {
         sourceType: "module"
     },
     plugins: [
-        "react"
+        "react", "react-hooks"
     ],
     rules: {
         indent: ["error", 4],
         semi: [2, "always"],
-        quotes: [2, "double"]
+        quotes: [2, "double"],
+        "react-hooks/rules-of-hooks": "error",
+        "react-hooks/exhaustive-deps": "error"
     }
 };

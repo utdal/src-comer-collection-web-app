@@ -1,27 +1,25 @@
-import React, { memo, useCallback, useEffect, useMemo, useState } from "react";
+import React, { memo, useCallback, useMemo, useState } from "react";
 import { Checkbox, Paper, Stack, TableCell, TableContainer, Typography, Table, TableBody, TableHead, TableRow, Skeleton } from "@mui/material";
 import { useTheme } from "@emotion/react";
 import { ColumnSortButton } from "./Buttons/ColumnSortButton.js";
 import PropTypes from "prop-types";
 import { InView } from "react-intersection-observer";
-import { useAppDarkTheme } from "../ContextProviders/AppFeatures.js";
 import { FullPageMessage } from "../Components/FullPageMessage.js";
 import { TableRowProvider } from "../ContextProviders/TableRowProvider.js";
+import { useItems, useSelectedItems, useVisibleItems } from "../ContextProviders/ManagementPageProvider.js";
 
-const DataTableCell = ({ tf, itemAsString }) => {
+const DataTableCell = ({ tf }) => {
     return useMemo(() => {
         return (
             <TableCell sx={{ maxWidth: tf.maxWidth ?? "unset", wordWrap: tf.maxWidth ? "break-word" : "unset" }}>
                 <tf.TableCellComponent />
-                {/* {tf.generateTableCell(JSON.parse(itemAsString))} */}
             </TableCell>
         );
-    }, [itemAsString]);
+    }, [tf]);
 };
 
 DataTableCell.propTypes = {
-    tf: PropTypes.object,
-    itemAsString: PropTypes.string
+    tf: PropTypes.object
 };
 
 const DataTableFieldCells = ({ tableFields, item: itemAsString }) => {
@@ -32,7 +30,7 @@ const DataTableFieldCells = ({ tableFields, item: itemAsString }) => {
             );
         }
         );
-    }, [itemAsString]);
+    }, [tableFields, itemAsString]);
 };
 
 const TableRowPlaceholder = memo(function TableContainer ({ colSpan }) {
@@ -48,13 +46,13 @@ TableRowPlaceholder.propTypes = {
 };
 
 export const DataTable = ({
-    tableFields, items,
-    rowSelectionEnabled, selectedItems, setSelectedItems, visibleItems,
-    defaultSortColumn, defaultSortAscending,
+    tableFields, rowSelectionEnabled, defaultSortColumn, defaultSortAscending,
     NoContentIcon, noContentMessage, noContentButtonAction, noContentButtonText
 }) => {
     const theme = useTheme();
-    const { appDarkTheme } = useAppDarkTheme();
+    const [items] = useItems();
+    const [selectedItems, setSelectedItems] = useSelectedItems();
+    const [visibleItems] = useVisibleItems();
 
     const [sortColumn, setSortColumn] = useState(defaultSortColumn ?? "ID");
     const [sortAscending, setSortAscending] = useState(defaultSortAscending ?? true);
@@ -64,10 +62,6 @@ export const DataTable = ({
         const [, bSortableValues] = b;
         return ((aSortableValues[sortColumn] ?? "") > (bSortableValues[sortColumn] ?? "")) ? 1 : -1;
     }, [sortColumn]);
-
-    useEffect(() => {
-        if (selectedItems) { setSelectedItems(selectedItems.filter((si) => items.map((i) => i.id).includes(si.id))); }
-    }, [items]);
 
     const sortableValuesByRow = useMemo(() => {
         const output = { };
@@ -80,7 +74,7 @@ export const DataTable = ({
             return null;
         });
         return output;
-    }, [items]);
+    }, [items, tableFields]);
 
     const itemInformation = useMemo(() => {
         const itemInformationToReturn = (
@@ -130,11 +124,11 @@ export const DataTable = ({
             })
         );
         return itemInformationToReturn;
-    }, [items, selectedItems, appDarkTheme]);
+    }, [items, selectedItems, setSelectedItems, rowSelectionEnabled, sortableValuesByRow, tableFields, theme]);
 
     const visibleItemInformation = useMemo(() => itemInformation.filter((r) => visibleItems.map((vi) => vi.id).includes(r[0].id)), [itemInformation, visibleItems]);
 
-    const sortedItemInformation = useMemo(() => visibleItemInformation.toSorted(sortRoutine), [visibleItemInformation, sortColumn]);
+    const sortedItemInformation = useMemo(() => visibleItemInformation.toSorted(sortRoutine), [visibleItemInformation, sortRoutine]);
 
     const renderedItems = useMemo(() => sortedItemInformation.map((r) => r[2]), [sortedItemInformation]);
 

@@ -44,7 +44,7 @@ export const ItemSingleEditDialog = ({ Entity, editDialogItem, refreshAllItems, 
                 );
             })
         );
-    }, [editDialogItem]);
+    }, [editDialogItem, Entity.fieldDefinitions]);
 
     const singularCapitalized = Entity?.singular.substr(0, 1).toUpperCase() + Entity?.singular.substr(1).toLowerCase();
 

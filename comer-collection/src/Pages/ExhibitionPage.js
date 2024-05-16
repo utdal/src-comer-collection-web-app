@@ -1,7 +1,7 @@
 import { Box } from "@mui/material";
 import { useParams } from "react-router";
 import { ExhibitionEditPane } from "../Components/ExhibitionPage/ExhibitionEditPane.js";
-import React, { useEffect, useReducer, useState } from "react";
+import React, { useCallback, useEffect, useReducer, useState } from "react";
 import { exhibitionEditReducer, blankExhibitionData } from "../Components/ExhibitionPage/exhibitionEditReducer.js";
 import Exhibition3DViewport from "../Components/Exhibition3DViewport/Exhibition3DViewport.js";
 import { sendAuthenticatedRequest } from "../Helpers/APICalls.js";
@@ -12,11 +12,6 @@ import { useSnackbar, useTitle } from "../ContextProviders/AppFeatures.js";
 import { AccessTimeIcon, InfoIcon } from "../Imports/Icons.js";
 
 const ExhibitionPage = () => {
-    const onUnload = async () => {
-        await saveExhibition();
-        return false;
-    };
-
     const { exhibitionId } = useParams();
 
     const [globalImageCatalog, setGlobalImageCatalog] = useState([]);
@@ -38,7 +33,7 @@ const ExhibitionPage = () => {
     const showSnackbar = useSnackbar();
     const setTitleText = useTitle();
 
-    const getSaveUrl = () => {
+    const getSaveUrl = useCallback(() => {
         if (appUser?.Exhibitions.filter((ex) => ex.id === exhibitionId).length) {
             return `/api/user/exhibitions/${exhibitionId}/save`;
         } else if (appUser?.is_admin) {
@@ -46,9 +41,9 @@ const ExhibitionPage = () => {
         } else {
             throw Error("Save operation is not permitted");
         }
-    };
+    }, [appUser, exhibitionId]);
 
-    const saveExhibition = async () => {
+    const saveExhibition = useCallback(async () => {
         try {
             const saveUrl = getSaveUrl();
             try {
@@ -64,9 +59,9 @@ const ExhibitionPage = () => {
         } catch (e) {
             console.log("No save URL available", e.message);
         }
-    };
+    }, [exhibitionState, getSaveUrl, showSnackbar]);
 
-    const getLoadUrl = () => {
+    const getLoadUrl = useCallback(() => {
         if (appUser?.Exhibitions.filter((ex) => ex.id === exhibitionId).length) {
             return `/api/user/exhibitions/${exhibitionId}/load`;
         } else if (appUser?.is_admin) {
@@ -74,9 +69,9 @@ const ExhibitionPage = () => {
         } else {
             return `/api/public/exhibitions/${exhibitionId}/load`;
         }
-    };
+    }, [appUser, exhibitionId]);
 
-    const loadExhibition = async () => {
+    const loadExhibition = useCallback(async () => {
         try {
             const exhibitionData = await sendAuthenticatedRequest("GET", getLoadUrl());
 
@@ -103,17 +98,22 @@ const ExhibitionPage = () => {
             setIsPermissionGranted(false);
             setTitleText("Exhibition Unavailable");
         }
-    };
+    }, [getLoadUrl, setTitleText]);
 
     useEffect(() => {
         loadExhibition();
-    }, [appUser]);
+    }, [appUser, loadExhibition]);
 
     useEffect(() => {
         if (isPermissionGranted) {
             loadCatalog();
         }
     }, [isPermissionGranted]);
+
+    const onUnload = useCallback(async () => {
+        await saveExhibition();
+        return false;
+    }, [saveExhibition]);
 
     useEffect(() => {
         if (exhibitionIsLoaded) {
@@ -122,18 +122,20 @@ const ExhibitionPage = () => {
                 window.onbeforeunload = null;
             };
         }
-    }, [exhibitionState]);
+    }, [exhibitionState, exhibitionIsLoaded, onUnload]);
 
     useEffect(() => {
-        if (exhibitionIsLoaded && !editModeActive) { saveExhibition(); }
-    }, [editModeActive]);
+        if (exhibitionIsLoaded && !editModeActive) {
+            saveExhibition();
+        }
+    }, [editModeActive, exhibitionIsLoaded, saveExhibition]);
 
-    const handleControlS = (e) => {
+    const handleControlS = useCallback((e) => {
         if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "s") {
             e.preventDefault();
             saveExhibition();
         }
-    };
+    }, [saveExhibition]);
 
     useEffect(() => {
         if (editModeActive) {
@@ -142,7 +144,7 @@ const ExhibitionPage = () => {
                 document.removeEventListener("keydown", handleControlS);
             };
         }
-    }, [editModeActive]);
+    }, [editModeActive, handleControlS]);
 
     return (!appUserIsLoaded &&
         <FullPageMessage message="Loading exhibition..." Icon={AccessTimeIcon} />
@@ -162,16 +164,34 @@ const ExhibitionPage = () => {
                 `
             }}>
 
-            <Exhibition3DViewport {...{ exhibitionState, exhibitionMetadata, exhibitionIsLoaded, globalImageCatalog, exhibitionIsEditable, editModeActive, setEditModeActive }}
-                sx={{ gridArea: "viewer", width: "100%", height: "calc(100vh - 64px)" }}
+            <Exhibition3DViewport {...{
+                exhibitionState,
+                exhibitionMetadata,
+                exhibitionIsLoaded,
+                globalImageCatalog,
+                exhibitionIsEditable,
+                editModeActive,
+                setEditModeActive
+            }}
+            sx={{ gridArea: "viewer", width: "100%", height: "calc(100vh - 64px)" }}
             />
 
             {editModeActive && (
-                <ExhibitionEditPane {...{ exhibitionId, exhibitionMetadata, exhibitionIsLoaded, exhibitionState, exhibitionEditDispatch, globalImageCatalog, editModeActive, setEditModeActive, saveExhibition }}
-                    sx={{
-                        gridArea: "editpane",
-                        display: editModeActive ? "" : "none"
-                    }}
+                <ExhibitionEditPane {...{
+                    exhibitionId,
+                    exhibitionMetadata,
+                    exhibitionIsLoaded,
+                    exhibitionState,
+                    exhibitionEditDispatch,
+                    globalImageCatalog,
+                    editModeActive,
+                    setEditModeActive,
+                    saveExhibition
+                }}
+                sx={{
+                    gridArea: "editpane",
+                    display: editModeActive ? "" : "none"
+                }}
                 />
             )}
 

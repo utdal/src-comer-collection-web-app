@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import {
     Stack,
     Button,
@@ -20,7 +20,7 @@ import { CourseFilterMenu } from "../../Components/Menus/CourseFilterMenu.js";
 
 import { useAccountNav } from "../../ContextProviders/AccountNavProvider.js";
 import { Exhibition } from "../../Classes/Entities/Exhibition.js";
-import { ManagementPageProvider } from "../../ContextProviders/ManagementPageProvider.js";
+import { ManagementPageProvider, useItemsReducer } from "../../ContextProviders/ManagementPageProvider.js";
 
 const exhibitionTableFields = [
     {
@@ -60,8 +60,9 @@ const exhibitionTableFields = [
 ];
 
 const ExhibitionManagement = () => {
+    const [exhibitionsCombinedState, setExhibitions, setSelectedExhibitions, filterExhibitions] = useItemsReducer();
     const [courses, setCourses] = useState([]);
-    const [exhibitions, setExhibitions] = useState([]);
+
     const [refreshInProgress, setRefreshInProgress] = useState(true);
 
     const [isLoaded, setIsLoaded] = useState(false);
@@ -75,12 +76,7 @@ const ExhibitionManagement = () => {
     const [editDialogExhibitionAccess, setEditDialogExhibitionAccess] = useState(null);
     const [editDialogExhibitionTitle, setEditDialogExhibitionTitle] = useState(null);
 
-    const [selectedExhibitions, setSelectedExhibitions] = useState([]);
-
     const [searchQuery, setSearchQuery] = useState("");
-
-    const [sortColumn, setSortColumn] = useState("Modified");
-    const [sortAscending, setSortAscending] = useState(false);
 
     const [, setSelectedNavItem] = useAccountNav();
     const [appUser] = useAppUser();
@@ -94,23 +90,12 @@ const ExhibitionManagement = () => {
         setSearchQuery("");
     };
 
-    useEffect(() => {
-        setSelectedNavItem("Exhibition Management");
-        setTitleText("Exhibition Management");
-        if (appUser.is_admin) {
-            fetchData();
-        }
-    }, []);
-
-    const fetchData = async () => {
+    const fetchData = useCallback(async () => {
         try {
             setIsError(false);
             const exhibitionData = await sendAuthenticatedRequest("GET", "/api/admin/exhibitions");
-            setExhibitions(exhibitionData.data);
 
-            setSelectedExhibitions(selectedExhibitions.filter((su) => (
-                exhibitionData.data.map((u) => u.id).includes(parseInt(su.id))
-            )));
+            setExhibitions(exhibitionData.data);
 
             const coursesById = {};
             for (const ex of exhibitionData.data) {
@@ -128,17 +113,25 @@ const ExhibitionManagement = () => {
         } catch (error) {
             setIsError(true);
         }
-    };
+    }, [setExhibitions]);
+
+    useEffect(() => {
+        setSelectedNavItem("Exhibition Management");
+        setTitleText("Exhibition Management");
+        if (appUser.is_admin) {
+            fetchData();
+        }
+    }, [appUser, fetchData, setSelectedNavItem, setTitleText]);
 
     const exhibitionFilterFunction = useCallback((exhibition) => {
         return (
             !userCourseIdFilter || (userCourseIdFilter && exhibition.User.Courses.map((c) => c.id).includes(userCourseIdFilter.id))
         ) && doesItemMatchSearchQuery(searchQuery, exhibition, ["title"]);
-    });
+    }, [searchQuery, userCourseIdFilter]);
 
-    const visibleExhibitions = useMemo(() => exhibitions.filter((exhibition) => {
-        return exhibitionFilterFunction(exhibition);
-    }), [exhibitions, searchQuery, userCourseIdFilter]);
+    useEffect(() => {
+        filterExhibitions(exhibitionFilterFunction);
+    }, [filterExhibitions, exhibitionFilterFunction]);
 
     const handleExhibitionEditByAdmin = async (exhibitionId, title, privacy) => {
         try {
@@ -176,19 +169,24 @@ const ExhibitionManagement = () => {
     ) || (!isLoaded &&
         <FullPageMessage message="Loading exhibitions..." Icon={AccessTimeIcon} />
     ) || (
-        <ManagementPageProvider managementCallbacks={{
-            handleOpenExhibitionSettings,
-            handleOpenExhibitionDeleteDialog
-        }}>
+        <ManagementPageProvider
+            managementCallbacks={{
+                handleOpenExhibitionSettings,
+                handleOpenExhibitionDeleteDialog
+            }}
+            itemsCombinedState={exhibitionsCombinedState}
+            setItems={setExhibitions}
+            setSelectedItems={setSelectedExhibitions}
+        >
             <Box component={Paper} square sx={{
                 display: "grid",
                 gridTemplateColumns: "1fr",
                 gridTemplateRows: "80px calc(100vh - 224px) 80px",
                 gridTemplateAreas: `
-            "top"
-            "table"
-            "bottom"
-        `
+                    "top"
+                    "table"
+                    "bottom"
+                `
             }}>
                 <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={2} padding={2} sx={{ gridArea: "top" }}>
                     <SearchBox {...{ searchQuery, setSearchQuery }} placeholder="Search by user name or email" width="30%" />
@@ -203,7 +201,7 @@ const ExhibitionManagement = () => {
                             <Typography variant="body1">Refresh</Typography>
                         </Button>
                         <Button color="primary" variant={
-                            visibleExhibitions.length > 0 ? "outlined" : "contained"
+                            exhibitionsCombinedState.visibleItems.length > 0 ? "outlined" : "contained"
                         } startIcon={<FilterAltOffOutlinedIcon />} onClick={clearFilters}
                         disabled={
                             !(searchQuery || userCourseIdFilter)
@@ -213,17 +211,15 @@ const ExhibitionManagement = () => {
                     </Stack>
                 </Stack>
                 <Box sx={{ gridArea: "table" }}>
-                    <DataTable items={exhibitions} visibleItems={visibleExhibitions} tableFields={exhibitionTableFields}
+                    <DataTable tableFields={exhibitionTableFields}
                         rowSelectionEnabled={true}
-                        selectedItems={selectedExhibitions} setSelectedItems={setSelectedExhibitions}
                         defaultSortColumn="Modified"
                         defaultSortAscending={false}
-                        {...{ sortColumn, setSortColumn, sortAscending, setSortAscending }}
                         {...
-                            (visibleExhibitions.length === exhibitions.length && {
+                            (exhibitionsCombinedState.visibleItems.length === exhibitionsCombinedState.items.length && {
                                 noContentMessage: "No exhibitions yet",
                                 NoContentIcon: InfoIcon
-                            }) || (visibleExhibitions.length < exhibitions.length && {
+                            }) || (exhibitionsCombinedState.visibleItems.length < exhibitionsCombinedState.items.length && {
                                 noContentMessage: "No results",
                                 noContentButtonAction: clearFilters,
                                 noContentButtonText: "Clear Filters",
@@ -234,10 +230,10 @@ const ExhibitionManagement = () => {
                 </Box>
                 <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={2} padding={2} sx={{ gridArea: "bottom" }}>
                     <SelectionSummary
-                        items={exhibitions}
-                        selectedItems={selectedExhibitions}
+                        items={exhibitionsCombinedState.items}
+                        selectedItems={exhibitionsCombinedState.selectedItems}
                         setSelectedItems={setSelectedExhibitions}
-                        visibleItems={visibleExhibitions}
+                        visibleItems={exhibitionsCombinedState.visibleItems}
                         entitySingular="exhibition"
                         entityPlural="exhibitions"
                     />
@@ -261,7 +257,7 @@ const ExhibitionManagement = () => {
                     deleteDialogIsOpen={deleteDialogIsOpen}
                     deleteDialogItem={deleteDialogExhibition}
                     requireTypedConfirmation={true}
-                    allItems={exhibitions}
+                    allItems={exhibitionsCombinedState.items}
                     setAllItems={setExhibitions}
                     setDeleteDialogIsOpen={setDeleteDialogIsOpen}
                 />

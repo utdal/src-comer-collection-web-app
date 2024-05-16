@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect } from "react";
+import React, { useEffect } from "react";
 import {
     Typography,
     Button,
@@ -9,16 +9,16 @@ import { Navigate, useNavigate } from "react-router";
 import { DataTable } from "../../Components/DataTable.js";
 import { SecurityIcon, PersonIcon, AccountCircleIcon, SchoolIcon, PhotoCameraBackIcon, CollectionManagerIcon } from "../../Imports/Icons.js";
 import { useAppUser } from "../../ContextProviders/AppUser.js";
-import { useSnackbar, useTitle } from "../../ContextProviders/AppFeatures.js";
+import { useTitle } from "../../ContextProviders/AppFeatures.js";
 
 import { useAccountNav } from "../../ContextProviders/AccountNavProvider.js";
 import { Course } from "../../Classes/Entities/Course.js";
+import { User } from "../../Classes/Entities/User.js";
 
 const Profile = () => {
     const [, setSelectedNavItem] = useAccountNav();
 
     const [appUser] = useAppUser();
-    const showSnackbar = useSnackbar();
 
     const navigate = useNavigate();
     const setTitleText = useTitle();
@@ -26,7 +26,7 @@ const Profile = () => {
     useEffect(() => {
         setSelectedNavItem("Profile");
         setTitleText("Profile");
-    }, []);
+    }, [setSelectedNavItem, setTitleText]);
 
     const courseTableFields = [
         {
@@ -77,13 +77,7 @@ const Profile = () => {
         },
         {
             columnDescription: "Email",
-            generateTableCell: (user) => (
-                <Button color="grey"
-                    variant="text" sx={{ textTransform: "unset" }}
-                    onClick={() => { handleCopyToClipboard(user, "email"); }}>
-                    <Typography variant="body1">{user.email}</Typography>
-                </Button>
-            )
+            TableCellComponent: User.TableCells.EmailWithCopyButton
         },
         {
             columnDescription: "Password",
@@ -120,15 +114,6 @@ const Profile = () => {
             )
         }
     ];
-
-    const handleCopyToClipboard = useCallback((user, fieldName) => {
-        try {
-            navigator.clipboard.writeText(user[fieldName]);
-            showSnackbar("Copied to clipboard", "success");
-        } catch (error) {
-            showSnackbar("Error copying text to clipboard", "error");
-        }
-    }, []);
 
     return (appUser.pw_change_required &&
         <Navigate to="/Account/ChangePassword" />

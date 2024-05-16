@@ -1,5 +1,5 @@
 import { Box, Chip, Paper, Stack, ToggleButton, ToggleButtonGroup, Typography, ListItemButton } from "@mui/material";
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { sendAuthenticatedRequest } from "../../Helpers/APICalls.js";
 import { ArtistFilterMenu } from "../../Components/Menus/ArtistFilterMenu.js";
 import { SellIcon, PersonIcon, GridOnIcon, ViewListIcon } from "../../Imports/Icons.js";
@@ -10,30 +10,34 @@ import { useTitle } from "../../ContextProviders/AppFeatures.js";
 import PropTypes from "prop-types";
 import { InView } from "react-intersection-observer";
 
-const CollectionBrowserImageContainer = ({ image, viewMode, isSelected, setSelectedItem, isDisabled }) => {
-    const thumbnailBox = useMemo(() => (
-        <InView triggerOnce={true}>
-            {({ inView, ref }) => (
-                <Box width="200px" height="150px" ref={ref}
-                    sx={{
-                        backgroundImage: inView ? `url(${`http://localhost:9000/api/public/images/${image.id}/download`})` : "none",
-                        backgroundRepeat: "no-repeat",
-                        backgroundSize: "contain",
-                        backgroundPositionX: "center",
-                        backgroundPositionY: "top"
-                    }}
-                />
-            )}
-        </InView>
-    ), [image]);
+const ThumbnailBox = ({ image }) => (
+    <InView triggerOnce={true}>
+        {({ inView, ref }) => (
+            <Box width="200px" height="150px" ref={ref}
+                sx={{
+                    backgroundImage: inView ? `url(${`http://localhost:9000/api/public/images/${image.id}/download`})` : "none",
+                    backgroundRepeat: "no-repeat",
+                    backgroundSize: "contain",
+                    backgroundPositionX: "center",
+                    backgroundPositionY: "top"
+                }}
+            />
+        )}
+    </InView>
+);
 
+ThumbnailBox.propTypes = {
+    image: PropTypes.object
+};
+
+const CollectionBrowserImageContainer = ({ image, viewMode, isSelected, setSelectedItem, isDisabled }) => {
     const infoStack = useMemo(() => (
         <Stack direction={viewMode === "list" ? "row" : "column"} spacing={2} padding={4}
             sx={{
                 width: viewMode === "list" ? "500px" : "200px"
             }}
         >
-            {thumbnailBox}
+            <ThumbnailBox {...{ image }} />
             <Stack direction="column" spacing={1} alignItems={viewMode === "list" ? "left" : "center"}>
                 <Typography variant="h6">{image.title}</Typography>
                 {viewMode === "list" && (
@@ -66,7 +70,7 @@ const CollectionBrowserImageContainer = ({ image, viewMode, isSelected, setSelec
         }}>
             {infoStack}
         </ListItemButton>
-    ), [image, viewMode, isSelected, isDisabled]);
+    ), [image, isSelected, isDisabled, infoStack, setSelectedItem]);
 
     return setSelectedItem ? listItemButton : infoStack;
 };
@@ -88,32 +92,32 @@ export const CollectionBrowser = ({ isDialogMode, selectedItem, setSelectedItem,
 
     const setTitleText = useTitle();
 
-    const fetchImageData = async () => {
+    const fetchImageData = useCallback(async () => {
         try {
             const imageData = await sendAuthenticatedRequest("GET", "/api/public/images");
             setImages(imageData.data);
         } catch (error) {
             console.error("Error fetching image metadata:", error);
         }
-    };
+    }, []);
 
-    const fetchArtistData = async () => {
+    const fetchArtistData = useCallback(async () => {
         try {
             const artistData = await sendAuthenticatedRequest("GET", "/api/public/artists");
             setArtists(artistData.data);
         } catch (error) {
             console.error("Error fetching artists:", error);
         }
-    };
+    }, []);
 
-    const fetchTagData = async () => {
+    const fetchTagData = useCallback(async () => {
         try {
             const tagData = await sendAuthenticatedRequest("GET", "/api/public/tags");
             setTags(tagData.data);
         } catch (error) {
             console.error("Error fetching tags:", error);
         }
-    };
+    }, []);
 
     useEffect(() => {
         if (!isDialogMode) {
@@ -122,7 +126,7 @@ export const CollectionBrowser = ({ isDialogMode, selectedItem, setSelectedItem,
         fetchImageData();
         fetchArtistData();
         fetchTagData();
-    }, []);
+    }, [isDialogMode, setTitleText, fetchArtistData, fetchImageData, fetchTagData]);
 
     const renderedImageContainerData = useMemo(() => images.map((image) => (
         [
@@ -131,7 +135,7 @@ export const CollectionBrowser = ({ isDialogMode, selectedItem, setSelectedItem,
                 isDisabled={(disabledImages ?? []).map((di) => di.image_id).includes(image.id)}
                 {...{ image, viewMode, setSelectedItem }} />
         ]
-    )), [images, selectedItem, disabledImages, viewMode]);
+    )), [images, selectedItem, disabledImages, viewMode, setSelectedItem]);
 
     const renderedImageContainerDataFiltered = useMemo(() => renderedImageContainerData.filter((imageContainerData) => {
         return (

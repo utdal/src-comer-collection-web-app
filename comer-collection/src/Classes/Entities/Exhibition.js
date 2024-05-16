@@ -123,10 +123,12 @@ class Exhibition extends Entity {
             const { handleOpenExhibitionSettings, handleOpenExhibitionDeleteDialog } = useManagementCallbacks();
             const handleOpenSettings = useCallback(() => {
                 handleOpenExhibitionSettings(exhibition);
-            });
+            }, [exhibition, handleOpenExhibitionSettings]);
+
             const handleOpenDeleteDialog = useCallback(() => {
                 handleOpenExhibitionDeleteDialog(exhibition);
-            });
+            }, [exhibition, handleOpenExhibitionDeleteDialog]);
+
             return (
                 <Stack direction="row" spacing={1}>
                     <Button variant="outlined" endIcon={<OpenInNewIcon />} href={`/Exhibitions/${exhibition.id}`} target="_blank">

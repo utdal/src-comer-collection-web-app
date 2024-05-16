@@ -2,7 +2,9 @@
 import { IconButton } from "@mui/material";
 import { sendAuthenticatedRequest } from "../Helpers/APICalls.js";
 import { DeleteIcon, EditIcon } from "../Imports/Icons.js";
-import React from "react";
+import React, { useCallback } from "react";
+import { useTableRowItem } from "../ContextProviders/TableRowProvider.js";
+import { useManagementCallbacks } from "../ContextProviders/ManagementPageProvider.js";
 
 export const capitalized = (string) => {
     return string.substr(0, 1).toUpperCase() + string.substr(1).toLowerCase();
@@ -51,6 +53,30 @@ class Entity {
                 <IconButton {...{ onClick, disabled }}>
                     <DeleteIcon />
                 </IconButton>
+            );
+        },
+        EntityManageEditButton ({ disabled }) {
+            const item = useTableRowItem();
+            const { handleOpenEntityEditDialog } = useManagementCallbacks();
+            const handleOpenEditDialog = useCallback(() => {
+                handleOpenEntityEditDialog(item);
+            }, [handleOpenEntityEditDialog, item]);
+            return (
+                <Entity.TableCells.EditButton
+                    {...{ disabled }}
+                    onClick={handleOpenEditDialog} />
+            );
+        },
+        EntityManageDeleteButton ({ disabled }) {
+            const item = useTableRowItem();
+            const { handleOpenEntityDeleteDialog } = useManagementCallbacks();
+            const handleOpenDeleteDialog = useCallback(() => {
+                handleOpenEntityDeleteDialog(item);
+            }, [handleOpenEntityDeleteDialog, item]);
+            return (
+                <Entity.TableCells.DeleteButton
+                    {...{ disabled }}
+                    onClick={handleOpenDeleteDialog} />
             );
         }
     };

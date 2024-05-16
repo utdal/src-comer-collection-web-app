@@ -1,5 +1,5 @@
 import { Box, Button, Paper, Stack, Typography } from "@mui/material";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { sendAuthenticatedRequest } from "../../Helpers/APICalls.js";
 import { DataTable } from "../../Components/DataTable.js";
 import { PhotoCameraBackIcon } from "../../Imports/Icons.js";
@@ -9,23 +9,23 @@ import { useTitle } from "../../ContextProviders/AppFeatures.js";
 export const ExhibitionBrowser = () => {
     const [exhibitions, setExhibitions] = useState([]);
 
+    const navigate = useNavigate();
+
     const setTitleText = useTitle();
 
-    const fetchPublicExhibitionData = async () => {
+    const fetchPublicExhibitionData = useCallback(async () => {
         try {
             const imageData = await sendAuthenticatedRequest("GET", "/api/public/exhibitions");
             setExhibitions(imageData.data);
         } catch (error) {
             console.error("Error fetching image metadata:", error);
         }
-    };
+    }, []);
 
     useEffect(() => {
         setTitleText("Public Exhibitions");
         fetchPublicExhibitionData();
-    }, []);
-
-    const navigate = useNavigate();
+    }, [setTitleText, fetchPublicExhibitionData]);
 
     const exhibitionTableFields = [
         {

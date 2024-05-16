@@ -2,10 +2,12 @@
 import { Button, Stack, Switch, Typography } from "@mui/material";
 import { sendAuthenticatedRequest } from "../../Helpers/APICalls.js";
 import { Entity } from "../Entity.js";
-import React from "react";
+import React, { useCallback } from "react";
 import { useAppUser } from "../../ContextProviders/AppUser.js";
 import { CollectionManagerIcon, LockIcon, LockResetIcon, OpenInNewIcon, PersonIcon, PhotoCameraBackIcon, SchoolIcon, SecurityIcon } from "../../Imports/Icons.js";
 import { useTableRowItem } from "../../ContextProviders/TableRowProvider.js";
+import { useClipboard } from "../../ContextProviders/AppFeatures.js";
+import { useManagementCallbacks } from "../../ContextProviders/ManagementPageProvider.js";
 
 class User extends Entity {
     static baseUrl = "/api/admin/users";
@@ -74,16 +76,22 @@ class User extends Entity {
                     )
             );
         },
-        Email ({ onClick }) {
+        Email () {
             const user = useTableRowItem();
-            return (onClick &&
-                <Button color="grey"
-                    variant="text" sx={{ textTransform: "unset" }}
-                    onClick={onClick}>
+            return (
+                <Typography variant="body1" color="grey">{user.email}</Typography>
+            );
+        },
+        EmailWithCopyButton () {
+            const user = useTableRowItem();
+            const clipboard = useClipboard();
+            const handleCopyToClipboard = useCallback(() => {
+                clipboard(user.email);
+            }, [clipboard, user.email]);
+            return (
+                <Button color="grey" variant="text" sx={{ textTransform: "unset" }} onClick={handleCopyToClipboard} >
                     <Typography variant="body1">{user.email}</Typography>
                 </Button>
-            ) || (!onClick &&
-                <Typography variant="body1" color="grey">{user.email}</Typography>
             );
         },
         StackedNameEmail () {
@@ -95,66 +103,83 @@ class User extends Entity {
                 </Stack>
             );
         },
-        PasswordChangeCurrentAdmin ({ onClick }) {
+        PasswordSetOrReset () {
             const user = useTableRowItem();
-            return (
-                <Button startIcon={<OpenInNewIcon />} color={user.is_admin_or_collection_manager ? "secondary" : "primary"}
-                    variant="outlined"
-                    onClick={onClick}>
-                    <Typography variant="body1">Change</Typography>
-                </Button>
-            );
+            const appUser = useAppUser();
+            const { handleOpenUserPasswordResetDialog, handleNavigateToChangePassword } = useManagementCallbacks();
+            const handleOpenPasswordResetDialog = useCallback(() => {
+                handleOpenUserPasswordResetDialog(user);
+            }, [handleOpenUserPasswordResetDialog, user]);
+            if (appUser.id === user.id) {
+                return (
+                    <Button startIcon={<OpenInNewIcon />} color="secondary"
+                        variant="outlined"
+                        onClick={handleNavigateToChangePassword}>
+                        <Typography variant="body1">Change</Typography>
+                    </Button>
+                );
+            } else {
+                return (
+                    <Button
+                        startIcon={user.has_password ? <LockResetIcon /> : <LockIcon />}
+                        color={user.is_admin_or_collection_manager ? "secondary" : "primary"}
+                        itemID={user.id}
+                        variant={user.has_password ? "outlined" : "contained"}
+                        onClick={handleOpenPasswordResetDialog}>
+                        <Typography variant="body1">
+                            {user.has_password ? "Reset" : "Set"}
+                        </Typography>
+                    </Button>
+                );
+            }
         },
-        PasswordSetOrReset ({ onClick }) {
+        CourseAssignmentButton () {
             const user = useTableRowItem();
-            return (
-                <Button
-                    startIcon={user.has_password ? <LockResetIcon /> : <LockIcon />}
-                    color={user.is_admin_or_collection_manager ? "secondary" : "primary"}
-                    itemID={user.id}
-                    variant={user.has_password ? "outlined" : "contained"}
-                    onClick={onClick}>
-                    <Typography variant="body1">
-                        {user.has_password ? "Reset" : "Set"}
-                    </Typography>
-                </Button>
-            );
-        },
-        CourseAssignmentButton ({ onClick }) {
-            const user = useTableRowItem();
+            const { handleOpenUserAssignCourseDialog } = useManagementCallbacks();
+            const handleOpenAssignCourseDialog = useCallback(() => {
+                handleOpenUserAssignCourseDialog(user);
+            }, [handleOpenUserAssignCourseDialog, user]);
             return (
                 <Stack direction="row" spacing={1} alignItems="center">
                     <Button variant="text"
                         color="lightgrey"
                         startIcon={<SchoolIcon />}
-                        onClick={onClick}
+                        onClick={handleOpenAssignCourseDialog}
                     >
                         <Typography variant="body1">{user.Courses.length}</Typography>
                     </Button>
                 </Stack>
             );
         },
-        UserExhibitionCountButton ({ onClick }) {
+        UserExhibitionCountButton () {
             const user = useTableRowItem();
+            const { handleOpenViewUserExhibitionDialog } = useManagementCallbacks();
+            const handleOpenViewExhibitionDialog = useCallback(() => {
+                handleOpenViewUserExhibitionDialog(user);
+            }, [handleOpenViewUserExhibitionDialog, user]);
             return (
                 <Stack direction="row" spacing={1}>
                     <Button variant="text" sx={{ textTransform: "unset" }}
                         color="lightgrey"
                         startIcon={<PhotoCameraBackIcon />}
-                        {...{ onClick }}
+                        onClick={handleOpenViewExhibitionDialog}
                     >
                         <Typography variant="body1">{user.Exhibitions.length} of {user.exhibition_quota}</Typography>
                     </Button>
                 </Stack>
             );
         },
-        UserTypeButton ({ onClick }) {
+        UserTypeButton () {
             const user = useTableRowItem();
             const [appUser] = useAppUser();
+            const { handleOpenUserPrivilegesDialog } = useManagementCallbacks();
+            const handleOpenPrivilegesDialog = useCallback(() => {
+                handleOpenUserPrivilegesDialog(user);
+            }, [handleOpenUserPrivilegesDialog, user]);
             return (
                 <Button color="lightgrey" sx={{ textTransform: "unset" }}
                     disabled={user.id === appUser.id}
-                    {...{ onClick }}
+                    onClick={handleOpenPrivilegesDialog}
                     startIcon={
                         (user.is_admin && <SecurityIcon color="secondary" />) ||
                         (user.is_collection_manager && <CollectionManagerIcon color="secondary" />) ||
@@ -168,22 +193,48 @@ class User extends Entity {
         UserActivationSwitch ({ onClick }) {
             const user = useTableRowItem();
             const [appUser] = useAppUser();
+            const { handleChangeUserActivationStatus } = useManagementCallbacks();
+            const handleChangeActivationStatus = useCallback((e) => {
+                handleChangeUserActivationStatus(user, e.target.checked);
+            }, [handleChangeUserActivationStatus, user]);
             return (
                 <Switch
                     itemID={user.id}
                     checked={user.is_active && user.has_password}
                     disabled={user.id === appUser.id || !user.has_password}
                     color={user.is_admin_or_collection_manager ? "secondary" : "primary"}
-                    {...{ onClick }}
+                    onClick={handleChangeActivationStatus}
                 />
             );
         },
-        DeleteButton ({ onClick }) {
+        EditButton () {
+            const user = useTableRowItem();
+            const { handleOpenUserEditDialog } = useManagementCallbacks();
+            const handleOpenEditDialog = useCallback(() => {
+                handleOpenUserEditDialog(user);
+            }, [user, handleOpenUserEditDialog]);
+            return (
+                <Entity.TableCells.EditButton onClick={handleOpenEditDialog} />
+            );
+        },
+        DeleteButton () {
             const user = useTableRowItem();
             const appUser = useAppUser();
+            const { handleOpenUserDeleteDialog } = useManagementCallbacks();
+            const handleOpenDeleteDialog = useCallback(() => {
+                handleOpenUserDeleteDialog(user);
+            }, [user, handleOpenUserDeleteDialog]);
             const disabled = Boolean(user.Courses.length || user.Exhibitions.length || user.id === appUser.id);
             return (
-                <Entity.TableCells.DeleteButton {...{ onClick, disabled }} />
+                <Entity.TableCells.DeleteButton onClick={handleOpenDeleteDialog} {... disabled } />
+            );
+        },
+        OptionsArray () {
+            return (
+                <>
+                    <User.TableCells.EditButton />
+                    <User.TableCells.DeleteButton />
+                </>
             );
         }
     };
