@@ -24,6 +24,8 @@ class Tag extends Entity {
         }
     ];
 
+    static searchBoxFields = ["data", "notes"];
+
     static TableCells = {
         ID () {
             const tag = useTableRowItem();
@@ -78,6 +80,32 @@ class Tag extends Entity {
             );
         }
     };
+
+    static tableFields = [
+        {
+            columnDescription: "ID",
+            TableCellComponent: Tag.TableCells.ID,
+            generateSortableValue: (tag) => tag.id
+        },
+        {
+            columnDescription: "Data",
+            maxWidth: "300px",
+            TableCellComponent: Tag.TableCells.Data,
+            generateSortableValue: (tag) => tag.data.toLowerCase()
+        },
+        {
+            columnDescription: "Images",
+            TableCellComponent: Tag.TableCells.ImageCount
+        },
+        {
+            columnDescription: "Notes",
+            TableCellComponent: Tag.TableCells.Notes
+        },
+        {
+            columnDescription: "Options",
+            TableCellComponent: Tag.TableCells.ManageOptionsArray
+        }
+    ];
 }
 
 export { Tag };

@@ -68,7 +68,9 @@ export const DataTable = ({
         (items ?? []).map((item) => {
             const sortableValues = {};
             for (const tf of tableFields) {
-                if (tf.generateSortableValue) { sortableValues[tf.columnDescription] = tf.generateSortableValue(item); }
+                if (tf.generateSortableValue) {
+                    sortableValues[tf.columnDescription] = tf.generateSortableValue(item);
+                }
             }
             output[item.id] = sortableValues;
             return null;
@@ -88,7 +90,7 @@ export const DataTable = ({
                     <InView key={item.id} triggerOnce={true}>
                         {({ inView, ref }) => (
                             <TableRowProvider {...{ item }} >
-                                <TableRow ref={ref} sx={{
+                                <TableRow color="secondary" ref={ref} sx={{
                                     "&:hover": {
                                         backgroundColor: isSelected ? theme.palette[themeColor].translucent : theme.palette.grey.veryTranslucent
 
@@ -133,7 +135,11 @@ export const DataTable = ({
     const renderedItems = useMemo(() => sortedItemInformation.map((r) => r[2]), [sortedItemInformation]);
 
     const itemsInFinalDisplayOrder = useMemo(() => {
-        if (sortAscending) { return renderedItems; } else { return renderedItems.toReversed(); }
+        if (sortAscending) {
+            return renderedItems;
+        } else {
+            return renderedItems.toReversed();
+        }
     }, [renderedItems, sortAscending]);
 
     const visibleSelectedItems = selectedItems ? visibleItems.filter((i) => selectedItems.map((si) => si.id).includes(parseInt(i.id))) : visibleItems;

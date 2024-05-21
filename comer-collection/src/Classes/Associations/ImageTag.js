@@ -14,6 +14,24 @@ class ImageTag extends Association {
     static assignPast = "tagged";
     static unassignPresent = "untag";
     static unassignPast = "untagged";
+
+    static secondaryFieldInPrimary = "Tags";
+
+    static tableFields = [
+        {
+            columnDescription: "ID",
+            TableCellComponent: Tag.TableCells.ID,
+            generateSortableValue: (tag) => tag.id
+        },
+        {
+            columnDescription: "Tag",
+            TableCellComponent: Tag.TableCells.Data
+        },
+        {
+            columnDescription: "Notes",
+            TableCellComponent: Tag.TableCells.Notes
+        }
+    ];
 }
 
 export { ImageTag };

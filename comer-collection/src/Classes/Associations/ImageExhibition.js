@@ -9,6 +9,33 @@ class ImageExhibition extends Association {
 
     static singular = "exhibition";
     static plural = "exhibitions";
+
+    static tableFields = [
+        {
+            columnDescription: "ID",
+            TableCellComponent: Exhibition.TableCells.ID
+        },
+        {
+            columnDescription: "Title",
+            TableCellComponent: Exhibition.TableCells.Title
+        },
+        {
+            columnDescription: "Open",
+            TableCellComponent: Exhibition.TableCells.OpenInNewTab
+        },
+        {
+            columnDescription: "Created",
+            TableCellComponent: Exhibition.TableCells.DateCreatedStacked
+        },
+        {
+            columnDescription: "Modified",
+            TableCellComponent: Exhibition.TableCells.DateModifiedStacked
+        },
+        {
+            columnDescription: "Access",
+            TableCellComponent: Exhibition.TableCells.Access
+        }
+    ];
 }
 
 export { ImageExhibition };

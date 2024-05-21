@@ -6,8 +6,7 @@ module.exports = {
     },
     extends: [
         "standard",
-        "plugin:react/recommended",
-        "plugin:react-hooks/recommended"
+        "plugin:react/all"
     ],
     overrides: [
         {
@@ -34,6 +33,12 @@ module.exports = {
         semi: [2, "always"],
         quotes: [2, "double"],
         "react-hooks/rules-of-hooks": "error",
-        "react-hooks/exhaustive-deps": "error"
+        "react-hooks/exhaustive-deps": "error",
+        "react/function-component-definition": [2, {
+            namedComponents: "arrow-function"
+        }],
+        "react/jsx-filename-extension": [1, {
+            extensions: [".js", ".jsx"]
+        }]
     }
 };

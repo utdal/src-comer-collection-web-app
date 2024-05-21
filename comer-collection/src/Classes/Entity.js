@@ -23,6 +23,8 @@ class Entity {
         }
     ];
 
+    static searchBoxFields = [];
+
     static formatDate = (date) => {
         return new Date(date).toLocaleDateString([], {
             year: "numeric",
@@ -112,6 +114,8 @@ class Entity {
             });
         });
     }
+
+    static tableFields = [];
 }
 
 export { Entity };

@@ -28,91 +28,7 @@ import { Tag } from "../../Classes/Entities/Tag.js";
 import { ImageArtist } from "../../Classes/Associations/ImageArtist.js";
 import { ImageTag } from "../../Classes/Associations/ImageTag.js";
 import { ImageExhibition } from "../../Classes/Associations/ImageExhibition.js";
-import { Exhibition } from "../../Classes/Entities/Exhibition.js";
 import { ManagementPageProvider, useItemsReducer } from "../../ContextProviders/ManagementPageProvider.js";
-
-const artistManagementTableFields = [
-    {
-        columnDescription: "ID",
-        TableCellComponent: Artist.TableCells.ID,
-        generateSortableValue: (artist) => artist.id
-    },
-    {
-        columnDescription: "Name",
-        maxWidth: "300px",
-        TableCellComponent: Artist.TableCells.Name,
-        generateSortableValue: (artist) => `${artist.familyName.toLowerCase()}, ${artist.givenName.toLowerCase()}`
-    },
-    {
-        columnDescription: "Images",
-        TableCellComponent: Artist.TableCells.ImageCount
-    },
-    {
-        columnDescription: "Website",
-        TableCellComponent: Artist.TableCells.Website
-    },
-    {
-        columnDescription: "Notes",
-        TableCellComponent: Artist.TableCells.Notes
-    },
-    {
-        columnDescription: "Options",
-        TableCellComponent: Artist.TableCells.ManageOptionsArray
-    }
-];
-
-const tagManagementTableFields = [
-    {
-        columnDescription: "ID",
-        TableCellComponent: Tag.TableCells.ID,
-        generateSortableValue: (tag) => tag.id
-    },
-    {
-        columnDescription: "Data",
-        maxWidth: "300px",
-        TableCellComponent: Tag.TableCells.Data,
-        generateSortableValue: (tag) => tag.data.toLowerCase()
-    },
-    {
-        columnDescription: "Images",
-        TableCellComponent: Tag.TableCells.ImageCount
-    },
-    {
-        columnDescription: "Notes",
-        TableCellComponent: Tag.TableCells.Notes
-    },
-    {
-        columnDescription: "Options",
-        TableCellComponent: Tag.TableCells.ManageOptionsArray
-    }
-];
-
-const exhibitionAssignmentTableFields = [
-    {
-        columnDescription: "ID",
-        TableCellComponent: Exhibition.TableCells.ID
-    },
-    {
-        columnDescription: "Title",
-        TableCellComponent: Exhibition.TableCells.Title
-    },
-    {
-        columnDescription: "Open",
-        TableCellComponent: Exhibition.TableCells.OpenInNewTab
-    },
-    {
-        columnDescription: "Created",
-        TableCellComponent: Exhibition.TableCells.DateCreatedStacked
-    },
-    {
-        columnDescription: "Modified",
-        TableCellComponent: Exhibition.TableCells.DateModifiedStacked
-    },
-    {
-        columnDescription: "Access",
-        TableCellComponent: Exhibition.TableCells.Access
-    }
-];
 
 const imageTableFields = [
     {
@@ -161,43 +77,11 @@ const imageTableFields = [
     }
 ];
 
-const artistAssignmentTableFields = [
-    {
-        columnDescription: "ID",
-        TableCellComponent: Artist.TableCells.ID,
-        generateSortableValue: (artist) => artist.id
-    },
-    {
-        columnDescription: "Artist",
-        TableCellComponent: Artist.TableCells.Name
-    },
-    {
-        columnDescription: "Notes",
-        TableCellComponent: Artist.TableCells.Notes
-    }
-];
-
-const tagAssignmentTableFields = [
-    {
-        columnDescription: "ID",
-        TableCellComponent: Tag.TableCells.ID,
-        generateSortableValue: (tag) => tag.id
-    },
-    {
-        columnDescription: "Tag",
-        TableCellComponent: Tag.TableCells.Data
-    },
-    {
-        columnDescription: "Notes",
-        TableCellComponent: Tag.TableCells.Notes
-    }
-];
-
 const ImageManagement = () => {
     const [imagesCombinedState, setImages, setSelectedImages, filterImages] = useItemsReducer();
+    const [artistsCombinedState, setArtists, , filterArtists] = useItemsReducer();
+    const [tagsCombinedState, setTags, , filterTags] = useItemsReducer();
 
-    const [artists, setArtists] = useState([]);
-    const [tags, setTags] = useState([]);
     const [exhibitions, setExhibitions] = useState([]);
     const [refreshInProgress, setRefreshInProgress] = useState(true);
 
@@ -226,18 +110,7 @@ const ImageManagement = () => {
     const [previewerOpen, setPreviewerOpen] = useState(false);
 
     const [manageArtistDialogIsOpen, setManageArtistDialogIsOpen] = useState(false);
-    const [artistDeleteDialogIsOpen, setArtistDeleteDialogIsOpen] = useState(false);
-    const [artistDeleteDialogItem, setArtistDeleteDialogItem] = useState(null);
-    const [artistEditDialogIsOpen, setArtistEditDialogIsOpen] = useState(false);
-    const [artistEditDialogItem, setArtistEditDialogItem] = useState(null);
-    const [artistDialogSearchQuery, setArtistDialogSearchQuery] = useState("");
-
     const [manageTagDialogIsOpen, setManageTagDialogIsOpen] = useState(false);
-    const [tagDeleteDialogIsOpen, setTagDeleteDialogIsOpen] = useState(false);
-    const [tagDeleteDialogItem, setTagDeleteDialogItem] = useState(null);
-    const [tagEditDialogIsOpen, setTagEditDialogIsOpen] = useState(false);
-    const [tagEditDialogItem, setTagEditDialogItem] = useState(null);
-    const [tagDialogSearchQuery, setTagDialogSearchQuery] = useState("");
 
     const [dialogIsOpen, setDialogIsOpen] = useState(false);
 
@@ -284,12 +157,12 @@ const ImageManagement = () => {
     const fetchArtists = useCallback(async () => {
         const artistData = await sendAuthenticatedRequest("GET", "/api/admin/artists");
         setArtists(artistData.data);
-    }, []);
+    }, [setArtists]);
 
     const fetchTags = useCallback(async () => {
         const tagData = await sendAuthenticatedRequest("GET", "/api/admin/tags");
         setTags(tagData.data);
-    }, []);
+    }, [setTags]);
 
     const fetchData = useCallback(async () => {
         setIsError(false);
@@ -502,45 +375,23 @@ const ImageManagement = () => {
 
                 <EntityManageDialog
                     Entity={Artist}
-                    dialogItems={artists}
+                    dialogItemsCombinedState={artistsCombinedState}
                     setDialogItems={setArtists}
-                    dialogTableFields={artistManagementTableFields}
+                    filterDialogItems={filterArtists}
                     dialogIsOpen={manageArtistDialogIsOpen}
                     setDialogIsOpen={setManageArtistDialogIsOpen}
-                    searchBoxFields={["fullName", "fullNameReverse", "notes"]}
                     searchBoxPlaceholder="Search artists by name or notes"
-                    internalDeleteDialogIsOpen={artistDeleteDialogIsOpen}
-                    setInternalDeleteDialogIsOpen={setArtistDeleteDialogIsOpen}
-                    internalDeleteDialogItem={artistDeleteDialogItem}
-                    setInternalDeleteDialogItem={setArtistDeleteDialogItem}
-                    internalEditDialogIsOpen={artistEditDialogIsOpen}
-                    setInternalEditDialogIsOpen={setArtistEditDialogIsOpen}
-                    internalEditDialogItem={artistEditDialogItem}
-                    setInternalEditDialogItem={setArtistEditDialogItem}
-                    itemSearchQuery={artistDialogSearchQuery}
-                    setItemSearchQuery={setArtistDialogSearchQuery}
                     refreshAllItems={fetchArtists}
                 />
 
                 <EntityManageDialog
                     Entity={Tag}
-                    dialogItems={tags}
+                    dialogItemsCombinedState={tagsCombinedState}
                     setDialogItems={setTags}
-                    dialogTableFields={tagManagementTableFields}
+                    filterDialogItems={filterTags}
                     dialogIsOpen={manageTagDialogIsOpen}
                     setDialogIsOpen={setManageTagDialogIsOpen}
-                    searchBoxFields={["data", "notes"]}
                     searchBoxPlaceholder="Search tags by name or notes"
-                    internalDeleteDialogIsOpen={tagDeleteDialogIsOpen}
-                    setInternalDeleteDialogIsOpen={setTagDeleteDialogIsOpen}
-                    internalDeleteDialogItem={tagDeleteDialogItem}
-                    setInternalDeleteDialogItem={setTagDeleteDialogItem}
-                    internalEditDialogIsOpen={tagEditDialogIsOpen}
-                    setInternalEditDialogIsOpen={setTagEditDialogIsOpen}
-                    internalEditDialogItem={tagEditDialogItem}
-                    setInternalEditDialogItem={setTagEditDialogItem}
-                    itemSearchQuery={tagDialogSearchQuery}
-                    setItemSearchQuery={setTagDialogSearchQuery}
                     refreshAllItems={fetchTags}
                 />
 
@@ -555,7 +406,7 @@ const ImageManagement = () => {
                     Association={ImageArtist}
                     editMode={true}
                     primaryItems={assignArtistDialogImages}
-                    secondaryItemsAll={artists}
+                    secondaryItemsAll={artistsCombinedState.items}
                     secondariesByPrimary={artistsByImage}
                     dialogButtonForSecondaryManagement={<>
                         <Button variant="outlined" onClick={() => {
@@ -568,7 +419,6 @@ const ImageManagement = () => {
                     dialogIsOpen={assignArtistDialogIsOpen}
                     setDialogIsOpen={setAssignArtistDialogIsOpen}
                     secondaryFieldInPrimary="Artists"
-                    secondaryTableFields={artistAssignmentTableFields}
                     secondarySearchFields={["fullName", "fullNameReverse", "notes"]}
                     secondarySearchBoxPlaceholder={"Search artists by name or notes"}
                     refreshAllItems={fetchData}
@@ -578,7 +428,7 @@ const ImageManagement = () => {
                     Association={ImageTag}
                     editMode={true}
                     primaryItems={assignTagDialogImages}
-                    secondaryItemsAll={tags}
+                    secondaryItemsAll={tagsCombinedState.items}
                     secondariesByPrimary={tagsByImage}
                     dialogButtonForSecondaryManagement={<>
                         <Button variant="outlined" onClick={() => {
@@ -591,7 +441,6 @@ const ImageManagement = () => {
                     dialogIsOpen={assignTagDialogIsOpen}
                     setDialogIsOpen={setAssignTagDialogIsOpen}
                     secondaryFieldInPrimary="Tags"
-                    secondaryTableFields={tagAssignmentTableFields}
                     secondarySearchFields={["data", "notes"]}
                     secondarySearchBoxPlaceholder={"Search tags by name or notes"}
                     refreshAllItems={fetchData}
@@ -613,7 +462,6 @@ const ImageManagement = () => {
                     </>}
                     dialogIsOpen={viewImageExhibitionDialogIsOpen}
                     setDialogIsOpen={setViewImageExhibitionDialogIsOpen}
-                    secondaryTableFields={exhibitionAssignmentTableFields}
                     secondarySearchFields={["title"]}
                     secondarySearchBoxPlaceholder="Search exhibitions by title"
                 />

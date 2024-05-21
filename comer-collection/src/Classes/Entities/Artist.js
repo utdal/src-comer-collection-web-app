@@ -36,6 +36,8 @@ class Artist extends Entity {
         }
     ];
 
+    static searchBoxFields = ["fullName", "fullNameReverse", "notes"];
+
     static TableCells = {
         ID () {
             const artist = useTableRowItem();
@@ -97,6 +99,36 @@ class Artist extends Entity {
             );
         }
     };
+
+    static tableFields = [
+        {
+            columnDescription: "ID",
+            TableCellComponent: Artist.TableCells.ID,
+            generateSortableValue: (artist) => artist.id
+        },
+        {
+            columnDescription: "Name",
+            maxWidth: "300px",
+            TableCellComponent: Artist.TableCells.Name,
+            generateSortableValue: (artist) => `${artist.familyName?.toLowerCase()}, ${artist.givenName?.toLowerCase()}`
+        },
+        {
+            columnDescription: "Images",
+            TableCellComponent: Artist.TableCells.ImageCount
+        },
+        {
+            columnDescription: "Website",
+            TableCellComponent: Artist.TableCells.Website
+        },
+        {
+            columnDescription: "Notes",
+            TableCellComponent: Artist.TableCells.Notes
+        },
+        {
+            columnDescription: "Options",
+            TableCellComponent: Artist.TableCells.ManageOptionsArray
+        }
+    ];
 }
 
 export { Artist };

@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import {
     Stack, Dialog,
     DialogTitle,
@@ -11,24 +11,18 @@ import { AddIcon } from "../../Imports/Icons.js";
 import { getBlankItemFields } from "../../Helpers/fields.js";
 import { DataTable } from "../DataTable.js";
 import SearchBox from "../SearchBox.js";
-import { searchItems } from "../../Helpers/SearchUtilities.js";
+import { doesItemMatchSearchQuery } from "../../Helpers/SearchUtilities.js";
 import { ItemSingleDeleteDialog } from "./ItemSingleDeleteDialog.js";
 import { ItemSingleEditDialog } from "./ItemSingleEditDialog.js";
 import PropTypes from "prop-types";
 import { useSnackbar } from "../../ContextProviders/AppFeatures.js";
+import { ManagementPageProvider } from "../../ContextProviders/ManagementPageProvider.js";
 
 export const EntityManageDialog = ({
     Entity,
-    dialogItems, setDialogItems,
-    dialogTableFields,
+    dialogItemsCombinedState, setDialogItems, filterDialogItems,
     dialogIsOpen, setDialogIsOpen,
-    searchBoxFields, searchBoxPlaceholder, itemSearchQuery, setItemSearchQuery,
-
-    internalDeleteDialogIsOpen, setInternalDeleteDialogIsOpen,
-    internalDeleteDialogItem,
-
-    internalEditDialogIsOpen, setInternalEditDialogIsOpen,
-    internalEditDialogItem,
+    searchBoxPlaceholder,
 
     refreshAllItems,
 
@@ -38,27 +32,45 @@ export const EntityManageDialog = ({
     const [itemToAdd, setItemToAdd] = useState(blankItem);
     const showSnackbar = useSnackbar();
 
-    // const [internalEditDialogItem, setInternalEditDialogItem] = useState(null);
-    // const [internalEditDialogIsOpen, setInternalEditDialogIsOpen] = useState(false);
+    const [itemSearchQuery, setItemSearchQuery] = useState("");
 
-    // const [internalDeleteDialogItem, setInternalDeleteDialogItem] = useState(null);
-    // const [internalDeleteDialogIsOpen, setInternalDeleteDialogIsOpen] = useState(false);
+    const [internalEditDialogItem, setInternalEditDialogItem] = useState(null);
+    const [internalEditDialogIsOpen, setInternalEditDialogIsOpen] = useState(false);
 
-    const visibleItems = useMemo(() => {
-        return searchItems(itemSearchQuery, dialogItems, searchBoxFields);
-    }, [dialogItems, itemSearchQuery, searchBoxFields]);
+    const [internalDeleteDialogItem, setInternalDeleteDialogItem] = useState(null);
+    const [internalDeleteDialogIsOpen, setInternalDeleteDialogIsOpen] = useState(false);
 
-    const entityDataTable = useMemo(() => {
+    const itemFilterFunction = useCallback((item) => {
         return (
-            <DataTable tableFields={dialogTableFields} items={dialogItems} visibleItems={visibleItems} />
+            doesItemMatchSearchQuery(itemSearchQuery, item, Entity.searchBoxFields)
         );
-    }, [dialogItems, visibleItems, dialogTableFields]);
+    }, [itemSearchQuery, Entity.searchBoxFields]);
+
+    useEffect(() => {
+        filterDialogItems(itemFilterFunction);
+    }, [filterDialogItems, itemFilterFunction]);
 
     const singularCapitalized = Entity?.singular.substr(0, 1).toUpperCase() + Entity?.singular.substr(1).toLowerCase();
     const pluralCapitalized = Entity?.plural.substr(0, 1).toUpperCase() + Entity?.plural.substr(1).toLowerCase();
 
+    const handleOpenEntityEditDialog = useCallback((item) => {
+        setInternalEditDialogItem(item);
+        setInternalEditDialogIsOpen(true);
+    }, []);
+
+    const handleOpenEntityDeleteDialog = useCallback((item) => {
+        setInternalDeleteDialogItem(item);
+        setInternalDeleteDialogIsOpen(true);
+    }, []);
+
     return (
-        <>
+        <ManagementPageProvider
+            itemsCombinedState={dialogItemsCombinedState}
+            managementCallbacks={{
+                handleOpenEntityEditDialog,
+                handleOpenEntityDeleteDialog
+            }}
+        >
             <Dialog fullWidth={true} maxWidth="lg" sx={{ zIndex: 10000 }}
                 open={dialogIsOpen} disableEscapeKeyDown
                 onClose={(event, reason) => {
@@ -78,7 +90,7 @@ export const EntityManageDialog = ({
             "create"
             `
                         }}>
-                        {dialogItems.length > 0 && (
+                        {dialogItemsCombinedState.items.length > 0 && (
                             <>
                                 <Box sx={{ gridArea: "update" }}>
                                     <Stack spacing={2} sx={{ height: "300px" }}>
@@ -89,7 +101,7 @@ export const EntityManageDialog = ({
                                             />
                                         </Stack>
 
-                                        {entityDataTable}
+                                        <DataTable tableFields={Entity.tableFields} NoContentIcon={"div"} />
 
                                     </Stack>
                                 </Box>
@@ -156,7 +168,7 @@ export const EntityManageDialog = ({
                 </DialogContent>
                 <DialogActions>
                     <Stack direction="row" justifyContent="space-between" width="100%">
-                        <Typography paddingLeft={4} variant="h6" sx={{ opacity: 0.5 }}>{dialogItems.length} {dialogItems.length === 1 ? Entity.singular : Entity.plural}</Typography>
+                        <Typography paddingLeft={4} variant="h6" sx={{ opacity: 0.5 }}>{dialogItemsCombinedState.items.length} {dialogItemsCombinedState.items.length === 1 ? Entity.singular : Entity.plural}</Typography>
                         <Button sx={{
                             width: "30%"
                         }} color="primary" variant="contained" size="large"
@@ -179,7 +191,7 @@ export const EntityManageDialog = ({
             />
 
             <ItemSingleDeleteDialog
-                allItems={dialogItems}
+                allItems={dialogItemsCombinedState.items}
                 setAllItems={setDialogItems}
                 deleteDialogIsOpen={internalDeleteDialogIsOpen}
                 setDeleteDialogIsOpen={setInternalDeleteDialogIsOpen}
@@ -188,27 +200,19 @@ export const EntityManageDialog = ({
                 {...{ Entity }}
             />
 
-        </>
+        </ManagementPageProvider>
     );
 };
 
 EntityManageDialog.propTypes = {
     Entity: PropTypes.any,
-    dialogItems: PropTypes.arrayOf(PropTypes.object),
+    dialogItemsCombinedState: PropTypes.object,
     setDialogItems: PropTypes.func,
+    filterDialogItems: PropTypes.func,
     dialogTableFields: PropTypes.PropTypes.arrayOf(PropTypes.object),
     dialogIsOpen: PropTypes.bool,
     setDialogIsOpen: PropTypes.func,
-    searchBoxFields: PropTypes.arrayOf(PropTypes.string),
     searchBoxPlaceholder: PropTypes.string,
-    itemSearchQuery: PropTypes.string,
-    setItemSearchQuery: PropTypes.func,
-    internalDeleteDialogIsOpen: PropTypes.bool,
-    setInternalDeleteDialogIsOpen: PropTypes.func,
-    internalDeleteDialogItem: PropTypes.object,
-    internalEditDialogIsOpen: PropTypes.bool,
-    setInternalEditDialogIsOpen: PropTypes.func,
-    internalEditDialogItem: PropTypes.object,
     refreshAllItems: PropTypes.func,
     onClose: PropTypes.func
 };

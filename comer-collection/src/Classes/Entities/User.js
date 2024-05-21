@@ -268,6 +268,49 @@ class User extends Entity {
             });
         });
     }
+
+    static tableFields = [
+        {
+            columnDescription: "ID",
+            TableCellComponent: User.TableCells.ID,
+            generateSortableValue: (user) => user.id
+        },
+        {
+            columnDescription: "Name",
+            maxWidth: "150px",
+            TableCellComponent: User.TableCells.Name,
+            generateSortableValue: (user) => user.full_name_reverse.toLowerCase()
+        },
+        {
+            columnDescription: "Email",
+            TableCellComponent: User.TableCells.EmailWithCopyButton,
+            generateSortableValue: (user) => user.email
+        },
+        {
+            columnDescription: "Password",
+            TableCellComponent: User.TableCells.PasswordSetOrReset
+        },
+        {
+            columnDescription: "Courses",
+            TableCellComponent: User.TableCells.CourseAssignmentButton
+        },
+        {
+            columnDescription: "Exhibitions",
+            TableCellComponent: User.TableCells.UserExhibitionCountButton
+        },
+        {
+            columnDescription: "User Type",
+            TableCellComponent: User.TableCells.UserTypeButton
+        },
+        {
+            columnDescription: "Active",
+            TableCellComponent: User.TableCells.UserActivationSwitch
+        },
+        {
+            columnDescription: "Options",
+            TableCellComponent: User.TableCells.OptionsArray
+        }
+    ];
 }
 
 export { User };

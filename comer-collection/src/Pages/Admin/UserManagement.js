@@ -26,78 +26,7 @@ import { useAccountNav } from "../../ContextProviders/AccountNavProvider.js";
 import { User } from "../../Classes/Entities/User.js";
 import { EnrollmentUserPrimary } from "../../Classes/Associations/Enrollment.js";
 import { UserExhibition } from "../../Classes/Associations/UserExhibition.js";
-import { Exhibition } from "../../Classes/Entities/Exhibition.js";
 import { ManagementPageProvider, useItemsReducer } from "../../ContextProviders/ManagementPageProvider.js";
-
-const userTableFields = [
-    {
-        columnDescription: "ID",
-        TableCellComponent: User.TableCells.ID,
-        generateSortableValue: (user) => user.id
-    },
-    {
-        columnDescription: "Name",
-        maxWidth: "150px",
-        TableCellComponent: User.TableCells.Name,
-        generateSortableValue: (user) => user.full_name_reverse.toLowerCase()
-    },
-    {
-        columnDescription: "Email",
-        TableCellComponent: User.TableCells.EmailWithCopyButton,
-        generateSortableValue: (user) => user.email
-    },
-    {
-        columnDescription: "Password",
-        TableCellComponent: User.TableCells.PasswordSetOrReset
-    },
-    {
-        columnDescription: "Courses",
-        TableCellComponent: User.TableCells.CourseAssignmentButton
-    },
-    {
-        columnDescription: "Exhibitions",
-        TableCellComponent: User.TableCells.UserExhibitionCountButton
-    },
-    {
-        columnDescription: "User Type",
-        TableCellComponent: User.TableCells.UserTypeButton
-    },
-    {
-        columnDescription: "Active",
-        TableCellComponent: User.TableCells.UserActivationSwitch
-    },
-    {
-        columnDescription: "Options",
-        TableCellComponent: User.TableCells.OptionsArray
-    }
-];
-
-const exhibitionTableFieldsForDialog = [
-    {
-        columnDescription: "ID",
-        TableCellComponent: Exhibition.TableCells.ID
-    },
-    {
-        columnDescription: "Title",
-        TableCellComponent: Exhibition.TableCells.Title
-    },
-    {
-        columnDescription: "Open",
-        TableCellComponent: Exhibition.TableCells.OpenInNewTab
-    },
-    {
-        columnDescription: "Created",
-        TableCellComponent: Exhibition.TableCells.DateCreatedStacked
-    },
-    {
-        columnDescription: "Modified",
-        TableCellComponent: Exhibition.TableCells.DateModifiedStacked
-    },
-    {
-        columnDescription: "Access",
-        TableCellComponent: Exhibition.TableCells.Access
-    }
-];
 
 const UserManagement = () => {
     const [usersCombinedState, setUsers, setSelectedUsers, filterUsers] = useItemsReducer();
@@ -121,11 +50,7 @@ const UserManagement = () => {
 
     const [assignCourseDialogIsOpen, setAssignCourseDialogIsOpen] = useState(false);
     const [viewUserExhibitionDialogIsOpen, setViewUserExhibitionDialogIsOpen] = useState(false);
-    const [assignCourseDialogUsers, setAssignCourseDialogUsers] = useState([]);
-    const [viewUserExhibitionDialogUsers, setViewUserExhibitionDialogUsers] = useState([]);
-
-    const [coursesByUser, setCoursesByUser] = useState({});
-    const [exhibitionsByUser, setExhibitionsByUser] = useState({});
+    const [associationDialogUsers, setAssociationDialogUsers] = useState([]);
 
     const [dialogIsOpen, setDialogIsOpen] = useState(false);
 
@@ -160,18 +85,6 @@ const UserManagement = () => {
                 setRefreshInProgress(false);
             }, 1000);
 
-            const coursesByUserDraft = {};
-            for (const c of userData.data) {
-                coursesByUserDraft[c.id] = c.Courses;
-            }
-            setCoursesByUser({ ...coursesByUserDraft });
-
-            const exhibitionsByUserDraft = {};
-            for (const e of userData.data) {
-                exhibitionsByUserDraft[e.id] = e.Exhibitions;
-            }
-            setExhibitionsByUser({ ...exhibitionsByUserDraft });
-
             setIsLoaded(true);
         } catch (e) {
             setIsError(true);
@@ -204,12 +117,12 @@ const UserManagement = () => {
     }, []);
 
     const handleOpenUserAssignCourseDialog = useCallback((user) => {
-        setAssignCourseDialogUsers([user]);
+        setAssociationDialogUsers([user]);
         setAssignCourseDialogIsOpen(true);
     }, []);
 
     const handleOpenViewUserExhibitionDialog = useCallback((user) => {
-        setViewUserExhibitionDialogUsers([user]);
+        setAssociationDialogUsers([user]);
         setViewUserExhibitionDialogIsOpen(true);
     }, []);
 
@@ -236,33 +149,6 @@ const UserManagement = () => {
         setDeleteDialogUser(user);
         setDeleteDialogIsOpen(true);
     }, []);
-
-    const courseTableFieldsForDialog = [
-        {
-            columnDescription: "ID",
-            generateTableCell: (course) => (
-                <Typography variant="body1">{course.id}</Typography>
-            ),
-            generateSortableValue: (course) => course.id
-        },
-        {
-            columnDescription: "Name",
-            maxWidth: "200px",
-            generateTableCell: (course) => (
-                <Typography variant="body1">{course.name}</Typography>
-            ),
-            generateSortableValue: (course) => course.name
-        },
-        {
-            columnDescription: "Dates",
-            generateTableCell: (course) => (
-                <Stack>
-                    <Typography variant="body1">{new Date(course.date_start).toLocaleDateString()}</Typography>
-                    <Typography variant="body1">{new Date(course.date_end).toLocaleDateString()}</Typography>
-                </Stack>
-            )
-        }
-    ];
 
     useEffect(() => {
         filterUsers(userFilterFunction);
@@ -330,7 +216,9 @@ const UserManagement = () => {
                         </Button>
                     </Stack>
                 </Stack>
-                <DataTable items={usersCombinedState.items} tableFields={userTableFields}
+                <DataTable
+                    items={usersCombinedState.items}
+                    tableFields={User.tableFields}
                     rowSelectionEnabled={true}
                     selectedItems={usersCombinedState.selectedItems} setSelectedItems={setSelectedUsers}
                     visibleItems={usersCombinedState.visibleItems}
@@ -366,7 +254,7 @@ const UserManagement = () => {
                             }}
                             startIcon={<SchoolIcon />}
                             onClick={() => {
-                                setAssignCourseDialogUsers([...usersCombinedState.selectedItems]);
+                                setAssociationDialogUsers([...usersCombinedState.selectedItems]);
                                 setAssignCourseDialogIsOpen(true);
                             }}>
                             <Typography variant="body1">Manage Course Enrollments for {usersCombinedState.selectedItems.length} {usersCombinedState.selectedItems.length === 1 ? "user" : "users"}</Typography>
@@ -376,7 +264,6 @@ const UserManagement = () => {
 
                 <ItemMultiCreateDialog
                     Entity={User}
-                    allItems={usersCombinedState.items}
                     refreshAllItems={fetchData}
                     dialogInstructions={"Add users, edit the user fields, then click 'Create'.  You can set passwords after creating the users."}
                     {...{ dialogIsOpen, setDialogIsOpen }} />
@@ -397,9 +284,8 @@ const UserManagement = () => {
                 <AssociationManagementDialog
                     Association={EnrollmentUserPrimary}
                     editMode={true}
-                    primaryItems={assignCourseDialogUsers}
+                    primaryItems={associationDialogUsers}
                     secondaryItemsAll={courses}
-                    secondariesByPrimary={coursesByUser}
                     refreshAllItems={fetchData}
                     dialogButtonForSecondaryManagement={<>
                         <Button variant="outlined" onClick={() => {
@@ -410,7 +296,6 @@ const UserManagement = () => {
                     </>}
                     dialogIsOpen={assignCourseDialogIsOpen}
                     setDialogIsOpen={setAssignCourseDialogIsOpen}
-                    secondaryTableFields={courseTableFieldsForDialog}
                     secondarySearchFields={["name"]}
                     secondarySearchBoxPlaceholder="Search courses by name"
                 />
@@ -418,9 +303,8 @@ const UserManagement = () => {
                 <AssociationManagementDialog
                     Association={UserExhibition}
                     editMode={false}
-                    primaryItems={viewUserExhibitionDialogUsers}
+                    primaryItems={associationDialogUsers}
                     secondaryItemsAll={exhibitions}
-                    secondariesByPrimary={exhibitionsByUser}
                     refreshAllItems={fetchData}
                     dialogButtonForSecondaryManagement={<>
                         <Button variant="outlined" onClick={() => {
@@ -431,7 +315,6 @@ const UserManagement = () => {
                     </>}
                     dialogIsOpen={viewUserExhibitionDialogIsOpen}
                     setDialogIsOpen={setViewUserExhibitionDialogIsOpen}
-                    secondaryTableFields={exhibitionTableFieldsForDialog}
                     secondarySearchFields={["title"]}
                     secondarySearchBoxPlaceholder="Search exhibitions by title"
                 />

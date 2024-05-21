@@ -9,11 +9,6 @@ class Enrollment extends Association {
     static singular = "enrollment";
     static plural = "enrollments";
 
-    static assignPresent = "enroll";
-    static assignPast = "enrolled";
-    static unassignPresent = "unenroll";
-    static unassignPast = "unenrolled";
-
     static AssignIcon = PersonAddIcon;
     static UnassignIcon = PersonRemoveIcon;
 }
@@ -21,6 +16,31 @@ class Enrollment extends Association {
 class EnrollmentUserPrimary extends Enrollment {
     static primary = User;
     static secondary = Course;
+
+    static assignPresent = "enroll";
+    static assignPast = "enrolled";
+    static unassignPresent = "unenroll";
+    static unassignPast = "unenrolled";
+
+    static secondaryFieldInPrimary = "Courses";
+
+    static tableFields = [
+        {
+            columnDescription: "ID",
+            TableCellComponent: Course.TableCells.ID,
+            generateSortableValue: (course) => course.id
+        },
+        {
+            columnDescription: "Name",
+            maxWidth: "200px",
+            TableCellComponent: Course.TableCells.Name,
+            generateSortableValue: (course) => course.name
+        },
+        {
+            columnDescription: "Dates",
+            TableCellComponent: Course.TableCells.CourseDateRangeStacked
+        }
+    ];
 }
 
 class EnrollmentCoursePrimary extends Enrollment {
@@ -31,6 +51,21 @@ class EnrollmentCoursePrimary extends Enrollment {
     static assignPast = "enrolled in";
     static unassignPresent = "unenroll from";
     static unassignPast = "unenrolled from";
+
+    static secondaryFieldInPrimary = "Users";
+
+    static tableFields = [
+        {
+            columnDescription: "ID",
+            TableCellComponent: User.TableCells.IDWithAccessIcon,
+            generateSortableValue: (user) => user.id
+        },
+        {
+            columnDescription: "User",
+            TableCellComponent: User.TableCells.StackedNameEmail,
+            generateSortableValue: (user) => user.full_name_reverse?.toLowerCase() ?? ""
+        }
+    ];
 }
 
 export { EnrollmentUserPrimary, EnrollmentCoursePrimary };

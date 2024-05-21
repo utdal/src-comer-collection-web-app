@@ -14,6 +14,24 @@ class ImageArtist extends Association {
     static assignPast = "added to";
     static unassignPresent = "remove from";
     static unassignPast = "removed from";
+
+    static secondaryFieldInPrimary = "Artists";
+
+    static tableFields = [
+        {
+            columnDescription: "ID",
+            TableCellComponent: Artist.TableCells.ID,
+            generateSortableValue: (artist) => artist.id
+        },
+        {
+            columnDescription: "Artist",
+            TableCellComponent: Artist.TableCells.Name
+        },
+        {
+            columnDescription: "Notes",
+            TableCellComponent: Artist.TableCells.Notes
+        }
+    ];
 }
 
 export { ImageArtist };

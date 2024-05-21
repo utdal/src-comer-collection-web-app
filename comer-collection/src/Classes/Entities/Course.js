@@ -106,9 +106,21 @@ class Course extends Entity {
                 </Stack>
             );
         },
+        CourseDateRangeStacked () {
+            const course = useTableRowItem();
+            return (
+                <Stack>
+                    <Typography variant="body1">{new Date(course.date_start).toLocaleDateString()}</Typography>
+                    <Typography variant="body1">{new Date(course.date_end).toLocaleDateString()}</Typography>
+                </Stack>
+            );
+        },
         UserAssignmentButton () {
             const course = useTableRowItem();
-            const { handleOpenAssignUserDialog } = useManagementCallbacks();
+            const { handleOpenAssignCourseUserDialog } = useManagementCallbacks();
+            const handleOpenAssignUserDialog = useCallback(() => {
+                handleOpenAssignCourseUserDialog(course);
+            }, [course, handleOpenAssignCourseUserDialog]);
             return (
                 <Stack direction="row" spacing={1} alignItems="center">
                     <Button variant="outlined" color="primary" startIcon={<PersonIcon />} onClick={handleOpenAssignUserDialog}>
@@ -154,6 +166,46 @@ class Course extends Entity {
             );
         }
     };
+
+    static tableFields = [
+        {
+            columnDescription: "ID",
+            TableCellComponent: Course.TableCells.ID,
+            generateSortableValue: (course) => course.id
+        },
+        {
+            columnDescription: "Name",
+            maxWidth: "200px",
+            TableCellComponent: Course.TableCells.Name,
+            generateSortableValue: (course) => course.name.toLowerCase()
+        },
+        {
+            columnDescription: "Start",
+            TableCellComponent: Course.TableCells.StartDateTimeStacked,
+            generateSortableValue: (course) => new Date(course.date_start)
+        },
+        {
+            columnDescription: "End",
+            TableCellComponent: Course.TableCells.EndDateTimeStacked,
+            generateSortableValue: (course) => new Date(course.date_end)
+        },
+        {
+            columnDescription: "Status",
+            TableCellComponent: Course.TableCells.Status
+        },
+        {
+            columnDescription: "Enrollment",
+            TableCellComponent: Course.TableCells.UserAssignmentButton
+        },
+        {
+            columnDescription: "Notes",
+            TableCellComponent: Course.TableCells.Notes
+        },
+        {
+            columnDescription: "Options",
+            TableCellComponent: Course.TableCells.OptionsArray
+        }
+    ];
 }
 
 export { Course };
