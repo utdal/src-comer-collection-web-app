@@ -2,6 +2,9 @@ import { PersonAddIcon, PersonRemoveIcon } from "../../Imports/Icons.js";
 import { Course } from "../Entities/Course.js";
 import { User } from "../Entities/User.js";
 import { Association } from "../Association.js";
+import { CourseIDCell } from "../../Components/TableCells/Course/CourseIDCell.js";
+import { CourseNameCell } from "../../Components/TableCells/Course/CourseNameCell.js";
+import { CourseDateRangeStackedCell } from "../../Components/TableCells/Course/CourseDateRangeStackedCell.js";
 
 class Enrollment extends Association {
     static url = "/api/admin/enrollments";
@@ -27,18 +30,18 @@ class EnrollmentUserPrimary extends Enrollment {
     static tableFields = [
         {
             columnDescription: "ID",
-            TableCellComponent: Course.TableCells.ID,
+            TableCellComponent: CourseIDCell,
             generateSortableValue: (course) => course.id
         },
         {
             columnDescription: "Name",
             maxWidth: "200px",
-            TableCellComponent: Course.TableCells.Name,
+            TableCellComponent: CourseNameCell,
             generateSortableValue: (course) => course.name
         },
         {
             columnDescription: "Dates",
-            TableCellComponent: Course.TableCells.CourseDateRangeStacked
+            TableCellComponent: CourseDateRangeStackedCell
         }
     ];
 }

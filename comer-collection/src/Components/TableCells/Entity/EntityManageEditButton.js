@@ -4,7 +4,7 @@ import { EditButton } from "./EditButton.js";
 import { useTableRowItem } from "../../../ContextProviders/TableRowProvider.js";
 import { useManagementCallbacks } from "../../../ContextProviders/ManagementPageProvider.js";
 
-export const EntityManageEditButton = ({ disabled }) => {
+export const EntityManageEditButton = ({ disabled = false }) => {
     const item = useTableRowItem();
     const { handleOpenEntityEditDialog } = useManagementCallbacks();
     const handleOpenEditDialog = useCallback(() => {
@@ -19,9 +19,5 @@ export const EntityManageEditButton = ({ disabled }) => {
 };
 
 EntityManageEditButton.propTypes = {
-    disabled: PropTypes.bool
-};
-
-EntityManageEditButton.defaultProps = {
-    disabled: false
+    disabled: PropTypes.bool.isRequired
 };

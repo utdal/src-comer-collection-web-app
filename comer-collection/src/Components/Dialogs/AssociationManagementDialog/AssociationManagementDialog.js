@@ -15,6 +15,8 @@ import { UnassignButton } from "../../TableCells/Association/UnassignButton.js";
 import { computeSecondaryItemsAssigned } from "../../../Helpers/computeSecondaryItemsAssigned.js";
 import { AssociationTableDisplay } from "./AssociationTableDisplay.js";
 import { entityPropTypeShape } from "../../../Classes/Entity.js";
+import { AssociationManagementPageProvider } from "../../../ContextProviders/AssociationManagementPageProvider.js";
+import { useItemsReducer } from "../../../ContextProviders/ManagementPageProvider.js";
 
 const assignButtonColumnDefinition = {
     columnDescription: "Assign",
@@ -34,6 +36,8 @@ export const AssociationManagementDialog = ({
     defaultSortColumn, defaultSortAscending,
     refreshAllItems
 }) => {
+    const [secondaryItemsCombinedState, setSecondaryItems] = useItemsReducer();
+
     const secondaryTableFieldsAll = useMemo(() => (
         editMode
             ? [...Association.tableFields, assignButtonColumnDefinition]
@@ -123,134 +127,141 @@ export const AssociationManagementDialog = ({
     );
 
     return (
-        <Dialog
-            disableEscapeKeyDown
-            fullWidth
-            maxWidth={editMode ? "lg" : "md"}
-            onClose={(event, reason) => {
-                if (reason === "backdropClick") {
-                    return;
-                }
-                setDialogIsOpen(false);
-            }}
-            open={dialogIsOpen}
-            sx={{ zIndex: 10000 }}
+        <AssociationManagementPageProvider
+            AssociationType={Association}
+            relevantPrimaryItems={primaryItems}
+            secondaryItemsCombinedState={secondaryItemsCombinedState}
+            setSecondaryItems={setSecondaryItems}
         >
-            <DialogTitle
-                sx={{ textOverflow: "ellipsis", wordWrap: "break-word" }}
-                textAlign="center"
-                variant="h4"
+            <Dialog
+                disableEscapeKeyDown
+                fullWidth
+                maxWidth={editMode ? "lg" : "md"}
+                onClose={(event, reason) => {
+                    if (reason === "backdropClick") {
+                        return;
+                    }
+                    setDialogIsOpen(false);
+                }}
+                open={dialogIsOpen}
+                sx={{ zIndex: 10000 }}
             >
-                {editMode ? "Manage" : "View"}
-
-                {associationPluralCapitalized}
-
-                {" "}
-
-                for
-                {summarizedSelection}
-            </DialogTitle>
-
-            <DialogContent>
-                <DialogContentText variant="body1">
-                    {dialogInstructions}
-                </DialogContentText>
-
-                <Stack
-                    direction="column"
-                    padding={1}
-                    spacing={2}
+                <DialogTitle
+                    sx={{ textOverflow: "ellipsis", wordWrap: "break-word" }}
+                    textAlign="center"
+                    variant="h4"
                 >
-                    {secondarySearchFields?.length > 0 && (
-                        <SearchBox
-                            placeholder={secondarySearchBoxPlaceholder ?? "Search"}
-                            searchQuery={secondarySearchQuery}
-                            setSearchQuery={setSecondarySearchQuery}
-                            width="100%"
-                        />
-                    )}
+                    {editMode ? "Manage" : "View"}
 
-                    <Box
+                    {associationPluralCapitalized}
+
+                    {" "}
+
+                    for
+                    {summarizedSelection}
+                </DialogTitle>
+
+                <DialogContent>
+                    <DialogContentText variant="body1">
+                        {dialogInstructions}
+                    </DialogContentText>
+
+                    <Stack
+                        direction="column"
+                        padding={1}
                         spacing={2}
-                        sx={{
-                            display: "grid",
-                            gridTemplateAreas: `
+                    >
+                        {secondarySearchFields?.length > 0 && (
+                            <SearchBox
+                                placeholder={secondarySearchBoxPlaceholder ?? "Search"}
+                                searchQuery={secondarySearchQuery}
+                                setSearchQuery={setSecondarySearchQuery}
+                                width="100%"
+                            />
+                        )}
+
+                        <Box
+                            spacing={2}
+                            sx={{
+                                display: "grid",
+                                gridTemplateAreas: `
                     "all divider assigned"
                 `,
-                            gridTemplateColumns: editMode ? "1fr 30px 1fr" : "0px 0px 1fr"
-                        }}
-                    >
-                        {
-                            editMode
-                                ? (
-                                    <Box sx={{ gridArea: "all" }}>
-                                        <AssociationTableDisplay
-                                            AssociationType={Association}
-                                            primaryItems={primaryItems}
-                                            secondaryItems={secondaryItemsAllWithQuantities}
-                                            secondaryItemsResults={secondaryItemsAllResults}
-                                            tableCaption={`All ${secondaryPluralCapitalized}`}
-                                        >
-                                            {allTable}
-                                        </AssociationTableDisplay>
-                                    </Box>
-                                )
-                                : null
-                        }
+                                gridTemplateColumns: editMode ? "1fr 30px 1fr" : "0px 0px 1fr"
+                            }}
+                        >
+                            {
+                                editMode
+                                    ? (
+                                        <Box sx={{ gridArea: "all" }}>
+                                            <AssociationTableDisplay
+                                                AssociationType={Association}
+                                                primaryItems={primaryItems}
+                                                secondaryItems={secondaryItemsAllWithQuantities}
+                                                secondaryItemsResults={secondaryItemsAllResults}
+                                                tableCaption={`All ${secondaryPluralCapitalized}`}
+                                            >
+                                                {allTable}
+                                            </AssociationTableDisplay>
+                                        </Box>
+                                    )
+                                    : null
+                            }
 
-                        <Box sx={{ gridArea: "assigned" }}>
-                            <AssociationTableDisplay
-                                AssociationType={Association}
-                                primaryItems={primaryItems}
-                                secondaryItems={secondaryItemsAssignedWithQuantities}
-                                secondaryItemsResults={secondaryItemsAssignedResults}
-                                tableCaption={editMode ? `Current ${secondaryPluralCapitalized} for ${summarizedSelection}` : ""}
-                            >
-                                {assignedTable}
-                            </AssociationTableDisplay>
+                            <Box sx={{ gridArea: "assigned" }}>
+                                <AssociationTableDisplay
+                                    AssociationType={Association}
+                                    primaryItems={primaryItems}
+                                    secondaryItems={secondaryItemsAssignedWithQuantities}
+                                    secondaryItemsResults={secondaryItemsAssignedResults}
+                                    tableCaption={editMode ? `Current ${secondaryPluralCapitalized} for ${summarizedSelection}` : ""}
+                                >
+                                    {assignedTable}
+                                </AssociationTableDisplay>
+                            </Box>
+
                         </Box>
+                    </Stack>
+                </DialogContent>
 
-                    </Box>
-                </Stack>
-            </DialogContent>
-
-            <DialogActions>
-                <Stack
-                    direction="row"
-                    justifyContent="space-between"
-                    spacing={1}
-                    width="100%"
-                >
-                    {dialogButtonForSecondaryManagement}
-
-                    <Button
-                        color="primary"
-                        onClick={() => {
-                            setDialogIsOpen(false);
-                        }}
-                        size="large"
-                        sx={{
-                            width: "30%"
-                        }}
-                        type="submit"
-                        variant="contained"
+                <DialogActions>
+                    <Stack
+                        direction="row"
+                        justifyContent="space-between"
+                        spacing={1}
+                        width="100%"
                     >
-                        <Typography variant="body1">
-                            Close
-                        </Typography>
-                    </Button>
-                </Stack>
-            </DialogActions>
-        </Dialog>
+                        {dialogButtonForSecondaryManagement}
+
+                        <Button
+                            color="primary"
+                            onClick={() => {
+                                setDialogIsOpen(false);
+                            }}
+                            size="large"
+                            sx={{
+                                width: "30%"
+                            }}
+                            type="submit"
+                            variant="contained"
+                        >
+                            <Typography variant="body1">
+                                Close
+                            </Typography>
+                        </Button>
+                    </Stack>
+                </DialogActions>
+            </Dialog>
+        </AssociationManagementPageProvider>
     );
 };
 
 AssociationManagementDialog.propTypes = {
     Association: PropTypes.node.isRequired,
-    defaultSortAscending: PropTypes.bool,
+    defaultSortAscending: PropTypes.bool.isRequired,
     defaultSortColumn: PropTypes.string.isRequired,
     dialogButtonForSecondaryManagement: PropTypes.element.isRequired,
-    dialogInstructions: PropTypes.string,
+    dialogInstructions: PropTypes.string.isRequired,
     dialogIsOpen: PropTypes.bool.isRequired,
     editMode: PropTypes.bool.isRequired,
     primaryItems: PropTypes.arrayOf(entityPropTypeShape).isRequired,
@@ -259,9 +270,4 @@ AssociationManagementDialog.propTypes = {
     secondarySearchBoxPlaceholder: PropTypes.string.isRequired,
     secondarySearchFields: PropTypes.arrayOf(PropTypes.string).isRequired,
     setDialogIsOpen: PropTypes.func.isRequired
-};
-
-AssociationManagementDialog.defaultProps = {
-    defaultSortAscending: false,
-    dialogInstructions: ""
 };

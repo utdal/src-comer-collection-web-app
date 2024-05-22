@@ -1,3 +1,10 @@
+import { ExhibitionAccessCell } from "../../Components/TableCells/Exhibition/ExhibitionAccessCell.js";
+import { ExhibitionDateCreatedStackedCell } from "../../Components/TableCells/Exhibition/ExhibitionDateCreatedStackedCell.js";
+import { ExhibitionDateModifiedStackedCell } from "../../Components/TableCells/Exhibition/ExhibitionDateModifiedStackedCell.js";
+import { ExhibitionIDCell } from "../../Components/TableCells/Exhibition/ExhibitionIDCell.js";
+import { ExhibitionOptionsCell } from "../../Components/TableCells/Exhibition/ExhibitionOptionsCell.js";
+import { ExhibitionOwnerStackedNameEmailCell } from "../../Components/TableCells/Exhibition/ExhibitionOwnerStackedNameEmailCell.js";
+import { ExhibitionTitleCell } from "../../Components/TableCells/Exhibition/ExhibitionTitleCell.js";
 import { Entity, entityPropTypeShape } from "../Entity.js";
 import PropTypes from "prop-types";
 
@@ -13,37 +20,37 @@ class Exhibition extends Entity {
     static tableFields = [
         {
             columnDescription: "ID",
-            TableCellComponent: Exhibition.TableCells.ID,
+            TableCellComponent: ExhibitionIDCell,
             generateSortableValue: (exhibition) => exhibition.id
         },
         {
             columnDescription: "Title",
             maxWidth: "150px",
-            TableCellComponent: Exhibition.TableCells.Title,
+            TableCellComponent: ExhibitionTitleCell,
             generateSortableValue: (exhibition) => exhibition.title?.toLowerCase()
         },
         {
             columnDescription: "Owner",
-            TableCellComponent: Exhibition.TableCells.OwnerStackedNameEmail,
+            TableCellComponent: ExhibitionOwnerStackedNameEmailCell,
             generateSortableValue: (exhibition) => exhibition.User.full_name_reverse?.toLowerCase()
         },
         {
             columnDescription: "Created",
-            TableCellComponent: Exhibition.TableCells.DateCreatedStacked,
+            TableCellComponent: ExhibitionDateCreatedStackedCell,
             generateSortableValue: (exhibition) => new Date(exhibition.date_created)
         },
         {
             columnDescription: "Modified",
-            TableCellComponent: Exhibition.TableCells.DateModifiedStacked,
+            TableCellComponent: ExhibitionDateModifiedStackedCell,
             generateSortableValue: (exhibition) => new Date(exhibition.date_modified)
         },
         {
             columnDescription: "Access",
-            TableCellComponent: Exhibition.TableCells.Access
+            TableCellComponent: ExhibitionAccessCell
         },
         {
             columnDescription: "Options",
-            TableCellComponent: Exhibition.TableCells.ExhibitionOptions
+            TableCellComponent: ExhibitionOptionsCell
         }
     ];
 }

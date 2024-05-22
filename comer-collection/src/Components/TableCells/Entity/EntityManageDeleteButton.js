@@ -4,7 +4,7 @@ import { useTableRowItem } from "../../../ContextProviders/TableRowProvider.js";
 import { useManagementCallbacks } from "../../../ContextProviders/ManagementPageProvider.js";
 import { DeleteButton } from "./DeleteButton.js";
 
-export const EntityManageDeleteButton = ({ disabled }) => {
+export const EntityManageDeleteButton = ({ disabled = false }) => {
     const item = useTableRowItem();
     const { handleOpenEntityDeleteDialog } = useManagementCallbacks();
     const handleOpenDeleteDialog = useCallback(() => {
@@ -19,9 +19,5 @@ export const EntityManageDeleteButton = ({ disabled }) => {
 };
 
 EntityManageDeleteButton.propTypes = {
-    disabled: PropTypes.bool
-};
-
-EntityManageDeleteButton.defaultProps = {
-    disabled: false
+    disabled: PropTypes.bool.isRequired
 };

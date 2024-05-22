@@ -55,13 +55,9 @@ export const ExhibitionOptionGroup = ({ id, description, expandedSection, setExp
     );
 };
 ExhibitionOptionGroup.propTypes = {
-    children: PropTypes.arrayOf(PropTypes.element).isRequired,
+    children: PropTypes.node.isRequired,
     description: PropTypes.string.isRequired,
-    expandedSection: PropTypes.string,
+    expandedSection: PropTypes.string.isRequired,
     id: PropTypes.string.isRequired,
     setExpandedSection: PropTypes.func.isRequired
-};
-
-ExhibitionOptionGroup.defaultProps = {
-    expandedSection: null
 };

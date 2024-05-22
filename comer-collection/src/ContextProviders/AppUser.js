@@ -51,7 +51,7 @@ export const AppUserProvider = ({ children }) => {
 };
 
 AppUserProvider.propTypes = {
-    children: PropTypes.arrayOf(PropTypes.element).isRequired
+    children: PropTypes.node.isRequired
 };
 
 /**

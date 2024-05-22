@@ -19,11 +19,7 @@ export const ExhibitionOption = ({ description, children, vertical }) => {
     );
 };
 ExhibitionOption.propTypes = {
-    children: PropTypes.arrayOf(PropTypes.element).isRequired,
+    children: PropTypes.node.isRequired,
     description: PropTypes.string.isRequired,
-    vertical: PropTypes.bool
-};
-
-ExhibitionOption.defaultProps = {
-    vertical: false
+    vertical: PropTypes.bool.isRequired
 };

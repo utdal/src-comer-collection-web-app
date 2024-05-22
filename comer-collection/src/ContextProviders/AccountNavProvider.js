@@ -2,6 +2,7 @@ import React, { createContext, useContext, useMemo, useState } from "react";
 import PropTypes from "prop-types";
 
 const AccountNavContext = createContext();
+
 export const AccountNavProvider = ({ children }) => {
     const [selectedNavItem, setSelectedNavItem] = useState("");
 
@@ -18,8 +19,9 @@ export const AccountNavProvider = ({ children }) => {
         </AccountNavContext.Provider>
     );
 };
+
 AccountNavProvider.propTypes = {
-    children: PropTypes.arrayOf(PropTypes.element).isRequired
+    children: PropTypes.node.isRequired
 };
 
 export const useAccountNav = () => {

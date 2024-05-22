@@ -1,6 +1,9 @@
 import { Artist } from "../Entities/Artist.js";
 import { Image } from "../Entities/Image.js";
 import { Association } from "../Association.js";
+import { ArtistIDCell } from "../../Components/TableCells/Artist/ArtistIDCell.js";
+import { ArtistNameCell } from "../../Components/TableCells/Artist/ArtistNameCell.js";
+import { ArtistNotesCell } from "../../Components/TableCells/Artist/ArtistNotesCell.js";
 
 class ImageArtist extends Association {
     static url = "/api/admin/imageartists";
@@ -20,16 +23,16 @@ class ImageArtist extends Association {
     static tableFields = [
         {
             columnDescription: "ID",
-            TableCellComponent: Artist.TableCells.ID,
+            TableCellComponent: ArtistIDCell,
             generateSortableValue: (artist) => artist.id
         },
         {
             columnDescription: "Artist",
-            TableCellComponent: Artist.TableCells.Name
+            TableCellComponent: ArtistNameCell
         },
         {
             columnDescription: "Notes",
-            TableCellComponent: Artist.TableCells.Notes
+            TableCellComponent: ArtistNotesCell
         }
     ];
 }

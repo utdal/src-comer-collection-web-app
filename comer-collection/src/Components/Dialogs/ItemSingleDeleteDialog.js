@@ -10,11 +10,15 @@ import {
 import { DeleteIcon } from "../../Imports/Icons.js";
 import PropTypes from "prop-types";
 import { useSnackbar } from "../../ContextProviders/AppFeatures.js";
+import { useItems } from "../../ContextProviders/ManagementPageProvider.js";
+import { entityPropTypeShape } from "../../Classes/Entity.js";
 
-export const ItemSingleDeleteDialog = ({ requireTypedConfirmation, allItems, setAllItems, Entity, deleteDialogItem, deleteDialogIsOpen, setDeleteDialogIsOpen }) => {
+export const ItemSingleDeleteDialog = ({ requireTypedConfirmation, Entity, deleteDialogItem, deleteDialogIsOpen, setDeleteDialogIsOpen }) => {
     const [deleteConfirmation, setDeleteConfirmation] = useState("");
     const [submitEnabled, setSubmitEnabled] = useState(true);
     const showSnackbar = useSnackbar();
+
+    const [items, setItems] = useItems();
 
     useEffect(() => {
         if (deleteDialogIsOpen) { setSubmitEnabled(true); }
@@ -35,7 +39,7 @@ export const ItemSingleDeleteDialog = ({ requireTypedConfirmation, allItems, set
                 setSubmitEnabled(false);
                 if (deleteDialogItem) {
                     Entity.handleDelete(deleteDialogItem.id).then((msg) => {
-                        setAllItems(allItems.filter((i) => i.id !== deleteDialogItem.id));
+                        setItems(items.filter((i) => i.id !== deleteDialogItem.id));
                         showSnackbar(msg, "success");
                         setDeleteDialogIsOpen(false);
                     }).catch((err) => {
@@ -76,11 +80,16 @@ export const ItemSingleDeleteDialog = ({ requireTypedConfirmation, allItems, set
                     </DialogContentText>
 
                     {requireTypedConfirmation
-                        ? <TextField
-                            autoComplete="off" value={deleteConfirmation} onChange={(e) => {
-                                setDeleteConfirmation(e.target.value);
-                            }} placeholder="Type 'delete' to confirm"
-                          />
+                        ? (
+                            <TextField
+                                autoComplete="off"
+                                onChange={(e) => {
+                                    setDeleteConfirmation(e.target.value);
+                                }}
+                                placeholder="Type 'delete' to confirm"
+                                value={deleteConfirmation}
+                            />
+                        )
                         : null}
 
                 </Stack>
@@ -128,11 +137,9 @@ export const ItemSingleDeleteDialog = ({ requireTypedConfirmation, allItems, set
 };
 
 ItemSingleDeleteDialog.propTypes = {
-    Entity: PropTypes.any,
-    allItems: PropTypes.arrayOf(PropTypes.object),
-    deleteDialogIsOpen: PropTypes.bool,
-    deleteDialogItem: PropTypes.object,
-    requireTypedConfirmation: PropTypes.bool,
-    setAllItems: PropTypes.func,
-    setDeleteDialogIsOpen: PropTypes.func
+    Entity: PropTypes.node.isRequired,
+    deleteDialogIsOpen: PropTypes.bool.isRequired,
+    deleteDialogItem: PropTypes.shape(entityPropTypeShape).isRequired,
+    requireTypedConfirmation: PropTypes.bool.isRequired,
+    setDeleteDialogIsOpen: PropTypes.func.isRequired
 };

@@ -1,6 +1,12 @@
 import { Exhibition } from "../Entities/Exhibition.js";
 import { Association } from "../Association.js";
 import { Image } from "../Entities/Image.js";
+import { ExhibitionIDCell } from "../../Components/TableCells/Exhibition/ExhibitionIDCell.js";
+import { ExhibitionTitleCell } from "../../Components/TableCells/Exhibition/ExhibitionTitleCell.js";
+import { ExhibitionOpenInNewTabCell } from "../../Components/TableCells/Exhibition/ExhibitionOpenInNewTabCell.js";
+import { ExhibitionDateCreatedStackedCell } from "../../Components/TableCells/Exhibition/ExhibitionDateCreatedStackedCell.js";
+import { ExhibitionDateModifiedStackedCell } from "../../Components/TableCells/Exhibition/ExhibitionDateModifiedStackedCell.js";
+import { ExhibitionAccessCell } from "../../Components/TableCells/Exhibition/ExhibitionAccessCell.js";
 
 class ImageExhibition extends Association {
     static url = null;
@@ -13,27 +19,27 @@ class ImageExhibition extends Association {
     static tableFields = [
         {
             columnDescription: "ID",
-            TableCellComponent: Exhibition.TableCells.ID
+            TableCellComponent: ExhibitionIDCell
         },
         {
             columnDescription: "Title",
-            TableCellComponent: Exhibition.TableCells.Title
+            TableCellComponent: ExhibitionTitleCell
         },
         {
             columnDescription: "Open",
-            TableCellComponent: Exhibition.TableCells.OpenInNewTab
+            TableCellComponent: ExhibitionOpenInNewTabCell
         },
         {
             columnDescription: "Created",
-            TableCellComponent: Exhibition.TableCells.DateCreatedStacked
+            TableCellComponent: ExhibitionDateCreatedStackedCell
         },
         {
             columnDescription: "Modified",
-            TableCellComponent: Exhibition.TableCells.DateModifiedStacked
+            TableCellComponent: ExhibitionDateModifiedStackedCell
         },
         {
             columnDescription: "Access",
-            TableCellComponent: Exhibition.TableCells.Access
+            TableCellComponent: ExhibitionAccessCell
         }
     ];
 }

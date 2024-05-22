@@ -173,7 +173,7 @@ export const ExhibitionSettingsDialog = ({ editMode, adminMode, dialogIsOpen, se
 };
 
 ExhibitionSettingsDialog.propTypes = {
-    adminMode: PropTypes.bool,
+    adminMode: PropTypes.bool.isRequired,
     dialogExhibitionAccess: PropTypes.string.isRequired,
     dialogExhibitionId: PropTypes.number.isRequired,
     dialogExhibitionTitle: PropTypes.string.isRequired,
@@ -184,8 +184,4 @@ ExhibitionSettingsDialog.propTypes = {
     setDialogExhibitionAccess: PropTypes.func.isRequired,
     setDialogExhibitionTitle: PropTypes.func.isRequired,
     setDialogIsOpen: PropTypes.func.isRequired
-};
-
-ExhibitionSettingsDialog.defaultProps = {
-    adminMode: false
 };

@@ -37,11 +37,7 @@ export const ArtistFilterMenu = ({ filterValue, setFilterValue, artists }) => {
 };
 
 ArtistFilterMenu.propTypes = {
-    artists: PropTypes.arrayOf(PropTypes.shape(entityPropTypeShape)).isRequired,
-    filterValue: PropTypes.shape(entityPropTypeShape),
+    artists: PropTypes.arrayOf(entityPropTypeShape).isRequired,
+    filterValue: PropTypes.shape(entityPropTypeShape).isRequired,
     setFilterValue: PropTypes.func.isRequired
-};
-
-ArtistFilterMenu.defaultProps = {
-    filterValue: null
 };

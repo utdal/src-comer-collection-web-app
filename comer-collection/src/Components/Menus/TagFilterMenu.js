@@ -39,5 +39,5 @@ export const TagFilterMenu = ({ filterValue, setFilterValue, tags }) => {
 TagFilterMenu.propTypes = {
     filterValue: PropTypes.arrayOf(entityPropTypeShape).isRequired,
     setFilterValue: PropTypes.func.isRequired,
-    tags: PropTypes.arrayOf(PropTypes.shape(entityPropTypeShape)).isRequired
+    tags: PropTypes.arrayOf(entityPropTypeShape).isRequired
 };

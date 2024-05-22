@@ -196,10 +196,6 @@ export const UserResetPasswordDialog = ({ dialogUser, dialogIsOpen, setDialogIsO
 
 UserResetPasswordDialog.propTypes = {
     dialogIsOpen: PropTypes.bool.isRequired,
-    dialogUser: PropTypes.shape(entityPropTypeShape),
+    dialogUser: PropTypes.shape(entityPropTypeShape).isRequired,
     setDialogIsOpen: PropTypes.func.isRequired
-};
-
-UserResetPasswordDialog.defaultProps = {
-    dialogUser: null
 };

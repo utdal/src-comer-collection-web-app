@@ -128,14 +128,10 @@ SecondaryFilterMenu.propTypes = {
     SecondaryIcon: PropTypes.elementType.isRequired,
     displayFunction: PropTypes.func.isRequired,
     emptyMessage: PropTypes.string.isRequired,
-    filterValue: PropTypes.shape(entityPropTypeShape),
+    filterValue: PropTypes.shape(entityPropTypeShape).isRequired,
     helpMessage: PropTypes.string.isRequired,
     nullMessage: PropTypes.string.isRequired,
-    secondaries: PropTypes.arrayOf(PropTypes.shape(entityPropTypeShape)).isRequired,
+    secondaries: PropTypes.arrayOf(entityPropTypeShape).isRequired,
     setFilterValue: PropTypes.func.isRequired,
     sortFunction: PropTypes.func.isRequired
-};
-
-SecondaryFilterMenu.defaultProps = {
-    filterValue: null
 };

@@ -101,7 +101,9 @@ const CollectionBrowserImageContainer = ({ image, viewMode, isSelected, setSelec
     return setSelectedItem ? listItemButton : infoStack;
 };
 
-export const CollectionBrowser = ({ isDialogMode, selectedItem, setSelectedItem, disabledImages }) => {
+const disabledImagesDefaultValue = [];
+
+export const CollectionBrowser = ({ isDialogMode, selectedItem = null, setSelectedItem = null, disabledImages = disabledImagesDefaultValue }) => {
     const [images, setImages] = useState([]);
     const [artists, setArtists] = useState([]);
     const [tags, setTags] = useState([]);
@@ -268,16 +270,10 @@ export const CollectionBrowser = ({ isDialogMode, selectedItem, setSelectedItem,
 CollectionBrowser.propTypes = {
     disabledImages: PropTypes.arrayOf(PropTypes.shape({
         id: PropTypes.number
-    })),
+    })).isRequired,
     isDialogMode: PropTypes.bool.isRequired,
     selectedItem: PropTypes.shape({
         id: PropTypes.number
-    }),
-    setSelectedItem: PropTypes.func
-};
-
-CollectionBrowser.defaultProps = {
-    disabledImages: [],
-    selectedItem: null,
-    setSelectedItem: null
+    }).isRequired,
+    setSelectedItem: PropTypes.func.isRequired
 };

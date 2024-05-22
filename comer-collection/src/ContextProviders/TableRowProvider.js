@@ -13,7 +13,7 @@ export const TableRowProvider = ({ item, children }) => {
 };
 
 TableRowProvider.propTypes = {
-    children: PropTypes.arrayOf(PropTypes.element).isRequired,
+    children: PropTypes.node.isRequired,
     item: PropTypes.shape(entityPropTypeShape).isRequired
 };
 

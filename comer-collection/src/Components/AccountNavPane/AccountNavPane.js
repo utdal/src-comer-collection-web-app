@@ -4,15 +4,6 @@ import { useTheme } from "@emotion/react";
 import { AccountCircleIcon, GroupsIcon, PhotoCameraBackIcon, ImageIcon, SchoolIcon, LockIcon } from "../../Imports/Icons.js";
 import { useAppUser } from "../../ContextProviders/AppUser.js";
 import { AccountNavSection } from "./AccountNavSection.js";
-import PropTypes from "prop-types";
-
-export const navLinkDefinitionShape = {
-    title: PropTypes.string.isRequired,
-    displayText: PropTypes.string,
-    Icon: PropTypes.elementType.isRequired,
-    link: PropTypes.string.isRequired,
-    requirePermanentPassword: PropTypes.bool
-};
 
 const navLinks = [
     {

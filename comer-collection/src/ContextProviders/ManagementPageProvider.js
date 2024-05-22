@@ -44,6 +44,7 @@ const itemsReducer = (state, action) => {
 };
 
 const defaultItemsCombinedState = {
+    Entity: null,
     items: [],
     selectedItems: [],
     visibleItems: [],
@@ -53,15 +54,16 @@ const defaultItemsCombinedState = {
 
 const ManagementPageContext = createContext();
 
-export const ManagementPageProvider = ({ managementCallbacks, itemsCombinedState, setItems, setSelectedItems, children }) => {
+export const ManagementPageProvider = ({ Entity, managementCallbacks, itemsCombinedState, setItems, setSelectedItems, children }) => {
     const contextValue = useMemo(() => {
         return {
+            Entity,
             managementCallbacks,
             itemsCombinedState,
             setItems,
             setSelectedItems
         };
-    }, [managementCallbacks, itemsCombinedState, setItems, setSelectedItems]);
+    }, [Entity, managementCallbacks, itemsCombinedState, setItems, setSelectedItems]);
     return (
         <ManagementPageContext.Provider value={contextValue}>
             {children}
@@ -70,7 +72,8 @@ export const ManagementPageProvider = ({ managementCallbacks, itemsCombinedState
 };
 
 ManagementPageProvider.propTypes = {
-    children: PropTypes.arrayOf(PropTypes.element).isRequired,
+    Entity: PropTypes.node.isRequired,
+    children: PropTypes.node.isRequired,
     itemsCombinedState: PropTypes.shape(itemsCombinedStatePropTypeShape).isRequired,
     managementCallbacks: PropTypes.objectOf(PropTypes.func).isRequired,
     setItems: PropTypes.func.isRequired,
@@ -113,6 +116,13 @@ export const useVisibleItems = () => {
  */
 export const useSelectedVisibleItems = () => {
     return useContext(ManagementPageContext).itemsCombinedState.selectedVisibleItems;
+};
+
+/**
+ * @returns {Class} type of entity
+ */
+export const useEntity = () => {
+    return useContext(ManagementPageContext).Entity;
 };
 
 /**

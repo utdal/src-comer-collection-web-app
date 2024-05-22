@@ -6,7 +6,7 @@ import PropTypes from "prop-types";
 import { InView } from "react-intersection-observer";
 import { FullPageMessage } from "../FullPageMessage.js";
 import { TableRowProvider } from "../../ContextProviders/TableRowProvider.js";
-import { useItems, useSelectedItems, useVisibleItems } from "../../ContextProviders/ManagementPageProvider.js";
+import { useItems, useSelectedItems, useSelectedVisibleItems, useVisibleItems } from "../../ContextProviders/ManagementPageProvider.js";
 import { DataTableFieldCells } from "./DataTableFieldCells.js";
 import { TableRowPlaceholder } from "./TableRowPlaceholder.js";
 import { tableFieldPropTypeShape } from "../../Classes/Entity.js";
@@ -19,6 +19,7 @@ export const DataTable = ({
     const [items] = useItems();
     const [selectedItems, setSelectedItems] = useSelectedItems();
     const [visibleItems] = useVisibleItems();
+    const selectedVisibleItems = useSelectedVisibleItems();
 
     const [sortColumn, setSortColumn] = useState(defaultSortColumn ?? "ID");
     const [sortAscending, setSortAscending] = useState(defaultSortAscending ?? true);
@@ -126,8 +127,6 @@ export const DataTable = ({
         }
     }, [renderedItems, sortAscending]);
 
-    const visibleSelectedItems = selectedItems ? visibleItems.filter((i) => selectedItems.map((si) => si.id).includes(parseInt(i.id))) : visibleItems;
-
     return (
         <TableContainer
             component={Paper}
@@ -153,11 +152,11 @@ export const DataTable = ({
                                 <Typography variant="body1">
                                     <Checkbox
                                         checked={
-                                            visibleSelectedItems.length === visibleItems.length && visibleItems.length > 0
+                                            selectedVisibleItems.length === visibleItems.length && visibleItems.length > 0
                                         }
                                         disabled={visibleItems.length === 0}
                                         indeterminate={
-                                            (visibleSelectedItems.length > 0 && visibleSelectedItems.length < visibleItems.length) || visibleItems.length === 0
+                                            (selectedVisibleItems.length > 0 && selectedVisibleItems.length < visibleItems.length) || visibleItems.length === 0
                                         }
                                         onChange={(e) => {
                                             if (e.target.checked) {
@@ -166,7 +165,7 @@ export const DataTable = ({
                                                 ))]);
                                             } else {
                                                 setSelectedItems(selectedItems.filter((si) => (
-                                                    !visibleSelectedItems.map((vsi) => vsi.id).includes(parseInt(si.id))
+                                                    !selectedVisibleItems.map((vsi) => vsi.id).includes(parseInt(si.id))
                                                 )));
                                             }
                                         }}
@@ -233,10 +232,6 @@ DataTable.propTypes = {
     noContentButtonAction: PropTypes.func.isRequired,
     noContentButtonText: PropTypes.string.isRequired,
     noContentMessage: PropTypes.string.isRequired,
-    rowSelectionEnabled: PropTypes.bool,
+    rowSelectionEnabled: PropTypes.bool.isRequired,
     tableFields: PropTypes.arrayOf(PropTypes.shape(tableFieldPropTypeShape)).isRequired
-};
-
-DataTable.defaultProps = {
-    rowSelectionEnabled: false
 };

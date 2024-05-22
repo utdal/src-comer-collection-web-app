@@ -821,6 +821,6 @@ ExhibitionEditPane.propTypes = {
         title: PropTypes.string
     }).isRequired,
     exhibitionState: PropTypes.shape(exhibitionStatePropTypesShape).isRequired,
-    globalImageCatalog: PropTypes.arrayOf(PropTypes.shape(entityPropTypeShape)).isRequired,
+    globalImageCatalog: PropTypes.arrayOf(entityPropTypeShape).isRequired,
     saveExhibition: PropTypes.func.isRequired
 };

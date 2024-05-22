@@ -253,6 +253,7 @@ const ImageManagement = () => {
         />
     ) || (
         <ManagementPageProvider
+            Entity={Image}
             itemsCombinedState={imagesCombinedState}
             managementCallbacks={{
                 handleOpenImageAssignArtistDialog,

@@ -27,7 +27,7 @@ export const AssociationManagementPageProvider = ({ managementCallbacks, seconda
 
 AssociationManagementPageProvider.propTypes = {
     AssociationType: PropTypes.node.isRequired,
-    children: PropTypes.arrayOf(PropTypes.element).isRequired,
+    children: PropTypes.node.isRequired,
     managementCallbacks: PropTypes.objectOf(PropTypes.func).isRequired,
     relevantPrimaryItems: PropTypes.arrayOf(entityPropTypeShape).isRequired,
     secondaryItemsCombinedState: PropTypes.exact(itemsCombinedStatePropTypeShape).isRequired,

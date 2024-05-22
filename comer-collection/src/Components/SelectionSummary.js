@@ -5,14 +5,14 @@ import {
     Typography
 } from "@mui/material";
 import { CheckIcon, ArrowUpwardIcon, DeselectIcon } from "../Imports/Icons.js";
-import PropTypes from "prop-types";
-import { useItems, useSelectedItems, useSelectedVisibleItems, useVisibleItems } from "../ContextProviders/ManagementPageProvider.js";
+import { useEntity, useItems, useSelectedItems, useSelectedVisibleItems, useVisibleItems } from "../ContextProviders/ManagementPageProvider.js";
 
-export const SelectionSummary = ({ entitySingular, entityPlural }) => {
+export const SelectionSummary = () => {
     const [items] = useItems();
     const [selectedItems, setSelectedItems] = useSelectedItems();
     const [visibleItems] = useVisibleItems();
     const selectedVisibleItems = useSelectedVisibleItems();
+    const Entity = useEntity();
 
     const clearSelectedItems = useCallback(() => {
         setSelectedItems([]);
@@ -42,8 +42,8 @@ export const SelectionSummary = ({ entitySingular, entityPlural }) => {
                     variant="body1"
                 >
                     {visibleItems.length < items.length
-                        ? `Showing ${visibleItems.length} of ${items.length} ${items.length === 1 ? entitySingular : entityPlural}`
-                        : `${items.length} ${items.length === 1 ? entitySingular : entityPlural}`}
+                        ? `Showing ${visibleItems.length} of ${items.length} ${items.length === 1 ? Entity.singular : Entity.plural}`
+                        : `${items.length} ${items.length === 1 ? Entity.singular : Entity.plural}`}
                 </Typography>
 
                 {(selectedItems.length > 0 &&
@@ -52,7 +52,7 @@ export const SelectionSummary = ({ entitySingular, entityPlural }) => {
 
                         {" "}
 
-                        {selectedItems.length === 1 ? entitySingular : entityPlural}
+                        {selectedItems.length === 1 ? Entity.singular : Entity.plural}
 
                         {" "}
 
@@ -86,13 +86,4 @@ export const SelectionSummary = ({ entitySingular, entityPlural }) => {
             )}
         </Stack>
     );
-};
-
-SelectionSummary.propTypes = {
-    entityPlural: PropTypes.string,
-    entitySingular: PropTypes.string,
-    items: PropTypes.arrayOf(PropTypes.object).isRequired,
-    selectedItems: PropTypes.arrayOf(PropTypes.object).isRequired,
-    setSelectedItems: PropTypes.func,
-    visibleItems: PropTypes.arrayOf(PropTypes.object).isRequired
 };

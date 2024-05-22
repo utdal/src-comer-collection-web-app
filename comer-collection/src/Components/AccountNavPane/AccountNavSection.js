@@ -5,7 +5,6 @@ import { useTheme } from "@emotion/react";
 import { useAppUser } from "../../ContextProviders/AppUser.js";
 import { useAccountNav } from "../../ContextProviders/AccountNavProvider.js";
 import PropTypes from "prop-types";
-import { navLinkDefinitionShape } from "./AccountNavPane.js";
 
 export const AccountNavSection = ({ sectionTitle, linkDefinitions }) => {
     const [selectedNavItem, setSelectedNavItem] = useAccountNav();
@@ -57,6 +56,15 @@ export const AccountNavSection = ({ sectionTitle, linkDefinitions }) => {
         </>
     );
 };
+
+const navLinkDefinitionShape = {
+    title: PropTypes.string.isRequired,
+    displayText: PropTypes.string,
+    Icon: PropTypes.elementType.isRequired,
+    link: PropTypes.string.isRequired,
+    requirePermanentPassword: PropTypes.bool
+};
+
 AccountNavSection.propTypes = {
     linkDefinitions: PropTypes.arrayOf(PropTypes.shape(navLinkDefinitionShape)).isRequired,
     sectionTitle: PropTypes.string.isRequired

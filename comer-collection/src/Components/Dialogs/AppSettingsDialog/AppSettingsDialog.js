@@ -19,7 +19,9 @@ export const AppSettingsDialog = ({ appSettingsDialogIsOpen, setAppSettingsDialo
             component="form"
             disableEscapeKeyDown
             onClose={(event, reason) => {
-                if (reason === "backdropClick") { return; }
+                if (reason === "backdropClick") {
+                    return;
+                }
                 setAppSettingsDialogIsOpen(false);
             }}
             open={appSettingsDialogIsOpen}
@@ -108,6 +110,6 @@ export const AppSettingsDialog = ({ appSettingsDialogIsOpen, setAppSettingsDialo
 };
 
 AppSettingsDialog.propTypes = {
-    appSettingsDialogIsOpen: PropTypes.bool,
-    setAppSettingsDialogIsOpen: PropTypes.func
+    appSettingsDialogIsOpen: PropTypes.bool.isRequired,
+    setAppSettingsDialogIsOpen: PropTypes.func.isRequired
 };

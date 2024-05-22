@@ -1,7 +1,7 @@
 import React from "react";
 import { useTableRowItem } from "../../../ContextProviders/TableRowProvider.js";
 import { Stack, Typography } from "@mui/material";
-import { Exhibition } from "../../../Classes/Entities/Exhibition";
+import { Exhibition } from "../../../Classes/Entities/Exhibition.js";
 
 export const ExhibitionDateCreatedStackedCell = () => {
     const exhibition = useTableRowItem();

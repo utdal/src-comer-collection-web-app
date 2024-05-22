@@ -175,7 +175,7 @@ export const ImageRearrangeDialog = ({ imageRearrangerIsOpen, setImageRearranger
 ImageRearrangeDialog.propTypes = {
     exhibitionEditDispatch: PropTypes.func.isRequired,
     exhibitionState: PropTypes.shape(exhibitionStatePropTypesShape).isRequired,
-    globalImageCatalog: PropTypes.arrayOf(PropTypes.shape(entityPropTypeShape)).isRequired,
+    globalImageCatalog: PropTypes.arrayOf(entityPropTypeShape).isRequired,
     imageRearrangerIsOpen: PropTypes.bool.isRequired,
     setImageRearrangerIsOpen: PropTypes.func.isRequired
 };

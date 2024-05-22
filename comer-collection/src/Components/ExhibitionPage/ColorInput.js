@@ -12,11 +12,7 @@ export const ColorInput = ({ value, onChange, disabled }) => {
     );
 };
 ColorInput.propTypes = {
-    disabled: PropTypes.bool,
+    disabled: PropTypes.bool.isRequired,
     onChange: PropTypes.func.isRequired,
     value: PropTypes.string.isRequired
-};
-
-ColorInput.defaultProps = {
-    disabled: false
 };

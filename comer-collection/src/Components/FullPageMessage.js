@@ -3,7 +3,7 @@ import React from "react";
 import { useNavigate } from "react-router";
 import PropTypes from "prop-types";
 
-export const FullPageMessage = ({ message, buttonText, buttonDestination, Icon, buttonAction }) => {
+export const FullPageMessage = ({ message, buttonText, buttonDestination = null, Icon, buttonAction = null }) => {
     const navigate = useNavigate();
 
     return (

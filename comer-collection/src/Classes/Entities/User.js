@@ -8,6 +8,9 @@ import { CollectionManagerIcon, LockIcon, LockResetIcon, OpenInNewIcon, PersonIc
 import { useTableRowItem } from "../../ContextProviders/TableRowProvider.js";
 import { useClipboard } from "../../ContextProviders/AppFeatures.js";
 import { useManagementCallbacks } from "../../ContextProviders/ManagementPageProvider.js";
+import { EntityManageEditButton } from "../../Components/TableCells/Entity/EntityManageEditButton.js";
+import { EditButton } from "../../Components/TableCells/Entity/EditButton.js";
+import { DeleteButton } from "../../Components/TableCells/Entity/DeleteButton.js";
 
 class User extends Entity {
     static baseUrl = "/api/admin/users";
@@ -296,7 +299,7 @@ class User extends Entity {
                 handleOpenUserEditDialog(user);
             }, [user, handleOpenUserEditDialog]);
             return (
-                <Entity.TableCells.EditButton onClick={handleOpenEditDialog} />
+                <EditButton onClick={handleOpenEditDialog} />
             );
         },
         DeleteButton () {
@@ -308,7 +311,7 @@ class User extends Entity {
             }, [user, handleOpenUserDeleteDialog]);
             const disabled = Boolean(user.Courses.length || user.Exhibitions.length || user.id === appUser.id);
             return (
-                <Entity.TableCells.DeleteButton
+                <DeleteButton
                     onClick={handleOpenDeleteDialog}
                     {... disabled}
                 />

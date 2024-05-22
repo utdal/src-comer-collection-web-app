@@ -184,12 +184,8 @@ export const ImageFullScreenViewer = ({ image, setImage, previewerOpen, setPrevi
 };
 
 ImageFullScreenViewer.propTypes = {
-    image: PropTypes.shape(entityPropTypeShape),
+    image: PropTypes.shape(entityPropTypeShape).isRequired,
     previewerOpen: PropTypes.bool.isRequired,
     setImage: PropTypes.func.isRequired,
     setPreviewerOpen: PropTypes.func.isRequired
-};
-
-ImageFullScreenViewer.defaultProps = {
-    image: null
 };

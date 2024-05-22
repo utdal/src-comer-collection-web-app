@@ -3,7 +3,7 @@ import { IconButton } from "@mui/material";
 import { SettingsIcon } from "../../../Imports/Icons.js";
 import PropTypes from "prop-types";
 
-export const ExhibitionSettingsButton = ({ onClick, disabled }) => {
+export const ExhibitionSettingsButton = ({ onClick, disabled = false }) => {
     return (
         <IconButton
             disabled={disabled}
@@ -15,10 +15,6 @@ export const ExhibitionSettingsButton = ({ onClick, disabled }) => {
 };
 
 ExhibitionSettingsButton.propTypes = {
-    disabled: PropTypes.bool,
+    disabled: PropTypes.bool.isRequired,
     onClick: PropTypes.func.isRequired
-};
-
-ExhibitionSettingsButton.defaultProps = {
-    disabled: false
 };

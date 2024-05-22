@@ -177,6 +177,7 @@ const UserManagement = () => {
         />
     ) || (
         <ManagementPageProvider
+            Entity={User}
             itemsCombinedState={usersCombinedState}
             managementCallbacks={{
                 handleNavigateToChangePassword,

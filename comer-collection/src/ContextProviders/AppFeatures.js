@@ -123,7 +123,7 @@ export const AppFeatureProvider = ({ children }) => {
 };
 
 AppFeatureProvider.propTypes = {
-    children: PropTypes.arrayOf(PropTypes.element).isRequired
+    children: PropTypes.node.isRequired
 };
 
 export const useSnackbar = () => {

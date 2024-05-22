@@ -72,9 +72,9 @@ export class Entity {
     static tableFields = [];
 }
 
-export const entityPropTypeShape = {
+export const entityPropTypeShape = PropTypes.shape({
     id: PropTypes.number
-};
+});
 
 export const itemsCombinedStatePropTypeShape = {
     items: PropTypes.arrayOf(entityPropTypeShape),

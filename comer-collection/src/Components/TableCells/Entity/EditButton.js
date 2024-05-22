@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import { IconButton } from "@mui/material";
 import { EditIcon } from "../../../Imports/Icons.js";
 
-export const EditButton = ({ onClick, disabled }) => {
+export const EditButton = ({ onClick, disabled = false }) => {
     return (
         <IconButton
             disabled={disabled}
@@ -15,10 +15,6 @@ export const EditButton = ({ onClick, disabled }) => {
 };
 
 EditButton.propTypes = {
-    disabled: PropTypes.bool,
+    disabled: PropTypes.bool.isRequired,
     onClick: PropTypes.func.isRequired
-};
-
-EditButton.defaultProps = {
-    disabled: false
 };

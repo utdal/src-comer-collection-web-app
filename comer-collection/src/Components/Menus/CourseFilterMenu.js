@@ -45,11 +45,7 @@ export const CourseFilterMenu = ({ filterValue, setFilterValue, courses }) => {
 };
 
 CourseFilterMenu.propTypes = {
-    courses: PropTypes.arrayOf(PropTypes.shape(entityPropTypeShape)).isRequired,
-    filterValue: PropTypes.shape(entityPropTypeShape),
+    courses: PropTypes.arrayOf(entityPropTypeShape).isRequired,
+    filterValue: PropTypes.shape(entityPropTypeShape).isRequired,
     setFilterValue: PropTypes.func.isRequired
-};
-
-CourseFilterMenu.defaultProps = {
-    filterValue: null
 };

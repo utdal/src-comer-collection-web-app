@@ -215,11 +215,7 @@ export const UserChangePrivilegesDialog = ({ dialogUser, dialogIsOpen, setDialog
 
 UserChangePrivilegesDialog.propTypes = {
     dialogIsOpen: PropTypes.bool.isRequired,
-    dialogUser: PropTypes.shape(entityPropTypeShape),
+    dialogUser: PropTypes.shape(entityPropTypeShape).isRequired,
     refreshAllItems: PropTypes.func.isRequired,
     setDialogIsOpen: PropTypes.func.isRequired
-};
-
-UserChangePrivilegesDialog.defaultProps = {
-    dialogUser: null
 };
