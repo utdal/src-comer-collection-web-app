@@ -32,9 +32,9 @@ import { DataTable } from "../../Components/DataTable/DataTable.js";
 import { ClearFilterButton } from "../../Components/Buttons/ClearFilterButton.js";
 
 const ImageManagement = () => {
-    const [imagesCombinedState, setImages, setSelectedImages, filterImages] = useItemsReducer();
-    const [artistsCombinedState, setArtists, , filterArtists] = useItemsReducer();
-    const [tagsCombinedState, setTags, , filterTags] = useItemsReducer();
+    const [imagesCombinedState, setImages, setSelectedImages, filterImages] = useItemsReducer(Image);
+    const [artistsCombinedState, setArtists, , filterArtists] = useItemsReducer(Artist);
+    const [tagsCombinedState, setTags, , filterTags] = useItemsReducer(Tag);
 
     const [exhibitions, setExhibitions] = useState([]);
     const [refreshInProgress, setRefreshInProgress] = useState(true);
@@ -49,16 +49,10 @@ const ImageManagement = () => {
     const [editDialogImage, setEditDialogImage] = useState(null);
 
     const [assignArtistDialogIsOpen, setAssignArtistDialogIsOpen] = useState(false);
-    const [assignArtistDialogImages, setAssignArtistDialogImages] = useState([]);
-    const [artistsByImage, setArtistsByImage] = useState({});
-
     const [assignTagDialogIsOpen, setAssignTagDialogIsOpen] = useState(false);
-    const [assignTagDialogImages, setAssignTagDialogImages] = useState([]);
-    const [tagsByImage, setTagsByImage] = useState({});
-
     const [viewImageExhibitionDialogIsOpen, setViewImageExhibitionDialogIsOpen] = useState(false);
-    const [viewImageExhibitionDialogImages, setViewImageExhibitionDialogImages] = useState([]);
-    const [exhibitionsByImage, setExhibitionsByImage] = useState({});
+
+    const [associationDialogImages, setAssociationDialogImages] = useState([]);
 
     const [previewerImage, setPreviewerImage] = useState(null);
     const [previewerOpen, setPreviewerOpen] = useState(false);
@@ -87,25 +81,7 @@ const ImageManagement = () => {
             setRefreshInProgress(false);
         }, 1000);
 
-        const artistsByImageDraft = {};
-        for (const i of imageData.data) {
-            artistsByImageDraft[i.id] = i.Artists;
-        }
-        setArtistsByImage({ ...artistsByImageDraft });
-
-        const tagsByImageDraft = {};
-        for (const i of imageData.data) {
-            tagsByImageDraft[i.id] = i.Tags;
-        }
-        setTagsByImage({ ...tagsByImageDraft });
-
         setExhibitions(imageData.data.map((i) => i.Exhibitions).flat());
-
-        const exhibitionsByImageDraft = {};
-        for (const i of imageData.data) {
-            exhibitionsByImageDraft[i.id] = i.Exhibitions;
-        }
-        setExhibitionsByImage({ ...exhibitionsByImageDraft });
     }, [setImages]);
 
     const fetchArtists = useCallback(async () => {
@@ -146,12 +122,12 @@ const ImageManagement = () => {
     }, [searchQuery]);
 
     const handleOpenImageAssignArtistDialog = useCallback((images) => {
-        setAssignArtistDialogImages(images);
+        setAssociationDialogImages(images);
         setAssignArtistDialogIsOpen(true);
     }, []);
 
     const handleOpenImageAssignTagDialog = useCallback((images) => {
-        setAssignTagDialogImages(images);
+        setAssociationDialogImages(images);
         setAssignTagDialogIsOpen(true);
     }, []);
 
@@ -161,7 +137,7 @@ const ImageManagement = () => {
     }, []);
 
     const handleOpenImageViewExhibitionDialog = useCallback((image) => {
-        setViewImageExhibitionDialogImages([image]);
+        setAssociationDialogImages([image]);
         setViewImageExhibitionDialogIsOpen(true);
     }, []);
 
@@ -330,14 +306,7 @@ const ImageManagement = () => {
                     spacing={2}
                     sx={{ gridArea: "bottom" }}
                 >
-                    <SelectionSummary
-                        entityPlural="images"
-                        entitySingular="image"
-                        items={imagesCombinedState.items}
-                        selectedItems={imagesCombinedState.selectedItems}
-                        setSelectedItems={setSelectedImages}
-                        visibleItems={imagesCombinedState.visibleItems}
-                    />
+                    <SelectionSummary />
 
                     <Stack
                         direction="row"
@@ -346,7 +315,7 @@ const ImageManagement = () => {
                         <Button
                             disabled={imagesCombinedState.selectedItems.length === 0}
                             onClick={() => {
-                                setAssignArtistDialogImages([...imagesCombinedState.selectedItems]);
+                                setAssociationDialogImages([...imagesCombinedState.selectedItems]);
                                 setAssignArtistDialogIsOpen(true);
                             }}
                             startIcon={<BrushIcon />}
@@ -365,7 +334,7 @@ const ImageManagement = () => {
                         <Button
                             disabled={imagesCombinedState.selectedItems.length === 0}
                             onClick={() => {
-                                setAssignTagDialogImages([...imagesCombinedState.selectedItems]);
+                                setAssociationDialogImages([...imagesCombinedState.selectedItems]);
                                 setAssignTagDialogIsOpen(true);
                             }}
                             startIcon={<SellIcon />}
@@ -455,9 +424,8 @@ const ImageManagement = () => {
                     }
                     dialogIsOpen={assignArtistDialogIsOpen}
                     editMode
-                    primaryItems={assignArtistDialogImages}
+                    primaryItems={associationDialogImages}
                     refreshAllItems={fetchData}
-                    secondariesByPrimary={artistsByImage}
                     secondaryFieldInPrimary="Artists"
                     secondaryItemsAll={artistsCombinedState.items}
                     secondarySearchBoxPlaceholder="Search artists by name or notes"
@@ -482,9 +450,8 @@ const ImageManagement = () => {
                     }
                     dialogIsOpen={assignTagDialogIsOpen}
                     editMode
-                    primaryItems={assignTagDialogImages}
+                    primaryItems={associationDialogImages}
                     refreshAllItems={fetchData}
-                    secondariesByPrimary={tagsByImage}
                     secondaryFieldInPrimary="Tags"
                     secondaryItemsAll={tagsCombinedState.items}
                     secondarySearchBoxPlaceholder="Search tags by name or notes"
@@ -508,9 +475,8 @@ const ImageManagement = () => {
                     }
                     dialogIsOpen={viewImageExhibitionDialogIsOpen}
                     editMode={false}
-                    primaryItems={viewImageExhibitionDialogImages}
+                    primaryItems={associationDialogImages}
                     refreshAllItems={fetchData}
-                    secondariesByPrimary={exhibitionsByImage}
                     secondaryItemsAll={exhibitions}
                     secondarySearchBoxPlaceholder="Search exhibitions by title"
                     secondarySearchFields={["title"]}

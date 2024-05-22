@@ -24,7 +24,7 @@ import { ManagementPageProvider, useItemsReducer } from "../../ContextProviders/
 import { ClearFilterButton } from "../../Components/Buttons/ClearFilterButton.js";
 
 const ExhibitionManagement = () => {
-    const [exhibitionsCombinedState, setExhibitions, setSelectedExhibitions, filterExhibitions] = useItemsReducer();
+    const [exhibitionsCombinedState, setExhibitions, setSelectedExhibitions, filterExhibitions] = useItemsReducer(Exhibition);
     const [courses, setCourses] = useState([]);
 
     const [refreshInProgress, setRefreshInProgress] = useState(true);
@@ -233,14 +233,7 @@ const ExhibitionManagement = () => {
                     spacing={2}
                     sx={{ gridArea: "bottom" }}
                 >
-                    <SelectionSummary
-                        entityPlural="exhibitions"
-                        entitySingular="exhibition"
-                        items={exhibitionsCombinedState.items}
-                        selectedItems={exhibitionsCombinedState.selectedItems}
-                        setSelectedItems={setSelectedExhibitions}
-                        visibleItems={exhibitionsCombinedState.visibleItems}
-                    />
+                    <SelectionSummary />
                 </Stack>
 
                 <ExhibitionSettingsDialog

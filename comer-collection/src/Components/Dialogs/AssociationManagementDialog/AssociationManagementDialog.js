@@ -36,7 +36,11 @@ export const AssociationManagementDialog = ({
     defaultSortColumn, defaultSortAscending,
     refreshAllItems
 }) => {
-    const [secondaryItemsCombinedState, setSecondaryItems] = useItemsReducer();
+    const [secondaryItemsCombinedState, setSecondaryItems] = useItemsReducer(Association.secondary);
+
+    useEffect(() => {
+        setSecondaryItems(secondaryItemsAll);
+    }, [secondaryItemsAll, setSecondaryItems]);
 
     const secondaryTableFieldsAll = useMemo(() => (
         editMode
@@ -60,6 +64,10 @@ export const AssociationManagementDialog = ({
     }, [Association, primaryItems]);
 
     const [secondarySearchQuery, setSecondarySearchQuery] = useState("");
+
+    const handleCloseDialog = useCallback(() => {
+        setDialogIsOpen(false);
+    }, [setDialogIsOpen]);
 
     const getQuantityAssigned = useCallback((secondary) => {
         return Object.entries(secondariesByPrimary)
@@ -153,11 +161,12 @@ export const AssociationManagementDialog = ({
                 >
                     {editMode ? "Manage" : "View"}
 
-                    {associationPluralCapitalized}
-
                     {" "}
 
-                    for
+                    {associationPluralCapitalized}
+
+                    {" for "}
+
                     {summarizedSelection}
                 </DialogTitle>
 
@@ -235,9 +244,7 @@ export const AssociationManagementDialog = ({
 
                         <Button
                             color="primary"
-                            onClick={() => {
-                                setDialogIsOpen(false);
-                            }}
+                            onClick={handleCloseDialog}
                             size="large"
                             sx={{
                                 width: "30%"

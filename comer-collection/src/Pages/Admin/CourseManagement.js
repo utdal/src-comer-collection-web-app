@@ -29,7 +29,7 @@ import { ManagementPageProvider, useItemsReducer } from "../../ContextProviders/
 import { ClearFilterButton } from "../../Components/Buttons/ClearFilterButton.js";
 
 const CourseManagement = () => {
-    const [coursesCombinedState, setCourses, setSelectedCourses, filterCourses] = useItemsReducer();
+    const [coursesCombinedState, setCourses, setSelectedCourses, filterCourses] = useItemsReducer(Course);
     const [users, setUsers] = useState([]);
     const [isLoaded, setIsLoaded] = useState(false);
     const [isError, setIsError] = useState(false);
@@ -43,8 +43,6 @@ const CourseManagement = () => {
 
     const [assignUserDialogIsOpen, setAssignUserDialogIsOpen] = useState(false);
     const [assignUserDialogCourses, setAssignUserDialogCourses] = useState([]);
-
-    const [usersByCourse, setUsersByCourse] = useState({});
 
     const [dialogIsOpen, setDialogIsOpen] = useState(false);
 
@@ -72,11 +70,6 @@ const CourseManagement = () => {
                 setRefreshInProgress(false);
             }, 1000);
 
-            const usersByCourseDraft = {};
-            for (const c of courseData.data) {
-                usersByCourseDraft[c.id] = c.Users;
-            }
-            setUsersByCourse({ ...usersByCourseDraft });
             setIsLoaded(true);
         } catch (error) {
             setIsError(true);
@@ -231,14 +224,7 @@ const CourseManagement = () => {
                     spacing={2}
                     sx={{ gridArea: "bottom" }}
                 >
-                    <SelectionSummary
-                        entityPlural="courses"
-                        entitySingular="course"
-                        items={coursesCombinedState.items}
-                        selectedItems={coursesCombinedState.selectedItems}
-                        setSelectedItems={setSelectedCourses}
-                        visibleItems={coursesCombinedState.visibleItems}
-                    />
+                    <SelectionSummary />
 
                     <Stack
                         direction="row"
@@ -310,8 +296,6 @@ const CourseManagement = () => {
                     editMode
                     primaryItems={assignUserDialogCourses}
                     refreshAllItems={fetchData}
-                    secondariesByPrimary={usersByCourse}
-                    secondaryFieldInPrimary="Users"
                     secondaryItemsAll={users}
                     secondarySearchBoxPlaceholder="Search users by name or email"
                     secondarySearchFields={["given_name"]}

@@ -1,168 +1,95 @@
 import React, { useEffect } from "react";
 import {
-    Typography,
-    Button,
-    Stack, Paper,
+    Typography, Stack, Paper,
     Box
 } from "@mui/material";
-import { Navigate, useNavigate } from "react-router";
+import { Navigate } from "react-router";
 import { DataTable } from "../../Components/DataTable/DataTable.js";
-import { SecurityIcon, PersonIcon, AccountCircleIcon, SchoolIcon, PhotoCameraBackIcon, CollectionManagerIcon } from "../../Imports/Icons.js";
+import { AccountCircleIcon, SchoolIcon } from "../../Imports/Icons.js";
 import { useAppUser } from "../../ContextProviders/AppUser.js";
 import { useTitle } from "../../ContextProviders/AppFeatures.js";
 
 import { useAccountNav } from "../../ContextProviders/AccountNavProvider.js";
-import { Course } from "../../Classes/Entities/Course.js";
 import { User } from "../../Classes/Entities/User.js";
+import { CourseNameCell } from "../../Components/TableCells/Course/CourseNameCell.js";
+import { CourseStartDateTimeCell } from "../../Components/TableCells/Course/CourseStartDateTimeCell.js";
+import { CourseEndDateTimeCell } from "../../Components/TableCells/Course/CourseEndDateTimeCell.js";
+import { CourseStatusCell } from "../../Components/TableCells/Course/CourseStatusCell.js";
+import { CourseNotesCell } from "../../Components/TableCells/Course/CourseNotesCell.js";
+import { ManagementPageProvider, useItemsReducer } from "../../ContextProviders/ManagementPageProvider.js";
+import { UserFullNameReverseCell } from "../../Components/TableCells/User/UserFullNameReverseCell.js";
+import { UserEmailCopyCell } from "../../Components/TableCells/User/UserEmailCopyCell.js";
+import { UserProfilePasswordInfoCell } from "../../Components/TableCells/User/UserProfilePasswordInfoCell.js";
+import { UserTypeCell } from "../../Components/TableCells/User/UserTypeCell.js";
+import { UserExhibitionQuotaCell } from "../../Components/TableCells/User/UserExhibitionQuotaCell.js";
+import { Course } from "../../Classes/Entities/Course.js";
+
+const courseTableFields = [
+    {
+        columnDescription: "Course Name",
+        TableCellComponent: CourseNameCell
+    },
+    {
+        columnDescription: "Start",
+        TableCellComponent: CourseStartDateTimeCell
+    },
+    {
+        columnDescription: "End",
+        TableCellComponent: CourseEndDateTimeCell
+    },
+    {
+        columnDescription: "Status",
+        TableCellComponent: CourseStatusCell
+    },
+    {
+        columnDescription: "Notes",
+        TableCellComponent: CourseNotesCell,
+        maxWidth: "300px"
+    }
+];
+
+const userTableFields = [
+    {
+        columnDescription: "Name",
+        TableCellComponent: UserFullNameReverseCell
+    },
+    {
+        columnDescription: "Email",
+        TableCellComponent: UserEmailCopyCell
+    },
+    {
+        columnDescription: "Password",
+        TableCellComponent: UserProfilePasswordInfoCell
+    },
+    {
+        columnDescription: "User Type",
+        TableCellComponent: UserTypeCell
+    },
+    {
+        columnDescription: "Exhibition Quota",
+        TableCellComponent: UserExhibitionQuotaCell
+    }
+];
 
 const Profile = () => {
     const [, setSelectedNavItem] = useAccountNav();
 
     const [appUser] = useAppUser();
 
-    const navigate = useNavigate();
+    const [usersCombinedState, setUsers] = useItemsReducer(User);
+    const [coursesCombinedState, setCourses] = useItemsReducer(Course);
+
+    useEffect(() => {
+        setUsers([appUser]);
+        setCourses(appUser.Courses);
+    }, [appUser, setCourses, setUsers]);
+
     const setTitleText = useTitle();
 
     useEffect(() => {
         setSelectedNavItem("Profile");
         setTitleText("Profile");
     }, [setSelectedNavItem, setTitleText]);
-
-    const courseTableFields = [
-        {
-            columnDescription: "Course Name",
-            generateTableCell: (course) => (
-                <Typography variant="body1">
-                    {course.name}
-                </Typography>
-            )
-        },
-        {
-            columnDescription: "Start",
-            generateTableCell: (course) => (
-                <Course.TableCells.StartDateTime {...{ course }} />
-            )
-        },
-        {
-            columnDescription: "End",
-            generateTableCell: (course) => (
-                <Course.TableCells.EndDateTime {...{ course }} />
-            )
-        },
-        {
-            columnDescription: "Status",
-            generateTableCell: (course) => (
-                <Course.TableCells.Status {...{ course }} />
-            )
-        },
-        {
-            columnDescription: "Notes",
-            maxWidth: "300px",
-            generateTableCell: (course) => (
-                <Typography variant="body1">
-                    {course.notes}
-                </Typography>
-            )
-        }
-    ];
-
-    const userTableFields = [
-        {
-            columnDescription: "Name",
-            generateTableCell: (user) => (
-                user.has_name
-                    ? (
-                        <Typography variant="body1">
-                            {user.full_name}
-                        </Typography>
-                    )
-                    : (
-                        <Typography
-                            sx={{ opacity: 0.5 }}
-                            variant="body1"
-                        >
-                            Not set
-                        </Typography>
-                    )
-            )
-        },
-        {
-            columnDescription: "Email",
-            TableCellComponent: User.TableCells.EmailWithCopyButton
-        },
-        {
-            columnDescription: "Password",
-            generateTableCell: (user) => (
-                <Stack
-                    alignItems="center"
-                    direction="row"
-                    spacing={2}
-                >
-                    <Typography variant="body1">
-                        {new Date(appUser.pw_updated).toLocaleString()}
-                    </Typography>
-
-                    <Button
-                        color={user.is_admin_or_collection_manager ? "secondary" : "primary"}
-                        onClick={() => {
-                            navigate("/Account/ChangePassword");
-                        }}
-                        variant="outlined"
-                    >
-                        <Typography variant="body1">
-                            Change
-                        </Typography>
-                    </Button>
-                </Stack>
-            )
-        },
-        {
-            columnDescription: "User Type",
-            generateTableCell: (user) => (
-                <Stack
-                    direction="row"
-                    spacing={1}
-                >
-                    <Typography variant="body1">
-                        {user.is_admin ? "Administrator" : user.is_collection_manager ? "Collection Manager" : "Curator"}
-                    </Typography>
-
-                    {user.is_admin ? (<SecurityIcon color="secondary" />) : user.is_collection_manager ? (<CollectionManagerIcon color="secondary" />) : (<PersonIcon color="primary" />)}
-                </Stack>
-            )
-        },
-        {
-            columnDescription: "Exhibition Quota",
-            generateTableCell: (user) => (
-                <Stack
-                    direction="row"
-                    spacing={1}
-                >
-                    <PhotoCameraBackIcon />
-
-                    <Typography variant="body1">
-                        {user.Exhibitions.length}
-
-                        {" "}
-                        of
-
-                        {" "}
-
-                        {user.exhibition_quota}
-
-                        {" "}
-                    </Typography>
-
-                    <Typography
-                        color="gray"
-                        variant="body1"
-                    >
-                        {user.is_admin ? " (ignored for administrators)" : ""}
-                    </Typography>
-                </Stack>
-            )
-        }
-    ];
 
     return (appUser.pw_change_required &&
         <Navigate to="/Account/ChangePassword" />
@@ -193,11 +120,17 @@ const Profile = () => {
                     </Stack>
 
                     <Box sx={{ height: "100px" }}>
-                        <DataTable
-                            items={[appUser]}
-                            tableFields={userTableFields}
-                            visibleItems={[appUser]}
-                        />
+                        <ManagementPageProvider
+                            itemsCombinedState={usersCombinedState}
+                            managementCallbacks={{}}
+                            setItems={setUsers}
+                        >
+                            <DataTable
+                                items={[appUser]}
+                                tableFields={userTableFields}
+                                visibleItems={[appUser]}
+                            />
+                        </ManagementPageProvider>
                     </Box>
                 </Stack>
             </Stack>
@@ -236,16 +169,20 @@ const Profile = () => {
                         </Typography>
                     </Stack>
 
-                    <DataTable
-                        NoContentIcon={SchoolIcon}
-                        defaultSortAscending={false}
-                        defaultSortColumn="Start"
-                        items={appUser.Courses}
-                        noContentMessage="You are not enrolled in any courses."
-                        sx={{ overflow: "scroll" }}
-                        tableFields={courseTableFields}
-                        visibleItems={appUser.Courses}
-                    />
+                    <ManagementPageProvider
+                        itemsCombinedState={coursesCombinedState}
+                        managementCallbacks={{}}
+                        setItems={setCourses}
+                    >
+                        <DataTable
+                            NoContentIcon={SchoolIcon}
+                            defaultSortAscending={false}
+                            defaultSortColumn="Start"
+                            noContentMessage="You are not enrolled in any courses."
+                            sx={{ overflow: "scroll" }}
+                            tableFields={courseTableFields}
+                        />
+                    </ManagementPageProvider>
                 </Stack>
             </Stack>
         </Box>

@@ -1,11 +1,12 @@
 import React, { createContext, useCallback, useContext, useMemo, useReducer } from "react";
 import PropTypes from "prop-types";
-import { itemsCombinedStatePropTypeShape } from "../Classes/Entity.js";
+import { Entity, itemsCombinedStatePropTypeShape } from "../Classes/Entity.js";
 
 const itemsReducer = (state, action) => {
     if (action.type === "setItems") {
         const filteredItems = state.filterFunction ? action.items.filter(state.filterFunction) : action.items;
         return {
+            Entity: state.Entity,
             items: action.items,
             selectedItems: state.selectedItems.filter((si) => (
                 action.items.map((i) => i.id).includes(parseInt(si.id))
@@ -18,6 +19,7 @@ const itemsReducer = (state, action) => {
         };
     } else if (action.type === "setSelectedItems") {
         return {
+            Entity: state.Entity,
             items: state.items,
             selectedItems: action.selectedItems,
             visibleItems: state.visibleItems,
@@ -29,6 +31,7 @@ const itemsReducer = (state, action) => {
     } else if (action.type === "filterItems") {
         const filteredItems = state.items.filter(action.filterFunction);
         return {
+            Entity: state.Entity,
             items: state.items,
             selectedItems: state.selectedItems,
             visibleItems: filteredItems,
@@ -44,7 +47,7 @@ const itemsReducer = (state, action) => {
 };
 
 const defaultItemsCombinedState = {
-    Entity: null,
+    Entity,
     items: [],
     selectedItems: [],
     visibleItems: [],
@@ -54,16 +57,15 @@ const defaultItemsCombinedState = {
 
 const ManagementPageContext = createContext();
 
-export const ManagementPageProvider = ({ Entity, managementCallbacks, itemsCombinedState, setItems, setSelectedItems, children }) => {
+export const ManagementPageProvider = ({ managementCallbacks, itemsCombinedState, setItems, setSelectedItems, children }) => {
     const contextValue = useMemo(() => {
         return {
-            Entity,
             managementCallbacks,
             itemsCombinedState,
             setItems,
             setSelectedItems
         };
-    }, [Entity, managementCallbacks, itemsCombinedState, setItems, setSelectedItems]);
+    }, [managementCallbacks, itemsCombinedState, setItems, setSelectedItems]);
     return (
         <ManagementPageContext.Provider value={contextValue}>
             {children}
@@ -72,7 +74,6 @@ export const ManagementPageProvider = ({ Entity, managementCallbacks, itemsCombi
 };
 
 ManagementPageProvider.propTypes = {
-    Entity: PropTypes.node.isRequired,
     children: PropTypes.node.isRequired,
     itemsCombinedState: PropTypes.shape(itemsCombinedStatePropTypeShape).isRequired,
     managementCallbacks: PropTypes.objectOf(PropTypes.func).isRequired,
@@ -122,14 +123,18 @@ export const useSelectedVisibleItems = () => {
  * @returns {Class} type of entity
  */
 export const useEntity = () => {
-    return useContext(ManagementPageContext).Entity;
+    return useContext(ManagementPageContext).itemsCombinedState.Entity;
 };
 
 /**
+ * @param {Class} Entity
  * @returns {[object, function, function, function]} [itemsCombinedState, setItems, setSelectedItems, filterItems]
  */
-export const useItemsReducer = () => {
-    const [itemsCombinedState, itemsDispatch] = useReducer(itemsReducer, defaultItemsCombinedState);
+export const useItemsReducer = (Entity) => {
+    const [itemsCombinedState, itemsDispatch] = useReducer(itemsReducer, {
+        ...defaultItemsCombinedState,
+        Entity
+    });
     const setItems = useCallback((items) => {
         itemsDispatch({
             type: "setItems",

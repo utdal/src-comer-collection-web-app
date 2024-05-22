@@ -3,7 +3,7 @@ import { Typography } from "@mui/material";
 import { useTableRowItem } from "../../../ContextProviders/TableRowProvider.js";
 import { Course } from "../../../Classes/Entities/Course.js";
 
-export const EndDateTime = () => {
+export const CourseEndDateTimeCell = () => {
     const course = useTableRowItem();
     return (
         <Typography variant="body1">

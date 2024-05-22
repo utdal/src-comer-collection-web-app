@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import {
     Stack, Dialog,
     DialogTitle,
@@ -29,7 +29,7 @@ export const EntityManageDialog = ({
 
     onClose
 }) => {
-    const blankItem = getBlankItemFields(Entity.fieldDefinitions);
+    const blankItem = useMemo(() => getBlankItemFields(Entity.fieldDefinitions), [Entity.fieldDefinitions]);
     const [itemToAdd, setItemToAdd] = useState(blankItem);
     const showSnackbar = useSnackbar();
 
@@ -53,6 +53,19 @@ export const EntityManageDialog = ({
 
     const singularCapitalized = Entity?.singular.substr(0, 1).toUpperCase() + Entity?.singular.substr(1).toLowerCase();
     const pluralCapitalized = Entity?.plural.substr(0, 1).toUpperCase() + Entity?.plural.substr(1).toLowerCase();
+
+    const handleCreate = useCallback((e) => {
+        e.preventDefault();
+        Entity.handleMultiCreate([itemToAdd]).then(([{ status }]) => {
+            if (status === "fulfilled") {
+                refreshAllItems();
+                showSnackbar(`${singularCapitalized} created`, "success");
+            } else {
+                showSnackbar(`Failed to create ${Entity.singular}`, "error");
+            }
+        });
+        setItemToAdd(blankItem);
+    }, [Entity, blankItem, itemToAdd, refreshAllItems, showSnackbar, singularCapitalized]);
 
     const handleOpenEntityEditDialog = useCallback((item) => {
         setInternalEditDialogItem(item);
@@ -160,18 +173,7 @@ export const EntityManageDialog = ({
                                     component="form"
                                     direction="row"
                                     justifyContent="space-around"
-                                    onSubmit={(e) => {
-                                        e.preventDefault();
-                                        Entity.handleMultiCreate([itemToAdd]).then(([{ status }]) => {
-                                            if (status === "fulfilled") {
-                                                refreshAllItems();
-                                                showSnackbar(`${singularCapitalized} created`, "success");
-                                            } else {
-                                                showSnackbar(`Failed to create ${Entity.singular}`, "error");
-                                            }
-                                        });
-                                        setItemToAdd(getBlankItemFields(Entity.fieldDefinitions));
-                                    }}
+                                    onSubmit={handleCreate}
                                     spacing={2}
                                 >
                                     <Stack

@@ -30,7 +30,7 @@ import { ManagementPageProvider, useItemsReducer } from "../../ContextProviders/
 import { ClearFilterButton } from "../../Components/Buttons/ClearFilterButton.js";
 
 const UserManagement = () => {
-    const [usersCombinedState, setUsers, setSelectedUsers, filterUsers] = useItemsReducer();
+    const [usersCombinedState, setUsers, setSelectedUsers, filterUsers] = useItemsReducer(User);
     const [courses, setCourses] = useState([]);
     const [exhibitions, setExhibitions] = useState([]);
     const [isLoaded, setIsLoaded] = useState(false);
@@ -280,14 +280,7 @@ const UserManagement = () => {
                     spacing={2}
                     sx={{ gridArea: "bottom" }}
                 >
-                    <SelectionSummary
-                        entityPlural="users"
-                        entitySingular="user"
-                        items={usersCombinedState.items}
-                        selectedItems={usersCombinedState.selectedItems}
-                        setSelectedItems={setSelectedUsers}
-                        visibleItems={usersCombinedState.visibleItems}
-                    />
+                    <SelectionSummary />
 
                     <Stack
                         direction="row"
