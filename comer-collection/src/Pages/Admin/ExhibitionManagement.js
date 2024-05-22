@@ -1,12 +1,10 @@
 import React, { useCallback, useEffect, useState } from "react";
 import {
-    Stack,
-    Button,
-    Typography, Box, Paper
+    Stack, Box, Paper
 } from "@mui/material";
 import { FullPageMessage } from "../../Components/FullPageMessage.js";
 import SearchBox from "../../Components/SearchBox.js";
-import { LockIcon, RefreshIcon, WarningIcon, AccessTimeIcon } from "../../Imports/Icons.js";
+import { LockIcon, WarningIcon, AccessTimeIcon } from "../../Imports/Icons.js";
 import { ItemSingleDeleteDialog } from "../../Components/Dialogs/ItemSingleDeleteDialog.js";
 import { DataTable } from "../../Components/DataTable/DataTable.js";
 import { Navigate } from "react-router";
@@ -22,12 +20,11 @@ import { useAccountNav } from "../../ContextProviders/AccountNavProvider.js";
 import { Exhibition } from "../../Classes/Entities/Exhibition.js";
 import { ManagementPageProvider, useItemsReducer } from "../../ContextProviders/ManagementPageProvider.js";
 import { ClearFilterButton } from "../../Components/Buttons/ClearFilterButton.js";
+import { RefreshButton } from "../../Components/Buttons/RefreshButton.js";
 
 const ExhibitionManagement = () => {
     const [exhibitionsCombinedState, setExhibitions, setSelectedExhibitions, filterExhibitions] = useItemsReducer(Exhibition);
     const [courses, setCourses] = useState([]);
-
-    const [refreshInProgress, setRefreshInProgress] = useState(true);
 
     const [isLoaded, setIsLoaded] = useState(false);
     const [isError, setIsError] = useState(false);
@@ -68,10 +65,6 @@ const ExhibitionManagement = () => {
             }
             setCourses(Object.values(coursesById));
 
-            setTimeout(() => {
-                setRefreshInProgress(false);
-            }, 1000);
-
             setIsLoaded(true);
         } catch (error) {
             setIsError(true);
@@ -108,6 +101,10 @@ const ExhibitionManagement = () => {
         setDeleteDialogIsOpen(true);
     }, [setDeleteDialogExhibition, setDeleteDialogIsOpen]);
 
+    const handleRefresh = useCallback(async () => {
+        await fetchData();
+    }, [fetchData]);
+
     return (!appUser.is_admin &&
         <FullPageMessage
             Icon={LockIcon}
@@ -136,7 +133,8 @@ const ExhibitionManagement = () => {
             managementCallbacks={{
                 handleOpenExhibitionSettings,
                 handleOpenExhibitionDeleteDialog,
-                handleClearFilters
+                handleClearFilters,
+                handleRefresh
             }}
             setItems={setExhibitions}
             setSelectedItems={setSelectedExhibitions}
@@ -180,20 +178,8 @@ const ExhibitionManagement = () => {
                         direction="row"
                         spacing={2}
                     >
-                        <Button
-                            color="primary"
-                            disabled={refreshInProgress}
-                            onClick={() => {
-                                setRefreshInProgress(true);
-                                fetchData();
-                            }}
-                            startIcon={<RefreshIcon />}
-                            variant="outlined"
-                        >
-                            <Typography variant="body1">
-                                Refresh
-                            </Typography>
-                        </Button>
+
+                        <RefreshButton />
 
                         <ClearFilterButton />
 

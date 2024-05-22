@@ -6,7 +6,7 @@ import {
 } from "@mui/material";
 import { FullPageMessage } from "../../Components/FullPageMessage.js";
 import SearchBox from "../../Components/SearchBox.js";
-import { RefreshIcon, AddPhotoAlternateIcon, SellIcon, BrushIcon, AccessTimeIcon, WarningIcon, LockIcon } from "../../Imports/Icons.js";
+import { AddPhotoAlternateIcon, SellIcon, BrushIcon, AccessTimeIcon, WarningIcon, LockIcon } from "../../Imports/Icons.js";
 import { ItemSingleDeleteDialog } from "../../Components/Dialogs/ItemSingleDeleteDialog.js";
 import { ItemMultiCreateDialog } from "../../Components/Dialogs/ItemMultiCreateDialog.js";
 import { ItemSingleEditDialog } from "../../Components/Dialogs/ItemSingleEditDialog.js";
@@ -30,6 +30,7 @@ import { ImageExhibition } from "../../Classes/Associations/ImageExhibition.js";
 import { ManagementPageProvider, useItemsReducer } from "../../ContextProviders/ManagementPageProvider.js";
 import { DataTable } from "../../Components/DataTable/DataTable.js";
 import { ClearFilterButton } from "../../Components/Buttons/ClearFilterButton.js";
+import { RefreshButton } from "../../Components/Buttons/RefreshButton.js";
 
 const ImageManagement = () => {
     const [imagesCombinedState, setImages, setSelectedImages, filterImages] = useItemsReducer(Image);
@@ -37,7 +38,6 @@ const ImageManagement = () => {
     const [tagsCombinedState, setTags, , filterTags] = useItemsReducer(Tag);
 
     const [exhibitions, setExhibitions] = useState([]);
-    const [refreshInProgress, setRefreshInProgress] = useState(true);
 
     const [isLoaded, setIsLoaded] = useState(false);
     const [isError, setIsError] = useState(false);
@@ -76,10 +76,6 @@ const ImageManagement = () => {
     const fetchImages = useCallback(async () => {
         const imageData = await sendAuthenticatedRequest("GET", "/api/admin/images");
         setImages(imageData.data);
-
-        setTimeout(() => {
-            setRefreshInProgress(false);
-        }, 1000);
 
         setExhibitions(imageData.data.map((i) => i.Exhibitions).flat());
     }, [setImages]);
@@ -155,9 +151,8 @@ const ImageManagement = () => {
         filterImages(imageFilterFunction);
     }, [filterImages, imageFilterFunction]);
 
-    const handleRefresh = useCallback(() => {
-        setRefreshInProgress(true);
-        fetchImages();
+    const handleRefresh = useCallback(async () => {
+        await fetchImages();
     }, [fetchImages]);
 
     return (!appUser.is_admin_or_collection_manager &&
@@ -192,7 +187,8 @@ const ImageManagement = () => {
                 handleOpenImagePreviewer,
                 handleOpenImageEditDialog,
                 handleOpenImageDeleteDialog,
-                handleClearFilters
+                handleClearFilters,
+                handleRefresh
             }}
             setItems={setImages}
             setSelectedItems={setSelectedImages}
@@ -230,17 +226,7 @@ const ImageManagement = () => {
                         direction="row"
                         spacing={2}
                     >
-                        <Button
-                            color="primary"
-                            disabled={refreshInProgress}
-                            onClick={handleRefresh}
-                            startIcon={<RefreshIcon />}
-                            variant="outlined"
-                        >
-                            <Typography variant="body1">
-                                Refresh
-                            </Typography>
-                        </Button>
+                        <RefreshButton />
 
                         <ClearFilterButton />
 

@@ -4,7 +4,7 @@ import {
     Button,
     Typography, Box, Paper
 } from "@mui/material";
-import { GroupAddIcon, RefreshIcon, SchoolIcon, LockIcon, AccessTimeIcon, WarningIcon } from "../../Imports/Icons.js";
+import { GroupAddIcon, SchoolIcon, LockIcon, AccessTimeIcon, WarningIcon } from "../../Imports/Icons.js";
 import { FullPageMessage } from "../../Components/FullPageMessage.js";
 import SearchBox from "../../Components/SearchBox.js";
 import { ItemSingleDeleteDialog } from "../../Components/Dialogs/ItemSingleDeleteDialog.js";
@@ -28,6 +28,7 @@ import { EnrollmentUserPrimary } from "../../Classes/Associations/Enrollment.js"
 import { UserExhibition } from "../../Classes/Associations/UserExhibition.js";
 import { ManagementPageProvider, useItemsReducer } from "../../ContextProviders/ManagementPageProvider.js";
 import { ClearFilterButton } from "../../Components/Buttons/ClearFilterButton.js";
+import { RefreshButton } from "../../Components/Buttons/RefreshButton.js";
 
 const UserManagement = () => {
     const [usersCombinedState, setUsers, setSelectedUsers, filterUsers] = useItemsReducer(User);
@@ -35,7 +36,6 @@ const UserManagement = () => {
     const [exhibitions, setExhibitions] = useState([]);
     const [isLoaded, setIsLoaded] = useState(false);
     const [isError, setIsError] = useState(false);
-    const [refreshInProgress, setRefreshInProgress] = useState(true);
 
     const [privilegesDialogIsOpen, setPrivilegesDialogIsOpen] = useState(false);
     const [privilegesDialogUser, setPrivilegesDialogUser] = useState(null);
@@ -56,13 +56,12 @@ const UserManagement = () => {
     const [dialogIsOpen, setDialogIsOpen] = useState(false);
 
     const [searchQuery, setSearchQuery] = useState("");
+    const [userCourseIdFilter, setUserCourseIdFilter] = useState(null);
 
     const handleClearFilters = useCallback(() => {
         setSearchQuery("");
         setUserCourseIdFilter(null);
     }, []);
-
-    const [userCourseIdFilter, setUserCourseIdFilter] = useState(null);
 
     const [, setSelectedNavItem] = useAccountNav();
     const [appUser] = useAppUser();
@@ -81,10 +80,6 @@ const UserManagement = () => {
 
             const exhibitionData = await sendAuthenticatedRequest("GET", "/api/admin/exhibitions");
             setExhibitions(exhibitionData.data);
-
-            setTimeout(() => {
-                setRefreshInProgress(false);
-            }, 1000);
 
             setIsLoaded(true);
         } catch (e) {
@@ -151,6 +146,10 @@ const UserManagement = () => {
         setDeleteDialogIsOpen(true);
     }, []);
 
+    const handleRefresh = useCallback(async () => {
+        await fetchData();
+    }, [fetchData]);
+
     useEffect(() => {
         filterUsers(userFilterFunction);
     }, [filterUsers, userFilterFunction]);
@@ -189,7 +188,8 @@ const UserManagement = () => {
                 handleChangeUserActivationStatus,
                 handleOpenUserEditDialog,
                 handleOpenUserDeleteDialog,
-                handleClearFilters
+                handleClearFilters,
+                handleRefresh
             }}
             setItems={setUsers}
             setSelectedItems={setSelectedUsers}
@@ -233,20 +233,7 @@ const UserManagement = () => {
                         direction="row"
                         spacing={2}
                     >
-                        <Button
-                            color="primary"
-                            disabled={refreshInProgress}
-                            onClick={() => {
-                                setRefreshInProgress(true);
-                                fetchData();
-                            }}
-                            startIcon={<RefreshIcon />}
-                            variant="outlined"
-                        >
-                            <Typography variant="body1">
-                                Refresh
-                            </Typography>
-                        </Button>
+                        <RefreshButton />
 
                         <ClearFilterButton />
 

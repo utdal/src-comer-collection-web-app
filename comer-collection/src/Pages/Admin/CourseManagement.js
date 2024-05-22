@@ -17,7 +17,7 @@ import { SelectionSummary } from "../../Components/SelectionSummary.js";
 import { sendAuthenticatedRequest } from "../../Helpers/APICalls.js";
 import { useAppUser } from "../../ContextProviders/AppUser.js";
 import {
-    AddIcon, RefreshIcon, GroupAddIcon, AccessTimeIcon,
+    AddIcon, GroupAddIcon, AccessTimeIcon,
     WarningIcon,
     LockIcon
 } from "../../Imports/Icons.js";
@@ -27,13 +27,13 @@ import { Course } from "../../Classes/Entities/Course.js";
 import { EnrollmentCoursePrimary } from "../../Classes/Associations/Enrollment.js";
 import { ManagementPageProvider, useItemsReducer } from "../../ContextProviders/ManagementPageProvider.js";
 import { ClearFilterButton } from "../../Components/Buttons/ClearFilterButton.js";
+import { RefreshButton } from "../../Components/Buttons/RefreshButton.js";
 
 const CourseManagement = () => {
     const [coursesCombinedState, setCourses, setSelectedCourses, filterCourses] = useItemsReducer(Course);
     const [users, setUsers] = useState([]);
     const [isLoaded, setIsLoaded] = useState(false);
     const [isError, setIsError] = useState(false);
-    const [refreshInProgress, setRefreshInProgress] = useState(true);
 
     const [deleteDialogIsOpen, setDeleteDialogIsOpen] = useState(false);
     const [deleteDialogCourse, setDeleteDialogCourse] = useState(null);
@@ -65,10 +65,6 @@ const CourseManagement = () => {
 
             const userData = await sendAuthenticatedRequest("GET", "/api/admin/users");
             setUsers(userData.data);
-
-            setTimeout(() => {
-                setRefreshInProgress(false);
-            }, 1000);
 
             setIsLoaded(true);
         } catch (error) {
@@ -107,6 +103,10 @@ const CourseManagement = () => {
         setAssignUserDialogIsOpen(true);
     }, []);
 
+    const handleRefresh = useCallback(async () => {
+        await fetchData();
+    }, [fetchData]);
+
     return (!appUser.is_admin &&
         <FullPageMessage
             Icon={LockIcon}
@@ -137,7 +137,8 @@ const CourseManagement = () => {
                 handleOpenCourseDeleteDialog,
                 handleOpenCourseEditDialog,
                 handleOpenAssignCourseUserDialog,
-                handleClearFilters
+                handleClearFilters,
+                handleRefresh
             }}
             setItems={setCourses}
             setSelectedItems={setSelectedCourses}
@@ -175,20 +176,7 @@ const CourseManagement = () => {
                         direction="row"
                         spacing={2}
                     >
-                        <Button
-                            color="primary"
-                            disabled={refreshInProgress}
-                            onClick={() => {
-                                setRefreshInProgress(true);
-                                fetchData();
-                            }}
-                            startIcon={<RefreshIcon />}
-                            variant="outlined"
-                        >
-                            <Typography variant="body1">
-                                Refresh
-                            </Typography>
-                        </Button>
+                        <RefreshButton />
 
                         <ClearFilterButton />
 
