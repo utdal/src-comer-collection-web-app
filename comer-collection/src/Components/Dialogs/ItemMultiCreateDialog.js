@@ -100,6 +100,7 @@ export const ItemMultiCreateDialog = ({ Entity, refreshAllItems, dialogInstructi
                     </DialogContentText>
 
                     {createDialogItems.map((u, index) => (
+                        // eslint-disable-next-line react/no-array-index-key
                         <React.Fragment key={index}>
                             <Divider />
 
@@ -117,6 +118,7 @@ export const ItemMultiCreateDialog = ({ Entity, refreshAllItems, dialogInstructi
                                     alignItems="center"
                                     direction="row"
                                     flexWrap="wrap"
+                                    // eslint-disable-next-line react/no-array-index-key
                                     key={index}
                                     spacing={{ xs: 1, sm: 2 }}
                                     useFlexGap
