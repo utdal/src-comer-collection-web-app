@@ -70,7 +70,7 @@ const UserManagement = () => {
     const navigate = useNavigate();
     const setTitleText = useTitle();
 
-    const fetchData = useCallback(async () => {
+    const handleRefresh = useCallback(async () => {
         try {
             setIsError(false);
             const userData = await sendAuthenticatedRequest("GET", "/api/admin/users");
@@ -92,9 +92,9 @@ const UserManagement = () => {
         setSelectedNavItem("User Management");
         setTitleText("User Management");
         if (appUser.is_admin) {
-            fetchData();
+            handleRefresh();
         }
-    }, [appUser.is_admin, fetchData, setSelectedNavItem, setTitleText]);
+    }, [appUser.is_admin, handleRefresh, setSelectedNavItem, setTitleText]);
 
     const userFilterFunction = useCallback((user) => {
         return (
@@ -133,12 +133,12 @@ const UserManagement = () => {
 
     const handleChangeUserActivationStatus = useCallback((user, newStatus) => {
         User.handleChangeUserActivationStatus(user.id, newStatus).then((msg) => {
-            fetchData();
+            handleRefresh();
             showSnackbar(msg, "success");
         }).catch((err) => {
             showSnackbar(err, "error");
         });
-    }, [fetchData, showSnackbar]);
+    }, [handleRefresh, showSnackbar]);
 
     const handleOpenMultiCreateDialog = useCallback(() => {
         setDialogIsOpen(true);
@@ -153,10 +153,6 @@ const UserManagement = () => {
         setDeleteDialogUser(user);
         setDeleteDialogIsOpen(true);
     }, []);
-
-    const handleRefresh = useCallback(async () => {
-        await fetchData();
-    }, [fetchData]);
 
     useEffect(() => {
         filterUsers(userFilterFunction);
@@ -174,7 +170,7 @@ const UserManagement = () => {
     ) || (isError &&
     <FullPageMessage
         Icon={WarningIcon}
-        buttonAction={fetchData}
+        buttonAction={handleRefresh}
         buttonText="Retry"
         message="Error loading users"
     />
@@ -291,7 +287,7 @@ const UserManagement = () => {
                 Entity={User}
                 dialogInstructions={"Add users, edit the user fields, then click 'Create'.  You can set passwords after creating the users."}
                 dialogIsOpen={dialogIsOpen}
-                refreshAllItems={fetchData}
+                refreshAllItems={handleRefresh}
                 setDialogIsOpen={setDialogIsOpen}
             />
 
@@ -299,7 +295,7 @@ const UserManagement = () => {
                 Entity={User}
                 editDialogIsOpen={editDialogIsOpen}
                 editDialogItem={editDialogUser}
-                refreshAllItems={fetchData}
+                refreshAllItems={handleRefresh}
                 setEditDialogIsOpen={setEditDialogIsOpen}
             />
 
@@ -329,7 +325,7 @@ const UserManagement = () => {
                 dialogIsOpen={assignCourseDialogIsOpen}
                 editMode
                 primaryItems={associationDialogUsers}
-                refreshAllItems={fetchData}
+                refreshAllItems={handleRefresh}
                 secondaryItemsAll={courses}
                 secondarySearchBoxPlaceholder="Search courses by name"
                 secondarySearchFields={["name"]}
@@ -353,7 +349,7 @@ const UserManagement = () => {
                 dialogIsOpen={viewUserExhibitionDialogIsOpen}
                 editMode={false}
                 primaryItems={associationDialogUsers}
-                refreshAllItems={fetchData}
+                refreshAllItems={handleRefresh}
                 secondaryItemsAll={exhibitions}
                 secondarySearchBoxPlaceholder="Search exhibitions by title"
                 secondarySearchFields={["title"]}
@@ -362,7 +358,7 @@ const UserManagement = () => {
 
             <UserChangePrivilegesDialog
                 dialogState={privilegesDialogState}
-                refreshAllItems={fetchData}
+                refreshAllItems={handleRefresh}
             />
 
             <UserResetPasswordDialog

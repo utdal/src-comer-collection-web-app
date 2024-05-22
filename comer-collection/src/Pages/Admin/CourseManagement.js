@@ -59,7 +59,7 @@ const CourseManagement = () => {
     const navigate = useNavigate();
     const setTitleText = useTitle();
 
-    const fetchData = useCallback(async () => {
+    const handleRefresh = useCallback(async () => {
         try {
             setIsError(false);
             const courseData = await sendAuthenticatedRequest("GET", "/api/admin/courses");
@@ -78,9 +78,9 @@ const CourseManagement = () => {
         setSelectedNavItem("Course Management");
         setTitleText("Course Management");
         if (appUser.is_admin) {
-            fetchData();
+            handleRefresh();
         }
-    }, [appUser.is_admin, setSelectedNavItem, setTitleText, fetchData]);
+    }, [appUser.is_admin, setSelectedNavItem, setTitleText, handleRefresh]);
 
     const courseFilterFunction = useCallback((course) => {
         return doesItemMatchSearchQuery(searchQuery, course, ["name", "notes"]);
@@ -105,10 +105,6 @@ const CourseManagement = () => {
         setAssignUserDialogIsOpen(true);
     }, []);
 
-    const handleRefresh = useCallback(async () => {
-        await fetchData();
-    }, [fetchData]);
-
     return (!appUser.is_admin &&
         <FullPageMessage
             Icon={LockIcon}
@@ -121,7 +117,7 @@ const CourseManagement = () => {
     ) || (isError &&
         <FullPageMessage
             Icon={WarningIcon}
-            buttonAction={fetchData}
+            buttonAction={handleRefresh}
             buttonText="Retry"
             message="Error loading courses"
         />
@@ -230,7 +226,7 @@ const CourseManagement = () => {
                 Entity={Course}
                 dialogInstructions={"Add courses, edit the course fields, then click 'Create'.  You can enroll users after creating the course."}
                 dialogIsOpen={dialogIsOpen}
-                refreshAllItems={fetchData}
+                refreshAllItems={handleRefresh}
                 setDialogIsOpen={setDialogIsOpen}
             />
 
@@ -238,7 +234,7 @@ const CourseManagement = () => {
                 Entity={Course}
                 editDialogIsOpen={editDialogIsOpen}
                 editDialogItem={editDialogCourse}
-                refreshAllItems={fetchData}
+                refreshAllItems={handleRefresh}
                 setEditDialogIsOpen={setEditDialogIsOpen}
             />
 
@@ -270,7 +266,7 @@ const CourseManagement = () => {
                 dialogIsOpen={assignUserDialogIsOpen}
                 editMode
                 primaryItems={assignUserDialogCourses}
-                refreshAllItems={fetchData}
+                refreshAllItems={handleRefresh}
                 secondaryItemsAll={users}
                 secondarySearchBoxPlaceholder="Search users by name or email"
                 secondarySearchFields={["given_name"]}

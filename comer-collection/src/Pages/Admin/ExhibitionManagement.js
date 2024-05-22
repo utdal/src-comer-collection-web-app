@@ -51,7 +51,7 @@ const ExhibitionManagement = () => {
         setSearchQuery("");
     }, []);
 
-    const fetchData = useCallback(async () => {
+    const handleRefresh = useCallback(async () => {
         try {
             setIsError(false);
             const exhibitionData = await sendAuthenticatedRequest("GET", "/api/admin/exhibitions");
@@ -76,9 +76,9 @@ const ExhibitionManagement = () => {
         setSelectedNavItem("Exhibition Management");
         setTitleText("Exhibition Management");
         if (appUser.is_admin) {
-            fetchData();
+            handleRefresh();
         }
-    }, [appUser, fetchData, setSelectedNavItem, setTitleText]);
+    }, [appUser, handleRefresh, setSelectedNavItem, setTitleText]);
 
     const exhibitionFilterFunction = useCallback((exhibition) => {
         return (
@@ -102,10 +102,6 @@ const ExhibitionManagement = () => {
         setDeleteDialogIsOpen(true);
     }, [setDeleteDialogExhibition, setDeleteDialogIsOpen]);
 
-    const handleRefresh = useCallback(async () => {
-        await fetchData();
-    }, [fetchData]);
-
     return (!appUser.is_admin &&
         <FullPageMessage
             Icon={LockIcon}
@@ -118,7 +114,7 @@ const ExhibitionManagement = () => {
     ) || (isError &&
         <FullPageMessage
             Icon={WarningIcon}
-            buttonAction={fetchData}
+            buttonAction={handleRefresh}
             buttonText="Retry"
             message="Error loading exhibitions"
         />
@@ -213,7 +209,7 @@ const ExhibitionManagement = () => {
                 dialogExhibitionTitle={editDialogExhibitionTitle}
                 dialogIsOpen={editDialogIsOpen}
                 editMode
-                refreshFunction={fetchData}
+                refreshFunction={handleRefresh}
                 setDialogExhibitionAccess={setEditDialogExhibitionAccess}
                 setDialogExhibitionId={setEditDialogExhibitionId}
                 setDialogExhibitionTitle={setEditDialogExhibitionTitle}

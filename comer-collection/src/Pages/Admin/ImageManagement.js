@@ -92,7 +92,7 @@ const ImageManagement = () => {
         setTags(tagData.data);
     }, [setTags]);
 
-    const fetchData = useCallback(async () => {
+    const handleRefresh = useCallback(async () => {
         setIsError(false);
         Promise.all([
             fetchImages(),
@@ -109,9 +109,9 @@ const ImageManagement = () => {
         setSelectedNavItem("Image Management");
         setTitleText("Image Management");
         if (appUser.is_admin_or_collection_manager) {
-            fetchData();
+            handleRefresh();
         }
-    }, [appUser.is_admin_or_collection_manager, fetchData, setSelectedNavItem, setTitleText]);
+    }, [appUser.is_admin_or_collection_manager, handleRefresh, setSelectedNavItem, setTitleText]);
 
     const imageFilterFunction = useCallback((image) => {
         return (
@@ -153,10 +153,6 @@ const ImageManagement = () => {
         filterImages(imageFilterFunction);
     }, [filterImages, imageFilterFunction]);
 
-    const handleRefresh = useCallback(async () => {
-        await fetchImages();
-    }, [fetchImages]);
-
     return (!appUser.is_admin_or_collection_manager &&
         <FullPageMessage
             Icon={LockIcon}
@@ -169,7 +165,7 @@ const ImageManagement = () => {
     ) || (isError &&
         <FullPageMessage
             Icon={WarningIcon}
-            buttonAction={fetchData}
+            buttonAction={handleRefresh}
             buttonText="Retry"
             message="Error loading images"
         />
@@ -398,7 +394,7 @@ const ImageManagement = () => {
                 dialogIsOpen={assignArtistDialogIsOpen}
                 editMode
                 primaryItems={associationDialogImages}
-                refreshAllItems={fetchData}
+                refreshAllItems={handleRefresh}
                 secondaryFieldInPrimary="Artists"
                 secondaryItemsAll={artistsCombinedState.items}
                 secondarySearchBoxPlaceholder="Search artists by name or notes"
@@ -424,7 +420,7 @@ const ImageManagement = () => {
                 dialogIsOpen={assignTagDialogIsOpen}
                 editMode
                 primaryItems={associationDialogImages}
-                refreshAllItems={fetchData}
+                refreshAllItems={handleRefresh}
                 secondaryFieldInPrimary="Tags"
                 secondaryItemsAll={tagsCombinedState.items}
                 secondarySearchBoxPlaceholder="Search tags by name or notes"
@@ -449,7 +445,7 @@ const ImageManagement = () => {
                 dialogIsOpen={viewImageExhibitionDialogIsOpen}
                 editMode={false}
                 primaryItems={associationDialogImages}
-                refreshAllItems={fetchData}
+                refreshAllItems={handleRefresh}
                 secondaryItemsAll={exhibitions}
                 secondarySearchBoxPlaceholder="Search exhibitions by title"
                 secondarySearchFields={["title"]}
