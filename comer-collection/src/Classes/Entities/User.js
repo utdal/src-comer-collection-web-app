@@ -18,6 +18,7 @@ class User extends Entity {
     static plural = "users";
 
     static MultiCreateButtonIcon = GroupAddIcon;
+    static multiCreateDialogSubtitle = "You can set passwords, roles, and course enrollments after creating the users.";
 
     static fieldDefinitions = [
         {

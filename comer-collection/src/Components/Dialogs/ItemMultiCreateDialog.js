@@ -1,7 +1,6 @@
 import React, { useCallback, useEffect, useReducer, useState } from "react";
 import {
-    Stack, Dialog,
-    DialogTitle,
+    Stack, DialogTitle,
     DialogContent,
     DialogActions,
     Button,
@@ -9,10 +8,18 @@ import {
 } from "@mui/material";
 import { DeleteIcon } from "../../Imports/Icons.js";
 import { getBlankItemFields } from "../../Helpers/fields.js";
-import PropTypes from "prop-types";
 import { useSnackbar } from "../../ContextProviders/AppFeatures.js";
+import { useEntity, useManagementCallbacks } from "../../ContextProviders/ManagementPageProvider.js";
+import { dialogStatePropTypesShape } from "../../Hooks/useDialogState.js";
+import { PersistentFormDialog } from "./PersistentDialog.js";
 
-export const ItemMultiCreateDialog = ({ Entity, refreshAllItems, dialogInstructions, dialogIsOpen, setDialogIsOpen }) => {
+export const ItemMultiCreateDialog = ({ dialogState }) => {
+    const { handleRefresh } = useManagementCallbacks();
+    const Entity = useEntity();
+    const showSnackbar = useSnackbar();
+
+    const { dialogIsOpen, closeDialog } = dialogState;
+
     const createDialogReducer = useCallback((createDialogItems, action) => {
         switch (action.type) {
         case "add":
@@ -39,65 +46,66 @@ export const ItemMultiCreateDialog = ({ Entity, refreshAllItems, dialogInstructi
     const [createDialogItems, createDialogDispatch] = useReducer(createDialogReducer, []);
     const [submitEnabled, setSubmitEnabled] = useState(true);
 
-    const showSnackbar = useSnackbar();
-
     useEffect(() => {
-        if (dialogIsOpen) { setSubmitEnabled(true); }
+        if (dialogIsOpen) {
+            setSubmitEnabled(true);
+        }
     }, [dialogIsOpen]);
 
     const pluralCapitalized = Entity?.plural.substr(0, 1).toUpperCase() + Entity?.plural.substr(1).toLowerCase();
 
+    const handleSubmit = useCallback(() => {
+        setSubmitEnabled(false);
+        Entity.handleMultiCreate(createDialogItems).then((itemPromises) => {
+            const itemsWithErrors = createDialogItems.filter((u, i) => {
+                return itemPromises[i].status !== "fulfilled";
+            });
+            createDialogDispatch({
+                type: "set",
+                newArray: itemsWithErrors
+            });
+            if (itemsWithErrors.length > 0) {
+                setSubmitEnabled(true);
+                if (itemsWithErrors.length === createDialogItems.length) {
+                    showSnackbar(`Could not create ${createDialogItems.length === 1 ? Entity.singular : Entity.plural}`, "error");
+                } else if (itemsWithErrors.length < createDialogItems.length) {
+                    handleRefresh();
+                    showSnackbar(`${createDialogItems.length - itemsWithErrors.length} of ${createDialogItems.length} ${Entity.plural} created`, "warning");
+                }
+            } else {
+                handleRefresh();
+                closeDialog();
+                showSnackbar(`${createDialogItems.length} ${createDialogItems.length === 1 ? Entity.singular : Entity.plural} created`, "success");
+            }
+        });
+    }, [Entity, closeDialog, createDialogItems, handleRefresh, showSnackbar]);
+
     return (
-        <Dialog
-            component="form"
-            disableEscapeKeyDown
-            fullWidth
+        <PersistentFormDialog
             maxWidth="lg"
-            onClose={(event, reason) => {
-                if (reason === "backdropClick") { return; }
-                setDialogIsOpen(false);
-            }}
-            onSubmit={(e) => {
-                e.preventDefault();
-                setSubmitEnabled(false);
-                Entity.handleMultiCreate(createDialogItems).then((itemPromises) => {
-                    const itemsWithErrors = createDialogItems.filter((u, i) => {
-                        return itemPromises[i].status !== "fulfilled";
-                    });
-                    createDialogDispatch({
-                        type: "set",
-                        newArray: itemsWithErrors
-                    });
-                    if (itemsWithErrors.length > 0) {
-                        setSubmitEnabled(true);
-                        if (itemsWithErrors.length === createDialogItems.length) {
-                            showSnackbar(`Could not create ${createDialogItems.length === 1 ? Entity.singular : Entity.plural}`, "error");
-                        } else if (itemsWithErrors.length < createDialogItems.length) {
-                            showSnackbar(`${createDialogItems.length - itemsWithErrors.length} of ${createDialogItems.length} ${Entity.plural} created`, "warning");
-                        }
-                    } else {
-                        refreshAllItems();
-                        setDialogIsOpen(false);
-                        showSnackbar(`${createDialogItems.length} ${createDialogItems.length === 1 ? Entity.singular : Entity.plural} created`, "success");
-                    }
-                });
-            }}
+            onClose={closeDialog}
+            onSubmit={handleSubmit}
             open={dialogIsOpen}
-            sx={{ zIndex: 10000 }}
         >
             <DialogTitle
                 textAlign="center"
                 variant="h4"
             >
-                Create
+                {"Create "}
+
                 {pluralCapitalized}
+
+                <DialogContentText
+                    align="center"
+                    paddingTop={1}
+                    variant="body1"
+                >
+                    {Entity.multiCreateDialogSubtitle}
+                </DialogContentText>
             </DialogTitle>
 
             <DialogContent>
                 <Stack spacing={2}>
-                    <DialogContentText variant="body1">
-                        {dialogInstructions}
-                    </DialogContentText>
 
                     {createDialogItems.map((u, index) => (
                         // eslint-disable-next-line react/no-array-index-key
@@ -190,7 +198,7 @@ export const ItemMultiCreateDialog = ({ Entity, refreshAllItems, dialogInstructi
                         color="primary"
                         disabled={!submitEnabled}
                         onClick={() => {
-                            setDialogIsOpen(false);
+                            closeDialog();
                             createDialogDispatch({
                                 type: "set",
                                 newArray: []
@@ -241,14 +249,10 @@ export const ItemMultiCreateDialog = ({ Entity, refreshAllItems, dialogInstructi
                     </Stack>
                 </Stack>
             </DialogActions>
-        </Dialog>
+        </PersistentFormDialog>
     );
 };
 
 ItemMultiCreateDialog.propTypes = {
-    Entity: PropTypes.node.isRequired,
-    dialogInstructions: PropTypes.string.isRequired,
-    dialogIsOpen: PropTypes.bool.isRequired,
-    refreshAllItems: PropTypes.func.isRequired,
-    setDialogIsOpen: PropTypes.func.isRequired
+    dialogState: dialogStatePropTypesShape.isRequired
 };

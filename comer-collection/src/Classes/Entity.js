@@ -22,6 +22,7 @@ export class Entity {
     static searchBoxFields = [];
 
     static MultiCreateButtonIcon = AddIcon;
+    static multiCreateDialogSubtitle = null;
 
     static formatDate = (date) => {
         return new Date(date).toLocaleDateString([], {

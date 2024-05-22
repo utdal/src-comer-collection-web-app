@@ -58,7 +58,7 @@ const UserManagement = () => {
     const [viewUserExhibitionDialogIsOpen, setViewUserExhibitionDialogIsOpen] = useState(false);
     const [associationDialogUsers, setAssociationDialogUsers] = useState([]);
 
-    const [dialogIsOpen, setDialogIsOpen] = useState(false);
+    const [createDialogState, handleOpenMultiCreateDialog] = useDialogState();
 
     const [searchQuery, setSearchQuery] = useState("");
     const [userCourseIdFilter, setUserCourseIdFilter] = useState(null);
@@ -144,10 +144,6 @@ const UserManagement = () => {
             showSnackbar(err, "error");
         });
     }, [handleRefresh, showSnackbar]);
-
-    const handleOpenMultiCreateDialog = useCallback(() => {
-        setDialogIsOpen(true);
-    }, []);
 
     const handleOpenUserEditDialog = useCallback((user) => {
         setEditDialogUser(user);
@@ -264,13 +260,7 @@ const UserManagement = () => {
 
             </ManagementPageContainer>
 
-            <ItemMultiCreateDialog
-                Entity={User}
-                dialogInstructions={"Add users, edit the user fields, then click 'Create'.  You can set passwords after creating the users."}
-                dialogIsOpen={dialogIsOpen}
-                refreshAllItems={handleRefresh}
-                setDialogIsOpen={setDialogIsOpen}
-            />
+            <ItemMultiCreateDialog dialogState={createDialogState} />
 
             <ItemSingleEditDialog
                 Entity={User}
