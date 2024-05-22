@@ -1,15 +1,42 @@
-import { Box, Button, Paper, Stack, Typography } from "@mui/material";
-import React, { useCallback, useEffect, useState } from "react";
+import { Box, Paper, Stack, Typography } from "@mui/material";
+import React, { useCallback, useEffect } from "react";
 import { sendAuthenticatedRequest } from "../../Helpers/APICalls.js";
 import { DataTable } from "../../Components/DataTable/DataTable.js";
 import { PhotoCameraBackIcon } from "../../Imports/Icons.js";
-import { useNavigate } from "react-router";
 import { useTitle } from "../../ContextProviders/AppFeatures.js";
+import { ExhibitionTitleCell } from "../../Components/TableCells/Exhibition/ExhibitionTitleCell.js";
+import { ExhibitionCuratorCell } from "../../Components/TableCells/Exhibition/ExhibitionCuratorCell.js";
+import { ExhibitionDateModifiedCell } from "../../Components/TableCells/Exhibition/ExhibitionDateModifiedCell.js";
+import { ExhibitionOpenInCurrentTabCell } from "../../Components/TableCells/Exhibition/ExhibitionOpenInCurrentTabCell.js";
+import { ManagementPageProvider, useItemsReducer } from "../../ContextProviders/ManagementPageProvider.js";
+import { Exhibition } from "../../Classes/Entities/Exhibition.js";
+
+const exhibitionTableFields = [
+    {
+        columnDescription: "Title",
+        maxWidth: "200px",
+        TableCellComponent: ExhibitionTitleCell,
+        generateSortableValue: (exhibition) => exhibition.title?.toLowerCase()
+    },
+    {
+        columnDescription: "Curator",
+        TableCellComponent: ExhibitionCuratorCell,
+        generateSortableValue: (exhibition) => exhibition.curator?.toLowerCase()
+    },
+    {
+        columnDescription: "Last Updated",
+        TableCellComponent: ExhibitionDateModifiedCell,
+        generateSortableValue: (exhibition) => new Date(exhibition.date_modified)
+    },
+    {
+        columnDescription: "Open",
+        columnHeaderLabel: "",
+        TableCellComponent: ExhibitionOpenInCurrentTabCell
+    }
+];
 
 export const ExhibitionBrowser = () => {
-    const [exhibitions, setExhibitions] = useState([]);
-
-    const navigate = useNavigate();
+    const [exhibitionsCombinedState, setExhibitions] = useItemsReducer(Exhibition);
 
     useTitle("Public Exhibitions");
 
@@ -20,116 +47,67 @@ export const ExhibitionBrowser = () => {
         } catch (error) {
             console.error("Error fetching image metadata:", error);
         }
-    }, []);
+    }, [setExhibitions]);
 
     useEffect(() => {
         fetchPublicExhibitionData();
     }, [fetchPublicExhibitionData]);
 
-    const exhibitionTableFields = [
-        {
-            columnDescription: "Title",
-            maxWidth: "200px",
-            generateTableCell: (exhibition) => (
-                <Typography variant="body1">
-                    {exhibition.title}
-                </Typography>
-            ),
-            generateSortableValue: (exhibition) => exhibition.title?.toLowerCase()
-        },
-        {
-            columnDescription: "Curator",
-            generateTableCell: (exhibition) => (
-                <Typography variant="body1">
-                    {exhibition.curator}
-                </Typography>
-            ),
-            generateSortableValue: (exhibition) => exhibition.curator?.toLowerCase()
-        },
-        {
-            columnDescription: "Last Updated",
-            generateTableCell: (exhibition) => (
-                <Typography variant="body1">
-                    {new Date(exhibition.date_modified).toLocaleString()}
-                </Typography>
-            ),
-            generateSortableValue: (exhibition) => new Date(exhibition.date_modified)
-        },
-        {
-            columnDescription: "Open",
-            columnHeaderLabel: "",
-            generateTableCell: (exhibition) => (
-                <Button
-                    onClick={() => {
-                        navigate(`/Exhibitions/${exhibition.id}`);
-                    }}
-                    variant="outlined"
-                >
-                    <Typography variant="body1">
-                        Open
-                    </Typography>
-                </Button>
-            )
-        }
-    ];
-
     return (
-        <Box
-            component={Paper}
-            justifyItems="center"
-            square
-            sx={{
-                height: "calc(100vh - 64px)",
-                width: "100vw",
-                boxSizing: "border-box"
-            }}
+        <ManagementPageProvider
+            itemsCombinedState={exhibitionsCombinedState}
         >
-            <Stack
-                spacing={4}
+            <Box
+                component={Paper}
+                justifyItems="center"
+                square
                 sx={{
-                    paddingLeft: "200px",
-                    paddingRight: "200px",
-                    paddingTop: "50px"
+                    height: "calc(100vh - 64px)",
+                    width: "100vw",
+                    boxSizing: "border-box"
                 }}
             >
                 <Stack
-                    direction="row"
-                    justifyContent="space-between"
-                    paddingLeft={1}
-                    spacing={2}
+                    spacing={4}
+                    sx={{
+                        paddingLeft: "200px",
+                        paddingRight: "200px",
+                        paddingTop: "50px"
+                    }}
                 >
                     <Stack
-                        alignItems="center"
                         direction="row"
+                        justifyContent="space-between"
                         paddingLeft={1}
                         spacing={2}
                     >
-                        <PhotoCameraBackIcon fontSize="large" />
+                        <Stack
+                            alignItems="center"
+                            direction="row"
+                            paddingLeft={1}
+                            spacing={2}
+                        >
+                            <PhotoCameraBackIcon fontSize="large" />
 
-                        <Typography variant="h4">
-                            Public Exhibitions
-                        </Typography>
+                            <Typography variant="h4">
+                                Public Exhibitions
+                            </Typography>
+                        </Stack>
                     </Stack>
-                </Stack>
 
-                <Box sx={{ height: "calc(80vh - 64px)" }}>
-                    <DataTable
-                        NoContentIcon={PhotoCameraBackIcon}
-                        defaultSortAscending={false}
-                        defaultSortColumn="Last Updated"
-                        emptyMinHeight="500px"
-                        items={exhibitions}
-                        noContentButtonAction={() => {
-                            navigate("/BrowseCollection");
-                        }}
-                        noContentButtonText="Browse Collection"
-                        nonEmptyHeight="500px"
-                        tableFields={exhibitionTableFields}
-                        visibleItems={exhibitions}
-                    />
-                </Box>
-            </Stack>
-        </Box>
+                    <Box sx={{ height: "calc(80vh - 64px)" }}>
+                        <DataTable
+                            defaultSortAscending={false}
+                            defaultSortColumn="Last Updated"
+                            emptyMinHeight="500px"
+                            nonEmptyHeight="500px"
+                            tableFields={exhibitionTableFields}
+                        />
+                    </Box>
+                </Stack>
+            </Box>
+
+        </ManagementPageProvider>
 
     );
 };
