@@ -3,8 +3,8 @@ import { List, ListItemButton, ListItemIcon, ListItemText, Typography } from "@m
 import { useNavigate } from "react-router-dom";
 import { useTheme } from "@emotion/react";
 import { useAppUser } from "../../ContextProviders/AppUser.js";
-import { useAccountNav } from "../../ContextProviders/AccountNavProvider.js";
 import PropTypes from "prop-types";
+import { useAccountNav } from "../../Hooks/useAccountNav.js";
 
 export const AccountNavSection = ({ sectionTitle, linkDefinitions }) => {
     const [selectedNavItem, setSelectedNavItem] = useAccountNav();

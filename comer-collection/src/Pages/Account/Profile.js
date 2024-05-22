@@ -9,7 +9,7 @@ import { AccountCircleIcon, SchoolIcon } from "../../Imports/Icons.js";
 import { useAppUser } from "../../ContextProviders/AppUser.js";
 import { useTitle } from "../../ContextProviders/AppFeatures.js";
 
-import { useAccountNav } from "../../ContextProviders/AccountNavProvider.js";
+import { useAccountNav } from "../../Hooks/useAccountNav.js";
 import { User } from "../../Classes/Entities/User.js";
 import { CourseNameCell } from "../../Components/TableCells/Course/CourseNameCell.js";
 import { CourseStartDateTimeCell } from "../../Components/TableCells/Course/CourseStartDateTimeCell.js";

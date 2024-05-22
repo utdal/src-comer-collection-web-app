@@ -20,7 +20,7 @@ import { sendAuthenticatedRequest } from "../../Helpers/APICalls.js";
 import { useTitle } from "../../ContextProviders/AppFeatures.js";
 import { useAppUser } from "../../ContextProviders/AppUser.js";
 
-import { useAccountNavTitle } from "../../ContextProviders/AccountNavProvider.js";
+import { useAccountNavTitle } from "../../Hooks/useAccountNavTitle.js";
 import { Image } from "../../Classes/Entities/Image.js";
 import { Artist } from "../../Classes/Entities/Artist.js";
 import { Tag } from "../../Classes/Entities/Tag.js";

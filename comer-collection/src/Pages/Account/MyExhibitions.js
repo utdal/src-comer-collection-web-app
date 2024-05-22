@@ -10,7 +10,7 @@ import { ItemSingleDeleteDialog } from "../../Components/Dialogs/ItemSingleDelet
 import { useTitle } from "../../ContextProviders/AppFeatures.js";
 import { useAppUser } from "../../ContextProviders/AppUser.js";
 
-import { useAccountNav } from "../../ContextProviders/AccountNavProvider.js";
+import { useAccountNav } from "../../Hooks/useAccountNav.js";
 import { MyExhibition } from "../../Classes/Entities/Exhibition.js";
 import { ExhibitionTitleCell } from "../../Components/TableCells/Exhibition/ExhibitionTitleCell.js";
 import { ExhibitionOpenInNewTabCell } from "../../Components/TableCells/Exhibition/ExhibitionOpenInNewTabCell.js";

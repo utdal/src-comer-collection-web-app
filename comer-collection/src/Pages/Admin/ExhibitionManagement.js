@@ -16,7 +16,7 @@ import { useAppUser } from "../../ContextProviders/AppUser.js";
 import { doesItemMatchSearchQuery } from "../../Helpers/SearchUtilities.js";
 import { CourseFilterMenu } from "../../Components/Menus/CourseFilterMenu.js";
 
-import { useAccountNavTitle } from "../../ContextProviders/AccountNavProvider.js";
+import { useAccountNavTitle } from "../../Hooks/useAccountNavTitle.js";
 import { Exhibition } from "../../Classes/Entities/Exhibition.js";
 import { ManagementPageProvider, useItemsReducer } from "../../ContextProviders/ManagementPageProvider.js";
 import { ClearFilterButton } from "../../Components/Buttons/ClearFilterButton.js";

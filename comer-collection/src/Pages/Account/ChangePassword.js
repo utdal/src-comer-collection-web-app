@@ -5,7 +5,7 @@ import { useAppUser } from "../../ContextProviders/AppUser.js";
 import { useTitle, useSnackbar } from "../../ContextProviders/AppFeatures.js";
 
 import { sendAuthenticatedRequest } from "../../Helpers/APICalls.js";
-import { useAccountNav } from "../../ContextProviders/AccountNavProvider.js";
+import { useAccountNav } from "../../Hooks/useAccountNav.js";
 
 const ChangePassword = () => {
     const [, setSelectedNavItem] = useAccountNav();
