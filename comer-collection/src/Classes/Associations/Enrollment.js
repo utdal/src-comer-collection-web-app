@@ -5,6 +5,8 @@ import { Association } from "../Association.js";
 import { CourseIDCell } from "../../Components/TableCells/Course/CourseIDCell.js";
 import { CourseNameCell } from "../../Components/TableCells/Course/CourseNameCell.js";
 import { CourseDateRangeStackedCell } from "../../Components/TableCells/Course/CourseDateRangeStackedCell.js";
+import { UserIDWithAccessIconCell } from "../../Components/TableCells/User/UserIDWithAccessIconCell.js";
+import { UserStackedNameEmailCell } from "../../Components/TableCells/User/UserStackedNameEmailCell.js";
 
 class Enrollment extends Association {
     static url = "/api/admin/enrollments";
@@ -60,12 +62,12 @@ class EnrollmentCoursePrimary extends Enrollment {
     static tableFields = [
         {
             columnDescription: "ID",
-            TableCellComponent: User.TableCells.IDWithAccessIcon,
+            TableCellComponent: UserIDWithAccessIconCell,
             generateSortableValue: (user) => user.id
         },
         {
             columnDescription: "User",
-            TableCellComponent: User.TableCells.StackedNameEmail,
+            TableCellComponent: UserStackedNameEmailCell,
             generateSortableValue: (user) => user.full_name_reverse?.toLowerCase() ?? ""
         }
     ];

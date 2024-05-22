@@ -141,6 +141,7 @@ const CourseManagement = () => {
     ) || (
 
         <ManagementPageProvider
+            Entity={Course}
             itemsCombinedState={coursesCombinedState}
             managementCallbacks={{
                 handleOpenCourseDeleteDialog,
@@ -230,6 +231,8 @@ const CourseManagement = () => {
                 </Stack>
 
                 <DataTable
+                    defaultSortAscending
+                    defaultSortColumn="ID"
                     emptyMinHeight="300px"
                     rowSelectionEnabled
                     sx={{ gridArea: "table" }}

@@ -30,53 +30,6 @@ import { ImageExhibition } from "../../Classes/Associations/ImageExhibition.js";
 import { ManagementPageProvider, useItemsReducer } from "../../ContextProviders/ManagementPageProvider.js";
 import { DataTable } from "../../Components/DataTable/DataTable.js";
 
-const imageTableFields = [
-    {
-        columnDescription: "ID",
-        TableCellComponent: Image.TableCells.ID,
-        generateSortableValue: (image) => image.id
-    },
-    {
-        columnDescription: "Title",
-        TableCellComponent: Image.TableCells.Title,
-        generateSortableValue: (image) => image.title.toLowerCase()
-    },
-    {
-        columnDescription: "Preview",
-        TableCellComponent: Image.TableCells.PreviewThumbnail
-    },
-    {
-        columnDescription: "Accession Number",
-        TableCellComponent: Image.TableCells.AccessionNumber,
-        generateSortableValue: (image) => image.accessionNumber?.toLowerCase()
-    },
-    {
-        columnDescription: "Year",
-        TableCellComponent: Image.TableCells.Year,
-        generateSortableValue: (image) => image.year
-    },
-    {
-        columnDescription: "Location",
-        TableCellComponent: Image.TableCells.Location
-    },
-    {
-        columnDescription: "Artists",
-        TableCellComponent: Image.TableCells.ArtistCountButton
-    },
-    {
-        columnDescription: "Tags",
-        TableCellComponent: Image.TableCells.TagCountButton
-    },
-    {
-        columnDescription: "Exhibitions",
-        TableCellComponent: Image.TableCells.ImageExhibitionCountButton
-    },
-    {
-        columnDescription: "Options",
-        TableCellComponent: Image.TableCells.OptionsArray
-    }
-];
-
 const ImageManagement = () => {
     const [imagesCombinedState, setImages, setSelectedImages, filterImages] = useItemsReducer();
     const [artistsCombinedState, setArtists, , filterArtists] = useItemsReducer();
@@ -373,7 +326,7 @@ const ImageManagement = () => {
                     <DataTable
                         emptyMinHeight="300px"
                         rowSelectionEnabled
-                        tableFields={imageTableFields}
+                        tableFields={Image.tableFields}
                         {...
                             (imagesCombinedState.visibleItems.length === imagesCombinedState.items.length && {
                                 noContentMessage: "No images yet",

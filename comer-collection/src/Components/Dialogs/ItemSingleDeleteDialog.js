@@ -76,6 +76,10 @@ export const ItemSingleDeleteDialog = ({ requireTypedConfirmation, Entity, delet
                         <i>
                             {deleteDialogItem?.safe_display_name}
                         </i>
+
+                        {
+                            /* */
+                        }
                         ?
                     </DialogContentText>
 

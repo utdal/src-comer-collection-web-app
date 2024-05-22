@@ -1,11 +1,15 @@
 /* eslint-disable react/prop-types */
 import { Entity } from "../Entity.js";
-import React, { useCallback } from "react";
-import { Button, Stack, Typography } from "@mui/material";
-import { BrushIcon, PhotoCameraBackIcon, PlaceIcon, VisibilityIcon } from "../../Imports/Icons.js";
-import { useAppUser } from "../../ContextProviders/AppUser.js";
-import { useTableRowItem } from "../../ContextProviders/TableRowProvider.js";
-import { useManagementCallbacks } from "../../ContextProviders/ManagementPageProvider.js";
+import { ImageIDCell } from "../../Components/TableCells/Image/ImageIDCell.js";
+import { ImageTitleCell } from "../../Components/TableCells/Image/ImageTitleCell.js";
+import { ImagePreviewThumbnailCell } from "../../Components/TableCells/Image/ImagePreviewThumbnailCell.js";
+import { ImageAccessionNumberCell } from "../../Components/TableCells/Image/ImageAccessionNumberCell.js";
+import { ImageYearCell } from "../../Components/TableCells/Image/ImageYearCell.js";
+import { ImageLocationCell } from "../../Components/TableCells/Image/ImageLocationCell.js";
+import { ImageArtistAssignmentCell } from "../../Components/TableCells/Image/ImageArtistAssignmentCell.js";
+import { ImageTagAssignmentCell } from "../../Components/TableCells/Image/ImageTagAssignmentCell.js";
+import { ImageExhibitionCountCell } from "../../Components/TableCells/Image/ImageExhibitionCountCell.js";
+import { ImageOptionsCell } from "../../Components/TableCells/Image/ImageOptionsCell.js";
 
 class Image extends Entity {
     static baseUrl = "/api/admin/images";
@@ -112,202 +116,52 @@ class Image extends Entity {
         }
     ];
 
-    static TableCells = {
-        ID () {
-            const image = useTableRowItem();
-            return (
-                <Typography variant="body1">
-                    {image.id}
-                </Typography>
-            );
+    static tableFields = [
+        {
+            columnDescription: "ID",
+            TableCellComponent: ImageIDCell,
+            generateSortableValue: (image) => image.id
         },
-        Title () {
-            const image = useTableRowItem();
-            return (
-                <Typography variant="body1">
-                    {image.title}
-                </Typography>
-            );
+        {
+            columnDescription: "Title",
+            TableCellComponent: ImageTitleCell,
+            generateSortableValue: (image) => image.title.toLowerCase()
         },
-        PreviewThumbnail () {
-            const image = useTableRowItem();
-            const { handleOpenImagePreviewer } = useManagementCallbacks();
-            const handleOpenPreviewer = useCallback(() => {
-                handleOpenImagePreviewer(image);
-            }, [handleOpenImagePreviewer, image]);
-            return (
-                <Stack
-                    alignItems="center"
-                    direction="row"
-                    justifyContent="center"
-                    sx={{ height: "50px", maxWidth: "100px" }}
-                >
-                    {(image.thumbnailUrl &&
-                        <Button onClick={handleOpenPreviewer} >
-                            <img
-                                height="50px"
-                                loading="lazy"
-                                src={`${process.env.REACT_APP_API_HOST}/api/public/images/${image.id}/download`}
-                            />
-                        </Button>
-                    ) || (image.url &&
-                        <Button
-                            color="primary"
-                            onClick={handleOpenPreviewer}
-                            startIcon={<VisibilityIcon />}
-                            variant="outlined"
-                        >
-                            <Typography variant="body1">
-                                View
-                            </Typography>
-                        </Button>
-                    )}
-                </Stack>
-            );
+        {
+            columnDescription: "Preview",
+            TableCellComponent: ImagePreviewThumbnailCell
         },
-        AccessionNumber () {
-            const image = useTableRowItem();
-            return (
-                <Typography variant="body1">
-                    {image.accessionNumber}
-                </Typography>
-            );
+        {
+            columnDescription: "Accession Number",
+            TableCellComponent: ImageAccessionNumberCell,
+            generateSortableValue: (image) => image.accessionNumber?.toLowerCase()
         },
-        Year () {
-            const image = useTableRowItem();
-            return (
-                <Typography variant="body1">
-                    {image.year}
-                </Typography>
-            );
+        {
+            columnDescription: "Year",
+            TableCellComponent: ImageYearCell,
+            generateSortableValue: (image) => image.year
         },
-        Location () {
-            const image = useTableRowItem();
-            return (
-                image.location && (
-                    <Stack
-                        direction="row"
-                        spacing={1}
-                    >
-                        <PlaceIcon />
-
-                        <Typography variant="body1">
-                            {image.location}
-                        </Typography>
-                    </Stack>
-                )
-            );
+        {
+            columnDescription: "Location",
+            TableCellComponent: ImageLocationCell
         },
-        ArtistCountButton () {
-            const image = useTableRowItem();
-            const { handleOpenImageAssignArtistDialog } = useManagementCallbacks();
-            const handleOpenAssignArtistDialog = useCallback(() => {
-                handleOpenImageAssignArtistDialog([image]);
-            }, [handleOpenImageAssignArtistDialog, image]);
-            return (
-                <Stack
-                    alignItems="center"
-                    direction="row"
-                    spacing={1}
-                >
-                    <Button
-                        color="primary"
-                        onClick={handleOpenAssignArtistDialog}
-                        startIcon={<BrushIcon />}
-                        variant="text"
-                    >
-                        <Typography variant="body1">
-                            {image.Artists.length}
-                        </Typography>
-                    </Button>
-                </Stack>
-            );
+        {
+            columnDescription: "Artists",
+            TableCellComponent: ImageArtistAssignmentCell
         },
-        TagCountButton () {
-            const image = useTableRowItem();
-            const { handleOpenImageAssignTagDialog } = useManagementCallbacks();
-            const handleOpenAssignTagDialog = useCallback(() => {
-                handleOpenImageAssignTagDialog([image]);
-            }, [handleOpenImageAssignTagDialog, image]);
-            return (
-                <Stack
-                    alignItems="center"
-                    direction="row"
-                    spacing={1}
-                >
-                    <Button
-                        color="primary"
-                        onClick={handleOpenAssignTagDialog}
-                        startIcon={<BrushIcon />}
-                        variant="text"
-                    >
-                        <Typography variant="body1">
-                            {image.Tags.length}
-                        </Typography>
-                    </Button>
-                </Stack>
-            );
+        {
+            columnDescription: "Tags",
+            TableCellComponent: ImageTagAssignmentCell
         },
-        ImageExhibitionCountButton () {
-            const image = useTableRowItem();
-            const [appUser] = useAppUser();
-            const { handleOpenImageViewExhibitionDialog } = useManagementCallbacks();
-            const handleOpenViewExhibitionDialog = useCallback(() => {
-                handleOpenImageViewExhibitionDialog([image]);
-            }, [handleOpenImageViewExhibitionDialog, image]);
-            return (
-                <Stack
-                    direction="row"
-                    spacing={1}
-                >
-                    <Button
-                        color="primary"
-                        disabled={!appUser.is_admin}
-                        onClick={handleOpenViewExhibitionDialog}
-                        startIcon={<PhotoCameraBackIcon />}
-                        sx={{ textTransform: "unset" }}
-                        variant="text"
-                    >
-                        <Typography variant="body1">
-                            {image.Exhibitions.length}
-                        </Typography>
-                    </Button>
-                </Stack>
-            );
+        {
+            columnDescription: "Exhibitions",
+            TableCellComponent: ImageExhibitionCountCell
         },
-        EditButton () {
-            const image = useTableRowItem();
-            const { handleOpenImageEditDialog } = useManagementCallbacks();
-            const handleOpenEditDialog = useCallback(() => {
-                handleOpenImageEditDialog(image);
-            }, [image, handleOpenImageEditDialog]);
-            return (
-                <Entity.TableCells.EditButton onClick={handleOpenEditDialog} />
-            );
-        },
-        DeleteButton () {
-            const image = useTableRowItem();
-            const { handleOpenImageDeleteDialog } = useManagementCallbacks();
-            const handleOpenDeleteDialog = useCallback(() => {
-                handleOpenImageDeleteDialog(image);
-            }, [image, handleOpenImageDeleteDialog]);
-            return (
-                <Entity.TableCells.DeleteButton
-                    disabled={image.Exhibitions.length > 0}
-                    onClick={handleOpenDeleteDialog}
-                />
-            );
-        },
-        OptionsArray () {
-            return (
-                <>
-                    <Image.TableCells.EditButton />
-
-                    <Image.TableCells.DeleteButton />
-                </>
-            );
+        {
+            columnDescription: "Options",
+            TableCellComponent: ImageOptionsCell
         }
-    };
+    ];
 }
 
 export { Image };

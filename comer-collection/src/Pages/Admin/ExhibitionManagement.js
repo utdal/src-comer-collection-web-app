@@ -146,6 +146,7 @@ const ExhibitionManagement = () => {
         />
     ) || (
         <ManagementPageProvider
+            Entity={Exhibition}
             itemsCombinedState={exhibitionsCombinedState}
             managementCallbacks={{
                 handleOpenExhibitionSettings,
