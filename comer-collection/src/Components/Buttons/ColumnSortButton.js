@@ -5,25 +5,31 @@ import PropTypes from "prop-types";
 
 export const ColumnSortButton = ({ columnName, sortColumn, setSortColumn, sortAscending, setSortAscending }) => {
     return (
-        <IconButton color={sortColumn === columnName ? "primary" : "grey"} size="medium" onClick={() => {
-            if (sortColumn === columnName) { setSortAscending((current) => !current); } else {
-                setSortColumn(columnName);
-                setSortAscending(true);
-            }
-        }}>
+        <IconButton
+            color={sortColumn === columnName ? "primary" : "grey"}
+            onClick={() => {
+                if (sortColumn === columnName) { setSortAscending((current) => !current); } else {
+                    setSortColumn(columnName);
+                    setSortAscending(true);
+                }
+            }}
+            size="medium"
+        >
             {sortColumn === columnName
                 ? (
-                    sortAscending ? (<ArrowUpwardIcon fontSize="medium" />) : (<ArrowDownwardIcon fontSize="medium" />)
+                    sortAscending
+                        ? <ArrowUpwardIcon fontSize="medium" />
+                        : <ArrowDownwardIcon fontSize="medium" />
                 )
-                : (<SwapVertIcon fontSize="medium" />)}
+                : <SwapVertIcon fontSize="medium" />}
         </IconButton>
     );
 };
 
 ColumnSortButton.propTypes = {
-    columnName: PropTypes.string,
-    sortColumn: PropTypes.string,
-    setSortColumn: PropTypes.func,
-    sortAscending: PropTypes.bool,
-    setSortAscending: PropTypes.func
+    columnName: PropTypes.string.isRequired,
+    setSortAscending: PropTypes.func.isRequired,
+    setSortColumn: PropTypes.func.isRequired,
+    sortAscending: PropTypes.bool.isRequired,
+    sortColumn: PropTypes.string.isRequired
 };

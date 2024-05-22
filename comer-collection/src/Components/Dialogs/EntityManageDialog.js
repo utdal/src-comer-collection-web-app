@@ -9,7 +9,7 @@ import {
 } from "@mui/material";
 import { AddIcon } from "../../Imports/Icons.js";
 import { getBlankItemFields } from "../../Helpers/fields.js";
-import { DataTable } from "../DataTable.js";
+import { DataTable } from "../DataTable/DataTable.js";
 import SearchBox from "../SearchBox.js";
 import { doesItemMatchSearchQuery } from "../../Helpers/SearchUtilities.js";
 import { ItemSingleDeleteDialog } from "./ItemSingleDeleteDialog.js";
@@ -17,6 +17,7 @@ import { ItemSingleEditDialog } from "./ItemSingleEditDialog.js";
 import PropTypes from "prop-types";
 import { useSnackbar } from "../../ContextProviders/AppFeatures.js";
 import { ManagementPageProvider } from "../../ContextProviders/ManagementPageProvider.js";
+import { itemsCombinedStatePropTypeShape } from "../../Classes/Entity.js";
 
 export const EntityManageDialog = ({
     Entity,
@@ -71,16 +72,28 @@ export const EntityManageDialog = ({
                 handleOpenEntityDeleteDialog
             }}
         >
-            <Dialog fullWidth={true} maxWidth="lg" sx={{ zIndex: 10000 }}
-                open={dialogIsOpen} disableEscapeKeyDown
+            <Dialog
+                disableEscapeKeyDown
+                fullWidth
+                maxWidth="lg"
                 onClose={(event, reason) => {
                     if (reason === "backdropClick") { return; }
                     setDialogIsOpen(false);
                 }}
+                open={dialogIsOpen}
+                sx={{ zIndex: 10000 }}
             >
-                <DialogTitle textAlign="center" variant="h4">Manage {pluralCapitalized}</DialogTitle>
+                <DialogTitle
+                    textAlign="center"
+                    variant="h4"
+                >
+                    Manage
+                    {pluralCapitalized}
+                </DialogTitle>
+
                 <DialogContent>
-                    <Stack spacing={2}
+                    <Stack
+                        spacing={2}
                         sx={{
                             display: "grid",
                             gridTemplateColumns: "1fr",
@@ -89,29 +102,64 @@ export const EntityManageDialog = ({
             "update"
             "create"
             `
-                        }}>
+                        }}
+                    >
                         {dialogItemsCombinedState.items.length > 0 && (
                             <>
                                 <Box sx={{ gridArea: "update" }}>
-                                    <Stack spacing={2} sx={{ height: "300px" }}>
-                                        <Stack direction="row" spacing={2} justifyContent="space-between" alignItems="center">
-                                            <DialogContentText textAlign="left" variant="h6">Edit or delete existing {Entity.plural}</DialogContentText>
-                                            <SearchBox searchQuery={itemSearchQuery} setSearchQuery={setItemSearchQuery}
-                                                placeholder={searchBoxPlaceholder} width="40%"
+                                    <Stack
+                                        spacing={2}
+                                        sx={{ height: "300px" }}
+                                    >
+                                        <Stack
+                                            alignItems="center"
+                                            direction="row"
+                                            justifyContent="space-between"
+                                            spacing={2}
+                                        >
+                                            <DialogContentText
+                                                textAlign="left"
+                                                variant="h6"
+                                            >
+                                                Edit or delete existing
+                                                {Entity.plural}
+                                            </DialogContentText>
+
+                                            <SearchBox
+                                                placeholder={searchBoxPlaceholder}
+                                                searchQuery={itemSearchQuery}
+                                                setSearchQuery={setItemSearchQuery}
+                                                width="40%"
                                             />
                                         </Stack>
 
-                                        <DataTable tableFields={Entity.tableFields} NoContentIcon={"div"} />
+                                        <DataTable
+                                            NoContentIcon="div"
+                                            tableFields={Entity.tableFields}
+                                        />
 
                                     </Stack>
                                 </Box>
+
                                 <Divider />
                             </>
                         )}
+
                         <Box sx={{ gridArea: "create" }}>
                             <Stack spacing={2}>
-                                <DialogContentText textAlign="left" variant="h6">Create a new {Entity.singular}</DialogContentText>
-                                <Stack component="form"
+                                <DialogContentText
+                                    textAlign="left"
+                                    variant="h6"
+                                >
+                                    Create a new
+                                    {Entity.singular}
+                                </DialogContentText>
+
+                                <Stack
+                                    alignItems="center"
+                                    component="form"
+                                    direction="row"
+                                    justifyContent="space-around"
                                     onSubmit={(e) => {
                                         e.preventDefault();
                                         Entity.handleMultiCreate([itemToAdd]).then(([{ status }]) => {
@@ -124,19 +172,18 @@ export const EntityManageDialog = ({
                                         });
                                         setItemToAdd(getBlankItemFields(Entity.fieldDefinitions));
                                     }}
-                                    direction="row" alignItems="center" spacing={2} justifyContent="space-around">
-                                    <Stack direction="row" useFlexGap flexWrap="wrap" alignItems="center" spacing={2} >
+                                    spacing={2}
+                                >
+                                    <Stack
+                                        alignItems="center"
+                                        direction="row"
+                                        flexWrap="wrap"
+                                        spacing={2}
+                                        useFlexGap
+                                    >
                                         {Entity.fieldDefinitions.map((f, fi) => (
-                                            <TextField key={f.fieldName}
-                                                name={f.fieldName}
-                                                label={f.displayName}
+                                            <TextField
                                                 autoFocus={fi === 0}
-                                                value={itemToAdd[f.fieldName]}
-                                                sx={{
-                                                    minWidth: "200px"
-                                                }}
-                                                multiline={f.multiline}
-                                                minRows={2}
                                                 inputProps={{
                                                     type: f.inputType ?? "text",
                                                     sx: {
@@ -145,59 +192,97 @@ export const EntityManageDialog = ({
                                                         }
                                                     }
                                                 }}
-                                                required={Boolean(f.isRequired)}
+                                                key={f.fieldName}
+                                                label={f.displayName}
+                                                minRows={2}
+                                                multiline={f.multiline}
+                                                name={f.fieldName}
                                                 onChange={(e) => {
                                                     setItemToAdd({
                                                         ...itemToAdd,
                                                         [f.fieldName]: e.target.value
                                                     });
-                                                }} />
+                                                }}
+                                                required={Boolean(f.isRequired)}
+                                                sx={{
+                                                    minWidth: "200px"
+                                                }}
+                                                value={itemToAdd[f.fieldName]}
+                                            />
                                         ))}
 
                                     </Stack>
-                                    <Button type="submit" variant="contained"
+
+                                    <Button
                                         startIcon={<AddIcon />}
                                         sx={{ minWidth: "200px", height: "100%" }}
+                                        type="submit"
+                                        variant="contained"
                                     >
-                                        <Typography variant="body1">{`Create ${Entity.singular}`}</Typography>
+                                        <Typography variant="body1">
+                                            {`Create ${Entity.singular}`}
+                                        </Typography>
                                     </Button>
                                 </Stack>
                             </Stack>
                         </Box>
                     </Stack>
                 </DialogContent>
+
                 <DialogActions>
-                    <Stack direction="row" justifyContent="space-between" width="100%">
-                        <Typography paddingLeft={4} variant="h6" sx={{ opacity: 0.5 }}>{dialogItemsCombinedState.items.length} {dialogItemsCombinedState.items.length === 1 ? Entity.singular : Entity.plural}</Typography>
-                        <Button sx={{
-                            width: "30%"
-                        }} color="primary" variant="contained" size="large"
-                        onClick={() => {
-                            if (onClose) { onClose(); }
-                            setDialogIsOpen(false);
-                        }}
+                    <Stack
+                        direction="row"
+                        justifyContent="space-between"
+                        width="100%"
+                    >
+                        <Typography
+                            paddingLeft={4}
+                            sx={{ opacity: 0.5 }}
+                            variant="h6"
                         >
-                            <Typography variant="body1">Close</Typography>
+                            {dialogItemsCombinedState.items.length}
+
+                            {" "}
+
+                            {dialogItemsCombinedState.items.length === 1 ? Entity.singular : Entity.plural}
+                        </Typography>
+
+                        <Button
+                            color="primary"
+                            onClick={() => {
+                                if (onClose) { onClose(); }
+                                setDialogIsOpen(false);
+                            }}
+                            size="large"
+                            sx={{
+                                width: "30%"
+                            }}
+                            variant="contained"
+                        >
+                            <Typography variant="body1">
+                                Close
+                            </Typography>
                         </Button>
                     </Stack>
                 </DialogActions>
             </Dialog>
 
             <ItemSingleEditDialog
-                {...{ Entity, refreshAllItems }}
+                Entity={Entity}
                 editDialogIsOpen={internalEditDialogIsOpen}
-                setEditDialogIsOpen={setInternalEditDialogIsOpen}
                 editDialogItem={internalEditDialogItem}
+                refreshAllItems={refreshAllItems}
+                setEditDialogIsOpen={setInternalEditDialogIsOpen}
             />
 
             <ItemSingleDeleteDialog
+                Entity={Entity}
                 allItems={dialogItemsCombinedState.items}
-                setAllItems={setDialogItems}
                 deleteDialogIsOpen={internalDeleteDialogIsOpen}
-                setDeleteDialogIsOpen={setInternalDeleteDialogIsOpen}
                 deleteDialogItem={internalDeleteDialogItem}
                 dialogTitle={`Delete ${Entity.singular[0].toUpperCase()}${Entity.singular.substring(1)}`}
-                {...{ Entity }}
+                setAllItems={setDialogItems}
+                setDeleteDialogIsOpen={setInternalDeleteDialogIsOpen}
             />
 
         </ManagementPageProvider>
@@ -205,14 +290,13 @@ export const EntityManageDialog = ({
 };
 
 EntityManageDialog.propTypes = {
-    Entity: PropTypes.any,
-    dialogItemsCombinedState: PropTypes.object,
-    setDialogItems: PropTypes.func,
-    filterDialogItems: PropTypes.func,
-    dialogTableFields: PropTypes.PropTypes.arrayOf(PropTypes.object),
-    dialogIsOpen: PropTypes.bool,
-    setDialogIsOpen: PropTypes.func,
-    searchBoxPlaceholder: PropTypes.string,
-    refreshAllItems: PropTypes.func,
-    onClose: PropTypes.func
+    Entity: PropTypes.node.isRequired,
+    dialogIsOpen: PropTypes.bool.isRequired,
+    dialogItemsCombinedState: PropTypes.exact(itemsCombinedStatePropTypeShape).isRequired,
+    filterDialogItems: PropTypes.func.isRequired,
+    onClose: PropTypes.func.isRequired,
+    refreshAllItems: PropTypes.func.isRequired,
+    searchBoxPlaceholder: PropTypes.string.isRequired,
+    setDialogIsOpen: PropTypes.func.isRequired,
+    setDialogItems: PropTypes.func.isRequired
 };

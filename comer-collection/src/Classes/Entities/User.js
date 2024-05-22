@@ -44,8 +44,15 @@ class User extends Entity {
             const user = useTableRowItem();
             const [appUser] = useAppUser();
             return (
-                <Stack direction="row" alignItems="center" spacing={1}>
-                    <Typography variant="body1">{user.id}</Typography>
+                <Stack
+                    alignItems="center"
+                    direction="row"
+                    spacing={1}
+                >
+                    <Typography variant="body1">
+                        {user.id}
+                    </Typography>
+
                     {user.id === appUser.id && (
                         <PersonIcon color="secondary" />
                     )}
@@ -55,8 +62,17 @@ class User extends Entity {
         IDWithAccessIcon () {
             const user = useTableRowItem();
             return (
-                <Stack direction="row" spacing={1} alignItems="center">
-                    <Typography variant="body1">{user.id} </Typography>
+                <Stack
+                    alignItems="center"
+                    direction="row"
+                    spacing={1}
+                >
+                    <Typography variant="body1">
+                        {user.id}
+
+                        {" "}
+                    </Typography>
+
                     {
                         (user.is_admin && <SecurityIcon color="secondary" />) ||
                         (user.is_collection_manager && <CollectionManagerIcon color="secondary" />)
@@ -69,17 +85,29 @@ class User extends Entity {
             return (
                 user.has_name
                     ? (
-                        <Typography variant="body1">{user.full_name_reverse}</Typography>
+                        <Typography variant="body1">
+                            {user.full_name_reverse}
+                        </Typography>
                     )
                     : (
-                        <Typography variant="body1" sx={{ opacity: 0.5 }}>Not set</Typography>
+                        <Typography
+                            sx={{ opacity: 0.5 }}
+                            variant="body1"
+                        >
+                            Not set
+                        </Typography>
                     )
             );
         },
         Email () {
             const user = useTableRowItem();
             return (
-                <Typography variant="body1" color="grey">{user.email}</Typography>
+                <Typography
+                    color="grey"
+                    variant="body1"
+                >
+                    {user.email}
+                </Typography>
             );
         },
         EmailWithCopyButton () {
@@ -89,17 +117,36 @@ class User extends Entity {
                 clipboard(user.email);
             }, [clipboard, user.email]);
             return (
-                <Button color="grey" variant="text" sx={{ textTransform: "unset" }} onClick={handleCopyToClipboard} >
-                    <Typography variant="body1">{user.email}</Typography>
+                <Button
+                    color="grey"
+                    onClick={handleCopyToClipboard}
+                    sx={{ textTransform: "unset" }}
+                    variant="text"
+                >
+                    <Typography variant="body1">
+                        {user.email}
+                    </Typography>
                 </Button>
             );
         },
         StackedNameEmail () {
             const user = useTableRowItem();
             return (
-                <Stack direction="column" paddingTop={1} paddingBottom={1}>
-                    <Typography variant="body1">{user.full_name_reverse}</Typography>
-                    <Typography variant="body1" sx={{ opacity: 0.5 }}>{user.email}</Typography>
+                <Stack
+                    direction="column"
+                    paddingBottom={1}
+                    paddingTop={1}
+                >
+                    <Typography variant="body1">
+                        {user.full_name_reverse}
+                    </Typography>
+
+                    <Typography
+                        sx={{ opacity: 0.5 }}
+                        variant="body1"
+                    >
+                        {user.email}
+                    </Typography>
                 </Stack>
             );
         },
@@ -112,20 +159,26 @@ class User extends Entity {
             }, [handleOpenUserPasswordResetDialog, user]);
             if (appUser.id === user.id) {
                 return (
-                    <Button startIcon={<OpenInNewIcon />} color="secondary"
+                    <Button
+                        color="secondary"
+                        onClick={handleNavigateToChangePassword}
+                        startIcon={<OpenInNewIcon />}
                         variant="outlined"
-                        onClick={handleNavigateToChangePassword}>
-                        <Typography variant="body1">Change</Typography>
+                    >
+                        <Typography variant="body1">
+                            Change
+                        </Typography>
                     </Button>
                 );
             } else {
                 return (
                     <Button
-                        startIcon={user.has_password ? <LockResetIcon /> : <LockIcon />}
                         color={user.is_admin_or_collection_manager ? "secondary" : "primary"}
                         itemID={user.id}
+                        onClick={handleOpenPasswordResetDialog}
+                        startIcon={user.has_password ? <LockResetIcon /> : <LockIcon />}
                         variant={user.has_password ? "outlined" : "contained"}
-                        onClick={handleOpenPasswordResetDialog}>
+                    >
                         <Typography variant="body1">
                             {user.has_password ? "Reset" : "Set"}
                         </Typography>
@@ -140,13 +193,20 @@ class User extends Entity {
                 handleOpenUserAssignCourseDialog(user);
             }, [handleOpenUserAssignCourseDialog, user]);
             return (
-                <Stack direction="row" spacing={1} alignItems="center">
-                    <Button variant="text"
+                <Stack
+                    alignItems="center"
+                    direction="row"
+                    spacing={1}
+                >
+                    <Button
                         color="lightgrey"
-                        startIcon={<SchoolIcon />}
                         onClick={handleOpenAssignCourseDialog}
+                        startIcon={<SchoolIcon />}
+                        variant="text"
                     >
-                        <Typography variant="body1">{user.Courses.length}</Typography>
+                        <Typography variant="body1">
+                            {user.Courses.length}
+                        </Typography>
                     </Button>
                 </Stack>
             );
@@ -158,13 +218,27 @@ class User extends Entity {
                 handleOpenViewUserExhibitionDialog(user);
             }, [handleOpenViewUserExhibitionDialog, user]);
             return (
-                <Stack direction="row" spacing={1}>
-                    <Button variant="text" sx={{ textTransform: "unset" }}
+                <Stack
+                    direction="row"
+                    spacing={1}
+                >
+                    <Button
                         color="lightgrey"
-                        startIcon={<PhotoCameraBackIcon />}
                         onClick={handleOpenViewExhibitionDialog}
+                        startIcon={<PhotoCameraBackIcon />}
+                        sx={{ textTransform: "unset" }}
+                        variant="text"
                     >
-                        <Typography variant="body1">{user.Exhibitions.length} of {user.exhibition_quota}</Typography>
+                        <Typography variant="body1">
+                            {user.Exhibitions.length}
+
+                            {" "}
+                            of
+
+                            {" "}
+
+                            {user.exhibition_quota}
+                        </Typography>
                     </Button>
                 </Stack>
             );
@@ -177,7 +251,8 @@ class User extends Entity {
                 handleOpenUserPrivilegesDialog(user);
             }, [handleOpenUserPrivilegesDialog, user]);
             return (
-                <Button color="lightgrey" sx={{ textTransform: "unset" }}
+                <Button
+                    color="lightgrey"
                     disabled={user.id === appUser.id}
                     onClick={handleOpenPrivilegesDialog}
                     startIcon={
@@ -185,8 +260,15 @@ class User extends Entity {
                         (user.is_collection_manager && <CollectionManagerIcon color="secondary" />) ||
                         (<PersonIcon color="primary" />)
                     }
+                    sx={{ textTransform: "unset" }}
                 >
-                    <Typography variant="body1" align="left" width={90} >{user.is_admin ? "Administrator" : user.is_collection_manager ? "Collection Manager" : "Curator"}</Typography>
+                    <Typography
+                        align="left"
+                        variant="body1"
+                        width={90}
+                    >
+                        {user.is_admin ? "Administrator" : user.is_collection_manager ? "Collection Manager" : "Curator"}
+                    </Typography>
                 </Button>
             );
         },
@@ -199,10 +281,10 @@ class User extends Entity {
             }, [handleChangeUserActivationStatus, user]);
             return (
                 <Switch
-                    itemID={user.id}
-                    checked={user.is_active && user.has_password}
-                    disabled={user.id === appUser.id || !user.has_password}
+                    checked={user.is_active ? user.has_password : null}
                     color={user.is_admin_or_collection_manager ? "secondary" : "primary"}
+                    disabled={user.id === appUser.id || !user.has_password}
+                    itemID={user.id}
                     onClick={handleChangeActivationStatus}
                 />
             );
@@ -226,13 +308,17 @@ class User extends Entity {
             }, [user, handleOpenUserDeleteDialog]);
             const disabled = Boolean(user.Courses.length || user.Exhibitions.length || user.id === appUser.id);
             return (
-                <Entity.TableCells.DeleteButton onClick={handleOpenDeleteDialog} {... disabled } />
+                <Entity.TableCells.DeleteButton
+                    onClick={handleOpenDeleteDialog}
+                    {... disabled}
+                />
             );
         },
         OptionsArray () {
             return (
                 <>
                     <User.TableCells.EditButton />
+
                     <User.TableCells.DeleteButton />
                 </>
             );

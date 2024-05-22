@@ -5,10 +5,7 @@ import PropTypes from "prop-types";
 
 const SearchBox = ({ searchQuery, setSearchQuery, width, placeholder }) => {
     return (
-        <TextField variant="outlined" placeholder={placeholder ?? "Search"} value={searchQuery} sx={{ width }}
-            onChange={(e) => {
-                setSearchQuery(e.target.value);
-            }}
+        <TextField
             InputProps={{
                 sx: {
                     height: "100%"
@@ -20,24 +17,35 @@ const SearchBox = ({ searchQuery, setSearchQuery, width, placeholder }) => {
                 ),
                 endAdornment: (
                     <InputAdornment position="end">
-                        <IconButton sx={{
-                            display: searchQuery === "" ? "none" : ""
-                        }} onClick={() => {
-                            setSearchQuery("");
-                        }}>
+                        <IconButton
+                            onClick={() => {
+                                setSearchQuery("");
+                            }}
+                            sx={{
+                                display: searchQuery === "" ? "none" : ""
+                            }}
+                        >
                             <ClearIcon />
                         </IconButton>
                     </InputAdornment>
                 )
-            }}></TextField>
+            }}
+            onChange={(e) => {
+                setSearchQuery(e.target.value);
+            }}
+            placeholder={placeholder ?? "Search"}
+            sx={{ width }}
+            value={searchQuery}
+            variant="outlined"
+        />
     );
 };
 
 SearchBox.propTypes = {
+    placeholder: PropTypes.string,
     searchQuery: PropTypes.string,
     setSearchQuery: PropTypes.func,
-    width: PropTypes.string,
-    placeholder: PropTypes.string
+    width: PropTypes.string
 };
 
 export default SearchBox;

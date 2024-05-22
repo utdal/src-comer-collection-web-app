@@ -9,9 +9,9 @@ import SearchBox from "../../Components/SearchBox.js";
 import { ItemSingleDeleteDialog } from "../../Components/Dialogs/ItemSingleDeleteDialog.js";
 import { ItemMultiCreateDialog } from "../../Components/Dialogs/ItemMultiCreateDialog.js";
 import { ItemSingleEditDialog } from "../../Components/Dialogs/ItemSingleEditDialog.js";
-import { DataTable } from "../../Components/DataTable.js";
+import { DataTable } from "../../Components/DataTable/DataTable.js";
 import { doesItemMatchSearchQuery } from "../../Helpers/SearchUtilities.js";
-import { AssociationManagementDialog } from "../../Components/Dialogs/AssociationManagementDialog.js";
+import { AssociationManagementDialog } from "../../Components/Dialogs/AssociationManagementDialog/AssociationManagementDialog.js";
 import { Navigate, useNavigate } from "react-router";
 import { SelectionSummary } from "../../Components/SelectionSummary.js";
 import { sendAuthenticatedRequest } from "../../Helpers/APICalls.js";
@@ -56,9 +56,6 @@ const CourseManagement = () => {
     const clearFilters = () => {
         setSearchQuery("");
     };
-
-    const [sortColumn, setSortColumn] = useState("ID");
-    const [sortAscending, setSortAscending] = useState(true);
 
     const [, setSelectedNavItem] = useAccountNav();
     const [appUser] = useAppUser();
@@ -176,8 +173,9 @@ const CourseManagement = () => {
                     sx={{ gridArea: "top" }}
                 >
                     <SearchBox
-                        {...{ searchQuery, setSearchQuery }}
                         placeholder="Search by course name or notes"
+                        searchQuery={searchQuery}
+                        setSearchQuery={setSearchQuery}
                         width="50%"
                     />
 
@@ -232,15 +230,10 @@ const CourseManagement = () => {
                 </Stack>
 
                 <DataTable
-                    items={coursesCombinedState.items}
-                    rowSelectionEnabled
-                    selectedItems={coursesCombinedState.selectedItems}
-                    setSelectedItems={setSelectedCourses}
-                    tableFields={Course.tableFields}
-                    visibleItems={coursesCombinedState.visibleItems}
-                    {...{ sortColumn, setSortColumn, sortAscending, setSortAscending }}
                     emptyMinHeight="300px"
+                    rowSelectionEnabled
                     sx={{ gridArea: "table" }}
+                    tableFields={Course.tableFields}
                     {...
                         (coursesCombinedState.visibleItems.length === coursesCombinedState.items.length && {
                             noContentMessage: "No courses yet",
@@ -301,39 +294,44 @@ const CourseManagement = () => {
                 <ItemMultiCreateDialog
                     Entity={Course}
                     dialogInstructions={"Add courses, edit the course fields, then click 'Create'.  You can enroll users after creating the course."}
+                    dialogIsOpen={dialogIsOpen}
                     refreshAllItems={fetchData}
-                    {...{ dialogIsOpen, setDialogIsOpen }}
+                    setDialogIsOpen={setDialogIsOpen}
                 />
 
                 <ItemSingleEditDialog
                     Entity={Course}
+                    editDialogIsOpen={editDialogIsOpen}
                     editDialogItem={editDialogCourse}
                     refreshAllItems={fetchData}
-                    {...{ editDialogIsOpen, setEditDialogIsOpen }}
+                    setEditDialogIsOpen={setEditDialogIsOpen}
                 />
 
                 <ItemSingleDeleteDialog
                     Entity={Course}
                     allItems={coursesCombinedState.items}
+                    deleteDialogIsOpen={deleteDialogIsOpen}
                     deleteDialogItem={deleteDialogCourse}
                     setAllItems={setCourses}
-                    {...{ deleteDialogIsOpen, setDeleteDialogIsOpen }}
+                    setDeleteDialogIsOpen={setDeleteDialogIsOpen}
                 />
 
                 <AssociationManagementDialog
                     Association={EnrollmentCoursePrimary}
                     defaultSortAscending
                     defaultSortColumn="Name"
-                    dialogButtonForSecondaryManagement={<Button
-                        onClick={() => {
-                            navigate("/Account/Admin/Users");
-                        }}
-                        variant="outlined"
-                    >
-                        <Typography>
-                            Go to user management
-                        </Typography>
-                    </Button>}
+                    dialogButtonForSecondaryManagement={
+                        <Button
+                            onClick={() => {
+                                navigate("/Account/Admin/Users");
+                            }}
+                            variant="outlined"
+                        >
+                            <Typography>
+                                Go to user management
+                            </Typography>
+                        </Button>
+                    }
                     dialogIsOpen={assignUserDialogIsOpen}
                     editMode
                     primaryItems={assignUserDialogCourses}

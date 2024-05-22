@@ -14,8 +14,11 @@ export const ItemMultiDeleteDialog = ({ entityPlural, deleteDialogItems, deleteD
     const [confirmText, setConfirmText] = useState("");
 
     return (
-        <Dialog component="form" fullWidth={true} maxWidth="sm" sx={{ zIndex: 10000 }}
-            open={deleteDialogIsOpen} disableEscapeKeyDown
+        <Dialog
+            component="form"
+            disableEscapeKeyDown
+            fullWidth
+            maxWidth="sm"
             onClose={(event, reason) => {
                 if (reason === "backdropClick") { return; }
                 setDeleteDialogIsOpen(false);
@@ -24,33 +27,84 @@ export const ItemMultiDeleteDialog = ({ entityPlural, deleteDialogItems, deleteD
                 e.preventDefault();
                 handleDelete(deleteDialogItems.map((i) => i.id));
             }}
+            open={deleteDialogIsOpen}
+            sx={{ zIndex: 10000 }}
         >
-            <DialogTitle variant="h4" textAlign="center">Delete {deleteDialogItems?.length} {entityPlural[0].toUpperCase()}{entityPlural.substring(1)}</DialogTitle>
+            <DialogTitle
+                textAlign="center"
+                variant="h4"
+            >
+                Delete
+                {deleteDialogItems?.length}
+
+                {" "}
+
+                {entityPlural[0].toUpperCase()}
+
+                {entityPlural.substring(1)}
+            </DialogTitle>
 
             <DialogContent>
-                <Stack direction="column" spacing={2}>
-                    <DialogContentText variant="body1">Are you sure you want to delete {deleteDialogItems?.length} {entityPlural}?
+                <Stack
+                    direction="column"
+                    spacing={2}
+                >
+                    <DialogContentText variant="body1">
+                        Are you sure you want to delete
+                        {deleteDialogItems?.length}
+
+                        {" "}
+
+                        {entityPlural}
+                        ?
                     </DialogContentText>
 
-                    <TextField autoComplete="off" placeholder="Type 'delete' to confirm" value={confirmText ?? ""}
+                    <TextField
+                        autoComplete="off"
                         onChange={(e) => {
                             setConfirmText(e.target.value);
                         }}
+                        placeholder="Type 'delete' to confirm"
+                        value={confirmText ?? ""}
                     />
                 </Stack>
             </DialogContent>
+
             <DialogActions>
-                <Stack direction="row" justifyContent="space-between" spacing={1} sx={{ width: "100%" }}>
-                    <Button color="primary" variant="outlined" sx={{ width: "100%" }} onClick={() => {
-                        setDeleteDialogIsOpen(false);
-                        setConfirmText("");
-                    }}>
-                        <Typography variant="body1">Cancel</Typography>
+                <Stack
+                    direction="row"
+                    justifyContent="space-between"
+                    spacing={1}
+                    sx={{ width: "100%" }}
+                >
+                    <Button
+                        color="primary"
+                        onClick={() => {
+                            setDeleteDialogIsOpen(false);
+                            setConfirmText("");
+                        }}
+                        sx={{ width: "100%" }}
+                        variant="outlined"
+                    >
+                        <Typography variant="body1">
+                            Cancel
+                        </Typography>
                     </Button>
-                    <Button color="error" type="submit"
+
+                    <Button
+                        color="error"
                         disabled={confirmText?.toLowerCase() !== "delete"}
-                        variant="contained" size="large" startIcon={<DeleteIcon />} sx={{ width: "100%" }} >
-                        <Typography variant="body1">Delete ({deleteDialogItems.length})</Typography>
+                        size="large"
+                        startIcon={<DeleteIcon />}
+                        sx={{ width: "100%" }}
+                        type="submit"
+                        variant="contained"
+                    >
+                        <Typography variant="body1">
+                            Delete (
+                            {deleteDialogItems.length}
+                            )
+                        </Typography>
                     </Button>
                 </Stack>
             </DialogActions>
@@ -59,9 +113,9 @@ export const ItemMultiDeleteDialog = ({ entityPlural, deleteDialogItems, deleteD
 };
 
 ItemMultiDeleteDialog.propTypes = {
+    deleteDialogIsOpen: PropTypes.bool.isRequired,
+    deleteDialogItems: PropTypes.arrayOf(),
     entityPlural: PropTypes.string,
-    deleteDialogItems: PropTypes.arrayOf(PropTypes.object),
-    deleteDialogIsOpen: PropTypes.bool,
-    setDeleteDialogIsOpen: PropTypes.func,
-    handleDelete: PropTypes.func
+    handleDelete: PropTypes.func,
+    setDeleteDialogIsOpen: PropTypes.func
 };

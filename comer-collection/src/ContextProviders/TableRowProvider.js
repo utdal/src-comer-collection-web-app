@@ -1,5 +1,6 @@
 import React, { createContext, useContext } from "react";
 import PropTypes from "prop-types";
+import { entityPropTypeShape } from "../Classes/Entity.js";
 
 const TableRowContext = createContext();
 
@@ -12,8 +13,8 @@ export const TableRowProvider = ({ item, children }) => {
 };
 
 TableRowProvider.propTypes = {
-    item: PropTypes.object,
-    children: PropTypes.node
+    children: PropTypes.arrayOf(PropTypes.element).isRequired,
+    item: PropTypes.shape(entityPropTypeShape).isRequired
 };
 
 /**

@@ -19,33 +19,69 @@ export const SelectionSummary = ({ entitySingular, entityPlural }) => {
     }, [setSelectedItems]);
 
     return (
-        <Stack direction="row" alignItems="center" spacing={2}>
+        <Stack
+            alignItems="center"
+            direction="row"
+            spacing={2}
+        >
             {(selectedItems.length > 0 &&
-                <CheckIcon fontSize="large" sx={{ opacity: 0.5 }} />
+                <CheckIcon
+                    fontSize="large"
+                    sx={{ opacity: 0.5 }}
+                />
             ) || (selectedItems.length === 0 &&
-                <ArrowUpwardIcon fontSize="large" sx={{ opacity: 0.5 }} />
+                <ArrowUpwardIcon
+                    fontSize="large"
+                    sx={{ opacity: 0.5 }}
+                />
             )}
+
             <Stack direction="column">
-                <Typography variant="body1" sx={{ opacity: 0.5 }}>
+                <Typography
+                    sx={{ opacity: 0.5 }}
+                    variant="body1"
+                >
                     {visibleItems.length < items.length
                         ? `Showing ${visibleItems.length} of ${items.length} ${items.length === 1 ? entitySingular : entityPlural}`
                         : `${items.length} ${items.length === 1 ? entitySingular : entityPlural}`}
                 </Typography>
+
                 {(selectedItems.length > 0 &&
-                    <Typography variant="body1">{selectedItems.length} {selectedItems.length === 1 ? entitySingular : entityPlural} selected
+                    <Typography variant="body1">
+                        {selectedItems.length}
+
+                        {" "}
+
+                        {selectedItems.length === 1 ? entitySingular : entityPlural}
+
+                        {" "}
+
+                        selected
+
                         {selectedVisibleItems.length < selectedItems.length
                             ? ` (${selectedVisibleItems.length} shown)`
-                            : ""
-                        }
+                            : ""}
                     </Typography>
                 ) || (selectedItems.length === 0 &&
-                    <Typography variant="body1" sx={{ opacity: 0.5 }}>Select items to use bulk actions</Typography>
+                    <Typography
+                        sx={{ opacity: 0.5 }}
+                        variant="body1"
+                    >
+                        Select items to use bulk actions
+                    </Typography>
                 )}
 
             </Stack>
+
             {selectedItems.length > 0 && (
-                <Button variant="outlined" startIcon={<DeselectIcon />} onClick={clearSelectedItems}>
-                    <Typography variant="body1">Clear Selection</Typography>
+                <Button
+                    onClick={clearSelectedItems}
+                    startIcon={<DeselectIcon />}
+                    variant="outlined"
+                >
+                    <Typography variant="body1">
+                        Clear Selection
+                    </Typography>
                 </Button>
             )}
         </Stack>
@@ -53,10 +89,10 @@ export const SelectionSummary = ({ entitySingular, entityPlural }) => {
 };
 
 SelectionSummary.propTypes = {
+    entityPlural: PropTypes.string,
+    entitySingular: PropTypes.string,
     items: PropTypes.arrayOf(PropTypes.object).isRequired,
     selectedItems: PropTypes.arrayOf(PropTypes.object).isRequired,
     setSelectedItems: PropTypes.func,
-    visibleItems: PropTypes.arrayOf(PropTypes.object).isRequired,
-    entitySingular: PropTypes.string,
-    entityPlural: PropTypes.string
+    visibleItems: PropTypes.arrayOf(PropTypes.object).isRequired
 };

@@ -147,10 +147,17 @@ const ExhibitionPage = () => {
     }, [editModeActive, handleControlS]);
 
     return (!appUserIsLoaded &&
-        <FullPageMessage message="Loading exhibition..." Icon={AccessTimeIcon} />
+        <FullPageMessage
+            Icon={AccessTimeIcon}
+            message="Loading exhibition..."
+        />
     ) || (appUserIsLoaded && !isPermissionGranted &&
-        <FullPageMessage message="This exhibition is not available" buttonText="View Public Exhibitions"
-            buttonDestination="/Exhibitions" Icon={InfoIcon} />
+        <FullPageMessage
+            Icon={InfoIcon}
+            buttonDestination="/Exhibitions"
+            buttonText="View Public Exhibitions"
+            message="This exhibition is not available"
+        />
     ) || (appUserIsLoaded && isPermissionGranted &&
         <Box
             sx={{
@@ -162,38 +169,43 @@ const ExhibitionPage = () => {
                 gridTemplateAreas: `
                     "viewer editpane"
                 `
-            }}>
-
-            <Exhibition3DViewport {...{
-                exhibitionState,
-                exhibitionMetadata,
-                exhibitionIsLoaded,
-                globalImageCatalog,
-                exhibitionIsEditable,
-                editModeActive,
-                setEditModeActive
             }}
-            sx={{ gridArea: "viewer", width: "100%", height: "calc(100vh - 64px)" }}
+        >
+
+            <Exhibition3DViewport
+                editModeActive={editModeActive}
+                exhibitionIsEditable={exhibitionIsEditable}
+                exhibitionIsLoaded={exhibitionIsLoaded}
+                exhibitionMetadata={exhibitionMetadata}
+                exhibitionState={exhibitionState}
+                globalImageCatalog={globalImageCatalog}
+                setEditModeActive={setEditModeActive}
+                sx={{
+                    gridArea: "viewer",
+                    width: "100%",
+                    height: "calc(100vh - 64px)"
+                }}
             />
 
-            {editModeActive && (
-                <ExhibitionEditPane {...{
-                    exhibitionId,
-                    exhibitionMetadata,
-                    exhibitionIsLoaded,
-                    exhibitionState,
-                    exhibitionEditDispatch,
-                    globalImageCatalog,
-                    editModeActive,
-                    setEditModeActive,
-                    saveExhibition
-                }}
-                sx={{
-                    gridArea: "editpane",
-                    display: editModeActive ? "" : "none"
-                }}
-                />
-            )}
+            {editModeActive
+                ? (
+                    <ExhibitionEditPane
+                        editModeActive={editModeActive}
+                        exhibitionEditDispatch={exhibitionEditDispatch}
+                        exhibitionId={exhibitionId}
+                        exhibitionIsLoaded={exhibitionIsLoaded}
+                        exhibitionMetadata={exhibitionMetadata}
+                        exhibitionState={exhibitionState}
+                        globalImageCatalog={globalImageCatalog}
+                        saveExhibition={saveExhibition}
+                        setEditModeActive={setEditModeActive}
+                        sx={{
+                            gridArea: "editpane",
+                            display: editModeActive ? "" : "none"
+                        }}
+                    />
+                )
+                : null}
 
         </Box>
     );

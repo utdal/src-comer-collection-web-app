@@ -1,19 +1,23 @@
-import React, { createContext, useContext } from "react";
+import React, { createContext, useContext, useMemo } from "react";
 import PropTypes from "prop-types";
 import { ManagementPageProvider, useItems, useVisibleItems } from "./ManagementPageProvider.js";
+import { entityPropTypeShape, itemsCombinedStatePropTypeShape } from "../Classes/Entity.js";
 
 const AssociationManagementPageContext = createContext();
 
 export const AssociationManagementPageProvider = ({ managementCallbacks, secondaryItemsCombinedState, setSecondaryItems, setSelectedSecondaryItems, relevantPrimaryItems, AssociationType, children }) => {
+    const contextValue = useMemo(() => {
+        return {
+            relevantPrimaryItems, AssociationType
+        };
+    }, [relevantPrimaryItems, AssociationType]);
     return (
-        <AssociationManagementPageContext.Provider
-            value={{ relevantPrimaryItems, AssociationType }}
-        >
+        <AssociationManagementPageContext.Provider value={contextValue}>
             <ManagementPageProvider
                 itemsCombinedState={secondaryItemsCombinedState}
+                managementCallbacks={managementCallbacks}
                 setItems={setSecondaryItems}
                 setSelectedItems={setSelectedSecondaryItems}
-                {...{ managementCallbacks }}
             >
                 {children}
             </ManagementPageProvider>
@@ -22,13 +26,13 @@ export const AssociationManagementPageProvider = ({ managementCallbacks, seconda
 };
 
 AssociationManagementPageProvider.propTypes = {
-    AssociationType: PropTypes.any,
-    managementCallbacks: PropTypes.object,
-    secondaryItemsCombinedState: PropTypes.object,
-    setSecondaryItems: PropTypes.func,
-    setSelectedSecondaryItems: PropTypes.func,
-    relevantPrimaryItems: PropTypes.array,
-    children: PropTypes.node
+    AssociationType: PropTypes.node.isRequired,
+    children: PropTypes.arrayOf(PropTypes.element).isRequired,
+    managementCallbacks: PropTypes.objectOf(PropTypes.func).isRequired,
+    relevantPrimaryItems: PropTypes.arrayOf(entityPropTypeShape).isRequired,
+    secondaryItemsCombinedState: PropTypes.exact(itemsCombinedStatePropTypeShape).isRequired,
+    setSecondaryItems: PropTypes.func.isRequired,
+    setSelectedSecondaryItems: PropTypes.func.isRequired
 };
 
 /**

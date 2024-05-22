@@ -1,5 +1,6 @@
-import React, { createContext, useCallback, useContext, useReducer } from "react";
+import React, { createContext, useCallback, useContext, useMemo, useReducer } from "react";
 import PropTypes from "prop-types";
+import { itemsCombinedStatePropTypeShape } from "../Classes/Entity.js";
 
 const itemsReducer = (state, action) => {
     if (action.type === "setItems") {
@@ -53,19 +54,27 @@ const defaultItemsCombinedState = {
 const ManagementPageContext = createContext();
 
 export const ManagementPageProvider = ({ managementCallbacks, itemsCombinedState, setItems, setSelectedItems, children }) => {
+    const contextValue = useMemo(() => {
+        return {
+            managementCallbacks,
+            itemsCombinedState,
+            setItems,
+            setSelectedItems
+        };
+    }, [managementCallbacks, itemsCombinedState, setItems, setSelectedItems]);
     return (
-        <ManagementPageContext.Provider value={{ managementCallbacks, itemsCombinedState, setItems, setSelectedItems }}>
+        <ManagementPageContext.Provider value={contextValue}>
             {children}
         </ManagementPageContext.Provider>
     );
 };
 
 ManagementPageProvider.propTypes = {
-    managementCallbacks: PropTypes.object,
-    itemsCombinedState: PropTypes.object,
-    setItems: PropTypes.func,
-    setSelectedItems: PropTypes.func,
-    children: PropTypes.node
+    children: PropTypes.arrayOf(PropTypes.element).isRequired,
+    itemsCombinedState: PropTypes.shape(itemsCombinedStatePropTypeShape).isRequired,
+    managementCallbacks: PropTypes.objectOf(PropTypes.func).isRequired,
+    setItems: PropTypes.func.isRequired,
+    setSelectedItems: PropTypes.func.isRequired
 };
 
 /**

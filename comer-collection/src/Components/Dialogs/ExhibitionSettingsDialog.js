@@ -39,31 +39,47 @@ export const exhibitionAccessOptions = (adminMode) => [
 
 export const ExhibitionSettingsDialog = ({ editMode, adminMode, dialogIsOpen, setDialogIsOpen, dialogExhibitionId, dialogExhibitionTitle, dialogExhibitionAccess, setDialogExhibitionTitle, setDialogExhibitionAccess, handleExhibitionCreate, handleExhibitionEdit }) => {
     return (
-        <Dialog component="form" sx={{ zIndex: 10000 }}
-            open={dialogIsOpen} disableEscapeKeyDown
+        <Dialog
+            component="form"
+            disableEscapeKeyDown
+            fullWidth
             onClose={(event, reason) => {
                 if (reason === "backdropClick") { return; }
                 setDialogIsOpen(false);
             }}
-            fullWidth={true}
             onSubmit={(e) => {
                 e.preventDefault();
                 if (editMode) { handleExhibitionEdit(dialogExhibitionId, dialogExhibitionTitle, dialogExhibitionAccess); } else { handleExhibitionCreate(dialogExhibitionTitle, dialogExhibitionAccess); }
             }}
+            open={dialogIsOpen}
+            sx={{ zIndex: 10000 }}
         >
-            <DialogTitle variant="h4" textAlign="center">{editMode ? "Edit Exhibition" : "Create Exhibition"}</DialogTitle>
+            <DialogTitle
+                textAlign="center"
+                variant="h4"
+            >
+                {editMode ? "Edit Exhibition" : "Create Exhibition"}
+            </DialogTitle>
+
             <DialogContent>
                 <Stack spacing={2}>
-                    <DialogContentText variant="body1">{
-                        adminMode
-                            ? "Set the title and access level for this exhibition.  These fields can be changed later by you or the owner."
-                            : "Set the title and access level for your exhibition.  These fields can be changed later by you or your instructor/administrator."
-                    }</DialogContentText>
-                    <TextField value={dialogExhibitionTitle} label="Exhibition Title"
+                    <DialogContentText variant="body1">
+                        {
+                            adminMode
+                                ? "Set the title and access level for this exhibition.  These fields can be changed later by you or the owner."
+                                : "Set the title and access level for your exhibition.  These fields can be changed later by you or your instructor/administrator."
+                        }
+                    </DialogContentText>
+
+                    <TextField
+                        label="Exhibition Title"
                         onChange={(e) => {
                             setDialogExhibitionTitle(e.target.value);
                         }}
-                        required />
+                        required
+                        value={dialogExhibitionTitle}
+                    />
+
                     <DialogContentText variant="body1">
                         {
                             adminMode
@@ -71,17 +87,42 @@ export const ExhibitionSettingsDialog = ({ editMode, adminMode, dialogIsOpen, se
                                 : "Note that the privacy settings below will have no effect if you include personal information in the exhibition title.  Your instructor/administrator will be able to see your name regardless of this setting."
                         }
                     </DialogContentText>
-                    <ToggleButtonGroup required exclusive orientation="vertical" value={dialogExhibitionAccess}
+
+                    <ToggleButtonGroup
+                        exclusive
                         onChange={(e, next) => {
                             setDialogExhibitionAccess(next);
-                        }}>
+                        }}
+                        orientation="vertical"
+                        required
+                        value={dialogExhibitionAccess}
+                    >
                         {exhibitionAccessOptions(Boolean(adminMode)).map((option) => (
-                            <ToggleButton key={option.value} value={option.value} sx={{ textTransform: "unset", minHeight: "100px" }}>
-                                <Stack direction="row" alignItems="center" spacing={2} paddingLeft={1}>
+                            <ToggleButton
+                                key={option.value}
+                                sx={{ textTransform: "unset", minHeight: "100px" }}
+                                value={option.value}
+                            >
+                                <Stack
+                                    alignItems="center"
+                                    direction="row"
+                                    paddingLeft={1}
+                                    spacing={2}
+                                >
                                     <option.icon fontSize="large" />
-                                    <Stack direction="column" sx={{ width: "460px" }} justifyContent="left">
-                                        <Typography fontWeight="bold">{option.displayText}</Typography>
-                                        <Typography sx={{ opacity: 0.5 }}>{option.caption}</Typography>
+
+                                    <Stack
+                                        direction="column"
+                                        justifyContent="left"
+                                        sx={{ width: "460px" }}
+                                    >
+                                        <Typography fontWeight="bold">
+                                            {option.displayText}
+                                        </Typography>
+
+                                        <Typography sx={{ opacity: 0.5 }}>
+                                            {option.caption}
+                                        </Typography>
                                     </Stack>
                                 </Stack>
                             </ToggleButton>
@@ -89,19 +130,41 @@ export const ExhibitionSettingsDialog = ({ editMode, adminMode, dialogIsOpen, se
                     </ToggleButtonGroup>
                 </Stack>
             </DialogContent>
+
             <DialogActions>
-                <Stack direction="row" justifyContent="space-between" spacing={1} sx={{ width: "100%" }}>
-                    <Button color="primary" variant="outlined" sx={{ width: "100%" }} onClick={() => {
-                        setDialogIsOpen(false);
-                        setDialogExhibitionAccess(null);
-                        setDialogExhibitionTitle("");
-                    }}>
-                        <Typography variant="body1">Cancel</Typography>
+                <Stack
+                    direction="row"
+                    justifyContent="space-between"
+                    spacing={1}
+                    sx={{ width: "100%" }}
+                >
+                    <Button
+                        color="primary"
+                        onClick={() => {
+                            setDialogIsOpen(false);
+                            setDialogExhibitionAccess(null);
+                            setDialogExhibitionTitle("");
+                        }}
+                        sx={{ width: "100%" }}
+                        variant="outlined"
+                    >
+                        <Typography variant="body1">
+                            Cancel
+                        </Typography>
                     </Button>
-                    <Button color="primary" variant="contained" size="large" startIcon={<SaveIcon />} sx={{ width: "100%" }}
+
+                    <Button
+                        color="primary"
                         disabled={!(dialogExhibitionAccess && dialogExhibitionTitle)}
-                        type="submit">
-                        <Typography variant="body1">{editMode ? "Save Settings" : "Create Exhibition"}</Typography>
+                        size="large"
+                        startIcon={<SaveIcon />}
+                        sx={{ width: "100%" }}
+                        type="submit"
+                        variant="contained"
+                    >
+                        <Typography variant="body1">
+                            {editMode ? "Save Settings" : "Create Exhibition"}
+                        </Typography>
                     </Button>
                 </Stack>
             </DialogActions>
@@ -110,15 +173,19 @@ export const ExhibitionSettingsDialog = ({ editMode, adminMode, dialogIsOpen, se
 };
 
 ExhibitionSettingsDialog.propTypes = {
-    editMode: PropTypes.bool,
     adminMode: PropTypes.bool,
-    dialogIsOpen: PropTypes.bool,
-    setDialogIsOpen: PropTypes.func,
-    dialogExhibitionId: PropTypes.number,
-    dialogExhibitionTitle: PropTypes.string,
-    dialogExhibitionAccess: PropTypes.string,
-    setDialogExhibitionTitle: PropTypes.func,
-    setDialogExhibitionAccess: PropTypes.func,
-    handleExhibitionCreate: PropTypes.func,
-    handleExhibitionEdit: PropTypes.func
+    dialogExhibitionAccess: PropTypes.string.isRequired,
+    dialogExhibitionId: PropTypes.number.isRequired,
+    dialogExhibitionTitle: PropTypes.string.isRequired,
+    dialogIsOpen: PropTypes.bool.isRequired,
+    editMode: PropTypes.bool.isRequired,
+    handleExhibitionCreate: PropTypes.func.isRequired,
+    handleExhibitionEdit: PropTypes.func.isRequired,
+    setDialogExhibitionAccess: PropTypes.func.isRequired,
+    setDialogExhibitionTitle: PropTypes.func.isRequired,
+    setDialogIsOpen: PropTypes.func.isRequired
+};
+
+ExhibitionSettingsDialog.defaultProps = {
+    adminMode: false
 };

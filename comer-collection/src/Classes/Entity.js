@@ -1,16 +1,11 @@
-/* eslint-disable react/prop-types */
-import { IconButton } from "@mui/material";
 import { sendAuthenticatedRequest } from "../Helpers/APICalls.js";
-import { DeleteIcon, EditIcon } from "../Imports/Icons.js";
-import React, { useCallback } from "react";
-import { useTableRowItem } from "../ContextProviders/TableRowProvider.js";
-import { useManagementCallbacks } from "../ContextProviders/ManagementPageProvider.js";
+import PropTypes from "prop-types";
 
 export const capitalized = (string) => {
     return string.substr(0, 1).toUpperCase() + string.substr(1).toLowerCase();
 };
 
-class Entity {
+export class Entity {
     static baseUrl = null;
 
     static singular = "item";
@@ -40,47 +35,6 @@ class Entity {
             minute: "2-digit",
             second: "2-digit"
         });
-    };
-
-    static TableCells = {
-        EditButton ({ onClick, disabled }) {
-            return (
-                <IconButton {...{ onClick, disabled }}>
-                    <EditIcon />
-                </IconButton>
-            );
-        },
-        DeleteButton ({ onClick, disabled }) {
-            return (
-                <IconButton {...{ onClick, disabled }}>
-                    <DeleteIcon />
-                </IconButton>
-            );
-        },
-        EntityManageEditButton ({ disabled }) {
-            const item = useTableRowItem();
-            const { handleOpenEntityEditDialog } = useManagementCallbacks();
-            const handleOpenEditDialog = useCallback(() => {
-                handleOpenEntityEditDialog(item);
-            }, [handleOpenEntityEditDialog, item]);
-            return (
-                <Entity.TableCells.EditButton
-                    {...{ disabled }}
-                    onClick={handleOpenEditDialog} />
-            );
-        },
-        EntityManageDeleteButton ({ disabled }) {
-            const item = useTableRowItem();
-            const { handleOpenEntityDeleteDialog } = useManagementCallbacks();
-            const handleOpenDeleteDialog = useCallback(() => {
-                handleOpenEntityDeleteDialog(item);
-            }, [handleOpenEntityDeleteDialog, item]);
-            return (
-                <Entity.TableCells.DeleteButton
-                    {...{ disabled }}
-                    onClick={handleOpenDeleteDialog} />
-            );
-        }
     };
 
     static handleMultiCreate ([...newItems]) {
@@ -118,4 +72,19 @@ class Entity {
     static tableFields = [];
 }
 
-export { Entity };
+export const entityPropTypeShape = {
+    id: PropTypes.number
+};
+
+export const itemsCombinedStatePropTypeShape = {
+    items: PropTypes.arrayOf(entityPropTypeShape),
+    selectedItems: PropTypes.arrayOf(entityPropTypeShape),
+    visibleItems: PropTypes.arrayOf(entityPropTypeShape),
+    selectedVisibleItems: PropTypes.arrayOf(entityPropTypeShape),
+    filterFunction: PropTypes.func
+};
+
+export const tableFieldPropTypeShape = {
+    columnDescription: PropTypes.string,
+    TableCellComponent: PropTypes.elementType
+};

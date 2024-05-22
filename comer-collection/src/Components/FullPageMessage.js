@@ -7,24 +7,45 @@ export const FullPageMessage = ({ message, buttonText, buttonDestination, Icon, 
     const navigate = useNavigate();
 
     return (
-        <Box component={Paper} square sx={{ width: "100%", height: "100%", boxSizing: "border-box", padding: "50px" }}>
-            <Stack direction="column" alignItems="center" justifyContent="center" spacing={2} sx={{ height: "100%" }}>
+        <Box
+            component={Paper}
+            square
+            sx={{ width: "100%", height: "100%", boxSizing: "border-box", padding: "50px" }}
+        >
+            <Stack
+                alignItems="center"
+                direction="column"
+                justifyContent="center"
+                spacing={2}
+                sx={{ height: "100%" }}
+            >
                 <Icon sx={{ fontSize: "150pt", opacity: 0.5 }} />
-                <Typography variant="h4">{message}</Typography>
-                {(buttonDestination || buttonText) && (
-                    <Button variant="contained" onClick={buttonAction ?? (() => navigate(buttonDestination ?? "/SignIn"))}>
-                        <Typography variant="body1">{buttonText ?? "Return to Login Page"}</Typography>
-                    </Button>
-                )}
+
+                <Typography variant="h4">
+                    {message}
+                </Typography>
+
+                {(buttonDestination || buttonText)
+                    ? (
+                        <Button
+                            onClick={buttonAction ?? (() => navigate(buttonDestination ?? "/SignIn"))}
+                            variant="contained"
+                        >
+                            <Typography variant="body1">
+                                {buttonText ?? "Return to Login Page"}
+                            </Typography>
+                        </Button>
+                    )
+                    : null}
             </Stack>
         </Box>
     );
 };
 
 FullPageMessage.propTypes = {
-    message: PropTypes.string,
-    buttonText: PropTypes.string,
-    buttonDestination: PropTypes.string,
-    buttonAction: PropTypes.func,
-    Icon: PropTypes.oneOfType([PropTypes.func, PropTypes.object])
+    Icon: PropTypes.elementType.isRequired,
+    buttonAction: PropTypes.func.isRequired,
+    buttonDestination: PropTypes.string.isRequired,
+    buttonText: PropTypes.string.isRequired,
+    message: PropTypes.string.isRequired
 };

@@ -45,45 +45,70 @@ const SignIn = () => {
     });
 
     return (appUser &&
-        <Navigate to="/Account" replace />) ||
+        <Navigate
+            replace
+            to="/Account"
+        />) ||
     (!appUser &&
-        <Box component={Paper} square sx={{ height: "100%" }}>
-            <Box component="form" sx={{ height: "100%" }} onSubmit={handleSignIn}>
-                <Stack direction="column" spacing={2} alignItems="center" justifyContent="center"
-                    sx={{ width: "100%", height: "100%" }}>
-                    <TextField sx={{ minWidth: "400px" }} autoFocus
-                        error={Boolean(error)}
+        <Box
+            component={Paper}
+            square
+            sx={{ height: "100%" }}
+        >
+            <Box
+                component="form"
+                onSubmit={handleSignIn}
+                sx={{ height: "100%" }}
+            >
+                <Stack
+                    alignItems="center"
+                    direction="column"
+                    justifyContent="center"
+                    spacing={2}
+                    sx={{ width: "100%", height: "100%" }}
+                >
+                    <TextField
+                        autoFocus
                         disabled={!formEnabled}
+                        error={Boolean(error)}
                         label="Email"
-                        type="text"
                         name="email"
-                        value={email}
                         onChange={(event) => {
                             setEmail(event.target.value);
                             setError(false);
                         }}
                         required
+                        sx={{ minWidth: "400px" }}
+                        type="text"
+                        value={email}
                     />
-                    <TextField sx={{ minWidth: "400px" }}
-                        error={Boolean(error)}
+
+                    <TextField
                         disabled={!formEnabled}
+                        error={Boolean(error)}
                         label="Password"
-                        type="password"
                         name="password"
-                        value={password}
                         onChange={(event) => {
                             setPassword(event.target.value);
                             setError(false);
                         }}
                         required
-                    />
-                    <Divider />
-                    <Button type="submit"
-                        variant="contained"
                         sx={{ minWidth: "400px" }}
+                        type="password"
+                        value={password}
+                    />
+
+                    <Divider />
+
+                    <Button
                         disabled={!(email && password && formEnabled)}
+                        sx={{ minWidth: "400px" }}
+                        type="submit"
+                        variant="contained"
                     >
-                        <Typography variant="body1">Sign In</Typography>
+                        <Typography variant="body1">
+                            Sign In
+                        </Typography>
                     </Button>
                 </Stack>
             </Box>

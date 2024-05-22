@@ -48,8 +48,11 @@ export const ItemMultiCreateDialog = ({ Entity, refreshAllItems, dialogInstructi
     const pluralCapitalized = Entity?.plural.substr(0, 1).toUpperCase() + Entity?.plural.substr(1).toLowerCase();
 
     return (
-        <Dialog component="form" fullWidth={true} maxWidth="lg" sx={{ zIndex: 10000 }}
-            open={dialogIsOpen} disableEscapeKeyDown
+        <Dialog
+            component="form"
+            disableEscapeKeyDown
+            fullWidth
+            maxWidth="lg"
             onClose={(event, reason) => {
                 if (reason === "backdropClick") { return; }
                 setDialogIsOpen(false);
@@ -79,33 +82,47 @@ export const ItemMultiCreateDialog = ({ Entity, refreshAllItems, dialogInstructi
                     }
                 });
             }}
+            open={dialogIsOpen}
+            sx={{ zIndex: 10000 }}
         >
-            <DialogTitle textAlign="center" variant="h4">Create {pluralCapitalized}</DialogTitle>
+            <DialogTitle
+                textAlign="center"
+                variant="h4"
+            >
+                Create
+                {pluralCapitalized}
+            </DialogTitle>
+
             <DialogContent>
                 <Stack spacing={2}>
-                    <DialogContentText variant="body1">{dialogInstructions}</DialogContentText>
+                    <DialogContentText variant="body1">
+                        {dialogInstructions}
+                    </DialogContentText>
+
                     {createDialogItems.map((u, index) => (
                         <React.Fragment key={index}>
                             <Divider />
-                            <Stack direction="row" spacing={2} alignItems="center" justifyItems="center">
-                                <DialogContentText variant="body1">{index + 1}</DialogContentText>
-                                <Stack key={index} direction="row" spacing={{ xs: 1, sm: 2 }} alignItems="center" useFlexGap flexWrap="wrap">
+
+                            <Stack
+                                alignItems="center"
+                                direction="row"
+                                justifyItems="center"
+                                spacing={2}
+                            >
+                                <DialogContentText variant="body1">
+                                    {index + 1}
+                                </DialogContentText>
+
+                                <Stack
+                                    alignItems="center"
+                                    direction="row"
+                                    flexWrap="wrap"
+                                    key={index}
+                                    spacing={{ xs: 1, sm: 2 }}
+                                    useFlexGap
+                                >
                                     {Entity.fieldDefinitions.map((f, fi) => (
-                                        <TextField key={f.fieldName}
-                                            name={f.fieldName}
-                                            label={f.displayName ?? ""}
-                                            autoFocus={fi === 0}
-                                            value={u[f.fieldName]}
-                                            multiline={f.multiline}
-                                            minRows={2}
-                                            sx={{
-                                                minWidth: "330px"
-                                            }}
-                                            inputProps={{
-                                                type: f.inputType ?? "text",
-                                                maxLength: f.maxlength ?? 255,
-                                                min: f.minValue
-                                            }}
+                                        <TextField
                                             InputLabelProps={
                                                 (() => {
                                                     if (f.inputType === "datetime-local") {
@@ -115,7 +132,17 @@ export const ItemMultiCreateDialog = ({ Entity, refreshAllItems, dialogInstructi
                                                     }
                                                 })()
                                             }
-                                            required={Boolean(f.isRequired)}
+                                            autoFocus={fi === 0}
+                                            inputProps={{
+                                                type: f.inputType ?? "text",
+                                                maxLength: f.maxlength ?? 255,
+                                                min: f.minValue
+                                            }}
+                                            key={f.fieldName}
+                                            label={f.displayName ?? ""}
+                                            minRows={2}
+                                            multiline={f.multiline}
+                                            name={f.fieldName}
                                             onChange={(e) => {
                                                 createDialogDispatch({
                                                     type: "change",
@@ -123,49 +150,91 @@ export const ItemMultiCreateDialog = ({ Entity, refreshAllItems, dialogInstructi
                                                     index,
                                                     newValue: e.target.value
                                                 });
-                                            }} />
+                                            }}
+                                            required={Boolean(f.isRequired)}
+                                            sx={{
+                                                minWidth: "330px"
+                                            }}
+                                            value={u[f.fieldName]}
+                                        />
                                     ))}
                                 </Stack>
+
                                 <IconButton onClick={() => {
                                     createDialogDispatch({
                                         type: "remove",
                                         index
                                     });
-                                }}>
+                                }}
+                                >
                                     <DeleteIcon />
                                 </IconButton>
                             </Stack>
                         </React.Fragment>
                     ))}
+
                     <Divider />
                 </Stack>
             </DialogContent>
+
             <DialogActions>
-                <Stack direction="row" justifyContent="space-between" spacing={1} sx={{ width: "100%" }}>
-                    <Button color="primary" variant="outlined" size="large" disabled={!submitEnabled} onClick={() => {
-                        setDialogIsOpen(false);
-                        createDialogDispatch({
-                            type: "set",
-                            newArray: []
-                        });
-                    }}>
+                <Stack
+                    direction="row"
+                    justifyContent="space-between"
+                    spacing={1}
+                    sx={{ width: "100%" }}
+                >
+                    <Button
+                        color="primary"
+                        disabled={!submitEnabled}
+                        onClick={() => {
+                            setDialogIsOpen(false);
+                            createDialogDispatch({
+                                type: "set",
+                                newArray: []
+                            });
+                        }}
+                        size="large"
+                        variant="outlined"
+                    >
                         <Typography variant="body1">
                             {createDialogItems.length > 0 ? "Cancel" : "Close"}
                         </Typography>
                     </Button>
-                    <Stack direction="row" spacing={1} sx={{ width: "50%" }}>
-                        <Button color="primary" disabled={!submitEnabled}
-                            variant={createDialogItems.length ? "outlined" : "contained"}
-                            size="large" sx={{ width: "100%" }} onClick={() => {
+
+                    <Stack
+                        direction="row"
+                        spacing={1}
+                        sx={{ width: "50%" }}
+                    >
+                        <Button
+                            color="primary"
+                            disabled={!submitEnabled}
+                            onClick={() => {
                                 createDialogDispatch({
                                     type: "add"
                                 });
-                            }}>
-                            <Typography variant="body1">{createDialogItems.length ? `Add another ${Entity.singular}` : `Add ${Entity.singular}`}</Typography>
+                            }}
+                            size="large"
+                            sx={{ width: "100%" }}
+                            variant={createDialogItems.length ? "outlined" : "contained"}
+                        >
+                            <Typography variant="body1">
+                                {createDialogItems.length ? `Add another ${Entity.singular}` : `Add ${Entity.singular}`}
+                            </Typography>
                         </Button>
-                        <Button type="submit" color="primary" variant="contained" size="large" sx={{ width: "100%" }}
-                            disabled={!submitEnabled || createDialogItems.length === 0}>
-                            <Typography variant="body1">{createDialogItems.length >= 2 ? `Create (${createDialogItems.length})` : "Create"}</Typography>
+
+                        <Button
+                            color="primary"
+                            disabled={!submitEnabled || createDialogItems.length === 0}
+                            size="large"
+                            sx={{ width: "100%" }}
+                            type="submit"
+                            variant="contained"
+                        >
+                            <Typography variant="body1">
+                                {createDialogItems.length >= 2 ? `Create (${createDialogItems.length})` : "Create"}
+                            </Typography>
                         </Button>
                     </Stack>
                 </Stack>
@@ -175,10 +244,9 @@ export const ItemMultiCreateDialog = ({ Entity, refreshAllItems, dialogInstructi
 };
 
 ItemMultiCreateDialog.propTypes = {
-    Entity: PropTypes.any,
-    dialogInstructions: PropTypes.string,
-    createDialogFieldDefinitions: PropTypes.arrayOf(PropTypes.object),
-    dialogIsOpen: PropTypes.bool,
-    setDialogIsOpen: PropTypes.func,
-    refreshAllItems: PropTypes.func
+    Entity: PropTypes.node.isRequired,
+    dialogInstructions: PropTypes.string.isRequired,
+    dialogIsOpen: PropTypes.bool.isRequired,
+    refreshAllItems: PropTypes.func.isRequired,
+    setDialogIsOpen: PropTypes.func.isRequired
 };

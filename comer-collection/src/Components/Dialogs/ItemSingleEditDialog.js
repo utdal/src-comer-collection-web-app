@@ -13,6 +13,7 @@ import PropTypes from "prop-types";
 import { useSnackbar } from "../../ContextProviders/AppFeatures.js";
 import { useAppUser } from "../../ContextProviders/AppUser.js";
 import { User } from "../../Classes/Entities/User.js";
+import { entityPropTypeShape } from "../../Classes/Entity.js";
 
 export const ItemSingleEditDialog = ({ Entity, editDialogItem, refreshAllItems, editDialogIsOpen, setEditDialogIsOpen }) => {
     const editDialogFieldRefs = useRef([]);
@@ -23,13 +24,7 @@ export const ItemSingleEditDialog = ({ Entity, editDialogItem, refreshAllItems, 
         return (
             Entity.fieldDefinitions.map((f) => {
                 return (
-                    <TextField multiline={f.multiline}
-                        minRows={2}
-                        key={f.fieldName}
-                        name={f.fieldName}
-                        label={f.displayName}
-                        required={f.isRequired}
-                        inputRef={(element) => editDialogFieldRefs.current.push(element)}
+                    <TextField
                         defaultValue={
                             f.inputType === "datetime-local"
                                 ? getLocalISOString(editDialogItem?.[f.fieldName])
@@ -39,8 +34,14 @@ export const ItemSingleEditDialog = ({ Entity, editDialogItem, refreshAllItems, 
                             type: f.inputType,
                             min: f.minValue ?? ""
                         }}
-                    >
-                    </TextField>
+                        inputRef={(element) => editDialogFieldRefs.current.push(element)}
+                        key={f.fieldName}
+                        label={f.displayName}
+                        minRows={2}
+                        multiline={f.multiline}
+                        name={f.fieldName}
+                        required={f.isRequired}
+                    />
                 );
             })
         );
@@ -52,8 +53,9 @@ export const ItemSingleEditDialog = ({ Entity, editDialogItem, refreshAllItems, 
     const [appUser, , initializeAppUser] = useAppUser();
 
     return (
-        <Dialog component="form" sx={{ zIndex: 10000 }}
-            open={editDialogIsOpen} disableEscapeKeyDown
+        <Dialog
+            component="form"
+            disableEscapeKeyDown
             onClose={(event, reason) => {
                 if (reason === "backdropClick") { return; }
                 setEditDialogIsOpen(false);
@@ -77,28 +79,71 @@ export const ItemSingleEditDialog = ({ Entity, editDialogItem, refreshAllItems, 
                     showSnackbar(err.message, "error");
                 });
             }}
+            open={editDialogIsOpen}
+            sx={{ zIndex: 10000 }}
         >
-            <DialogTitle variant="h4" textAlign="center">Edit {singularCapitalized}</DialogTitle>
+            <DialogTitle
+                textAlign="center"
+                variant="h4"
+            >
+                Edit
+                {singularCapitalized}
+            </DialogTitle>
+
             <DialogContent
                 sx={{
                     width: "500px"
-                }}>
+                }}
+            >
                 <Stack spacing={2}>
-                    <DialogContentText variant="body1">Edit the {Entity.singular} fields, then click &lsquo;Save {singularCapitalized}&rsquo;.</DialogContentText>
+                    <DialogContentText variant="body1">
+                        Edit the
+                        {Entity.singular}
+
+                        {" "}
+
+                        fields, then click &lsquo;Save
+                        {singularCapitalized}
+                        &rsquo;.
+                    </DialogContentText>
+
                     {editDialogEntryFields}
                 </Stack>
             </DialogContent>
+
             <DialogActions>
-                <Stack direction="row" justifyContent="space-between" spacing={1} sx={{ width: "100%" }}>
-                    <Button color="primary" variant="outlined" sx={{ width: "100%" }} onClick={() => {
-                        setEditDialogIsOpen(false);
-                        editDialogFieldRefs.current = [];
-                    }}>
-                        <Typography variant="body1">Cancel</Typography>
+                <Stack
+                    direction="row"
+                    justifyContent="space-between"
+                    spacing={1}
+                    sx={{ width: "100%" }}
+                >
+                    <Button
+                        color="primary"
+                        onClick={() => {
+                            setEditDialogIsOpen(false);
+                            editDialogFieldRefs.current = [];
+                        }}
+                        sx={{ width: "100%" }}
+                        variant="outlined"
+                    >
+                        <Typography variant="body1">
+                            Cancel
+                        </Typography>
                     </Button>
-                    <Button color="primary" variant="contained" size="large" startIcon={<SaveIcon />} sx={{ width: "100%" }}
-                        type="submit">
-                        <Typography variant="body1">Save {Entity.singular}</Typography>
+
+                    <Button
+                        color="primary"
+                        size="large"
+                        startIcon={<SaveIcon />}
+                        sx={{ width: "100%" }}
+                        type="submit"
+                        variant="contained"
+                    >
+                        <Typography variant="body1">
+                            Save
+                            {Entity.singular}
+                        </Typography>
                     </Button>
                 </Stack>
             </DialogActions>
@@ -107,9 +152,9 @@ export const ItemSingleEditDialog = ({ Entity, editDialogItem, refreshAllItems, 
 };
 
 ItemSingleEditDialog.propTypes = {
-    Entity: PropTypes.any,
-    editDialogItem: PropTypes.object,
-    editDialogIsOpen: PropTypes.bool,
-    setEditDialogIsOpen: PropTypes.func,
-    refreshAllItems: PropTypes.func.isRequired
+    Entity: PropTypes.node.isRequired,
+    editDialogIsOpen: PropTypes.bool.isRequired,
+    editDialogItem: PropTypes.shape(entityPropTypeShape).isRequired,
+    refreshAllItems: PropTypes.func.isRequired,
+    setEditDialogIsOpen: PropTypes.func.isRequired
 };

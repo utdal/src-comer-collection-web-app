@@ -2,6 +2,7 @@ import { Dialog, Stack, DialogTitle, DialogContent, Typography, DialogActions, B
 import React from "react";
 import { PersonIcon } from "../../Imports/Icons.js";
 import PropTypes from "prop-types";
+import { entityPropTypeShape } from "../../Classes/Entity.js";
 
 export const ImageFullScreenViewer = ({ image, setImage, previewerOpen, setPreviewerOpen }) => {
     const fields = [
@@ -55,9 +56,18 @@ export const ImageFullScreenViewer = ({ image, setImage, previewerOpen, setPrevi
     });
 
     return image && (
-        <Dialog open={previewerOpen} maxWidth="lg" sx={{ zIndex: 5000 }}>
+        <Dialog
+            maxWidth="lg"
+            open={previewerOpen}
+            sx={{ zIndex: 5000 }}
+        >
 
-            <DialogTitle textAlign="center" variant="h4">{image.title}</DialogTitle>
+            <DialogTitle
+                textAlign="center"
+                variant="h4"
+            >
+                {image.title}
+            </DialogTitle>
 
             <DialogContent sx={{
                 height: "100%",
@@ -68,49 +78,104 @@ export const ImageFullScreenViewer = ({ image, setImage, previewerOpen, setPrevi
                         'paddingLeft image paddingMiddle fields paddingRight'
                     `,
                 overflow: "hidden"
-            }}>
-                <Stack gridArea="image" maxHeight="500px" alignContent="center">
-                    <img src={`${process.env.REACT_APP_API_HOST}/api/public/images/${image.id}/download`}
-                        style={{ objectFit: "contain" }} width="auto" height="100%"
+            }}
+            >
+                <Stack
+                    alignContent="center"
+                    gridArea="image"
+                    maxHeight="500px"
+                >
+                    <img
+                        height="100%"
+                        src={`${process.env.REACT_APP_API_HOST}/api/public/images/${image.id}/download`}
+                        style={{ objectFit: "contain" }}
+                        width="auto"
                     />
                 </Stack>
-                <Stack gridArea="fields" overflow="auto" spacing={2}>
+
+                <Stack
+                    gridArea="fields"
+                    overflow="auto"
+                    spacing={2}
+                >
                     {/* Artists */}
                     <Stack direction="column">
-                        <Typography variant="h6">{
-                            (artists.length <= 1 && "Artist") ||
+                        <Typography variant="h6">
+                            {
+                                (artists.length <= 1 && "Artist") ||
                             (artists.length > 1 && "Artists")
-                        }</Typography>
+                            }
+                        </Typography>
+
                         {(artists.length >= 1 && artists.map((a) => (
-                            <Stack direction="row" alignItems="center" key={a.id}>
+                            <Stack
+                                alignItems="center"
+                                direction="row"
+                                key={a.id}
+                            >
                                 <PersonIcon />
-                                <Typography variant="body1">{a.safe_display_name}</Typography>
+
+                                <Typography variant="body1">
+                                    {a.safe_display_name}
+                                </Typography>
                             </Stack>
                         ))) || (artists.length === 0 && (
-                            <Stack direction="row" alignItems="center">
+                            <Stack
+                                alignItems="center"
+                                direction="row"
+                            >
                                 <PersonIcon opacity="0.5" />
-                                <Typography sx={{ opacity: 0.5 }} variant="body1">No artist listed</Typography>
+
+                                <Typography
+                                    sx={{ opacity: 0.5 }}
+                                    variant="body1"
+                                >
+                                    No artist listed
+                                </Typography>
                             </Stack>
                         ))}
                     </Stack>
-                    <Stack direction="column" alignItems="left" spacing={2} height="100%">
+
+                    <Stack
+                        alignItems="left"
+                        direction="column"
+                        height="100%"
+                        spacing={2}
+                    >
                         {fields.map((field) => image[field.fieldName] && (
-                            <Stack direction="column" key={field.fieldName}>
-                                <Typography variant="h6">{field.displayName}</Typography>
-                                <Typography sx={{ opacity: 0.5 }} variant="body1">{
-                                    image[field.fieldName]
-                                }</Typography>
+                            <Stack
+                                direction="column"
+                                key={field.fieldName}
+                            >
+                                <Typography variant="h6">
+                                    {field.displayName}
+                                </Typography>
+
+                                <Typography
+                                    sx={{ opacity: 0.5 }}
+                                    variant="body1"
+                                >
+                                    {
+                                        image[field.fieldName]
+                                    }
+                                </Typography>
                             </Stack>
                         ))}
                     </Stack>
                 </Stack>
             </DialogContent>
+
             <DialogActions>
-                <Button variant="contained" onClick={() => {
-                    setPreviewerOpen(false);
-                    setImage(null);
-                }}>
-                    <Typography variant="body1">Close</Typography>
+                <Button
+                    onClick={() => {
+                        setPreviewerOpen(false);
+                        setImage(null);
+                    }}
+                    variant="contained"
+                >
+                    <Typography variant="body1">
+                        Close
+                    </Typography>
                 </Button>
             </DialogActions>
 
@@ -119,8 +184,12 @@ export const ImageFullScreenViewer = ({ image, setImage, previewerOpen, setPrevi
 };
 
 ImageFullScreenViewer.propTypes = {
-    image: PropTypes.object,
-    setImage: PropTypes.func,
-    previewerOpen: PropTypes.bool,
-    setPreviewerOpen: PropTypes.func
+    image: PropTypes.shape(entityPropTypeShape),
+    previewerOpen: PropTypes.bool.isRequired,
+    setImage: PropTypes.func.isRequired,
+    setPreviewerOpen: PropTypes.func.isRequired
+};
+
+ImageFullScreenViewer.defaultProps = {
+    image: null
 };

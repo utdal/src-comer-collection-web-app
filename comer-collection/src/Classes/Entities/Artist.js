@@ -1,8 +1,10 @@
-import React from "react";
-import { useTableRowItem } from "../../ContextProviders/TableRowProvider.js";
+import { ArtistIDCell } from "../../Components/TableCells/Artist/ArtistIDCell.js";
+import { ArtistImageCountCell } from "../../Components/TableCells/Artist/ArtistImageCountCell.js";
+import { ArtistManageOptionsCell } from "../../Components/TableCells/Artist/ArtistManageOptionsCell.js";
+import { ArtistNameCell } from "../../Components/TableCells/Artist/ArtistNameCell.js";
+import { ArtistNotesCell } from "../../Components/TableCells/Artist/ArtistNotesCell.js";
+import { ArtistWebsiteCell } from "../../Components/TableCells/Artist/ArtistWebsiteCell.js";
 import { Entity } from "../Entity.js";
-import { Button, Stack, Typography } from "@mui/material";
-import { ContentCopyIcon, ImageIcon } from "../../Imports/Icons.js";
 
 class Artist extends Entity {
     static baseUrl = "/api/admin/artists";
@@ -38,95 +40,33 @@ class Artist extends Entity {
 
     static searchBoxFields = ["fullName", "fullNameReverse", "notes"];
 
-    static TableCells = {
-        ID () {
-            const artist = useTableRowItem();
-            return (
-                <Typography variant="body1">{artist.id}</Typography>
-            );
-        },
-        Name () {
-            const artist = useTableRowItem();
-            return (
-                <Typography variant="body1">{artist.familyName}, {artist.givenName}</Typography>
-            );
-        },
-        ImageCount () {
-            const artist = useTableRowItem();
-            return (
-                <Stack direction="row" spacing={1} alignItems="center">
-                    <ImageIcon />
-                    <Typography variant="body1">{artist.Images.length}</Typography>
-                </Stack>
-            );
-        },
-        Website () {
-            const artist = useTableRowItem();
-            return artist.website && (
-                <Button size="small"
-                    sx={{ textTransform: "unset" }}
-                    endIcon={<ContentCopyIcon />} >
-                    <Typography variant="body1">{artist.website}</Typography>
-                </Button>
-            );
-        },
-        Notes () {
-            const artist = useTableRowItem();
-            return (artist.notes &&
-                <Typography variant="body1">{artist.notes}</Typography>
-            ) || (!artist.notes &&
-                <Typography variant="body1" sx={{ opacity: 0.5 }}></Typography>
-            );
-        },
-        ManageEditButton () {
-            return (
-                <Entity.TableCells.EntityManageEditButton />
-            );
-        },
-        ManageDeleteButton () {
-            const artist = useTableRowItem();
-            return (
-                <Entity.TableCells.EntityManageDeleteButton
-                    disabled={artist.Images.length > 0} />
-            );
-        },
-        ManageOptionsArray () {
-            return (
-                <Stack direction="row">
-                    <Artist.TableCells.ManageEditButton />
-                    <Artist.TableCells.ManageDeleteButton />
-                </Stack>
-            );
-        }
-    };
-
     static tableFields = [
         {
             columnDescription: "ID",
-            TableCellComponent: Artist.TableCells.ID,
+            TableCellComponent: ArtistIDCell,
             generateSortableValue: (artist) => artist.id
         },
         {
             columnDescription: "Name",
             maxWidth: "300px",
-            TableCellComponent: Artist.TableCells.Name,
+            TableCellComponent: ArtistNameCell,
             generateSortableValue: (artist) => `${artist.familyName?.toLowerCase()}, ${artist.givenName?.toLowerCase()}`
         },
         {
             columnDescription: "Images",
-            TableCellComponent: Artist.TableCells.ImageCount
+            TableCellComponent: ArtistImageCountCell
         },
         {
             columnDescription: "Website",
-            TableCellComponent: Artist.TableCells.Website
+            TableCellComponent: ArtistWebsiteCell
         },
         {
             columnDescription: "Notes",
-            TableCellComponent: Artist.TableCells.Notes
+            TableCellComponent: ArtistNotesCell
         },
         {
             columnDescription: "Options",
-            TableCellComponent: Artist.TableCells.ManageOptionsArray
+            TableCellComponent: ArtistManageOptionsCell
         }
     ];
 }

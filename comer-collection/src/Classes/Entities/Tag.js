@@ -30,33 +30,54 @@ class Tag extends Entity {
         ID () {
             const tag = useTableRowItem();
             return (
-                <Typography variant="body1">{tag.id}</Typography>
+                <Typography variant="body1">
+                    {tag.id}
+                </Typography>
             );
         },
         Data () {
             const tag = useTableRowItem();
             return (
-                <Stack direction="row" spacing={1} alignItems="center">
+                <Stack
+                    alignItems="center"
+                    direction="row"
+                    spacing={1}
+                >
                     <SellIcon />
-                    <Typography variant="body1">{tag.data}</Typography>
+
+                    <Typography variant="body1">
+                        {tag.data}
+                    </Typography>
                 </Stack>
             );
         },
         ImageCount () {
             const tag = useTableRowItem();
             return (
-                <Stack direction="row" spacing={1} alignItems="center">
+                <Stack
+                    alignItems="center"
+                    direction="row"
+                    spacing={1}
+                >
                     <ImageIcon />
-                    <Typography variant="body1">{tag.Images.length}</Typography>
+
+                    <Typography variant="body1">
+                        {tag.Images.length}
+                    </Typography>
                 </Stack>
             );
         },
         Notes () {
             const tag = useTableRowItem();
             return (tag.notes &&
-                <Typography variant="body1">{tag.notes}</Typography>
+                <Typography variant="body1">
+                    {tag.notes}
+                </Typography>
             ) || (!tag.notes &&
-                <Typography variant="body1" sx={{ opacity: 0.5 }}></Typography>
+                <Typography
+                    sx={{ opacity: 0.5 }}
+                    variant="body1"
+                />
             );
         },
         ManageEditButton () {
@@ -68,13 +89,15 @@ class Tag extends Entity {
             const tag = useTableRowItem();
             return (
                 <Entity.TableCells.EntityManageDeleteButton
-                    disabled={tag.Images.length > 0} />
+                    disabled={tag.Images.length > 0}
+                />
             );
         },
         ManageOptionsArray () {
             return (
                 <Stack direction="row">
                     <Tag.TableCells.ManageEditButton />
+
                     <Tag.TableCells.ManageDeleteButton />
                 </Stack>
             );

@@ -116,13 +116,17 @@ class Image extends Entity {
         ID () {
             const image = useTableRowItem();
             return (
-                <Typography variant="body1">{image.id}</Typography>
+                <Typography variant="body1">
+                    {image.id}
+                </Typography>
             );
         },
         Title () {
             const image = useTableRowItem();
             return (
-                <Typography variant="body1">{image.title}</Typography>
+                <Typography variant="body1">
+                    {image.title}
+                </Typography>
             );
         },
         PreviewThumbnail () {
@@ -132,18 +136,30 @@ class Image extends Entity {
                 handleOpenImagePreviewer(image);
             }, [handleOpenImagePreviewer, image]);
             return (
-                <Stack direction="row" sx={{ height: "50px", maxWidth: "100px" }}
-                    justifyContent="center" alignItems="center">
+                <Stack
+                    alignItems="center"
+                    direction="row"
+                    justifyContent="center"
+                    sx={{ height: "50px", maxWidth: "100px" }}
+                >
                     {(image.thumbnailUrl &&
                         <Button onClick={handleOpenPreviewer} >
-                            <img height="50px" src={`${process.env.REACT_APP_API_HOST}/api/public/images/${image.id}/download`} loading="lazy" />
+                            <img
+                                height="50px"
+                                loading="lazy"
+                                src={`${process.env.REACT_APP_API_HOST}/api/public/images/${image.id}/download`}
+                            />
                         </Button>
                     ) || (image.url &&
-                        <Button variant="outlined" color="primary"
-                            startIcon={<VisibilityIcon />}
+                        <Button
+                            color="primary"
                             onClick={handleOpenPreviewer}
+                            startIcon={<VisibilityIcon />}
+                            variant="outlined"
                         >
-                            <Typography variant="body1">View</Typography>
+                            <Typography variant="body1">
+                                View
+                            </Typography>
                         </Button>
                     )}
                 </Stack>
@@ -152,22 +168,32 @@ class Image extends Entity {
         AccessionNumber () {
             const image = useTableRowItem();
             return (
-                <Typography variant="body1">{image.accessionNumber}</Typography>
+                <Typography variant="body1">
+                    {image.accessionNumber}
+                </Typography>
             );
         },
         Year () {
             const image = useTableRowItem();
             return (
-                <Typography variant="body1">{image.year}</Typography>
+                <Typography variant="body1">
+                    {image.year}
+                </Typography>
             );
         },
         Location () {
             const image = useTableRowItem();
             return (
                 image.location && (
-                    <Stack direction="row" spacing={1}>
+                    <Stack
+                        direction="row"
+                        spacing={1}
+                    >
                         <PlaceIcon />
-                        <Typography variant="body1">{image.location}</Typography>
+
+                        <Typography variant="body1">
+                            {image.location}
+                        </Typography>
                     </Stack>
                 )
             );
@@ -179,13 +205,20 @@ class Image extends Entity {
                 handleOpenImageAssignArtistDialog([image]);
             }, [handleOpenImageAssignArtistDialog, image]);
             return (
-                <Stack direction="row" spacing={1} alignItems="center">
-                    <Button variant="text"
+                <Stack
+                    alignItems="center"
+                    direction="row"
+                    spacing={1}
+                >
+                    <Button
                         color="primary"
-                        startIcon={<BrushIcon />}
                         onClick={handleOpenAssignArtistDialog}
+                        startIcon={<BrushIcon />}
+                        variant="text"
                     >
-                        <Typography variant="body1">{image.Artists.length}</Typography>
+                        <Typography variant="body1">
+                            {image.Artists.length}
+                        </Typography>
                     </Button>
                 </Stack>
             );
@@ -197,13 +230,20 @@ class Image extends Entity {
                 handleOpenImageAssignTagDialog([image]);
             }, [handleOpenImageAssignTagDialog, image]);
             return (
-                <Stack direction="row" spacing={1} alignItems="center">
-                    <Button variant="text"
+                <Stack
+                    alignItems="center"
+                    direction="row"
+                    spacing={1}
+                >
+                    <Button
                         color="primary"
-                        startIcon={<BrushIcon />}
                         onClick={handleOpenAssignTagDialog}
+                        startIcon={<BrushIcon />}
+                        variant="text"
                     >
-                        <Typography variant="body1">{image.Tags.length}</Typography>
+                        <Typography variant="body1">
+                            {image.Tags.length}
+                        </Typography>
                     </Button>
                 </Stack>
             );
@@ -216,14 +256,21 @@ class Image extends Entity {
                 handleOpenImageViewExhibitionDialog([image]);
             }, [handleOpenImageViewExhibitionDialog, image]);
             return (
-                <Stack direction="row" spacing={1}>
-                    <Button variant="text" sx={{ textTransform: "unset" }}
+                <Stack
+                    direction="row"
+                    spacing={1}
+                >
+                    <Button
                         color="primary"
-                        startIcon={<PhotoCameraBackIcon />}
                         disabled={!appUser.is_admin}
                         onClick={handleOpenViewExhibitionDialog}
+                        startIcon={<PhotoCameraBackIcon />}
+                        sx={{ textTransform: "unset" }}
+                        variant="text"
                     >
-                        <Typography variant="body1">{image.Exhibitions.length}</Typography>
+                        <Typography variant="body1">
+                            {image.Exhibitions.length}
+                        </Typography>
                     </Button>
                 </Stack>
             );
@@ -247,13 +294,15 @@ class Image extends Entity {
             return (
                 <Entity.TableCells.DeleteButton
                     disabled={image.Exhibitions.length > 0}
-                    onClick={handleOpenDeleteDialog} />
+                    onClick={handleOpenDeleteDialog}
+                />
             );
         },
         OptionsArray () {
             return (
                 <>
                     <Image.TableCells.EditButton />
+
                     <Image.TableCells.DeleteButton />
                 </>
             );

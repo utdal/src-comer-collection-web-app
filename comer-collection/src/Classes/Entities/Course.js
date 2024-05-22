@@ -1,10 +1,13 @@
 /* eslint-disable react/prop-types */
-import { Button, Stack, Typography } from "@mui/material";
+import { CourseEndDateTimeStackedCell } from "../../Components/TableCells/Course/CourseEndDateTimeStackedCell.js";
+import { CourseIDCell } from "../../Components/TableCells/Course/CourseIDCell.js";
+import { CourseNameCell } from "../../Components/TableCells/Course/CourseNameCell.js";
+import { CourseNotesCell } from "../../Components/TableCells/Course/CourseNotesCell.js";
+import { CourseOptionsCell } from "../../Components/TableCells/Course/CourseOptionsCell.js";
+import { CourseStartDateTimeStackedCell } from "../../Components/TableCells/Course/CourseStartDateTimeStackedCell.js";
+import { CourseStatusCell } from "../../Components/TableCells/Course/CourseStatusCell.js";
+import { CourseUserAssignmentCell } from "../../Components/TableCells/Course/CourseUserAssignmentCell.js";
 import { Entity } from "../Entity.js";
-import React, { useCallback } from "react";
-import { AccessTimeIcon, CheckIcon, ExpiredIcon, PersonIcon } from "../../Imports/Icons.js";
-import { useTableRowItem } from "../../ContextProviders/TableRowProvider.js";
-import { useManagementCallbacks } from "../../ContextProviders/ManagementPageProvider.js";
 
 class Course extends Entity {
     static baseUrl = "/api/admin/courses";
@@ -38,172 +41,43 @@ class Course extends Entity {
         }
     ];
 
-    static TableCells = {
-        ID () {
-            const course = useTableRowItem();
-            return (
-                <Typography variant="body1">{course.id}</Typography>
-            );
-        },
-        Name () {
-            const course = useTableRowItem();
-            return (
-                <Typography variant="body1">{course.name}</Typography>
-            );
-        },
-        Status () {
-            const course = useTableRowItem();
-            return (
-                <Stack direction="row" spacing={1}>
-                    {
-                        (course.status === "Active" && <CheckIcon color="grey"/>) ||
-                        (course.status === "Upcoming" && <AccessTimeIcon color="grey"/>) ||
-                        (course.status === "Expired" && <ExpiredIcon color="grey"/>)
-                    }
-                    <Typography variant="body1">{course.status}</Typography>
-                </Stack>
-            );
-        },
-        StartDateTime () {
-            const course = useTableRowItem();
-            return (
-                <Typography variant="body1">
-                    {Course.formatDate(course.date_start)}, {Course.formatTime(course.date_start)}
-                </Typography>
-            );
-        },
-        StartDateTimeStacked () {
-            const course = useTableRowItem();
-            return (
-                <Stack direction="column" padding={0}>
-                    <Typography variant="body1">
-                        {Course.formatDate(course.date_start)}
-                    </Typography>
-                    <Typography variant="body1">
-                        {Course.formatTime(course.date_start)}
-                    </Typography>
-                </Stack>
-            );
-        },
-        EndDateTime () {
-            const course = useTableRowItem();
-            return (
-                <Typography variant="body1">
-                    {Course.formatDate(course.date_end)}, {Course.formatTime(course.date_end)}
-                </Typography>
-            );
-        },
-        EndDateTimeStacked () {
-            const course = useTableRowItem();
-            return (
-                <Stack direction="column" padding={0}>
-                    <Typography variant="body1">
-                        {Course.formatDate(course.date_end)}
-                    </Typography>
-                    <Typography variant="body1">
-                        {Course.formatTime(course.date_end)}
-                    </Typography>
-                </Stack>
-            );
-        },
-        CourseDateRangeStacked () {
-            const course = useTableRowItem();
-            return (
-                <Stack>
-                    <Typography variant="body1">{new Date(course.date_start).toLocaleDateString()}</Typography>
-                    <Typography variant="body1">{new Date(course.date_end).toLocaleDateString()}</Typography>
-                </Stack>
-            );
-        },
-        UserAssignmentButton () {
-            const course = useTableRowItem();
-            const { handleOpenAssignCourseUserDialog } = useManagementCallbacks();
-            const handleOpenAssignUserDialog = useCallback(() => {
-                handleOpenAssignCourseUserDialog(course);
-            }, [course, handleOpenAssignCourseUserDialog]);
-            return (
-                <Stack direction="row" spacing={1} alignItems="center">
-                    <Button variant="outlined" color="primary" startIcon={<PersonIcon />} onClick={handleOpenAssignUserDialog}>
-                        <Typography variant="body1">{course.Users.length}</Typography>
-                    </Button>
-                </Stack>
-            );
-        },
-        Notes () {
-            const course = useTableRowItem();
-            return (
-                <Typography variant="body1">{course.notes}</Typography>
-            );
-        },
-        EditButton () {
-            const course = useTableRowItem();
-            const { handleOpenCourseEditDialog } = useManagementCallbacks();
-            const handleOpenEditDialog = useCallback(() => {
-                handleOpenCourseEditDialog(course);
-            }, [course, handleOpenCourseEditDialog]);
-            return (
-                <Entity.TableCells.EditButton onClick={handleOpenEditDialog} />
-            );
-        },
-        DeleteButton () {
-            const course = useTableRowItem();
-            const { handleOpenCourseDeleteDialog } = useManagementCallbacks();
-            const handleOpenDeleteDialog = useCallback(() => {
-                handleOpenCourseDeleteDialog(course);
-            }, [course, handleOpenCourseDeleteDialog]);
-            return (
-                <Entity.TableCells.DeleteButton
-                    disabled={course.Users.length > 0}
-                    onClick={handleOpenDeleteDialog} />
-            );
-        },
-        OptionsArray () {
-            return (
-                <>
-                    <Course.TableCells.EditButton />
-                    <Course.TableCells.DeleteButton />
-                </>
-            );
-        }
-    };
-
     static tableFields = [
         {
             columnDescription: "ID",
-            TableCellComponent: Course.TableCells.ID,
+            TableCellComponent: CourseIDCell,
             generateSortableValue: (course) => course.id
         },
         {
             columnDescription: "Name",
             maxWidth: "200px",
-            TableCellComponent: Course.TableCells.Name,
+            TableCellComponent: CourseNameCell,
             generateSortableValue: (course) => course.name.toLowerCase()
         },
         {
             columnDescription: "Start",
-            TableCellComponent: Course.TableCells.StartDateTimeStacked,
+            TableCellComponent: CourseStartDateTimeStackedCell,
             generateSortableValue: (course) => new Date(course.date_start)
         },
         {
             columnDescription: "End",
-            TableCellComponent: Course.TableCells.EndDateTimeStacked,
+            TableCellComponent: CourseEndDateTimeStackedCell,
             generateSortableValue: (course) => new Date(course.date_end)
         },
         {
             columnDescription: "Status",
-            TableCellComponent: Course.TableCells.Status
+            TableCellComponent: CourseStatusCell
         },
         {
             columnDescription: "Enrollment",
-            TableCellComponent: Course.TableCells.UserAssignmentButton
+            TableCellComponent: CourseUserAssignmentCell
         },
         {
             columnDescription: "Notes",
-            TableCellComponent: Course.TableCells.Notes
+            TableCellComponent: CourseNotesCell
         },
         {
             columnDescription: "Options",
-            TableCellComponent: Course.TableCells.OptionsArray
+            TableCellComponent: CourseOptionsCell
         }
     ];
 }

@@ -1,6 +1,6 @@
 import React from "react";
 import { Navigate, Route, Routes } from "react-router-dom"; // Import Route from react-router-dom
-import { AccountNavPane } from "../Components/AccountNavPane.js";
+import { AccountNavPane } from "../Components/AccountNavPane/AccountNavPane.js";
 import UserManagement from "./Admin/UserManagement.js";
 import ImageManagement from "./Admin/ImageManagement.js";
 import Profile from "./Account/Profile.js";
@@ -18,7 +18,10 @@ const Account = () => {
     const [appUser, , , appUserIsLoaded] = useAppUser();
 
     return (!appUserIsLoaded &&
-        <FullPageMessage Icon={AccessTimeIcon} message="Loading" />
+        <FullPageMessage
+            Icon={AccessTimeIcon}
+            message="Loading"
+        />
     ) || (appUserIsLoaded && appUser &&
         <AccountNavProvider>
 
@@ -29,25 +32,64 @@ const Account = () => {
           "sidebar main"
         `,
                 height: "100%"
-            }}>
+            }}
+            >
 
                 <AccountNavPane sx={{ gridArea: "sidebar" }} />
 
                 <Box sx={{ gridArea: "main", position: "relative", overflowY: "hidden", height: "100%" }}>
 
                     <Routes>
-                        <Route index element={
-                            (!appUser.pw_change_required && <Navigate to='Profile' replace />) ||
-                            (appUser.pw_change_required && <Navigate to='ChangePassword' replace />)
-                        } />
-                        <Route path="Profile" element={<Profile />} />
-                        <Route path="ChangePassword" element={<ChangePassword />} />
-                        <Route path="MyExhibitions" element={<MyExhibitions />} />
-                        <Route path="Admin/Images" element={<ImageManagement />} />
-                        <Route path="Admin/Users" element={<UserManagement />} />
-                        <Route path="Admin/Exhibitions" element={<ExhibitionManagement />} />
-                        <Route path="Admin/Courses" element={<CourseManagement />} />
-                        <Route path="*" element={<Navigate to="Profile" />} replace />
+                        <Route
+                            element={
+                                <Navigate
+                                    replace
+                                    to='Profile'
+                                />
+                            }
+                            index
+                        />
+
+                        <Route
+                            element={<Profile />}
+                            path="Profile"
+                        />
+
+                        <Route
+                            element={<ChangePassword />}
+                            path="ChangePassword"
+                        />
+
+                        <Route
+                            element={<MyExhibitions />}
+                            path="MyExhibitions"
+                        />
+
+                        <Route
+                            element={<ImageManagement />}
+                            path="Admin/Images"
+                        />
+
+                        <Route
+                            element={<UserManagement />}
+                            path="Admin/Users"
+                        />
+
+                        <Route
+                            element={<ExhibitionManagement />}
+                            path="Admin/Exhibitions"
+                        />
+
+                        <Route
+                            element={<CourseManagement />}
+                            path="Admin/Courses"
+                        />
+
+                        <Route
+                            element={<Navigate to="Profile" />}
+                            path="*"
+                            replace
+                        />
 
                     </Routes>
 
@@ -56,7 +98,12 @@ const Account = () => {
             </Box>
         </AccountNavProvider>
     ) || (appUserIsLoaded && !appUser &&
-        <FullPageMessage Icon={LockIcon} message="Unauthorized" buttonDestination="/SignIn" buttonText="Sign In" />
+        <FullPageMessage
+            Icon={LockIcon}
+            buttonDestination="/SignIn"
+            buttonText="Sign In"
+            message="Unauthorized"
+        />
     );
 };
 

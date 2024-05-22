@@ -3,6 +3,7 @@ import { BrushIcon } from "../../Imports/Icons.js";
 import PropTypes from "prop-types";
 import { SecondaryFilterMenu } from "./SecondaryFilterMenu.js";
 import { Typography } from "@mui/material";
+import { entityPropTypeShape } from "../../Classes/Entity.js";
 
 const artistSortFunction = (a, b) => {
     return a.fullNameReverse > b.fullNameReverse;
@@ -10,7 +11,10 @@ const artistSortFunction = (a, b) => {
 
 const artistDisplayFunction = (artist) => {
     return (
-        <Typography variant="body1" sx={{ minWidth: "120px", maxWidth: "200px", wordWrap: "break-word" }}>
+        <Typography
+            sx={{ minWidth: "120px", maxWidth: "200px", wordWrap: "break-word" }}
+            variant="body1"
+        >
             {artist.fullNameReverse}
         </Typography>
     );
@@ -18,19 +22,26 @@ const artistDisplayFunction = (artist) => {
 
 export const ArtistFilterMenu = ({ filterValue, setFilterValue, artists }) => {
     return (
-        <SecondaryFilterMenu SecondaryIcon={BrushIcon} displayFunction={artistDisplayFunction}
-            helpMessage="Filter images by artist"
+        <SecondaryFilterMenu
+            SecondaryIcon={BrushIcon}
+            displayFunction={artistDisplayFunction}
             emptyMessage="No artist filters available"
+            filterValue={filterValue}
+            helpMessage="Filter images by artist"
             nullMessage="Do not filter by artist"
-            sortFunction={artistSortFunction}
             secondaries={artists}
-            {...{ filterValue, setFilterValue }}
+            setFilterValue={setFilterValue}
+            sortFunction={artistSortFunction}
         />
     );
 };
 
 ArtistFilterMenu.propTypes = {
-    filterValue: PropTypes.object,
-    setFilterValue: PropTypes.func,
-    artists: PropTypes.arrayOf(PropTypes.object)
+    artists: PropTypes.arrayOf(PropTypes.shape(entityPropTypeShape)).isRequired,
+    filterValue: PropTypes.shape(entityPropTypeShape),
+    setFilterValue: PropTypes.func.isRequired
+};
+
+ArtistFilterMenu.defaultProps = {
+    filterValue: null
 };

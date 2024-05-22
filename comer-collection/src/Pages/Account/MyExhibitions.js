@@ -3,7 +3,7 @@ import {
     Typography, Stack, Paper, Box, Button, IconButton
 } from "@mui/material";
 import { Navigate, useNavigate } from "react-router";
-import { DataTable } from "../../Components/DataTable.js";
+import { DataTable } from "../../Components/DataTable/DataTable.js";
 import { PhotoCameraBackIcon, AddIcon, InfoIcon, SettingsIcon, DeleteIcon, SecurityIcon } from "../../Imports/Icons.js";
 import { sendAuthenticatedRequest } from "../../Helpers/APICalls.js";
 import { ExhibitionSettingsDialog } from "../../Components/Dialogs/ExhibitionSettingsDialog.js";
@@ -25,7 +25,7 @@ const MyExhibitions = () => {
     const [dialogExhibitionId, setDialogExhibitionId] = useState(null);
     const [dialogExhibitionTitle, setDialogExhibitionTitle] = useState("");
     const [dialogExhibitionAccess, setDialogExhibitionAccess] = useState(null);
-    const [isDialogInEditMode, setDialogIsEditMode] = useState(false);
+    const [dialogEditMode, setDialogEditMode] = useState(false);
 
     const [deleteDialogIsOpen, setDeleteDialogIsOpen] = useState(false);
     const [deleteDialogExhibition, setDeleteDialogExhibition] = useState(null);
@@ -72,7 +72,9 @@ const MyExhibitions = () => {
             columnDescription: "Title",
             maxWidth: "200px",
             generateTableCell: (exhibition) => (
-                <Typography variant="body1">{exhibition.title}</Typography>
+                <Typography variant="body1">
+                    {exhibition.title}
+                </Typography>
             ),
             generateSortableValue: (exhibition) => exhibition.title.toLowerCase()
         },
@@ -106,11 +108,14 @@ const MyExhibitions = () => {
         {
             columnDescription: "Options",
             generateTableCell: (exhibition) => (
-                <Stack direction="row" spacing={2}>
+                <Stack
+                    direction="row"
+                    spacing={2}
+                >
 
                     <IconButton
                         onClick={() => {
-                            setDialogIsEditMode(true);
+                            setDialogEditMode(true);
                             setDialogExhibitionId(exhibition.id);
                             setDialogExhibitionAccess(exhibition.privacy);
                             setDialogExhibitionTitle(exhibition.title);
@@ -137,93 +142,146 @@ const MyExhibitions = () => {
     return (appUser.pw_change_required &&
         <Navigate to="/Account/ChangePassword" />
     ) || (!appUser.pw_change_required &&
-        <Box component={Paper} square sx={{
-            overflowY: "auto",
-            padding: "50px",
-            display: "grid",
-            gridTemplateColumns: "1fr",
-            gridTemplateRows: "40px 80px calc(100vh - 284px)",
-            gridTemplateAreas: `
+        <Box
+            component={Paper}
+            square
+            sx={{
+                overflowY: "auto",
+                padding: "50px",
+                display: "grid",
+                gridTemplateColumns: "1fr",
+                gridTemplateRows: "40px 80px calc(100vh - 284px)",
+                gridTemplateAreas: `
             "header"
             "comment"
             "table"
         `
-        }}>
-            <Stack direction="row" justifyContent="space-between" sx={{ gridArea: "header" }}>
-                <Stack direction="row" alignItems="center" spacing={2} >
+            }}
+        >
+            <Stack
+                direction="row"
+                justifyContent="space-between"
+                sx={{ gridArea: "header" }}
+            >
+                <Stack
+                    alignItems="center"
+                    direction="row"
+                    spacing={2}
+                >
                     <PhotoCameraBackIcon fontSize="large" />
-                    <Typography variant="h4">My Exhibitions</Typography>
+
+                    <Typography variant="h4">
+                        My Exhibitions
+                    </Typography>
                 </Stack>
-                <Button color="primary" disabled={!appUser.can_create_exhibition} variant="contained" startIcon={<AddIcon/>}
+
+                <Button
+                    color="primary"
+                    disabled={!appUser.can_create_exhibition}
                     onClick={() => {
-                        setDialogIsEditMode(false);
+                        setDialogEditMode(false);
                         setDialogExhibitionId(null);
                         setDialogIsOpen(true);
                     }}
+                    startIcon={<AddIcon />}
+                    variant="contained"
                 >
-                    <Typography variant="body1">Create Exhibition</Typography>
+                    <Typography variant="body1">
+                        Create Exhibition
+                    </Typography>
                 </Button>
             </Stack>
-            <Stack direction="column" spacing={2} sx={{ gridArea: "comment", justifyContent: "center" }}>
-                {appUser.is_admin && (
-                    <Stack direction="row" spacing={2} color="gray">
-                        <SecurityIcon color="secondary" />
-                        <Typography variant="body1">Restrictions on exhibition creation are removed for administrators.</Typography>
-                    </Stack>
-                )}
+
+            <Stack
+                direction="column"
+                spacing={2}
+                sx={{ gridArea: "comment", justifyContent: "center" }}
+            >
+                {appUser.is_admin
+                    ? (
+                        <Stack
+                            color="gray"
+                            direction="row"
+                            spacing={2}
+                        >
+                            <SecurityIcon color="secondary" />
+
+                            <Typography variant="body1">
+                                Restrictions on exhibition creation are removed for administrators.
+                            </Typography>
+                        </Stack>
+                    )
+                    : null}
+
                 {!appUser.is_admin && appUser.Courses.filter((c) => c.status === "Active").length === 0 && (
-                    <Stack direction="row" spacing={2} color="gray">
+                    <Stack
+                        color="gray"
+                        direction="row"
+                        spacing={2}
+                    >
                         <InfoIcon />
-                        <Typography variant="body1">You must be enrolled in at least one active course to create exhibitions.</Typography>
+
+                        <Typography variant="body1">
+                            You must be enrolled in at least one active course to create exhibitions.
+                        </Typography>
                     </Stack>
                 )}
+
                 {!appUser.is_admin && appUser.Exhibitions.length >= appUser.exhibition_quota && (
-                    <Stack direction="row" spacing={2} color="gray">
+                    <Stack
+                        color="gray"
+                        direction="row"
+                        spacing={2}
+                    >
                         <InfoIcon />
-                        <Typography variant="body1">Your account has reached its exhibition quota.  To create an exhibition, first delete an existing exhibition, or contact your instructor to request a quota increase.</Typography>
+
+                        <Typography variant="body1">
+                            Your account has reached its exhibition quota.  To create an exhibition, first delete an existing exhibition, or contact your instructor to request a quota increase.
+                        </Typography>
                     </Stack>
                 )}
             </Stack>
+
             <Box sx={{ gridArea: "table" }}>
                 <DataTable
-                    items={appUser.Exhibitions}
-                    visibleItems={appUser.Exhibitions}
-                    defaultSortColumn={"Date Modified"}
-                    defaultSortAscending={false}
-                    tableFields={exhibitionTableFields}
                     NoContentIcon={InfoIcon}
-                    noContentMessage="You have no exhibitions."
-                    noContentButtonText="View your courses"
+                    defaultSortAscending={false}
+                    defaultSortColumn="Date Modified"
+                    items={appUser.Exhibitions}
                     noContentButtonAction={() => {
                         navigate("/Account/Profile");
                     }}
+                    noContentButtonText="View your courses"
+                    noContentMessage="You have no exhibitions."
+                    tableFields={exhibitionTableFields}
+                    visibleItems={appUser.Exhibitions}
                 />
             </Box>
 
             <ItemSingleDeleteDialog
+                Entity={MyExhition}
+                allItems={appUser.Exhibitions}
                 deleteDialogIsOpen={deleteDialogIsOpen}
                 deleteDialogItem={deleteDialogExhibition}
-                Entity={MyExhition}
-                requireTypedConfirmation={true}
-                allItems={appUser.Exhibitions}
+                requireTypedConfirmation
                 setAllItems={() => {
                     initializeAppUser();
                 }}
                 setDeleteDialogIsOpen={setDeleteDialogIsOpen}
             />
 
-            <ExhibitionSettingsDialog editMode={isDialogInEditMode}
-                dialogIsOpen={dialogIsOpen && (isDialogInEditMode || appUser.can_create_exhibition)}
-                {...{
-                    dialogExhibitionId,
-                    dialogExhibitionAccess,
-                    setDialogExhibitionAccess,
-                    dialogExhibitionTitle,
-                    setDialogExhibitionTitle,
-                    setDialogIsOpen,
-                    handleExhibitionCreate,
-                    handleExhibitionEdit: handleExhibitionEditByOwner
-                }} />
+            <ExhibitionSettingsDialog
+                dialogExhibitionAccess={dialogExhibitionAccess}
+                dialogExhibitionId={dialogExhibitionId}
+                dialogExhibitionTitle={dialogExhibitionTitle}
+                dialogIsOpen={dialogIsOpen ? dialogEditMode || appUser.can_create_exhibition : null}
+                editMode={dialogEditMode}
+                handleExhibitionCreate={handleExhibitionCreate}
+                handleExhibitionEdit={handleExhibitionEditByOwner}
+                setDialogExhibitionAccess={setDialogExhibitionAccess}
+                setDialogExhibitionTitle={setDialogExhibitionTitle}
+                setDialogIsOpen={setDialogIsOpen}
+            />
         </Box>
     );
 };

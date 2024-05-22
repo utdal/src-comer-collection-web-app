@@ -3,6 +3,7 @@ import { Typography } from "@mui/material";
 import { SellIcon } from "../../Imports/Icons.js";
 import PropTypes from "prop-types";
 import { SecondaryFilterMenu } from "./SecondaryFilterMenu.js";
+import { entityPropTypeShape } from "../../Classes/Entity.js";
 
 const tagSortFunction = (a, b) => {
     return a.data > b.data;
@@ -10,7 +11,10 @@ const tagSortFunction = (a, b) => {
 
 const tagDisplayFunction = (tag) => {
     return (
-        <Typography variant="body1" sx={{ minWidth: "120px", maxWidth: "200px", wordWrap: "break-word" }}>
+        <Typography
+            sx={{ minWidth: "120px", maxWidth: "200px", wordWrap: "break-word" }}
+            variant="body1"
+        >
             {tag.data}
         </Typography>
     );
@@ -18,19 +22,22 @@ const tagDisplayFunction = (tag) => {
 
 export const TagFilterMenu = ({ filterValue, setFilterValue, tags }) => {
     return (
-        <SecondaryFilterMenu SecondaryIcon={SellIcon} displayFunction={tagDisplayFunction}
-            helpMessage="Filter images by tag"
+        <SecondaryFilterMenu
+            SecondaryIcon={SellIcon}
+            displayFunction={tagDisplayFunction}
             emptyMessage="No tag filters available"
+            filterValue={filterValue}
+            helpMessage="Filter images by tag"
             nullMessage="Do not filter by tag"
-            sortFunction={tagSortFunction}
             secondaries={tags}
-            {...{ filterValue, setFilterValue }}
+            setFilterValue={setFilterValue}
+            sortFunction={tagSortFunction}
         />
     );
 };
 
 TagFilterMenu.propTypes = {
-    filterValue: PropTypes.object,
-    setFilterValue: PropTypes.func,
-    tags: PropTypes.arrayOf(PropTypes.object)
+    filterValue: PropTypes.arrayOf(entityPropTypeShape).isRequired,
+    setFilterValue: PropTypes.func.isRequired,
+    tags: PropTypes.arrayOf(PropTypes.shape(entityPropTypeShape)).isRequired
 };

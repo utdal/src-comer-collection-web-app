@@ -2,59 +2,117 @@ import React from "react";
 import { Stack, Typography, Select, ListItemButton, Divider } from "@mui/material";
 import { CheckIcon, RemoveCircleOutlineIcon } from "../../Imports/Icons.js";
 import PropTypes from "prop-types";
+import { entityPropTypeShape } from "../../Classes/Entity.js";
 
 export const SecondaryFilterMenu = ({ filterValue, setFilterValue, secondaries, helpMessage, emptyMessage, nullMessage, displayFunction, sortFunction, SecondaryIcon }) => {
     return (
-        <Select displayEmpty value={filterValue?.id ?? ""}
-            variant="outlined"
-            sx={{
-                wordWrap: "break-word",
-                width: "300px"
-            }}
+        <Select
+            displayEmpty
+            placeholder="All secondaries"
             renderValue={(selected) => {
                 return (
-                    <Stack direction="row" alignItems="center" spacing={2}>
+                    <Stack
+                        alignItems="center"
+                        direction="row"
+                        spacing={2}
+                    >
                         <SecondaryIcon />
+
                         {(secondaries.find((i) => i.id === selected) &&
-                            <Typography variant="body1" sx={{ minWidth: "120px" }}>
+                            <Typography
+                                sx={{ minWidth: "120px" }}
+                                variant="body1"
+                            >
                                 {secondaries.find((c) => c.id === selected)?.safe_display_name}
                             </Typography>
                         ) || (
-                            <Typography variant="body1" sx={{ minWidth: "120px", opacity: 0.5 }}>{helpMessage}</Typography>
+                            <Typography
+                                sx={{ minWidth: "120px", opacity: 0.5 }}
+                                variant="body1"
+                            >
+                                {helpMessage}
+                            </Typography>
                         )}
                     </Stack>
                 );
             }}
-            placeholder="All secondaries"
+            sx={{
+                wordWrap: "break-word",
+                width: "300px"
+            }}
+            value={filterValue?.id ?? ""}
+            variant="outlined"
         >
 
             {(!secondaries.length &&
-                <ListItemButton key={""} value={""} disabled={true} >
-                    <Stack direction="row" alignItems="center" spacing={2}>
+                <ListItemButton
+                    disabled
+                    key=""
+                    value=""
+                >
+                    <Stack
+                        alignItems="center"
+                        direction="row"
+                        spacing={2}
+                    >
                         <RemoveCircleOutlineIcon />
-                        <Typography variant="body1" sx={{ minWidth: "120px" }}>{emptyMessage}</Typography>
+
+                        <Typography
+                            sx={{ minWidth: "120px" }}
+                            variant="body1"
+                        >
+                            {emptyMessage}
+                        </Typography>
                     </Stack>
                 </ListItemButton>
             ) || (secondaries.length &&
                 <div>
-                    <ListItemButton key={""} value={""}
+                    <ListItemButton
+                        key=""
                         onClick={() => {
                             setFilterValue(null);
-                        }}>
-                        <Stack direction="row" alignItems="center" spacing={2}>
+                        }}
+                        value=""
+                    >
+                        <Stack
+                            alignItems="center"
+                            direction="row"
+                            spacing={2}
+                        >
                             <CheckIcon sx={{ visibility: filterValue ? "hidden" : "" }} />
-                            <Typography variant="body1" sx={{ minWidth: "120px" }}>{nullMessage}</Typography>
+
+                            <Typography
+                                sx={{ minWidth: "120px" }}
+                                variant="body1"
+                            >
+                                {nullMessage}
+                            </Typography>
                         </Stack>
                     </ListItemButton>
+
                     <Divider sx={{ padding: "4px" }} />
+
                     {secondaries.sort(sortFunction).map((secondary) => (
-                        <ListItemButton key={secondary.id} value={secondary.id}
+                        <ListItemButton
+                            key={secondary.id}
                             onClick={() => {
                                 setFilterValue(secondary);
-                            }}>
-                            <Stack direction="row" alignItems="center" spacing={2}>
+                            }}
+                            value={secondary.id}
+                        >
+                            <Stack
+                                alignItems="center"
+                                direction="row"
+                                spacing={2}
+                            >
                                 <CheckIcon sx={{ visibility: filterValue?.id === secondary.id ? "" : "hidden" }} />
-                                <Stack direction="column" alignItems="left" spacing={0} sx={{}}>
+
+                                <Stack
+                                    alignItems="left"
+                                    direction="column"
+                                    spacing={0}
+                                    sx={{}}
+                                >
                                     {displayFunction(secondary)}
                                 </Stack>
                             </Stack>
@@ -67,13 +125,17 @@ export const SecondaryFilterMenu = ({ filterValue, setFilterValue, secondaries, 
 };
 
 SecondaryFilterMenu.propTypes = {
-    filterValue: PropTypes.object,
-    setFilterValue: PropTypes.func,
-    secondaries: PropTypes.arrayOf(PropTypes.object),
-    helpMessage: PropTypes.string.isRequired,
-    emptyMessage: PropTypes.string.isRequired,
-    nullMessage: PropTypes.string.isRequired,
+    SecondaryIcon: PropTypes.elementType.isRequired,
     displayFunction: PropTypes.func.isRequired,
-    sortFunction: PropTypes.func.isRequired,
-    SecondaryIcon: PropTypes.elementType.isRequired
+    emptyMessage: PropTypes.string.isRequired,
+    filterValue: PropTypes.shape(entityPropTypeShape),
+    helpMessage: PropTypes.string.isRequired,
+    nullMessage: PropTypes.string.isRequired,
+    secondaries: PropTypes.arrayOf(PropTypes.shape(entityPropTypeShape)).isRequired,
+    setFilterValue: PropTypes.func.isRequired,
+    sortFunction: PropTypes.func.isRequired
+};
+
+SecondaryFilterMenu.defaultProps = {
+    filterValue: null
 };

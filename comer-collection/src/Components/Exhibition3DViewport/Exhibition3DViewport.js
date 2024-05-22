@@ -6,11 +6,15 @@ import { setupMainWalls, setupSideWalls } from "./js/Walls.js";
 import { setupFloor } from "./js/Floor.js";
 import { setupCeiling } from "./js/Ceiling.js";
 import { createArt } from "./js/Art.js";
-import { Box, Button, Card, CardContent, Dialog, DialogActions, DialogContent, Divider, Fab, Paper, Stack, Typography } from "@mui/material";
+import { Box, Fab, Stack, Typography } from "@mui/material";
 import { PointerLockControls } from "three/examples/jsm/controls/PointerLockControls.js";
 import { EditIcon, SecurityIcon, VisibilityIcon } from "../../Imports/Icons.js";
 import { useAppUser } from "../../ContextProviders/AppUser.js";
 import PropTypes from "prop-types";
+import { ExhibitionIntro } from "./ExhibitionIntro.js";
+import { ArtInfoPopup } from "./ArtInfoPopup.js";
+import { entityPropTypeShape } from "../../Classes/Entity.js";
+import { exhibitionStatePropTypesShape } from "../../Classes/Entities/Exhibition.js";
 
 const getAmbientLightIntensity = (moodiness) => {
     switch (moodiness) {
@@ -406,148 +410,83 @@ const Exhibition3DViewport = ({ exhibitionState, exhibitionMetadata, exhibitionI
         exhibitionState.appearance.ambient_light_color, exhibitionState.appearance.moodiness]);
 
     return (
-        <Box width="100%" height="calc(100vh - 64px)" ref={containerRef} sx={{ position: "relative" }}>
-            <div id="exhibition-canvas" ref={canvasRef}>
-            </div>
-            {exhibitionIsEditable && (
-                <Fab variant="extended" color={
-                    appUser.is_admin && appUser.id !== exhibitionMetadata.exhibition_owner ? "secondary" : "primary"
-                } sx={{ position: "absolute", right: 20, bottom: 20, zIndex: 1500 }}
-                onClick={() => {
-                    if (editModeActive) {
-                        setEditModeActive(false);
-                    } else {
-                        setEditModeActive(true);
-                    }
-                }}>
-                    <Stack direction="row" spacing={1} alignItems="center">
-                        {(editModeActive &&
+        <Box
+            height="calc(100vh - 64px)"
+            ref={containerRef}
+            sx={{ position: "relative" }}
+            width="100%"
+        >
+            <div
+                id="exhibition-canvas"
+                ref={canvasRef}
+            />
+
+            {exhibitionIsEditable
+                ? (
+                    <Fab
+                        color={
+                            appUser.is_admin && appUser.id !== exhibitionMetadata.exhibition_owner ? "secondary" : "primary"
+                        }
+                        onClick={() => {
+                            if (editModeActive) {
+                                setEditModeActive(false);
+                            } else {
+                                setEditModeActive(true);
+                            }
+                        }}
+                        sx={{ position: "absolute", right: 20, bottom: 20, zIndex: 1500 }}
+                        variant="extended"
+                    >
+                        <Stack
+                            alignItems="center"
+                            direction="row"
+                            spacing={1}
+                        >
+                            {(editModeActive &&
                             <VisibilityIcon fontSize="large" />
-                        ) || (!editModeActive &&
+                            ) || (!editModeActive &&
                             appUser.is_admin && appUser.id !== exhibitionMetadata.exhibition_owner
-                            ? <SecurityIcon fontSize="large" />
-                            : <EditIcon fontSize="large" />
-                        )}
-                        <Typography variant="h6">
-                            {editModeActive ? "Preview" : "Edit"}
-                        </Typography>
-                    </Stack>
-                </Fab>
+                                ? <SecurityIcon fontSize="large" />
+                                : <EditIcon fontSize="large" />
+                            )}
+
+                            <Typography variant="h6">
+                                {editModeActive ? "Preview" : "Edit"}
+                            </Typography>
+                        </Stack>
+                    </Fab>
+                )
+                : null}
+
+            {!editModeActive && (
+                <ExhibitionIntro
+                    controls={myControls}
+                    dialogIsOpen={dialogIsOpen}
+                    exhibitionMetadata={exhibitionMetadata}
+                    setDialogIsOpen={setDialogIsOpen}
+                />
             )}
-            {!editModeActive && (<ExhibitionIntro {...{ dialogIsOpen, setDialogIsOpen }} controls={myControls} {...{ exhibitionMetadata }} />)}
-            <ArtInfoPopup {...{ globalImageCatalog }} exhibitionState={exhibitionState} imageId={infoMenuImageId} />
+
+            <ArtInfoPopup
+                exhibitionState={exhibitionState}
+                globalImageCatalog={globalImageCatalog}
+                imageId={infoMenuImageId}
+            />
 
         </Box>
     );
 };
 
 Exhibition3DViewport.propTypes = {
-    exhibitionState: PropTypes.object.isRequired,
-    exhibitionMetadata: PropTypes.object.isRequired,
-    exhibitionIsLoaded: PropTypes.bool.isRequired,
-    exhibitionIsEditable: PropTypes.bool.isRequired,
-    globalImageCatalog: PropTypes.arrayOf(PropTypes.object),
     editModeActive: PropTypes.bool.isRequired,
+    exhibitionIsEditable: PropTypes.bool.isRequired,
+    exhibitionIsLoaded: PropTypes.bool.isRequired,
+    exhibitionMetadata: PropTypes.shape({
+        exhibition_owner: PropTypes.shape(entityPropTypeShape)
+    }).isRequired,
+    exhibitionState: PropTypes.shape(exhibitionStatePropTypesShape).isRequired,
+    globalImageCatalog: PropTypes.arrayOf(entityPropTypeShape).isRequired,
     setEditModeActive: PropTypes.func.isRequired
-};
-
-const ArtInfoPopup = ({ globalImageCatalog, imageId, exhibitionState }) => {
-    const infoFromCatalog = globalImageCatalog.find((i) => i.id === imageId);
-    const infoFromExhibition = exhibitionState.images.find((i) => i.imageId === imageId);
-    return (
-        <Card raised={true} component={Paper} sx={{
-            position: "absolute",
-            top: 10,
-            left: 10,
-            width: "calc(30vw - 90px)",
-            opacity: 0.8,
-            visibility: imageId ? "" : "hidden"
-        }}>
-            <CardContent>
-                <Stack spacing={2}>
-                    <Typography variant="h5">{infoFromCatalog?.title}</Typography>
-                    {infoFromCatalog?.Artists.length > 0 && (
-                        <Stack>
-                            {infoFromCatalog?.Artists.map((a) => (
-                                <Typography key={a.id}>{a.safe_display_name}</Typography>
-                            ))}
-                        </Stack>
-                    )}
-                    {(infoFromCatalog?.year) && (
-                        <>
-                            <Divider />
-                            <Typography>{infoFromCatalog?.year}</Typography>
-                        </>
-                    )}
-                    {(infoFromExhibition?.metadata.description) && (
-                        <>
-                            <Divider />
-                            <Typography>{infoFromExhibition?.metadata.description}</Typography>
-                        </>
-                    )}
-                    {(infoFromExhibition?.metadata.additional_information) && (
-                        <>
-                            <Divider />
-                            <Typography>{infoFromExhibition?.metadata.additional_information}</Typography>
-                        </>
-                    )}
-                </Stack>
-            </CardContent>
-        </Card>
-    );
-};
-
-ArtInfoPopup.propTypes = {
-    globalImageCatalog: PropTypes.arrayOf(PropTypes.object).isRequired,
-    imageId: PropTypes.number,
-    exhibitionState: PropTypes.object.isRequired
-};
-
-const ExhibitionIntro = ({ exhibitionMetadata, controls, dialogIsOpen, setDialogIsOpen }) => {
-    return (
-        <Dialog open={dialogIsOpen} className="background_menu" fullWidth maxWidth="md"
-            hideBackdrop disablePortal
-            sx={{ position: "absolute" }}>
-            <DialogContent>
-                <Stack alignItems="center" spacing={2}>
-                    <img src="/images/logo_square_orange.png" style={{ maxWidth: "200px" }}/>
-                    <Typography variant="h4">{exhibitionMetadata.title}</Typography>
-                    {exhibitionMetadata.curator && (
-                        <Typography variant="h5">Curated by {exhibitionMetadata.curator}</Typography>
-                    )}
-
-                    <Stack sx={{ opacity: 0.5 }} alignItems="center">
-                        <Typography>Controls are paused while this menu is open.</Typography>
-                        <Typography>This menu will reappear whenever you press ESCAPE.</Typography>
-                        <Typography>Explore the gallery using the W-A-S-D or arrow keys on your keyboard.</Typography>
-                        <Typography>Take a look around and turn by using your mouse or mousepad.</Typography>
-                    </Stack>
-                    <Button variant="contained" color="grey" size="large" id="play_button"
-                        onClick={() => {
-                            setDialogIsOpen(false);
-                            controls.lock();
-                        }}
-                    >
-                        <Typography variant="h6">Enter Exhibition</Typography>
-                    </Button>
-                </Stack>
-
-                <div>
-                </div>
-
-            </DialogContent>
-            <DialogActions>
-
-            </DialogActions>
-        </Dialog>
-    );
-};
-
-ExhibitionIntro.propTypes = {
-    exhibitionMetadata: PropTypes.object.isRequired,
-    controls: PropTypes.object,
-    dialogIsOpen: PropTypes.bool.isRequired,
-    setDialogIsOpen: PropTypes.func.isRequired
 };
 
 export default Exhibition3DViewport;

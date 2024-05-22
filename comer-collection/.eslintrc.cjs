@@ -39,6 +39,9 @@ module.exports = {
         }],
         "react/jsx-filename-extension": [1, {
             extensions: [".js", ".jsx"]
-        }]
+        }],
+        "react/jsx-no-bind": [0],
+        "react/jsx-max-depth": [0],
+        "react/jsx-no-literals": [0]
     }
 };

@@ -1,5 +1,5 @@
 import { Snackbar, Alert, Stack, Typography, ThemeProvider, createTheme } from "@mui/material";
-import React, { useCallback, useContext, useState, createContext } from "react";
+import React, { useCallback, useContext, useState, createContext, useMemo } from "react";
 
 import PropTypes from "prop-types";
 
@@ -73,33 +73,47 @@ export const AppFeatureProvider = ({ children }) => {
         setSnackbarOpen(true);
     }, [setSnackbarOpen, setSnackbarSeverity, setSnackbarText]);
 
-    return (
-        <AppFeatureContext.Provider value={{
+    const appFeatureContextValue = useMemo(() => {
+        return {
             showSnackbar,
             setTitleText,
             appDarkTheme,
             setAppDarkTheme
-        }}>
+        };
+    }, [showSnackbar, setTitleText, appDarkTheme, setAppDarkTheme]);
+
+    return (
+        <AppFeatureContext.Provider value={appFeatureContextValue}>
 
             <ThemeProvider theme={theme}>
                 {children}
+
                 <Snackbar
-                    open={snackbarOpen}
-                    autoHideDuration={3000}
                     anchorOrigin={{
                         vertical: "bottom",
                         horizontal: "center"
                     }}
+                    autoHideDuration={3000}
                     onClose={() => {
                         setSnackbarOpen(false);
-                    } }
+                    }}
+                    open={snackbarOpen}
                     sx={{
                         zIndex: 10000000
                     }}
                 >
-                    <Alert severity={snackbarSeverity} variant="standard" sx={{ width: "100%" }}>
-                        <Stack direction="row" spacing={2}>
-                            <Typography variant="body1">{snackbarText}</Typography>
+                    <Alert
+                        severity={snackbarSeverity}
+                        sx={{ width: "100%" }}
+                        variant="standard"
+                    >
+                        <Stack
+                            direction="row"
+                            spacing={2}
+                        >
+                            <Typography variant="body1">
+                                {snackbarText}
+                            </Typography>
                         </Stack>
                     </Alert>
                 </Snackbar>
@@ -109,7 +123,7 @@ export const AppFeatureProvider = ({ children }) => {
 };
 
 AppFeatureProvider.propTypes = {
-    children: PropTypes.node
+    children: PropTypes.arrayOf(PropTypes.element).isRequired
 };
 
 export const useSnackbar = () => {

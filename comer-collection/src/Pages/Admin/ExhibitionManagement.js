@@ -8,7 +8,7 @@ import { FullPageMessage } from "../../Components/FullPageMessage.js";
 import SearchBox from "../../Components/SearchBox.js";
 import { LockIcon, RefreshIcon, SearchIcon, InfoIcon, FilterAltOffOutlinedIcon, WarningIcon, AccessTimeIcon } from "../../Imports/Icons.js";
 import { ItemSingleDeleteDialog } from "../../Components/Dialogs/ItemSingleDeleteDialog.js";
-import { DataTable } from "../../Components/DataTable.js";
+import { DataTable } from "../../Components/DataTable/DataTable.js";
 import { Navigate } from "react-router";
 import { SelectionSummary } from "../../Components/SelectionSummary.js";
 import { sendAuthenticatedRequest } from "../../Helpers/APICalls.js";
@@ -124,60 +124,114 @@ const ExhibitionManagement = () => {
     }, [setDeleteDialogExhibition, setDeleteDialogIsOpen]);
 
     return (!appUser.is_admin &&
-        <FullPageMessage message="Insufficient Privileges" Icon={LockIcon} buttonText="Return to Profile" buttonDestination="/Account/Profile" />
+        <FullPageMessage
+            Icon={LockIcon}
+            buttonDestination="/Account/Profile"
+            buttonText="Return to Profile"
+            message="Insufficient Privileges"
+        />
     ) || (appUser.pw_change_required &&
         <Navigate to="/Account/ChangePassword" />
     ) || (isError &&
-        <FullPageMessage message="Error loading exhibitions" Icon={WarningIcon} buttonText="Retry" buttonAction={fetchData} />
+        <FullPageMessage
+            Icon={WarningIcon}
+            buttonAction={fetchData}
+            buttonText="Retry"
+            message="Error loading exhibitions"
+        />
     ) || (!isLoaded &&
-        <FullPageMessage message="Loading exhibitions..." Icon={AccessTimeIcon} />
+        <FullPageMessage
+            Icon={AccessTimeIcon}
+            message="Loading exhibitions..."
+        />
     ) || (
         <ManagementPageProvider
+            itemsCombinedState={exhibitionsCombinedState}
             managementCallbacks={{
                 handleOpenExhibitionSettings,
                 handleOpenExhibitionDeleteDialog
             }}
-            itemsCombinedState={exhibitionsCombinedState}
             setItems={setExhibitions}
             setSelectedItems={setSelectedExhibitions}
         >
-            <Box component={Paper} square sx={{
-                display: "grid",
-                gridTemplateColumns: "1fr",
-                gridTemplateRows: "80px calc(100vh - 224px) 80px",
-                gridTemplateAreas: `
+            <Box
+                component={Paper}
+                square
+                sx={{
+                    display: "grid",
+                    gridTemplateColumns: "1fr",
+                    gridTemplateRows: "80px calc(100vh - 224px) 80px",
+                    gridTemplateAreas: `
                     "top"
                     "table"
                     "bottom"
                 `
-            }}>
-                <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={2} padding={2} sx={{ gridArea: "top" }}>
-                    <SearchBox {...{ searchQuery, setSearchQuery }} placeholder="Search by user name or email" width="30%" />
-                    <CourseFilterMenu filterValue={userCourseIdFilter} setFilterValue={setUserCourseIdFilter} {...{ courses }} />
+                }}
+            >
+                <Stack
+                    alignItems="center"
+                    direction="row"
+                    justifyContent="space-between"
+                    padding={2}
+                    spacing={2}
+                    sx={{ gridArea: "top" }}
+                >
+                    <SearchBox
+                        placeholder="Search by user name or email"
+                        searchQuery={searchQuery}
+                        setSearchQuery={setSearchQuery}
+                        width="30%"
+                    />
 
-                    <Stack direction="row" spacing={2}>
-                        <Button color="primary" variant="outlined" startIcon={<RefreshIcon />} onClick={() => {
-                            setRefreshInProgress(true);
-                            fetchData();
-                        }}
-                        disabled={refreshInProgress}>
-                            <Typography variant="body1">Refresh</Typography>
+                    <CourseFilterMenu
+                        courses={courses}
+                        filterValue={userCourseIdFilter}
+                        setFilterValue={setUserCourseIdFilter}
+                    />
+
+                    <Stack
+                        direction="row"
+                        spacing={2}
+                    >
+                        <Button
+                            color="primary"
+                            disabled={refreshInProgress}
+                            onClick={() => {
+                                setRefreshInProgress(true);
+                                fetchData();
+                            }}
+                            startIcon={<RefreshIcon />}
+                            variant="outlined"
+                        >
+                            <Typography variant="body1">
+                                Refresh
+                            </Typography>
                         </Button>
-                        <Button color="primary" variant={
-                            exhibitionsCombinedState.visibleItems.length > 0 ? "outlined" : "contained"
-                        } startIcon={<FilterAltOffOutlinedIcon />} onClick={clearFilters}
-                        disabled={
-                            !(searchQuery || userCourseIdFilter)
-                        }>
-                            <Typography variant="body1">Clear Filters</Typography>
+
+                        <Button
+                            color="primary"
+                            disabled={
+                                !(searchQuery || userCourseIdFilter)
+                            }
+                            onClick={clearFilters}
+                            startIcon={<FilterAltOffOutlinedIcon />}
+                            variant={
+                                exhibitionsCombinedState.visibleItems.length > 0 ? "outlined" : "contained"
+                            }
+                        >
+                            <Typography variant="body1">
+                                Clear Filters
+                            </Typography>
                         </Button>
                     </Stack>
                 </Stack>
+
                 <Box sx={{ gridArea: "table" }}>
-                    <DataTable tableFields={Exhibition.tableFields}
-                        rowSelectionEnabled={true}
-                        defaultSortColumn="Modified"
+                    <DataTable
                         defaultSortAscending={false}
+                        defaultSortColumn="Modified"
+                        rowSelectionEnabled
+                        tableFields={Exhibition.tableFields}
                         {...
                             (exhibitionsCombinedState.visibleItems.length === exhibitionsCombinedState.items.length && {
                                 noContentMessage: "No exhibitions yet",
@@ -191,36 +245,44 @@ const ExhibitionManagement = () => {
                         }
                     />
                 </Box>
-                <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={2} padding={2} sx={{ gridArea: "bottom" }}>
+
+                <Stack
+                    alignItems="center"
+                    direction="row"
+                    justifyContent="space-between"
+                    padding={2}
+                    spacing={2}
+                    sx={{ gridArea: "bottom" }}
+                >
                     <SelectionSummary
+                        entityPlural="exhibitions"
+                        entitySingular="exhibition"
                         items={exhibitionsCombinedState.items}
                         selectedItems={exhibitionsCombinedState.selectedItems}
                         setSelectedItems={setSelectedExhibitions}
                         visibleItems={exhibitionsCombinedState.visibleItems}
-                        entitySingular="exhibition"
-                        entityPlural="exhibitions"
                     />
                 </Stack>
 
                 <ExhibitionSettingsDialog
-                    editMode={true}
-                    adminMode={true}
+                    adminMode
                     dialogExhibitionAccess={editDialogExhibitionAccess}
-                    setDialogExhibitionAccess={setEditDialogExhibitionAccess}
                     dialogExhibitionId={editDialogExhibitionId}
                     dialogExhibitionTitle={editDialogExhibitionTitle}
-                    setDialogExhibitionTitle={setEditDialogExhibitionTitle}
                     dialogIsOpen={editDialogIsOpen}
-                    setDialogIsOpen={setEditDialogIsOpen}
+                    editMode
                     handleExhibitionEdit={handleExhibitionEditByAdmin}
+                    setDialogExhibitionAccess={setEditDialogExhibitionAccess}
+                    setDialogExhibitionTitle={setEditDialogExhibitionTitle}
+                    setDialogIsOpen={setEditDialogIsOpen}
                 />
 
                 <ItemSingleDeleteDialog
                     Entity={Exhibition}
+                    allItems={exhibitionsCombinedState.items}
                     deleteDialogIsOpen={deleteDialogIsOpen}
                     deleteDialogItem={deleteDialogExhibition}
-                    requireTypedConfirmation={true}
-                    allItems={exhibitionsCombinedState.items}
+                    requireTypedConfirmation
                     setAllItems={setExhibitions}
                     setDeleteDialogIsOpen={setDeleteDialogIsOpen}
                 />

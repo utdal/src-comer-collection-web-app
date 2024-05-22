@@ -1,7 +1,7 @@
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import SignIn from "./Pages/SignIn.js";
-import NavBar from "./Components/NavBar.js";
-import React, { Suspense, lazy } from "react";
+import NavBar from "./Components/NavBar/NavBar.js";
+import React from "react";
 
 import { Box } from "@mui/material";
 import { CollectionBrowser } from "./Pages/Browsers/CollectionBrowser.js";
@@ -12,22 +12,8 @@ import { Helmet, HelmetProvider } from "react-helmet-async";
 
 import { CacheProvider } from "@emotion/react";
 import createCache from "@emotion/cache";
-import { FullPageMessage } from "./Components/FullPageMessage.js";
-import { AccessTimeIcon } from "./Imports/Icons.js";
-
-const ExhibitionPage = lazy(() => import("./Pages/ExhibitionPage.js"));
-const ExhibitionPageWrapper = () => (
-    <Suspense fallback={<FullPageMessage message="Loading exhibition viewer..." Icon={AccessTimeIcon} />}>
-        <ExhibitionPage />
-    </Suspense>
-);
-
-const Account = lazy(() => import("./Pages/Account.js"));
-const AccountWrapper = () => (
-    <Suspense fallback={<FullPageMessage message="Loading account..." Icon={AccessTimeIcon} />}>
-        <Account />
-    </Suspense>
-);
+import { ExhibitionPageWrapper } from "./Components/LazyLoaders/ExhibitionPageWrapper.js";
+import { AccountWrapper } from "./Components/LazyLoaders/AccountWrapper.js";
 
 const App = () => {
     const cache = createCache({
@@ -39,8 +25,10 @@ const App = () => {
         <CacheProvider value={cache}>
             <HelmetProvider>
                 <Helmet>
-                    <meta httpEquiv='Content-Security-Policy'
-                        content={`default-src 'none'; script-src 'self'; style-src 'nonce-${cache.nonce}'; img-src 'self' ${process.env.REACT_APP_API_HOST}; connect-src 'self' ${process.env.REACT_APP_API_HOST}`} />
+                    <meta
+                        content={`default-src 'none'; script-src 'self'; style-src 'nonce-${cache.nonce}'; img-src 'self' ${process.env.REACT_APP_API_HOST}; connect-src 'self' ${process.env.REACT_APP_API_HOST}`}
+                        httpEquiv='Content-Security-Policy'
+                    />
                 </Helmet>
             </HelmetProvider>
 
@@ -56,21 +44,48 @@ const App = () => {
                                 "header"
                                 "body"
                             `
-                        }}>
+                        }}
+                        >
                             <NavBar sx={{ gridArea: "header" }} />
+
                             <Box sx={{ gridArea: "body", position: "relative" }} >
                                 <Routes>
 
-                                    <Route index element={<Navigate to="/SignIn" />} />
+                                    <Route
+                                        element={<Navigate to="/SignIn" />}
+                                        index
+                                    />
 
-                                    <Route path="/BrowseCollection" element={<CollectionBrowser isDialogMode={false} />} />
-                                    <Route path="/Exhibitions" element={<ExhibitionBrowser />} />
-                                    <Route path="/Exhibitions/:exhibitionId" element={<ExhibitionPageWrapper />} />
+                                    <Route
+                                        element={<CollectionBrowser isDialogMode={false} />}
+                                        path="/BrowseCollection"
+                                    />
 
-                                    <Route path="/Account/*" element={<AccountWrapper />} />
+                                    <Route
+                                        element={<ExhibitionBrowser />}
+                                        path="/Exhibitions"
+                                    />
 
-                                    <Route path="/SignIn" element={<SignIn />} />
-                                    <Route path="*" element={<Navigate to="/SignIn" />} replace />
+                                    <Route
+                                        element={<ExhibitionPageWrapper />}
+                                        path="/Exhibitions/:exhibitionId"
+                                    />
+
+                                    <Route
+                                        element={<AccountWrapper />}
+                                        path="/Account/*"
+                                    />
+
+                                    <Route
+                                        element={<SignIn />}
+                                        path="/SignIn"
+                                    />
+
+                                    <Route
+                                        element={<Navigate to="/SignIn" />}
+                                        path="*"
+                                        replace
+                                    />
 
                                 </Routes>
 

@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useEffect, useState } from "react";
+import React, { createContext, useCallback, useContext, useEffect, useMemo, useState } from "react";
 import PropTypes from "prop-types";
 
 export const AppUserContext = createContext();
@@ -7,7 +7,7 @@ export const AppUserProvider = ({ children }) => {
     const [appUser, setAppUser] = useState(null);
     const [appUserIsLoaded, setAppUserIsLoaded] = useState(false);
 
-    const initializeAppUser = async () => {
+    const initializeAppUser = useCallback(async () => {
         try {
             if (!localStorage.getItem("token")) {
                 throw new Error("No user is logged in");
@@ -26,23 +26,32 @@ export const AppUserProvider = ({ children }) => {
         } catch (error) {
             setAppUser(null);
         }
-    };
+    }, []);
 
     useEffect(() => {
         initializeAppUser().then(() => {
             setAppUserIsLoaded(true);
         });
-    }, []);
+    }, [initializeAppUser]);
+
+    const appUserContextValue = useMemo(() => {
+        return {
+            appUser,
+            setAppUser,
+            initializeAppUser,
+            appUserIsLoaded
+        };
+    }, [appUser, setAppUser, initializeAppUser, appUserIsLoaded]);
 
     return (
-        <AppUserContext.Provider value={{ appUser, setAppUser, initializeAppUser, appUserIsLoaded }}>
+        <AppUserContext.Provider value={appUserContextValue}>
             {children}
         </AppUserContext.Provider>
     );
 };
 
 AppUserProvider.propTypes = {
-    children: PropTypes.node
+    children: PropTypes.arrayOf(PropTypes.element).isRequired
 };
 
 /**

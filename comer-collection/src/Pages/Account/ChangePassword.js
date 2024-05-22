@@ -55,69 +55,107 @@ const ChangePassword = () => {
     });
 
     return (
-        <Box component={Paper} square sx={{ height: "100%" }}>
-            <Box component="form" sx={{ height: "100%" }} onSubmit={handleChangePassword}>
-                <Stack direction="column" spacing={2} alignItems="center" justifyContent="center"
-                    sx={{ width: "100%", height: "100%" }}>
-                    {appUser.pw_change_required && (
-                        <>
-                            <Typography variant="h5">Please change your password.</Typography>
-                            <Divider />
-                        </>
-                    )}
-                    <TextField sx={{ minWidth: "400px" }} autoFocus
+        <Box
+            component={Paper}
+            square
+            sx={{ height: "100%" }}
+        >
+            <Box
+                component="form"
+                onSubmit={handleChangePassword}
+                sx={{ height: "100%" }}
+            >
+                <Stack
+                    alignItems="center"
+                    direction="column"
+                    justifyContent="center"
+                    spacing={2}
+                    sx={{ width: "100%", height: "100%" }}
+                >
+                    {appUser.pw_change_required
+                        ? (
+                            <>
+                                <Typography variant="h5">
+                                    Please change your password.
+                                </Typography>
+
+                                <Divider />
+                            </>
+                        )
+                        : null}
+
+                    <TextField
+                        autoFocus
                         error={Boolean(error)}
                         label="Old Password"
-                        type="password"
                         name="password"
-                        value={oldPassword}
                         onChange={(event) => {
                             setOldPassword(event.target.value);
                             setError(false);
                         }}
                         required
+                        sx={{ minWidth: "400px" }}
+                        type="password"
+                        value={oldPassword}
                     />
+
                     <Divider />
-                    <TextField sx={{ minWidth: "400px" }}
+
+                    <TextField
                         error={Boolean(error)}
                         label="New Password"
-                        type="password"
                         name="password"
-                        value={newPassword}
                         onChange={(event) => {
                             setNewPassword(event.target.value);
                             setError(false);
                         }}
                         required
+                        sx={{ minWidth: "400px" }}
+                        type="password"
+                        value={newPassword}
                     />
-                    <TextField sx={{ minWidth: "400px" }}
+
+                    <TextField
                         error={Boolean(error)}
                         label="Confirm New Password"
-                        type="password"
                         name="password"
-                        value={newPasswordConfirm}
                         onChange={(event) => {
                             setNewPasswordConfirm(event.target.value);
                             setError(false);
                         }}
                         required
-                    />
-                    <Divider />
-                    <Button type="submit"
-                        variant="contained"
                         sx={{ minWidth: "400px" }}
+                        type="password"
+                        value={newPasswordConfirm}
+                    />
+
+                    <Divider />
+
+                    <Button
                         disabled={!(submitEnabled && oldPassword && newPassword && newPassword === newPasswordConfirm)}
+                        sx={{ minWidth: "400px" }}
+                        type="submit"
+                        variant="contained"
                     >
-                        <Typography variant="body1">Change Password</Typography>
+                        <Typography variant="body1">
+                            Change Password
+                        </Typography>
                     </Button>
-                    {!appUser.pw_change_required && (<Button disabled={!submitEnabled} onClick={() => {
-                        navigate("/Account/Profile");
-                    }}
-                    variant="outlined"
-                    sx={{ minWidth: "400px" }}
-                    >
-                        <Typography variant="body1">Return to Profile</Typography>
-                    </Button>)}
+
+                    {!appUser.pw_change_required && (
+                        <Button
+                            disabled={!submitEnabled}
+                            onClick={() => {
+                                navigate("/Account/Profile");
+                            }}
+                            sx={{ minWidth: "400px" }}
+                            variant="outlined"
+                        >
+                            <Typography variant="body1">
+                                Return to Profile
+                            </Typography>
+                        </Button>
+                    )}
                 </Stack>
             </Box>
         </Box>

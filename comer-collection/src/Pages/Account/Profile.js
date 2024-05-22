@@ -6,7 +6,7 @@ import {
     Box
 } from "@mui/material";
 import { Navigate, useNavigate } from "react-router";
-import { DataTable } from "../../Components/DataTable.js";
+import { DataTable } from "../../Components/DataTable/DataTable.js";
 import { SecurityIcon, PersonIcon, AccountCircleIcon, SchoolIcon, PhotoCameraBackIcon, CollectionManagerIcon } from "../../Imports/Icons.js";
 import { useAppUser } from "../../ContextProviders/AppUser.js";
 import { useTitle } from "../../ContextProviders/AppFeatures.js";
@@ -32,7 +32,9 @@ const Profile = () => {
         {
             columnDescription: "Course Name",
             generateTableCell: (course) => (
-                <Typography variant="body1">{course.name}</Typography>
+                <Typography variant="body1">
+                    {course.name}
+                </Typography>
             )
         },
         {
@@ -57,7 +59,9 @@ const Profile = () => {
             columnDescription: "Notes",
             maxWidth: "300px",
             generateTableCell: (course) => (
-                <Typography variant="body1">{course.notes}</Typography>
+                <Typography variant="body1">
+                    {course.notes}
+                </Typography>
             )
         }
     ];
@@ -68,10 +72,17 @@ const Profile = () => {
             generateTableCell: (user) => (
                 user.has_name
                     ? (
-                        <Typography variant="body1">{user.full_name}</Typography>
+                        <Typography variant="body1">
+                            {user.full_name}
+                        </Typography>
                     )
                     : (
-                        <Typography variant="body1" sx={{ opacity: 0.5 }}>Not set</Typography>
+                        <Typography
+                            sx={{ opacity: 0.5 }}
+                            variant="body1"
+                        >
+                            Not set
+                        </Typography>
                     )
             )
         },
@@ -82,14 +93,25 @@ const Profile = () => {
         {
             columnDescription: "Password",
             generateTableCell: (user) => (
-                <Stack direction="row" spacing={2} alignItems="center">
-                    <Typography variant="body1">{new Date(appUser.pw_updated).toLocaleString()}</Typography>
-                    <Button color={user.is_admin_or_collection_manager ? "secondary" : "primary"}
-                        variant="outlined"
+                <Stack
+                    alignItems="center"
+                    direction="row"
+                    spacing={2}
+                >
+                    <Typography variant="body1">
+                        {new Date(appUser.pw_updated).toLocaleString()}
+                    </Typography>
+
+                    <Button
+                        color={user.is_admin_or_collection_manager ? "secondary" : "primary"}
                         onClick={() => {
                             navigate("/Account/ChangePassword");
-                        }}>
-                        <Typography variant="body1">Change</Typography>
+                        }}
+                        variant="outlined"
+                    >
+                        <Typography variant="body1">
+                            Change
+                        </Typography>
                     </Button>
                 </Stack>
             )
@@ -97,8 +119,14 @@ const Profile = () => {
         {
             columnDescription: "User Type",
             generateTableCell: (user) => (
-                <Stack direction="row" spacing={1}>
-                    <Typography variant="body1">{user.is_admin ? "Administrator" : user.is_collection_manager ? "Collection Manager" : "Curator"}</Typography>
+                <Stack
+                    direction="row"
+                    spacing={1}
+                >
+                    <Typography variant="body1">
+                        {user.is_admin ? "Administrator" : user.is_collection_manager ? "Collection Manager" : "Curator"}
+                    </Typography>
+
                     {user.is_admin ? (<SecurityIcon color="secondary" />) : user.is_collection_manager ? (<CollectionManagerIcon color="secondary" />) : (<PersonIcon color="primary" />)}
                 </Stack>
             )
@@ -106,10 +134,31 @@ const Profile = () => {
         {
             columnDescription: "Exhibition Quota",
             generateTableCell: (user) => (
-                <Stack direction="row" spacing={1}>
+                <Stack
+                    direction="row"
+                    spacing={1}
+                >
                     <PhotoCameraBackIcon />
-                    <Typography variant="body1">{user.Exhibitions.length} of {user.exhibition_quota} </Typography>
-                    <Typography variant="body1" color="gray">{user.is_admin ? " (ignored for administrators)" : ""}</Typography>
+
+                    <Typography variant="body1">
+                        {user.Exhibitions.length}
+
+                        {" "}
+                        of
+
+                        {" "}
+
+                        {user.exhibition_quota}
+
+                        {" "}
+                    </Typography>
+
+                    <Typography
+                        color="gray"
+                        variant="body1"
+                    >
+                        {user.is_admin ? " (ignored for administrators)" : ""}
+                    </Typography>
                 </Stack>
             )
         }
@@ -118,45 +167,84 @@ const Profile = () => {
     return (appUser.pw_change_required &&
         <Navigate to="/Account/ChangePassword" />
     ) || (!appUser.pw_change_required &&
-        <Box component={Paper} square sx={{ height: "100%", overflowY: "auto" }}>
-            <Stack spacing={4} paddingTop={5} paddingLeft={5} paddingRight={5}>
+        <Box
+            component={Paper}
+            square
+            sx={{ height: "100%", overflowY: "auto" }}
+        >
+            <Stack
+                paddingLeft={5}
+                paddingRight={5}
+                paddingTop={5}
+                spacing={4}
+            >
                 <Stack spacing={2}>
-                    <Stack direction="row" paddingLeft={1} spacing={2} alignItems="center">
+                    <Stack
+                        alignItems="center"
+                        direction="row"
+                        paddingLeft={1}
+                        spacing={2}
+                    >
                         <AccountCircleIcon fontSize="large" />
-                        <Typography variant="h4">Profile Information</Typography>
+
+                        <Typography variant="h4">
+                            Profile Information
+                        </Typography>
                     </Stack>
+
                     <Box sx={{ height: "100px" }}>
                         <DataTable
                             items={[appUser]}
-                            visibleItems={[appUser]}
                             tableFields={userTableFields}
+                            visibleItems={[appUser]}
                         />
                     </Box>
                 </Stack>
             </Stack>
-            <Stack spacing={4} paddingTop={5} paddingLeft={5} paddingRight={5} height="400px">
-                <Stack spacing={2} sx={{
-                    display: "grid",
-                    gridTemplateRows: "50px 350px",
-                    gridTemplateColumns: "1fr",
-                    gridTemplateAreas: `
+
+            <Stack
+                height="400px"
+                paddingLeft={5}
+                paddingRight={5}
+                paddingTop={5}
+                spacing={4}
+            >
+                <Stack
+                    overflow="hidden"
+                    spacing={2}
+                    sx={{
+                        display: "grid",
+                        gridTemplateRows: "50px 350px",
+                        gridTemplateColumns: "1fr",
+                        gridTemplateAreas: `
           "title"
           "content"
         `
-                }} overflow="hidden">
-                    <Stack direction="row" paddingLeft={1} spacing={2} alignItems="center"
-                        sx={{ gridArea: "title" }}>
+                    }}
+                >
+                    <Stack
+                        alignItems="center"
+                        direction="row"
+                        paddingLeft={1}
+                        spacing={2}
+                        sx={{ gridArea: "title" }}
+                    >
                         <SchoolIcon fontSize="large" />
-                        <Typography variant="h4">My Courses</Typography>
+
+                        <Typography variant="h4">
+                            My Courses
+                        </Typography>
                     </Stack>
-                    <DataTable sx={{ overflow: "scroll" }}
-                        items={appUser.Courses}
-                        visibleItems={appUser.Courses}
-                        tableFields={courseTableFields}
+
+                    <DataTable
                         NoContentIcon={SchoolIcon}
-                        noContentMessage="You are not enrolled in any courses."
                         defaultSortAscending={false}
                         defaultSortColumn="Start"
+                        items={appUser.Courses}
+                        noContentMessage="You are not enrolled in any courses."
+                        sx={{ overflow: "scroll" }}
+                        tableFields={courseTableFields}
+                        visibleItems={appUser.Courses}
                     />
                 </Stack>
             </Stack>
