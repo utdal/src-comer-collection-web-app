@@ -249,7 +249,9 @@ const UserManagement = () => {
                             variant="outlined"
                         >
                             <Typography variant="body1">
-                                Manage Course Enrollments for
+
+                                {"Update Courses for "}
+
                                 {usersCombinedState.selectedItems.length}
 
                                 {" "}
