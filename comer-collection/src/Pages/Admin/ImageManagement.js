@@ -70,10 +70,10 @@ const ImageManagement = () => {
         setSearchQuery("");
     }, []);
 
-    useAccountNavTitle("Image Management");
     const [appUser] = useAppUser();
-    const setTitleText = useTitle();
     const navigate = useNavigate();
+    useAccountNavTitle("Image Management");
+    useTitle("Image Management");
 
     const fetchImages = useCallback(async () => {
         const imageData = await sendAuthenticatedRequest("GET", "/api/admin/images");
@@ -106,11 +106,10 @@ const ImageManagement = () => {
     }, [fetchImages, fetchArtists, fetchTags]);
 
     useEffect(() => {
-        setTitleText("Image Management");
         if (appUser.is_admin_or_collection_manager) {
             handleRefresh();
         }
-    }, [appUser.is_admin_or_collection_manager, handleRefresh, setTitleText]);
+    }, [appUser.is_admin_or_collection_manager, handleRefresh]);
 
     const imageFilterFunction = useCallback((image) => {
         return (

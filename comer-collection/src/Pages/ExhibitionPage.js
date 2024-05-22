@@ -31,7 +31,7 @@ const ExhibitionPage = () => {
 
     const [appUser, , , appUserIsLoaded] = useAppUser();
     const showSnackbar = useSnackbar();
-    const setTitleText = useTitle();
+    const setTitleText = useTitle("Exhibition");
 
     const getSaveUrl = useCallback(() => {
         if (appUser?.Exhibitions.filter((ex) => ex.id === exhibitionId).length) {

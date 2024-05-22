@@ -84,12 +84,11 @@ const Profile = () => {
         setCourses(appUser.Courses);
     }, [appUser, setCourses, setUsers]);
 
-    const setTitleText = useTitle();
+    useTitle("Profile");
 
     useEffect(() => {
         setSelectedNavItem("Profile");
-        setTitleText("Profile");
-    }, [setSelectedNavItem, setTitleText]);
+    }, [setSelectedNavItem]);
 
     return (appUser.pw_change_required &&
         <Navigate to="/Account/ChangePassword" />

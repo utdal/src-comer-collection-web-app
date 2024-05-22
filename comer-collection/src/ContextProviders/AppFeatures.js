@@ -1,5 +1,5 @@
 import { Snackbar, Alert, Stack, Typography, ThemeProvider, createTheme } from "@mui/material";
-import React, { useCallback, useContext, useState, createContext, useMemo } from "react";
+import React, { useCallback, useContext, useState, createContext, useMemo, useEffect } from "react";
 
 import PropTypes from "prop-types";
 
@@ -131,8 +131,16 @@ export const useSnackbar = () => {
     return showSnackbar;
 };
 
-export const useTitle = () => {
+/**
+ * Change the webpage title displayed in the browser tab
+ * @param {string} defaultTitleText
+ * @returns {function} setTitleText(newTitleText)
+ */
+export const useTitle = (defaultTitleText) => {
     const { setTitleText } = useContext(AppFeatureContext);
+    useEffect(() => {
+        setTitleText(defaultTitleText);
+    }, [defaultTitleText, setTitleText]);
     return setTitleText;
 };
 

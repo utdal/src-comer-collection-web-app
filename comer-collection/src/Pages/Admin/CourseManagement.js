@@ -56,7 +56,7 @@ const CourseManagement = () => {
 
     const [appUser] = useAppUser();
     const navigate = useNavigate();
-    const setTitleText = useTitle();
+    useTitle("Course Management");
 
     useAccountNavTitle("Course Management");
 
@@ -76,11 +76,10 @@ const CourseManagement = () => {
     }, [setCourses]);
 
     useEffect(() => {
-        setTitleText("Course Management");
         if (appUser.is_admin) {
             handleRefresh();
         }
-    }, [appUser.is_admin, setTitleText, handleRefresh]);
+    }, [appUser.is_admin, handleRefresh]);
 
     const courseFilterFunction = useCallback((course) => {
         return doesItemMatchSearchQuery(searchQuery, course, ["name", "notes"]);

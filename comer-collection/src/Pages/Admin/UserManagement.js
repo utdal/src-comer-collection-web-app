@@ -67,7 +67,7 @@ const UserManagement = () => {
     const [appUser] = useAppUser();
     const showSnackbar = useSnackbar();
     const navigate = useNavigate();
-    const setTitleText = useTitle();
+    useTitle("User Management");
 
     useAccountNavTitle("User Management");
 
@@ -90,11 +90,10 @@ const UserManagement = () => {
     }, [setUsers]);
 
     useEffect(() => {
-        setTitleText("User Management");
         if (appUser.is_admin) {
             handleRefresh();
         }
-    }, [appUser.is_admin, handleRefresh, setTitleText]);
+    }, [appUser.is_admin, handleRefresh]);
 
     const userFilterFunction = useCallback((user) => {
         return (

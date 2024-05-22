@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Navigate, useNavigate } from "react-router";
 import { Box, Button, Divider, Paper, Stack, TextField, Typography } from "@mui/material";
 import { sendAuthenticatedRequest } from "../Helpers/APICalls.js";
@@ -14,7 +14,7 @@ const SignIn = () => {
     const [formEnabled, setFormEnabled] = useState(true);
 
     const navigate = useNavigate();
-    const setTitleText = useTitle();
+    useTitle("Sign In");
 
     const handleSignIn = async (event) => {
         event.preventDefault();
@@ -39,10 +39,6 @@ const SignIn = () => {
             setError(true);
         }
     };
-
-    useEffect(() => {
-        setTitleText("Sign In");
-    });
 
     return (appUser &&
         <Navigate

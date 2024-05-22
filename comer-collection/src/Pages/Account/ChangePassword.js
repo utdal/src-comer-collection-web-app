@@ -21,7 +21,7 @@ const ChangePassword = () => {
     const showSnackbar = useSnackbar();
 
     const navigate = useNavigate();
-    const setTitleText = useTitle();
+    useTitle("Change Password");
 
     // Api call here
     const handleChangePassword = async (event) => {
@@ -51,7 +51,6 @@ const ChangePassword = () => {
 
     useEffect(() => {
         setSelectedNavItem("Change Password");
-        setTitleText("Change Password");
     });
 
     return (

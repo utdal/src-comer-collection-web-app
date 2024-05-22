@@ -6,7 +6,6 @@ import { SellIcon, PersonIcon, GridOnIcon, ViewListIcon } from "../../Imports/Ic
 import { TagFilterMenu } from "../../Components/Menus/TagFilterMenu.js";
 import SearchBox from "../../Components/SearchBox.js";
 import { doesItemMatchSearchQuery } from "../../Helpers/SearchUtilities.js";
-import { useTitle } from "../../ContextProviders/AppFeatures.js";
 import PropTypes from "prop-types";
 import { ThumbnailBox } from "../../Components/CollectionBrowser/ThumbnailBox.js";
 
@@ -118,8 +117,6 @@ export const CollectionBrowser = ({ isDialogMode, selectedItem = null, setSelect
     const [tagFilter, setTagFilter] = useState(null);
     const [searchQuery, setSearchQuery] = useState("");
 
-    const setTitleText = useTitle();
-
     const fetchImageData = useCallback(async () => {
         try {
             const imageData = await sendAuthenticatedRequest("GET", "/api/public/images");
@@ -148,13 +145,10 @@ export const CollectionBrowser = ({ isDialogMode, selectedItem = null, setSelect
     }, []);
 
     useEffect(() => {
-        if (!isDialogMode) {
-            setTitleText("Browse Collection");
-        }
         fetchImageData();
         fetchArtistData();
         fetchTagData();
-    }, [isDialogMode, setTitleText, fetchArtistData, fetchImageData, fetchTagData]);
+    }, [isDialogMode, fetchArtistData, fetchImageData, fetchTagData]);
 
     const renderedImageContainerData = useMemo(() => images.map((image) => (
         [

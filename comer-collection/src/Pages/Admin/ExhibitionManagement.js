@@ -41,11 +41,11 @@ const ExhibitionManagement = () => {
     const [searchQuery, setSearchQuery] = useState("");
 
     const [appUser] = useAppUser();
-    const setTitleText = useTitle();
 
     const [userCourseIdFilter, setUserCourseIdFilter] = useState(null);
 
     useAccountNavTitle("Exhibition Management");
+    useTitle("Exhibition Management");
 
     const handleClearFilters = useCallback(() => {
         setUserCourseIdFilter(null);
@@ -74,11 +74,10 @@ const ExhibitionManagement = () => {
     }, [setExhibitions]);
 
     useEffect(() => {
-        setTitleText("Exhibition Management");
         if (appUser.is_admin) {
             handleRefresh();
         }
-    }, [appUser, handleRefresh, setTitleText]);
+    }, [appUser, handleRefresh]);
 
     const exhibitionFilterFunction = useCallback((exhibition) => {
         return (

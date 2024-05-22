@@ -55,7 +55,7 @@ const exhibitionTableFields = [
 
 const MyExhibitions = () => {
     const [, setSelectedNavItem] = useAccountNav();
-    const setTitleText = useTitle();
+    useTitle("My Exhibitions");
 
     const [appUser, , initializeAppUser] = useAppUser();
 
@@ -76,8 +76,7 @@ const MyExhibitions = () => {
 
     useEffect(() => {
         setSelectedNavItem("My Exhibitions");
-        setTitleText("My Exhibitions");
-    }, [setSelectedNavItem, setTitleText]);
+    }, [setSelectedNavItem]);
 
     const handleOpenExhibitionCreateDialog = useCallback(() => {
         setDialogEditMode(false);

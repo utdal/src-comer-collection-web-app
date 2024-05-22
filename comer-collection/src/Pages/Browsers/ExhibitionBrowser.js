@@ -11,7 +11,7 @@ export const ExhibitionBrowser = () => {
 
     const navigate = useNavigate();
 
-    const setTitleText = useTitle();
+    useTitle("Public Exhibitions");
 
     const fetchPublicExhibitionData = useCallback(async () => {
         try {
@@ -23,9 +23,8 @@ export const ExhibitionBrowser = () => {
     }, []);
 
     useEffect(() => {
-        setTitleText("Public Exhibitions");
         fetchPublicExhibitionData();
-    }, [setTitleText, fetchPublicExhibitionData]);
+    }, [fetchPublicExhibitionData]);
 
     const exhibitionTableFields = [
         {
