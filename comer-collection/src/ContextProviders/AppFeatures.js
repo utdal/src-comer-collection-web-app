@@ -126,6 +126,10 @@ AppFeatureProvider.propTypes = {
     children: PropTypes.node.isRequired
 };
 
+/**
+ * Allows components within an AppFeaturesProvider to trigger the snackbar
+ * @returns {function} showSnackbar
+ */
 export const useSnackbar = () => {
     const { showSnackbar } = useContext(AppFeatureContext);
     return showSnackbar;
