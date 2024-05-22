@@ -155,7 +155,7 @@ export const ItemMultiCreateDialog = ({ Entity, refreshAllItems, dialogInstructi
                                             }}
                                             required={Boolean(f.isRequired)}
                                             sx={{
-                                                minWidth: "330px"
+                                                minWidth: "250px"
                                             }}
                                             value={u[f.fieldName]}
                                         />
