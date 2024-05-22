@@ -31,7 +31,7 @@ import { ClearFilterButton } from "../../Components/Buttons/ClearFilterButton.js
 import { RefreshButton } from "../../Components/Buttons/RefreshButton.js";
 import { MultiCreateButton } from "../../Components/Buttons/MultiCreateButton.js";
 import { ManagementButtonStack } from "../../Components/ManagementPage/ManagementButtonStack.js";
-import { useDialogState } from "./useDialogState.js";
+import { useDialogState } from "../../Hooks/useDialogState.js";
 
 const UserManagement = () => {
     const [usersCombinedState, setUsers, setSelectedUsers, filterUsers] = useItemsReducer(User);

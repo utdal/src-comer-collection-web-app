@@ -10,7 +10,7 @@ import {
 import { SecurityIcon, PersonIcon, CollectionManagerIcon } from "../../Imports/Icons.js";
 import { User } from "../../Classes/Entities/User.js";
 import { useSnackbar } from "../../ContextProviders/AppFeatures.js";
-import { dialogStatePropTypesShape } from "../../Pages/Admin/useDialogState.js";
+import { dialogStatePropTypesShape } from "../../Hooks/useDialogState.js";
 import { useManagementCallbacks } from "../../ContextProviders/ManagementPageProvider.js";
 
 const userPrivilegeOptions = () => [

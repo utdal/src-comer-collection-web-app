@@ -1,6 +1,6 @@
 import { useCallback, useMemo, useState } from "react";
 import PropTypes from "prop-types";
-import { Entity, entityPropTypeShape } from "../../Classes/Entity.js";
+import { Entity, entityPropTypeShape } from "../Classes/Entity.js";
 
 export const dialogStatePropTypesShape = PropTypes.shape({
     dialogIsOpen: PropTypes.bool.isRequired,

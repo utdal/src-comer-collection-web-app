@@ -10,7 +10,7 @@ import {
 import { ContentCopyIcon, SyncIcon } from "../../Imports/Icons.js";
 import { useClipboard, useSnackbar } from "../../ContextProviders/AppFeatures.js";
 import { User } from "../../Classes/Entities/User.js";
-import { dialogStatePropTypesShape } from "../../Pages/Admin/useDialogState.js";
+import { dialogStatePropTypesShape } from "../../Hooks/useDialogState.js";
 import { useManagementCallbacks } from "../../ContextProviders/ManagementPageProvider.js";
 
 const randomPassword = () => {
