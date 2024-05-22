@@ -10,15 +10,16 @@ import {
 import { DeleteIcon } from "../../Imports/Icons.js";
 import PropTypes from "prop-types";
 import { useSnackbar } from "../../ContextProviders/AppFeatures.js";
-import { useItems } from "../../ContextProviders/ManagementPageProvider.js";
+import { useEntity, useItems } from "../../ContextProviders/ManagementPageProvider.js";
 import { entityPropTypeShape } from "../../Classes/Entity.js";
 
-export const ItemSingleDeleteDialog = ({ requireTypedConfirmation, Entity, deleteDialogItem, deleteDialogIsOpen, setDeleteDialogIsOpen }) => {
+export const ItemSingleDeleteDialog = ({ requireTypedConfirmation, deleteDialogItem, deleteDialogIsOpen, setDeleteDialogIsOpen }) => {
     const [deleteConfirmation, setDeleteConfirmation] = useState("");
     const [submitEnabled, setSubmitEnabled] = useState(true);
     const showSnackbar = useSnackbar();
 
     const [items, setItems] = useItems();
+    const Entity = useEntity();
 
     useEffect(() => {
         if (deleteDialogIsOpen) { setSubmitEnabled(true); }
@@ -141,7 +142,6 @@ export const ItemSingleDeleteDialog = ({ requireTypedConfirmation, Entity, delet
 };
 
 ItemSingleDeleteDialog.propTypes = {
-    Entity: PropTypes.node.isRequired,
     deleteDialogIsOpen: PropTypes.bool.isRequired,
     deleteDialogItem: PropTypes.shape(entityPropTypeShape).isRequired,
     requireTypedConfirmation: PropTypes.bool.isRequired,

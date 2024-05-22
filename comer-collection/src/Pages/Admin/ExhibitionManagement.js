@@ -13,7 +13,7 @@ import { Navigate } from "react-router";
 import { SelectionSummary } from "../../Components/SelectionSummary.js";
 import { sendAuthenticatedRequest } from "../../Helpers/APICalls.js";
 import { ExhibitionSettingsDialog } from "../../Components/Dialogs/ExhibitionSettingsDialog.js";
-import { useSnackbar, useTitle } from "../../ContextProviders/AppFeatures.js";
+import { useTitle } from "../../ContextProviders/AppFeatures.js";
 import { useAppUser } from "../../ContextProviders/AppUser.js";
 import { doesItemMatchSearchQuery } from "../../Helpers/SearchUtilities.js";
 import { CourseFilterMenu } from "../../Components/Menus/CourseFilterMenu.js";
@@ -44,7 +44,6 @@ const ExhibitionManagement = () => {
 
     const [, setSelectedNavItem] = useAccountNav();
     const [appUser] = useAppUser();
-    const showSnackbar = useSnackbar();
     const setTitleText = useTitle();
 
     const [userCourseIdFilter, setUserCourseIdFilter] = useState(null);
@@ -96,21 +95,6 @@ const ExhibitionManagement = () => {
     useEffect(() => {
         filterExhibitions(exhibitionFilterFunction);
     }, [filterExhibitions, exhibitionFilterFunction]);
-
-    const handleExhibitionEditByAdmin = async (exhibitionId, title, privacy) => {
-        try {
-            await sendAuthenticatedRequest("PUT", `/api/admin/exhibitions/${exhibitionId}`, { title, privacy });
-            setEditDialogIsOpen(false);
-            setEditDialogExhibitionId(null);
-            setEditDialogExhibitionTitle("");
-            setEditDialogExhibitionAccess(null);
-            showSnackbar("Exhibition updated", "success");
-        } catch (e) {
-            console.log(`Error updating exhibition: ${e.message}`);
-            showSnackbar("Error updating exhibition", "error");
-        }
-        fetchData();
-    };
 
     const handleOpenExhibitionSettings = useCallback((exhibition) => {
         setEditDialogExhibitionId(exhibition.id);
@@ -243,8 +227,9 @@ const ExhibitionManagement = () => {
                     dialogExhibitionTitle={editDialogExhibitionTitle}
                     dialogIsOpen={editDialogIsOpen}
                     editMode
-                    handleExhibitionEdit={handleExhibitionEditByAdmin}
+                    refreshFunction={fetchData}
                     setDialogExhibitionAccess={setEditDialogExhibitionAccess}
+                    setDialogExhibitionId={setEditDialogExhibitionId}
                     setDialogExhibitionTitle={setEditDialogExhibitionTitle}
                     setDialogIsOpen={setEditDialogIsOpen}
                 />

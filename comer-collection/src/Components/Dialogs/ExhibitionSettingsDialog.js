@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useCallback } from "react";
 import {
     Stack, Dialog,
     DialogTitle,
@@ -9,8 +9,11 @@ import {
 } from "@mui/material";
 import { SaveIcon, PublicIcon, LockIcon, VpnLockIcon } from "../../Imports/Icons.js";
 import PropTypes from "prop-types";
+import { Exhibition, MyExhibition } from "../../Classes/Entities/Exhibition.js";
+import { useSnackbar } from "../../ContextProviders/AppFeatures.js";
+import { useAppUser } from "../../ContextProviders/AppUser.js";
 
-export const exhibitionAccessOptions = (adminMode) => [
+const exhibitionAccessOptions = (adminMode) => [
     {
         value: "PRIVATE",
         displayText: "Private",
@@ -37,7 +40,58 @@ export const exhibitionAccessOptions = (adminMode) => [
     }
 ];
 
-export const ExhibitionSettingsDialog = ({ editMode, adminMode, dialogIsOpen, setDialogIsOpen, dialogExhibitionId, dialogExhibitionTitle, dialogExhibitionAccess, setDialogExhibitionTitle, setDialogExhibitionAccess, handleExhibitionCreate, handleExhibitionEdit }) => {
+export const ExhibitionSettingsDialog = ({ editMode, adminMode, dialogIsOpen, setDialogIsOpen, dialogExhibitionId, dialogExhibitionTitle, dialogExhibitionAccess, setDialogExhibitionId, setDialogExhibitionTitle, setDialogExhibitionAccess, refreshFunction }) => {
+    const showSnackbar = useSnackbar();
+    const [, , initializeAppUser] = useAppUser();
+
+    const handleExhibitionCreate = useCallback((title, privacy) => {
+        MyExhibition.handleMultiCreate([{
+            title, privacy
+        }]).then((exhibitionPromises) => {
+            const [{ status }] = exhibitionPromises;
+            if (status === "fulfilled") {
+                setDialogIsOpen(false);
+                setDialogExhibitionId(null);
+                setDialogExhibitionTitle("");
+                setDialogExhibitionAccess(null);
+                showSnackbar("Successfully created exhibition", "success");
+            } else {
+                throw new Error("Could not create exhibition");
+            }
+        }).catch((err) => {
+            showSnackbar(err.message, "error");
+        }).finally(() => {
+            initializeAppUser();
+        });
+    }, [initializeAppUser, setDialogExhibitionAccess, setDialogExhibitionId, setDialogExhibitionTitle, setDialogIsOpen, showSnackbar]);
+
+    const handleExhibitionEdit = useCallback((exhibitionId, title, privacy) => {
+        const ExhibitionClass = adminMode ? Exhibition : MyExhibition;
+        ExhibitionClass.handleEdit(exhibitionId, {
+            title, privacy
+        }).then((msg) => {
+            setDialogIsOpen(false);
+            setDialogExhibitionId(null);
+            setDialogExhibitionTitle("");
+            setDialogExhibitionAccess(null);
+            showSnackbar(msg, "success");
+        }).catch((err) => {
+            showSnackbar(err.message, "error");
+        }).finally(() => {
+            initializeAppUser();
+        });
+        refreshFunction();
+    }, [adminMode, initializeAppUser, refreshFunction, setDialogExhibitionAccess, setDialogExhibitionId, setDialogExhibitionTitle, setDialogIsOpen, showSnackbar]);
+
+    const handleFormSubmit = useCallback((e) => {
+        e.preventDefault();
+        if (editMode) {
+            handleExhibitionEdit(dialogExhibitionId, dialogExhibitionTitle, dialogExhibitionAccess);
+        } else {
+            handleExhibitionCreate(dialogExhibitionTitle, dialogExhibitionAccess);
+        }
+    }, [dialogExhibitionAccess, dialogExhibitionId, dialogExhibitionTitle, editMode, handleExhibitionCreate, handleExhibitionEdit]);
+
     return (
         <Dialog
             component="form"
@@ -47,10 +101,7 @@ export const ExhibitionSettingsDialog = ({ editMode, adminMode, dialogIsOpen, se
                 if (reason === "backdropClick") { return; }
                 setDialogIsOpen(false);
             }}
-            onSubmit={(e) => {
-                e.preventDefault();
-                if (editMode) { handleExhibitionEdit(dialogExhibitionId, dialogExhibitionTitle, dialogExhibitionAccess); } else { handleExhibitionCreate(dialogExhibitionTitle, dialogExhibitionAccess); }
-            }}
+            onSubmit={handleFormSubmit}
             open={dialogIsOpen}
             sx={{ zIndex: 10000 }}
         >
@@ -179,9 +230,9 @@ ExhibitionSettingsDialog.propTypes = {
     dialogExhibitionTitle: PropTypes.string.isRequired,
     dialogIsOpen: PropTypes.bool.isRequired,
     editMode: PropTypes.bool.isRequired,
-    handleExhibitionCreate: PropTypes.func.isRequired,
-    handleExhibitionEdit: PropTypes.func.isRequired,
+    refreshFunction: PropTypes.func.isRequired,
     setDialogExhibitionAccess: PropTypes.func.isRequired,
+    setDialogExhibitionId: PropTypes.func.isRequired,
     setDialogExhibitionTitle: PropTypes.func.isRequired,
     setDialogIsOpen: PropTypes.func.isRequired
 };

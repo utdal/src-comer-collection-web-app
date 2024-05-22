@@ -13,10 +13,6 @@ class Exhibition extends Entity {
     static singular = "exhibition";
     static plural = "exhibitions";
 
-    static handleMultiCreate () {
-        return Promise.reject(new Error("MultiCreate is not allowed for exhibitions"));
-    }
-
     static tableFields = [
         {
             columnDescription: "ID",
@@ -55,7 +51,7 @@ class Exhibition extends Entity {
     ];
 }
 
-class MyExhition extends Exhibition {
+class MyExhibition extends Exhibition {
     static baseUrl = "/api/user/exhibitions";
 }
 
@@ -77,4 +73,4 @@ export const exhibitionStatePropTypesShape = {
     images: PropTypes.arrayOf(entityPropTypeShape)
 };
 
-export { Exhibition, MyExhition };
+export { Exhibition, MyExhibition };

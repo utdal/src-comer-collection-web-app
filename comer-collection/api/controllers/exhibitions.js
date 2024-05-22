@@ -8,8 +8,8 @@ const isAppUserExhibitionOwner = (appUser, exhibitionId) => {
     // Exhibitions owned by current app user are already included
     // during authentication process.  Scan that list to determine
     // whether the exhibition being edited is owned by the current user.
-    return Boolean(appUser.Exhibitions
-        .filter((ex) => ex.id === exhibitionId).length);
+    return Boolean(appUser.toJSON().Exhibitions
+        .find((ex) => ex.id === parseInt(exhibitionId)));
 };
 
 const listExhibitions = async (req, res, next) => {

@@ -1,7 +1,7 @@
 import React from "react";
 import { useTableRowItem } from "../../../ContextProviders/TableRowProvider.js";
 import { Typography } from "@mui/material";
-import { Entity } from "../../../Classes/Entity";
+import { Entity } from "../../../Classes/Entity.js";
 
 export const ExhibitionDateModifiedCell = () => {
     const exhibition = useTableRowItem();
