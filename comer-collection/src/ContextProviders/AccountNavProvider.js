@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useMemo, useState } from "react";
+import React, { createContext, useContext, useEffect, useMemo, useState } from "react";
 import PropTypes from "prop-types";
 
 const AccountNavContext = createContext();
@@ -27,4 +27,11 @@ AccountNavProvider.propTypes = {
 export const useAccountNav = () => {
     const { selectedNavItem, setSelectedNavItem } = useContext(AccountNavContext);
     return [selectedNavItem, setSelectedNavItem];
+};
+
+export const useAccountNavTitle = (newNavItemTitle) => {
+    const { setSelectedNavItem } = useContext(AccountNavContext);
+    useEffect(() => {
+        setSelectedNavItem(newNavItemTitle);
+    }, [newNavItemTitle, setSelectedNavItem]);
 };

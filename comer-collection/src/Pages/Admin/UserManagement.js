@@ -22,7 +22,6 @@ import { useSnackbar, useTitle } from "../../ContextProviders/AppFeatures.js";
 import { useAppUser } from "../../ContextProviders/AppUser.js";
 
 import { UserResetPasswordDialog } from "../../Components/Dialogs/UserResetPasswordDialog.js";
-import { useAccountNav } from "../../ContextProviders/AccountNavProvider.js";
 import { User } from "../../Classes/Entities/User.js";
 import { EnrollmentUserPrimary } from "../../Classes/Associations/Enrollment.js";
 import { UserExhibition } from "../../Classes/Associations/UserExhibition.js";
@@ -32,6 +31,7 @@ import { RefreshButton } from "../../Components/Buttons/RefreshButton.js";
 import { MultiCreateButton } from "../../Components/Buttons/MultiCreateButton.js";
 import { ManagementButtonStack } from "../../Components/ManagementPage/ManagementButtonStack.js";
 import { useDialogState } from "../../Hooks/useDialogState.js";
+import { useAccountNavTitle } from "../../ContextProviders/AccountNavProvider.js";
 
 const UserManagement = () => {
     const [usersCombinedState, setUsers, setSelectedUsers, filterUsers] = useItemsReducer(User);
@@ -64,11 +64,12 @@ const UserManagement = () => {
         setUserCourseIdFilter(null);
     }, []);
 
-    const [, setSelectedNavItem] = useAccountNav();
     const [appUser] = useAppUser();
     const showSnackbar = useSnackbar();
     const navigate = useNavigate();
     const setTitleText = useTitle();
+
+    useAccountNavTitle("User Management");
 
     const handleRefresh = useCallback(async () => {
         try {
@@ -89,12 +90,11 @@ const UserManagement = () => {
     }, [setUsers]);
 
     useEffect(() => {
-        setSelectedNavItem("User Management");
         setTitleText("User Management");
         if (appUser.is_admin) {
             handleRefresh();
         }
-    }, [appUser.is_admin, handleRefresh, setSelectedNavItem, setTitleText]);
+    }, [appUser.is_admin, handleRefresh, setTitleText]);
 
     const userFilterFunction = useCallback((user) => {
         return (

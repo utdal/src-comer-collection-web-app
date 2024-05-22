@@ -20,7 +20,7 @@ import { sendAuthenticatedRequest } from "../../Helpers/APICalls.js";
 import { useTitle } from "../../ContextProviders/AppFeatures.js";
 import { useAppUser } from "../../ContextProviders/AppUser.js";
 
-import { useAccountNav } from "../../ContextProviders/AccountNavProvider.js";
+import { useAccountNavTitle } from "../../ContextProviders/AccountNavProvider.js";
 import { Image } from "../../Classes/Entities/Image.js";
 import { Artist } from "../../Classes/Entities/Artist.js";
 import { Tag } from "../../Classes/Entities/Tag.js";
@@ -70,7 +70,7 @@ const ImageManagement = () => {
         setSearchQuery("");
     }, []);
 
-    const [, setSelectedNavItem] = useAccountNav();
+    useAccountNavTitle("Image Management");
     const [appUser] = useAppUser();
     const setTitleText = useTitle();
     const navigate = useNavigate();
@@ -106,12 +106,11 @@ const ImageManagement = () => {
     }, [fetchImages, fetchArtists, fetchTags]);
 
     useEffect(() => {
-        setSelectedNavItem("Image Management");
         setTitleText("Image Management");
         if (appUser.is_admin_or_collection_manager) {
             handleRefresh();
         }
-    }, [appUser.is_admin_or_collection_manager, handleRefresh, setSelectedNavItem, setTitleText]);
+    }, [appUser.is_admin_or_collection_manager, handleRefresh, setTitleText]);
 
     const imageFilterFunction = useCallback((image) => {
         return (

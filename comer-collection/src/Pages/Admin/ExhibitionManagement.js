@@ -16,7 +16,7 @@ import { useAppUser } from "../../ContextProviders/AppUser.js";
 import { doesItemMatchSearchQuery } from "../../Helpers/SearchUtilities.js";
 import { CourseFilterMenu } from "../../Components/Menus/CourseFilterMenu.js";
 
-import { useAccountNav } from "../../ContextProviders/AccountNavProvider.js";
+import { useAccountNavTitle } from "../../ContextProviders/AccountNavProvider.js";
 import { Exhibition } from "../../Classes/Entities/Exhibition.js";
 import { ManagementPageProvider, useItemsReducer } from "../../ContextProviders/ManagementPageProvider.js";
 import { ClearFilterButton } from "../../Components/Buttons/ClearFilterButton.js";
@@ -40,11 +40,12 @@ const ExhibitionManagement = () => {
 
     const [searchQuery, setSearchQuery] = useState("");
 
-    const [, setSelectedNavItem] = useAccountNav();
     const [appUser] = useAppUser();
     const setTitleText = useTitle();
 
     const [userCourseIdFilter, setUserCourseIdFilter] = useState(null);
+
+    useAccountNavTitle("Exhibition Management");
 
     const handleClearFilters = useCallback(() => {
         setUserCourseIdFilter(null);
@@ -73,12 +74,11 @@ const ExhibitionManagement = () => {
     }, [setExhibitions]);
 
     useEffect(() => {
-        setSelectedNavItem("Exhibition Management");
         setTitleText("Exhibition Management");
         if (appUser.is_admin) {
             handleRefresh();
         }
-    }, [appUser, handleRefresh, setSelectedNavItem, setTitleText]);
+    }, [appUser, handleRefresh, setTitleText]);
 
     const exhibitionFilterFunction = useCallback((exhibition) => {
         return (

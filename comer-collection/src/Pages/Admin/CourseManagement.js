@@ -22,7 +22,7 @@ import {
     LockIcon
 } from "../../Imports/Icons.js";
 import { useTitle } from "../../ContextProviders/AppFeatures.js";
-import { useAccountNav } from "../../ContextProviders/AccountNavProvider.js";
+import { useAccountNavTitle } from "../../ContextProviders/AccountNavProvider.js";
 import { Course } from "../../Classes/Entities/Course.js";
 import { EnrollmentCoursePrimary } from "../../Classes/Associations/Enrollment.js";
 import { ManagementPageProvider, useItemsReducer } from "../../ContextProviders/ManagementPageProvider.js";
@@ -54,10 +54,11 @@ const CourseManagement = () => {
         setSearchQuery("");
     }, []);
 
-    const [, setSelectedNavItem] = useAccountNav();
     const [appUser] = useAppUser();
     const navigate = useNavigate();
     const setTitleText = useTitle();
+
+    useAccountNavTitle("Course Management");
 
     const handleRefresh = useCallback(async () => {
         try {
@@ -75,12 +76,11 @@ const CourseManagement = () => {
     }, [setCourses]);
 
     useEffect(() => {
-        setSelectedNavItem("Course Management");
         setTitleText("Course Management");
         if (appUser.is_admin) {
             handleRefresh();
         }
-    }, [appUser.is_admin, setSelectedNavItem, setTitleText, handleRefresh]);
+    }, [appUser.is_admin, setTitleText, handleRefresh]);
 
     const courseFilterFunction = useCallback((course) => {
         return doesItemMatchSearchQuery(searchQuery, course, ["name", "notes"]);
