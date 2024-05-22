@@ -17,7 +17,7 @@ import { SelectionSummary } from "../../Components/SelectionSummary.js";
 import { sendAuthenticatedRequest } from "../../Helpers/APICalls.js";
 import { useAppUser } from "../../ContextProviders/AppUser.js";
 import {
-    AddIcon, GroupAddIcon, AccessTimeIcon,
+    GroupAddIcon, AccessTimeIcon,
     WarningIcon,
     LockIcon
 } from "../../Imports/Icons.js";
@@ -28,6 +28,8 @@ import { EnrollmentCoursePrimary } from "../../Classes/Associations/Enrollment.j
 import { ManagementPageProvider, useItemsReducer } from "../../ContextProviders/ManagementPageProvider.js";
 import { ClearFilterButton } from "../../Components/Buttons/ClearFilterButton.js";
 import { RefreshButton } from "../../Components/Buttons/RefreshButton.js";
+import { MultiCreateButton } from "../../Components/Buttons/MultiCreateButton.js";
+import { ManagementButtonStack } from "../../Components/ManagementPage/ManagementButtonStack.js";
 
 const CourseManagement = () => {
     const [coursesCombinedState, setCourses, setSelectedCourses, filterCourses] = useItemsReducer(Course);
@@ -172,27 +174,13 @@ const CourseManagement = () => {
                         width="50%"
                     />
 
-                    <Stack
-                        direction="row"
-                        spacing={2}
-                    >
+                    <ManagementButtonStack>
                         <RefreshButton />
 
                         <ClearFilterButton />
 
-                        <Button
-                            color="primary"
-                            onClick={() => {
-                                setDialogIsOpen(true);
-                            }}
-                            startIcon={<AddIcon />}
-                            variant="contained"
-                        >
-                            <Typography variant="body1">
-                                Create Courses
-                            </Typography>
-                        </Button>
-                    </Stack>
+                        <MultiCreateButton />
+                    </ManagementButtonStack>
                 </Stack>
 
                 <DataTable
@@ -214,10 +202,7 @@ const CourseManagement = () => {
                 >
                     <SelectionSummary />
 
-                    <Stack
-                        direction="row"
-                        spacing={2}
-                    >
+                    <ManagementButtonStack>
                         <Button
                             disabled={coursesCombinedState.selectedItems.length === 0}
                             onClick={() => {
@@ -236,61 +221,61 @@ const CourseManagement = () => {
                                 {coursesCombinedState.selectedItems.length === 1 ? "course" : "courses"}
                             </Typography>
                         </Button>
-                    </Stack>
+                    </ManagementButtonStack>
                 </Stack>
 
-                <ItemMultiCreateDialog
-                    Entity={Course}
-                    dialogInstructions={"Add courses, edit the course fields, then click 'Create'.  You can enroll users after creating the course."}
-                    dialogIsOpen={dialogIsOpen}
-                    refreshAllItems={fetchData}
-                    setDialogIsOpen={setDialogIsOpen}
-                />
-
-                <ItemSingleEditDialog
-                    Entity={Course}
-                    editDialogIsOpen={editDialogIsOpen}
-                    editDialogItem={editDialogCourse}
-                    refreshAllItems={fetchData}
-                    setEditDialogIsOpen={setEditDialogIsOpen}
-                />
-
-                <ItemSingleDeleteDialog
-                    Entity={Course}
-                    allItems={coursesCombinedState.items}
-                    deleteDialogIsOpen={deleteDialogIsOpen}
-                    deleteDialogItem={deleteDialogCourse}
-                    setAllItems={setCourses}
-                    setDeleteDialogIsOpen={setDeleteDialogIsOpen}
-                />
-
-                <AssociationManagementDialog
-                    Association={EnrollmentCoursePrimary}
-                    defaultSortAscending
-                    defaultSortColumn="Name"
-                    dialogButtonForSecondaryManagement={
-                        <Button
-                            onClick={() => {
-                                navigate("/Account/Admin/Users");
-                            }}
-                            variant="outlined"
-                        >
-                            <Typography>
-                                Go to user management
-                            </Typography>
-                        </Button>
-                    }
-                    dialogIsOpen={assignUserDialogIsOpen}
-                    editMode
-                    primaryItems={assignUserDialogCourses}
-                    refreshAllItems={fetchData}
-                    secondaryItemsAll={users}
-                    secondarySearchBoxPlaceholder="Search users by name or email"
-                    secondarySearchFields={["given_name"]}
-                    setDialogIsOpen={setAssignUserDialogIsOpen}
-                />
-
             </Box>
+
+            <ItemMultiCreateDialog
+                Entity={Course}
+                dialogInstructions={"Add courses, edit the course fields, then click 'Create'.  You can enroll users after creating the course."}
+                dialogIsOpen={dialogIsOpen}
+                refreshAllItems={fetchData}
+                setDialogIsOpen={setDialogIsOpen}
+            />
+
+            <ItemSingleEditDialog
+                Entity={Course}
+                editDialogIsOpen={editDialogIsOpen}
+                editDialogItem={editDialogCourse}
+                refreshAllItems={fetchData}
+                setEditDialogIsOpen={setEditDialogIsOpen}
+            />
+
+            <ItemSingleDeleteDialog
+                Entity={Course}
+                allItems={coursesCombinedState.items}
+                deleteDialogIsOpen={deleteDialogIsOpen}
+                deleteDialogItem={deleteDialogCourse}
+                setAllItems={setCourses}
+                setDeleteDialogIsOpen={setDeleteDialogIsOpen}
+            />
+
+            <AssociationManagementDialog
+                Association={EnrollmentCoursePrimary}
+                defaultSortAscending
+                defaultSortColumn="Name"
+                dialogButtonForSecondaryManagement={
+                    <Button
+                        onClick={() => {
+                            navigate("/Account/Admin/Users");
+                        }}
+                        variant="outlined"
+                    >
+                        <Typography>
+                            Go to user management
+                        </Typography>
+                    </Button>
+                }
+                dialogIsOpen={assignUserDialogIsOpen}
+                editMode
+                primaryItems={assignUserDialogCourses}
+                refreshAllItems={fetchData}
+                secondaryItemsAll={users}
+                secondarySearchBoxPlaceholder="Search users by name or email"
+                secondarySearchFields={["given_name"]}
+                setDialogIsOpen={setAssignUserDialogIsOpen}
+            />
         </ManagementPageProvider>
     );
 };

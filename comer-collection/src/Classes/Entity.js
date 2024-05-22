@@ -1,5 +1,6 @@
 import { sendAuthenticatedRequest } from "../Helpers/APICalls.js";
 import PropTypes from "prop-types";
+import { AddIcon } from "../Imports/Icons.js";
 
 export const capitalized = (string) => {
     return string.substr(0, 1).toUpperCase() + string.substr(1).toLowerCase();
@@ -19,6 +20,8 @@ export class Entity {
     ];
 
     static searchBoxFields = [];
+
+    static MultiCreateButtonIcon = AddIcon;
 
     static formatDate = (date) => {
         return new Date(date).toLocaleDateString([], {

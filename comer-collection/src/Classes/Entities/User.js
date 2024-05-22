@@ -10,11 +10,14 @@ import { UserExhibitionCountCell } from "../../Components/TableCells/User/UserEx
 import { UserTypeButtonCell } from "../../Components/TableCells/User/UserTypeButtonCell.js";
 import { UserActivationSwitchCell } from "../../Components/TableCells/User/UserActivationSwitchCell.js";
 import { UserOptionsCell } from "../../Components/TableCells/User/UserOptionsCell.js";
+import { GroupAddIcon } from "../../Imports/Icons.js";
 
 class User extends Entity {
     static baseUrl = "/api/admin/users";
     static singular = "user";
     static plural = "users";
+
+    static MultiCreateButtonIcon = GroupAddIcon;
 
     static fieldDefinitions = [
         {

@@ -10,11 +10,14 @@ import { ImageArtistAssignmentCell } from "../../Components/TableCells/Image/Ima
 import { ImageTagAssignmentCell } from "../../Components/TableCells/Image/ImageTagAssignmentCell.js";
 import { ImageExhibitionCountCell } from "../../Components/TableCells/Image/ImageExhibitionCountCell.js";
 import { ImageOptionsCell } from "../../Components/TableCells/Image/ImageOptionsCell.js";
+import { AddPhotoAlternateIcon } from "../../Imports/Icons.js";
 
 class Image extends Entity {
     static baseUrl = "/api/admin/images";
     static singular = "image";
     static plural = "images";
+
+    static MultiCreateButtonIcon = AddPhotoAlternateIcon;
 
     static fieldDefinitions = [
         {

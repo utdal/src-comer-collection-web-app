@@ -6,7 +6,7 @@ import {
 } from "@mui/material";
 import { FullPageMessage } from "../../Components/FullPageMessage.js";
 import SearchBox from "../../Components/SearchBox.js";
-import { AddPhotoAlternateIcon, SellIcon, BrushIcon, AccessTimeIcon, WarningIcon, LockIcon } from "../../Imports/Icons.js";
+import { SellIcon, BrushIcon, AccessTimeIcon, WarningIcon, LockIcon } from "../../Imports/Icons.js";
 import { ItemSingleDeleteDialog } from "../../Components/Dialogs/ItemSingleDeleteDialog.js";
 import { ItemMultiCreateDialog } from "../../Components/Dialogs/ItemMultiCreateDialog.js";
 import { ItemSingleEditDialog } from "../../Components/Dialogs/ItemSingleEditDialog.js";
@@ -31,6 +31,8 @@ import { ManagementPageProvider, useItemsReducer } from "../../ContextProviders/
 import { DataTable } from "../../Components/DataTable/DataTable.js";
 import { ClearFilterButton } from "../../Components/Buttons/ClearFilterButton.js";
 import { RefreshButton } from "../../Components/Buttons/RefreshButton.js";
+import { MultiCreateButton } from "../../Components/Buttons/MultiCreateButton.js";
+import { ManagementButtonStack } from "../../Components/ManagementPage/ManagementButtonStack.js";
 
 const ImageManagement = () => {
     const [imagesCombinedState, setImages, setSelectedImages, filterImages] = useItemsReducer(Image);
@@ -222,10 +224,7 @@ const ImageManagement = () => {
                         width="30%"
                     />
 
-                    <Stack
-                        direction="row"
-                        spacing={2}
-                    >
+                    <ManagementButtonStack>
                         <RefreshButton />
 
                         <ClearFilterButton />
@@ -256,19 +255,8 @@ const ImageManagement = () => {
                             </Typography>
                         </Button>
 
-                        <Button
-                            color="primary"
-                            onClick={() => {
-                                setDialogIsOpen(true);
-                            }}
-                            startIcon={<AddPhotoAlternateIcon />}
-                            variant="contained"
-                        >
-                            <Typography variant="body1">
-                                Create Images
-                            </Typography>
-                        </Button>
-                    </Stack>
+                        <MultiCreateButton />
+                    </ManagementButtonStack>
                 </Stack>
 
                 {(!isLoaded &&
@@ -294,10 +282,7 @@ const ImageManagement = () => {
                 >
                     <SelectionSummary />
 
-                    <Stack
-                        direction="row"
-                        spacing={2}
-                    >
+                    <ManagementButtonStack>
                         <Button
                             disabled={imagesCombinedState.selectedItems.length === 0}
                             onClick={() => {
@@ -335,141 +320,141 @@ const ImageManagement = () => {
                                 {imagesCombinedState.selectedItems.length === 1 ? "image" : "images"}
                             </Typography>
                         </Button>
-                    </Stack>
+                    </ManagementButtonStack>
                 </Stack>
 
-                <ItemMultiCreateDialog
-                    Entity={Image}
-                    allItems={imagesCombinedState.items}
-                    dialogInstructions={"Add images, edit the image fields, then click 'Create'.  You can add artists and tags after you have created the images."}
-                    dialogIsOpen={dialogIsOpen}
-                    refreshAllItems={fetchImages}
-                    setDialogIsOpen={setDialogIsOpen}
-                />
-
-                <ItemSingleEditDialog
-                    Entity={Image}
-                    editDialogIsOpen={editDialogIsOpen}
-                    editDialogItem={editDialogImage}
-                    refreshAllItems={fetchImages}
-                    setEditDialogIsOpen={setEditDialogIsOpen}
-                />
-
-                <ItemSingleDeleteDialog
-                    Entity={Image}
-                    allItems={imagesCombinedState.items}
-                    deleteDialogIsOpen={deleteDialogIsOpen}
-                    deleteDialogItem={deleteDialogImage}
-                    setAllItems={setImages}
-                    setDeleteDialogIsOpen={setDeleteDialogIsOpen}
-                />
-
-                <EntityManageDialog
-                    Entity={Artist}
-                    dialogIsOpen={manageArtistDialogIsOpen}
-                    dialogItemsCombinedState={artistsCombinedState}
-                    filterDialogItems={filterArtists}
-                    refreshAllItems={fetchArtists}
-                    searchBoxPlaceholder="Search artists by name or notes"
-                    setDialogIsOpen={setManageArtistDialogIsOpen}
-                    setDialogItems={setArtists}
-                />
-
-                <EntityManageDialog
-                    Entity={Tag}
-                    dialogIsOpen={manageTagDialogIsOpen}
-                    dialogItemsCombinedState={tagsCombinedState}
-                    filterDialogItems={filterTags}
-                    refreshAllItems={fetchTags}
-                    searchBoxPlaceholder="Search tags by name or notes"
-                    setDialogIsOpen={setManageTagDialogIsOpen}
-                    setDialogItems={setTags}
-                />
-
-                <ImageFullScreenViewer
-                    image={previewerImage}
-                    previewerOpen={previewerOpen}
-                    setImage={setPreviewerImage}
-                    setPreviewerOpen={setPreviewerOpen}
-                />
-
-                <AssociationManagementDialog
-                    Association={ImageArtist}
-                    dialogButtonForSecondaryManagement={
-                        <Button
-                            onClick={() => {
-                                setAssignArtistDialogIsOpen(false);
-                                setManageArtistDialogIsOpen(true);
-                            }}
-                            variant="outlined"
-                        >
-                            <Typography>
-                                Go to artist management
-                            </Typography>
-                        </Button>
-                    }
-                    dialogIsOpen={assignArtistDialogIsOpen}
-                    editMode
-                    primaryItems={associationDialogImages}
-                    refreshAllItems={fetchData}
-                    secondaryFieldInPrimary="Artists"
-                    secondaryItemsAll={artistsCombinedState.items}
-                    secondarySearchBoxPlaceholder="Search artists by name or notes"
-                    secondarySearchFields={["fullName", "fullNameReverse", "notes"]}
-                    setDialogIsOpen={setAssignArtistDialogIsOpen}
-                />
-
-                <AssociationManagementDialog
-                    Association={ImageTag}
-                    dialogButtonForSecondaryManagement={
-                        <Button
-                            onClick={() => {
-                                setAssignTagDialogIsOpen(false);
-                                setManageTagDialogIsOpen(true);
-                            }}
-                            variant="outlined"
-                        >
-                            <Typography>
-                                Go to tag management
-                            </Typography>
-                        </Button>
-                    }
-                    dialogIsOpen={assignTagDialogIsOpen}
-                    editMode
-                    primaryItems={associationDialogImages}
-                    refreshAllItems={fetchData}
-                    secondaryFieldInPrimary="Tags"
-                    secondaryItemsAll={tagsCombinedState.items}
-                    secondarySearchBoxPlaceholder="Search tags by name or notes"
-                    secondarySearchFields={["data", "notes"]}
-                    setDialogIsOpen={setAssignTagDialogIsOpen}
-                />
-
-                <AssociationManagementDialog
-                    Association={ImageExhibition}
-                    dialogButtonForSecondaryManagement={
-                        <Button
-                            onClick={() => {
-                                navigate("/Account/Admin/Exhibitions");
-                            }}
-                            variant="outlined"
-                        >
-                            <Typography>
-                                Go to exhibition management
-                            </Typography>
-                        </Button>
-                    }
-                    dialogIsOpen={viewImageExhibitionDialogIsOpen}
-                    editMode={false}
-                    primaryItems={associationDialogImages}
-                    refreshAllItems={fetchData}
-                    secondaryItemsAll={exhibitions}
-                    secondarySearchBoxPlaceholder="Search exhibitions by title"
-                    secondarySearchFields={["title"]}
-                    setDialogIsOpen={setViewImageExhibitionDialogIsOpen}
-                />
-
             </Box>
+
+            <ItemMultiCreateDialog
+                Entity={Image}
+                allItems={imagesCombinedState.items}
+                dialogInstructions={"Add images, edit the image fields, then click 'Create'.  You can add artists and tags after you have created the images."}
+                dialogIsOpen={dialogIsOpen}
+                refreshAllItems={fetchImages}
+                setDialogIsOpen={setDialogIsOpen}
+            />
+
+            <ItemSingleEditDialog
+                Entity={Image}
+                editDialogIsOpen={editDialogIsOpen}
+                editDialogItem={editDialogImage}
+                refreshAllItems={fetchImages}
+                setEditDialogIsOpen={setEditDialogIsOpen}
+            />
+
+            <ItemSingleDeleteDialog
+                Entity={Image}
+                allItems={imagesCombinedState.items}
+                deleteDialogIsOpen={deleteDialogIsOpen}
+                deleteDialogItem={deleteDialogImage}
+                setAllItems={setImages}
+                setDeleteDialogIsOpen={setDeleteDialogIsOpen}
+            />
+
+            <EntityManageDialog
+                Entity={Artist}
+                dialogIsOpen={manageArtistDialogIsOpen}
+                dialogItemsCombinedState={artistsCombinedState}
+                filterDialogItems={filterArtists}
+                refreshAllItems={fetchArtists}
+                searchBoxPlaceholder="Search artists by name or notes"
+                setDialogIsOpen={setManageArtistDialogIsOpen}
+                setDialogItems={setArtists}
+            />
+
+            <EntityManageDialog
+                Entity={Tag}
+                dialogIsOpen={manageTagDialogIsOpen}
+                dialogItemsCombinedState={tagsCombinedState}
+                filterDialogItems={filterTags}
+                refreshAllItems={fetchTags}
+                searchBoxPlaceholder="Search tags by name or notes"
+                setDialogIsOpen={setManageTagDialogIsOpen}
+                setDialogItems={setTags}
+            />
+
+            <ImageFullScreenViewer
+                image={previewerImage}
+                previewerOpen={previewerOpen}
+                setImage={setPreviewerImage}
+                setPreviewerOpen={setPreviewerOpen}
+            />
+
+            <AssociationManagementDialog
+                Association={ImageArtist}
+                dialogButtonForSecondaryManagement={
+                    <Button
+                        onClick={() => {
+                            setAssignArtistDialogIsOpen(false);
+                            setManageArtistDialogIsOpen(true);
+                        }}
+                        variant="outlined"
+                    >
+                        <Typography>
+                            Go to artist management
+                        </Typography>
+                    </Button>
+                }
+                dialogIsOpen={assignArtistDialogIsOpen}
+                editMode
+                primaryItems={associationDialogImages}
+                refreshAllItems={fetchData}
+                secondaryFieldInPrimary="Artists"
+                secondaryItemsAll={artistsCombinedState.items}
+                secondarySearchBoxPlaceholder="Search artists by name or notes"
+                secondarySearchFields={["fullName", "fullNameReverse", "notes"]}
+                setDialogIsOpen={setAssignArtistDialogIsOpen}
+            />
+
+            <AssociationManagementDialog
+                Association={ImageTag}
+                dialogButtonForSecondaryManagement={
+                    <Button
+                        onClick={() => {
+                            setAssignTagDialogIsOpen(false);
+                            setManageTagDialogIsOpen(true);
+                        }}
+                        variant="outlined"
+                    >
+                        <Typography>
+                            Go to tag management
+                        </Typography>
+                    </Button>
+                }
+                dialogIsOpen={assignTagDialogIsOpen}
+                editMode
+                primaryItems={associationDialogImages}
+                refreshAllItems={fetchData}
+                secondaryFieldInPrimary="Tags"
+                secondaryItemsAll={tagsCombinedState.items}
+                secondarySearchBoxPlaceholder="Search tags by name or notes"
+                secondarySearchFields={["data", "notes"]}
+                setDialogIsOpen={setAssignTagDialogIsOpen}
+            />
+
+            <AssociationManagementDialog
+                Association={ImageExhibition}
+                dialogButtonForSecondaryManagement={
+                    <Button
+                        onClick={() => {
+                            navigate("/Account/Admin/Exhibitions");
+                        }}
+                        variant="outlined"
+                    >
+                        <Typography>
+                            Go to exhibition management
+                        </Typography>
+                    </Button>
+                }
+                dialogIsOpen={viewImageExhibitionDialogIsOpen}
+                editMode={false}
+                primaryItems={associationDialogImages}
+                refreshAllItems={fetchData}
+                secondaryItemsAll={exhibitions}
+                secondarySearchBoxPlaceholder="Search exhibitions by title"
+                secondarySearchFields={["title"]}
+                setDialogIsOpen={setViewImageExhibitionDialogIsOpen}
+            />
 
         </ManagementPageProvider>
 

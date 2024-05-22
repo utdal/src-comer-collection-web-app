@@ -21,6 +21,7 @@ import { Exhibition } from "../../Classes/Entities/Exhibition.js";
 import { ManagementPageProvider, useItemsReducer } from "../../ContextProviders/ManagementPageProvider.js";
 import { ClearFilterButton } from "../../Components/Buttons/ClearFilterButton.js";
 import { RefreshButton } from "../../Components/Buttons/RefreshButton.js";
+import { ManagementButtonStack } from "../../Components/ManagementPage/ManagementButtonStack.js";
 
 const ExhibitionManagement = () => {
     const [exhibitionsCombinedState, setExhibitions, setSelectedExhibitions, filterExhibitions] = useItemsReducer(Exhibition);
@@ -174,16 +175,13 @@ const ExhibitionManagement = () => {
                         setFilterValue={setUserCourseIdFilter}
                     />
 
-                    <Stack
-                        direction="row"
-                        spacing={2}
-                    >
+                    <ManagementButtonStack>
 
                         <RefreshButton />
 
                         <ClearFilterButton />
 
-                    </Stack>
+                    </ManagementButtonStack>
                 </Stack>
 
                 <Box sx={{ gridArea: "table" }}>
@@ -206,31 +204,31 @@ const ExhibitionManagement = () => {
                     <SelectionSummary />
                 </Stack>
 
-                <ExhibitionSettingsDialog
-                    adminMode
-                    dialogExhibitionAccess={editDialogExhibitionAccess}
-                    dialogExhibitionId={editDialogExhibitionId}
-                    dialogExhibitionTitle={editDialogExhibitionTitle}
-                    dialogIsOpen={editDialogIsOpen}
-                    editMode
-                    refreshFunction={fetchData}
-                    setDialogExhibitionAccess={setEditDialogExhibitionAccess}
-                    setDialogExhibitionId={setEditDialogExhibitionId}
-                    setDialogExhibitionTitle={setEditDialogExhibitionTitle}
-                    setDialogIsOpen={setEditDialogIsOpen}
-                />
-
-                <ItemSingleDeleteDialog
-                    Entity={Exhibition}
-                    allItems={exhibitionsCombinedState.items}
-                    deleteDialogIsOpen={deleteDialogIsOpen}
-                    deleteDialogItem={deleteDialogExhibition}
-                    requireTypedConfirmation
-                    setAllItems={setExhibitions}
-                    setDeleteDialogIsOpen={setDeleteDialogIsOpen}
-                />
-
             </Box>
+
+            <ExhibitionSettingsDialog
+                adminMode
+                dialogExhibitionAccess={editDialogExhibitionAccess}
+                dialogExhibitionId={editDialogExhibitionId}
+                dialogExhibitionTitle={editDialogExhibitionTitle}
+                dialogIsOpen={editDialogIsOpen}
+                editMode
+                refreshFunction={fetchData}
+                setDialogExhibitionAccess={setEditDialogExhibitionAccess}
+                setDialogExhibitionId={setEditDialogExhibitionId}
+                setDialogExhibitionTitle={setEditDialogExhibitionTitle}
+                setDialogIsOpen={setEditDialogIsOpen}
+            />
+
+            <ItemSingleDeleteDialog
+                Entity={Exhibition}
+                allItems={exhibitionsCombinedState.items}
+                deleteDialogIsOpen={deleteDialogIsOpen}
+                deleteDialogItem={deleteDialogExhibition}
+                requireTypedConfirmation
+                setAllItems={setExhibitions}
+                setDeleteDialogIsOpen={setDeleteDialogIsOpen}
+            />
 
         </ManagementPageProvider>
     );

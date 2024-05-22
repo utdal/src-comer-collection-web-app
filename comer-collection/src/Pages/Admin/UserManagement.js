@@ -4,7 +4,7 @@ import {
     Button,
     Typography, Box, Paper
 } from "@mui/material";
-import { GroupAddIcon, SchoolIcon, LockIcon, AccessTimeIcon, WarningIcon } from "../../Imports/Icons.js";
+import { SchoolIcon, LockIcon, AccessTimeIcon, WarningIcon } from "../../Imports/Icons.js";
 import { FullPageMessage } from "../../Components/FullPageMessage.js";
 import SearchBox from "../../Components/SearchBox.js";
 import { ItemSingleDeleteDialog } from "../../Components/Dialogs/ItemSingleDeleteDialog.js";
@@ -29,6 +29,8 @@ import { UserExhibition } from "../../Classes/Associations/UserExhibition.js";
 import { ManagementPageProvider, useItemsReducer } from "../../ContextProviders/ManagementPageProvider.js";
 import { ClearFilterButton } from "../../Components/Buttons/ClearFilterButton.js";
 import { RefreshButton } from "../../Components/Buttons/RefreshButton.js";
+import { MultiCreateButton } from "../../Components/Buttons/MultiCreateButton.js";
+import { ManagementButtonStack } from "../../Components/ManagementPage/ManagementButtonStack.js";
 
 const UserManagement = () => {
     const [usersCombinedState, setUsers, setSelectedUsers, filterUsers] = useItemsReducer(User);
@@ -117,6 +119,11 @@ const UserManagement = () => {
         setAssignCourseDialogIsOpen(true);
     }, []);
 
+    const handleOpenUserAssignCourseDialogForSelectedUsers = useCallback(() => {
+        setAssociationDialogUsers([...usersCombinedState.selectedItems]);
+        setAssignCourseDialogIsOpen(true);
+    }, [usersCombinedState.selectedItems]);
+
     const handleOpenViewUserExhibitionDialog = useCallback((user) => {
         setAssociationDialogUsers([user]);
         setViewUserExhibitionDialogIsOpen(true);
@@ -135,6 +142,10 @@ const UserManagement = () => {
             showSnackbar(err, "error");
         });
     }, [fetchData, showSnackbar]);
+
+    const handleOpenMultiCreateDialog = useCallback(() => {
+        setDialogIsOpen(true);
+    }, []);
 
     const handleOpenUserEditDialog = useCallback((user) => {
         setEditDialogUser(user);
@@ -164,17 +175,17 @@ const UserManagement = () => {
     ) || (appUser.pw_change_required &&
         <Navigate to="/Account/ChangePassword" />
     ) || (isError &&
-        <FullPageMessage
-            Icon={WarningIcon}
-            buttonAction={fetchData}
-            buttonText="Retry"
-            message="Error loading users"
-        />
+    <FullPageMessage
+        Icon={WarningIcon}
+        buttonAction={fetchData}
+        buttonText="Retry"
+        message="Error loading users"
+    />
     ) || (!isLoaded &&
-        <FullPageMessage
-            Icon={AccessTimeIcon}
-            message="Loading users..."
-        />
+    <FullPageMessage
+        Icon={AccessTimeIcon}
+        message="Loading users..."
+    />
     ) || (
         <ManagementPageProvider
             Entity={User}
@@ -186,6 +197,7 @@ const UserManagement = () => {
                 handleOpenViewUserExhibitionDialog,
                 handleOpenUserPrivilegesDialog,
                 handleChangeUserActivationStatus,
+                handleOpenMultiCreateDialog,
                 handleOpenUserEditDialog,
                 handleOpenUserDeleteDialog,
                 handleClearFilters,
@@ -229,27 +241,13 @@ const UserManagement = () => {
                         setFilterValue={setUserCourseIdFilter}
                     />
 
-                    <Stack
-                        direction="row"
-                        spacing={2}
-                    >
+                    <ManagementButtonStack>
                         <RefreshButton />
 
                         <ClearFilterButton />
 
-                        <Button
-                            color="primary"
-                            onClick={() => {
-                                setDialogIsOpen(true);
-                            }}
-                            startIcon={<GroupAddIcon />}
-                            variant="contained"
-                        >
-                            <Typography variant="body1">
-                                Create Users
-                            </Typography>
-                        </Button>
-                    </Stack>
+                        <MultiCreateButton />
+                    </ManagementButtonStack>
                 </Stack>
 
                 <DataTable
@@ -269,15 +267,9 @@ const UserManagement = () => {
                 >
                     <SelectionSummary />
 
-                    <Stack
-                        direction="row"
-                        spacing={2}
-                    >
+                    <ManagementButtonStack>
                         <Button
-                            onClick={() => {
-                                setAssociationDialogUsers([...usersCombinedState.selectedItems]);
-                                setAssignCourseDialogIsOpen(true);
-                            }}
+                            onClick={handleOpenUserAssignCourseDialogForSelectedUsers}
                             startIcon={<SchoolIcon />}
                             sx={{
                                 display: usersCombinedState.selectedItems.length === 0 ? "none" : ""
@@ -293,96 +285,96 @@ const UserManagement = () => {
                                 {usersCombinedState.selectedItems.length === 1 ? "user" : "users"}
                             </Typography>
                         </Button>
-                    </Stack>
+                    </ManagementButtonStack>
                 </Stack>
 
-                <ItemMultiCreateDialog
-                    Entity={User}
-                    dialogInstructions={"Add users, edit the user fields, then click 'Create'.  You can set passwords after creating the users."}
-                    dialogIsOpen={dialogIsOpen}
-                    refreshAllItems={fetchData}
-                    setDialogIsOpen={setDialogIsOpen}
-                />
-
-                <ItemSingleEditDialog
-                    Entity={User}
-                    editDialogIsOpen={editDialogIsOpen}
-                    editDialogItem={editDialogUser}
-                    refreshAllItems={fetchData}
-                    setEditDialogIsOpen={setEditDialogIsOpen}
-                />
-
-                <ItemSingleDeleteDialog
-                    Entity={User}
-                    allItems={usersCombinedState.items}
-                    deleteDialogIsOpen={deleteDialogIsOpen}
-                    deleteDialogItem={deleteDialogUser}
-                    setAllItems={setUsers}
-                    setDeleteDialogIsOpen={setDeleteDialogIsOpen}
-                />
-
-                <AssociationManagementDialog
-                    Association={EnrollmentUserPrimary}
-                    dialogButtonForSecondaryManagement={
-                        <Button
-                            onClick={() => {
-                                navigate("/Account/Admin/Courses");
-                            }}
-                            variant="outlined"
-                        >
-                            <Typography>
-                                Go to course management
-                            </Typography>
-                        </Button>
-                    }
-                    dialogIsOpen={assignCourseDialogIsOpen}
-                    editMode
-                    primaryItems={associationDialogUsers}
-                    refreshAllItems={fetchData}
-                    secondaryItemsAll={courses}
-                    secondarySearchBoxPlaceholder="Search courses by name"
-                    secondarySearchFields={["name"]}
-                    setDialogIsOpen={setAssignCourseDialogIsOpen}
-                />
-
-                <AssociationManagementDialog
-                    Association={UserExhibition}
-                    dialogButtonForSecondaryManagement={
-                        <Button
-                            onClick={() => {
-                                navigate("/Account/Admin/Exhibitions");
-                            }}
-                            variant="outlined"
-                        >
-                            <Typography>
-                                Go to exhibition management
-                            </Typography>
-                        </Button>
-                    }
-                    dialogIsOpen={viewUserExhibitionDialogIsOpen}
-                    editMode={false}
-                    primaryItems={associationDialogUsers}
-                    refreshAllItems={fetchData}
-                    secondaryItemsAll={exhibitions}
-                    secondarySearchBoxPlaceholder="Search exhibitions by title"
-                    secondarySearchFields={["title"]}
-                    setDialogIsOpen={setViewUserExhibitionDialogIsOpen}
-                />
-
-                <UserChangePrivilegesDialog
-                    dialogIsOpen={privilegesDialogIsOpen}
-                    dialogUser={privilegesDialogUser}
-                    refreshAllItems={fetchData}
-                    setDialogIsOpen={setPrivilegesDialogIsOpen}
-                />
-
-                <UserResetPasswordDialog
-                    dialogIsOpen={resetPasswordDialogIsOpen}
-                    dialogUser={resetPasswordDialogUser}
-                    setDialogIsOpen={setResetPasswordDialogIsOpen}
-                />
-
             </Box>
+
+            <ItemMultiCreateDialog
+                Entity={User}
+                dialogInstructions={"Add users, edit the user fields, then click 'Create'.  You can set passwords after creating the users."}
+                dialogIsOpen={dialogIsOpen}
+                refreshAllItems={fetchData}
+                setDialogIsOpen={setDialogIsOpen}
+            />
+
+            <ItemSingleEditDialog
+                Entity={User}
+                editDialogIsOpen={editDialogIsOpen}
+                editDialogItem={editDialogUser}
+                refreshAllItems={fetchData}
+                setEditDialogIsOpen={setEditDialogIsOpen}
+            />
+
+            <ItemSingleDeleteDialog
+                Entity={User}
+                allItems={usersCombinedState.items}
+                deleteDialogIsOpen={deleteDialogIsOpen}
+                deleteDialogItem={deleteDialogUser}
+                setAllItems={setUsers}
+                setDeleteDialogIsOpen={setDeleteDialogIsOpen}
+            />
+
+            <AssociationManagementDialog
+                Association={EnrollmentUserPrimary}
+                dialogButtonForSecondaryManagement={
+                    <Button
+                        onClick={() => {
+                            navigate("/Account/Admin/Courses");
+                        }}
+                        variant="outlined"
+                    >
+                        <Typography>
+                            Go to course management
+                        </Typography>
+                    </Button>
+                }
+                dialogIsOpen={assignCourseDialogIsOpen}
+                editMode
+                primaryItems={associationDialogUsers}
+                refreshAllItems={fetchData}
+                secondaryItemsAll={courses}
+                secondarySearchBoxPlaceholder="Search courses by name"
+                secondarySearchFields={["name"]}
+                setDialogIsOpen={setAssignCourseDialogIsOpen}
+            />
+
+            <AssociationManagementDialog
+                Association={UserExhibition}
+                dialogButtonForSecondaryManagement={
+                    <Button
+                        onClick={() => {
+                            navigate("/Account/Admin/Exhibitions");
+                        }}
+                        variant="outlined"
+                    >
+                        <Typography>
+                            Go to exhibition management
+                        </Typography>
+                    </Button>
+                }
+                dialogIsOpen={viewUserExhibitionDialogIsOpen}
+                editMode={false}
+                primaryItems={associationDialogUsers}
+                refreshAllItems={fetchData}
+                secondaryItemsAll={exhibitions}
+                secondarySearchBoxPlaceholder="Search exhibitions by title"
+                secondarySearchFields={["title"]}
+                setDialogIsOpen={setViewUserExhibitionDialogIsOpen}
+            />
+
+            <UserChangePrivilegesDialog
+                dialogIsOpen={privilegesDialogIsOpen}
+                dialogUser={privilegesDialogUser}
+                refreshAllItems={fetchData}
+                setDialogIsOpen={setPrivilegesDialogIsOpen}
+            />
+
+            <UserResetPasswordDialog
+                dialogIsOpen={resetPasswordDialogIsOpen}
+                dialogUser={resetPasswordDialogUser}
+                setDialogIsOpen={setResetPasswordDialogIsOpen}
+            />
         </ManagementPageProvider>
     );
 };
