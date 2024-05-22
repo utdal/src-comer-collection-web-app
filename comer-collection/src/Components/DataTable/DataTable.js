@@ -10,10 +10,10 @@ import { useItems, useSelectedItems, useSelectedVisibleItems, useVisibleItems } 
 import { DataTableFieldCells } from "./DataTableFieldCells.js";
 import { TableRowPlaceholder } from "./TableRowPlaceholder.js";
 import { tableFieldPropTypeShape } from "../../Classes/Entity.js";
+import { InfoIcon } from "../../Imports/Icons.js";
 
 export const DataTable = ({
-    tableFields, rowSelectionEnabled, defaultSortColumn, defaultSortAscending,
-    NoContentIcon, noContentMessage, noContentButtonAction, noContentButtonText
+    tableFields, rowSelectionEnabled, defaultSortColumn, defaultSortAscending
 }) => {
     const theme = useTheme();
     const [items] = useItems();
@@ -215,10 +215,10 @@ export const DataTable = ({
 
             {visibleItems.length === 0 && (
                 <FullPageMessage
-                    Icon={NoContentIcon}
-                    buttonAction={noContentButtonAction}
-                    buttonText={noContentButtonText}
-                    message={noContentMessage ?? "This list is empty"}
+                    Icon={InfoIcon}
+                    buttonAction={null}
+                    buttonText={null}
+                    message={items.length === 0 ? "This list is empty" : "All items are hidden"}
                 />
             )}
         </TableContainer>
@@ -226,12 +226,8 @@ export const DataTable = ({
 };
 
 DataTable.propTypes = {
-    NoContentIcon: PropTypes.elementType.isRequired,
     defaultSortAscending: PropTypes.bool.isRequired,
     defaultSortColumn: PropTypes.string.isRequired,
-    noContentButtonAction: PropTypes.func.isRequired,
-    noContentButtonText: PropTypes.string.isRequired,
-    noContentMessage: PropTypes.string.isRequired,
     rowSelectionEnabled: PropTypes.bool.isRequired,
     tableFields: PropTypes.arrayOf(PropTypes.shape(tableFieldPropTypeShape)).isRequired
 };

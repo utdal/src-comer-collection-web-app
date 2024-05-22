@@ -6,7 +6,7 @@ import {
 } from "@mui/material";
 import { FullPageMessage } from "../../Components/FullPageMessage.js";
 import SearchBox from "../../Components/SearchBox.js";
-import { FilterAltOffOutlinedIcon, RefreshIcon, InfoIcon, SearchIcon, AddPhotoAlternateIcon, SellIcon, BrushIcon, AccessTimeIcon, WarningIcon, LockIcon } from "../../Imports/Icons.js";
+import { RefreshIcon, AddPhotoAlternateIcon, SellIcon, BrushIcon, AccessTimeIcon, WarningIcon, LockIcon } from "../../Imports/Icons.js";
 import { ItemSingleDeleteDialog } from "../../Components/Dialogs/ItemSingleDeleteDialog.js";
 import { ItemMultiCreateDialog } from "../../Components/Dialogs/ItemMultiCreateDialog.js";
 import { ItemSingleEditDialog } from "../../Components/Dialogs/ItemSingleEditDialog.js";
@@ -29,6 +29,7 @@ import { ImageTag } from "../../Classes/Associations/ImageTag.js";
 import { ImageExhibition } from "../../Classes/Associations/ImageExhibition.js";
 import { ManagementPageProvider, useItemsReducer } from "../../ContextProviders/ManagementPageProvider.js";
 import { DataTable } from "../../Components/DataTable/DataTable.js";
+import { ClearFilterButton } from "../../Components/Buttons/ClearFilterButton.js";
 
 const ImageManagement = () => {
     const [imagesCombinedState, setImages, setSelectedImages, filterImages] = useItemsReducer();
@@ -69,9 +70,9 @@ const ImageManagement = () => {
 
     const [searchQuery, setSearchQuery] = useState("");
 
-    const clearFilters = () => {
+    const handleClearFilters = useCallback(() => {
         setSearchQuery("");
-    };
+    }, []);
 
     const [, setSelectedNavItem] = useAccountNav();
     const [appUser] = useAppUser();
@@ -214,7 +215,8 @@ const ImageManagement = () => {
                 handleOpenImageViewExhibitionDialog,
                 handleOpenImagePreviewer,
                 handleOpenImageEditDialog,
-                handleOpenImageDeleteDialog
+                handleOpenImageDeleteDialog,
+                handleClearFilters
             }}
             setItems={setImages}
             setSelectedItems={setSelectedImages}
@@ -264,17 +266,7 @@ const ImageManagement = () => {
                             </Typography>
                         </Button>
 
-                        <Button
-                            color="primary"
-                            disabled={searchQuery === ""}
-                            onClick={clearFilters}
-                            startIcon={<FilterAltOffOutlinedIcon />}
-                            variant="outlined"
-                        >
-                            <Typography variant="body1">
-                                Clear Filters
-                            </Typography>
-                        </Button>
+                        <ClearFilterButton />
 
                         <Button
                             color="primary"
@@ -327,19 +319,6 @@ const ImageManagement = () => {
                         emptyMinHeight="300px"
                         rowSelectionEnabled
                         tableFields={Image.tableFields}
-                        {...
-                            (imagesCombinedState.visibleItems.length === imagesCombinedState.items.length && {
-                                noContentMessage: "No images yet",
-                                noContentButtonAction: () => { setDialogIsOpen(true); },
-                                noContentButtonText: "Create an image",
-                                NoContentIcon: InfoIcon
-                            }) || (imagesCombinedState.visibleItems.length < imagesCombinedState.items.length && {
-                                noContentMessage: "No results",
-                                noContentButtonAction: clearFilters,
-                                noContentButtonText: "Clear Filters",
-                                NoContentIcon: SearchIcon
-                            })
-                        }
                     />
                 ))}
 

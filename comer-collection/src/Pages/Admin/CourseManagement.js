@@ -17,11 +17,7 @@ import { SelectionSummary } from "../../Components/SelectionSummary.js";
 import { sendAuthenticatedRequest } from "../../Helpers/APICalls.js";
 import { useAppUser } from "../../ContextProviders/AppUser.js";
 import {
-    FilterAltOffOutlinedIcon,
-    AddIcon,
-    SearchIcon,
-    RefreshIcon, GroupAddIcon, InfoIcon,
-    AccessTimeIcon,
+    AddIcon, RefreshIcon, GroupAddIcon, AccessTimeIcon,
     WarningIcon,
     LockIcon
 } from "../../Imports/Icons.js";
@@ -30,6 +26,7 @@ import { useAccountNav } from "../../ContextProviders/AccountNavProvider.js";
 import { Course } from "../../Classes/Entities/Course.js";
 import { EnrollmentCoursePrimary } from "../../Classes/Associations/Enrollment.js";
 import { ManagementPageProvider, useItemsReducer } from "../../ContextProviders/ManagementPageProvider.js";
+import { ClearFilterButton } from "../../Components/Buttons/ClearFilterButton.js";
 
 const CourseManagement = () => {
     const [coursesCombinedState, setCourses, setSelectedCourses, filterCourses] = useItemsReducer();
@@ -53,9 +50,9 @@ const CourseManagement = () => {
 
     const [searchQuery, setSearchQuery] = useState("");
 
-    const clearFilters = () => {
+    const handleClearFilters = useCallback(() => {
         setSearchQuery("");
-    };
+    }, []);
 
     const [, setSelectedNavItem] = useAccountNav();
     const [appUser] = useAppUser();
@@ -146,7 +143,8 @@ const CourseManagement = () => {
             managementCallbacks={{
                 handleOpenCourseDeleteDialog,
                 handleOpenCourseEditDialog,
-                handleOpenAssignCourseUserDialog
+                handleOpenAssignCourseUserDialog,
+                handleClearFilters
             }}
             setItems={setCourses}
             setSelectedItems={setSelectedCourses}
@@ -199,21 +197,7 @@ const CourseManagement = () => {
                             </Typography>
                         </Button>
 
-                        <Button
-                            color="primary"
-                            disabled={
-                                !searchQuery
-                            }
-                            onClick={clearFilters}
-                            startIcon={<FilterAltOffOutlinedIcon />}
-                            variant={
-                                coursesCombinedState.visibleItems.length > 0 ? "outlined" : "contained"
-                            }
-                        >
-                            <Typography variant="body1">
-                                Clear Filters
-                            </Typography>
-                        </Button>
+                        <ClearFilterButton />
 
                         <Button
                             color="primary"
@@ -237,19 +221,6 @@ const CourseManagement = () => {
                     rowSelectionEnabled
                     sx={{ gridArea: "table" }}
                     tableFields={Course.tableFields}
-                    {...
-                        (coursesCombinedState.visibleItems.length === coursesCombinedState.items.length && {
-                            noContentMessage: "No courses yet",
-                            noContentButtonAction: () => { setDialogIsOpen(true); },
-                            noContentButtonText: "Create a course",
-                            NoContentIcon: InfoIcon
-                        }) || (coursesCombinedState.visibleItems.length < coursesCombinedState.items.length && {
-                            noContentMessage: "No results",
-                            noContentButtonAction: clearFilters,
-                            noContentButtonText: "Clear Filters",
-                            NoContentIcon: SearchIcon
-                        })
-                    }
                 />
 
                 <Stack

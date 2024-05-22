@@ -6,7 +6,7 @@ import {
 } from "@mui/material";
 import { FullPageMessage } from "../../Components/FullPageMessage.js";
 import SearchBox from "../../Components/SearchBox.js";
-import { LockIcon, RefreshIcon, SearchIcon, InfoIcon, FilterAltOffOutlinedIcon, WarningIcon, AccessTimeIcon } from "../../Imports/Icons.js";
+import { LockIcon, RefreshIcon, WarningIcon, AccessTimeIcon } from "../../Imports/Icons.js";
 import { ItemSingleDeleteDialog } from "../../Components/Dialogs/ItemSingleDeleteDialog.js";
 import { DataTable } from "../../Components/DataTable/DataTable.js";
 import { Navigate } from "react-router";
@@ -21,6 +21,7 @@ import { CourseFilterMenu } from "../../Components/Menus/CourseFilterMenu.js";
 import { useAccountNav } from "../../ContextProviders/AccountNavProvider.js";
 import { Exhibition } from "../../Classes/Entities/Exhibition.js";
 import { ManagementPageProvider, useItemsReducer } from "../../ContextProviders/ManagementPageProvider.js";
+import { ClearFilterButton } from "../../Components/Buttons/ClearFilterButton.js";
 
 const ExhibitionManagement = () => {
     const [exhibitionsCombinedState, setExhibitions, setSelectedExhibitions, filterExhibitions] = useItemsReducer();
@@ -48,10 +49,10 @@ const ExhibitionManagement = () => {
 
     const [userCourseIdFilter, setUserCourseIdFilter] = useState(null);
 
-    const clearFilters = () => {
+    const handleClearFilters = useCallback(() => {
         setUserCourseIdFilter(null);
         setSearchQuery("");
-    };
+    }, []);
 
     const fetchData = useCallback(async () => {
         try {
@@ -150,7 +151,8 @@ const ExhibitionManagement = () => {
             itemsCombinedState={exhibitionsCombinedState}
             managementCallbacks={{
                 handleOpenExhibitionSettings,
-                handleOpenExhibitionDeleteDialog
+                handleOpenExhibitionDeleteDialog,
+                handleClearFilters
             }}
             setItems={setExhibitions}
             setSelectedItems={setSelectedExhibitions}
@@ -209,21 +211,8 @@ const ExhibitionManagement = () => {
                             </Typography>
                         </Button>
 
-                        <Button
-                            color="primary"
-                            disabled={
-                                !(searchQuery || userCourseIdFilter)
-                            }
-                            onClick={clearFilters}
-                            startIcon={<FilterAltOffOutlinedIcon />}
-                            variant={
-                                exhibitionsCombinedState.visibleItems.length > 0 ? "outlined" : "contained"
-                            }
-                        >
-                            <Typography variant="body1">
-                                Clear Filters
-                            </Typography>
-                        </Button>
+                        <ClearFilterButton />
+
                     </Stack>
                 </Stack>
 
@@ -233,17 +222,6 @@ const ExhibitionManagement = () => {
                         defaultSortColumn="Modified"
                         rowSelectionEnabled
                         tableFields={Exhibition.tableFields}
-                        {...
-                            (exhibitionsCombinedState.visibleItems.length === exhibitionsCombinedState.items.length && {
-                                noContentMessage: "No exhibitions yet",
-                                NoContentIcon: InfoIcon
-                            }) || (exhibitionsCombinedState.visibleItems.length < exhibitionsCombinedState.items.length && {
-                                noContentMessage: "No results",
-                                noContentButtonAction: clearFilters,
-                                noContentButtonText: "Clear Filters",
-                                NoContentIcon: SearchIcon
-                            })
-                        }
                     />
                 </Box>
 

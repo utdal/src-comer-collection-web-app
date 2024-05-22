@@ -4,7 +4,7 @@ import {
     Button,
     Typography, Box, Paper
 } from "@mui/material";
-import { FilterAltOffOutlinedIcon, GroupAddIcon, RefreshIcon, SchoolIcon, SearchIcon, InfoIcon, LockIcon, AccessTimeIcon, WarningIcon } from "../../Imports/Icons.js";
+import { GroupAddIcon, RefreshIcon, SchoolIcon, LockIcon, AccessTimeIcon, WarningIcon } from "../../Imports/Icons.js";
 import { FullPageMessage } from "../../Components/FullPageMessage.js";
 import SearchBox from "../../Components/SearchBox.js";
 import { ItemSingleDeleteDialog } from "../../Components/Dialogs/ItemSingleDeleteDialog.js";
@@ -27,6 +27,7 @@ import { User } from "../../Classes/Entities/User.js";
 import { EnrollmentUserPrimary } from "../../Classes/Associations/Enrollment.js";
 import { UserExhibition } from "../../Classes/Associations/UserExhibition.js";
 import { ManagementPageProvider, useItemsReducer } from "../../ContextProviders/ManagementPageProvider.js";
+import { ClearFilterButton } from "../../Components/Buttons/ClearFilterButton.js";
 
 const UserManagement = () => {
     const [usersCombinedState, setUsers, setSelectedUsers, filterUsers] = useItemsReducer();
@@ -56,10 +57,10 @@ const UserManagement = () => {
 
     const [searchQuery, setSearchQuery] = useState("");
 
-    const clearFilters = () => {
+    const handleClearFilters = useCallback(() => {
         setSearchQuery("");
         setUserCourseIdFilter(null);
-    };
+    }, []);
 
     const [userCourseIdFilter, setUserCourseIdFilter] = useState(null);
 
@@ -187,7 +188,8 @@ const UserManagement = () => {
                 handleOpenUserPrivilegesDialog,
                 handleChangeUserActivationStatus,
                 handleOpenUserEditDialog,
-                handleOpenUserDeleteDialog
+                handleOpenUserDeleteDialog,
+                handleClearFilters
             }}
             setItems={setUsers}
             setSelectedItems={setSelectedUsers}
@@ -246,21 +248,7 @@ const UserManagement = () => {
                             </Typography>
                         </Button>
 
-                        <Button
-                            color="primary"
-                            disabled={
-                                !(searchQuery || userCourseIdFilter)
-                            }
-                            onClick={clearFilters}
-                            startIcon={<FilterAltOffOutlinedIcon />}
-                            variant={
-                                usersCombinedState.visibleItems.length > 0 ? "outlined" : "contained"
-                            }
-                        >
-                            <Typography variant="body1">
-                                Clear Filters
-                            </Typography>
-                        </Button>
+                        <ClearFilterButton />
 
                         <Button
                             color="primary"
@@ -282,19 +270,6 @@ const UserManagement = () => {
                     rowSelectionEnabled
                     sx={{ gridArea: "table" }}
                     tableFields={User.tableFields}
-                    {...
-                        (usersCombinedState.visibleItems.length === usersCombinedState.items.length && {
-                            noContentMessage: "No users yet",
-                            noContentButtonAction: () => { setDialogIsOpen(true); },
-                            noContentButtonText: "Create a user",
-                            NoContentIcon: InfoIcon
-                        }) || (usersCombinedState.visibleItems.length < usersCombinedState.items.length && {
-                            noContentMessage: "No results",
-                            noContentButtonAction: clearFilters,
-                            noContentButtonText: "Clear Filters",
-                            NoContentIcon: SearchIcon
-                        })
-                    }
                 />
 
                 <Stack
