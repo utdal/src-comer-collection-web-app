@@ -31,6 +31,7 @@ import { ClearFilterButton } from "../../Components/Buttons/ClearFilterButton.js
 import { RefreshButton } from "../../Components/Buttons/RefreshButton.js";
 import { MultiCreateButton } from "../../Components/Buttons/MultiCreateButton.js";
 import { ManagementButtonStack } from "../../Components/ManagementPage/ManagementButtonStack.js";
+import { useDialogState } from "./useDialogState.js";
 
 const UserManagement = () => {
     const [usersCombinedState, setUsers, setSelectedUsers, filterUsers] = useItemsReducer(User);
@@ -39,11 +40,9 @@ const UserManagement = () => {
     const [isLoaded, setIsLoaded] = useState(false);
     const [isError, setIsError] = useState(false);
 
-    const [privilegesDialogIsOpen, setPrivilegesDialogIsOpen] = useState(false);
-    const [privilegesDialogUser, setPrivilegesDialogUser] = useState(null);
+    const [privilegesDialogState, openPrivilegesDialog] = useDialogState(false, User);
 
-    const [resetPasswordDialogIsOpen, setResetPasswordDialogIsOpen] = useState(false);
-    const [resetPasswordDialogUser, setResetPasswordDialogUser] = useState(null);
+    const [resetPasswordDialogState, openResetPasswordDialog] = useDialogState(false, User);
 
     const [deleteDialogIsOpen, setDeleteDialogIsOpen] = useState(false);
     const [deleteDialogUser, setDeleteDialogUser] = useState(null);
@@ -110,9 +109,8 @@ const UserManagement = () => {
     }, [navigate]);
 
     const handleOpenUserPasswordResetDialog = useCallback((user) => {
-        setResetPasswordDialogUser(user);
-        setResetPasswordDialogIsOpen(true);
-    }, []);
+        openResetPasswordDialog(user);
+    }, [openResetPasswordDialog]);
 
     const handleOpenUserAssignCourseDialog = useCallback((user) => {
         setAssociationDialogUsers([user]);
@@ -130,9 +128,8 @@ const UserManagement = () => {
     }, []);
 
     const handleOpenUserPrivilegesDialog = useCallback((user) => {
-        setPrivilegesDialogUser(user);
-        setPrivilegesDialogIsOpen(true);
-    }, []);
+        openPrivilegesDialog(user);
+    }, [openPrivilegesDialog]);
 
     const handleChangeUserActivationStatus = useCallback((user, newStatus) => {
         User.handleChangeUserActivationStatus(user.id, newStatus).then((msg) => {
@@ -364,16 +361,12 @@ const UserManagement = () => {
             />
 
             <UserChangePrivilegesDialog
-                dialogIsOpen={privilegesDialogIsOpen}
-                dialogUser={privilegesDialogUser}
+                dialogState={privilegesDialogState}
                 refreshAllItems={fetchData}
-                setDialogIsOpen={setPrivilegesDialogIsOpen}
             />
 
             <UserResetPasswordDialog
-                dialogIsOpen={resetPasswordDialogIsOpen}
-                dialogUser={resetPasswordDialogUser}
-                setDialogIsOpen={setResetPasswordDialogIsOpen}
+                dialogState={resetPasswordDialogState}
             />
         </ManagementPageProvider>
     );

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import {
     Stack, Dialog,
     DialogTitle,
@@ -9,23 +9,76 @@ import {
 } from "@mui/material";
 import { ContentCopyIcon, SyncIcon } from "../../Imports/Icons.js";
 import { useClipboard, useSnackbar } from "../../ContextProviders/AppFeatures.js";
-import PropTypes from "prop-types";
 import { User } from "../../Classes/Entities/User.js";
-import { entityPropTypeShape } from "../../Classes/Entity.js";
+import { dialogStatePropTypesShape } from "../../Pages/Admin/useDialogState.js";
+import { useManagementCallbacks } from "../../ContextProviders/ManagementPageProvider.js";
 
 const randomPassword = () => {
     const password = Math.random().toString(36).slice(-8) + Math.random().toString(36).slice(-8);
     return password;
 };
 
-export const UserResetPasswordDialog = ({ dialogUser, dialogIsOpen, setDialogIsOpen }) => {
+export const UserResetPasswordDialog = ({ dialogState }) => {
     const [newPassword, setNewPassword] = useState("");
     const [editMode, setEditMode] = useState(true);
     const [hasCopied, setHasCopied] = useState(false);
 
     const showSnackbar = useSnackbar();
-    const themeColor = dialogUser?.is_admin_or_collection_manager ? "secondary" : "primary";
     const clipboard = useClipboard();
+
+    const { handleRefresh } = useManagementCallbacks();
+
+    if (dialogState.Entity !== User) {
+        throw new Error("Dialog state entity must be User");
+    }
+
+    const {
+        dialogItem: dialogUser,
+        dialogIsOpen,
+        closeDialog
+    } = dialogState;
+
+    const themeColor = dialogUser?.is_admin_or_collection_manager ? "secondary" : "primary";
+
+    useEffect(() => {
+        if (!dialogIsOpen) {
+            closeDialog();
+            setEditMode(true);
+            setHasCopied(false);
+            setNewPassword("");
+        }
+    }, [closeDialog, dialogIsOpen]);
+
+    const handleClose = useCallback((event, reason) => {
+        if (reason === "backdropClick") {
+            return;
+        }
+        closeDialog();
+    }, [closeDialog]);
+
+    const handleSubmit = useCallback((e) => {
+        e.preventDefault();
+        User.handleResetPassword(dialogUser?.id, newPassword).then((msg) => {
+            handleRefresh();
+            setEditMode(false);
+            showSnackbar(msg, "success");
+        }).catch((err) => {
+            showSnackbar(err, "error");
+        });
+    }, [dialogUser?.id, handleRefresh, newPassword, showSnackbar]);
+
+    const handleNewPasswordInput = useCallback((e) => {
+        setNewPassword(e.target.value);
+    }, []);
+
+    const handleRandomizePasswordInput = useCallback(() => {
+        setNewPassword(randomPassword());
+    }, []);
+
+    const handleCopyNewPassword = useCallback(() => {
+        clipboard(newPassword);
+        setHasCopied(true);
+    }, [clipboard, newPassword]);
 
     return (
         <Dialog
@@ -33,21 +86,8 @@ export const UserResetPasswordDialog = ({ dialogUser, dialogIsOpen, setDialogIsO
             disableEscapeKeyDown
             fullWidth
             maxWidth="sm"
-            onClose={(event, reason) => {
-                if (reason === "backdropClick") {
-                    return;
-                }
-                setDialogIsOpen(false);
-            }}
-            onSubmit={(e) => {
-                e.preventDefault();
-                User.handleResetPassword(dialogUser?.id, newPassword).then((msg) => {
-                    setEditMode(false);
-                    showSnackbar(msg, "success");
-                }).catch((err) => {
-                    showSnackbar(err, "error");
-                });
-            }}
+            onClose={handleClose}
+            onSubmit={handleSubmit}
             open={dialogIsOpen}
             sx={{ zIndex: 10000 }}
         >
@@ -91,9 +131,7 @@ export const UserResetPasswordDialog = ({ dialogUser, dialogIsOpen, setDialogIsO
                             color={themeColor}
                             disabled={!editMode}
                             label="New Password"
-                            onChange={(e) => {
-                                setNewPassword(e.target.value);
-                            }}
+                            onChange={handleNewPasswordInput}
                             sx={{ width: "80%" }}
                             type="password"
                             value={newPassword}
@@ -102,9 +140,7 @@ export const UserResetPasswordDialog = ({ dialogUser, dialogIsOpen, setDialogIsO
                         {(editMode &&
                             <Button
                                 color={themeColor}
-                                onClick={() => {
-                                    setNewPassword(randomPassword());
-                                }}
+                                onClick={handleRandomizePasswordInput}
                                 startIcon={<SyncIcon />}
                                 variant={newPassword ? "outlined" : "contained"}
                             >
@@ -115,10 +151,7 @@ export const UserResetPasswordDialog = ({ dialogUser, dialogIsOpen, setDialogIsO
                         ) || (!editMode &&
                             <Button
                                 color={themeColor}
-                                onClick={() => {
-                                    clipboard(newPassword);
-                                    setHasCopied(true);
-                                }}
+                                onClick={handleCopyNewPassword}
                                 startIcon={<ContentCopyIcon />}
                                 variant={hasCopied ? "outlined" : "contained"}
                             >
@@ -142,12 +175,7 @@ export const UserResetPasswordDialog = ({ dialogUser, dialogIsOpen, setDialogIsO
                         <>
                             <Button
                                 color={themeColor}
-                                onClick={() => {
-                                    setDialogIsOpen(false);
-                                    setEditMode(true);
-                                    setHasCopied(false);
-                                    setNewPassword("");
-                                }}
+                                onClick={handleClose}
                                 sx={{ width: "100%" }}
                                 variant="outlined"
                             >
@@ -173,12 +201,7 @@ export const UserResetPasswordDialog = ({ dialogUser, dialogIsOpen, setDialogIsO
                         <Button
                             color={themeColor}
                             disabled={!hasCopied}
-                            onClick={() => {
-                                setDialogIsOpen(false);
-                                setNewPassword("");
-                                setHasCopied(false);
-                                setEditMode(true);
-                            }}
+                            onClick={handleClose}
                             size="large"
                             sx={{ width: "100%" }}
                             variant="contained"
@@ -195,7 +218,5 @@ export const UserResetPasswordDialog = ({ dialogUser, dialogIsOpen, setDialogIsO
 };
 
 UserResetPasswordDialog.propTypes = {
-    dialogIsOpen: PropTypes.bool.isRequired,
-    dialogUser: PropTypes.shape(entityPropTypeShape).isRequired,
-    setDialogIsOpen: PropTypes.func.isRequired
+    dialogState: dialogStatePropTypesShape.isRequired
 };

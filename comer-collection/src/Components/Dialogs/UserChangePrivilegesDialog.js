@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import {
     Stack, Dialog,
     DialogTitle,
@@ -8,10 +8,10 @@ import {
     Typography, DialogContentText, Checkbox, ToggleButtonGroup, ToggleButton
 } from "@mui/material";
 import { SecurityIcon, PersonIcon, CollectionManagerIcon } from "../../Imports/Icons.js";
-import PropTypes from "prop-types";
 import { User } from "../../Classes/Entities/User.js";
 import { useSnackbar } from "../../ContextProviders/AppFeatures.js";
-import { entityPropTypeShape } from "../../Classes/Entity.js";
+import { dialogStatePropTypesShape } from "../../Pages/Admin/useDialogState.js";
+import { useManagementCallbacks } from "../../ContextProviders/ManagementPageProvider.js";
 
 const userPrivilegeOptions = () => [
     {
@@ -37,14 +37,37 @@ const userPrivilegeOptions = () => [
     }
 ];
 
-export const UserChangePrivilegesDialog = ({ dialogUser, dialogIsOpen, setDialogIsOpen, refreshAllItems }) => {
+/**
+ * @param {{
+ *  dialogState: {
+ *    dialogIsOpen: Boolean,
+ *    openDialog: function,
+ *    closeDialog: function,
+ *    dialogItem: object | null,
+ *    dialogItems: object[] | null,
+ *    Entity: Class
+ *  }
+ * }} props
+ */
+export const UserChangePrivilegesDialog = ({ dialogState }) => {
     const [confirmAction, setConfirmAction] = useState(false);
     const [newAccess, setNewAccess] = useState(null);
     const [submitEnabled, setSubmitEnabled] = useState(true);
 
     const showSnackbar = useSnackbar();
-
     const themeColor = newAccess === "CURATOR" ? "primary" : "secondary";
+
+    const { handleRefresh } = useManagementCallbacks();
+
+    if (dialogState.Entity !== User) {
+        throw new Error("Dialog state entity must be User");
+    }
+
+    const {
+        dialogItem: dialogUser,
+        dialogIsOpen,
+        closeDialog
+    } = dialogState;
 
     useEffect(() => {
         if (dialogIsOpen) {
@@ -52,7 +75,42 @@ export const UserChangePrivilegesDialog = ({ dialogUser, dialogIsOpen, setDialog
             setSubmitEnabled(true);
             setConfirmAction(false);
         }
-    }, [dialogUser, dialogIsOpen]);
+    }, [dialogIsOpen, dialogUser?.access_level]);
+
+    const handleChangeNewAccessInput = useCallback((e, next) => {
+        if (next) {
+            setNewAccess(next);
+            setConfirmAction(false);
+        }
+    }, []);
+
+    const handleChangeConfirmationInput = useCallback((e) => {
+        setConfirmAction(e.target.checked);
+    }, []);
+
+    const handleClose = useCallback((event, reason) => {
+        if (reason === "backdropClick") {
+            return;
+        }
+        closeDialog();
+    }, [closeDialog]);
+
+    const handleSubmit = useCallback((e) => {
+        e.preventDefault();
+        if (dialogUser) {
+            setSubmitEnabled(false);
+            User.handleChangeUserAccess(dialogUser.id, newAccess).then((msg) => {
+                closeDialog();
+                setConfirmAction(false);
+                handleRefresh();
+                showSnackbar(msg, "success");
+            }).catch((err) => {
+                setConfirmAction(false);
+                setSubmitEnabled(true);
+                showSnackbar(err, "error");
+            });
+        }
+    }, [closeDialog, dialogUser, newAccess, handleRefresh, showSnackbar]);
 
     return (
         <Dialog
@@ -60,25 +118,8 @@ export const UserChangePrivilegesDialog = ({ dialogUser, dialogIsOpen, setDialog
             disableEscapeKeyDown
             fullWidth
             maxWidth="sm"
-            onClose={(event, reason) => {
-                if (reason === "backdropClick") { return; }
-                setDialogIsOpen(false);
-                setConfirmAction(false);
-            }}
-            onSubmit={(e) => {
-                e.preventDefault();
-                setSubmitEnabled(false);
-                User.handleChangeUserAccess(dialogUser.id, newAccess).then((msg) => {
-                    setDialogIsOpen(false);
-                    setConfirmAction(false);
-                    refreshAllItems();
-                    showSnackbar(msg, "success");
-                }).catch((err) => {
-                    setConfirmAction(false);
-                    setSubmitEnabled(true);
-                    showSnackbar(err, "error");
-                });
-            }}
+            onClose={handleClose}
+            onSubmit={handleSubmit}
             open={dialogIsOpen}
             sx={{ zIndex: 10000 }}
         >
@@ -101,12 +142,7 @@ export const UserChangePrivilegesDialog = ({ dialogUser, dialogIsOpen, setDialog
                 >
                     <ToggleButtonGroup
                         exclusive
-                        onChange={(e, next) => {
-                            if (next) {
-                                setNewAccess(next);
-                                setConfirmAction(false);
-                            }
-                        }}
+                        onChange={handleChangeNewAccessInput}
                         orientation="vertical"
                         required
                         value={newAccess}
@@ -160,9 +196,7 @@ export const UserChangePrivilegesDialog = ({ dialogUser, dialogIsOpen, setDialog
                             checked={confirmAction}
                             color={themeColor}
                             disabled={!submitEnabled || newAccess === dialogUser?.access_level}
-                            onChange={(e) => {
-                                setConfirmAction(e.target.checked);
-                            }}
+                            onChange={handleChangeConfirmationInput}
                             size="large"
                         />
 
@@ -183,10 +217,7 @@ export const UserChangePrivilegesDialog = ({ dialogUser, dialogIsOpen, setDialog
                     <Button
                         color={themeColor}
                         disabled={!submitEnabled}
-                        onClick={() => {
-                            setDialogIsOpen(false);
-                            setConfirmAction(false);
-                        }}
+                        onClick={handleClose}
                         sx={{ width: "100%" }}
                         variant="outlined"
                     >
@@ -214,8 +245,5 @@ export const UserChangePrivilegesDialog = ({ dialogUser, dialogIsOpen, setDialog
 };
 
 UserChangePrivilegesDialog.propTypes = {
-    dialogIsOpen: PropTypes.bool.isRequired,
-    dialogUser: PropTypes.shape(entityPropTypeShape).isRequired,
-    refreshAllItems: PropTypes.func.isRequired,
-    setDialogIsOpen: PropTypes.func.isRequired
+    dialogState: dialogStatePropTypesShape.isRequired
 };
