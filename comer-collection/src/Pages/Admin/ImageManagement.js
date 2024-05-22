@@ -134,6 +134,10 @@ const ImageManagement = () => {
         setViewImageExhibitionDialogIsOpen(true);
     }, []);
 
+    const handleOpenMultiCreateDialog = useCallback(() => {
+        setDialogIsOpen(true);
+    }, []);
+
     const handleOpenImageEditDialog = useCallback((image) => {
         setEditDialogImage(image);
         setEditDialogIsOpen(true);
@@ -178,6 +182,7 @@ const ImageManagement = () => {
                 handleOpenImageAssignTagDialog,
                 handleOpenImageViewExhibitionDialog,
                 handleOpenImagePreviewer,
+                handleOpenMultiCreateDialog,
                 handleOpenImageEditDialog,
                 handleOpenImageDeleteDialog,
                 handleClearFilters,

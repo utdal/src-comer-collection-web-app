@@ -92,6 +92,10 @@ const CourseManagement = () => {
         filterCourses(courseFilterFunction);
     }, [filterCourses, courseFilterFunction]);
 
+    const handleOpenMultiCreateDialog = useCallback(() => {
+        setDialogIsOpen(true);
+    }, []);
+
     const handleOpenCourseEditDialog = useCallback((course) => {
         setEditDialogCourse(course);
         setEditDialogIsOpen(true);
@@ -136,6 +140,7 @@ const CourseManagement = () => {
             managementCallbacks={{
                 handleOpenCourseDeleteDialog,
                 handleOpenCourseEditDialog,
+                handleOpenMultiCreateDialog,
                 handleOpenAssignCourseUserDialog,
                 handleClearFilters,
                 handleRefresh
