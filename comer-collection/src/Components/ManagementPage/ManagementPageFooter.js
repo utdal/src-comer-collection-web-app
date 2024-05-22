@@ -1,0 +1,22 @@
+import React from "react";
+import PropTypes from "prop-types";
+import { Stack } from "@mui/material";
+
+export const ManagementPageFooter = ({ children }) => {
+    return (
+        <Stack
+            alignItems="center"
+            direction="row"
+            justifyContent="space-between"
+            padding={2}
+            spacing={2}
+            sx={{ gridArea: "bottom" }}
+        >
+            {children}
+        </Stack>
+    );
+};
+
+ManagementPageFooter.propTypes = {
+    children: PropTypes.node.isRequired
+};

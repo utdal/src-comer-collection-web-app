@@ -1,8 +1,7 @@
 import React, { useCallback, useEffect, useState } from "react";
 import {
-    Stack,
     Button,
-    Typography, Box, Paper
+    Typography
 } from "@mui/material";
 import { SchoolIcon, LockIcon, AccessTimeIcon, WarningIcon } from "../../Imports/Icons.js";
 import { FullPageMessage } from "../../Components/FullPageMessage.js";
@@ -33,6 +32,10 @@ import { useDialogState } from "../../Hooks/useDialogState.js";
 import { useAccountNavTitle } from "../../Hooks/useAccountNavTitle.js";
 import { Course } from "../../Classes/Entities/Course.js";
 import { Exhibition } from "../../Classes/Entities/Exhibition.js";
+import { ManagementPageContainer } from "../../Components/ManagementPage/ManagementPageContainer.js";
+import { ManagementPageHeader } from "../../Components/ManagementPage/ManagementPageHeader.js";
+import { ManagementPageBody } from "../../Components/ManagementPage/ManagementPageBody.js";
+import { ManagementPageFooter } from "../../Components/ManagementPage/ManagementPageFooter.js";
 
 const UserManagement = () => {
     const [usersCombinedState, setUsers, setSelectedUsers, filterUsers] = useItemsReducer(User);
@@ -201,28 +204,8 @@ const UserManagement = () => {
             setItems={setUsers}
             setSelectedItems={setSelectedUsers}
         >
-            <Box
-                component={Paper}
-                square
-                sx={{
-                    display: "grid",
-                    gridTemplateColumns: "1fr",
-                    gridTemplateRows: "80px calc(100vh - 224px) 80px",
-                    gridTemplateAreas: `
-        "top"
-        "table"
-        "bottom"
-      `
-                }}
-            >
-                <Stack
-                    alignItems="center"
-                    direction="row"
-                    justifyContent="space-between"
-                    padding={2}
-                    spacing={2}
-                    sx={{ gridArea: "top" }}
-                >
+            <ManagementPageContainer>
+                <ManagementPageHeader>
                     <SearchBox
                         placeholder="Search by user name or email"
                         searchQuery={searchQuery}
@@ -243,23 +226,17 @@ const UserManagement = () => {
 
                         <MultiCreateButton />
                     </ManagementButtonStack>
-                </Stack>
+                </ManagementPageHeader>
 
-                <DataTable
-                    emptyMinHeight="300px"
-                    rowSelectionEnabled
-                    sx={{ gridArea: "table" }}
-                    tableFields={User.tableFields}
-                />
+                <ManagementPageBody>
+                    <DataTable
+                        emptyMinHeight="300px"
+                        rowSelectionEnabled
+                        tableFields={User.tableFields}
+                    />
+                </ManagementPageBody>
 
-                <Stack
-                    alignItems="center"
-                    direction="row"
-                    justifyContent="space-between"
-                    padding={2}
-                    spacing={2}
-                    sx={{ gridArea: "bottom" }}
-                >
+                <ManagementPageFooter>
                     <SelectionSummary />
 
                     <ManagementButtonStack>
@@ -281,9 +258,9 @@ const UserManagement = () => {
                             </Typography>
                         </Button>
                     </ManagementButtonStack>
-                </Stack>
+                </ManagementPageFooter>
 
-            </Box>
+            </ManagementPageContainer>
 
             <ItemMultiCreateDialog
                 Entity={User}
