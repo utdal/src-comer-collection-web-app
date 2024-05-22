@@ -9,7 +9,6 @@ import { ItemSingleDeleteDialog } from "../../Components/Dialogs/ItemSingleDelet
 import { DataTable } from "../../Components/DataTable/DataTable.js";
 import { Navigate } from "react-router";
 import { SelectionSummary } from "../../Components/SelectionSummary.js";
-import { sendAuthenticatedRequest } from "../../Helpers/APICalls.js";
 import { ExhibitionSettingsDialog } from "../../Components/Dialogs/ExhibitionSettingsDialog.js";
 import { useTitle } from "../../ContextProviders/AppFeatures.js";
 import { useAppUser } from "../../ContextProviders/AppUser.js";
@@ -55,12 +54,12 @@ const ExhibitionManagement = () => {
     const handleRefresh = useCallback(async () => {
         try {
             setIsError(false);
-            const exhibitionData = await sendAuthenticatedRequest("GET", "/api/admin/exhibitions");
 
-            setExhibitions(exhibitionData.data);
+            const fetchedExhibitions = await Exhibition.handleFetchAll();
+            setExhibitions(fetchedExhibitions);
 
             const coursesById = {};
-            for (const ex of exhibitionData.data) {
+            for (const ex of fetchedExhibitions) {
                 for (const c of ex.User.Courses) {
                     coursesById[c.id] = c;
                 }

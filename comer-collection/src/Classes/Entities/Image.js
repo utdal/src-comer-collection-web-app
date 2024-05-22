@@ -167,4 +167,8 @@ class Image extends Entity {
     ];
 }
 
-export { Image };
+class PublicImage extends Image {
+    static baseUrl = "/api/public/images";
+};
+
+export { Image, PublicImage };

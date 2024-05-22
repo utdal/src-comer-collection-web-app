@@ -16,7 +16,6 @@ import { AssociationManagementDialog } from "../../Components/Dialogs/Associatio
 import { Navigate, useNavigate } from "react-router";
 import { UserChangePrivilegesDialog } from "../../Components/Dialogs/UserChangePrivilegesDialog.js";
 import { SelectionSummary } from "../../Components/SelectionSummary.js";
-import { sendAuthenticatedRequest } from "../../Helpers/APICalls.js";
 import { CourseFilterMenu } from "../../Components/Menus/CourseFilterMenu.js";
 import { useSnackbar, useTitle } from "../../ContextProviders/AppFeatures.js";
 import { useAppUser } from "../../ContextProviders/AppUser.js";
@@ -32,6 +31,8 @@ import { MultiCreateButton } from "../../Components/Buttons/MultiCreateButton.js
 import { ManagementButtonStack } from "../../Components/ManagementPage/ManagementButtonStack.js";
 import { useDialogState } from "../../Hooks/useDialogState.js";
 import { useAccountNavTitle } from "../../Hooks/useAccountNavTitle.js";
+import { Course } from "../../Classes/Entities/Course.js";
+import { Exhibition } from "../../Classes/Entities/Exhibition.js";
 
 const UserManagement = () => {
     const [usersCombinedState, setUsers, setSelectedUsers, filterUsers] = useItemsReducer(User);
@@ -74,14 +75,16 @@ const UserManagement = () => {
     const handleRefresh = useCallback(async () => {
         try {
             setIsError(false);
-            const userData = await sendAuthenticatedRequest("GET", "/api/admin/users");
-            setUsers(userData.data);
 
-            const courseData = await sendAuthenticatedRequest("GET", "/api/admin/courses");
-            setCourses(courseData.data);
+            const [fetchedUsers, fetchedCourses, fetchedExhibitions] = await Promise.all([
+                User.handleFetchAll(),
+                Course.handleFetchAll(),
+                Exhibition.handleFetchAll()
+            ]);
 
-            const exhibitionData = await sendAuthenticatedRequest("GET", "/api/admin/exhibitions");
-            setExhibitions(exhibitionData.data);
+            setUsers(fetchedUsers);
+            setCourses(fetchedCourses);
+            setExhibitions(fetchedExhibitions);
 
             setIsLoaded(true);
         } catch (e) {

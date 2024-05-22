@@ -14,7 +14,6 @@ import { doesItemMatchSearchQuery } from "../../Helpers/SearchUtilities.js";
 import { AssociationManagementDialog } from "../../Components/Dialogs/AssociationManagementDialog/AssociationManagementDialog.js";
 import { Navigate, useNavigate } from "react-router";
 import { SelectionSummary } from "../../Components/SelectionSummary.js";
-import { sendAuthenticatedRequest } from "../../Helpers/APICalls.js";
 import { useAppUser } from "../../ContextProviders/AppUser.js";
 import {
     GroupAddIcon, AccessTimeIcon,
@@ -30,6 +29,7 @@ import { ClearFilterButton } from "../../Components/Buttons/ClearFilterButton.js
 import { RefreshButton } from "../../Components/Buttons/RefreshButton.js";
 import { MultiCreateButton } from "../../Components/Buttons/MultiCreateButton.js";
 import { ManagementButtonStack } from "../../Components/ManagementPage/ManagementButtonStack.js";
+import { User } from "../../Classes/Entities/User.js";
 
 const CourseManagement = () => {
     const [coursesCombinedState, setCourses, setSelectedCourses, filterCourses] = useItemsReducer(Course);
@@ -63,11 +63,14 @@ const CourseManagement = () => {
     const handleRefresh = useCallback(async () => {
         try {
             setIsError(false);
-            const courseData = await sendAuthenticatedRequest("GET", "/api/admin/courses");
-            setCourses(courseData.data);
 
-            const userData = await sendAuthenticatedRequest("GET", "/api/admin/users");
-            setUsers(userData.data);
+            const [fetchedCourses, fetchedUsers] = await Promise.all([
+                Course.handleFetchAll(),
+                User.handleFetchAll()
+            ]);
+
+            setCourses(fetchedCourses);
+            setUsers(fetchedUsers);
 
             setIsLoaded(true);
         } catch (error) {

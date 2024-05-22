@@ -1,6 +1,5 @@
 import { Box, Chip, Paper, Stack, ToggleButton, ToggleButtonGroup, Typography, ListItemButton } from "@mui/material";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
-import { sendAuthenticatedRequest } from "../../Helpers/APICalls.js";
 import { ArtistFilterMenu } from "../../Components/Menus/ArtistFilterMenu.js";
 import { SellIcon, PersonIcon, GridOnIcon, ViewListIcon } from "../../Imports/Icons.js";
 import { TagFilterMenu } from "../../Components/Menus/TagFilterMenu.js";
@@ -8,6 +7,9 @@ import SearchBox from "../../Components/SearchBox.js";
 import { doesItemMatchSearchQuery } from "../../Helpers/SearchUtilities.js";
 import PropTypes from "prop-types";
 import { ThumbnailBox } from "../../Components/CollectionBrowser/ThumbnailBox.js";
+import { PublicImage } from "../../Classes/Entities/Image.js";
+import { PublicArtist } from "../../Classes/Entities/Artist.js";
+import { PublicTag } from "../../Classes/Entities/Tag.js";
 
 const CollectionBrowserImageContainer = ({ image, viewMode, isSelected, setSelectedItem, isDisabled }) => {
     const infoStack = useMemo(() => (
@@ -117,38 +119,41 @@ export const CollectionBrowser = ({ isDialogMode, selectedItem = null, setSelect
     const [tagFilter, setTagFilter] = useState(null);
     const [searchQuery, setSearchQuery] = useState("");
 
-    const fetchImageData = useCallback(async () => {
+    const fetchImages = useCallback(async () => {
         try {
-            const imageData = await sendAuthenticatedRequest("GET", "/api/public/images");
-            setImages(imageData.data);
+            setImages(await PublicImage.handleFetchAll());
         } catch (error) {
             console.error("Error fetching image metadata:", error);
         }
     }, []);
 
-    const fetchArtistData = useCallback(async () => {
+    const fetchArtists = useCallback(async () => {
         try {
-            const artistData = await sendAuthenticatedRequest("GET", "/api/public/artists");
-            setArtists(artistData.data);
+            setArtists(await PublicArtist.handleFetchAll());
         } catch (error) {
             console.error("Error fetching artists:", error);
         }
     }, []);
 
-    const fetchTagData = useCallback(async () => {
+    const fetchTags = useCallback(async () => {
         try {
-            const tagData = await sendAuthenticatedRequest("GET", "/api/public/tags");
-            setTags(tagData.data);
+            setTags(await PublicTag.handleFetchAll());
         } catch (error) {
             console.error("Error fetching tags:", error);
         }
     }, []);
 
+    const handleRefresh = useCallback(async () => {
+        return Promise.all([
+            fetchImages(),
+            fetchArtists(),
+            fetchTags()
+        ]);
+    }, [fetchArtists, fetchImages, fetchTags]);
+
     useEffect(() => {
-        fetchImageData();
-        fetchArtistData();
-        fetchTagData();
-    }, [isDialogMode, fetchArtistData, fetchImageData, fetchTagData]);
+        handleRefresh();
+    }, [isDialogMode, handleRefresh]);
 
     const renderedImageContainerData = useMemo(() => images.map((image) => (
         [

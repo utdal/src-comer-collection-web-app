@@ -131,4 +131,8 @@ class Tag extends Entity {
     ];
 }
 
-export { Tag };
+class PublicTag extends Tag {
+    static baseUrl = "/api/public/tags";
+};
+
+export { Tag, PublicTag };

@@ -40,6 +40,19 @@ export class Entity {
         });
     };
 
+    /**
+     * @returns {Promise<Object[]>} The requested data
+     */
+    static handleFetchAll () {
+        return new Promise((resolve, reject) => {
+            sendAuthenticatedRequest("GET", `${this.baseUrl}`).then((response) => {
+                resolve(response.data);
+            }).catch((e) => {
+                reject(e);
+            });
+        });
+    }
+
     static handleMultiCreate ([...newItems]) {
         return Promise.allSettled(newItems.map((newItem) => {
             return new Promise((resolve, reject) => {

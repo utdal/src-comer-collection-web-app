@@ -10,7 +10,6 @@ import { ItemSingleDeleteDialog } from "../../Components/Dialogs/ItemSingleDelet
 import { useTitle } from "../../ContextProviders/AppFeatures.js";
 import { useAppUser } from "../../ContextProviders/AppUser.js";
 
-import { useAccountNav } from "../../Hooks/useAccountNav.js";
 import { MyExhibition } from "../../Classes/Entities/Exhibition.js";
 import { ExhibitionTitleCell } from "../../Components/TableCells/Exhibition/ExhibitionTitleCell.js";
 import { ExhibitionOpenInNewTabCell } from "../../Components/TableCells/Exhibition/ExhibitionOpenInNewTabCell.js";
@@ -21,6 +20,7 @@ import { ExhibitionOptionsCell } from "../../Components/TableCells/Exhibition/Ex
 import { ManagementPageProvider, useItemsReducer } from "../../ContextProviders/ManagementPageProvider.js";
 import { CreateExhibitionButton } from "../../Components/Buttons/CreateExhibitionButton.js";
 import { ExhibitionCreationRestriction } from "../../Components/TextBanners/ExhibitionCreationRestriction.js";
+import { useAccountNavTitle } from "../../Hooks/useAccountNavTitle.js";
 
 const exhibitionTableFields = [
     {
@@ -54,7 +54,7 @@ const exhibitionTableFields = [
 ];
 
 const MyExhibitions = () => {
-    const [, setSelectedNavItem] = useAccountNav();
+    useAccountNavTitle("My Exhibitions");
     useTitle("My Exhibitions");
 
     const [appUser, , initializeAppUser] = useAppUser();
@@ -73,10 +73,6 @@ const MyExhibitions = () => {
     useEffect(() => {
         setExhibitions(appUser.Exhibitions);
     }, [appUser, setExhibitions]);
-
-    useEffect(() => {
-        setSelectedNavItem("My Exhibitions");
-    }, [setSelectedNavItem]);
 
     const handleOpenExhibitionCreateDialog = useCallback(() => {
         setDialogEditMode(false);

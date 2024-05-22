@@ -16,7 +16,6 @@ import { ImageFullScreenViewer } from "../../Components/Dialogs/ImageFullScreenV
 import { EntityManageDialog } from "../../Components/Dialogs/EntityManageDialog.js";
 import { SelectionSummary } from "../../Components/SelectionSummary.js";
 import { AssociationManagementDialog } from "../../Components/Dialogs/AssociationManagementDialog/AssociationManagementDialog.js";
-import { sendAuthenticatedRequest } from "../../Helpers/APICalls.js";
 import { useTitle } from "../../ContextProviders/AppFeatures.js";
 import { useAppUser } from "../../ContextProviders/AppUser.js";
 
@@ -76,20 +75,18 @@ const ImageManagement = () => {
     useTitle("Image Management");
 
     const fetchImages = useCallback(async () => {
-        const imageData = await sendAuthenticatedRequest("GET", "/api/admin/images");
-        setImages(imageData.data);
+        const fetchedImages = await Image.handleFetchAll();
+        setImages(fetchedImages);
 
-        setExhibitions(imageData.data.map((i) => i.Exhibitions).flat());
+        setExhibitions(fetchedImages.map((i) => i.Exhibitions).flat());
     }, [setImages]);
 
     const fetchArtists = useCallback(async () => {
-        const artistData = await sendAuthenticatedRequest("GET", "/api/admin/artists");
-        setArtists(artistData.data);
+        setArtists(await Artist.handleFetchAll());
     }, [setArtists]);
 
     const fetchTags = useCallback(async () => {
-        const tagData = await sendAuthenticatedRequest("GET", "/api/admin/tags");
-        setTags(tagData.data);
+        setTags(await Tag.handleFetchAll());
     }, [setTags]);
 
     const handleRefresh = useCallback(async () => {

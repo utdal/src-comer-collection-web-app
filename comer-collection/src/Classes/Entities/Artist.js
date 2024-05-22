@@ -71,4 +71,8 @@ class Artist extends Entity {
     ];
 }
 
-export { Artist };
+class PublicArtist extends Artist {
+    static baseUrl = "/api/public/artists";
+}
+
+export { Artist, PublicArtist };
