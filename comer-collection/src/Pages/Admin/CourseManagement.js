@@ -1,8 +1,7 @@
 import React, { useCallback, useEffect, useState } from "react";
 import {
-    Stack,
     Button,
-    Typography, Box, Paper
+    Typography
 } from "@mui/material";
 import { FullPageMessage } from "../../Components/FullPageMessage.js";
 import SearchBox from "../../Components/SearchBox.js";
@@ -30,6 +29,10 @@ import { RefreshButton } from "../../Components/Buttons/RefreshButton.js";
 import { MultiCreateButton } from "../../Components/Buttons/MultiCreateButton.js";
 import { ManagementButtonStack } from "../../Components/ManagementPage/ManagementButtonStack.js";
 import { User } from "../../Classes/Entities/User.js";
+import { ManagementPageContainer } from "../../Components/ManagementPage/ManagementPageContainer.js";
+import { ManagementPageHeader } from "../../Components/ManagementPage/ManagementPageHeader.js";
+import { ManagementPageBody } from "../../Components/ManagementPage/ManagementPageBody.js";
+import { ManagementPageFooter } from "../../Components/ManagementPage/ManagementPageFooter.js";
 
 const CourseManagement = () => {
     const [coursesCombinedState, setCourses, setSelectedCourses, filterCourses] = useItemsReducer(Course);
@@ -148,28 +151,8 @@ const CourseManagement = () => {
             setItems={setCourses}
             setSelectedItems={setSelectedCourses}
         >
-            <Box
-                component={Paper}
-                square
-                sx={{
-                    display: "grid",
-                    gridTemplateColumns: "1fr",
-                    gridTemplateRows: "80px calc(100vh - 224px) 80px",
-                    gridTemplateAreas: `
-        "top"
-        "table"
-        "bottom"
-      `
-                }}
-            >
-                <Stack
-                    alignItems="center"
-                    direction="row"
-                    justifyContent="space-between"
-                    padding={2}
-                    spacing={2}
-                    sx={{ gridArea: "top" }}
-                >
+            <ManagementPageContainer>
+                <ManagementPageHeader>
                     <SearchBox
                         placeholder="Search by course name or notes"
                         searchQuery={searchQuery}
@@ -184,18 +167,20 @@ const CourseManagement = () => {
 
                         <MultiCreateButton />
                     </ManagementButtonStack>
-                </Stack>
+                </ManagementPageHeader>
 
-                <DataTable
-                    defaultSortAscending
-                    defaultSortColumn="ID"
-                    emptyMinHeight="300px"
-                    rowSelectionEnabled
-                    sx={{ gridArea: "table" }}
-                    tableFields={Course.tableFields}
-                />
+                <ManagementPageBody>
+                    <DataTable
+                        defaultSortAscending
+                        defaultSortColumn="ID"
+                        emptyMinHeight="300px"
+                        rowSelectionEnabled
+                        sx={{ gridArea: "table" }}
+                        tableFields={Course.tableFields}
+                    />
+                </ManagementPageBody>
 
-                <Stack
+                <ManagementPageFooter
                     alignItems="center"
                     direction="row"
                     justifyContent="space-between"
@@ -225,9 +210,9 @@ const CourseManagement = () => {
                             </Typography>
                         </Button>
                     </ManagementButtonStack>
-                </Stack>
+                </ManagementPageFooter>
 
-            </Box>
+            </ManagementPageContainer>
 
             <ItemMultiCreateDialog
                 Entity={Course}

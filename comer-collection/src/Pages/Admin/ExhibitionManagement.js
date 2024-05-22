@@ -1,7 +1,4 @@
 import React, { useCallback, useEffect, useState } from "react";
-import {
-    Stack, Box, Paper
-} from "@mui/material";
 import { FullPageMessage } from "../../Components/FullPageMessage.js";
 import SearchBox from "../../Components/SearchBox.js";
 import { LockIcon, WarningIcon, AccessTimeIcon } from "../../Imports/Icons.js";
@@ -21,6 +18,10 @@ import { ManagementPageProvider, useItemsReducer } from "../../ContextProviders/
 import { ClearFilterButton } from "../../Components/Buttons/ClearFilterButton.js";
 import { RefreshButton } from "../../Components/Buttons/RefreshButton.js";
 import { ManagementButtonStack } from "../../Components/ManagementPage/ManagementButtonStack.js";
+import { ManagementPageContainer } from "../../Components/ManagementPage/ManagementPageContainer.js";
+import { ManagementPageHeader } from "../../Components/ManagementPage/ManagementPageHeader.js";
+import { ManagementPageBody } from "../../Components/ManagementPage/ManagementPageBody.js";
+import { ManagementPageFooter } from "../../Components/ManagementPage/ManagementPageFooter.js";
 
 const ExhibitionManagement = () => {
     const [exhibitionsCombinedState, setExhibitions, setSelectedExhibitions, filterExhibitions] = useItemsReducer(Exhibition);
@@ -134,28 +135,8 @@ const ExhibitionManagement = () => {
             setItems={setExhibitions}
             setSelectedItems={setSelectedExhibitions}
         >
-            <Box
-                component={Paper}
-                square
-                sx={{
-                    display: "grid",
-                    gridTemplateColumns: "1fr",
-                    gridTemplateRows: "80px calc(100vh - 224px) 80px",
-                    gridTemplateAreas: `
-                    "top"
-                    "table"
-                    "bottom"
-                `
-                }}
-            >
-                <Stack
-                    alignItems="center"
-                    direction="row"
-                    justifyContent="space-between"
-                    padding={2}
-                    spacing={2}
-                    sx={{ gridArea: "top" }}
-                >
+            <ManagementPageContainer>
+                <ManagementPageHeader>
                     <SearchBox
                         placeholder="Search by user name or email"
                         searchQuery={searchQuery}
@@ -176,29 +157,22 @@ const ExhibitionManagement = () => {
                         <ClearFilterButton />
 
                     </ManagementButtonStack>
-                </Stack>
+                </ManagementPageHeader>
 
-                <Box sx={{ gridArea: "table" }}>
+                <ManagementPageBody>
                     <DataTable
                         defaultSortAscending={false}
                         defaultSortColumn="Modified"
                         rowSelectionEnabled
                         tableFields={Exhibition.tableFields}
                     />
-                </Box>
+                </ManagementPageBody>
 
-                <Stack
-                    alignItems="center"
-                    direction="row"
-                    justifyContent="space-between"
-                    padding={2}
-                    spacing={2}
-                    sx={{ gridArea: "bottom" }}
-                >
+                <ManagementPageFooter>
                     <SelectionSummary />
-                </Stack>
+                </ManagementPageFooter>
 
-            </Box>
+            </ManagementPageContainer>
 
             <ExhibitionSettingsDialog
                 adminMode

@@ -1,8 +1,7 @@
 import React, { useCallback, useEffect, useState } from "react";
 import {
-    Stack,
     Button,
-    Typography, Box, Paper
+    Typography
 } from "@mui/material";
 import { FullPageMessage } from "../../Components/FullPageMessage.js";
 import SearchBox from "../../Components/SearchBox.js";
@@ -32,6 +31,10 @@ import { ClearFilterButton } from "../../Components/Buttons/ClearFilterButton.js
 import { RefreshButton } from "../../Components/Buttons/RefreshButton.js";
 import { MultiCreateButton } from "../../Components/Buttons/MultiCreateButton.js";
 import { ManagementButtonStack } from "../../Components/ManagementPage/ManagementButtonStack.js";
+import { ManagementPageContainer } from "../../Components/ManagementPage/ManagementPageContainer.js";
+import { ManagementPageHeader } from "../../Components/ManagementPage/ManagementPageHeader.js";
+import { ManagementPageBody } from "../../Components/ManagementPage/ManagementPageBody.js";
+import { ManagementPageFooter } from "../../Components/ManagementPage/ManagementPageFooter.js";
 
 const ImageManagement = () => {
     const [imagesCombinedState, setImages, setSelectedImages, filterImages] = useItemsReducer(Image);
@@ -191,28 +194,8 @@ const ImageManagement = () => {
             setItems={setImages}
             setSelectedItems={setSelectedImages}
         >
-            <Box
-                component={Paper}
-                square
-                sx={{
-                    display: "grid",
-                    gridTemplateColumns: "1fr",
-                    gridTemplateRows: "80px calc(100vh - 224px) 80px",
-                    gridTemplateAreas: `
-                    "top"
-                    "table"
-                    "bottom"
-                `
-                }}
-            >
-                <Stack
-                    alignItems="center"
-                    direction="row"
-                    justifyContent="space-between"
-                    padding={2}
-                    spacing={2}
-                    sx={{ gridArea: "top" }}
-                >
+            <ManagementPageContainer>
+                <ManagementPageHeader>
                     <SearchBox
                         placeholder="Search image fields and notes"
                         searchQuery={searchQuery}
@@ -253,29 +236,17 @@ const ImageManagement = () => {
 
                         <MultiCreateButton />
                     </ManagementButtonStack>
-                </Stack>
+                </ManagementPageHeader>
 
-                {(!isLoaded &&
-                    <FullPageMessage
-                        Icon={AccessTimeIcon}
-                        message="Loading images..."
-                    />
-                ) || (isLoaded && (
+                <ManagementPageBody>
                     <DataTable
                         emptyMinHeight="300px"
                         rowSelectionEnabled
                         tableFields={Image.tableFields}
                     />
-                ))}
+                </ManagementPageBody>
 
-                <Stack
-                    alignItems="center"
-                    direction="row"
-                    justifyContent="space-between"
-                    padding={2}
-                    spacing={2}
-                    sx={{ gridArea: "bottom" }}
-                >
+                <ManagementPageFooter>
                     <SelectionSummary />
 
                     <ManagementButtonStack>
@@ -317,9 +288,9 @@ const ImageManagement = () => {
                             </Typography>
                         </Button>
                     </ManagementButtonStack>
-                </Stack>
+                </ManagementPageFooter>
 
-            </Box>
+            </ManagementPageContainer>
 
             <ItemMultiCreateDialog
                 Entity={Image}
