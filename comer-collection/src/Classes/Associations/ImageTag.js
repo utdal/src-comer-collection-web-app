@@ -1,6 +1,9 @@
 import { Image } from "../Entities/Image.js";
 import { Tag } from "../Entities/Tag.js";
 import { Association } from "../Association.js";
+import { TagIDCell } from "../../Components/TableCells/Tag/TagIDCell.js";
+import { TagDataCell } from "../../Components/TableCells/Tag/TagDataCell.js";
+import { TagNotesCell } from "../../Components/TableCells/Tag/TagNotesCell.js";
 
 class ImageTag extends Association {
     static url = "/api/admin/imagetags";
@@ -20,16 +23,16 @@ class ImageTag extends Association {
     static tableFields = [
         {
             columnDescription: "ID",
-            TableCellComponent: Tag.TableCells.ID,
+            TableCellComponent: TagIDCell,
             generateSortableValue: (tag) => tag.id
         },
         {
             columnDescription: "Tag",
-            TableCellComponent: Tag.TableCells.Data
+            TableCellComponent: TagDataCell
         },
         {
             columnDescription: "Notes",
-            TableCellComponent: Tag.TableCells.Notes
+            TableCellComponent: TagNotesCell
         }
     ];
 }
