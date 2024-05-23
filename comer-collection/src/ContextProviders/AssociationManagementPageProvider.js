@@ -4,8 +4,9 @@ import { ManagementPageProvider, useItems, useVisibleItems } from "./ManagementP
 import { entityPropTypeShape, itemsCombinedStatePropTypeShape } from "../Classes/Entity.js";
 
 const AssociationManagementPageContext = createContext();
+const defaultManagementCallbacks = {};
 
-export const AssociationManagementPageProvider = ({ managementCallbacks, secondaryItemsCombinedState, setSecondaryItems, setSelectedSecondaryItems, relevantPrimaryItems, AssociationType, children }) => {
+export const AssociationManagementPageProvider = ({ managementCallbacks = defaultManagementCallbacks, secondaryItemsCombinedState, setSecondaryItems, setSelectedSecondaryItems, relevantPrimaryItems, AssociationType, children }) => {
     const contextValue = useMemo(() => {
         return {
             relevantPrimaryItems, AssociationType
@@ -28,7 +29,7 @@ export const AssociationManagementPageProvider = ({ managementCallbacks, seconda
 AssociationManagementPageProvider.propTypes = {
     AssociationType: PropTypes.node.isRequired,
     children: PropTypes.node.isRequired,
-    managementCallbacks: PropTypes.objectOf(PropTypes.func).isRequired,
+    managementCallbacks: PropTypes.objectOf(PropTypes.func),
     relevantPrimaryItems: PropTypes.arrayOf(entityPropTypeShape).isRequired,
     secondaryItemsCombinedState: PropTypes.exact(itemsCombinedStatePropTypeShape).isRequired,
     setSecondaryItems: PropTypes.func.isRequired,

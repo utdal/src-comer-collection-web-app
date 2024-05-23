@@ -19,7 +19,7 @@ import { useSnackbar } from "../../ContextProviders/AppFeatures.js";
 import { ManagementPageProvider, useItemsReducer } from "../../ContextProviders/ManagementPageProvider.js";
 import { useDialogState } from "../../Hooks/useDialogState.js";
 import { DialogState } from "../../Classes/DialogState.js";
-import { PersistentFormDialog } from "./PersistentDialog.js";
+import { PersistentFormDialog } from "./PersistentFormDialog.js";
 import { FullPageMessage } from "../FullPageMessage.js";
 import { RefreshButton } from "../Buttons/RefreshButton.js";
 import { SelectionSummary } from "../SelectionSummary.js";

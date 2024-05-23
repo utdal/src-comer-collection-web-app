@@ -226,9 +226,9 @@ export const DataTable = ({
 };
 
 DataTable.propTypes = {
-    defaultSortAscending: PropTypes.bool.isRequired,
-    defaultSortColumn: PropTypes.string.isRequired,
-    rowSelectionEnabled: PropTypes.bool.isRequired,
+    defaultSortAscending: PropTypes.bool,
+    defaultSortColumn: PropTypes.string,
+    rowSelectionEnabled: PropTypes.bool,
     smallCheckboxes: PropTypes.bool,
     tableFields: PropTypes.arrayOf(PropTypes.shape(tableFieldPropTypeShape)).isRequired
 };

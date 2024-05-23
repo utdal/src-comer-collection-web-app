@@ -11,7 +11,7 @@ import { DeleteIcon } from "../../Imports/Icons.js";
 import { getBlankItemFields } from "../../Helpers/fields.js";
 import { useSnackbar } from "../../ContextProviders/AppFeatures.js";
 import { useEntity, useManagementCallbacks } from "../../ContextProviders/ManagementPageProvider.js";
-import { PersistentFormDialog } from "./PersistentDialog.js";
+import { PersistentFormDialog } from "./PersistentFormDialog.js";
 import { DialogState } from "../../Classes/DialogState.js";
 
 export const ItemMultiCreateDialog = ({ dialogState }) => {

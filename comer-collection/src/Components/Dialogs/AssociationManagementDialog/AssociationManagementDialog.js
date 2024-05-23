@@ -4,7 +4,7 @@ import {
     DialogContent,
     DialogActions,
     Button,
-    Typography, DialogContentText, Box
+    Typography, Box
 } from "@mui/material";
 import { DataTable } from "../../DataTable/DataTable.js";
 import SearchBox from "../../SearchBox.js";
@@ -30,13 +30,13 @@ const unassignButtonColumnDefinition = {
 export const AssociationManagementDialog = ({
     Association, editMode, primaryItems,
     secondaryItemsAll,
-    dialogInstructions, dialogButtonForSecondaryManagement,
+    dialogButtonForSecondaryManagement,
     dialogIsOpen, setDialogIsOpen,
     secondarySearchFields, secondarySearchBoxPlaceholder,
     defaultSortColumn, defaultSortAscending,
     refreshAllItems
 }) => {
-    const [secondaryItemsCombinedState, setSecondaryItems] = useItemsReducer(Association.secondary);
+    const [secondaryItemsCombinedState, setSecondaryItems, setSelectedSecondaryItems] = useItemsReducer(Association.secondary);
 
     useEffect(() => {
         setSecondaryItems(secondaryItemsAll);
@@ -137,9 +137,11 @@ export const AssociationManagementDialog = ({
     return (
         <AssociationManagementPageProvider
             AssociationType={Association}
+            managementCallbacks={{}}
             relevantPrimaryItems={primaryItems}
             secondaryItemsCombinedState={secondaryItemsCombinedState}
             setSecondaryItems={setSecondaryItems}
+            setSelectedSecondaryItems={setSelectedSecondaryItems}
         >
             <Dialog
                 disableEscapeKeyDown
@@ -171,9 +173,6 @@ export const AssociationManagementDialog = ({
                 </DialogTitle>
 
                 <DialogContent>
-                    <DialogContentText variant="body1">
-                        {dialogInstructions}
-                    </DialogContentText>
 
                     <Stack
                         direction="column"
@@ -265,10 +264,9 @@ export const AssociationManagementDialog = ({
 
 AssociationManagementDialog.propTypes = {
     Association: PropTypes.node.isRequired,
-    defaultSortAscending: PropTypes.bool.isRequired,
-    defaultSortColumn: PropTypes.string.isRequired,
+    defaultSortAscending: PropTypes.bool,
+    defaultSortColumn: PropTypes.string,
     dialogButtonForSecondaryManagement: PropTypes.element.isRequired,
-    dialogInstructions: PropTypes.string.isRequired,
     dialogIsOpen: PropTypes.bool.isRequired,
     editMode: PropTypes.bool.isRequired,
     primaryItems: PropTypes.arrayOf(entityPropTypeShape).isRequired,

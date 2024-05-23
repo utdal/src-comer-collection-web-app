@@ -144,6 +144,6 @@ export const ItemSingleDeleteDialog = ({ requireTypedConfirmation, deleteDialogI
 ItemSingleDeleteDialog.propTypes = {
     deleteDialogIsOpen: PropTypes.bool.isRequired,
     deleteDialogItem: PropTypes.shape(entityPropTypeShape).isRequired,
-    requireTypedConfirmation: PropTypes.bool.isRequired,
+    requireTypedConfirmation: PropTypes.bool,
     setDeleteDialogIsOpen: PropTypes.func.isRequired
 };

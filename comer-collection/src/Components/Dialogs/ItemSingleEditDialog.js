@@ -13,7 +13,7 @@ import { useAppUser } from "../../ContextProviders/AppUser.js";
 import { User } from "../../Classes/Entities/User.js";
 import { useEntity, useManagementCallbacks } from "../../ContextProviders/ManagementPageProvider.js";
 import { DialogInputFieldWithRef } from "../Inputs/DialogInputFieldWithRef.js";
-import { PersistentFormDialog } from "./PersistentDialog.js";
+import { PersistentFormDialog } from "./PersistentFormDialog.js";
 import PropTypes from "prop-types";
 import { DialogState } from "../../Classes/DialogState.js";
 
@@ -85,13 +85,18 @@ export const ItemSingleEditDialog = ({ dialogState }) => {
             >
                 <Stack spacing={2}>
                     <DialogContentText variant="body1">
-                        Edit the
+                        {"Edit the "}
+
                         {Entity.singular}
 
-                        {" "}
+                        {" fields, then click "}
 
-                        fields, then click &lsquo;Save
+                        &lsquo;
+
+                        {"Save "}
+
                         {singularCapitalized}
+
                         &rsquo;.
                     </DialogContentText>
 
@@ -141,7 +146,8 @@ export const ItemSingleEditDialog = ({ dialogState }) => {
                         variant="contained"
                     >
                         <Typography variant="body1">
-                            Save
+                            {"Save "}
+
                             {Entity.singular}
                         </Typography>
                     </Button>

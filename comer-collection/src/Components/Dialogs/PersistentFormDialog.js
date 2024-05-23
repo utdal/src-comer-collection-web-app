@@ -27,7 +27,7 @@ export const PersistentFormDialog = ({ children, maxWidth, onClose, onSubmit, op
         <Dialog
             component="form"
             disableEscapeKeyDown
-            fullWidth
+            fullWidth={Boolean(maxWidth)}
             maxWidth={maxWidth}
             onClose={handleClose}
             onSubmit={handleSubmit}
@@ -41,13 +41,7 @@ export const PersistentFormDialog = ({ children, maxWidth, onClose, onSubmit, op
 
 PersistentFormDialog.propTypes = {
     children: PropTypes.node.isRequired,
-    maxWidth: PropTypes.oneOf([
-        PropTypes.exact("xs"),
-        PropTypes.exact("sm"),
-        PropTypes.exact("md"),
-        PropTypes.exact("lg"),
-        PropTypes.exact("xl")
-    ]).isRequired,
+    maxWidth: PropTypes.oneOf(["xs", "sm", "md", "lg", "xl"]),
     onClose: PropTypes.func.isRequired,
     onSubmit: PropTypes.func.isRequired,
     open: PropTypes.bool.isRequired

@@ -21,7 +21,10 @@ export const DialogInputFieldWithRef = ({ fieldDefinition, defaultValue, inputRe
 };
 
 DialogInputFieldWithRef.propTypes = {
-    defaultValue: PropTypes.node.isRequired,
+    defaultValue: PropTypes.oneOfType([
+        PropTypes.string,
+        PropTypes.number
+    ]),
     fieldDefinition: PropTypes.shape({
         inputType: PropTypes.string,
         fieldName: PropTypes.string,
@@ -30,5 +33,10 @@ DialogInputFieldWithRef.propTypes = {
         multiline: PropTypes.bool,
         isRequired: PropTypes.bool
     }).isRequired,
-    inputRef: PropTypes.node.isRequired
+    inputRef: PropTypes.oneOfType([
+        PropTypes.func,
+        PropTypes.shape({
+            current: PropTypes.instanceOf(Element)
+        })
+    ]).isRequired
 };

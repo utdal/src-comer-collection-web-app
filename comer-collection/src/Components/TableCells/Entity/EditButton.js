@@ -15,6 +15,6 @@ export const EditButton = ({ onClick, disabled = false }) => {
 };
 
 EditButton.propTypes = {
-    disabled: PropTypes.bool.isRequired,
+    disabled: PropTypes.bool,
     onClick: PropTypes.func.isRequired
 };

@@ -15,6 +15,6 @@ export const DeleteButton = ({ onClick, disabled = false }) => {
 };
 
 DeleteButton.propTypes = {
-    disabled: PropTypes.bool.isRequired,
+    disabled: PropTypes.bool,
     onClick: PropTypes.func.isRequired
 };
