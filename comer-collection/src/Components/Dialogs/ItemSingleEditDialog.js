@@ -38,8 +38,7 @@ export const ItemSingleEditDialog = ({ dialogState }) => {
         }
     }, [dialogIsOpen]);
 
-    const handleSubmit = useCallback((e) => {
-        e.preventDefault();
+    const handleSubmit = useCallback(() => {
         if (dialogItem) {
             const editDialogFieldData = {};
             for (const r of editDialogFieldRefs.current) {
