@@ -83,7 +83,6 @@ export const ItemMultiCreateDialog = ({ dialogState }) => {
 
     return (
         <PersistentFormDialog
-            fullWidth
             maxWidth="lg"
             onClose={closeDialog}
             onSubmit={handleSubmit}
