@@ -44,13 +44,11 @@ const CourseManagement = () => {
     const [deleteDialogIsOpen, setDeleteDialogIsOpen] = useState(false);
     const [deleteDialogCourse, setDeleteDialogCourse] = useState(null);
 
-    const [editDialogIsOpen, setEditDialogIsOpen] = useState(false);
-    const [editDialogCourse, setEditDialogCourse] = useState(null);
-
     const [assignUserDialogIsOpen, setAssignUserDialogIsOpen] = useState(false);
     const [assignUserDialogCourses, setAssignUserDialogCourses] = useState([]);
 
     const [createDialogState, handleOpenMultiCreateDialog] = useDialogState();
+    const [editDialogState, openEditDialog] = useDialogState(false);
 
     const [searchQuery, setSearchQuery] = useState("");
 
@@ -97,9 +95,8 @@ const CourseManagement = () => {
     }, [filterCourses, courseFilterFunction]);
 
     const handleOpenCourseEditDialog = useCallback((course) => {
-        setEditDialogCourse(course);
-        setEditDialogIsOpen(true);
-    }, []);
+        openEditDialog(course);
+    }, [openEditDialog]);
 
     const handleOpenCourseDeleteDialog = useCallback((course) => {
         setDeleteDialogCourse(course);
@@ -213,13 +210,7 @@ const CourseManagement = () => {
 
             <ItemMultiCreateDialog dialogState={createDialogState} />
 
-            <ItemSingleEditDialog
-                Entity={Course}
-                editDialogIsOpen={editDialogIsOpen}
-                editDialogItem={editDialogCourse}
-                refreshAllItems={handleRefresh}
-                setEditDialogIsOpen={setEditDialogIsOpen}
-            />
+            <ItemSingleEditDialog dialogState={editDialogState} />
 
             <ItemSingleDeleteDialog
                 Entity={Course}
