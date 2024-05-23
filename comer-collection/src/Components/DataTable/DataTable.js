@@ -13,7 +13,7 @@ import { tableFieldPropTypeShape } from "../../Classes/Entity.js";
 import { InfoIcon } from "../../Imports/Icons.js";
 
 export const DataTable = ({
-    tableFields, rowSelectionEnabled, defaultSortColumn, defaultSortAscending
+    tableFields, rowSelectionEnabled, smallCheckboxes, defaultSortColumn, defaultSortAscending
 }) => {
     const theme = useTheme();
     const [items] = useItems();
@@ -85,7 +85,7 @@ export const DataTable = ({
                                                         setSelectedItems(selectedItems.filter((si) => si.id !== item.id));
                                                     }
                                                 }}
-                                                size="large"
+                                                size={smallCheckboxes ? "medium" : "large"}
                                             />
                                         </TableCell>)}
 
@@ -111,7 +111,7 @@ export const DataTable = ({
             })
         );
         return itemInformationToReturn;
-    }, [items, selectedItems, setSelectedItems, rowSelectionEnabled, sortableValuesByRow, tableFields, theme]);
+    }, [items, selectedItems, sortableValuesByRow, theme.palette, rowSelectionEnabled, smallCheckboxes, tableFields, setSelectedItems]);
 
     const visibleItemInformation = useMemo(() => itemInformation.filter((r) => visibleItems.map((vi) => vi.id).includes(r[0].id)), [itemInformation, visibleItems]);
 
@@ -169,7 +169,7 @@ export const DataTable = ({
                                                 )));
                                             }
                                         }}
-                                        size="large"
+                                        size={smallCheckboxes ? "medium" : "large"}
                                     />
                                 </Typography>
                             </TableCell>
@@ -229,5 +229,6 @@ DataTable.propTypes = {
     defaultSortAscending: PropTypes.bool.isRequired,
     defaultSortColumn: PropTypes.string.isRequired,
     rowSelectionEnabled: PropTypes.bool.isRequired,
+    smallCheckboxes: PropTypes.bool,
     tableFields: PropTypes.arrayOf(PropTypes.shape(tableFieldPropTypeShape)).isRequired
 };
