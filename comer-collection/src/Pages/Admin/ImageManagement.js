@@ -40,8 +40,6 @@ import EntityManageButton from "../../Components/Buttons/EntityManageButton.js";
 
 const ImageManagement = () => {
     const [imagesCombinedState, setImages, setSelectedImages, filterImages] = useItemsReducer(Image);
-    const [artistsCombinedState, setArtists, , filterArtists] = useItemsReducer(Artist);
-    const [tagsCombinedState, setTags, , filterTags] = useItemsReducer(Tag);
 
     const [exhibitions, setExhibitions] = useState([]);
 
@@ -60,8 +58,8 @@ const ImageManagement = () => {
     const [previewerImage, setPreviewerImage] = useState(null);
     const [previewerOpen, setPreviewerOpen] = useState(false);
 
-    const [manageArtistDialogIsOpen, setManageArtistDialogIsOpen] = useState(false);
-    const [manageTagDialogIsOpen, setManageTagDialogIsOpen] = useState(false);
+    const [manageArtistDialogState, openManageArtistDialog] = useDialogState();
+    const [manageTagDialogState, openManageTagDialog] = useDialogState();
 
     const [createDialogState, handleOpenMultiCreateDialog] = useDialogState();
     const [editDialogState, openEditDialog] = useDialogState(false);
@@ -77,33 +75,17 @@ const ImageManagement = () => {
     useAccountNavTitle("Image Management");
     useTitle("Image Management");
 
-    const fetchImages = useCallback(async () => {
-        const fetchedImages = await Image.handleFetchAll();
-        setImages(fetchedImages);
-
-        setExhibitions(fetchedImages.map((i) => i.Exhibitions).flat());
-    }, [setImages]);
-
-    const fetchArtists = useCallback(async () => {
-        setArtists(await Artist.handleFetchAll());
-    }, [setArtists]);
-
-    const fetchTags = useCallback(async () => {
-        setTags(await Tag.handleFetchAll());
-    }, [setTags]);
-
     const handleRefresh = useCallback(async () => {
         setIsError(false);
-        Promise.all([
-            fetchImages(),
-            fetchArtists(),
-            fetchTags()
-        ]).then(() => {
+        try {
+            const fetchedImages = await Image.handleFetchAll();
+            setImages(fetchedImages);
+            setExhibitions(fetchedImages.map((i) => i.Exhibitions).flat());
             setIsLoaded(true);
-        }).catch(() => {
+        } catch (e) {
             setIsError(true);
-        });
-    }, [fetchImages, fetchArtists, fetchTags]);
+        }
+    }, [setImages]);
 
     useEffect(() => {
         if (appUser.is_admin_or_collection_manager) {
@@ -205,16 +187,12 @@ const ImageManagement = () => {
 
                         <EntityManageButton
                             entity={Tag}
-                            handleOpenDialog={() => {
-                                setManageTagDialogIsOpen(true);
-                            }}
+                            handleOpenDialog={openManageTagDialog}
                         />
 
                         <EntityManageButton
                             entity={Artist}
-                            handleOpenDialog={() => {
-                                setManageArtistDialogIsOpen(true);
-                            }}
+                            handleOpenDialog={openManageArtistDialog}
                         />
 
                         <MultiCreateButton />
@@ -290,24 +268,14 @@ const ImageManagement = () => {
 
             <EntityManageDialog
                 Entity={Artist}
-                dialogIsOpen={manageArtistDialogIsOpen}
-                dialogItemsCombinedState={artistsCombinedState}
-                filterDialogItems={filterArtists}
-                refreshAllItems={fetchArtists}
+                dialogState={manageArtistDialogState}
                 searchBoxPlaceholder="Search artists by name or notes"
-                setDialogIsOpen={setManageArtistDialogIsOpen}
-                setDialogItems={setArtists}
             />
 
             <EntityManageDialog
                 Entity={Tag}
-                dialogIsOpen={manageTagDialogIsOpen}
-                dialogItemsCombinedState={tagsCombinedState}
-                filterDialogItems={filterTags}
-                refreshAllItems={fetchTags}
+                dialogState={manageTagDialogState}
                 searchBoxPlaceholder="Search tags by name or notes"
-                setDialogIsOpen={setManageTagDialogIsOpen}
-                setDialogItems={setTags}
             />
 
             <ImageFullScreenViewer
@@ -323,7 +291,7 @@ const ImageManagement = () => {
                     <Button
                         onClick={() => {
                             setAssignArtistDialogIsOpen(false);
-                            setManageArtistDialogIsOpen(true);
+                            openManageArtistDialog();
                         }}
                         variant="outlined"
                     >
@@ -337,7 +305,8 @@ const ImageManagement = () => {
                 primaryItems={associationDialogImages}
                 refreshAllItems={handleRefresh}
                 secondaryFieldInPrimary="Artists"
-                secondaryItemsAll={artistsCombinedState.items}
+                // secondaryItemsAll={artistsCombinedState.items}
+                secondaryItemsAll={[]}
                 secondarySearchBoxPlaceholder="Search artists by name or notes"
                 secondarySearchFields={["fullName", "fullNameReverse", "notes"]}
                 setDialogIsOpen={setAssignArtistDialogIsOpen}
@@ -349,7 +318,7 @@ const ImageManagement = () => {
                     <Button
                         onClick={() => {
                             setAssignTagDialogIsOpen(false);
-                            setManageTagDialogIsOpen(true);
+                            openManageTagDialog();
                         }}
                         variant="outlined"
                     >
@@ -363,7 +332,8 @@ const ImageManagement = () => {
                 primaryItems={associationDialogImages}
                 refreshAllItems={handleRefresh}
                 secondaryFieldInPrimary="Tags"
-                secondaryItemsAll={tagsCombinedState.items}
+                // secondaryItemsAll={tagsCombinedState.items}
+                secondaryItemsAll={[]}
                 secondarySearchBoxPlaceholder="Search tags by name or notes"
                 secondarySearchFields={["data", "notes"]}
                 setDialogIsOpen={setAssignTagDialogIsOpen}
