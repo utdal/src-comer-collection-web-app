@@ -42,6 +42,7 @@ module.exports = {
         }],
         "react/jsx-no-bind": [0],
         "react/jsx-max-depth": [0],
-        "react/jsx-no-literals": [0]
+        "react/jsx-no-literals": [0],
+        "react/require-default-props": [0]
     }
 };
