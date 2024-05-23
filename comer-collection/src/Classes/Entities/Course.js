@@ -14,6 +14,8 @@ class Course extends Entity {
     static singular = "course";
     static plural = "courses";
 
+    static multiCreateDialogSubtitle = "You can enroll users after creating the courses.";
+
     static fieldDefinitions = [
         {
             fieldName: "name",

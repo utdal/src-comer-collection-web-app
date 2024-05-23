@@ -33,6 +33,7 @@ import { ManagementPageContainer } from "../../Components/ManagementPage/Managem
 import { ManagementPageHeader } from "../../Components/ManagementPage/ManagementPageHeader.js";
 import { ManagementPageBody } from "../../Components/ManagementPage/ManagementPageBody.js";
 import { ManagementPageFooter } from "../../Components/ManagementPage/ManagementPageFooter.js";
+import { useDialogState } from "../../Hooks/useDialogState.js";
 
 const CourseManagement = () => {
     const [coursesCombinedState, setCourses, setSelectedCourses, filterCourses] = useItemsReducer(Course);
@@ -49,7 +50,7 @@ const CourseManagement = () => {
     const [assignUserDialogIsOpen, setAssignUserDialogIsOpen] = useState(false);
     const [assignUserDialogCourses, setAssignUserDialogCourses] = useState([]);
 
-    const [dialogIsOpen, setDialogIsOpen] = useState(false);
+    const [createDialogState, handleOpenMultiCreateDialog] = useDialogState();
 
     const [searchQuery, setSearchQuery] = useState("");
 
@@ -94,10 +95,6 @@ const CourseManagement = () => {
     useEffect(() => {
         filterCourses(courseFilterFunction);
     }, [filterCourses, courseFilterFunction]);
-
-    const handleOpenMultiCreateDialog = useCallback(() => {
-        setDialogIsOpen(true);
-    }, []);
 
     const handleOpenCourseEditDialog = useCallback((course) => {
         setEditDialogCourse(course);
@@ -214,13 +211,7 @@ const CourseManagement = () => {
 
             </ManagementPageContainer>
 
-            <ItemMultiCreateDialog
-                Entity={Course}
-                dialogInstructions={"Add courses, edit the course fields, then click 'Create'.  You can enroll users after creating the course."}
-                dialogIsOpen={dialogIsOpen}
-                refreshAllItems={handleRefresh}
-                setDialogIsOpen={setDialogIsOpen}
-            />
+            <ItemMultiCreateDialog dialogState={createDialogState} />
 
             <ItemSingleEditDialog
                 Entity={Course}

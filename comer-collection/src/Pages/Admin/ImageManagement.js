@@ -35,6 +35,7 @@ import { ManagementPageContainer } from "../../Components/ManagementPage/Managem
 import { ManagementPageHeader } from "../../Components/ManagementPage/ManagementPageHeader.js";
 import { ManagementPageBody } from "../../Components/ManagementPage/ManagementPageBody.js";
 import { ManagementPageFooter } from "../../Components/ManagementPage/ManagementPageFooter.js";
+import { useDialogState } from "../../Hooks/useDialogState.js";
 
 const ImageManagement = () => {
     const [imagesCombinedState, setImages, setSelectedImages, filterImages] = useItemsReducer(Image);
@@ -64,7 +65,7 @@ const ImageManagement = () => {
     const [manageArtistDialogIsOpen, setManageArtistDialogIsOpen] = useState(false);
     const [manageTagDialogIsOpen, setManageTagDialogIsOpen] = useState(false);
 
-    const [dialogIsOpen, setDialogIsOpen] = useState(false);
+    const [createDialogState, handleOpenMultiCreateDialog] = useDialogState();
 
     const [searchQuery, setSearchQuery] = useState("");
 
@@ -135,10 +136,6 @@ const ImageManagement = () => {
     const handleOpenImageViewExhibitionDialog = useCallback((image) => {
         setAssociationDialogImages([image]);
         setViewImageExhibitionDialogIsOpen(true);
-    }, []);
-
-    const handleOpenMultiCreateDialog = useCallback(() => {
-        setDialogIsOpen(true);
     }, []);
 
     const handleOpenImageEditDialog = useCallback((image) => {
@@ -292,14 +289,7 @@ const ImageManagement = () => {
 
             </ManagementPageContainer>
 
-            <ItemMultiCreateDialog
-                Entity={Image}
-                allItems={imagesCombinedState.items}
-                dialogInstructions={"Add images, edit the image fields, then click 'Create'.  You can add artists and tags after you have created the images."}
-                dialogIsOpen={dialogIsOpen}
-                refreshAllItems={fetchImages}
-                setDialogIsOpen={setDialogIsOpen}
-            />
+            <ItemMultiCreateDialog dialogState={createDialogState} />
 
             <ItemSingleEditDialog
                 Entity={Image}

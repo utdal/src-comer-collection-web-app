@@ -18,6 +18,7 @@ class Image extends Entity {
     static plural = "images";
 
     static MultiCreateButtonIcon = AddPhotoAlternateIcon;
+    static multiCreateDialogSubtitle = "You can add artists and tags after creating the images.";
 
     static fieldDefinitions = [
         {
