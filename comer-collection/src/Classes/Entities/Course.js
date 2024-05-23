@@ -7,6 +7,7 @@ import { CourseOptionsCell } from "../../Components/TableCells/Course/CourseOpti
 import { CourseStartDateTimeStackedCell } from "../../Components/TableCells/Course/CourseStartDateTimeStackedCell.js";
 import { CourseStatusCell } from "../../Components/TableCells/Course/CourseStatusCell.js";
 import { CourseUserAssignmentCell } from "../../Components/TableCells/Course/CourseUserAssignmentCell.js";
+import { SchoolIcon } from "../../Imports/Icons.js";
 import { Entity } from "../Entity.js";
 
 class Course extends Entity {
@@ -15,6 +16,7 @@ class Course extends Entity {
     static plural = "courses";
 
     static multiCreateDialogSubtitle = "You can enroll users after creating the courses.";
+    static DefaultIcon = SchoolIcon;
 
     static fieldDefinitions = [
         {

@@ -3,7 +3,7 @@ import {
     Button,
     Typography
 } from "@mui/material";
-import { SchoolIcon, LockIcon, AccessTimeIcon, WarningIcon } from "../../Imports/Icons.js";
+import { LockIcon, AccessTimeIcon, WarningIcon } from "../../Imports/Icons.js";
 import { FullPageMessage } from "../../Components/FullPageMessage.js";
 import SearchBox from "../../Components/SearchBox.js";
 import { ItemSingleDeleteDialog } from "../../Components/Dialogs/ItemSingleDeleteDialog.js";
@@ -36,6 +36,7 @@ import { ManagementPageContainer } from "../../Components/ManagementPage/Managem
 import { ManagementPageHeader } from "../../Components/ManagementPage/ManagementPageHeader.js";
 import { ManagementPageBody } from "../../Components/ManagementPage/ManagementPageBody.js";
 import { ManagementPageFooter } from "../../Components/ManagementPage/ManagementPageFooter.js";
+import AssociationManageButton from "../../Components/Buttons/AssociationManageButton.js";
 
 const UserManagement = () => {
     const [usersCombinedState, setUsers, setSelectedUsers, filterUsers] = useItemsReducer(User);
@@ -230,25 +231,11 @@ const UserManagement = () => {
                     <SelectionSummary />
 
                     <ManagementButtonStack>
-                        <Button
-                            onClick={handleOpenUserAssignCourseDialogForSelectedUsers}
-                            startIcon={<SchoolIcon />}
-                            sx={{
-                                display: usersCombinedState.selectedItems.length === 0 ? "none" : ""
-                            }}
-                            variant="outlined"
-                        >
-                            <Typography variant="body1">
+                        <AssociationManageButton
+                            handleOpenDialog={handleOpenUserAssignCourseDialogForSelectedUsers}
+                            secondaryEntity={Course}
+                        />
 
-                                {"Update Courses for "}
-
-                                {usersCombinedState.selectedItems.length}
-
-                                {" "}
-
-                                {usersCombinedState.selectedItems.length === 1 ? "user" : "users"}
-                            </Typography>
-                        </Button>
                     </ManagementButtonStack>
                 </ManagementPageFooter>
 
@@ -308,14 +295,9 @@ const UserManagement = () => {
                 setDialogIsOpen={setViewUserExhibitionDialogIsOpen}
             />
 
-            <UserChangePrivilegesDialog
-                dialogState={privilegesDialogState}
-                refreshAllItems={handleRefresh}
-            />
+            <UserChangePrivilegesDialog dialogState={privilegesDialogState} />
 
-            <UserResetPasswordDialog
-                dialogState={resetPasswordDialogState}
-            />
+            <UserResetPasswordDialog dialogState={resetPasswordDialogState} />
         </ManagementPageProvider>
     );
 };
