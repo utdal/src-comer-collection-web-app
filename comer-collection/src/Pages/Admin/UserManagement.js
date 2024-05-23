@@ -51,8 +51,7 @@ const UserManagement = () => {
     const [deleteDialogIsOpen, setDeleteDialogIsOpen] = useState(false);
     const [deleteDialogUser, setDeleteDialogUser] = useState(null);
 
-    const [editDialogIsOpen, setEditDialogIsOpen] = useState(false);
-    const [editDialogUser, setEditDialogUser] = useState(null);
+    const [editDialogState, openEditDialog] = useDialogState(false);
 
     const [assignCourseDialogIsOpen, setAssignCourseDialogIsOpen] = useState(false);
     const [viewUserExhibitionDialogIsOpen, setViewUserExhibitionDialogIsOpen] = useState(false);
@@ -146,9 +145,8 @@ const UserManagement = () => {
     }, [handleRefresh, showSnackbar]);
 
     const handleOpenUserEditDialog = useCallback((user) => {
-        setEditDialogUser(user);
-        setEditDialogIsOpen(true);
-    }, []);
+        openEditDialog(user);
+    }, [openEditDialog]);
 
     const handleOpenUserDeleteDialog = useCallback((user) => {
         setDeleteDialogUser(user);
@@ -262,13 +260,7 @@ const UserManagement = () => {
 
             <ItemMultiCreateDialog dialogState={createDialogState} />
 
-            <ItemSingleEditDialog
-                Entity={User}
-                editDialogIsOpen={editDialogIsOpen}
-                editDialogItem={editDialogUser}
-                refreshAllItems={handleRefresh}
-                setEditDialogIsOpen={setEditDialogIsOpen}
-            />
+            <ItemSingleEditDialog dialogState={editDialogState} />
 
             <ItemSingleDeleteDialog
                 Entity={User}
