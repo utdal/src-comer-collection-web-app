@@ -5,7 +5,10 @@ import { Box } from "@mui/material";
 export const ManagementPageBody = ({ children }) => {
     return (
         <Box
-            sx={{ gridArea: "table" }}
+            sx={{
+                gridArea: "table",
+                overflowX: "auto"
+            }}
         >
             {children}
         </Box>

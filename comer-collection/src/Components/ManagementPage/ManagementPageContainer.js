@@ -15,7 +15,8 @@ export const ManagementPageContainer = ({ children }) => {
                     "top"
                     "table"
                     "bottom"
-                `
+                `,
+                overflowX: "hidden"
             }}
         >
             {children}
