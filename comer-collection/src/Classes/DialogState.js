@@ -6,12 +6,12 @@ export class DialogState {
         this.dialogIsOpen = dialogIsOpen;
 
         /**
-         * @type {function}
+         * @type {function()}
          */
         this.openDialog = openDialog;
 
         /**
-         * @type {function}
+         * @type {function()}
          */
         this.closeDialog = closeDialog;
 

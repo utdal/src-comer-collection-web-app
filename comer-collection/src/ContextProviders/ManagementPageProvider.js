@@ -82,7 +82,7 @@ ManagementPageProvider.propTypes = {
 };
 
 /**
- * @returns {Object.<string, function>}
+ * @returns {Object.<string, function()>}
  */
 export const useManagementCallbacks = () => {
     return useContext(ManagementPageContext).managementCallbacks;
