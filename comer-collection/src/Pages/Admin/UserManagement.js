@@ -48,16 +48,13 @@ const UserManagement = () => {
 
     const [resetPasswordDialogState, openResetPasswordDialog] = useDialogState(false, User);
 
-    const [deleteDialogIsOpen, setDeleteDialogIsOpen] = useState(false);
-    const [deleteDialogUser, setDeleteDialogUser] = useState(null);
-
+    const [createDialogState, handleOpenMultiCreateDialog] = useDialogState();
     const [editDialogState, openEditDialog] = useDialogState(false);
+    const [deleteDialogState, openDeleteDialog] = useDialogState(false);
 
     const [assignCourseDialogIsOpen, setAssignCourseDialogIsOpen] = useState(false);
     const [viewUserExhibitionDialogIsOpen, setViewUserExhibitionDialogIsOpen] = useState(false);
     const [associationDialogUsers, setAssociationDialogUsers] = useState([]);
-
-    const [createDialogState, handleOpenMultiCreateDialog] = useDialogState();
 
     const [searchQuery, setSearchQuery] = useState("");
     const [userCourseIdFilter, setUserCourseIdFilter] = useState(null);
@@ -149,9 +146,8 @@ const UserManagement = () => {
     }, [openEditDialog]);
 
     const handleOpenUserDeleteDialog = useCallback((user) => {
-        setDeleteDialogUser(user);
-        setDeleteDialogIsOpen(true);
-    }, []);
+        openDeleteDialog(user);
+    }, [openDeleteDialog]);
 
     useEffect(() => {
         filterUsers(userFilterFunction);
@@ -262,14 +258,7 @@ const UserManagement = () => {
 
             <ItemSingleEditDialog dialogState={editDialogState} />
 
-            <ItemSingleDeleteDialog
-                Entity={User}
-                allItems={usersCombinedState.items}
-                deleteDialogIsOpen={deleteDialogIsOpen}
-                deleteDialogItem={deleteDialogUser}
-                setAllItems={setUsers}
-                setDeleteDialogIsOpen={setDeleteDialogIsOpen}
-            />
+            <ItemSingleDeleteDialog dialogState={deleteDialogState} />
 
             <AssociationManagementDialog
                 Association={EnrollmentUserPrimary}

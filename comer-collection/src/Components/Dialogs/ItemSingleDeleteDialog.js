@@ -1,7 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import {
-    Stack, Dialog,
-    DialogTitle,
+    Stack, DialogTitle,
     DialogContent,
     DialogActions,
     Button,
@@ -11,9 +10,16 @@ import { DeleteIcon } from "../../Imports/Icons.js";
 import PropTypes from "prop-types";
 import { useSnackbar } from "../../ContextProviders/AppFeatures.js";
 import { useEntity, useItems } from "../../ContextProviders/ManagementPageProvider.js";
-import { entityPropTypeShape } from "../../Classes/Entity.js";
+import { DialogState } from "../../Classes/DialogState.js";
+import { PersistentFormDialog } from "./PersistentFormDialog.js";
 
-export const ItemSingleDeleteDialog = ({ requireTypedConfirmation, deleteDialogItem, deleteDialogIsOpen, setDeleteDialogIsOpen }) => {
+/**
+ * @param {{
+ *  dialogState: DialogState
+ * }} param0
+ * @returns
+ */
+export const ItemSingleDeleteDialog = ({ requireTypedConfirmation, dialogState }) => {
     const [deleteConfirmation, setDeleteConfirmation] = useState("");
     const [submitEnabled, setSubmitEnabled] = useState(true);
     const showSnackbar = useSnackbar();
@@ -21,43 +27,41 @@ export const ItemSingleDeleteDialog = ({ requireTypedConfirmation, deleteDialogI
     const [items, setItems] = useItems();
     const Entity = useEntity();
 
+    const { dialogIsOpen, closeDialog, dialogItem } = dialogState;
+
     useEffect(() => {
-        if (deleteDialogIsOpen) { setSubmitEnabled(true); }
-    }, [deleteDialogIsOpen]);
+        if (dialogIsOpen) { setSubmitEnabled(true); }
+    }, [dialogIsOpen]);
+
+    const handleSubmit = useCallback(() => {
+        setSubmitEnabled(false);
+        if (dialogItem) {
+            Entity.handleDelete(dialogItem.id).then((msg) => {
+                setItems(items.filter((i) => i.id !== dialogItem.id));
+                showSnackbar(msg, "success");
+                closeDialog();
+            }).catch((err) => {
+                setSubmitEnabled(true);
+                showSnackbar(err.message, "error");
+            });
+        }
+        setDeleteConfirmation("");
+    }, [Entity, closeDialog, dialogItem, items, setItems, showSnackbar]);
 
     return (
-        <Dialog
-            component="form"
-            disableEscapeKeyDown
-            fullWidth
+        <PersistentFormDialog
             maxWidth="sm"
-            onClose={(event, reason) => {
-                if (reason === "backdropClick") { return; }
-                setDeleteDialogIsOpen(false);
-            }}
-            onSubmit={(e) => {
-                e.preventDefault();
-                setSubmitEnabled(false);
-                if (deleteDialogItem) {
-                    Entity.handleDelete(deleteDialogItem.id).then((msg) => {
-                        setItems(items.filter((i) => i.id !== deleteDialogItem.id));
-                        showSnackbar(msg, "success");
-                        setDeleteDialogIsOpen(false);
-                    }).catch((err) => {
-                        setSubmitEnabled(true);
-                        showSnackbar(err.message, "error");
-                    });
-                }
-                setDeleteConfirmation("");
-            }}
-            open={deleteDialogIsOpen}
+            onClose={closeDialog}
+            onSubmit={handleSubmit}
+            open={dialogIsOpen}
             sx={{ zIndex: 10000 }}
         >
             <DialogTitle
                 textAlign="center"
                 variant="h4"
             >
-                Delete
+                {"Delete "}
+
                 {Entity?.singular.substr(0, 1).toUpperCase()}
 
                 {Entity?.singular.substr(1).toLowerCase()}
@@ -69,13 +73,14 @@ export const ItemSingleDeleteDialog = ({ requireTypedConfirmation, deleteDialogI
                         sx={{ wordWrap: "break-word" }}
                         variant="body1"
                     >
-                        Are you sure you want to delete the
+                        {"Are you sure you want to delete the "}
+
                         {Entity?.singular}
 
                         {" "}
 
                         <i>
-                            {deleteDialogItem?.safe_display_name}
+                            {dialogItem?.safe_display_name}
                         </i>
 
                         {
@@ -110,9 +115,7 @@ export const ItemSingleDeleteDialog = ({ requireTypedConfirmation, deleteDialogI
                     <Button
                         color="primary"
                         disabled={!submitEnabled}
-                        onClick={() => {
-                            setDeleteDialogIsOpen(false);
-                        }}
+                        onClick={closeDialog}
                         sx={{ width: "100%" }}
                         variant="outlined"
                     >
@@ -137,13 +140,11 @@ export const ItemSingleDeleteDialog = ({ requireTypedConfirmation, deleteDialogI
                     </Button>
                 </Stack>
             </DialogActions>
-        </Dialog>
+        </PersistentFormDialog>
     );
 };
 
 ItemSingleDeleteDialog.propTypes = {
-    deleteDialogIsOpen: PropTypes.bool.isRequired,
-    deleteDialogItem: PropTypes.shape(entityPropTypeShape).isRequired,
-    requireTypedConfirmation: PropTypes.bool,
-    setDeleteDialogIsOpen: PropTypes.func.isRequired
+    dialogState: PropTypes.instanceOf(DialogState),
+    requireTypedConfirmation: PropTypes.bool
 };
