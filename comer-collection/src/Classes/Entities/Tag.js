@@ -3,6 +3,7 @@ import { TagIDCell } from "../../Components/TableCells/Tag/TagIDCell.js";
 import { TagImageCountCell } from "../../Components/TableCells/Tag/TagImageCountCell.js";
 import TagManageOptionsArray from "../../Components/TableCells/Tag/TagManageOptionsArray.js";
 import { TagNotesCell } from "../../Components/TableCells/Tag/TagNotesCell.js";
+import { SellIcon } from "../../Imports/Icons.js";
 import { Entity } from "../Entity.js";
 
 class Tag extends Entity {
@@ -24,6 +25,8 @@ class Tag extends Entity {
             multiline: true
         }
     ];
+
+    static DefaultIcon = SellIcon;
 
     static searchBoxFields = ["data", "notes"];
 

@@ -36,6 +36,7 @@ import { ManagementPageHeader } from "../../Components/ManagementPage/Management
 import { ManagementPageBody } from "../../Components/ManagementPage/ManagementPageBody.js";
 import { ManagementPageFooter } from "../../Components/ManagementPage/ManagementPageFooter.js";
 import { useDialogState } from "../../Hooks/useDialogState.js";
+import EntityManageButton from "../../Components/Buttons/EntityManageButton.js";
 
 const ImageManagement = () => {
     const [imagesCombinedState, setImages, setSelectedImages, filterImages] = useItemsReducer(Image);
@@ -202,31 +203,19 @@ const ImageManagement = () => {
 
                         <ClearFilterButton />
 
-                        <Button
-                            color="primary"
-                            onClick={() => {
+                        <EntityManageButton
+                            entity={Tag}
+                            handleOpenDialog={() => {
                                 setManageTagDialogIsOpen(true);
                             }}
-                            startIcon={<SellIcon />}
-                            variant="outlined"
-                        >
-                            <Typography variant="body1">
-                                Tags
-                            </Typography>
-                        </Button>
+                        />
 
-                        <Button
-                            color="primary"
-                            onClick={() => {
+                        <EntityManageButton
+                            entity={Artist}
+                            handleOpenDialog={() => {
                                 setManageArtistDialogIsOpen(true);
                             }}
-                            startIcon={<BrushIcon />}
-                            variant="outlined"
-                        >
-                            <Typography variant="body1">
-                                Artists
-                            </Typography>
-                        </Button>
+                        />
 
                         <MultiCreateButton />
                     </ManagementButtonStack>

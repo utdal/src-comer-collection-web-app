@@ -73,7 +73,8 @@ export const ItemSingleEditDialog = ({ dialogState }) => {
                 textAlign="center"
                 variant="h4"
             >
-                Edit
+                {"Edit "}
+
                 {singularCapitalized}
             </DialogTitle>
 

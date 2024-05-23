@@ -4,6 +4,7 @@ import { ArtistManageOptionsCell } from "../../Components/TableCells/Artist/Arti
 import { ArtistNameCell } from "../../Components/TableCells/Artist/ArtistNameCell.js";
 import { ArtistNotesCell } from "../../Components/TableCells/Artist/ArtistNotesCell.js";
 import { ArtistWebsiteCell } from "../../Components/TableCells/Artist/ArtistWebsiteCell.js";
+import { BrushIcon } from "../../Imports/Icons.js";
 import { Entity } from "../Entity.js";
 
 class Artist extends Entity {
@@ -37,6 +38,8 @@ class Artist extends Entity {
             blank: ""
         }
     ];
+
+    static DefaultIcon = BrushIcon;
 
     static searchBoxFields = ["fullName", "fullNameReverse", "notes"];
 

@@ -19,6 +19,11 @@ export class Entity {
         }
     ];
 
+    /**
+     * @type {React.ElementType}
+     */
+    static DefaultIcon = null;
+
     static searchBoxFields = [];
 
     static MultiCreateButtonIcon = AddIcon;
