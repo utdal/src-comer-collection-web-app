@@ -16,8 +16,9 @@ import { ItemSingleDeleteDialog } from "./ItemSingleDeleteDialog.js";
 import { ItemSingleEditDialog } from "./ItemSingleEditDialog.js";
 import PropTypes from "prop-types";
 import { useSnackbar } from "../../ContextProviders/AppFeatures.js";
-import { ManagementPageProvider } from "../../ContextProviders/ManagementPageProvider.js";
+import { ManagementPageProvider, useManagementCallbacks } from "../../ContextProviders/ManagementPageProvider.js";
 import { itemsCombinedStatePropTypeShape } from "../../Classes/Entity.js";
+import { useDialogState } from "../../Hooks/useDialogState.js";
 
 export const EntityManageDialog = ({
     Entity,
@@ -35,8 +36,9 @@ export const EntityManageDialog = ({
 
     const [itemSearchQuery, setItemSearchQuery] = useState("");
 
-    const [internalEditDialogItem, setInternalEditDialogItem] = useState(null);
-    const [internalEditDialogIsOpen, setInternalEditDialogIsOpen] = useState(false);
+    const [editDialogState, openEditDialog] = useDialogState(false);
+
+    const { handleRefresh } = useManagementCallbacks();
 
     const [internalDeleteDialogItem, setInternalDeleteDialogItem] = useState(null);
     const [internalDeleteDialogIsOpen, setInternalDeleteDialogIsOpen] = useState(false);
@@ -68,9 +70,8 @@ export const EntityManageDialog = ({
     }, [Entity, blankItem, itemToAdd, refreshAllItems, showSnackbar, singularCapitalized]);
 
     const handleOpenEntityEditDialog = useCallback((item) => {
-        setInternalEditDialogItem(item);
-        setInternalEditDialogIsOpen(true);
-    }, []);
+        openEditDialog(item);
+    }, [openEditDialog]);
 
     const handleOpenEntityDeleteDialog = useCallback((item) => {
         setInternalDeleteDialogItem(item);
@@ -82,7 +83,8 @@ export const EntityManageDialog = ({
             itemsCombinedState={dialogItemsCombinedState}
             managementCallbacks={{
                 handleOpenEntityEditDialog,
-                handleOpenEntityDeleteDialog
+                handleOpenEntityDeleteDialog,
+                handleRefresh
             }}
         >
             <Dialog
@@ -100,7 +102,8 @@ export const EntityManageDialog = ({
                     textAlign="center"
                     variant="h4"
                 >
-                    Manage
+                    {"Manage "}
+
                     {pluralCapitalized}
                 </DialogTitle>
 
@@ -134,7 +137,8 @@ export const EntityManageDialog = ({
                                                 textAlign="left"
                                                 variant="h6"
                                             >
-                                                Edit or delete existing
+                                                {"Edit or delete existing "}
+
                                                 {Entity.plural}
                                             </DialogContentText>
 
@@ -164,7 +168,8 @@ export const EntityManageDialog = ({
                                     textAlign="left"
                                     variant="h6"
                                 >
-                                    Create a new
+                                    {"Create a new "}
+
                                     {Entity.singular}
                                 </DialogContentText>
 
@@ -269,13 +274,7 @@ export const EntityManageDialog = ({
                 </DialogActions>
             </Dialog>
 
-            <ItemSingleEditDialog
-                Entity={Entity}
-                editDialogIsOpen={internalEditDialogIsOpen}
-                editDialogItem={internalEditDialogItem}
-                refreshAllItems={refreshAllItems}
-                setEditDialogIsOpen={setInternalEditDialogIsOpen}
-            />
+            <ItemSingleEditDialog dialogState={editDialogState} />
 
             <ItemSingleDeleteDialog
                 Entity={Entity}
