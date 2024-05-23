@@ -22,6 +22,7 @@ import { ManagementPageContainer } from "../../Components/ManagementPage/Managem
 import { ManagementPageHeader } from "../../Components/ManagementPage/ManagementPageHeader.js";
 import { ManagementPageBody } from "../../Components/ManagementPage/ManagementPageBody.js";
 import { ManagementPageFooter } from "../../Components/ManagementPage/ManagementPageFooter.js";
+import { useDialogState } from "../../Hooks/useDialogState.js";
 
 const ExhibitionManagement = () => {
     const [exhibitionsCombinedState, setExhibitions, setSelectedExhibitions, filterExhibitions] = useItemsReducer(Exhibition);
@@ -30,13 +31,12 @@ const ExhibitionManagement = () => {
     const [isLoaded, setIsLoaded] = useState(false);
     const [isError, setIsError] = useState(false);
 
-    const [deleteDialogIsOpen, setDeleteDialogIsOpen] = useState(false);
-    const [deleteDialogExhibition, setDeleteDialogExhibition] = useState(null);
-
     const [editDialogIsOpen, setEditDialogIsOpen] = useState(false);
     const [editDialogExhibitionId, setEditDialogExhibitionId] = useState(null);
     const [editDialogExhibitionAccess, setEditDialogExhibitionAccess] = useState(null);
     const [editDialogExhibitionTitle, setEditDialogExhibitionTitle] = useState(null);
+
+    const [deleteDialogState, openDeleteDialog] = useDialogState(false);
 
     const [searchQuery, setSearchQuery] = useState("");
 
@@ -97,9 +97,8 @@ const ExhibitionManagement = () => {
     }, [setEditDialogExhibitionId, setEditDialogExhibitionAccess, setEditDialogExhibitionTitle]);
 
     const handleOpenExhibitionDeleteDialog = useCallback((exhibition) => {
-        setDeleteDialogExhibition(exhibition);
-        setDeleteDialogIsOpen(true);
-    }, [setDeleteDialogExhibition, setDeleteDialogIsOpen]);
+        openDeleteDialog(exhibition);
+    }, [openDeleteDialog]);
 
     return (!appUser.is_admin &&
         <FullPageMessage
@@ -189,13 +188,8 @@ const ExhibitionManagement = () => {
             />
 
             <ItemSingleDeleteDialog
-                Entity={Exhibition}
-                allItems={exhibitionsCombinedState.items}
-                deleteDialogIsOpen={deleteDialogIsOpen}
-                deleteDialogItem={deleteDialogExhibition}
+                dialogState={deleteDialogState}
                 requireTypedConfirmation
-                setAllItems={setExhibitions}
-                setDeleteDialogIsOpen={setDeleteDialogIsOpen}
             />
 
         </ManagementPageProvider>

@@ -46,9 +46,6 @@ const ImageManagement = () => {
     const [isLoaded, setIsLoaded] = useState(false);
     const [isError, setIsError] = useState(false);
 
-    const [deleteDialogIsOpen, setDeleteDialogIsOpen] = useState(false);
-    const [deleteDialogImage, setDeleteDialogImage] = useState(null);
-
     const [assignArtistDialogIsOpen, setAssignArtistDialogIsOpen] = useState(false);
     const [assignTagDialogIsOpen, setAssignTagDialogIsOpen] = useState(false);
     const [viewImageExhibitionDialogIsOpen, setViewImageExhibitionDialogIsOpen] = useState(false);
@@ -63,6 +60,7 @@ const ImageManagement = () => {
 
     const [createDialogState, handleOpenMultiCreateDialog] = useDialogState();
     const [editDialogState, openEditDialog] = useDialogState(false);
+    const [deleteDialogState, openDeleteDialog] = useDialogState(false);
 
     const [searchQuery, setSearchQuery] = useState("");
 
@@ -124,9 +122,8 @@ const ImageManagement = () => {
     }, [openEditDialog]);
 
     const handleOpenImageDeleteDialog = useCallback((image) => {
-        setDeleteDialogImage(image);
-        setDeleteDialogIsOpen(true);
-    }, []);
+        openDeleteDialog(image);
+    }, [openDeleteDialog]);
 
     useEffect(() => {
         filterImages(imageFilterFunction);
@@ -257,14 +254,7 @@ const ImageManagement = () => {
 
             <ItemSingleEditDialog dialogState={editDialogState} />
 
-            <ItemSingleDeleteDialog
-                Entity={Image}
-                allItems={imagesCombinedState.items}
-                deleteDialogIsOpen={deleteDialogIsOpen}
-                deleteDialogItem={deleteDialogImage}
-                setAllItems={setImages}
-                setDeleteDialogIsOpen={setDeleteDialogIsOpen}
-            />
+            <ItemSingleDeleteDialog dialogState={deleteDialogState} />
 
             <EntityManageDialog
                 Entity={Artist}

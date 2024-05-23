@@ -48,9 +48,7 @@ export const EntityManageDialog = ({
     const [itemSearchQuery, setItemSearchQuery] = useState("");
 
     const [editDialogState, openEditDialog] = useDialogState(false);
-
-    const [internalDeleteDialogItem, setInternalDeleteDialogItem] = useState(null);
-    const [internalDeleteDialogIsOpen, setInternalDeleteDialogIsOpen] = useState(false);
+    const [deleteDialogState, openDeleteDialog] = useDialogState(false);
 
     const handleRefresh = useCallback(async () => {
         setIsError(false);
@@ -100,9 +98,8 @@ export const EntityManageDialog = ({
     }, [openEditDialog]);
 
     const handleOpenEntityDeleteDialog = useCallback((item) => {
-        setInternalDeleteDialogItem(item);
-        setInternalDeleteDialogIsOpen(true);
-    }, []);
+        openDeleteDialog(item);
+    }, [openDeleteDialog]);
 
     return (
         <ManagementPageProvider
@@ -306,15 +303,7 @@ export const EntityManageDialog = ({
 
             <ItemSingleEditDialog dialogState={editDialogState} />
 
-            <ItemSingleDeleteDialog
-                Entity={Entity}
-                allItems={dialogItemsCombinedState.items}
-                deleteDialogIsOpen={internalDeleteDialogIsOpen}
-                deleteDialogItem={internalDeleteDialogItem}
-                dialogTitle={`Delete ${Entity.singular[0].toUpperCase()}${Entity.singular.substring(1)}`}
-                setAllItems={setDialogItems}
-                setDeleteDialogIsOpen={setInternalDeleteDialogIsOpen}
-            />
+            <ItemSingleDeleteDialog dialogState={deleteDialogState} />
 
         </ManagementPageProvider>
     );

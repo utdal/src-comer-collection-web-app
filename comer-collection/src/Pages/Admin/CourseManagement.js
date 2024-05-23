@@ -41,14 +41,12 @@ const CourseManagement = () => {
     const [isLoaded, setIsLoaded] = useState(false);
     const [isError, setIsError] = useState(false);
 
-    const [deleteDialogIsOpen, setDeleteDialogIsOpen] = useState(false);
-    const [deleteDialogCourse, setDeleteDialogCourse] = useState(null);
-
     const [assignUserDialogIsOpen, setAssignUserDialogIsOpen] = useState(false);
     const [assignUserDialogCourses, setAssignUserDialogCourses] = useState([]);
 
     const [createDialogState, handleOpenMultiCreateDialog] = useDialogState();
     const [editDialogState, openEditDialog] = useDialogState(false);
+    const [deleteDialogState, openDeleteDialog] = useDialogState(false);
 
     const [searchQuery, setSearchQuery] = useState("");
 
@@ -99,9 +97,8 @@ const CourseManagement = () => {
     }, [openEditDialog]);
 
     const handleOpenCourseDeleteDialog = useCallback((course) => {
-        setDeleteDialogCourse(course);
-        setDeleteDialogIsOpen(true);
-    }, []);
+        openDeleteDialog(course);
+    }, [openDeleteDialog]);
 
     const handleOpenAssignCourseUserDialog = useCallback((course) => {
         setAssignUserDialogCourses([course]);
@@ -205,14 +202,7 @@ const CourseManagement = () => {
 
             <ItemSingleEditDialog dialogState={editDialogState} />
 
-            <ItemSingleDeleteDialog
-                Entity={Course}
-                allItems={coursesCombinedState.items}
-                deleteDialogIsOpen={deleteDialogIsOpen}
-                deleteDialogItem={deleteDialogCourse}
-                setAllItems={setCourses}
-                setDeleteDialogIsOpen={setDeleteDialogIsOpen}
-            />
+            <ItemSingleDeleteDialog dialogState={deleteDialogState} />
 
             <AssociationManagementDialog
                 Association={EnrollmentCoursePrimary}
