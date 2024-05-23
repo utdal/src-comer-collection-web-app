@@ -174,14 +174,7 @@ const CourseManagement = () => {
                     />
                 </ManagementPageBody>
 
-                <ManagementPageFooter
-                    alignItems="center"
-                    direction="row"
-                    justifyContent="space-between"
-                    padding={2}
-                    spacing={2}
-                    sx={{ gridArea: "bottom" }}
-                >
+                <ManagementPageFooter>
                     <SelectionSummary />
 
                     <ManagementButtonStack>
