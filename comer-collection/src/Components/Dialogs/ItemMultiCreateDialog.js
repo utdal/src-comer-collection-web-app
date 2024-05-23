@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useReducer, useState } from "react";
+import PropTypes from "prop-types";
 import {
     Stack, DialogTitle,
     DialogContent,
@@ -10,8 +11,8 @@ import { DeleteIcon } from "../../Imports/Icons.js";
 import { getBlankItemFields } from "../../Helpers/fields.js";
 import { useSnackbar } from "../../ContextProviders/AppFeatures.js";
 import { useEntity, useManagementCallbacks } from "../../ContextProviders/ManagementPageProvider.js";
-import { dialogStatePropTypesShape } from "../../Hooks/useDialogState.js";
 import { PersistentFormDialog } from "./PersistentDialog.js";
+import { DialogState } from "../../Classes/DialogState.js";
 
 export const ItemMultiCreateDialog = ({ dialogState }) => {
     const { handleRefresh } = useManagementCallbacks();
@@ -82,6 +83,7 @@ export const ItemMultiCreateDialog = ({ dialogState }) => {
 
     return (
         <PersistentFormDialog
+            fullWidth
             maxWidth="lg"
             onClose={closeDialog}
             onSubmit={handleSubmit}
@@ -254,5 +256,5 @@ export const ItemMultiCreateDialog = ({ dialogState }) => {
 };
 
 ItemMultiCreateDialog.propTypes = {
-    dialogState: dialogStatePropTypesShape.isRequired
+    dialogState: PropTypes.instanceOf(DialogState).isRequired
 };

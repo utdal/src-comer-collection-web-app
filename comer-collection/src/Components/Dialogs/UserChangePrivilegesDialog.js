@@ -10,8 +10,9 @@ import {
 import { SecurityIcon, PersonIcon, CollectionManagerIcon } from "../../Imports/Icons.js";
 import { User } from "../../Classes/Entities/User.js";
 import { useSnackbar } from "../../ContextProviders/AppFeatures.js";
-import { dialogStatePropTypesShape } from "../../Hooks/useDialogState.js";
 import { useManagementCallbacks } from "../../ContextProviders/ManagementPageProvider.js";
+import { DialogState } from "../../Classes/DialogState.js";
+import PropTypes from "prop-types";
 
 const userPrivilegeOptions = () => [
     {
@@ -38,16 +39,7 @@ const userPrivilegeOptions = () => [
 ];
 
 /**
- * @param {{
- *  dialogState: {
- *    dialogIsOpen: Boolean,
- *    openDialog: function,
- *    closeDialog: function,
- *    dialogItem: object | null,
- *    dialogItems: object[] | null,
- *    Entity: Class
- *  }
- * }} props
+ * @param {{ dialogState: DialogState }} props
  */
 export const UserChangePrivilegesDialog = ({ dialogState }) => {
     const [confirmAction, setConfirmAction] = useState(false);
@@ -59,15 +51,7 @@ export const UserChangePrivilegesDialog = ({ dialogState }) => {
 
     const { handleRefresh } = useManagementCallbacks();
 
-    if (dialogState.Entity !== User) {
-        throw new Error("Dialog state entity must be User");
-    }
-
-    const {
-        dialogItem: dialogUser,
-        dialogIsOpen,
-        closeDialog
-    } = dialogState;
+    const { dialogItem: dialogUser, dialogIsOpen, closeDialog } = dialogState;
 
     useEffect(() => {
         if (dialogIsOpen) {
@@ -245,5 +229,5 @@ export const UserChangePrivilegesDialog = ({ dialogState }) => {
 };
 
 UserChangePrivilegesDialog.propTypes = {
-    dialogState: dialogStatePropTypesShape.isRequired
+    dialogState: PropTypes.instanceOf(DialogState).isRequired
 };

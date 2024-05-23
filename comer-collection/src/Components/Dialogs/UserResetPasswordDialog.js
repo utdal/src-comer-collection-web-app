@@ -10,14 +10,18 @@ import {
 import { ContentCopyIcon, SyncIcon } from "../../Imports/Icons.js";
 import { useClipboard, useSnackbar } from "../../ContextProviders/AppFeatures.js";
 import { User } from "../../Classes/Entities/User.js";
-import { dialogStatePropTypesShape } from "../../Hooks/useDialogState.js";
 import { useManagementCallbacks } from "../../ContextProviders/ManagementPageProvider.js";
+import PropTypes from "prop-types";
+import { DialogState } from "../../Classes/DialogState.js";
 
 const randomPassword = () => {
     const password = Math.random().toString(36).slice(-8) + Math.random().toString(36).slice(-8);
     return password;
 };
 
+/**
+ * @param {{ dialogState: DialogState }} props
+ */
 export const UserResetPasswordDialog = ({ dialogState }) => {
     const [newPassword, setNewPassword] = useState("");
     const [editMode, setEditMode] = useState(true);
@@ -28,15 +32,7 @@ export const UserResetPasswordDialog = ({ dialogState }) => {
 
     const { handleRefresh } = useManagementCallbacks();
 
-    if (dialogState.Entity !== User) {
-        throw new Error("Dialog state entity must be User");
-    }
-
-    const {
-        dialogItem: dialogUser,
-        dialogIsOpen,
-        closeDialog
-    } = dialogState;
+    const { dialogItem: dialogUser, dialogIsOpen, closeDialog } = dialogState;
 
     const themeColor = dialogUser?.is_admin_or_collection_manager ? "secondary" : "primary";
 
@@ -218,5 +214,5 @@ export const UserResetPasswordDialog = ({ dialogState }) => {
 };
 
 UserResetPasswordDialog.propTypes = {
-    dialogState: dialogStatePropTypesShape.isRequired
+    dialogState: PropTypes.instanceOf(DialogState).isRequired
 };

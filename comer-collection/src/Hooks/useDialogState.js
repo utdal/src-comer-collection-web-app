@@ -1,30 +1,14 @@
 import { useCallback, useMemo, useState } from "react";
-import PropTypes from "prop-types";
-import { Entity, entityPropTypeShape } from "../Classes/Entity.js";
-
-export const dialogStatePropTypesShape = PropTypes.shape({
-    dialogIsOpen: PropTypes.bool.isRequired,
-    openDialog: PropTypes.func.isRequired,
-    closeDialog: PropTypes.func.isRequired,
-    dialogItem: entityPropTypeShape,
-    dialogItems: PropTypes.arrayOf(entityPropTypeShape)
-});
+import { DialogState } from "../Classes/DialogState.js";
 
 /**
  * Custom hook to manage dialog state (open/closed and associated items)
  * @param {Boolean} multipleItems Set to false if dialog pertains to only one
  * primary item.  Set to true if dialog pertains to multiple primary items.
  * @param {Class} entity Optionally choose a specific type of item
- * @returns {[{
- *  dialogIsOpen: Boolean,
- *  openDialog: function,
- *  closeDialog: function,
- *  dialogItem: object | null,
- *  dialogItems: object[] | null,
- *  Entity: Class
- * }, openDialog: function, closeDialog: function]} [dialogState, openDialog, closeDialog]
+ * @returns {[DialogState, openDialog: function, closeDialog: function]} [dialogState, openDialog, closeDialog]
  */
-export const useDialogState = (multipleItems, entity = Entity) => {
+export const useDialogState = (multipleItems) => {
     const [dialogIsOpen, setDialogIsOpen] = useState(false);
     const [dialogItems, setDialogItems] = useState(multipleItems ? [] : null);
 
@@ -73,15 +57,14 @@ export const useDialogState = (multipleItems, entity = Entity) => {
             : openDialogWithNoItems;
 
     const dialogState = useMemo(() => {
-        return {
+        return new DialogState({
             dialogIsOpen,
             openDialog,
             closeDialog,
-            Entity: entity,
             dialogItems: multipleItems === true ? dialogItems : null,
             dialogItem: multipleItems === false ? dialogItems : null
-        };
-    }, [dialogIsOpen, openDialog, closeDialog, entity, multipleItems, dialogItems]);
+        });
+    }, [dialogIsOpen, openDialog, closeDialog, multipleItems, dialogItems]);
 
     return [dialogState, openDialog, closeDialog];
 };
