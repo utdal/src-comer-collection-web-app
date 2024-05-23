@@ -12,7 +12,7 @@ import { useAppUser } from "../../ContextProviders/AppUser.js";
 
 import { MyExhibition } from "../../Classes/Entities/Exhibition.js";
 import { ExhibitionTitleCell } from "../../Components/TableCells/Exhibition/ExhibitionTitleCell.js";
-import { ExhibitionOpenInNewTabCell } from "../../Components/TableCells/Exhibition/ExhibitionOpenInNewTabCell.js";
+import { ExhibitionOpenInCurrentTabCell } from "../../Components/TableCells/Exhibition/ExhibitionOpenInCurrentTabCell.js";
 import { ExhibitionDateCreatedCell } from "../../Components/TableCells/Exhibition/ExhibitionDateCreatedCell.js";
 import { ExhibitionDateModifiedCell } from "../../Components/TableCells/Exhibition/ExhibitionDateModifiedCell.js";
 import { ExhibitionAccessCell } from "../../Components/TableCells/Exhibition/ExhibitionAccessCell.js";
@@ -21,6 +21,7 @@ import { ManagementPageProvider, useItemsReducer } from "../../ContextProviders/
 import { CreateExhibitionButton } from "../../Components/Buttons/CreateExhibitionButton.js";
 import { ExhibitionCreationRestriction } from "../../Components/TextBanners/ExhibitionCreationRestriction.js";
 import { useAccountNavTitle } from "../../Hooks/useAccountNavTitle.js";
+import { useDialogState } from "../../Hooks/useDialogState.js";
 
 const exhibitionTableFields = [
     {
@@ -31,7 +32,7 @@ const exhibitionTableFields = [
     },
     {
         columnDescription: "Open",
-        TableCellComponent: ExhibitionOpenInNewTabCell
+        TableCellComponent: ExhibitionOpenInCurrentTabCell
     },
     {
         columnDescription: "Date Created",
@@ -65,8 +66,7 @@ const MyExhibitions = () => {
     const [dialogExhibitionAccess, setDialogExhibitionAccess] = useState(null);
     const [dialogEditMode, setDialogEditMode] = useState(false);
 
-    const [deleteDialogIsOpen, setDeleteDialogIsOpen] = useState(false);
-    const [deleteDialogExhibition, setDeleteDialogExhibition] = useState(null);
+    const [deleteDialogState, openDeleteDialog] = useDialogState(false);
 
     const [exhibitionsCombinedState, setExhibitions] = useItemsReducer(MyExhibition);
 
@@ -89,9 +89,8 @@ const MyExhibitions = () => {
     }, []);
 
     const handleOpenExhibitionDeleteDialog = useCallback((exhibition) => {
-        setDeleteDialogExhibition(exhibition);
-        setDeleteDialogIsOpen(true);
-    }, [setDeleteDialogExhibition, setDeleteDialogIsOpen]);
+        openDeleteDialog(exhibition);
+    }, [openDeleteDialog]);
 
     return (appUser.pw_change_required &&
         <Navigate to="/Account/ChangePassword" />
@@ -153,13 +152,8 @@ const MyExhibitions = () => {
                 </Box>
 
                 <ItemSingleDeleteDialog
-                    deleteDialogIsOpen={deleteDialogIsOpen}
-                    deleteDialogItem={deleteDialogExhibition}
+                    dialogState={deleteDialogState}
                     requireTypedConfirmation
-                    setAllItems={() => {
-                        initializeAppUser();
-                    }}
-                    setDeleteDialogIsOpen={setDeleteDialogIsOpen}
                 />
 
                 <ExhibitionSettingsDialog
