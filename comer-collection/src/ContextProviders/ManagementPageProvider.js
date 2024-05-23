@@ -23,7 +23,7 @@ const itemsReducer = (state, action) => {
             items: state.items,
             selectedItems: action.selectedItems,
             visibleItems: state.visibleItems,
-            selectedVisibleItems: state.selectedVisibleItems.filter((si) => (
+            selectedVisibleItems: state.visibleItems.filter((si) => (
                 action.selectedItems.map((i) => i.id).includes(parseInt(si.id))
             )),
             filterFunction: state.filterFunction
