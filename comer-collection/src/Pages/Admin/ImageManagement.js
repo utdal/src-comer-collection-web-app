@@ -1,11 +1,7 @@
 import React, { useCallback, useEffect, useState } from "react";
-import {
-    Button,
-    Typography
-} from "@mui/material";
 import { FullPageMessage } from "../../Components/FullPageMessage.js";
 import SearchBox from "../../Components/SearchBox.js";
-import { SellIcon, BrushIcon, AccessTimeIcon, WarningIcon, LockIcon } from "../../Imports/Icons.js";
+import { AccessTimeIcon, WarningIcon, LockIcon } from "../../Imports/Icons.js";
 import { ItemSingleDeleteDialog } from "../../Components/Dialogs/ItemSingleDeleteDialog.js";
 import { ItemMultiCreateDialog } from "../../Components/Dialogs/ItemMultiCreateDialog.js";
 import { ItemSingleEditDialog } from "../../Components/Dialogs/ItemSingleEditDialog.js";
@@ -37,6 +33,7 @@ import { ManagementPageBody } from "../../Components/ManagementPage/ManagementPa
 import { ManagementPageFooter } from "../../Components/ManagementPage/ManagementPageFooter.js";
 import { useDialogState } from "../../Hooks/useDialogState.js";
 import EntityManageButton from "../../Components/Buttons/EntityManageButton.js";
+import AssociationManageButton from "../../Components/Buttons/AssociationManageButton.js";
 
 const ImageManagement = () => {
     const [imagesCombinedState, setImages, setSelectedImages, filterImages] = useItemsReducer(Image);
@@ -45,12 +42,6 @@ const ImageManagement = () => {
 
     const [isLoaded, setIsLoaded] = useState(false);
     const [isError, setIsError] = useState(false);
-
-    const [assignArtistDialogIsOpen, setAssignArtistDialogIsOpen] = useState(false);
-    const [assignTagDialogIsOpen, setAssignTagDialogIsOpen] = useState(false);
-    const [viewImageExhibitionDialogIsOpen, setViewImageExhibitionDialogIsOpen] = useState(false);
-
-    const [associationDialogImages, setAssociationDialogImages] = useState([]);
 
     const [previewerImage, setPreviewerImage] = useState(null);
     const [previewerOpen, setPreviewerOpen] = useState(false);
@@ -61,6 +52,10 @@ const ImageManagement = () => {
     const [createDialogState, handleOpenMultiCreateDialog] = useDialogState();
     const [editDialogState, openEditDialog] = useDialogState(false);
     const [deleteDialogState, openDeleteDialog] = useDialogState(false);
+
+    const [assignArtistDialogState, openAssignArtistDialog, closeAssignArtistDialog] = useDialogState(true);
+    const [assignTagDialogState, openAssignTagDialog, closeAssignTagDialog] = useDialogState(true);
+    const [viewExhibitionDialogState, openViewExhibitionDialog] = useDialogState(true);
 
     const [searchQuery, setSearchQuery] = useState("");
 
@@ -97,15 +92,21 @@ const ImageManagement = () => {
         );
     }, [searchQuery]);
 
-    const handleOpenImageAssignArtistDialog = useCallback((images) => {
-        setAssociationDialogImages(images);
-        setAssignArtistDialogIsOpen(true);
-    }, []);
+    const handleOpenImageAssignArtistDialog = useCallback((image) => {
+        openAssignArtistDialog([image]);
+    }, [openAssignArtistDialog]);
 
-    const handleOpenImageAssignTagDialog = useCallback((images) => {
-        setAssociationDialogImages(images);
-        setAssignTagDialogIsOpen(true);
-    }, []);
+    const handleOpenImageAssignTagDialog = useCallback((image) => {
+        openAssignTagDialog([image]);
+    }, [openAssignTagDialog]);
+
+    const handleOpenImageAssignArtistDialogForSelectedUsers = useCallback(() => {
+        openAssignArtistDialog(imagesCombinedState.selectedItems);
+    }, [imagesCombinedState.selectedItems, openAssignArtistDialog]);
+
+    const handleOpenImageAssignTagDialogForSelectedUsers = useCallback(() => {
+        openAssignTagDialog(imagesCombinedState.selectedItems);
+    }, [imagesCombinedState.selectedItems, openAssignTagDialog]);
 
     const handleOpenImagePreviewer = useCallback((image) => {
         setPreviewerImage(image);
@@ -113,9 +114,8 @@ const ImageManagement = () => {
     }, []);
 
     const handleOpenImageViewExhibitionDialog = useCallback((image) => {
-        setAssociationDialogImages([image]);
-        setViewImageExhibitionDialogIsOpen(true);
-    }, []);
+        openViewExhibitionDialog([image]);
+    }, [openViewExhibitionDialog]);
 
     const handleOpenImageEditDialog = useCallback((image) => {
         openEditDialog(image);
@@ -124,6 +124,20 @@ const ImageManagement = () => {
     const handleOpenImageDeleteDialog = useCallback((image) => {
         openDeleteDialog(image);
     }, [openDeleteDialog]);
+
+    const handleSwitchToArtistsView = useCallback(() => {
+        closeAssignArtistDialog(false);
+        openManageArtistDialog();
+    }, [closeAssignArtistDialog, openManageArtistDialog]);
+
+    const handleSwitchToTagsView = useCallback(() => {
+        closeAssignTagDialog(false);
+        openManageTagDialog();
+    }, [closeAssignTagDialog, openManageTagDialog]);
+
+    const handleSwitchToExhibitionsView = useCallback(() => {
+        navigate("/Account/Admin/Exhibitions");
+    }, [navigate]);
 
     useEffect(() => {
         filterImages(imageFilterFunction);
@@ -208,43 +222,15 @@ const ImageManagement = () => {
                     <SelectionSummary />
 
                     <ManagementButtonStack>
-                        <Button
-                            disabled={imagesCombinedState.selectedItems.length === 0}
-                            onClick={() => {
-                                setAssociationDialogImages([...imagesCombinedState.selectedItems]);
-                                setAssignArtistDialogIsOpen(true);
-                            }}
-                            startIcon={<BrushIcon />}
-                            variant="outlined"
-                        >
-                            <Typography variant="body1">
-                                Manage Credits for
-                                {imagesCombinedState.selectedItems.length}
+                        <AssociationManageButton
+                            handleOpenDialog={handleOpenImageAssignArtistDialogForSelectedUsers}
+                            secondaryEntity={Artist}
+                        />
 
-                                {" "}
-
-                                {imagesCombinedState.selectedItems.length === 1 ? "image" : "images"}
-                            </Typography>
-                        </Button>
-
-                        <Button
-                            disabled={imagesCombinedState.selectedItems.length === 0}
-                            onClick={() => {
-                                setAssociationDialogImages([...imagesCombinedState.selectedItems]);
-                                setAssignTagDialogIsOpen(true);
-                            }}
-                            startIcon={<SellIcon />}
-                            variant="outlined"
-                        >
-                            <Typography variant="body1">
-                                Manage Tags for
-                                {imagesCombinedState.selectedItems.length}
-
-                                {" "}
-
-                                {imagesCombinedState.selectedItems.length === 1 ? "image" : "images"}
-                            </Typography>
-                        </Button>
+                        <AssociationManageButton
+                            handleOpenDialog={handleOpenImageAssignTagDialogForSelectedUsers}
+                            secondaryEntity={Tag}
+                        />
                     </ManagementButtonStack>
                 </ManagementPageFooter>
 
@@ -277,80 +263,27 @@ const ImageManagement = () => {
 
             <AssociationManagementDialog
                 Association={ImageArtist}
-                dialogButtonForSecondaryManagement={
-                    <Button
-                        onClick={() => {
-                            setAssignArtistDialogIsOpen(false);
-                            openManageArtistDialog();
-                        }}
-                        variant="outlined"
-                    >
-                        <Typography>
-                            Go to artist management
-                        </Typography>
-                    </Button>
-                }
-                dialogIsOpen={assignArtistDialogIsOpen}
+                dialogState={assignArtistDialogState}
                 editMode
-                primaryItems={associationDialogImages}
-                refreshAllItems={handleRefresh}
-                secondaryFieldInPrimary="Artists"
+                handleSwitchToSecondary={handleSwitchToArtistsView}
                 // secondaryItemsAll={artistsCombinedState.items}
                 secondaryItemsAll={[]}
-                secondarySearchBoxPlaceholder="Search artists by name or notes"
-                secondarySearchFields={["fullName", "fullNameReverse", "notes"]}
-                setDialogIsOpen={setAssignArtistDialogIsOpen}
             />
 
             <AssociationManagementDialog
                 Association={ImageTag}
-                dialogButtonForSecondaryManagement={
-                    <Button
-                        onClick={() => {
-                            setAssignTagDialogIsOpen(false);
-                            openManageTagDialog();
-                        }}
-                        variant="outlined"
-                    >
-                        <Typography>
-                            Go to tag management
-                        </Typography>
-                    </Button>
-                }
-                dialogIsOpen={assignTagDialogIsOpen}
+                dialogState={assignTagDialogState}
                 editMode
-                primaryItems={associationDialogImages}
-                refreshAllItems={handleRefresh}
-                secondaryFieldInPrimary="Tags"
+                handleSwitchToSecondary={handleSwitchToTagsView}
                 // secondaryItemsAll={tagsCombinedState.items}
                 secondaryItemsAll={[]}
-                secondarySearchBoxPlaceholder="Search tags by name or notes"
-                secondarySearchFields={["data", "notes"]}
-                setDialogIsOpen={setAssignTagDialogIsOpen}
             />
 
             <AssociationManagementDialog
                 Association={ImageExhibition}
-                dialogButtonForSecondaryManagement={
-                    <Button
-                        onClick={() => {
-                            navigate("/Account/Admin/Exhibitions");
-                        }}
-                        variant="outlined"
-                    >
-                        <Typography>
-                            Go to exhibition management
-                        </Typography>
-                    </Button>
-                }
-                dialogIsOpen={viewImageExhibitionDialogIsOpen}
-                editMode={false}
-                primaryItems={associationDialogImages}
-                refreshAllItems={handleRefresh}
+                dialogState={viewExhibitionDialogState}
+                handleSwitchToSecondary={handleSwitchToExhibitionsView}
                 secondaryItemsAll={exhibitions}
-                secondarySearchBoxPlaceholder="Search exhibitions by title"
-                secondarySearchFields={["title"]}
-                setDialogIsOpen={setViewImageExhibitionDialogIsOpen}
             />
 
         </ManagementPageProvider>

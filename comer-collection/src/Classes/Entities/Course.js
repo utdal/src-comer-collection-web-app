@@ -18,6 +18,9 @@ class Course extends Entity {
     static multiCreateDialogSubtitle = "You can enroll users after creating the courses.";
     static DefaultIcon = SchoolIcon;
 
+    static searchBoxFields = ["name"];
+    static searchBoxPlaceholder = "Search courses by name";
+
     static fieldDefinitions = [
         {
             fieldName: "name",

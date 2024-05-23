@@ -13,6 +13,8 @@ class Exhibition extends Entity {
     static singular = "exhibition";
     static plural = "exhibitions";
 
+    static searchBoxFields = ["title"];
+
     static tableFields = [
         {
             columnDescription: "ID",

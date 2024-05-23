@@ -13,7 +13,7 @@ import { useAppUser } from "../../ContextProviders/AppUser.js";
 import { User } from "../../Classes/Entities/User.js";
 import { useEntity, useManagementCallbacks } from "../../ContextProviders/ManagementPageProvider.js";
 import { DialogInputFieldWithRef } from "../Inputs/DialogInputFieldWithRef.js";
-import { PersistentFormDialog } from "./PersistentFormDialog.js";
+import { PersistentDialog } from "./PersistentDialog.js";
 import PropTypes from "prop-types";
 import { DialogState } from "../../Classes/DialogState.js";
 
@@ -61,13 +61,11 @@ export const ItemSingleEditDialog = ({ dialogState }) => {
     const singularCapitalized = Entity?.singular.substr(0, 1).toUpperCase() + Entity?.singular.substr(1).toLowerCase();
 
     return (
-        <PersistentFormDialog
-            component="form"
-            disableEscapeKeyDown
+        <PersistentDialog
+            isForm
             onClose={closeDialog}
             onSubmit={handleSubmit}
             open={dialogIsOpen}
-            sx={{ zIndex: 10000 }}
         >
             <DialogTitle
                 textAlign="center"
@@ -153,7 +151,7 @@ export const ItemSingleEditDialog = ({ dialogState }) => {
                     </Button>
                 </Stack>
             </DialogActions>
-        </PersistentFormDialog>
+        </PersistentDialog>
     );
 };
 

@@ -20,6 +20,9 @@ class Association {
 
     static secondaryFieldInPrimary = null;
 
+    static secondarySearchBoxFields = ["id"];
+    static secondarySearchBoxPlaceholder = "Search secondary items by ID";
+
     static handleAssign ([...primaries], [...secondaries]) {
         return new Promise((resolve, reject) => {
             sendAuthenticatedRequest("PUT", `${this.url}`, {

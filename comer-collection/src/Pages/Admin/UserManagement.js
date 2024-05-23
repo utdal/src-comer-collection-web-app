@@ -1,8 +1,4 @@
 import React, { useCallback, useEffect, useState } from "react";
-import {
-    Button,
-    Typography
-} from "@mui/material";
 import { LockIcon, AccessTimeIcon, WarningIcon } from "../../Imports/Icons.js";
 import { FullPageMessage } from "../../Components/FullPageMessage.js";
 import SearchBox from "../../Components/SearchBox.js";
@@ -53,9 +49,8 @@ const UserManagement = () => {
     const [editDialogState, openEditDialog] = useDialogState(false);
     const [deleteDialogState, openDeleteDialog] = useDialogState(false);
 
-    const [assignCourseDialogIsOpen, setAssignCourseDialogIsOpen] = useState(false);
-    const [viewUserExhibitionDialogIsOpen, setViewUserExhibitionDialogIsOpen] = useState(false);
-    const [associationDialogUsers, setAssociationDialogUsers] = useState([]);
+    const [courseDialogState, openCourseDialog] = useDialogState(true);
+    const [exhibitionDialogState, openExhibitionDialog] = useDialogState(true);
 
     const [searchQuery, setSearchQuery] = useState("");
     const [userCourseIdFilter, setUserCourseIdFilter] = useState(null);
@@ -115,19 +110,16 @@ const UserManagement = () => {
     }, [openResetPasswordDialog]);
 
     const handleOpenUserAssignCourseDialog = useCallback((user) => {
-        setAssociationDialogUsers([user]);
-        setAssignCourseDialogIsOpen(true);
-    }, []);
+        openCourseDialog([user]);
+    }, [openCourseDialog]);
 
     const handleOpenUserAssignCourseDialogForSelectedUsers = useCallback(() => {
-        setAssociationDialogUsers([...usersCombinedState.selectedItems]);
-        setAssignCourseDialogIsOpen(true);
-    }, [usersCombinedState.selectedItems]);
+        openCourseDialog(usersCombinedState.selectedItems);
+    }, [openCourseDialog, usersCombinedState.selectedItems]);
 
     const handleOpenViewUserExhibitionDialog = useCallback((user) => {
-        setAssociationDialogUsers([user]);
-        setViewUserExhibitionDialogIsOpen(true);
-    }, []);
+        openExhibitionDialog([user]);
+    }, [openExhibitionDialog]);
 
     const handleOpenUserPrivilegesDialog = useCallback((user) => {
         openPrivilegesDialog(user);
@@ -149,6 +141,14 @@ const UserManagement = () => {
     const handleOpenUserDeleteDialog = useCallback((user) => {
         openDeleteDialog(user);
     }, [openDeleteDialog]);
+
+    const handleSwitchToCoursesView = useCallback(() => {
+        navigate("/Account/Admin/Courses");
+    }, [navigate]);
+
+    const handleSwitchToExhibitionsView = useCallback(() => {
+        navigate("/Account/Admin/Exhibitions");
+    }, [navigate]);
 
     useEffect(() => {
         filterUsers(userFilterFunction);
@@ -249,50 +249,17 @@ const UserManagement = () => {
 
             <AssociationManagementDialog
                 Association={EnrollmentUserPrimary}
-                dialogButtonForSecondaryManagement={
-                    <Button
-                        onClick={() => {
-                            navigate("/Account/Admin/Courses");
-                        }}
-                        variant="outlined"
-                    >
-                        <Typography>
-                            Go to course management
-                        </Typography>
-                    </Button>
-                }
-                dialogIsOpen={assignCourseDialogIsOpen}
+                dialogState={courseDialogState}
                 editMode
-                primaryItems={associationDialogUsers}
-                refreshAllItems={handleRefresh}
+                handleSwitchToSecondary={handleSwitchToCoursesView}
                 secondaryItemsAll={courses}
-                secondarySearchBoxPlaceholder="Search courses by name"
-                secondarySearchFields={["name"]}
-                setDialogIsOpen={setAssignCourseDialogIsOpen}
             />
 
             <AssociationManagementDialog
                 Association={UserExhibition}
-                dialogButtonForSecondaryManagement={
-                    <Button
-                        onClick={() => {
-                            navigate("/Account/Admin/Exhibitions");
-                        }}
-                        variant="outlined"
-                    >
-                        <Typography>
-                            Go to exhibition management
-                        </Typography>
-                    </Button>
-                }
-                dialogIsOpen={viewUserExhibitionDialogIsOpen}
-                editMode={false}
-                primaryItems={associationDialogUsers}
-                refreshAllItems={handleRefresh}
+                dialogState={exhibitionDialogState}
+                handleSwitchToSecondary={handleSwitchToExhibitionsView}
                 secondaryItemsAll={exhibitions}
-                secondarySearchBoxPlaceholder="Search exhibitions by title"
-                secondarySearchFields={["title"]}
-                setDialogIsOpen={setViewUserExhibitionDialogIsOpen}
             />
 
             <UserChangePrivilegesDialog dialogState={privilegesDialogState} />

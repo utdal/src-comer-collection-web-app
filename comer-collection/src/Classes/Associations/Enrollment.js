@@ -29,6 +29,9 @@ class EnrollmentUserPrimary extends Enrollment {
 
     static secondaryFieldInPrimary = "Courses";
 
+    static secondarySearchBoxFields = ["name"];
+    static secondarySearchBoxPlaceholder = "Search courses by name";
+
     static tableFields = [
         {
             columnDescription: "ID",
@@ -58,6 +61,9 @@ class EnrollmentCoursePrimary extends Enrollment {
     static unassignPast = "unenrolled from";
 
     static secondaryFieldInPrimary = "Users";
+
+    static secondarySearchBoxFields = User.searchBoxFields;
+    static secondarySearchBoxPlaceholder = User.searchBoxPlaceholder;
 
     static tableFields = [
         {

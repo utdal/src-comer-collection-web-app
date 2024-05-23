@@ -1,8 +1,4 @@
 import React, { useCallback, useEffect, useState } from "react";
-import {
-    Button,
-    Typography
-} from "@mui/material";
 import { FullPageMessage } from "../../Components/FullPageMessage.js";
 import SearchBox from "../../Components/SearchBox.js";
 import { ItemSingleDeleteDialog } from "../../Components/Dialogs/ItemSingleDeleteDialog.js";
@@ -15,7 +11,7 @@ import { Navigate, useNavigate } from "react-router";
 import { SelectionSummary } from "../../Components/SelectionSummary.js";
 import { useAppUser } from "../../ContextProviders/AppUser.js";
 import {
-    GroupAddIcon, AccessTimeIcon,
+    AccessTimeIcon,
     WarningIcon,
     LockIcon
 } from "../../Imports/Icons.js";
@@ -34,6 +30,7 @@ import { ManagementPageHeader } from "../../Components/ManagementPage/Management
 import { ManagementPageBody } from "../../Components/ManagementPage/ManagementPageBody.js";
 import { ManagementPageFooter } from "../../Components/ManagementPage/ManagementPageFooter.js";
 import { useDialogState } from "../../Hooks/useDialogState.js";
+import AssociationManageButton from "../../Components/Buttons/AssociationManageButton.js";
 
 const CourseManagement = () => {
     const [coursesCombinedState, setCourses, setSelectedCourses, filterCourses] = useItemsReducer(Course);
@@ -41,12 +38,11 @@ const CourseManagement = () => {
     const [isLoaded, setIsLoaded] = useState(false);
     const [isError, setIsError] = useState(false);
 
-    const [assignUserDialogIsOpen, setAssignUserDialogIsOpen] = useState(false);
-    const [assignUserDialogCourses, setAssignUserDialogCourses] = useState([]);
-
     const [createDialogState, handleOpenMultiCreateDialog] = useDialogState();
     const [editDialogState, openEditDialog] = useDialogState(false);
     const [deleteDialogState, openDeleteDialog] = useDialogState(false);
+
+    const [userDialogState, openUserDialog] = useDialogState(true);
 
     const [searchQuery, setSearchQuery] = useState("");
 
@@ -101,9 +97,12 @@ const CourseManagement = () => {
     }, [openDeleteDialog]);
 
     const handleOpenAssignCourseUserDialog = useCallback((course) => {
-        setAssignUserDialogCourses([course]);
-        setAssignUserDialogIsOpen(true);
-    }, []);
+        openUserDialog([course]);
+    }, [openUserDialog]);
+
+    const handleSwitchToUsersView = useCallback(() => {
+        navigate("/Account/Admin/Users");
+    }, [navigate]);
 
     return (!appUser.is_admin &&
         <FullPageMessage
@@ -175,24 +174,10 @@ const CourseManagement = () => {
                     <SelectionSummary />
 
                     <ManagementButtonStack>
-                        <Button
-                            disabled={coursesCombinedState.selectedItems.length === 0}
-                            onClick={() => {
-                                setAssignUserDialogCourses([...coursesCombinedState.selectedItems]);
-                                setAssignUserDialogIsOpen(true);
-                            }}
-                            startIcon={<GroupAddIcon />}
-                            variant="outlined"
-                        >
-                            <Typography variant="body1">
-                                Manage User Enrollments for
-                                {coursesCombinedState.selectedItems.length}
-
-                                {" "}
-
-                                {coursesCombinedState.selectedItems.length === 1 ? "course" : "courses"}
-                            </Typography>
-                        </Button>
+                        <AssociationManageButton
+                            handleOpenDialog={handleOpenAssignCourseUserDialog}
+                            secondaryEntity={User}
+                        />
                     </ManagementButtonStack>
                 </ManagementPageFooter>
 
@@ -208,26 +193,10 @@ const CourseManagement = () => {
                 Association={EnrollmentCoursePrimary}
                 defaultSortAscending
                 defaultSortColumn="Name"
-                dialogButtonForSecondaryManagement={
-                    <Button
-                        onClick={() => {
-                            navigate("/Account/Admin/Users");
-                        }}
-                        variant="outlined"
-                    >
-                        <Typography>
-                            Go to user management
-                        </Typography>
-                    </Button>
-                }
-                dialogIsOpen={assignUserDialogIsOpen}
+                dialogState={userDialogState}
                 editMode
-                primaryItems={assignUserDialogCourses}
-                refreshAllItems={handleRefresh}
+                handleSwitchToSecondary={handleSwitchToUsersView}
                 secondaryItemsAll={users}
-                secondarySearchBoxPlaceholder="Search users by name or email"
-                secondarySearchFields={["given_name"]}
-                setDialogIsOpen={setAssignUserDialogIsOpen}
             />
         </ManagementPageProvider>
     );

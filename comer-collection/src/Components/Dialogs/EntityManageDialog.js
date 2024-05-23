@@ -19,7 +19,7 @@ import { useSnackbar } from "../../ContextProviders/AppFeatures.js";
 import { ManagementPageProvider, useItemsReducer } from "../../ContextProviders/ManagementPageProvider.js";
 import { useDialogState } from "../../Hooks/useDialogState.js";
 import { DialogState } from "../../Classes/DialogState.js";
-import { PersistentFormDialog } from "./PersistentFormDialog.js";
+import { PersistentDialog } from "./PersistentDialog.js";
 import { FullPageMessage } from "../FullPageMessage.js";
 import { RefreshButton } from "../Buttons/RefreshButton.js";
 import { SelectionSummary } from "../SelectionSummary.js";
@@ -112,7 +112,7 @@ export const EntityManageDialog = ({
             setItems={setDialogItems}
             setSelectedItems={setSelectedDialogItems}
         >
-            <PersistentFormDialog
+            <PersistentDialog
                 maxWidth="lg"
                 onClose={closeDialog}
                 onSubmit={handleCreate}
@@ -299,7 +299,7 @@ export const EntityManageDialog = ({
                             : null}
                     </Stack>
                 </DialogActions>
-            </PersistentFormDialog>
+            </PersistentDialog>
 
             <ItemSingleEditDialog dialogState={editDialogState} />
 

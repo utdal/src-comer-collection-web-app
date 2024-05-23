@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import {
-    Stack, Dialog, DialogTitle,
+    Stack, DialogTitle,
     DialogContent,
     DialogActions,
     Button,
@@ -16,7 +16,10 @@ import { computeSecondaryItemsAssigned } from "../../../Helpers/computeSecondary
 import { AssociationTableDisplay } from "./AssociationTableDisplay.js";
 import { entityPropTypeShape } from "../../../Classes/Entity.js";
 import { AssociationManagementPageProvider } from "../../../ContextProviders/AssociationManagementPageProvider.js";
-import { useItemsReducer } from "../../../ContextProviders/ManagementPageProvider.js";
+import { useItemsReducer, useManagementCallbacks } from "../../../ContextProviders/ManagementPageProvider.js";
+import { DialogState } from "../../../Classes/DialogState.js";
+import { PersistentDialog } from "../PersistentDialog.js";
+import SecondaryManagementButton from "../../Buttons/SecondaryManagementButton.js";
 
 const assignButtonColumnDefinition = {
     columnDescription: "Assign",
@@ -27,16 +30,23 @@ const unassignButtonColumnDefinition = {
     TableCellComponent: UnassignButton
 };
 
+/**
+ * @param {{
+ *  dialogState: DialogState
+ * }} props
+ */
 export const AssociationManagementDialog = ({
-    Association, editMode, primaryItems,
+    Association, editMode,
     secondaryItemsAll,
-    dialogButtonForSecondaryManagement,
-    dialogIsOpen, setDialogIsOpen,
-    secondarySearchFields, secondarySearchBoxPlaceholder,
-    defaultSortColumn, defaultSortAscending,
-    refreshAllItems
+    handleSwitchToSecondary,
+    dialogState,
+    defaultSortColumn, defaultSortAscending
 }) => {
     const [secondaryItemsCombinedState, setSecondaryItems, setSelectedSecondaryItems] = useItemsReducer(Association.secondary);
+
+    const { dialogIsOpen, dialogItems: primaryItems, closeDialog } = dialogState;
+
+    const { handleRefresh } = useManagementCallbacks();
 
     useEffect(() => {
         setSecondaryItems(secondaryItemsAll);
@@ -66,8 +76,9 @@ export const AssociationManagementDialog = ({
     const [secondarySearchQuery, setSecondarySearchQuery] = useState("");
 
     const handleCloseDialog = useCallback(() => {
-        setDialogIsOpen(false);
-    }, [setDialogIsOpen]);
+        handleRefresh();
+        closeDialog();
+    }, [closeDialog, handleRefresh]);
 
     const getQuantityAssigned = useCallback((secondary) => {
         return Object.entries(secondariesByPrimary)
@@ -92,13 +103,13 @@ export const AssociationManagementDialog = ({
     });
 
     const secondaryItemsAllResults = useMemo(() =>
-        searchItems(secondarySearchQuery, secondaryItemsAllWithQuantities, secondarySearchFields ?? []
+        searchItems(secondarySearchQuery, secondaryItemsAllWithQuantities, Association.secondarySearchBoxFields ?? []
 
-        ), [secondarySearchQuery, secondaryItemsAllWithQuantities, secondarySearchFields]);
+        ), [secondarySearchQuery, secondaryItemsAllWithQuantities, Association.secondarySearchBoxFields]);
 
     const secondaryItemsAssignedResults = useMemo(() =>
-        searchItems(secondarySearchQuery, secondaryItemsAssignedWithQuantities, secondarySearchFields ?? []
-        ), [secondarySearchQuery, secondaryItemsAssignedWithQuantities, secondarySearchFields]);
+        searchItems(secondarySearchQuery, secondaryItemsAssignedWithQuantities, Association.secondarySearchBoxFields ?? []
+        ), [secondarySearchQuery, secondaryItemsAssignedWithQuantities, Association.secondarySearchBoxFields]);
 
     const allTable = useMemo(() => {
         return (
@@ -143,18 +154,10 @@ export const AssociationManagementDialog = ({
             setSecondaryItems={setSecondaryItems}
             setSelectedSecondaryItems={setSelectedSecondaryItems}
         >
-            <Dialog
-                disableEscapeKeyDown
-                fullWidth
+            <PersistentDialog
                 maxWidth={editMode ? "lg" : "md"}
-                onClose={(event, reason) => {
-                    if (reason === "backdropClick") {
-                        return;
-                    }
-                    setDialogIsOpen(false);
-                }}
+                onClose={closeDialog}
                 open={dialogIsOpen}
-                sx={{ zIndex: 10000 }}
             >
                 <DialogTitle
                     sx={{ textOverflow: "ellipsis", wordWrap: "break-word" }}
@@ -179,9 +182,9 @@ export const AssociationManagementDialog = ({
                         padding={1}
                         spacing={2}
                     >
-                        {secondarySearchFields?.length > 0 && (
+                        {Association.secondarySearchBoxFields?.length > 0 && (
                             <SearchBox
-                                placeholder={secondarySearchBoxPlaceholder ?? "Search"}
+                                placeholder={Association.secondarySearchBoxPlaceholder ?? "Search"}
                                 searchQuery={secondarySearchQuery}
                                 setSearchQuery={setSecondarySearchQuery}
                                 width="100%"
@@ -193,8 +196,8 @@ export const AssociationManagementDialog = ({
                             sx={{
                                 display: "grid",
                                 gridTemplateAreas: `
-                    "all divider assigned"
-                `,
+                                    "all divider assigned"
+                                `,
                                 gridTemplateColumns: editMode ? "1fr 30px 1fr" : "0px 0px 1fr"
                             }}
                         >
@@ -239,7 +242,9 @@ export const AssociationManagementDialog = ({
                         spacing={1}
                         width="100%"
                     >
-                        {dialogButtonForSecondaryManagement}
+                        <SecondaryManagementButton
+                            handleSwitchToSecondary={handleSwitchToSecondary}
+                        />
 
                         <Button
                             color="primary"
@@ -257,7 +262,7 @@ export const AssociationManagementDialog = ({
                         </Button>
                     </Stack>
                 </DialogActions>
-            </Dialog>
+            </PersistentDialog>
         </AssociationManagementPageProvider>
     );
 };
@@ -266,13 +271,8 @@ AssociationManagementDialog.propTypes = {
     Association: PropTypes.node.isRequired,
     defaultSortAscending: PropTypes.bool,
     defaultSortColumn: PropTypes.string,
-    dialogButtonForSecondaryManagement: PropTypes.element.isRequired,
-    dialogIsOpen: PropTypes.bool.isRequired,
+    dialogState: PropTypes.instanceOf(DialogState),
     editMode: PropTypes.bool.isRequired,
-    primaryItems: PropTypes.arrayOf(entityPropTypeShape).isRequired,
-    refreshAllItems: PropTypes.func.isRequired,
-    secondaryItemsAll: PropTypes.arrayOf(entityPropTypeShape).isRequired,
-    secondarySearchBoxPlaceholder: PropTypes.string.isRequired,
-    secondarySearchFields: PropTypes.arrayOf(PropTypes.string).isRequired,
-    setDialogIsOpen: PropTypes.func.isRequired
+    handleSwitchToSecondary: PropTypes.func.isRequired,
+    secondaryItemsAll: PropTypes.arrayOf(entityPropTypeShape).isRequired
 };

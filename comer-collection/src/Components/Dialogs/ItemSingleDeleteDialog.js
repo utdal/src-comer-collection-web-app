@@ -11,7 +11,7 @@ import PropTypes from "prop-types";
 import { useSnackbar } from "../../ContextProviders/AppFeatures.js";
 import { useEntity, useItems } from "../../ContextProviders/ManagementPageProvider.js";
 import { DialogState } from "../../Classes/DialogState.js";
-import { PersistentFormDialog } from "./PersistentFormDialog.js";
+import { PersistentDialog } from "./PersistentDialog.js";
 
 /**
  * @param {{
@@ -49,7 +49,8 @@ export const ItemSingleDeleteDialog = ({ requireTypedConfirmation, dialogState }
     }, [Entity, closeDialog, dialogItem, items, setItems, showSnackbar]);
 
     return (
-        <PersistentFormDialog
+        <PersistentDialog
+            isForm
             maxWidth="sm"
             onClose={closeDialog}
             onSubmit={handleSubmit}
@@ -140,7 +141,7 @@ export const ItemSingleDeleteDialog = ({ requireTypedConfirmation, dialogState }
                     </Button>
                 </Stack>
             </DialogActions>
-        </PersistentFormDialog>
+        </PersistentDialog>
     );
 };
 
