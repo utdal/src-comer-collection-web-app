@@ -31,9 +31,7 @@ export const FullPageMessage = ({ message, buttonText, buttonDestination = null,
                             onClick={buttonAction ?? (() => navigate(buttonDestination ?? "/SignIn"))}
                             variant="contained"
                         >
-                            <Typography variant="body1">
-                                {buttonText ?? "Return to Login Page"}
-                            </Typography>
+                            {buttonText ?? "Return to Login Page"}
                         </Button>
                     )
                     : null}

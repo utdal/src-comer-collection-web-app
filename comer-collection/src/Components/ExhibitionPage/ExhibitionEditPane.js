@@ -352,9 +352,7 @@ export const ExhibitionEditPane = ({ exhibitionMetadata, exhibitionState, exhibi
                             }}
                             variant="contained"
                         >
-                            <Typography variant="body1">
-                                Add Image
-                            </Typography>
+                            Add Image
                         </Button>
                     </ExhibitionOption>
 
@@ -370,9 +368,7 @@ export const ExhibitionEditPane = ({ exhibitionMetadata, exhibitionState, exhibi
                             }}
                             variant="outlined"
                         >
-                            <Typography variant="body1">
-                                Rearrange Images
-                            </Typography>
+                            Rearrange Images
                         </Button>
 
                     </ExhibitionOption>
@@ -725,9 +721,7 @@ export const ExhibitionEditPane = ({ exhibitionMetadata, exhibitionState, exhibi
                     }
                     variant="contained"
                 >
-                    <Typography variant="body1">
-                        Save
-                    </Typography>
+                    Save
                 </Button>
 
             </Stack>

@@ -86,9 +86,7 @@ export const ItemMultiDeleteDialog = ({ entityPlural, deleteDialogItems, deleteD
                         sx={{ width: "100%" }}
                         variant="outlined"
                     >
-                        <Typography variant="body1">
-                            Cancel
-                        </Typography>
+                        Cancel
                     </Button>
 
                     <Button

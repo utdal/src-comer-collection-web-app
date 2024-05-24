@@ -1,4 +1,4 @@
-import { Button, Typography } from "@mui/material";
+import { Button } from "@mui/material";
 import React, { memo } from "react";
 import { useEntity, useManagementCallbacks } from "../../ContextProviders/ManagementPageProvider.js";
 
@@ -18,11 +18,9 @@ export const MultiCreateButton = memo(function MultiCreateButton () {
             startIcon={<Entity.MultiCreateButtonIcon />}
             variant="contained"
         >
-            <Typography variant="body1">
-                {"Create "}
+            {"Create "}
 
-                {Entity.plural}
-            </Typography>
+            {Entity.plural}
         </Button>
     );
 });

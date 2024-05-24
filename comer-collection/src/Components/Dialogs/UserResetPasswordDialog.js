@@ -175,9 +175,7 @@ export const UserResetPasswordDialog = ({ dialogState }) => {
                                 sx={{ width: "100%" }}
                                 variant="outlined"
                             >
-                                <Typography variant="body1">
-                                    Cancel
-                                </Typography>
+                                Cancel
                             </Button>
 
                             <Button
@@ -188,9 +186,7 @@ export const UserResetPasswordDialog = ({ dialogState }) => {
                                 type="submit"
                                 variant="contained"
                             >
-                                <Typography variant="body1">
-                                    {dialogUser?.has_password ? "Reset Password" : "Set Password"}
-                                </Typography>
+                                {dialogUser?.has_password ? "Reset Password" : "Set Password"}
                             </Button>
                         </>
                     ) || (!editMode &&
@@ -202,9 +198,7 @@ export const UserResetPasswordDialog = ({ dialogState }) => {
                             sx={{ width: "100%" }}
                             variant="contained"
                         >
-                            <Typography variant="body1">
-                                Close
-                            </Typography>
+                            Close
                         </Button>
                     )}
                 </Stack>

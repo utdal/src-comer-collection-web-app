@@ -136,9 +136,7 @@ const ChangePassword = () => {
                         type="submit"
                         variant="contained"
                     >
-                        <Typography variant="body1">
-                            Change Password
-                        </Typography>
+                        Change Password
                     </Button>
 
                     {!appUser.pw_change_required && (
@@ -150,9 +148,7 @@ const ChangePassword = () => {
                             sx={{ minWidth: "400px" }}
                             variant="outlined"
                         >
-                            <Typography variant="body1">
-                                Return to Profile
-                            </Typography>
+                            Return to Profile
                         </Button>
                     )}
                 </Stack>

@@ -1,6 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { Button, Typography } from "@mui/material";
+import { Button } from "@mui/material";
 
 /**
  * @param {{
@@ -15,9 +15,7 @@ const EntityManageButton = ({ entity, handleOpenDialog }) => {
             startIcon={<entity.DefaultIcon />}
             variant="outlined"
         >
-            <Typography variant="body1">
-                {entity.plural}
-            </Typography>
+            {entity.plural}
         </Button>
     );
 };

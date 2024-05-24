@@ -3,8 +3,7 @@ import {
     Stack, DialogTitle,
     DialogContent,
     DialogActions,
-    Button,
-    Typography, DialogContentText, TextField
+    Button, DialogContentText, TextField
 } from "@mui/material";
 import { DeleteIcon } from "../../Imports/Icons.js";
 import PropTypes from "prop-types";
@@ -120,9 +119,7 @@ export const ItemSingleDeleteDialog = ({ requireTypedConfirmation, dialogState }
                         sx={{ width: "100%" }}
                         variant="outlined"
                     >
-                        <Typography variant="body1">
-                            Cancel
-                        </Typography>
+                        Cancel
                     </Button>
 
                     <Button
@@ -134,9 +131,7 @@ export const ItemSingleDeleteDialog = ({ requireTypedConfirmation, dialogState }
                         type="submit"
                         variant="contained"
                     >
-                        <Typography variant="body1">
-                            Delete
-                        </Typography>
+                        Delete
 
                     </Button>
                 </Stack>

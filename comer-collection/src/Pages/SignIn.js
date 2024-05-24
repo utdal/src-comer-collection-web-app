@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Navigate, useNavigate } from "react-router";
-import { Box, Button, Divider, Paper, Stack, TextField, Typography } from "@mui/material";
+import { Box, Button, Divider, Paper, Stack, TextField } from "@mui/material";
 import { sendAuthenticatedRequest } from "../Helpers/APICalls.js";
 import { useAppUser } from "../ContextProviders/AppUser.js";
 import { useTitle } from "../ContextProviders/AppFeatures.js";
@@ -102,9 +102,7 @@ const SignIn = () => {
                         type="submit"
                         variant="contained"
                     >
-                        <Typography variant="body1">
-                            Sign In
-                        </Typography>
+                        Sign In
                     </Button>
                 </Stack>
             </Box>

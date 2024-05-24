@@ -4,8 +4,7 @@ import {
     Stack, DialogTitle,
     DialogContent,
     DialogActions,
-    Button,
-    Typography, IconButton, DialogContentText, TextField, Divider
+    Button, IconButton, DialogContentText, TextField, Divider
 } from "@mui/material";
 import { DeleteIcon } from "../../Imports/Icons.js";
 import { getBlankItemFields } from "../../Helpers/fields.js";
@@ -209,9 +208,7 @@ export const ItemMultiCreateDialog = ({ dialogState }) => {
                         size="large"
                         variant="outlined"
                     >
-                        <Typography variant="body1">
-                            {createDialogItems.length > 0 ? "Cancel" : "Close"}
-                        </Typography>
+                        {createDialogItems.length > 0 ? "Cancel" : "Close"}
                     </Button>
 
                     <Stack
@@ -231,9 +228,7 @@ export const ItemMultiCreateDialog = ({ dialogState }) => {
                             sx={{ width: "100%" }}
                             variant={createDialogItems.length ? "outlined" : "contained"}
                         >
-                            <Typography variant="body1">
-                                {createDialogItems.length ? `Add another ${Entity.singular}` : `Add ${Entity.singular}`}
-                            </Typography>
+                            {createDialogItems.length ? `Add another ${Entity.singular}` : `Add ${Entity.singular}`}
                         </Button>
 
                         <Button
@@ -244,9 +239,7 @@ export const ItemMultiCreateDialog = ({ dialogState }) => {
                             type="submit"
                             variant="contained"
                         >
-                            <Typography variant="body1">
-                                {createDialogItems.length >= 2 ? `Create (${createDialogItems.length})` : "Create"}
-                            </Typography>
+                            {createDialogItems.length >= 2 ? `Create (${createDialogItems.length})` : "Create"}
                         </Button>
                     </Stack>
                 </Stack>

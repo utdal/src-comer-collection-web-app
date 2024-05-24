@@ -205,9 +205,7 @@ export const UserChangePrivilegesDialog = ({ dialogState }) => {
                         sx={{ width: "100%" }}
                         variant="outlined"
                     >
-                        <Typography variant="body1">
-                            Cancel
-                        </Typography>
+                        Cancel
                     </Button>
 
                     <Button
@@ -218,9 +216,7 @@ export const UserChangePrivilegesDialog = ({ dialogState }) => {
                         type="submit"
                         variant="contained"
                     >
-                        <Typography variant="body1">
-                            Change Access
-                        </Typography>
+                        Change Access
                     </Button>
                 </Stack>
             </DialogActions>

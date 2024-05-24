@@ -100,27 +100,25 @@ export const DataTable = memo(function DataTable ({
                     <TableRow>
                         {Boolean(rowSelectionEnabled) && (
                             <TableCell sx={{ backgroundColor: theme.palette.grey.translucent }}>
-                                <Typography variant="body1">
-                                    <Checkbox
-                                        checked={false}
-                                        // selectedVisibleItems.length === visibleItems.length && visibleItems.length > 0
-                                        disabled={1 !== 0 /* visibleItems.length === 0 */}
-                                        indeterminate={false}
-                                        // (selectedVisibleItems.length > 0 && selectedVisibleItems.length < visibleItems.length) || visibleItems.length === 0
-                                        onChange={(e) => {
-                                            if (e.target.checked) {
-                                                // setSelectedItems([...selectedItems, ...visibleItems.filter((i) => (
-                                                //     !selectedItems.map((si) => si.id).includes(parseInt(i.id))
-                                                // ))]);
-                                            } else {
-                                                // setSelectedItems(selectedItems.filter((si) => (
-                                                //     !selectedVisibleItems.map((vsi) => vsi.id).includes(parseInt(si.id))
-                                                // )));
-                                            }
-                                        }}
-                                        size={smallCheckboxes ? "medium" : "large"}
-                                    />
-                                </Typography>
+                                <Checkbox
+                                    checked={false}
+                                    // selectedVisibleItems.length === visibleItems.length && visibleItems.length > 0
+                                    disabled={1 !== 0 /* visibleItems.length === 0 */}
+                                    indeterminate={false}
+                                    // (selectedVisibleItems.length > 0 && selectedVisibleItems.length < visibleItems.length) || visibleItems.length === 0
+                                    onChange={(e) => {
+                                        if (e.target.checked) {
+                                            // setSelectedItems([...selectedItems, ...visibleItems.filter((i) => (
+                                            //     !selectedItems.map((si) => si.id).includes(parseInt(i.id))
+                                            // ))]);
+                                        } else {
+                                            // setSelectedItems(selectedItems.filter((si) => (
+                                            //     !selectedVisibleItems.map((vsi) => vsi.id).includes(parseInt(si.id))
+                                            // )));
+                                        }
+                                    }}
+                                    size={smallCheckboxes ? "medium" : "large"}
+                                />
                             </TableCell>
                         )}
 
