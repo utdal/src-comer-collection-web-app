@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { LockIcon, AccessTimeIcon, WarningIcon } from "../../Imports/Icons.js";
 import { FullPageMessage } from "../../Components/FullPageMessage.js";
 import SearchBox from "../../Components/SearchBox.js";
@@ -154,6 +154,30 @@ const UserManagement = () => {
         filterUsers(userFilterFunction);
     }, [filterUsers, userFilterFunction]);
 
+    const managementCallbacks = useMemo(() => ({
+        handleNavigateToChangePassword,
+        handleOpenUserPasswordResetDialog,
+        handleOpenUserAssignCourseDialog,
+        handleOpenViewUserExhibitionDialog,
+        handleOpenUserPrivilegesDialog,
+        handleChangeUserActivationStatus,
+        handleOpenMultiCreateDialog,
+        handleOpenUserEditDialog,
+        handleOpenUserDeleteDialog,
+        handleClearFilters,
+        handleRefresh
+    }), [handleChangeUserActivationStatus,
+        handleClearFilters,
+        handleNavigateToChangePassword,
+        handleOpenMultiCreateDialog,
+        handleOpenUserAssignCourseDialog,
+        handleOpenUserDeleteDialog,
+        handleOpenUserEditDialog,
+        handleOpenUserPasswordResetDialog,
+        handleOpenUserPrivilegesDialog,
+        handleOpenViewUserExhibitionDialog,
+        handleRefresh]);
+
     return (!appUser.is_admin &&
         <FullPageMessage
             Icon={LockIcon}
@@ -179,19 +203,7 @@ const UserManagement = () => {
         <ManagementPageProvider
             Entity={User}
             itemsCombinedState={usersCombinedState}
-            managementCallbacks={{
-                handleNavigateToChangePassword,
-                handleOpenUserPasswordResetDialog,
-                handleOpenUserAssignCourseDialog,
-                handleOpenViewUserExhibitionDialog,
-                handleOpenUserPrivilegesDialog,
-                handleChangeUserActivationStatus,
-                handleOpenMultiCreateDialog,
-                handleOpenUserEditDialog,
-                handleOpenUserDeleteDialog,
-                handleClearFilters,
-                handleRefresh
-            }}
+            managementCallbacks={managementCallbacks}
             setItems={setUsers}
             setSelectedItems={setSelectedUsers}
         >
