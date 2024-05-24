@@ -76,11 +76,11 @@ export const ItemMultiDeleteDialog = ({ entityPlural, deleteDialogItems, deleteD
                 >
                     <Button
                         color="primary"
+                        fullWidth
                         onClick={() => {
                             setDeleteDialogIsOpen(false);
                             setConfirmText("");
                         }}
-                        sx={{ width: "100%" }}
                         variant="outlined"
                     >
                         Cancel
@@ -89,9 +89,9 @@ export const ItemMultiDeleteDialog = ({ entityPlural, deleteDialogItems, deleteD
                     <Button
                         color="error"
                         disabled={confirmText?.toLowerCase() !== "delete"}
+                        fullWidth
                         size="large"
                         startIcon={<DeleteIcon />}
-                        sx={{ width: "100%" }}
                         type="submit"
                         variant="contained"
                     >

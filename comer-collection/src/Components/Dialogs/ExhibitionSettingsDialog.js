@@ -184,12 +184,12 @@ export const ExhibitionSettingsDialog = ({ editMode, adminMode, dialogIsOpen, se
                 >
                     <Button
                         color="primary"
+                        fullWidth
                         onClick={() => {
                             setDialogIsOpen(false);
                             setDialogExhibitionAccess(null);
                             setDialogExhibitionTitle("");
                         }}
-                        sx={{ width: "100%" }}
                         variant="outlined"
                     >
                         Cancel
@@ -198,9 +198,9 @@ export const ExhibitionSettingsDialog = ({ editMode, adminMode, dialogIsOpen, se
                     <Button
                         color="primary"
                         disabled={!(dialogExhibitionAccess && dialogExhibitionTitle)}
+                        fullWidth
                         size="large"
                         startIcon={<SaveIcon />}
-                        sx={{ width: "100%" }}
                         type="submit"
                         variant="contained"
                     >

@@ -168,8 +168,8 @@ export const UserResetPasswordDialog = ({ dialogState }) => {
                         <>
                             <Button
                                 color={themeColor}
+                                fullWidth
                                 onClick={handleClose}
-                                sx={{ width: "100%" }}
                                 variant="outlined"
                             >
                                 Cancel
@@ -178,8 +178,8 @@ export const UserResetPasswordDialog = ({ dialogState }) => {
                             <Button
                                 color={themeColor}
                                 disabled={!newPassword}
+                                fullWidth
                                 size="large"
-                                sx={{ width: "100%" }}
                                 type="submit"
                                 variant="contained"
                             >
@@ -190,9 +190,9 @@ export const UserResetPasswordDialog = ({ dialogState }) => {
                         <Button
                             color={themeColor}
                             disabled={!hasCopied}
+                            fullWidth
                             onClick={handleClose}
                             size="large"
-                            sx={{ width: "100%" }}
                             variant="contained"
                         >
                             Close

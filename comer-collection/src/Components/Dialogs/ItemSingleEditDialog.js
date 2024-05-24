@@ -118,11 +118,11 @@ export const ItemSingleEditDialog = ({ dialogState }) => {
                 >
                     <Button
                         color="primary"
+                        fullWidth
                         onClick={() => {
                             closeDialog();
                             editDialogFieldRefs.current = [];
                         }}
-                        sx={{ width: "100%" }}
                         variant="outlined"
                     >
                         Cancel
@@ -131,9 +131,9 @@ export const ItemSingleEditDialog = ({ dialogState }) => {
                     <Button
                         color="primary"
                         disabled={!submitEnabled}
+                        fullWidth
                         size="large"
                         startIcon={<SaveIcon />}
-                        sx={{ width: "100%" }}
                         type="submit"
                         variant="contained"
                     >

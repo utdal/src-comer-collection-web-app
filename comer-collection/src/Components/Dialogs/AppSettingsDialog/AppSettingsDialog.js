@@ -32,7 +32,6 @@ export const AppSettingsDialog = ({ dialogState }) => {
 
     return (
         <PersistentDialog
-            disableEscapeKeyDown
             onClose={closeDialog}
             open={dialogIsOpen}
         >
@@ -96,8 +95,8 @@ export const AppSettingsDialog = ({ dialogState }) => {
             <DialogActions>
                 <Button
                     color="primary"
+                    fullWidth
                     onClick={closeDialog}
-                    sx={{ width: "100%" }}
                     variant="contained"
                 >
                     Close

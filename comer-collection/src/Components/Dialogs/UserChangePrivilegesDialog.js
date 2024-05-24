@@ -198,8 +198,8 @@ export const UserChangePrivilegesDialog = ({ dialogState }) => {
                     <Button
                         color={themeColor}
                         disabled={!submitEnabled}
+                        fullWidth
                         onClick={handleClose}
-                        sx={{ width: "100%" }}
                         variant="outlined"
                     >
                         Cancel
@@ -208,8 +208,8 @@ export const UserChangePrivilegesDialog = ({ dialogState }) => {
                     <Button
                         color={themeColor}
                         disabled={!confirmAction || !submitEnabled || newAccess === dialogUser?.access_level}
+                        fullWidth
                         size="large"
-                        sx={{ width: "100%" }}
                         type="submit"
                         variant="contained"
                     >

@@ -112,8 +112,8 @@ export const ItemSingleDeleteDialog = ({ requireTypedConfirmation, dialogState }
                     <Button
                         color="primary"
                         disabled={!submitEnabled}
+                        fullWidth
                         onClick={closeDialog}
-                        sx={{ width: "100%" }}
                         variant="outlined"
                     >
                         Cancel
@@ -122,9 +122,9 @@ export const ItemSingleDeleteDialog = ({ requireTypedConfirmation, dialogState }
                     <Button
                         color="error"
                         disabled={!submitEnabled || (requireTypedConfirmation && deleteConfirmation.toLowerCase() !== "delete")}
+                        fullWidth
                         size="large"
                         startIcon={<DeleteIcon />}
-                        sx={{ width: "100%" }}
                         type="submit"
                         variant="contained"
                     >

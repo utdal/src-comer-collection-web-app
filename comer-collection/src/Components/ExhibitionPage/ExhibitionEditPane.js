@@ -343,13 +343,11 @@ export const ExhibitionEditPane = ({ exhibitionMetadata, exhibitionState, exhibi
                     <ExhibitionOption>
 
                         <Button
+                            fullWidth
                             onClick={() => {
                                 setImageChooserIsOpen(true);
                             }}
                             startIcon={<AddPhotoAlternateIcon />}
-                            sx={{
-                                width: "100%"
-                            }}
                             variant="contained"
                         >
                             Add Image
@@ -359,13 +357,11 @@ export const ExhibitionEditPane = ({ exhibitionMetadata, exhibitionState, exhibi
                     <ExhibitionOption>
 
                         <Button
+                            fullWidth
                             onClick={() => {
                                 setImageRearrangerIsOpen(true);
                             }}
                             startIcon={<CollectionsIcon />}
-                            sx={{
-                                width: "100%"
-                            }}
                             variant="outlined"
                         >
                             Rearrange Images

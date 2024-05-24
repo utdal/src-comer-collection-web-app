@@ -216,13 +216,13 @@ export const ItemMultiCreateDialog = ({ dialogState }) => {
                         <Button
                             color="primary"
                             disabled={!submitEnabled}
+                            fullWidth
                             onClick={() => {
                                 createDialogDispatch({
                                     type: "add"
                                 });
                             }}
                             size="large"
-                            sx={{ width: "100%" }}
                             variant={createDialogItems.length ? "outlined" : "contained"}
                         >
                             {createDialogItems.length ? `Add another ${Entity.singular}` : `Add ${Entity.singular}`}
@@ -231,8 +231,8 @@ export const ItemMultiCreateDialog = ({ dialogState }) => {
                         <Button
                             color="primary"
                             disabled={!submitEnabled || createDialogItems.length === 0}
+                            fullWidth
                             size="large"
-                            sx={{ width: "100%" }}
                             type="submit"
                             variant="contained"
                         >
