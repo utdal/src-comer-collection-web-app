@@ -29,6 +29,13 @@ export const AppFeatureProvider = ({ children }) => {
                         ...theme.typography.body1
                     })
                 }
+            },
+            MuiStack: {
+                styleOverrides: {
+                    root: ({ theme }) => ({
+                        ...theme.typography.body1
+                    })
+                }
             }
         },
         typography: {
