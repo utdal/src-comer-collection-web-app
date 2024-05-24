@@ -36,6 +36,12 @@ export const AppFeatureProvider = ({ children }) => {
                         ...theme.typography.body1
                     })
                 }
+            },
+            MuiDialogTitle: {
+                defaultProps: {
+                    textAlign: "center",
+                    variant: "h4"
+                }
             }
         },
         typography: {
