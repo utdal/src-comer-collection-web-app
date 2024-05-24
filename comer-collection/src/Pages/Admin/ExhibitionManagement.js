@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { FullPageMessage } from "../../Components/FullPageMessage.js";
 import SearchBox from "../../Components/SearchBox.js";
 import { LockIcon, WarningIcon, AccessTimeIcon } from "../../Imports/Icons.js";
@@ -25,7 +25,7 @@ import { ManagementPageFooter } from "../../Components/ManagementPage/Management
 import { useDialogState } from "../../Hooks/useDialogState.js";
 
 const ExhibitionManagement = () => {
-    const [exhibitionsCombinedState, setExhibitions, setSelectedExhibitions, filterExhibitions] = useItemsReducer(Exhibition);
+    const [exhibitionsCombinedState, setExhibitions, setSelectedExhibitions, filterExhibitions, setExhibitionSelectionStatus] = useItemsReducer(Exhibition);
     const [courses, setCourses] = useState([]);
 
     const [isLoaded, setIsLoaded] = useState(false);
@@ -100,6 +100,17 @@ const ExhibitionManagement = () => {
         openDeleteDialog(exhibition);
     }, [openDeleteDialog]);
 
+    const managementCallbacks = useMemo(() => ({
+        handleOpenExhibitionSettings,
+        handleOpenExhibitionDeleteDialog,
+        handleClearFilters,
+        handleRefresh
+    }), [handleClearFilters,
+        handleOpenExhibitionDeleteDialog,
+        handleOpenExhibitionSettings,
+        handleRefresh
+    ]);
+
     return (!appUser.is_admin &&
         <FullPageMessage
             Icon={LockIcon}
@@ -125,12 +136,8 @@ const ExhibitionManagement = () => {
         <ManagementPageProvider
             Entity={Exhibition}
             itemsCombinedState={exhibitionsCombinedState}
-            managementCallbacks={{
-                handleOpenExhibitionSettings,
-                handleOpenExhibitionDeleteDialog,
-                handleClearFilters,
-                handleRefresh
-            }}
+            managementCallbacks={managementCallbacks}
+            setItemSelectionStatus={setExhibitionSelectionStatus}
             setItems={setExhibitions}
             setSelectedItems={setSelectedExhibitions}
         >

@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { FullPageMessage } from "../../Components/FullPageMessage.js";
 import SearchBox from "../../Components/SearchBox.js";
 import { ItemSingleDeleteDialog } from "../../Components/Dialogs/ItemSingleDeleteDialog.js";
@@ -33,7 +33,7 @@ import { useDialogState } from "../../Hooks/useDialogState.js";
 import AssociationManageButton from "../../Components/Buttons/AssociationManageButton.js";
 
 const CourseManagement = () => {
-    const [coursesCombinedState, setCourses, setSelectedCourses, filterCourses] = useItemsReducer(Course);
+    const [coursesCombinedState, setCourses, setSelectedCourses, filterCourses, setCourseSelectionStatus] = useItemsReducer(Course);
     const [users, setUsers] = useState([]);
     const [isLoaded, setIsLoaded] = useState(false);
     const [isError, setIsError] = useState(false);
@@ -104,6 +104,21 @@ const CourseManagement = () => {
         navigate("/Account/Admin/Users");
     }, [navigate]);
 
+    const managementCallbacks = useMemo(() => ({
+        handleOpenCourseDeleteDialog,
+        handleOpenCourseEditDialog,
+        handleOpenMultiCreateDialog,
+        handleOpenAssignCourseUserDialog,
+        handleClearFilters,
+        handleRefresh
+    }), [handleClearFilters,
+        handleOpenAssignCourseUserDialog,
+        handleOpenCourseDeleteDialog,
+        handleOpenCourseEditDialog,
+        handleOpenMultiCreateDialog,
+        handleRefresh
+    ]);
+
     return (!appUser.is_admin &&
         <FullPageMessage
             Icon={LockIcon}
@@ -130,14 +145,8 @@ const CourseManagement = () => {
         <ManagementPageProvider
             Entity={Course}
             itemsCombinedState={coursesCombinedState}
-            managementCallbacks={{
-                handleOpenCourseDeleteDialog,
-                handleOpenCourseEditDialog,
-                handleOpenMultiCreateDialog,
-                handleOpenAssignCourseUserDialog,
-                handleClearFilters,
-                handleRefresh
-            }}
+            managementCallbacks={managementCallbacks}
+            setItemSelectionStatus={setCourseSelectionStatus}
             setItems={setCourses}
             setSelectedItems={setSelectedCourses}
         >
