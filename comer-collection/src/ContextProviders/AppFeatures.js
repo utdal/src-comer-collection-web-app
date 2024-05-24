@@ -21,7 +21,16 @@ export const AppFeatureProvider = ({ children }) => {
 
     const [appDarkTheme, setAppDarkTheme] = useState(JSON.parse(localStorage.getItem("appDarkTheme")) ?? false);
 
-    const theme = createTheme({
+    const finalTheme = createTheme({
+        components: {
+            MuiButton: {
+                styleOverrides: {
+                    root: ({ theme }) => ({
+                        ...theme.typography.body1
+                    })
+                }
+            }
+        },
         typography: {
             fontFamily: "Helvetica",
             fontSize: 12,
@@ -85,7 +94,7 @@ export const AppFeatureProvider = ({ children }) => {
     return (
         <AppFeatureContext.Provider value={appFeatureContextValue}>
 
-            <ThemeProvider theme={theme}>
+            <ThemeProvider theme={finalTheme}>
                 {children}
 
                 <Snackbar
