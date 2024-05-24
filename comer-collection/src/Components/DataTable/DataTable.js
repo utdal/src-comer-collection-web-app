@@ -88,10 +88,11 @@ export const DataTable = memo(function DataTable ({
                         {Boolean(rowSelectionEnabled) && (
                             <TableCell sx={{ backgroundColor: theme.palette.grey.translucent }}>
                                 <Checkbox
-                                    checked={false}
-                                    // selectedVisibleItems.length === visibleItems.length && visibleItems.length > 0
                                     disabled={1 !== 0 /* visibleItems.length === 0 */}
-                                    indeterminate={false}
+                                    checked={
+                                        itemCounts.selectedAndVisible === itemCounts.visible && itemCounts.visible > 0
+                                    }
+                                    indeterminate={(itemCounts.selectedAndVisible > 0 && itemCounts.selectedAndVisible < itemCounts.visible)}
                                     // (selectedVisibleItems.length > 0 && selectedVisibleItems.length < visibleItems.length) || visibleItems.length === 0
                                     onChange={(e) => {
                                         if (e.target.checked) {
