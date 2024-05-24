@@ -1,4 +1,4 @@
-import { Button, Typography } from "@mui/material";
+import { Button } from "@mui/material";
 import React, { memo, useCallback, useState } from "react";
 import { RefreshIcon } from "../../Imports/Icons.js";
 import { useManagementCallbacks } from "../../ContextProviders/ManagementPageProvider.js";
@@ -24,9 +24,7 @@ export const RefreshButton = memo(function RefreshButton () {
             startIcon={<RefreshIcon />}
             variant="outlined"
         >
-            <Typography variant="body1">
-                Refresh
-            </Typography>
+            Refresh
         </Button>
     );
 });

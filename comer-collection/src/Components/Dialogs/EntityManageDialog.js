@@ -3,8 +3,7 @@ import {
     Stack, DialogTitle,
     DialogContent,
     DialogActions,
-    Button,
-    Typography, DialogContentText, Divider, TextField, Box,
+    Button, DialogContentText, Divider, TextField, Box,
     LinearProgress
 } from "@mui/material";
 import { AddIcon, WarningIcon } from "../../Imports/Icons.js";
@@ -254,9 +253,7 @@ export const EntityManageDialog = ({
                                                         type="submit"
                                                         variant="contained"
                                                     >
-                                                        <Typography variant="body1">
-                                                            {`Create ${Entity.singular}`}
-                                                        </Typography>
+                                                        {`Create ${Entity.singular}`}
                                                     </Button>
                                                 </Stack>
                                             </Stack>
@@ -285,9 +282,7 @@ export const EntityManageDialog = ({
                             }}
                             variant="contained"
                         >
-                            <Typography variant="body1">
-                                Close
-                            </Typography>
+                            Close
                         </Button>
 
                         {isLoaded && !isError

@@ -3,8 +3,7 @@ import {
     Stack, DialogTitle,
     DialogContent,
     DialogActions,
-    Button,
-    Typography, DialogContentText
+    Button, DialogContentText
 } from "@mui/material";
 import { SaveIcon } from "../../Imports/Icons.js";
 import { getLocalISOString } from "../../Helpers/getLocalISOString.js";
@@ -129,9 +128,7 @@ export const ItemSingleEditDialog = ({ dialogState }) => {
                         sx={{ width: "100%" }}
                         variant="outlined"
                     >
-                        <Typography variant="body1">
-                            Cancel
-                        </Typography>
+                        Cancel
                     </Button>
 
                     <Button
@@ -143,11 +140,9 @@ export const ItemSingleEditDialog = ({ dialogState }) => {
                         type="submit"
                         variant="contained"
                     >
-                        <Typography variant="body1">
-                            {"Save "}
+                        {"Save "}
 
-                            {Entity.singular}
-                        </Typography>
+                        {Entity.singular}
                     </Button>
                 </Stack>
             </DialogActions>

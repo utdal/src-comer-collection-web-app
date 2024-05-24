@@ -100,9 +100,7 @@ export const AppSettingsDialog = ({ appSettingsDialogIsOpen, setAppSettingsDialo
                     sx={{ width: "100%" }}
                     variant="contained"
                 >
-                    <Typography variant="body1">
-                        Close
-                    </Typography>
+                    Close
                 </Button>
             </DialogActions>
         </Dialog>

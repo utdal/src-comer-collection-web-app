@@ -173,9 +173,7 @@ export const ImageFullScreenViewer = ({ image, setImage, previewerOpen, setPrevi
                     }}
                     variant="contained"
                 >
-                    <Typography variant="body1">
-                        Close
-                    </Typography>
+                    Close
                 </Button>
             </DialogActions>
 

@@ -3,8 +3,7 @@ import {
     Stack, DialogTitle,
     DialogContent,
     DialogActions,
-    Button,
-    Typography, Box
+    Button, Box
 } from "@mui/material";
 import { DataTable } from "../../DataTable/DataTable.js";
 import SearchBox from "../../SearchBox.js";
@@ -256,9 +255,7 @@ export const AssociationManagementDialog = ({
                             type="submit"
                             variant="contained"
                         >
-                            <Typography variant="body1">
-                                Close
-                            </Typography>
+                            Close
                         </Button>
                     </Stack>
                 </DialogActions>

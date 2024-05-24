@@ -1,37 +1,37 @@
-import React from "react";
+import React, { useMemo } from "react";
 import PropTypes from "prop-types";
-import { Button, Typography } from "@mui/material";
-import { useEntity, useSelectedItems } from "../../ContextProviders/ManagementPageProvider.js";
+import { Button, styled } from "@mui/material";
+import { useEntity, useItemCounts } from "../../ContextProviders/ManagementPageProvider.js";
+
+const DisappearingButton = styled(Button)(({ itemCounts }) => ({
+    display: itemCounts.selected === 0 ? "none" : ""
+}));
 
 const AssociationManageButton = ({ secondaryEntity, handleOpenDialog }) => {
     const primaryEntity = useEntity();
-    const [selectedItems] = useSelectedItems();
+    const itemCounts = useItemCounts();
+    const startIcon = useMemo(() => <secondaryEntity.DefaultIcon />, []);
     return (
-        <Button
+        <DisappearingButton
+            itemCounts={itemCounts}
             onClick={handleOpenDialog}
-            startIcon={<secondaryEntity.DefaultIcon />}
-            sx={{
-                display: selectedItems.length === 0 ? "none" : ""
-            }}
+            startIcon={startIcon}
             variant="outlined"
         >
-            <Typography variant="body1">
+            {"Update "}
 
-                {"Update "}
+            {secondaryEntity.plural}
 
-                {secondaryEntity.plural}
+            {" for "}
 
-                {" for "}
+            {itemCounts.selected}
 
-                {selectedItems.length}
+            {" "}
 
-                {" "}
-
-                {selectedItems.length === 1
-                    ? primaryEntity.singular
-                    : primaryEntity.plural}
-            </Typography>
-        </Button>
+            {itemCounts.selected === 1
+                ? primaryEntity.singular
+                : primaryEntity.plural}
+        </DisappearingButton>
     );
 };
 

@@ -199,9 +199,7 @@ export const ExhibitionSettingsDialog = ({ editMode, adminMode, dialogIsOpen, se
                         sx={{ width: "100%" }}
                         variant="outlined"
                     >
-                        <Typography variant="body1">
-                            Cancel
-                        </Typography>
+                        Cancel
                     </Button>
 
                     <Button
@@ -213,9 +211,7 @@ export const ExhibitionSettingsDialog = ({ editMode, adminMode, dialogIsOpen, se
                         type="submit"
                         variant="contained"
                     >
-                        <Typography variant="body1">
-                            {editMode ? "Save Settings" : "Create Exhibition"}
-                        </Typography>
+                        {editMode ? "Save Settings" : "Create Exhibition"}
                     </Button>
                 </Stack>
             </DialogActions>

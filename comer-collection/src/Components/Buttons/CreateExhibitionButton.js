@@ -1,5 +1,5 @@
 import React from "react";
-import { Button, Typography } from "@mui/material";
+import { Button } from "@mui/material";
 import { useAppUser } from "../../ContextProviders/AppUser.js";
 import { useManagementCallbacks } from "../../ContextProviders/ManagementPageProvider.js";
 import { AddIcon } from "../../Imports/Icons.js";
@@ -12,12 +12,11 @@ export const CreateExhibitionButton = () => {
             color="primary"
             disabled={!appUser.can_create_exhibition}
             onClick={handleOpenExhibitionCreateDialog}
+            size="large"
             startIcon={<AddIcon />}
             variant="contained"
         >
-            <Typography>
-                Create Exhibition
-            </Typography>
+            Create Exhibition
         </Button>
     );
 };
