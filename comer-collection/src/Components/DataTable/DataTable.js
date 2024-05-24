@@ -79,12 +79,13 @@ export const DataTable = memo(function DataTable ({
 
     const itemInformation = useMemo(() => {
         const itemInformationToReturn = (
-            (items ?? []).map((item) => {
+            items.map((item) => {
                 const sortableValues = sortableValuesByRow[item.id];
 
                 const renderedTableRow = (
                     <TableRowContainer
                         item={item}
+                        key={item.id}
                         rowSelectionEnabled={rowSelectionEnabled}
                         smallCheckboxes={smallCheckboxes}
                         tableFields={tableFields}
