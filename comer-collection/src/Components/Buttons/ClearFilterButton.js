@@ -1,5 +1,5 @@
 import React, { memo } from "react";
-import { Button, Typography } from "@mui/material";
+import { Button } from "@mui/material";
 import { useItemCounts, useManagementCallbacks } from "../../ContextProviders/ManagementPageProvider.js";
 import { FilterAltOffOutlinedIcon } from "../../Imports/Icons.js";
 
@@ -18,9 +18,7 @@ export const ClearFilterButton = memo(function ClearFilterButton () {
                 itemCounts.visible > 0 ? "outlined" : "contained"
             }
         >
-            <Typography variant="body1">
-                Clear Filters
-            </Typography>
+            Clear Filters
         </Button>
     );
 });
