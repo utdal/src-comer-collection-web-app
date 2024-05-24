@@ -39,7 +39,7 @@ export const EntityManageDialog = ({
 
     const { closeDialog, dialogIsOpen } = dialogState;
 
-    const [dialogItemsCombinedState, setDialogItems, setSelectedDialogItems, filterDialogItems] = useItemsReducer(Entity);
+    const [dialogItemsCombinedState, setDialogItems, setSelectedDialogItems, filterDialogItems, setDialogItemSelectionStatus] = useItemsReducer(Entity);
     const [isLoaded, setIsLoaded] = useState(false);
     const [isError, setIsError] = useState(false);
 
@@ -99,14 +99,17 @@ export const EntityManageDialog = ({
         openDeleteDialog(item);
     }, [openDeleteDialog]);
 
+    const managementCallbacks = useMemo(() => ({
+        handleOpenEntityEditDialog,
+        handleOpenEntityDeleteDialog,
+        handleRefresh
+    }), [handleOpenEntityDeleteDialog, handleOpenEntityEditDialog, handleRefresh]);
+
     return (
         <ManagementPageProvider
             itemsCombinedState={dialogItemsCombinedState}
-            managementCallbacks={{
-                handleOpenEntityEditDialog,
-                handleOpenEntityDeleteDialog,
-                handleRefresh
-            }}
+            managementCallbacks={managementCallbacks}
+            setItemSelectionStatus={setDialogItemSelectionStatus}
             setItems={setDialogItems}
             setSelectedItems={setSelectedDialogItems}
         >
