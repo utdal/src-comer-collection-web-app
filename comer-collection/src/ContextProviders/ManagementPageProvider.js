@@ -2,6 +2,40 @@ import React, { createContext, useCallback, useContext, useMemo, useReducer } fr
 import PropTypes from "prop-types";
 import { Entity, itemsCombinedStatePropTypeShape } from "../Classes/Entity.js";
 
+/**
+ * Return an itemCounts object based on an array of items,
+ * and its associated selection and visibility status dictionaries
+ * @param {{id: number}[]} items
+ * @param {Object<number, boolean>} selectionStatuses
+ * @param {Object<number, boolean>} visibilityStatuses
+ * @returns {{
+ *  all: number,
+ *  selected: number,
+ *  visible: number,
+ *  selectedAndVisible: number
+ * }}
+*/
+const getItemCounts = (items, selectionStatuses, visibilityStatuses) => {
+    const itemCounts = {
+        all: items.length,
+        selected: 0,
+        visible: 0,
+        selectedAndVisible: 0
+    };
+    for (const { id } of items) {
+        if (selectionStatuses[id]) {
+            itemCounts.selected++;
+        }
+        if (visibilityStatuses[id]) {
+            itemCounts.visible++;
+        }
+        if (selectionStatuses[id] && visibilityStatuses[id]) {
+            itemCounts.selectedAndVisible++;
+        }
+    }
+    return itemCounts;
+};
+
 const itemsReducer = (state, action) => {
     if (action.type === "setItems") {
         const newSelectionStatuses = {};
@@ -17,7 +51,8 @@ const itemsReducer = (state, action) => {
             items: action.items,
             selectionStatuses: newSelectionStatuses,
             visibilityStatuses: newVisibilityStatuses,
-            filterFunction: state.filterFunction
+            filterFunction: state.filterFunction,
+            itemCounts: getItemCounts(action.items, newSelectionStatuses, newVisibilityStatuses)
         };
     } else if (action.type === "setSelectedItems") {
         const newSelectionStatuses = {};
@@ -32,7 +67,8 @@ const itemsReducer = (state, action) => {
             items: state.items,
             selectionStatuses: newSelectionStatuses,
             visibilityStatuses: state.visibilityStatuses,
-            filterFunction: state.filterFunction
+            filterFunction: state.filterFunction,
+            itemCounts: getItemCounts(state.items, newSelectionStatuses, state.visibilityStatuses)
         };
     } else if (action.type === "filterItems") {
         const filteredItems = state.items.filter(action.filterFunction);
@@ -46,10 +82,12 @@ const itemsReducer = (state, action) => {
             items: state.items,
             selectionStatuses: state.selectionStatuses,
             visibilityStatuses: newVisibilityStatuses,
-            filterFunction: action.filterFunction
+            filterFunction: action.filterFunction,
+            itemCounts: getItemCounts(state.items, state.selectionStatuses, newVisibilityStatuses)
         };
     } else if (action.type === "setItemSelectionStatus") {
         state.selectionStatuses[action.itemId] = action.newStatus;
+        state.itemCounts = getItemCounts(state.items, state.selectionStatuses, state.visibilityStatuses);
         return { ...state };
     } else {
         console.warn("itemsReducer received invalid action object", action);
@@ -62,7 +100,13 @@ const defaultItemsCombinedState = {
     items: [],
     selectionStatuses: {},
     visibilityStatuses: {},
-    filterFunction: null
+    filterFunction: null,
+    itemCounts: {
+        all: 0,
+        selected: 0,
+        visible: 0,
+        selectedAndVisible: 0
+    }
 };
 
 const ManagementPageContext = createContext();
@@ -148,6 +192,18 @@ export const useSelectedVisibleItems = () => {
 };
 
 /**
+ * @returns {{
+ *  all: number,
+ *  selected: number,
+ *  visible: number,
+ *  selectedAndVisible: number
+ * }}
+ */
+export const useItemCounts = () => {
+    return useContext(ManagementPageContext).itemsCombinedState.itemCounts;
+};
+
+/**
  * @returns {Class} type of entity
  */
 export const useEntity = () => {
@@ -157,7 +213,19 @@ export const useEntity = () => {
 /**
  * @param {Class} Entity
  * @returns {[
- *  object,
+ *  {
+ *      Entity: class,
+ *      items: object[],
+ *      selectionStatuses: Object<number, boolean>,
+ *      visibilityStatuses: Object<number, boolean>,
+ *      filterFunction: (item: object) => boolean | null,
+ *      itemCounts: {
+ *          all: number,
+ *          selected: number,
+ *          visible: number,
+ *          selectedAndVisible: number
+ *      }
+ * },
  *  setItems: (items: object[]) => void,
  *  setSelectedItems: (selectedItems: object[]) => void,
  *  filterItems: (filterFunction: (item: object) => boolean) => void,
