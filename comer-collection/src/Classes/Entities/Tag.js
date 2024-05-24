@@ -29,6 +29,7 @@ class Tag extends Entity {
     static DefaultIcon = SellIcon;
 
     static searchBoxFields = ["data", "notes"];
+    static searchBoxPlaceholder = "Search tags by name or notes";
 
     static tableFields = [
         {

@@ -42,6 +42,7 @@ class Artist extends Entity {
     static DefaultIcon = BrushIcon;
 
     static searchBoxFields = ["fullName", "fullNameReverse", "notes"];
+    static searchBoxPlaceholder = "Search artists by name or notes";
 
     static tableFields = [
         {

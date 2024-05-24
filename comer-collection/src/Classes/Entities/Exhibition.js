@@ -14,6 +14,7 @@ class Exhibition extends Entity {
     static plural = "exhibitions";
 
     static searchBoxFields = ["title"];
+    static searchBoxPlaceholder = "Search by title";
 
     static tableFields = [
         {

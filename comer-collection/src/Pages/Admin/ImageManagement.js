@@ -196,7 +196,6 @@ const ImageManagement = () => {
             <ManagementPageContainer>
                 <ManagementPageHeader>
                     <SearchBox
-                        placeholder="Search image fields and notes"
                         searchQuery={searchQuery}
                         setSearchQuery={setSearchQuery}
                         width="30%"

@@ -32,8 +32,7 @@ import { SelectionSummary } from "../SelectionSummary.js";
  */
 export const EntityManageDialog = ({
     Entity,
-    dialogState,
-    searchBoxPlaceholder
+    dialogState
 }) => {
     const blankItem = useMemo(() => getBlankItemFields(Entity.fieldDefinitions), [Entity.fieldDefinitions]);
     const [itemToAdd, setItemToAdd] = useState(blankItem);
@@ -170,7 +169,6 @@ export const EntityManageDialog = ({
                                                         >
 
                                                             <SearchBox
-                                                                placeholder={searchBoxPlaceholder}
                                                                 searchQuery={itemSearchQuery}
                                                                 setSearchQuery={setItemSearchQuery}
                                                                 width="40%"
@@ -311,6 +309,5 @@ export const EntityManageDialog = ({
 
 EntityManageDialog.propTypes = {
     Entity: PropTypes.node.isRequired,
-    dialogState: PropTypes.instanceOf(DialogState).isRequired,
-    searchBoxPlaceholder: PropTypes.string.isRequired
+    dialogState: PropTypes.instanceOf(DialogState).isRequired
 };

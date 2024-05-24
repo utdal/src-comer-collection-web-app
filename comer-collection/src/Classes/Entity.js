@@ -24,8 +24,8 @@ export class Entity {
      */
     static DefaultIcon = null;
 
-    static searchBoxFields = null;
-    static searchBoxPlaceholder = null;
+    static searchBoxFields = ["id"];
+    static searchBoxPlaceholder = "Search items by ID";
 
     static MultiCreateButtonIcon = AddIcon;
     static multiCreateDialogSubtitle = null;

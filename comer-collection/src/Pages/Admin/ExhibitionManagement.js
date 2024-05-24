@@ -144,7 +144,6 @@ const ExhibitionManagement = () => {
             <ManagementPageContainer>
                 <ManagementPageHeader>
                     <SearchBox
-                        placeholder="Search by user name or email"
                         searchQuery={searchQuery}
                         setSearchQuery={setSearchQuery}
                         width="30%"

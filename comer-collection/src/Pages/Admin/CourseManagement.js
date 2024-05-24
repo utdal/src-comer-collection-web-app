@@ -153,7 +153,6 @@ const CourseManagement = () => {
             <ManagementPageContainer>
                 <ManagementPageHeader>
                     <SearchBox
-                        placeholder="Search by course name or notes"
                         searchQuery={searchQuery}
                         setSearchQuery={setSearchQuery}
                         width="50%"
