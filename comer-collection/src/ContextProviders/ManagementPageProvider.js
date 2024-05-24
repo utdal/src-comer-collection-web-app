@@ -156,7 +156,12 @@ export const useEntity = () => {
 
 /**
  * @param {Class} Entity
- * @returns {[object, function, function, function, (item: object, newStatus: bool) => void]}
+ * @returns {[
+ *  object,
+ *  setItems: (items: object[]) => void,
+ *  setSelectedItems: (selectedItems: object[]) => void,
+ *  filterItems: (filterFunction: (item: object) => boolean) => void,
+ *  setItemSelectionStatus: (itemId: number, newStatus: bool) => void]}
  * [itemsCombinedState, setItems, setSelectedItems, filterItems, setItemSelectionStatus]
  */
 export const useItemsReducer = (Entity) => {
