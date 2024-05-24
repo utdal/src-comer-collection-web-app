@@ -1,26 +1,30 @@
-import React from "react";
-import { useTheme } from "@emotion/react";
-import { Button, Typography } from "@mui/material";
+import React, { useCallback, useMemo } from "react";
+import { Button, Typography, styled } from "@mui/material";
 import { useNavigate } from "react-router";
 import PropTypes from "prop-types";
 
+const StyledButton = styled(Button)(({ theme, isPageActive }) => ({
+    height: "64px",
+    minWidth: "120px",
+    borderBottom: isPageActive ? `5px solid ${theme.palette.secondary.main}` : "5px solid rgba(0, 0, 0, 0)",
+    textTransform: "unset"
+}));
+
 export const NavBarButton = ({ href, text }) => {
     const navigate = useNavigate();
-    const theme = useTheme();
 
-    const isPageActive = document.location.pathname === href;
+    const isPageActive = useMemo(() => document.location.pathname === href, [href]);
+
+    const handleClick = useCallback(() => {
+        navigate(href);
+    }, [href, navigate]);
 
     return (
-        <Button
+        <StyledButton
             color="secondary"
-            onClick={() => navigate(href)}
+            isPageActive={isPageActive}
+            onClick={handleClick}
             spacing={1}
-            sx={{
-                height: "64px",
-                minWidth: "120px",
-                borderBottom: isPageActive ? `5px solid ${theme.palette.secondary.main}` : "5px solid rgba(0, 0, 0, 0)",
-                textTransform: "unset"
-            }}
         >
             <Typography
                 color="white"
@@ -28,7 +32,7 @@ export const NavBarButton = ({ href, text }) => {
             >
                 {text}
             </Typography>
-        </Button>
+        </StyledButton>
     );
 };
 

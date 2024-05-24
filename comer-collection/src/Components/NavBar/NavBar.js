@@ -1,29 +1,21 @@
-import React, { useState } from "react";
-
+import React from "react";
 import { AppBar, Toolbar, Typography, Button, Divider, IconButton, Stack } from "@mui/material";
-
 import { useNavigate } from "react-router-dom";
-
 import { useAppUser } from "../../ContextProviders/AppUser.js";
-import {
-    SettingsIcon
-} from "../../Imports/Icons.js";
+import { SettingsIcon } from "../../Imports/Icons.js";
 import { AppSettingsDialog } from "../Dialogs/AppSettingsDialog/AppSettingsDialog.js";
 import { NavBarUserMenu } from "./NavBarUserMenu.js";
 import { NavBarButton } from "./NavBarButton.js";
+import { useDialogState } from "../../Hooks/useDialogState.js";
 
 const NavBar = () => {
     const [appUser] = useAppUser();
     const navigate = useNavigate();
 
-    const [appSettingsDialogIsOpen, setAppSettingsDialogIsOpen] = useState(false);
+    const [appSettingsDialogState, openAppSettingsDialog] = useDialogState();
 
     return (
-        <AppBar
-            color="primary"
-            position="fixed"
-            sx={{ zIndex: 5000 }}
-        >
+        <AppBar color="primary">
             <Stack
                 alignItems="center"
                 direction="row"
@@ -34,6 +26,7 @@ const NavBar = () => {
                     alignItems="center"
                     direction="row"
                     paddingLeft={2}
+                    spacing={1}
                 >
                     <img
                         height="48px"
@@ -41,7 +34,7 @@ const NavBar = () => {
                     />
 
                     <Typography
-                        sx={{ fontWeight: "bold", paddingLeft: 1 }}
+                        sx={{ fontWeight: "bold" }}
                         variant="h5"
                     >
                         Comer Collection
@@ -89,14 +82,9 @@ const NavBar = () => {
                                 >
                                     <Button
                                         onClick={() => { navigate("/SignIn"); }}
-                                        sx={{
-                                            height: "60%"
-                                        }}
                                         variant="contained"
                                     >
-                                        <Typography>
-                                            Sign In
-                                        </Typography>
+                                        Sign In
                                     </Button>
                                 </Stack>
 
@@ -104,9 +92,7 @@ const NavBar = () => {
                     </Stack>
 
                     <IconButton
-                        onClick={() => {
-                            setAppSettingsDialogIsOpen(true);
-                        }}
+                        onClick={openAppSettingsDialog}
                         sx={{ color: "white", marginLeft: 2 }}
                     >
                         <SettingsIcon />
@@ -114,10 +100,7 @@ const NavBar = () => {
                 </Toolbar>
             </Stack>
 
-            <AppSettingsDialog
-                appSettingsDialogIsOpen={appSettingsDialogIsOpen}
-                setAppSettingsDialogIsOpen={setAppSettingsDialogIsOpen}
-            />
+            <AppSettingsDialog dialogState={appSettingsDialogState} />
         </AppBar>
     );
 };

@@ -1,7 +1,6 @@
-import React from "react";
+import React, { useCallback } from "react";
 import {
-    Stack, Dialog,
-    DialogTitle,
+    Stack, DialogTitle,
     DialogContent,
     DialogActions,
     Button, Divider,
@@ -11,21 +10,31 @@ import { useAppDarkTheme } from "../../../ContextProviders/AppFeatures.js";
 import { DarkModeIcon, LightModeIcon } from "../../../Imports/Icons.js";
 import PropTypes from "prop-types";
 import { AppSettingsDialogOption } from "./AppSettingsDialogOption.js";
+import { PersistentDialog } from "../PersistentDialog.js";
+import { DialogState } from "../../../Classes/DialogState.js";
 
-export const AppSettingsDialog = ({ appSettingsDialogIsOpen, setAppSettingsDialogIsOpen }) => {
+/**
+ * @param {{
+ *  dialogState: DialogState
+ * }} props
+ */
+export const AppSettingsDialog = ({ dialogState }) => {
     const { appDarkTheme, setAppDarkTheme } = useAppDarkTheme();
+    const { closeDialog, dialogIsOpen } = dialogState;
+
+    const handleSwitchToLightTheme = useCallback(() => {
+        setAppDarkTheme(false);
+    }, [setAppDarkTheme]);
+
+    const handleSwitchToDarkTheme = useCallback(() => {
+        setAppDarkTheme(true);
+    }, [setAppDarkTheme]);
+
     return (
-        <Dialog
-            component="form"
+        <PersistentDialog
             disableEscapeKeyDown
-            onClose={(event, reason) => {
-                if (reason === "backdropClick") {
-                    return;
-                }
-                setAppSettingsDialogIsOpen(false);
-            }}
-            open={appSettingsDialogIsOpen}
-            sx={{ zIndex: 10000 }}
+            onClose={closeDialog}
+            open={dialogIsOpen}
         >
             <DialogTitle
                 textAlign="center"
@@ -48,9 +57,7 @@ export const AppSettingsDialog = ({ appSettingsDialogIsOpen, setAppSettingsDialo
                             value={appDarkTheme}
                         >
                             <ToggleButton
-                                onClick={() => {
-                                    setAppDarkTheme(false);
-                                }}
+                                onClick={handleSwitchToLightTheme}
                                 value={false}
                             >
                                 <Stack
@@ -67,9 +74,7 @@ export const AppSettingsDialog = ({ appSettingsDialogIsOpen, setAppSettingsDialo
                             </ToggleButton>
 
                             <ToggleButton
-                                onClick={() => {
-                                    setAppDarkTheme(true);
-                                }}
+                                onClick={handleSwitchToDarkTheme}
                                 value
                             >
                                 <Stack
@@ -94,20 +99,17 @@ export const AppSettingsDialog = ({ appSettingsDialogIsOpen, setAppSettingsDialo
             <DialogActions>
                 <Button
                     color="primary"
-                    onClick={() => {
-                        setAppSettingsDialogIsOpen(false);
-                    }}
+                    onClick={closeDialog}
                     sx={{ width: "100%" }}
                     variant="contained"
                 >
                     Close
                 </Button>
             </DialogActions>
-        </Dialog>
+        </PersistentDialog>
     );
 };
 
 AppSettingsDialog.propTypes = {
-    appSettingsDialogIsOpen: PropTypes.bool.isRequired,
-    setAppSettingsDialogIsOpen: PropTypes.func.isRequired
+    dialogState: PropTypes.instanceOf(DialogState)
 };
