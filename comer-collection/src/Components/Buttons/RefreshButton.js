@@ -5,7 +5,6 @@ import { useManagementCallbacks } from "../../ContextProviders/ManagementPagePro
 import { sleepAsync } from "../../Helpers/sleepAsync.js";
 
 export const RefreshButton = memo(function RefreshButton () {
-    console.log("rendering refresh button");
     const { handleRefresh } = useManagementCallbacks();
     const [refreshInProgress, setRefreshInProgress] = useState(false);
     const handleClickRefresh = useCallback(() => {

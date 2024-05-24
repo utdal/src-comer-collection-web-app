@@ -3,7 +3,6 @@ import React, { memo } from "react";
 import PropTypes from "prop-types";
 
 export const ManagementButtonStack = memo(function ManagementButtonStack ({ children }) {
-    console.log("ManagementButtonStack children", children);
     return (
         <Stack
             direction="row"
