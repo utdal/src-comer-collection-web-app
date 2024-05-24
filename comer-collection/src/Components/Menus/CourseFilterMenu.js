@@ -1,4 +1,4 @@
-import React from "react";
+import React, { memo } from "react";
 import { SchoolIcon } from "../../Imports/Icons.js";
 import PropTypes from "prop-types";
 import { SecondaryFilterMenu } from "./SecondaryFilterMenu.js";
@@ -28,7 +28,7 @@ const courseDisplayFunction = (c) => {
     );
 };
 
-export const CourseFilterMenu = ({ filterValue, setFilterValue, courses }) => {
+export const CourseFilterMenu = memo(function CourseFilterMenu ({ filterValue, setFilterValue, courses }) {
     return (
         <SecondaryFilterMenu
             SecondaryIcon={SchoolIcon}
@@ -42,7 +42,7 @@ export const CourseFilterMenu = ({ filterValue, setFilterValue, courses }) => {
             sortFunction={courseSortFunction}
         />
     );
-};
+});
 
 CourseFilterMenu.propTypes = {
     courses: PropTypes.arrayOf(entityPropTypeShape).isRequired,

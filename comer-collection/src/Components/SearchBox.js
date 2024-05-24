@@ -1,5 +1,5 @@
 /* eslint-disable react/no-multi-comp */
-import React, { useCallback, useMemo } from "react";
+import React, { memo, useCallback, useMemo } from "react";
 import { TextField, InputAdornment, IconButton, styled } from "@mui/material";
 import { SearchIcon, ClearIcon } from "../Imports/Icons.js";
 import PropTypes from "prop-types";
@@ -15,7 +15,7 @@ const FixedWidthTextField = styled(TextField)(({ width }) => ({
     width
 }));
 
-const SearchBox = ({ searchQuery, setSearchQuery, width, placeholder }) => {
+const SearchBox = memo(function SearchBox ({ searchQuery, setSearchQuery, width, placeholder }) {
     const handleEditSearchQuery = useCallback((e) => {
         setSearchQuery(e.target.value);
     }, [setSearchQuery]);
@@ -54,7 +54,7 @@ const SearchBox = ({ searchQuery, setSearchQuery, width, placeholder }) => {
             width={width}
         />
     );
-};
+});
 
 SearchBox.propTypes = {
     placeholder: PropTypes.string,

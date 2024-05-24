@@ -1,10 +1,11 @@
 import { Button, Typography } from "@mui/material";
-import React, { useCallback, useState } from "react";
+import React, { memo, useCallback, useState } from "react";
 import { RefreshIcon } from "../../Imports/Icons.js";
 import { useManagementCallbacks } from "../../ContextProviders/ManagementPageProvider.js";
 import { sleepAsync } from "../../Helpers/sleepAsync.js";
 
-export const RefreshButton = () => {
+export const RefreshButton = memo(function RefreshButton () {
+    console.log("rendering refresh button");
     const { handleRefresh } = useManagementCallbacks();
     const [refreshInProgress, setRefreshInProgress] = useState(false);
     const handleClickRefresh = useCallback(() => {
@@ -29,4 +30,4 @@ export const RefreshButton = () => {
             </Typography>
         </Button>
     );
-};
+});

@@ -1,8 +1,9 @@
 import { Stack } from "@mui/material";
-import React from "react";
+import React, { memo } from "react";
 import PropTypes from "prop-types";
 
-export const ManagementButtonStack = ({ children }) => {
+export const ManagementButtonStack = memo(function ManagementButtonStack ({ children }) {
+    console.log("ManagementButtonStack children", children);
     return (
         <Stack
             direction="row"
@@ -11,7 +12,7 @@ export const ManagementButtonStack = ({ children }) => {
             {children}
         </Stack>
     );
-};
+});
 
 ManagementButtonStack.propTypes = {
     children: PropTypes.node.isRequired

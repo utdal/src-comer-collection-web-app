@@ -1,21 +1,26 @@
-import React from "react";
+import React, { memo } from "react";
 import PropTypes from "prop-types";
-import { Stack } from "@mui/material";
+import { Stack, styled } from "@mui/material";
 
-export const ManagementPageHeader = ({ children }) => {
+const HeaderStack = styled(Stack, {
+    skipSx: true
+})(({ theme }) => ({
+    alignItems: "center",
+    gridArea: "top",
+    justifyContent: "space-between",
+    padding: theme.spacing(2)
+}));
+
+export const ManagementPageHeader = memo(function ManagementPageHeader ({ children }) {
     return (
-        <Stack
-            alignItems="center"
+        <HeaderStack
             direction="row"
-            justifyContent="space-between"
-            padding={2}
             spacing={2}
-            sx={{ gridArea: "top" }}
         >
             {children}
-        </Stack>
+        </HeaderStack>
     );
-};
+});
 
 ManagementPageHeader.propTypes = {
     children: PropTypes.node.isRequired

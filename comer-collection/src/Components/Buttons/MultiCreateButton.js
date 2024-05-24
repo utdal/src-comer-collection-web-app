@@ -1,5 +1,5 @@
 import { Button, Typography } from "@mui/material";
-import React from "react";
+import React, { memo } from "react";
 import { useEntity, useManagementCallbacks } from "../../ContextProviders/ManagementPageProvider.js";
 
 /**
@@ -8,7 +8,7 @@ import { useEntity, useManagementCallbacks } from "../../ContextProviders/Manage
  * Must be inside a ManagementPageProvider with a function
  * handleOpenMultiCreateDialog inside managementCallbacks.
  */
-export const MultiCreateButton = () => {
+export const MultiCreateButton = memo(function MultiCreateButton () {
     const Entity = useEntity();
     const { handleOpenMultiCreateDialog } = useManagementCallbacks();
     return (
@@ -25,4 +25,4 @@ export const MultiCreateButton = () => {
             </Typography>
         </Button>
     );
-};
+});

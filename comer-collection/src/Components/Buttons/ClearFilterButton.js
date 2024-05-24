@@ -1,9 +1,9 @@
-import React from "react";
+import React, { memo } from "react";
 import { Button, Typography } from "@mui/material";
 import { useItems, useManagementCallbacks, useVisibleItems } from "../../ContextProviders/ManagementPageProvider.js";
 import { FilterAltOffOutlinedIcon } from "../../Imports/Icons.js";
 
-export const ClearFilterButton = () => {
+export const ClearFilterButton = memo(function ClearFilterButton () {
     const [items] = useItems();
     const [visibleItems] = useVisibleItems();
     const { handleClearFilters } = useManagementCallbacks();
@@ -24,4 +24,4 @@ export const ClearFilterButton = () => {
             </Typography>
         </Button>
     );
-};
+});

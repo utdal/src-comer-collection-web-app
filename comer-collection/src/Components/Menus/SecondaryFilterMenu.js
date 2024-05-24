@@ -1,10 +1,10 @@
-import React from "react";
+import React, { memo } from "react";
 import { Stack, Typography, Select, ListItemButton, Divider } from "@mui/material";
 import { CheckIcon, RemoveCircleOutlineIcon } from "../../Imports/Icons.js";
 import PropTypes from "prop-types";
 import { entityPropTypeShape } from "../../Classes/Entity.js";
 
-export const SecondaryFilterMenu = ({ filterValue, setFilterValue, secondaries, helpMessage, emptyMessage, nullMessage, displayFunction, sortFunction, SecondaryIcon }) => {
+export const SecondaryFilterMenu = memo(function SecondaryFilterMenu ({ filterValue, setFilterValue, secondaries, helpMessage, emptyMessage, nullMessage, displayFunction, sortFunction, SecondaryIcon }) {
     return (
         <Select
             displayEmpty
@@ -122,7 +122,7 @@ export const SecondaryFilterMenu = ({ filterValue, setFilterValue, secondaries, 
             )}
         </Select>
     );
-};
+});
 
 SecondaryFilterMenu.propTypes = {
     SecondaryIcon: PropTypes.elementType.isRequired,
