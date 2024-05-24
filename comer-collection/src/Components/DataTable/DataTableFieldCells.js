@@ -1,17 +1,23 @@
 import React, { useMemo } from "react";
 import { DataTableCell } from "./DataTableCell.js";
+import { TableCellProvider } from "../../ContextProviders/TableCellProvider.js";
 
-export const DataTableFieldCells = ({ tableFields, item: itemAsString }) => {
+export const DataTableFieldCells = ({ tableFields, item, managementCallbacks }) => {
     return useMemo(() => {
         return tableFields.map((tf) => {
             return (
-                <DataTableCell
-                    itemAsString={itemAsString}
+                <TableCellProvider
+                    item={item}
                     key={tf.columnDescription}
-                    tf={tf}
-                />
+                    managementCallbacks={managementCallbacks}
+                >
+                    <DataTableCell
+                        tf={tf}
+                    />
+
+                </TableCellProvider>
             );
         }
         );
-    }, [tableFields, itemAsString]);
+    }, [tableFields, item, managementCallbacks]);
 };

@@ -1,25 +1,24 @@
-import React, { useCallback, useMemo, useState } from "react";
+import React, { memo, useCallback, useMemo, useState } from "react";
 import { Checkbox, Paper, Stack, TableCell, TableContainer, Typography, Table, TableBody, TableHead, TableRow } from "@mui/material";
 import { useTheme } from "@emotion/react";
 import { ColumnSortButton } from "../Buttons/ColumnSortButton.js";
 import PropTypes from "prop-types";
-import { InView } from "react-intersection-observer";
 import { FullPageMessage } from "../FullPageMessage.js";
 import { TableRowProvider } from "../../ContextProviders/TableRowProvider.js";
-import { useItems, useSelectedItems, useSelectedVisibleItems, useVisibleItems } from "../../ContextProviders/ManagementPageProvider.js";
-import { DataTableFieldCells } from "./DataTableFieldCells.js";
-import { TableRowPlaceholder } from "./TableRowPlaceholder.js";
+import { useItems, useManagementCallbacks, useSelectedItems, useSelectedVisibleItems, useVisibleItems } from "../../ContextProviders/ManagementPageProvider.js";
 import { tableFieldPropTypeShape } from "../../Classes/Entity.js";
 import { InfoIcon } from "../../Imports/Icons.js";
+import DataTableRow from "./DataTableRow.js";
 
-export const DataTable = ({
+export const DataTable = memo(function DataTable ({
     tableFields, rowSelectionEnabled, smallCheckboxes, defaultSortColumn, defaultSortAscending
-}) => {
+}) {
     const theme = useTheme();
     const [items] = useItems();
     const [selectedItems, setSelectedItems] = useSelectedItems();
     const [visibleItems] = useVisibleItems();
     const selectedVisibleItems = useSelectedVisibleItems();
+    const managementCallbacks = useManagementCallbacks();
 
     const [sortColumn, setSortColumn] = useState(defaultSortColumn ?? "ID");
     const [sortAscending, setSortAscending] = useState(defaultSortAscending ?? true);
@@ -54,64 +53,27 @@ export const DataTable = ({
                 const sortableValues = sortableValuesByRow[item.id];
 
                 const renderedTableRow = (
-                    <InView
-                        key={item.id}
-                        triggerOnce
+                    <TableRowProvider
+                        item={item}
+                        managementCallbacks={managementCallbacks}
+                        selectedItems={selectedItems}
+                        setSelectedItems={setSelectedItems}
                     >
-                        {({ inView, ref }) => (
-                            <TableRowProvider item={item} >
-                                <TableRow
-                                    color="secondary"
-                                    ref={ref}
-                                    sx={{
-                                        "&:hover": {
-                                            backgroundColor: isSelected ? theme.palette[themeColor].translucent : theme.palette.grey.veryTranslucent
-
-                                        },
-                                        "&:not(:hover)": {
-                                            backgroundColor: isSelected ? theme.palette[themeColor].veryTranslucent : ""
-                                        }
-                                    }}
-                                >
-                                    {Boolean(rowSelectionEnabled) && (
-                                        <TableCell width="10px">
-                                            <Checkbox
-                                                checked={isSelected}
-                                                color={themeColor}
-                                                onChange={(e) => {
-                                                    if (e.target.checked) {
-                                                        setSelectedItems([...selectedItems, item]);
-                                                    } else {
-                                                        setSelectedItems(selectedItems.filter((si) => si.id !== item.id));
-                                                    }
-                                                }}
-                                                size={smallCheckboxes ? "medium" : "large"}
-                                            />
-                                        </TableCell>)}
-
-                                    {
-                                        inView
-                                            ? (
-                                                <DataTableFieldCells
-                                                    item={JSON.stringify(item)}
-                                                    tableFields={tableFields}
-                                                />
-                                            )
-                                            : (
-                                                <TableRowPlaceholder colSpan={tableFields.length} />
-                                            )
-                                    }
-                                </TableRow>
-                            </TableRowProvider>
-                        )}
-                    </InView>
+                        <DataTableRow
+                            isSelected={isSelected}
+                            rowSelectionEnabled={rowSelectionEnabled}
+                            smallCheckboxes={smallCheckboxes}
+                            tableFields={tableFields}
+                            themeColor={themeColor}
+                        />
+                    </TableRowProvider>
                 );
 
                 return [item, sortableValues, renderedTableRow];
             })
         );
         return itemInformationToReturn;
-    }, [items, selectedItems, sortableValuesByRow, theme.palette, rowSelectionEnabled, smallCheckboxes, tableFields, setSelectedItems]);
+    }, [items, managementCallbacks, rowSelectionEnabled, selectedItems, setSelectedItems, smallCheckboxes, sortableValuesByRow, tableFields]);
 
     const visibleItemInformation = useMemo(() => itemInformation.filter((r) => visibleItems.map((vi) => vi.id).includes(r[0].id)), [itemInformation, visibleItems]);
 
@@ -223,7 +185,7 @@ export const DataTable = ({
             )}
         </TableContainer>
     );
-};
+});
 
 DataTable.propTypes = {
     defaultSortAscending: PropTypes.bool,

@@ -1,12 +1,11 @@
 import React, { useCallback } from "react";
-import { useTableRowItem } from "../../../ContextProviders/TableRowProvider.js";
 import { Button, Stack, Typography } from "@mui/material";
-import { useManagementCallbacks } from "../../../ContextProviders/ManagementPageProvider.js";
 import { BrushIcon } from "../../../Imports/Icons.js";
+import { useTableCellItem, useTableCellManagementCallbacks } from "../../../ContextProviders/TableCellProvider.js";
 
 export const ImageArtistAssignmentCell = () => {
-    const image = useTableRowItem();
-    const { handleOpenImageAssignArtistDialog } = useManagementCallbacks();
+    const image = useTableCellItem();
+    const { handleOpenImageAssignArtistDialog } = useTableCellManagementCallbacks();
     const handleOpenAssignArtistDialog = useCallback(() => {
         handleOpenImageAssignArtistDialog([image]);
     }, [handleOpenImageAssignArtistDialog, image]);

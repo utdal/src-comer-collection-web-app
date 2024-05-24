@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { FullPageMessage } from "../../Components/FullPageMessage.js";
 import SearchBox from "../../Components/SearchBox.js";
 import { AccessTimeIcon, WarningIcon, LockIcon } from "../../Imports/Icons.js";
@@ -143,6 +143,26 @@ const ImageManagement = () => {
         filterImages(imageFilterFunction);
     }, [filterImages, imageFilterFunction]);
 
+    const managementCallbacks = useMemo(() => ({
+        handleOpenImageAssignArtistDialog,
+        handleOpenImageAssignTagDialog,
+        handleOpenImageViewExhibitionDialog,
+        handleOpenImagePreviewer,
+        handleOpenMultiCreateDialog,
+        handleOpenImageEditDialog,
+        handleOpenImageDeleteDialog,
+        handleClearFilters,
+        handleRefresh
+    }), [handleClearFilters,
+        handleOpenImageAssignArtistDialog,
+        handleOpenImageAssignTagDialog,
+        handleOpenImageDeleteDialog,
+        handleOpenImageEditDialog,
+        handleOpenImagePreviewer,
+        handleOpenImageViewExhibitionDialog,
+        handleOpenMultiCreateDialog,
+        handleRefresh]);
+
     return (!appUser.is_admin_or_collection_manager &&
         <FullPageMessage
             Icon={LockIcon}
@@ -168,17 +188,7 @@ const ImageManagement = () => {
         <ManagementPageProvider
             Entity={Image}
             itemsCombinedState={imagesCombinedState}
-            managementCallbacks={{
-                handleOpenImageAssignArtistDialog,
-                handleOpenImageAssignTagDialog,
-                handleOpenImageViewExhibitionDialog,
-                handleOpenImagePreviewer,
-                handleOpenMultiCreateDialog,
-                handleOpenImageEditDialog,
-                handleOpenImageDeleteDialog,
-                handleClearFilters,
-                handleRefresh
-            }}
+            managementCallbacks={managementCallbacks}
             setItems={setImages}
             setSelectedItems={setSelectedImages}
         >
