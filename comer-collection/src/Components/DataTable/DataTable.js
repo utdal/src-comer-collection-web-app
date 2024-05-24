@@ -4,46 +4,9 @@ import { Checkbox, Paper, Stack, TableCell, TableContainer, Typography, Table, T
 import { useTheme } from "@emotion/react";
 import { ColumnSortButton } from "../Buttons/ColumnSortButton.js";
 import PropTypes from "prop-types";
-import { TableRowProvider } from "../../ContextProviders/TableRowProvider.js";
-import { useItems, useManagementCallbacks, useSelectionStatuses, useVisibilityStatuses } from "../../ContextProviders/ManagementPageProvider.js";
-import { entityPropTypeShape, tableFieldPropTypeShape } from "../../Classes/Entity.js";
-import DataTableRow from "./DataTableRow.js";
-
-const TableRowContainer = ({ item, tableFields, rowSelectionEnabled, smallCheckboxes }) => {
-    const [selectionStatuses, setItemSelectionStatus] = useSelectionStatuses();
-    const themeColor = item.is_admin_or_collection_manager ? "secondary" : "primary";
-
-    /**
-     * @type {(newStatus: boolean) => void}
-     */
-    const setSelectionStatus = useCallback((newStatus) => {
-        setItemSelectionStatus(item.id, newStatus);
-    }, [item, setItemSelectionStatus]);
-
-    const managementCallbacks = useManagementCallbacks();
-    return (
-        <TableRowProvider
-            item={item}
-            managementCallbacks={managementCallbacks}
-            rowSelectionEnabled={rowSelectionEnabled}
-            setSelectionStatus={setSelectionStatus}
-            smallCheckboxes={smallCheckboxes}
-            tableFields={tableFields}
-        >
-            <DataTableRow
-                isSelected={selectionStatuses[item.id]}
-                themeColor={themeColor}
-            />
-        </TableRowProvider>
-    );
-};
-
-TableRowContainer.propTypes = {
-    item: entityPropTypeShape,
-    rowSelectionEnabled: PropTypes.bool,
-    smallCheckboxes: PropTypes.bool,
-    tableFields: PropTypes.arrayOf(PropTypes.shape(tableFieldPropTypeShape)).isRequired
-};
+import { useItems, useVisibilityStatuses } from "../../ContextProviders/ManagementPageProvider.js";
+import { tableFieldPropTypeShape } from "../../Classes/Entity.js";
+import { TableRowContainer } from "./TableRowContainer.js";
 
 export const DataTable = memo(function DataTable ({
     tableFields, rowSelectionEnabled, smallCheckboxes, defaultSortColumn, defaultSortAscending
