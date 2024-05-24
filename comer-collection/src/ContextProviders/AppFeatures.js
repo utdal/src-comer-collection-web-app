@@ -21,7 +21,7 @@ export const AppFeatureProvider = ({ children }) => {
 
     const [appDarkTheme, setAppDarkTheme] = useState(JSON.parse(localStorage.getItem("appDarkTheme")) ?? false);
 
-    const finalTheme = createTheme({
+    const themeSettings = useMemo(() => ({
         components: {
             MuiButton: {
                 styleOverrides: {
@@ -41,6 +41,57 @@ export const AppFeatureProvider = ({ children }) => {
                 defaultProps: {
                     textAlign: "center",
                     variant: "h4"
+                }
+            },
+            MuiTable: {
+                defaultProps: {
+                    size: "small",
+                    stickyHeader: true
+                }
+            },
+            MuiTableContainer: {
+                styleOverrides: {
+                    root: () => ({
+                        width: "100%",
+                        height: "100%",
+                        display: "grid",
+                        gridTemplateAreas: `
+                            "header"
+                            "rows"
+                        `,
+                        gridTemplateRows: "40px calc(100% - 40px)"
+                    })
+                },
+                defaultProps: {
+
+                }
+            },
+            MuiTableHead: {
+                styleOverrides: {
+                    root: () => ({
+                        gridArea: "header"
+                    })
+                }
+            },
+            MuiTableBody: {
+                styleOverrides: {
+                    root: () => ({
+                        gridArea: "rows"
+                    })
+                }
+            },
+            MuiSnackbar: {
+                defaultProps: {
+                    anchorOrigin: {
+                        horizontal: "center",
+                        vertical: "bottom"
+                    },
+                    autoHideDuration: 3000
+                },
+                styleOverrides: {
+                    root: () => ({
+                        zIndex: 10000000
+                    })
                 }
             }
         },
@@ -81,13 +132,17 @@ export const AppFeatureProvider = ({ children }) => {
                 main: appDarkTheme ? grey["500"] : grey["700"]
             }
         }
-    });
+    }), [appDarkTheme]);
 
-    if (!titleText) {
-        document.title = defaultTitleSuffix;
-    } else {
-        document.title = `${titleText} - ${defaultTitleSuffix}`;
-    }
+    const finalTheme = createTheme(themeSettings);
+
+    useEffect(() => {
+        if (!titleText) {
+            document.title = defaultTitleSuffix;
+        } else {
+            document.title = `${titleText} - ${defaultTitleSuffix}`;
+        }
+    }, [titleText]);
 
     const showSnackbar = useCallback((message, severity = "info") => {
         setSnackbarText(message);
@@ -111,24 +166,12 @@ export const AppFeatureProvider = ({ children }) => {
                 {children}
 
                 <Snackbar
-                    anchorOrigin={{
-                        vertical: "bottom",
-                        horizontal: "center"
-                    }}
-                    autoHideDuration={3000}
                     onClose={() => {
                         setSnackbarOpen(false);
                     }}
                     open={snackbarOpen}
-                    sx={{
-                        zIndex: 10000000
-                    }}
                 >
-                    <Alert
-                        severity={snackbarSeverity}
-                        sx={{ width: "100%" }}
-                        variant="standard"
-                    >
+                    <Alert severity={snackbarSeverity}>
                         <Stack
                             direction="row"
                             spacing={2}

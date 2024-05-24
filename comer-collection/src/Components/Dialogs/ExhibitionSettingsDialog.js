@@ -111,7 +111,7 @@ export const ExhibitionSettingsDialog = ({ editMode, adminMode, dialogIsOpen, se
 
             <DialogContent>
                 <Stack spacing={2}>
-                    <DialogContentText variant="body1">
+                    <DialogContentText>
                         {
                             adminMode
                                 ? "Set the title and access level for this exhibition.  These fields can be changed later by you or the owner."
@@ -159,11 +159,7 @@ export const ExhibitionSettingsDialog = ({ editMode, adminMode, dialogIsOpen, se
                                 >
                                     <option.icon fontSize="large" />
 
-                                    <Stack
-                                        direction="column"
-                                        justifyContent="left"
-                                        sx={{ width: "460px" }}
-                                    >
+                                    <Stack direction="column">
                                         <Typography fontWeight="bold">
                                             {option.displayText}
                                         </Typography>

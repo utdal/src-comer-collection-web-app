@@ -1,6 +1,6 @@
 /* eslint-disable react/no-multi-comp */
 import React, { memo, useCallback, useMemo, useState } from "react";
-import { Checkbox, Paper, Stack, TableCell, TableContainer, Typography, Table, TableBody, TableHead, TableRow } from "@mui/material";
+import { Checkbox, Stack, TableCell, TableContainer, Typography, Table, TableBody, TableHead, TableRow, Paper } from "@mui/material";
 import { useTheme } from "@emotion/react";
 import { ColumnSortButton } from "../Buttons/ColumnSortButton.js";
 import PropTypes from "prop-types";
@@ -81,22 +81,9 @@ export const DataTable = memo(function DataTable ({
     return (
         <TableContainer
             component={Paper}
-            sx={{
-                width: "100%",
-                height: "100%",
-                display: "grid",
-                gridTemplateAreas: `
-                "header"
-                "rows"
-            `,
-                gridTemplateRows: "40px calc(100% - 40px)"
-            }}
         >
-            <Table
-                size="small"
-                stickyHeader
-            >
-                <TableHead sx={{ gridArea: "header" }}>
+            <Table>
+                <TableHead>
                     <TableRow>
                         {Boolean(rowSelectionEnabled) && (
                             <TableCell sx={{ backgroundColor: theme.palette.grey.translucent }}>
@@ -155,7 +142,7 @@ export const DataTable = memo(function DataTable ({
                     </TableRow>
                 </TableHead>
 
-                <TableBody sx={{ gridArea: "rows" }}>
+                <TableBody>
                     {itemsInFinalDisplayOrder}
                 </TableBody>
             </Table>
