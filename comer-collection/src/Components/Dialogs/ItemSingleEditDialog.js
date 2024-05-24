@@ -66,10 +66,7 @@ export const ItemSingleEditDialog = ({ dialogState }) => {
             onSubmit={handleSubmit}
             open={dialogIsOpen}
         >
-            <DialogTitle
-                textAlign="center"
-                variant="h4"
-            >
+            <DialogTitle>
                 {"Edit "}
 
                 {singularCapitalized}

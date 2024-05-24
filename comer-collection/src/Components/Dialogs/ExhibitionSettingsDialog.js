@@ -105,10 +105,7 @@ export const ExhibitionSettingsDialog = ({ editMode, adminMode, dialogIsOpen, se
             open={dialogIsOpen}
             sx={{ zIndex: 10000 }}
         >
-            <DialogTitle
-                textAlign="center"
-                variant="h4"
-            >
+            <DialogTitle>
                 {editMode ? "Edit Exhibition" : "Create Exhibition"}
             </DialogTitle>
 

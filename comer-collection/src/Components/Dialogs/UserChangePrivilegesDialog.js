@@ -107,10 +107,7 @@ export const UserChangePrivilegesDialog = ({ dialogState }) => {
             open={dialogIsOpen}
             sx={{ zIndex: 10000 }}
         >
-            <DialogTitle
-                textAlign="center"
-                variant="h4"
-            >
+            <DialogTitle>
                 Set Access Level for
                 {" "}
 

@@ -88,10 +88,7 @@ export const ItemMultiCreateDialog = ({ dialogState }) => {
             onSubmit={handleSubmit}
             open={dialogIsOpen}
         >
-            <DialogTitle
-                textAlign="center"
-                variant="h4"
-            >
+            <DialogTitle>
                 {"Create "}
 
                 {pluralCapitalized}

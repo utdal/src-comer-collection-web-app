@@ -56,10 +56,7 @@ export const ItemSingleDeleteDialog = ({ requireTypedConfirmation, dialogState }
             open={dialogIsOpen}
             sx={{ zIndex: 10000 }}
         >
-            <DialogTitle
-                textAlign="center"
-                variant="h4"
-            >
+            <DialogTitle>
                 {"Delete "}
 
                 {Entity?.singular.substr(0, 1).toUpperCase()}

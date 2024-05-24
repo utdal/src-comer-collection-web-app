@@ -158,11 +158,7 @@ export const AssociationManagementDialog = ({
                 onClose={closeDialog}
                 open={dialogIsOpen}
             >
-                <DialogTitle
-                    sx={{ textOverflow: "ellipsis", wordWrap: "break-word" }}
-                    textAlign="center"
-                    variant="h4"
-                >
+                <DialogTitle>
                     {editMode ? "Manage" : "View"}
 
                     {" "}

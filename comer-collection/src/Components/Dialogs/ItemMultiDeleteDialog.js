@@ -30,10 +30,7 @@ export const ItemMultiDeleteDialog = ({ entityPlural, deleteDialogItems, deleteD
             open={deleteDialogIsOpen}
             sx={{ zIndex: 10000 }}
         >
-            <DialogTitle
-                textAlign="center"
-                variant="h4"
-            >
+            <DialogTitle>
                 Delete
                 {deleteDialogItems?.length}
 

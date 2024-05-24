@@ -87,10 +87,7 @@ export const UserResetPasswordDialog = ({ dialogState }) => {
             open={dialogIsOpen}
             sx={{ zIndex: 10000 }}
         >
-            <DialogTitle
-                textAlign="center"
-                variant="h4"
-            >
+            <DialogTitle>
                 {dialogUser?.has_password ? "Reset Password" : "Set Password"}
             </DialogTitle>
 

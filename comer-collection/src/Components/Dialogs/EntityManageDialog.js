@@ -116,10 +116,7 @@ export const EntityManageDialog = ({
                 onSubmit={handleCreate}
                 open={dialogIsOpen}
             >
-                <DialogTitle
-                    textAlign="center"
-                    variant="h4"
-                >
+                <DialogTitle>
                     {"Manage "}
 
                     {pluralCapitalized}

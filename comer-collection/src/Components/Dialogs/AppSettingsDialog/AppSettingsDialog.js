@@ -36,10 +36,7 @@ export const AppSettingsDialog = ({ dialogState }) => {
             onClose={closeDialog}
             open={dialogIsOpen}
         >
-            <DialogTitle
-                textAlign="center"
-                variant="h4"
-            >
+            <DialogTitle>
                 Application Settings
             </DialogTitle>
 

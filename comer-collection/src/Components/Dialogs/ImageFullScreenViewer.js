@@ -62,10 +62,7 @@ export const ImageFullScreenViewer = ({ image, setImage, previewerOpen, setPrevi
             sx={{ zIndex: 5000 }}
         >
 
-            <DialogTitle
-                textAlign="center"
-                variant="h4"
-            >
+            <DialogTitle>
                 {image.title}
             </DialogTitle>
 
