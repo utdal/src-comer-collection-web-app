@@ -1,10 +1,12 @@
 import React, { memo } from "react";
 import { TableCell, Skeleton } from "@mui/material";
-import PropTypes from "prop-types";
+import { useTableCheckboxSettings, useTableFields } from "../../ContextProviders/TableRowProvider.js";
 
-export const TableRowPlaceholder = memo(function TableContainer ({ colSpan }) {
+export const TableRowPlaceholder = memo(function TableContainer () {
+    const tableFields = useTableFields();
+    const { rowSelectionEnabled } = useTableCheckboxSettings();
     return (
-        <TableCell colSpan={colSpan}>
+        <TableCell colSpan={tableFields.length - (1 * !rowSelectionEnabled)}>
             <Skeleton
                 height="20px"
                 variant="text"
@@ -13,6 +15,3 @@ export const TableRowPlaceholder = memo(function TableContainer ({ colSpan }) {
         </TableCell>
     );
 });
-TableRowPlaceholder.propTypes = {
-    colSpan: PropTypes.number.isRequired
-};

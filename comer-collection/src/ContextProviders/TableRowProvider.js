@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useMemo } from "react";
 import PropTypes from "prop-types";
-import { entityPropTypeShape } from "../Classes/Entity.js";
+import { entityPropTypeShape, tableFieldPropTypeShape } from "../Classes/Entity.js";
 
 const TableRowContext = createContext();
 
@@ -8,18 +8,22 @@ const TableRowContext = createContext();
  * @typedef {Object<string, () => void>} callbacksObject
  * @param {{
  *  item: object,
- *  selectedItems: object[],
- *  setSelectedItems: (items: object[]) => void
- *  managementCallbacks: callbacksObject
+ *  setSelectionStatus: (newStatus: bool) => void
+ *  managementCallbacks: callbacksObject,
+ *  rowSelectionEnabled: boolean,
+ *  smallCheckboxes: boolean,
+ *  tableFields: {columnDescription: string}[]
  * }} props
  */
-export const TableRowProvider = ({ item, selectedItems, setSelectedItems, managementCallbacks, children }) => {
+export const TableRowProvider = ({ item, setSelectionStatus, managementCallbacks, rowSelectionEnabled, smallCheckboxes, tableFields, children }) => {
     const contextValue = useMemo(() => ({
         item,
-        selectedItems,
-        setSelectedItems,
-        managementCallbacks
-    }), [item, managementCallbacks, selectedItems, setSelectedItems]);
+        setSelectionStatus,
+        managementCallbacks,
+        rowSelectionEnabled,
+        smallCheckboxes,
+        tableFields
+    }), [item, managementCallbacks, rowSelectionEnabled, setSelectionStatus, smallCheckboxes, tableFields]);
     return (
         <TableRowContext.Provider value={contextValue}>
             {children}
@@ -31,8 +35,10 @@ TableRowProvider.propTypes = {
     children: PropTypes.node.isRequired,
     item: entityPropTypeShape.isRequired,
     managementCallbacks: PropTypes.objectOf(PropTypes.func),
-    selectedItems: PropTypes.arrayOf(entityPropTypeShape).isRequired,
-    setSelectedItems: PropTypes.func.isRequired
+    rowSelectionEnabled: PropTypes.bool,
+    setSelectionStatus: PropTypes.func.isRequired,
+    smallCheckboxes: PropTypes.bool,
+    tableFields: PropTypes.arrayOf(tableFieldPropTypeShape)
 };
 
 /**
@@ -40,15 +46,15 @@ TableRowProvider.propTypes = {
  * selectedItems and setSelectedItems context values
  * to the TableRowProvider.
  */
-export const useTableSelectedItems = () => {
+export const useSetSelectionStatus = () => {
     /**
      * @type {{
      *  selectedItems: object[],
      *  setSelectedItems: (items: object[]) => void
      * }}
      */
-    const { selectedItems, setSelectedItems } = useContext(TableRowContext);
-    return [selectedItems, setSelectedItems];
+    const { setSelectionStatus } = useContext(TableRowContext);
+    return setSelectionStatus;
 };
 
 /**
@@ -64,4 +70,19 @@ export const useTableRowItem = () => {
  */
 export const useTableRowManagementCallbacks = () => {
     return useContext(TableRowContext).managementCallbacks;
+};
+
+/**
+ * @returns {callbacksObject}
+ */
+export const useTableFields = () => {
+    return useContext(TableRowContext).tableFields;
+};
+
+/**
+ * @returns {{rowSelectionEnabled: boolean, smallCheckboxes: boolean}}
+ */
+export const useTableCheckboxSettings = () => {
+    const { rowSelectionEnabled, smallCheckboxes } = useContext(TableRowContext);
+    return { rowSelectionEnabled, smallCheckboxes };
 };

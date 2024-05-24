@@ -36,7 +36,7 @@ import EntityManageButton from "../../Components/Buttons/EntityManageButton.js";
 import AssociationManageButton from "../../Components/Buttons/AssociationManageButton.js";
 
 const ImageManagement = () => {
-    const [imagesCombinedState, setImages, setSelectedImages, filterImages] = useItemsReducer(Image);
+    const [imagesCombinedState, setImages, setSelectedImages, filterImages, setImageSelectionStatuses] = useItemsReducer(Image);
 
     const [exhibitions, setExhibitions] = useState([]);
 
@@ -189,6 +189,7 @@ const ImageManagement = () => {
             Entity={Image}
             itemsCombinedState={imagesCombinedState}
             managementCallbacks={managementCallbacks}
+            setItemSelectionStatus={setImageSelectionStatuses}
             setItems={setImages}
             setSelectedItems={setSelectedImages}
         >

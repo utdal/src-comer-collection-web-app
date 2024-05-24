@@ -4,42 +4,53 @@ import { Entity, itemsCombinedStatePropTypeShape } from "../Classes/Entity.js";
 
 const itemsReducer = (state, action) => {
     if (action.type === "setItems") {
-        const filteredItems = state.filterFunction ? action.items.filter(state.filterFunction) : action.items;
+        const newSelectionStatuses = {};
+        const newVisibilityStatuses = {};
+
+        for (const item of action.items) {
+            newSelectionStatuses[item.id] = state.selectionStatuses[item.id] ?? false;
+            newVisibilityStatuses[item.id] = state.filterFunction ? state.filterFunction(item) : true;
+        }
+
         return {
             Entity: state.Entity,
             items: action.items,
-            selectedItems: state.selectedItems.filter((si) => (
-                action.items.map((i) => i.id).includes(parseInt(si.id))
-            )),
-            visibleItems: filteredItems,
-            selectedVisibleItems: filteredItems.filter((si) => (
-                state.selectedItems.map((i) => i.id).includes(parseInt(si.id))
-            )),
+            selectionStatuses: newSelectionStatuses,
+            visibilityStatuses: newVisibilityStatuses,
             filterFunction: state.filterFunction
         };
     } else if (action.type === "setSelectedItems") {
+        const newSelectionStatuses = {};
+        for (const { id } of state.items) {
+            newSelectionStatuses[id] = false;
+        }
+        for (const { id } of action.selectedItems) {
+            newSelectionStatuses[id] = true;
+        }
         return {
             Entity: state.Entity,
             items: state.items,
-            selectedItems: action.selectedItems,
-            visibleItems: state.visibleItems,
-            selectedVisibleItems: state.visibleItems.filter((si) => (
-                action.selectedItems.map((i) => i.id).includes(parseInt(si.id))
-            )),
+            selectionStatuses: newSelectionStatuses,
+            visibilityStatuses: state.visibilityStatuses,
             filterFunction: state.filterFunction
         };
     } else if (action.type === "filterItems") {
         const filteredItems = state.items.filter(action.filterFunction);
+        const newVisibilityStatuses = {};
+
+        for (const { id } of filteredItems) {
+            newVisibilityStatuses[id] = true;
+        }
         return {
             Entity: state.Entity,
             items: state.items,
-            selectedItems: state.selectedItems,
-            visibleItems: filteredItems,
-            selectedVisibleItems: filteredItems.filter((si) => (
-                state.selectedItems.map((i) => i.id).includes(parseInt(si.id))
-            )),
+            selectionStatuses: state.selectionStatuses,
+            visibilityStatuses: newVisibilityStatuses,
             filterFunction: action.filterFunction
         };
+    } else if (action.type === "setItemSelectionStatus") {
+        state.selectionStatuses[action.itemId] = action.newStatus;
+        return { ...state };
     } else {
         console.warn("itemsReducer received invalid action object", action);
         return state;
@@ -49,23 +60,23 @@ const itemsReducer = (state, action) => {
 const defaultItemsCombinedState = {
     Entity,
     items: [],
-    selectedItems: [],
-    visibleItems: [],
-    selectedVisibleItems: [],
+    selectionStatuses: {},
+    visibilityStatuses: {},
     filterFunction: null
 };
 
 const ManagementPageContext = createContext();
 
-export const ManagementPageProvider = ({ managementCallbacks, itemsCombinedState, setItems, setSelectedItems, children }) => {
+export const ManagementPageProvider = ({ managementCallbacks, itemsCombinedState, setItems, setSelectedItems, setItemSelectionStatus, children }) => {
     const contextValue = useMemo(() => {
         return {
             managementCallbacks,
             itemsCombinedState,
             setItems,
-            setSelectedItems
+            setSelectedItems,
+            setItemSelectionStatus
         };
-    }, [managementCallbacks, itemsCombinedState, setItems, setSelectedItems]);
+    }, [managementCallbacks, itemsCombinedState, setItems, setSelectedItems, setItemSelectionStatus]);
     return (
         <ManagementPageContext.Provider value={contextValue}>
             {children}
@@ -77,6 +88,7 @@ ManagementPageProvider.propTypes = {
     children: PropTypes.node.isRequired,
     itemsCombinedState: PropTypes.shape(itemsCombinedStatePropTypeShape).isRequired,
     managementCallbacks: PropTypes.objectOf(PropTypes.func).isRequired,
+    setItemSelectionStatus: PropTypes.func.isRequired,
     setItems: PropTypes.func.isRequired,
     setSelectedItems: PropTypes.func.isRequired
 };
@@ -100,23 +112,39 @@ export const useItems = () => {
  * @returns {[object[], function]} [selectedItems, setSelectedItems]
  */
 export const useSelectedItems = () => {
-    const { itemsCombinedState, setSelectedItems } = useContext(ManagementPageContext);
-    return [itemsCombinedState.selectedItems, setSelectedItems];
+    const { setSelectedItems } = useContext(ManagementPageContext);
+    return [useMemo(() => [], []), setSelectedItems];
+};
+
+/**
+ * @returns {[Object<number, boolean>, (itemId: number, newStatus: bool) => void]} [selectionStatuses, setItemSelectionStatus]
+ */
+export const useSelectionStatuses = () => {
+    const { itemsCombinedState, setItemSelectionStatus } = useContext(ManagementPageContext);
+    return [itemsCombinedState.selectionStatuses, setItemSelectionStatus];
 };
 
 /**
  * @returns {[object[], function]} [visibleItems, filterItems]
  */
 export const useVisibleItems = () => {
+    const { filterItems } = useContext(ManagementPageContext);
+    return [useMemo(() => [], []), filterItems];
+};
+
+/**
+ * @returns {[Object<number, boolean>, (item: object) => boolean]} [visibilityStatuses, filterItems]
+ */
+export const useVisibilityStatuses = () => {
     const { itemsCombinedState, filterItems } = useContext(ManagementPageContext);
-    return [itemsCombinedState.visibleItems, filterItems];
+    return [itemsCombinedState.visibilityStatuses, filterItems];
 };
 
 /**
  * @returns {object[]} selectedVisibleItems
  */
 export const useSelectedVisibleItems = () => {
-    return useContext(ManagementPageContext).itemsCombinedState.selectedVisibleItems;
+    return useMemo(() => [], []);
 };
 
 /**
@@ -128,7 +156,8 @@ export const useEntity = () => {
 
 /**
  * @param {Class} Entity
- * @returns {[object, function, function, function]} [itemsCombinedState, setItems, setSelectedItems, filterItems]
+ * @returns {[object, function, function, function, (item: object, newStatus: bool) => void]}
+ * [itemsCombinedState, setItems, setSelectedItems, filterItems, setItemSelectionStatus]
  */
 export const useItemsReducer = (Entity) => {
     const [itemsCombinedState, itemsDispatch] = useReducer(itemsReducer, {
@@ -140,18 +169,25 @@ export const useItemsReducer = (Entity) => {
             type: "setItems",
             items
         });
-    }, [itemsDispatch]);
+    }, []);
     const setSelectedItems = useCallback((selectedItems) => {
         itemsDispatch({
             type: "setSelectedItems",
             selectedItems
         });
-    }, [itemsDispatch]);
+    }, []);
     const filterItems = useCallback((filterFunction) => {
         itemsDispatch({
             type: "filterItems",
             filterFunction
         });
-    }, [itemsDispatch]);
-    return [itemsCombinedState, setItems, setSelectedItems, filterItems];
+    }, []);
+    const setItemSelectionStatus = useCallback((itemId, newStatus) => {
+        itemsDispatch({
+            type: "setItemSelectionStatus",
+            itemId,
+            newStatus
+        });
+    }, []);
+    return [itemsCombinedState, setItems, setSelectedItems, filterItems, setItemSelectionStatus];
 };

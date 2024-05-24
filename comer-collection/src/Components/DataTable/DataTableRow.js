@@ -1,11 +1,10 @@
-import React, { useCallback } from "react";
+import React, { memo, useCallback } from "react";
 import PropTypes from "prop-types";
 import { useInView } from "react-intersection-observer";
-import { useTableRowItem, useTableSelectedItems, useTableRowManagementCallbacks } from "../../ContextProviders/TableRowProvider.js";
+import { useTableRowItem, useTableRowManagementCallbacks, useSetSelectionStatus, useTableCheckboxSettings } from "../../ContextProviders/TableRowProvider.js";
 import { Checkbox, TableCell, TableRow, styled } from "@mui/material";
 import { DataTableFieldCells } from "./DataTableFieldCells.js";
 import { TableRowPlaceholder } from "./TableRowPlaceholder.js";
-import { tableFieldPropTypeShape } from "../../Classes/Entity.js";
 
 const ColoredTableRow = styled(TableRow)(({ isSelected, theme, themeColor }) => ({
     "&:hover": {
@@ -17,26 +16,27 @@ const ColoredTableRow = styled(TableRow)(({ isSelected, theme, themeColor }) => 
     }
 }));
 
-const DataTableRow = ({ rowSelectionEnabled, tableFields, isSelected, themeColor, smallCheckboxes }) => {
+const DataTableRow = memo(function DataTableRow ({ isSelected, themeColor }) {
     const { inView, ref } = useInView({
         triggerOnce: true
     });
 
     const item = useTableRowItem();
-    const [selectedItems, setSelectedItems] = useTableSelectedItems();
+    const { rowSelectionEnabled, smallCheckboxes } = useTableCheckboxSettings();
 
     const managementCallbacks = useTableRowManagementCallbacks();
+    const setSelectionStatus = useSetSelectionStatus();
 
     const handleCheckboxChange = useCallback((e) => {
-        if (e.target.checked) {
-            setSelectedItems([...selectedItems, item]);
-        } else {
-            setSelectedItems(selectedItems.filter((si) => si.id !== item.id));
-        }
-    }, [item, selectedItems, setSelectedItems]);
+        setSelectionStatus(e.target.checked);
+    }, [setSelectionStatus]);
 
     return (
-        <ColoredTableRow ref={ref}>
+        <ColoredTableRow
+            isSelected={isSelected}
+            ref={ref}
+            themeColor={themeColor}
+        >
             {Boolean(rowSelectionEnabled) && (
                 <TableCell width="10px">
                     <Checkbox
@@ -53,22 +53,18 @@ const DataTableRow = ({ rowSelectionEnabled, tableFields, isSelected, themeColor
                         <DataTableFieldCells
                             item={item}
                             managementCallbacks={managementCallbacks}
-                            tableFields={tableFields}
                         />
                     )
                     : (
-                        <TableRowPlaceholder colSpan={tableFields.length} />
+                        <TableRowPlaceholder />
                     )
             }
         </ColoredTableRow>
     );
-};
+});
 
 DataTableRow.propTypes = {
     isSelected: PropTypes.bool,
-    rowSelectionEnabled: PropTypes.bool,
-    smallCheckboxes: PropTypes.string,
-    tableFields: PropTypes.arrayOf(tableFieldPropTypeShape),
     themeColor: PropTypes.string
 };
 

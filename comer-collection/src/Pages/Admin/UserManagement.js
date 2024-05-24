@@ -35,7 +35,7 @@ import { ManagementPageFooter } from "../../Components/ManagementPage/Management
 import AssociationManageButton from "../../Components/Buttons/AssociationManageButton.js";
 
 const UserManagement = () => {
-    const [usersCombinedState, setUsers, setSelectedUsers, filterUsers] = useItemsReducer(User);
+    const [usersCombinedState, setUsers, setSelectedUsers, filterUsers, setUserSelectionStatus] = useItemsReducer(User);
     const [courses, setCourses] = useState([]);
     const [exhibitions, setExhibitions] = useState([]);
     const [isLoaded, setIsLoaded] = useState(false);
@@ -204,6 +204,7 @@ const UserManagement = () => {
             Entity={User}
             itemsCombinedState={usersCombinedState}
             managementCallbacks={managementCallbacks}
+            setItemSelectionStatus={setUserSelectionStatus}
             setItems={setUsers}
             setSelectedItems={setSelectedUsers}
         >
