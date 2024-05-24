@@ -1,11 +1,10 @@
 import React, { useCallback } from "react";
-import { useTableRowItem } from "../../../ContextProviders/TableRowProvider.js";
 import { DeleteButton } from "../Entity/DeleteButton.js";
-import { useManagementCallbacks } from "../../../ContextProviders/ManagementPageProvider.js";
+import { useTableCellItem, useTableCellManagementCallbacks } from "../../../ContextProviders/TableCellProvider.js";
 
 export const ImageDeleteButton = () => {
-    const image = useTableRowItem();
-    const { handleOpenImageDeleteDialog } = useManagementCallbacks();
+    const image = useTableCellItem();
+    const { handleOpenImageDeleteDialog } = useTableCellManagementCallbacks();
     const handleOpenDeleteDialog = useCallback(() => {
         handleOpenImageDeleteDialog(image);
     }, [image, handleOpenImageDeleteDialog]);

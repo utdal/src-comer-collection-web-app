@@ -1,10 +1,10 @@
 import React from "react";
-import { useTableRowItem } from "../../../ContextProviders/TableRowProvider.js";
 import { Stack, Typography } from "@mui/material";
 import { PlaceIcon } from "../../../Imports/Icons.js";
+import { useTableCellItem } from "../../../ContextProviders/TableCellProvider.js";
 
 export const ImageLocationCell = () => {
-    const image = useTableRowItem();
+    const image = useTableCellItem();
     return (
         image.location && (
             <Stack

@@ -1,14 +1,13 @@
 import React, { useCallback } from "react";
-import { useTableRowItem } from "../../../ContextProviders/TableRowProvider.js";
 import { Button, Stack, Typography } from "@mui/material";
 import { useAppUser } from "../../../ContextProviders/AppUser.js";
-import { useManagementCallbacks } from "../../../ContextProviders/ManagementPageProvider.js";
 import { PhotoCameraBackIcon } from "../../../Imports/Icons.js";
+import { useTableCellItem, useTableCellManagementCallbacks } from "../../../ContextProviders/TableCellProvider.js";
 
 export const ImageExhibitionCountCell = () => {
-    const image = useTableRowItem();
+    const image = useTableCellItem();
     const [appUser] = useAppUser();
-    const { handleOpenImageViewExhibitionDialog } = useManagementCallbacks();
+    const { handleOpenImageViewExhibitionDialog } = useTableCellManagementCallbacks();
     const handleOpenViewExhibitionDialog = useCallback(() => {
         handleOpenImageViewExhibitionDialog([image]);
     }, [handleOpenImageViewExhibitionDialog, image]);

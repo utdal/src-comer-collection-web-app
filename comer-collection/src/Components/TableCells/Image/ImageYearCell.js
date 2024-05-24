@@ -1,9 +1,9 @@
 import React from "react";
-import { useTableRowItem } from "../../../ContextProviders/TableRowProvider.js";
 import { Typography } from "@mui/material";
+import { useTableCellItem } from "../../../ContextProviders/TableCellProvider.js";
 
 export const ImageYearCell = () => {
-    const image = useTableRowItem();
+    const image = useTableCellItem();
     return (
         <Typography variant="body1">
             {image.year}

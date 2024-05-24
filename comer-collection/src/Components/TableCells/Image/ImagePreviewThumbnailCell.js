@@ -1,12 +1,11 @@
 import React, { useCallback } from "react";
-import { useTableRowItem } from "../../../ContextProviders/TableRowProvider.js";
 import { Button, Stack, Typography } from "@mui/material";
-import { useManagementCallbacks } from "../../../ContextProviders/ManagementPageProvider.js";
 import { VisibilityIcon } from "../../../Imports/Icons.js";
+import { useTableCellItem, useTableCellManagementCallbacks } from "../../../ContextProviders/TableCellProvider.js";
 
 export const ImagePreviewThumbnailCell = () => {
-    const image = useTableRowItem();
-    const { handleOpenImagePreviewer } = useManagementCallbacks();
+    const image = useTableCellItem();
+    const { handleOpenImagePreviewer } = useTableCellManagementCallbacks();
     const handleOpenPreviewer = useCallback(() => {
         handleOpenImagePreviewer(image);
     }, [handleOpenImagePreviewer, image]);

@@ -1,11 +1,10 @@
 import React, { useCallback } from "react";
-import { useTableRowItem } from "../../../ContextProviders/TableRowProvider.js";
-import { useManagementCallbacks } from "../../../ContextProviders/ManagementPageProvider.js";
 import { EditButton } from "../Entity/EditButton.js";
+import { useTableCellItem, useTableCellManagementCallbacks } from "../../../ContextProviders/TableCellProvider.js";
 
 export const ImageEditButton = () => {
-    const image = useTableRowItem();
-    const { handleOpenImageEditDialog } = useManagementCallbacks();
+    const image = useTableCellItem();
+    const { handleOpenImageEditDialog } = useTableCellManagementCallbacks();
     const handleOpenEditDialog = useCallback(() => {
         handleOpenImageEditDialog(image);
     }, [image, handleOpenImageEditDialog]);
