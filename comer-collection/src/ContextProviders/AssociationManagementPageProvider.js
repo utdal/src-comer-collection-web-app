@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useMemo } from "react";
 import PropTypes from "prop-types";
-import { ManagementPageProvider, useItems, useVisibleItems } from "./ManagementPageProvider.js";
+import { ManagementPageProvider, useItemCounts, useItems } from "./ManagementPageProvider.js";
 import { entityPropTypeShape, itemsCombinedStatePropTypeShape } from "../Classes/Entity.js";
 
 const AssociationManagementPageContext = createContext();
@@ -58,8 +58,8 @@ export const useSecondaryItems = () => {
 };
 
 /**
- * @returns {[object[], function]} [visibleSecondaryItems, filterSecondaryItems]
+ * Copy of useItemCounts for use inside Association contexts.  Renamed for clarity.
  */
-export const useVisibleSecondaryItems = () => {
-    return useVisibleItems();
+export const useSecondaryItemCounts = () => {
+    return useItemCounts();
 };

@@ -4,9 +4,11 @@ import { Checkbox, Paper, Stack, TableCell, TableContainer, Typography, Table, T
 import { useTheme } from "@emotion/react";
 import { ColumnSortButton } from "../Buttons/ColumnSortButton.js";
 import PropTypes from "prop-types";
-import { useItems, useVisibilityStatuses } from "../../ContextProviders/ManagementPageProvider.js";
+import { useItemCounts, useItems, useVisibilityStatuses } from "../../ContextProviders/ManagementPageProvider.js";
 import { tableFieldPropTypeShape } from "../../Classes/Entity.js";
 import { TableRowContainer } from "./TableRowContainer.js";
+import { FullPageMessage } from "../FullPageMessage.js";
+import { InfoIcon } from "../../Imports/Icons.js";
 
 export const DataTable = memo(function DataTable ({
     tableFields, rowSelectionEnabled, smallCheckboxes, defaultSortColumn, defaultSortAscending
@@ -15,6 +17,7 @@ export const DataTable = memo(function DataTable ({
     const [items] = useItems();
 
     const [visibilityStatuses] = useVisibilityStatuses();
+    const itemCounts = useItemCounts();
 
     const [sortColumn, setSortColumn] = useState(defaultSortColumn ?? "ID");
     const [sortAscending, setSortAscending] = useState(defaultSortAscending ?? true);
@@ -159,14 +162,14 @@ export const DataTable = memo(function DataTable ({
                 </TableBody>
             </Table>
 
-            {/* {visibleItems.length === 0 && (
+            {itemCounts.visible === 0 && (
                 <FullPageMessage
                     Icon={InfoIcon}
                     buttonAction={null}
                     buttonText={null}
-                    message={items.length === 0 ? "This list is empty" : "All items are hidden"}
+                    message={itemCounts.all === 0 ? "This list is empty" : "All items are hidden"}
                 />
-            )} */}
+            )}
         </TableContainer>
     );
 });

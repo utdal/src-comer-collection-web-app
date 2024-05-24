@@ -5,14 +5,12 @@ import {
     Typography
 } from "@mui/material";
 import { CheckIcon, ArrowUpwardIcon, DeselectIcon } from "../Imports/Icons.js";
-import { useEntity, useItems, useSelectedItems, useSelectedVisibleItems, useVisibleItems } from "../ContextProviders/ManagementPageProvider.js";
+import { useEntity, useItemCounts, useSelectedItems } from "../ContextProviders/ManagementPageProvider.js";
 
 export const SelectionSummary = () => {
-    const [items] = useItems();
-    const [selectedItems, setSelectedItems] = useSelectedItems();
-    const [visibleItems] = useVisibleItems();
-    const selectedVisibleItems = useSelectedVisibleItems();
+    const [, setSelectedItems] = useSelectedItems();
     const Entity = useEntity();
+    const itemCounts = useItemCounts();
 
     const clearSelectedItems = useCallback(() => {
         setSelectedItems([]);
@@ -24,12 +22,12 @@ export const SelectionSummary = () => {
             direction="row"
             spacing={2}
         >
-            {(selectedItems.length > 0 &&
+            {(itemCounts.selected > 0 &&
                 <CheckIcon
                     fontSize="large"
                     sx={{ opacity: 0.5 }}
                 />
-            ) || (selectedItems.length === 0 &&
+            ) || (itemCounts.selected === 0 &&
                 <ArrowUpwardIcon
                     fontSize="large"
                     sx={{ opacity: 0.5 }}
@@ -41,28 +39,28 @@ export const SelectionSummary = () => {
                     sx={{ opacity: 0.5 }}
                     variant="body1"
                 >
-                    {visibleItems.length < items.length
-                        ? `Showing ${visibleItems.length} of ${items.length} ${items.length === 1 ? Entity.singular : Entity.plural}`
-                        : `${items.length} ${items.length === 1 ? Entity.singular : Entity.plural}`}
+                    {itemCounts.visible < itemCounts.all
+                        ? `Showing ${itemCounts.visible} of ${itemCounts.all} ${itemCounts.all === 1 ? Entity.singular : Entity.plural}`
+                        : `${itemCounts.all} ${itemCounts.all === 1 ? Entity.singular : Entity.plural}`}
                 </Typography>
 
-                {(selectedItems.length > 0 &&
+                {(itemCounts.selected > 0 &&
                     <Typography variant="body1">
-                        {selectedItems.length}
+                        {itemCounts.selected}
 
                         {" "}
 
-                        {selectedItems.length === 1 ? Entity.singular : Entity.plural}
+                        {itemCounts.selected === 1 ? Entity.singular : Entity.plural}
 
                         {" "}
 
                         selected
 
-                        {selectedVisibleItems.length < selectedItems.length
-                            ? ` (${selectedVisibleItems.length} shown)`
+                        {itemCounts.selectedAndVisible < itemCounts.selected
+                            ? ` (${itemCounts.selectedAndVisible} shown)`
                             : ""}
                     </Typography>
-                ) || (selectedItems.length === 0 &&
+                ) || (itemCounts.selected === 0 &&
                     <Typography
                         sx={{ opacity: 0.5 }}
                         variant="body1"
@@ -73,7 +71,7 @@ export const SelectionSummary = () => {
 
             </Stack>
 
-            {selectedItems.length > 0 && (
+            {itemCounts.selected > 0 && (
                 <Button
                     onClick={clearSelectedItems}
                     startIcon={<DeselectIcon />}

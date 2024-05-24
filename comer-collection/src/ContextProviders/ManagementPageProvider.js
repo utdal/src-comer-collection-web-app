@@ -169,26 +169,11 @@ export const useSelectionStatuses = () => {
 };
 
 /**
- * @returns {[object[], function]} [visibleItems, filterItems]
- */
-export const useVisibleItems = () => {
-    const { filterItems } = useContext(ManagementPageContext);
-    return [useMemo(() => [], []), filterItems];
-};
-
-/**
  * @returns {[Object<number, boolean>, (item: object) => boolean]} [visibilityStatuses, filterItems]
  */
 export const useVisibilityStatuses = () => {
     const { itemsCombinedState, filterItems } = useContext(ManagementPageContext);
     return [itemsCombinedState.visibilityStatuses, filterItems];
-};
-
-/**
- * @returns {object[]} selectedVisibleItems
- */
-export const useSelectedVisibleItems = () => {
-    return useMemo(() => [], []);
 };
 
 /**

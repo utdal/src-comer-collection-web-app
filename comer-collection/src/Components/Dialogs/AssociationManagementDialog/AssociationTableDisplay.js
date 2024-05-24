@@ -1,80 +1,41 @@
 import React from "react";
-import { Stack, Typography, Box } from "@mui/material";
-import { InfoIcon, SearchIcon } from "../../../Imports/Icons.js";
+import { Stack, Typography, Box, styled } from "@mui/material";
 import PropTypes from "prop-types";
-import { useSecondaryItems, useVisibleSecondaryItems } from "../../../ContextProviders/AssociationManagementPageProvider.js";
+
+const BoxWithGridLayout = styled(Box)(({ tableCaption }) => ({
+    display: "grid",
+    gridTemplateAreas: `
+        "caption"
+        "table"
+    `,
+    gridTemplateRows: tableCaption ? "50px 300px" : "0px 300px"
+}));
+
+const TableCaptionContainer = styled(Stack)(({ tableCaption }) => ({
+    gridArea: "caption",
+    display: tableCaption ? "" : "none",
+    justifyContent: "center"
+}));
 
 export const AssociationTableDisplay = ({ tableCaption = "", children }) => {
-    const [secondaryItems] = useSecondaryItems();
-    const [visibleSecondaryItems] = useVisibleSecondaryItems();
-
     return (
-        <Box sx={{
-            display: "grid",
-            gridTemplateAreas: `
-                "caption"
-                "table"
-            `,
-            gridTemplateRows: tableCaption ? "50px 300px" : "0px 300px"
-        }}
-        >
-            <Stack
+        <BoxWithGridLayout tableCaption={tableCaption}>
+            <TableCaptionContainer
                 direction="row"
-                justifyContent="center"
-                sx={{ gridArea: "caption" }}
+                tableCaption={tableCaption}
             >
-                {tableCaption
-                    ? (
-                        <Typography
-                            align="center"
-                            variant="h5"
-                        >
-                            {tableCaption}
-                        </Typography>
-                    )
-                    : null}
-            </Stack>
+                <Typography
+                    align="center"
+                    variant="h5"
+                >
+                    {tableCaption}
+                </Typography>
+            </TableCaptionContainer>
 
             <Box sx={{ gridArea: "table", height: "100%", overflowY: "auto" }}>
-                {(secondaryItems.length > 0 && visibleSecondaryItems.length > 0 &&
-                        children) ||
-                        (secondaryItems.length > 0 && visibleSecondaryItems.length === 0 &&
-                            <Box sx={{ width: "100%" }}>
-                                <Stack
-                                    alignItems="center"
-                                    direction="column"
-                                    justifyContent="center"
-                                    paddingTop={2}
-                                    spacing={2}
-                                    sx={{ height: "100%", opacity: 0.5 }}
-                                >
-                                    <SearchIcon sx={{ fontSize: "150pt" }} />
-
-                                    <Typography variant="h4">
-                                        No results
-                                    </Typography>
-                                </Stack>
-                            </Box>
-                        ) || (secondaryItems.length === 0 &&
-                            <Box sx={{ width: "100%" }}>
-                                <Stack
-                                    alignItems="center"
-                                    direction="column"
-                                    justifyContent="center"
-                                    paddingTop={2}
-                                    spacing={2}
-                                    sx={{ height: "100%", opacity: 0.5 }}
-                                >
-                                    <InfoIcon sx={{ fontSize: "150pt" }} />
-
-                                    <Typography variant="h4">
-                                        This list is empty
-                                    </Typography>
-                                </Stack>
-                            </Box>
-                )}
+                {children}
             </Box>
-        </Box>
+        </BoxWithGridLayout>
     );
 };
 
