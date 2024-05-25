@@ -1,15 +1,13 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useMemo } from "react";
 import {
     Typography, Stack, Paper,
     Box
 } from "@mui/material";
-import { Navigate } from "react-router";
 import { DataTable } from "../../Components/DataTable/DataTable.js";
 import { AccountCircleIcon, SchoolIcon } from "../../Imports/Icons.js";
 import { useAppUser } from "../../ContextProviders/AppUser.js";
 import { useTitle } from "../../ContextProviders/AppFeatures.js";
 
-import { useAccountNav } from "../../Hooks/useAccountNav.js";
 import { User } from "../../Classes/Entities/User.js";
 import { CourseNameCell } from "../../Components/TableCells/Course/CourseNameCell.js";
 import { CourseStartDateTimeCell } from "../../Components/TableCells/Course/CourseStartDateTimeCell.js";
@@ -23,6 +21,7 @@ import { UserProfilePasswordInfoCell } from "../../Components/TableCells/User/Us
 import { UserTypeCell } from "../../Components/TableCells/User/UserTypeCell.js";
 import { UserExhibitionQuotaCell } from "../../Components/TableCells/User/UserExhibitionQuotaCell.js";
 import { Course } from "../../Classes/Entities/Course.js";
+import { useAccountNavTitle } from "../../Hooks/useAccountNavTitle.js";
 
 const courseTableFields = [
     {
@@ -72,8 +71,6 @@ const userTableFields = [
 ];
 
 const Profile = () => {
-    const [, setSelectedNavItem] = useAccountNav();
-
     const [appUser] = useAppUser();
 
     const [usersCombinedState, setUsers] = useItemsReducer(User);
@@ -86,13 +83,11 @@ const Profile = () => {
 
     useTitle("Profile");
 
-    useEffect(() => {
-        setSelectedNavItem("Profile");
-    }, [setSelectedNavItem]);
+    useAccountNavTitle("Profile");
 
-    return (appUser.pw_change_required &&
-        <Navigate to="/Account/ChangePassword" />
-    ) || (!appUser.pw_change_required &&
+    const managementCallbacks = useMemo(() => ({}), []);
+
+    return (
         <Box
             component={Paper}
             square
@@ -121,14 +116,10 @@ const Profile = () => {
                     <Box sx={{ height: "100px" }}>
                         <ManagementPageProvider
                             itemsCombinedState={usersCombinedState}
-                            managementCallbacks={{}}
+                            managementCallbacks={managementCallbacks}
                             setItems={setUsers}
                         >
-                            <DataTable
-                                items={[appUser]}
-                                tableFields={userTableFields}
-                                visibleItems={[appUser]}
-                            />
+                            <DataTable tableFields={userTableFields} />
                         </ManagementPageProvider>
                     </Box>
                 </Stack>
@@ -149,9 +140,9 @@ const Profile = () => {
                         gridTemplateRows: "50px 350px",
                         gridTemplateColumns: "1fr",
                         gridTemplateAreas: `
-          "title"
-          "content"
-        `
+                            "title"
+                            "content"
+                        `
                     }}
                 >
                     <Stack
@@ -170,15 +161,12 @@ const Profile = () => {
 
                     <ManagementPageProvider
                         itemsCombinedState={coursesCombinedState}
-                        managementCallbacks={{}}
+                        managementCallbacks={managementCallbacks}
                         setItems={setCourses}
                     >
                         <DataTable
-                            NoContentIcon={SchoolIcon}
                             defaultSortAscending={false}
                             defaultSortColumn="Start"
-                            noContentMessage="You are not enrolled in any courses."
-                            sx={{ overflow: "scroll" }}
                             tableFields={courseTableFields}
                         />
                     </ManagementPageProvider>
