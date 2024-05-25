@@ -24,7 +24,6 @@ import { ManagementButtonStack } from "../../Components/ManagementPage/Managemen
 import { useDialogState } from "../../Hooks/useDialogState.js";
 import { useAccountNavTitle } from "../../Hooks/useAccountNavTitle.js";
 import { Course } from "../../Classes/Entities/Course.js";
-import { Exhibition } from "../../Classes/Entities/Exhibition.js";
 import { ManagementPageContainer } from "../../Components/ManagementPage/ManagementPageContainer.js";
 import { ManagementPageHeader } from "../../Components/ManagementPage/ManagementPageHeader.js";
 import { ManagementPageBody } from "../../Components/ManagementPage/ManagementPageBody.js";
@@ -33,8 +32,8 @@ import AssociationManageButton from "../../Components/Buttons/AssociationManageB
 
 const UserManagement = () => {
     const [usersCombinedState, setUsers, setSelectedUsers, filterUsers, setUserSelectionStatus] = useItemsReducer(User);
-    const [courses, setCourses] = useState([]);
-    const [exhibitions, setExhibitions] = useState([]);
+    // const [courses, setCourses] = useState([]);
+    // const [exhibitions, setExhibitions] = useState([]);
     const [isLoaded, setIsLoaded] = useState(false);
     const [isError, setIsError] = useState(false);
 
@@ -66,22 +65,17 @@ const UserManagement = () => {
     const handleRefresh = useCallback(async () => {
         try {
             setIsError(false);
-
-            const [fetchedUsers, fetchedCourses, fetchedExhibitions] = await Promise.all([
-                User.handleFetchAll(),
-                Course.handleFetchAll(),
-                Exhibition.handleFetchAll()
-            ]);
-
-            setUsers(fetchedUsers);
-            setCourses(fetchedCourses);
-            setExhibitions(fetchedExhibitions);
-
+            setUsers(await User.handleFetchAll());
             setIsLoaded(true);
         } catch (e) {
             setIsError(true);
+            setIsLoaded(false);
         }
     }, [setUsers]);
+
+    useEffect(() => {
+        console.log(usersCombinedState.selectionStatuses);
+    }, [usersCombinedState.selectionStatuses]);
 
     useEffect(() => {
         handleRefresh();
@@ -192,7 +186,7 @@ const UserManagement = () => {
                     />
 
                     <CourseFilterMenu
-                        courses={courses}
+                        courses={[]}
                         filterValue={userCourseIdFilter}
                         setFilterValue={setUserCourseIdFilter}
                     />
@@ -239,14 +233,14 @@ const UserManagement = () => {
                 dialogState={courseDialogState}
                 editMode
                 handleSwitchToSecondary={handleSwitchToCoursesView}
-                secondaryItemsAll={courses}
+                secondaryItemsAll={[]}
             />
 
             <AssociationManagementDialog
                 Association={UserExhibition}
                 dialogState={exhibitionDialogState}
                 handleSwitchToSecondary={handleSwitchToExhibitionsView}
-                secondaryItemsAll={exhibitions}
+                secondaryItemsAll={[]}
             />
 
             <UserChangePrivilegesDialog dialogState={privilegesDialogState} />

@@ -1,5 +1,5 @@
 import React, { useCallback } from "react";
-import { useTableRowItem } from "../../../ContextProviders/TableRowProvider.js";
+import { useTableRowItemOld } from "../../../ContextProviders/TableRowProvider.js";
 import { Button, Stack, Typography } from "@mui/material";
 import { OpenInNewIcon } from "../../../Imports/Icons.js";
 import { ExhibitionSettingsButton } from "./ExhibitionSettingsButton.js";
@@ -7,7 +7,7 @@ import { ExhibitionDeleteButton } from "./ExhibitionDeleteButton.js";
 import { useManagementCallbacks } from "../../../ContextProviders/ManagementPageProvider.js";
 
 export const ExhibitionOptionsCell = () => {
-    const exhibition = useTableRowItem();
+    const exhibition = useTableRowItemOld();
     const {
         handleOpenExhibitionSettings,
         handleOpenExhibitionDeleteDialog

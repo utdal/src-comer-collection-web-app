@@ -1,9 +1,9 @@
 import React from "react";
-import { useTableRowItem } from "../../../ContextProviders/TableRowProvider.js";
+import { useTableRowItemOld } from "../../../ContextProviders/TableRowProvider.js";
 import { Stack, Typography } from "@mui/material";
 
 export const ExhibitionOwnerStackedNameEmailCell = () => {
-    const { User: owner } = useTableRowItem();
+    const { User: owner } = useTableRowItemOld();
     return (
         <Stack
             direction="column"

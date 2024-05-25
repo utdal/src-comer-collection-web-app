@@ -1,11 +1,11 @@
 import React, { useCallback } from "react";
 import { Button, Stack, Typography } from "@mui/material";
 import { useAppUser } from "../../../ContextProviders/AppUser.js";
-import { useTableRowItem } from "../../../ContextProviders/TableRowProvider.js";
+import { useTableCellItem } from "../../../ContextProviders/TableCellProvider.js";
 import { useNavigate } from "react-router";
 
 export const UserProfilePasswordInfoCell = () => {
-    const user = useTableRowItem();
+    const user = useTableCellItem();
     const [appUser] = useAppUser();
     const navigate = useNavigate();
     const handleNavigateToChangePassword = useCallback(() => {

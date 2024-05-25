@@ -1,9 +1,9 @@
 import React from "react";
 import { Typography } from "@mui/material";
-import { useTableRowItem } from "../../../ContextProviders/TableRowProvider.js";
+import { useTableCellItem } from "../../../ContextProviders/TableCellProvider.js";
 
 export const CourseIDCell = () => {
-    const course = useTableRowItem();
+    const course = useTableCellItem();
     return (
         <Typography variant="body1">
             {course.id}

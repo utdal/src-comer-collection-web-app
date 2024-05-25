@@ -1,11 +1,11 @@
 import React, { useCallback } from "react";
-import { useTableRowItem } from "../../../ContextProviders/TableRowProvider.js";
-import { useManagementCallbacks } from "../../../ContextProviders/ManagementPageProvider.js";
+import { useTableCellItem, useTableCellManagementCallbacks } from "../../../ContextProviders/TableCellProvider.js";
+
 import { EditButton } from "../Entity/EditButton.js";
 
 export const CourseEditButton = () => {
-    const course = useTableRowItem();
-    const { handleOpenCourseEditDialog } = useManagementCallbacks();
+    const course = useTableCellItem();
+    const { handleOpenCourseEditDialog } = useTableCellManagementCallbacks();
     const handleOpenEditDialog = useCallback(() => {
         handleOpenCourseEditDialog(course);
     }, [course, handleOpenCourseEditDialog]);

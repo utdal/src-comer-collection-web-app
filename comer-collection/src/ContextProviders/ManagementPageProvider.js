@@ -1,19 +1,48 @@
 import React, { createContext, useCallback, useContext, useMemo, useReducer } from "react";
 import PropTypes from "prop-types";
-import { Entity, itemsCombinedStatePropTypeShape } from "../Classes/Entity.js";
+import { itemsCombinedStatePropTypeShape } from "../Classes/Entity.js";
+
+/**
+ *
+ * @typedef {{id: number}} Item
+ *
+ * @typedef {{
+ *      all: number,
+ *      selected: number,
+ *      visible: number,
+ *      selectedAndVisible: number
+ * }} ItemCounts
+ *
+ * @typedef {{
+ *      item: Item,
+ *      itemString: string
+ * }} ItemDictionaryEntry
+ *
+ * @typedef {Object<number, ItemDictionaryEntry>} ItemDictionary
+ *
+ * @typedef {{
+ *      Entity: class,
+ *      items: Item[],
+ *      itemDictionary: ItemDictionary
+ *      selectionStatuses: Object<number, boolean>,
+ *      visibilityStatuses: Object<number, boolean>,
+ *      filterFunction: (item: Item) => boolean | null,
+ *      itemCounts: ItemCounts
+ * }} ItemsCombinedState
+ *
+ * @typedef {{
+ *      type: ("setItems"|"setSelectedItems"|"filterItems"|"setItemSelectionStatus")
+ * }} ItemsDispatchAction
+ *
+ */
 
 /**
  * Return an itemCounts object based on an array of items,
  * and its associated selection and visibility status dictionaries
- * @param {{id: number}[]} items
+ * @param {Item[]} items
  * @param {Object<number, boolean>} selectionStatuses
  * @param {Object<number, boolean>} visibilityStatuses
- * @returns {{
- *  all: number,
- *  selected: number,
- *  visible: number,
- *  selectedAndVisible: number
- * }}
+ * @returns {ItemCounts}
 */
 const getItemCounts = (items, selectionStatuses, visibilityStatuses) => {
     const itemCounts = {
@@ -36,39 +65,53 @@ const getItemCounts = (items, selectionStatuses, visibilityStatuses) => {
     return itemCounts;
 };
 
+/**
+ * Reducer function for useItemsReducer
+ * @param {ItemsCombinedState} state
+ * @param {ItemsDispatchAction} action
+ * @returns {ItemsCombinedState} newState
+ */
 const itemsReducer = (state, action) => {
     if (action.type === "setItems") {
-        const newSelectionStatuses = {};
         const newVisibilityStatuses = {};
 
-        for (const item of action.items) {
-            newSelectionStatuses[item.id] = state.selectionStatuses[item.id] ?? false;
-            newVisibilityStatuses[item.id] = state.filterFunction ? state.filterFunction(item) : true;
+        for (const newItem of action.items) {
+            const newItemString = JSON.stringify(newItem);
+            if (!state.itemDictionary[newItem.id] || state.itemDictionary[newItem.id].itemString !== newItemString) {
+                state.itemDictionary[newItem.id] = {
+                    item: newItem,
+                    itemString: JSON.stringify(newItem)
+                };
+            } else {
+                state.itemDictionary[newItem.id].item = newItem;
+                state.itemDictionary[newItem.id].itemString = newItemString;
+            }
+            newVisibilityStatuses[newItem.id] = state.filterFunction ? state.filterFunction(newItem) : true;
         }
 
         return {
-            Entity: state.Entity,
+            ...state,
             items: action.items,
-            selectionStatuses: newSelectionStatuses,
+            // selectionStatuses: newSelectionStatuses,
             visibilityStatuses: newVisibilityStatuses,
-            filterFunction: state.filterFunction,
-            itemCounts: getItemCounts(action.items, newSelectionStatuses, newVisibilityStatuses)
+            itemCounts: getItemCounts(action.items, state.selectionStatuses, newVisibilityStatuses)
         };
     } else if (action.type === "setSelectedItems") {
-        const newSelectionStatuses = {};
-        for (const { id } of state.items) {
-            newSelectionStatuses[id] = false;
+        const clearSelectionStatuses = {};
+        for (const itemId in state.selectionStatuses) {
+            clearSelectionStatuses[itemId] = false;
         }
+        Object.assign(state.selectionStatuses, clearSelectionStatuses);
+
+        const newSelectionStatuses = {};
         for (const { id } of action.selectedItems) {
             newSelectionStatuses[id] = true;
         }
+        Object.assign(state.selectionStatuses, newSelectionStatuses);
+
         return {
-            Entity: state.Entity,
-            items: state.items,
-            selectionStatuses: newSelectionStatuses,
-            visibilityStatuses: state.visibilityStatuses,
-            filterFunction: state.filterFunction,
-            itemCounts: getItemCounts(state.items, newSelectionStatuses, state.visibilityStatuses)
+            ...state,
+            itemCounts: getItemCounts(state.items, state.selectionStatuses, state.visibilityStatuses)
         };
     } else if (action.type === "filterItems") {
         const filteredItems = state.items.filter(action.filterFunction);
@@ -78,16 +121,20 @@ const itemsReducer = (state, action) => {
             newVisibilityStatuses[id] = true;
         }
         return {
-            Entity: state.Entity,
-            items: state.items,
-            selectionStatuses: state.selectionStatuses,
+            ...state,
             visibilityStatuses: newVisibilityStatuses,
             filterFunction: action.filterFunction,
             itemCounts: getItemCounts(state.items, state.selectionStatuses, newVisibilityStatuses)
         };
     } else if (action.type === "setItemSelectionStatus") {
+        /**
+         * Update the dictionary value without changing the pointer for selectionStatuses
+         */
         state.selectionStatuses[action.itemId] = action.newStatus;
         state.itemCounts = getItemCounts(state.items, state.selectionStatuses, state.visibilityStatuses);
+        /**
+         * Change the pointer to the state object to force React to re-render
+         */
         return { ...state };
     } else {
         console.warn("itemsReducer received invalid action object", action);
@@ -95,9 +142,14 @@ const itemsReducer = (state, action) => {
     }
 };
 
-const defaultItemsCombinedState = {
+/**
+ * @param {class} Entity
+ * @returns {ItemsCombinedState}
+ */
+const defaultItemsCombinedState = (Entity) => ({
     Entity,
     items: [],
+    itemDictionary: {},
     selectionStatuses: {},
     visibilityStatuses: {},
     filterFunction: null,
@@ -107,7 +159,7 @@ const defaultItemsCombinedState = {
         visible: 0,
         selectedAndVisible: 0
     }
-};
+});
 
 const ManagementPageContext = createContext();
 
@@ -149,7 +201,7 @@ export const useManagementCallbacks = () => {
 };
 
 /**
- * @returns {[object[], function]} [items, setItems]
+ * @returns {[Item[], function]} [items, setItems]
  */
 export const useItems = () => {
     const { itemsCombinedState, setItems } = useContext(ManagementPageContext);
@@ -157,7 +209,8 @@ export const useItems = () => {
 };
 
 /**
- * @returns {[object[], function]} [selectedItems, setSelectedItems]
+ * REMOVE THIS
+ * @returns {[Item[], function]} [selectedItems, setSelectedItems]
  */
 export const useSelectedItems = () => {
     const { setSelectedItems } = useContext(ManagementPageContext);
@@ -181,12 +234,14 @@ export const useVisibilityStatuses = () => {
 };
 
 /**
- * @returns {{
- *  all: number,
- *  selected: number,
- *  visible: number,
- *  selectedAndVisible: number
- * }}
+ * @returns {ItemDictionary}
+ */
+export const useItemDictionary = () => {
+    return useContext(ManagementPageContext).itemsCombinedState.itemDictionary;
+};
+
+/**
+ * @returns {ItemCounts}
  */
 export const useItemCounts = () => {
     return useContext(ManagementPageContext).itemsCombinedState.itemCounts;
@@ -210,19 +265,7 @@ export const useItemsLoadStatus = () => {
 /**
  * @param {Class} Entity
  * @returns {[
- *  {
- *      Entity: class,
- *      items: object[],
- *      selectionStatuses: Object<number, boolean>,
- *      visibilityStatuses: Object<number, boolean>,
- *      filterFunction: (item: object) => boolean | null,
- *      itemCounts: {
- *          all: number,
- *          selected: number,
- *          visible: number,
- *          selectedAndVisible: number
- *      }
- * },
+ *  itemsCombinedState: ItemsCombinedState,
  *  setItems: (items: object[]) => void,
  *  setSelectedItems: (selectedItems: object[]) => void,
  *  filterItems: (filterFunction: (item: object) => boolean) => void,
@@ -230,10 +273,7 @@ export const useItemsLoadStatus = () => {
  * [itemsCombinedState, setItems, setSelectedItems, filterItems, setItemSelectionStatus]
  */
 export const useItemsReducer = (Entity) => {
-    const [itemsCombinedState, itemsDispatch] = useReducer(itemsReducer, {
-        ...defaultItemsCombinedState,
-        Entity
-    });
+    const [itemsCombinedState, itemsDispatch] = useReducer(itemsReducer, Entity, defaultItemsCombinedState);
     const setItems = useCallback((items) => {
         itemsDispatch({
             type: "setItems",

@@ -1,12 +1,12 @@
 import React, { useCallback } from "react";
 import { Button, Stack, Typography } from "@mui/material";
-import { useTableRowItem } from "../../../ContextProviders/TableRowProvider.js";
-import { useManagementCallbacks } from "../../../ContextProviders/ManagementPageProvider.js";
+import { useTableCellItem, useTableCellManagementCallbacks } from "../../../ContextProviders/TableCellProvider.js";
+
 import { PersonIcon } from "../../../Imports/Icons.js";
 
 export const CourseUserAssignmentCell = () => {
-    const course = useTableRowItem();
-    const { handleOpenAssignCourseUserDialog } = useManagementCallbacks();
+    const course = useTableCellItem();
+    const { handleOpenAssignCourseUserDialog } = useTableCellManagementCallbacks();
     const handleOpenAssignUserDialog = useCallback(() => {
         handleOpenAssignCourseUserDialog(course);
     }, [course, handleOpenAssignCourseUserDialog]);

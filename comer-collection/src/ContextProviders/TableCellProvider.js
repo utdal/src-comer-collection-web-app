@@ -6,16 +6,18 @@ const TableCellContext = createContext();
 
 /**
  * @typedef {Object<string, () => void>} callbacksObject
+ * @typedef {import("../Components/DataTable/DataTableFieldCells.js").ItemDictionaryEntry} ItemDictionaryEntry
+ *
  * @param {{
-*  item: object,
-*  managementCallbacks: callbacksObject
-* }} props
+ *      itemDictionaryEntry: ItemDictionaryEntry,
+ *      managementCallbacks: callbacksObject
+ * }} props
 */
-export const TableCellProvider = ({ item, managementCallbacks, children }) => {
+export const TableCellProvider = ({ itemDictionaryEntry, managementCallbacks, children }) => {
     const contextValue = useMemo(() => ({
-        item,
+        itemDictionaryEntry,
         managementCallbacks
-    }), [item, managementCallbacks]);
+    }), [itemDictionaryEntry, managementCallbacks]);
     return (
         <TableCellContext.Provider value={contextValue}>
             {children}
@@ -25,16 +27,23 @@ export const TableCellProvider = ({ item, managementCallbacks, children }) => {
 
 TableCellProvider.propTypes = {
     children: PropTypes.node.isRequired,
-    item: entityPropTypeShape.isRequired,
+    itemDictionaryEntry: PropTypes.shape({
+        item: entityPropTypeShape,
+        itemString: PropTypes.string
+    }),
     managementCallbacks: PropTypes.objectOf(PropTypes.func)
 };
 
 /**
  * Access the item within the TableRowContext
- * @returns {Object} The item represented in the Table Row
+ * @returns The item represented in the Table Row
  */
 export const useTableCellItem = () => {
-    return useContext(TableCellContext).item;
+    /**
+     * @type {{itemDictionaryEntry: ItemDictionaryEntry}}
+     */
+    const { itemDictionaryEntry } = useContext(TableCellContext);
+    return itemDictionaryEntry.item;
 };
 
 /**

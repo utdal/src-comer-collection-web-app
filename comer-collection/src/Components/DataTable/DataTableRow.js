@@ -1,7 +1,7 @@
 import React, { memo, useCallback } from "react";
 import PropTypes from "prop-types";
 import { useInView } from "react-intersection-observer";
-import { useTableRowItem, useTableRowManagementCallbacks, useSetSelectionStatus, useTableCheckboxSettings } from "../../ContextProviders/TableRowProvider.js";
+import { useTableRowManagementCallbacks, useSetSelectionStatus, useTableCheckboxSettings, useTableRowItem, useTableFields } from "../../ContextProviders/TableRowProvider.js";
 import { Checkbox, TableCell, TableRow, styled } from "@mui/material";
 import { DataTableFieldCells } from "./DataTableFieldCells.js";
 import { TableRowPlaceholder } from "./TableRowPlaceholder.js";
@@ -16,13 +16,24 @@ const ColoredTableRow = styled(TableRow)(({ isSelected, theme, themeColor }) => 
     }
 }));
 
+/**
+ * @typedef {import("../../ContextProviders/ManagementPageProvider.js").ItemDictionaryEntry} ItemDictionaryEntry
+ * @type {(props: {
+ *      isSelected: boolean,
+ *      themeColor: string
+ * }) => React.JSX.Element}
+ */
 const DataTableRow = memo(function DataTableRow ({ isSelected, themeColor }) {
     const { inView, ref } = useInView({
         triggerOnce: true
     });
 
-    const item = useTableRowItem();
     const { rowSelectionEnabled, smallCheckboxes } = useTableCheckboxSettings();
+
+    const itemDictionaryEntry = useTableRowItem();
+    console.log("Rendering DataTableRow where itemId = ", itemDictionaryEntry.item.id, " and isSelected = ", isSelected);
+
+    const tableFields = useTableFields();
 
     const managementCallbacks = useTableRowManagementCallbacks();
     const setSelectionStatus = useSetSelectionStatus();
@@ -37,23 +48,29 @@ const DataTableRow = memo(function DataTableRow ({ isSelected, themeColor }) {
             ref={ref}
             themeColor={themeColor}
         >
-            {Boolean(rowSelectionEnabled) && (
-                <TableCell width="10px">
-                    <Checkbox
-                        checked={isSelected}
-                        color={themeColor}
-                        onChange={handleCheckboxChange}
-                        size={smallCheckboxes ? "medium" : "large"}
-                    />
-                </TableCell>)}
-
             {
                 inView
                     ? (
-                        <DataTableFieldCells
-                            item={item}
-                            managementCallbacks={managementCallbacks}
-                        />
+                        <>
+                            {rowSelectionEnabled
+                                ? (
+                                    <TableCell width="10px">
+                                        <Checkbox
+                                            checked={isSelected}
+                                            color={themeColor}
+                                            onChange={handleCheckboxChange}
+                                            size={smallCheckboxes ? "medium" : "large"}
+                                        />
+                                    </TableCell>
+                                )
+                                : null}
+
+                            <DataTableFieldCells
+                                itemDictionaryEntry={itemDictionaryEntry}
+                                managementCallbacks={managementCallbacks}
+                                tableFields={tableFields}
+                            />
+                        </>
                     )
                     : (
                         <TableRowPlaceholder />

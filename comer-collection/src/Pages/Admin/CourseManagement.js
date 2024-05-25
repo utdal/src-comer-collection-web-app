@@ -27,7 +27,6 @@ import AssociationManageButton from "../../Components/Buttons/AssociationManageB
 
 const CourseManagement = () => {
     const [coursesCombinedState, setCourses, setSelectedCourses, filterCourses, setCourseSelectionStatus] = useItemsReducer(Course);
-    const [users, setUsers] = useState([]);
     const [isLoaded, setIsLoaded] = useState(false);
     const [isError, setIsError] = useState(false);
 
@@ -51,18 +50,11 @@ const CourseManagement = () => {
     const handleRefresh = useCallback(async () => {
         try {
             setIsError(false);
-
-            const [fetchedCourses, fetchedUsers] = await Promise.all([
-                Course.handleFetchAll(),
-                User.handleFetchAll()
-            ]);
-
-            setCourses(fetchedCourses);
-            setUsers(fetchedUsers);
-
+            setCourses(await Course.handleFetchAll());
             setIsLoaded(true);
         } catch (error) {
             setIsError(true);
+            setIsLoaded(false);
         }
     }, [setCourses]);
 
@@ -174,7 +166,7 @@ const CourseManagement = () => {
                 dialogState={userDialogState}
                 editMode
                 handleSwitchToSecondary={handleSwitchToUsersView}
-                secondaryItemsAll={users}
+                secondaryItemsAll={[]}
             />
         </ManagementPageProvider>
     );

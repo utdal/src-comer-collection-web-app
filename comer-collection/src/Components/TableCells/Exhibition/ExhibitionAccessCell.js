@@ -1,10 +1,10 @@
 import React from "react";
-import { useTableRowItem } from "../../../ContextProviders/TableRowProvider.js";
+import { useTableRowItemOld } from "../../../ContextProviders/TableRowProvider.js";
 import { Stack, Typography } from "@mui/material";
 import { LockIcon, PublicIcon, VpnLockIcon } from "../../../Imports/Icons.js";
 
 export const ExhibitionAccessCell = () => {
-    const exhibition = useTableRowItem();
+    const exhibition = useTableRowItemOld();
     return (
         <Stack
             alignItems="center"

@@ -4,7 +4,7 @@ import { Checkbox, Stack, TableCell, TableContainer, Typography, Table, TableBod
 import { useTheme } from "@emotion/react";
 import { ColumnSortButton } from "../Buttons/ColumnSortButton.js";
 import PropTypes from "prop-types";
-import { useItemCounts, useItems, useVisibilityStatuses } from "../../ContextProviders/ManagementPageProvider.js";
+import { useItemCounts, useItemDictionary, useItems, useVisibilityStatuses } from "../../ContextProviders/ManagementPageProvider.js";
 import { tableFieldPropTypeShape } from "../../Classes/Entity.js";
 import { TableRowContainer } from "./TableRowContainer.js";
 import { FullPageMessage } from "../FullPageMessage.js";
@@ -15,6 +15,7 @@ export const DataTable = memo(function DataTable ({
 }) {
     const theme = useTheme();
     const [items] = useItems();
+    const itemDictionary = useItemDictionary();
 
     const [visibilityStatuses] = useVisibilityStatuses();
     const itemCounts = useItemCounts();
@@ -47,10 +48,11 @@ export const DataTable = memo(function DataTable ({
         const itemInformationToReturn = (
             items.map((item) => {
                 const sortableValues = sortableValuesByRow[item.id];
+                const itemDictionaryEntry = itemDictionary[item.id];
 
                 const renderedTableRow = (
                     <TableRowContainer
-                        item={item}
+                        itemDictionaryEntry={itemDictionaryEntry}
                         key={item.id}
                         rowSelectionEnabled={rowSelectionEnabled}
                         smallCheckboxes={smallCheckboxes}
@@ -62,7 +64,7 @@ export const DataTable = memo(function DataTable ({
             })
         );
         return itemInformationToReturn;
-    }, [items, rowSelectionEnabled, smallCheckboxes, sortableValuesByRow, tableFields]);
+    }, [itemDictionary, items, rowSelectionEnabled, smallCheckboxes, sortableValuesByRow, tableFields]);
 
     const visibleItemInformation = useMemo(() => itemInformation.filter((r) => visibilityStatuses[r[0].id]), [itemInformation, visibilityStatuses]);
 
@@ -88,10 +90,10 @@ export const DataTable = memo(function DataTable ({
                         {Boolean(rowSelectionEnabled) && (
                             <TableCell sx={{ backgroundColor: theme.palette.grey.translucent }}>
                                 <Checkbox
-                                    disabled={1 !== 0 /* visibleItems.length === 0 */}
                                     checked={
                                         itemCounts.selectedAndVisible === itemCounts.visible && itemCounts.visible > 0
                                     }
+                                    disabled={1 !== 0 /* visibleItems.length === 0 */}
                                     indeterminate={(itemCounts.selectedAndVisible > 0 && itemCounts.selectedAndVisible < itemCounts.visible)}
                                     // (selectedVisibleItems.length > 0 && selectedVisibleItems.length < visibleItems.length) || visibleItems.length === 0
                                     onChange={(e) => {

@@ -6,7 +6,10 @@ export const TableRowPlaceholder = memo(function TableContainer () {
     const tableFields = useTableFields();
     const { rowSelectionEnabled } = useTableCheckboxSettings();
     return (
-        <TableCell colSpan={tableFields.length - (1 * !rowSelectionEnabled)}>
+        <TableCell
+            colSpan={tableFields.length + (1 * rowSelectionEnabled)}
+            size="medium"
+        >
             <Skeleton
                 height="20px"
                 variant="text"

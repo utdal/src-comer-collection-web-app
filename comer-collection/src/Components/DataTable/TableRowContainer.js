@@ -5,21 +5,30 @@ import { useManagementCallbacks, useSelectionStatuses } from "../../ContextProvi
 import DataTableRow from "./DataTableRow.js";
 import { entityPropTypeShape, tableFieldPropTypeShape } from "../../Classes/Entity.js";
 
-export const TableRowContainer = ({ item, tableFields, rowSelectionEnabled, smallCheckboxes }) => {
+/**
+ * @typedef {import("../../ContextProviders/ManagementPageProvider.js").ItemDictionaryEntry} ItemDictionaryEntry
+ * @param {{
+ *      itemDictionaryEntry: ItemDictionaryEntry
+ * }} props
+ */
+export const TableRowContainer = ({ itemDictionaryEntry, tableFields, rowSelectionEnabled, smallCheckboxes }) => {
     const [selectionStatuses, setItemSelectionStatus] = useSelectionStatuses();
+
+    const { item } = itemDictionaryEntry;
+
     const themeColor = item.is_admin_or_collection_manager ? "secondary" : "primary";
 
     /**
      * @type {(newStatus: boolean) => void}
      */
     const setSelectionStatus = useCallback((newStatus) => {
-        setItemSelectionStatus(item.id, newStatus);
-    }, [item, setItemSelectionStatus]);
+        setItemSelectionStatus(itemDictionaryEntry.item.id, newStatus);
+    }, [itemDictionaryEntry, setItemSelectionStatus]);
 
     const managementCallbacks = useManagementCallbacks();
     return (
         <TableRowProvider
-            item={item}
+            itemDictionaryEntry={itemDictionaryEntry}
             managementCallbacks={managementCallbacks}
             rowSelectionEnabled={rowSelectionEnabled}
             setSelectionStatus={setSelectionStatus}
@@ -27,7 +36,7 @@ export const TableRowContainer = ({ item, tableFields, rowSelectionEnabled, smal
             tableFields={tableFields}
         >
             <DataTableRow
-                isSelected={selectionStatuses[item.id]}
+                isSelected={Boolean(selectionStatuses[item.id])}
                 themeColor={themeColor}
             />
         </TableRowProvider>
@@ -35,7 +44,10 @@ export const TableRowContainer = ({ item, tableFields, rowSelectionEnabled, smal
 };
 
 TableRowContainer.propTypes = {
-    item: entityPropTypeShape,
+    itemDictionaryEntry: PropTypes.shape({
+        item: entityPropTypeShape,
+        itemString: PropTypes.string
+    }),
     rowSelectionEnabled: PropTypes.bool,
     smallCheckboxes: PropTypes.bool,
     tableFields: PropTypes.arrayOf(PropTypes.shape(tableFieldPropTypeShape)).isRequired

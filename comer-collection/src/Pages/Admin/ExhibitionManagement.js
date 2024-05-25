@@ -22,7 +22,6 @@ import { useDialogState } from "../../Hooks/useDialogState.js";
 
 const ExhibitionManagement = () => {
     const [exhibitionsCombinedState, setExhibitions, setSelectedExhibitions, filterExhibitions, setExhibitionSelectionStatus] = useItemsReducer(Exhibition);
-    const [courses, setCourses] = useState([]);
 
     const [isLoaded, setIsLoaded] = useState(false);
     const [isError, setIsError] = useState(false);
@@ -49,21 +48,11 @@ const ExhibitionManagement = () => {
     const handleRefresh = useCallback(async () => {
         try {
             setIsError(false);
-
-            const fetchedExhibitions = await Exhibition.handleFetchAll();
-            setExhibitions(fetchedExhibitions);
-
-            const coursesById = {};
-            for (const ex of fetchedExhibitions) {
-                for (const c of ex.User.Courses) {
-                    coursesById[c.id] = c;
-                }
-            }
-            setCourses(Object.values(coursesById));
-
+            setExhibitions(await Exhibition.handleFetchAll());
             setIsLoaded(true);
         } catch (error) {
             setIsError(true);
+            setIsLoaded(false);
         }
     }, [setExhibitions]);
 
@@ -123,7 +112,7 @@ const ExhibitionManagement = () => {
                     />
 
                     <CourseFilterMenu
-                        courses={courses}
+                        courses={[]}
                         filterValue={userCourseIdFilter}
                         setFilterValue={setUserCourseIdFilter}
                     />

@@ -1,6 +1,6 @@
 import React from "react";
 import { useSnackbar } from "../../../ContextProviders/AppFeatures.js";
-import { useTableRowItem } from "../../../ContextProviders/TableRowProvider.js";
+import { useTableRowItemOld } from "../../../ContextProviders/TableRowProvider.js";
 import { useAssociationType, useRelevantPrimaryItems } from "../../../ContextProviders/AssociationManagementPageProvider.js";
 import { User } from "../../../Classes/Entities/User.js";
 import { capitalized } from "../../../Classes/Entity.js";
@@ -8,7 +8,7 @@ import { Button, Typography } from "@mui/material";
 
 export const UnassignButton = () => {
     const showSnackbar = useSnackbar();
-    const secondaryItem = useTableRowItem();
+    const secondaryItem = useTableRowItemOld();
     const primaryItems = useRelevantPrimaryItems();
     const AssociationType = useAssociationType();
     const buttonColor = AssociationType.secondary === User && secondaryItem.is_admin_or_collection_manager ? "secondary" : "primary";

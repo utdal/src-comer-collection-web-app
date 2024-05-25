@@ -1,10 +1,10 @@
 import React from "react";
 import { Stack, Typography } from "@mui/material";
-import { useTableRowItem } from "../../../ContextProviders/TableRowProvider.js";
+import { useTableCellItem } from "../../../ContextProviders/TableCellProvider.js";
 import { AccessTimeIcon, CheckIcon, ExpiredIcon } from "../../../Imports/Icons.js";
 
 export const CourseStatusCell = () => {
-    const course = useTableRowItem();
+    const course = useTableCellItem();
     return (
         <Stack
             direction="row"

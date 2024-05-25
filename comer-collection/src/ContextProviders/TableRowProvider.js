@@ -6,24 +6,30 @@ const TableRowContext = createContext();
 
 /**
  * @typedef {Object<string, () => void>} callbacksObject
- * @param {{
- *  item: object,
+ * @typedef {import("./ManagementPageProvider.js").Item} Item
+ * @typedef {import("../Components/DataTable/TableRowContainer.js").ItemDictionaryEntry} ItemDictionaryEntry
+ *
+ * @typedef {{
+ *  item: Item,
+ *  itemDictionaryEntry: ItemDictionaryEntry
  *  setSelectionStatus: (newStatus: bool) => void
  *  managementCallbacks: callbacksObject,
  *  rowSelectionEnabled: boolean,
  *  smallCheckboxes: boolean,
  *  tableFields: {columnDescription: string}[]
- * }} props
+ * }} TableRowContextValues
+ *
+ * @param {TableRowContextValues} props
  */
-export const TableRowProvider = ({ item, setSelectionStatus, managementCallbacks, rowSelectionEnabled, smallCheckboxes, tableFields, children }) => {
+export const TableRowProvider = ({ itemDictionaryEntry, setSelectionStatus, managementCallbacks, rowSelectionEnabled, smallCheckboxes, tableFields, children }) => {
     const contextValue = useMemo(() => ({
-        item,
+        itemDictionaryEntry,
         setSelectionStatus,
         managementCallbacks,
         rowSelectionEnabled,
         smallCheckboxes,
         tableFields
-    }), [item, managementCallbacks, rowSelectionEnabled, setSelectionStatus, smallCheckboxes, tableFields]);
+    }), [itemDictionaryEntry, managementCallbacks, rowSelectionEnabled, setSelectionStatus, smallCheckboxes, tableFields]);
     return (
         <TableRowContext.Provider value={contextValue}>
             {children}
@@ -33,7 +39,10 @@ export const TableRowProvider = ({ item, setSelectionStatus, managementCallbacks
 
 TableRowProvider.propTypes = {
     children: PropTypes.node.isRequired,
-    item: entityPropTypeShape.isRequired,
+    itemDictionaryEntry: PropTypes.shape({
+        item: entityPropTypeShape,
+        itemString: PropTypes.string
+    }),
     managementCallbacks: PropTypes.objectOf(PropTypes.func),
     rowSelectionEnabled: PropTypes.bool,
     setSelectionStatus: PropTypes.func.isRequired,
@@ -59,10 +68,27 @@ export const useSetSelectionStatus = () => {
 
 /**
  * Access the item within the TableRowContext
- * @returns {Object} The item represented in the Table Row
+ * @returns The item represented in the Table Row
+ */
+export const useTableRowItemOld = () => {
+    /**
+     * @type {TableRowContextValues}
+     */
+    const contextValue = useContext(TableRowContext);
+    const { itemDictionaryEntry: { item } } = contextValue;
+    return item;
+};
+
+/**
+ * Access the item and itemString within the TableRowContext
+ * @returns The item dictionary entry containing the item and itemString
  */
 export const useTableRowItem = () => {
-    return useContext(TableRowContext).item;
+    /**
+     * @type {TableRowContextValues}
+     */
+    const contextValue = useContext(TableRowContext);
+    return contextValue.itemDictionaryEntry;
 };
 
 /**

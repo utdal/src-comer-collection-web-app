@@ -1,10 +1,10 @@
 import React from "react";
-import { useTableRowItem } from "../../../ContextProviders/TableRowProvider.js";
+import { useTableRowItemOld } from "../../../ContextProviders/TableRowProvider.js";
 import { Stack, Typography } from "@mui/material";
 import { Exhibition } from "../../../Classes/Entities/Exhibition.js";
 
 export const ExhibitionDateModifiedStackedCell = () => {
-    const exhibition = useTableRowItem();
+    const exhibition = useTableRowItemOld();
     return (
         <Stack
             direction="column"

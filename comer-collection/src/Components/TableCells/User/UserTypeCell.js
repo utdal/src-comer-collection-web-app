@@ -1,10 +1,10 @@
 import React from "react";
 import { Stack, Typography } from "@mui/material";
-import { useTableRowItem } from "../../../ContextProviders/TableRowProvider.js";
+import { useTableCellItem } from "../../../ContextProviders/TableCellProvider.js";
 import { CollectionManagerIcon, PersonIcon, SecurityIcon } from "../../../Imports/Icons.js";
 
 export const UserTypeCell = () => {
-    const user = useTableRowItem();
+    const user = useTableCellItem();
     return (
         <Stack
             direction="row"

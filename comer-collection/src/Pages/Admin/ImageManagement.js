@@ -32,13 +32,36 @@ import { useDialogState } from "../../Hooks/useDialogState.js";
 import EntityManageButton from "../../Components/Buttons/EntityManageButton.js";
 import AssociationManageButton from "../../Components/Buttons/AssociationManageButton.js";
 
+/**
+ * Custom hook that manages fetching items on a management page
+ * @typedef {import("../../ContextProviders/ManagementPageProvider.js").Item} Item
+ * @param {class} Entity the type of items to fetch
+ * @param {React.Dispatch<React.SetStateAction<Item[]>>} setItems the setter method for the items state
+ * @returns {[() => Promise<void>, boolean, boolean]} [handleRefresh, isLoaded, isError]
+ */
+export const useItemsFetch = (Entity, setItems) => {
+    const [isLoaded, setIsLoaded] = useState(false);
+    const [isError, setIsError] = useState(false);
+
+    const handleRefresh = useCallback(async () => {
+        try {
+            setIsError(false);
+            setItems(await Entity.handleFetchAll());
+            setIsLoaded(true);
+        } catch (e) {
+            setIsError(true);
+            setIsLoaded(false);
+        }
+    }, [Entity, setItems]);
+
+    return [handleRefresh, isLoaded, isError];
+};
+
 const ImageManagement = () => {
     const [imagesCombinedState, setImages, setSelectedImages, filterImages, setImageSelectionStatuses] = useItemsReducer(Image);
 
-    const [exhibitions, setExhibitions] = useState([]);
-
-    const [isLoaded, setIsLoaded] = useState(false);
-    const [isError, setIsError] = useState(false);
+    // const [isLoaded, setIsLoaded] = useState(false);
+    // const [isError, setIsError] = useState(false);
 
     const [previewerImage, setPreviewerImage] = useState(null);
     const [previewerOpen, setPreviewerOpen] = useState(false);
@@ -64,17 +87,7 @@ const ImageManagement = () => {
     useAccountNavTitle("Image Management");
     useTitle("Image Management");
 
-    const handleRefresh = useCallback(async () => {
-        setIsError(false);
-        try {
-            const fetchedImages = await Image.handleFetchAll();
-            setImages(fetchedImages);
-            setExhibitions(fetchedImages.map((i) => i.Exhibitions).flat());
-            setIsLoaded(true);
-        } catch (e) {
-            setIsError(true);
-        }
-    }, [setImages]);
+    const [handleRefresh, isLoaded, isError] = useItemsFetch(Image, setImages);
 
     useEffect(() => {
         handleRefresh();
@@ -156,6 +169,10 @@ const ImageManagement = () => {
         handleOpenImageViewExhibitionDialog,
         handleOpenMultiCreateDialog,
         handleRefresh]);
+
+    useEffect(() => {
+        console.log(imagesCombinedState.selectionStatuses);
+    }, [imagesCombinedState.selectionStatuses]);
 
     return (
         <ManagementPageProvider
@@ -268,7 +285,7 @@ const ImageManagement = () => {
                 Association={ImageExhibition}
                 dialogState={viewExhibitionDialogState}
                 handleSwitchToSecondary={handleSwitchToExhibitionsView}
-                secondaryItemsAll={exhibitions}
+                secondaryItemsAll={[]}
             />
 
         </ManagementPageProvider>

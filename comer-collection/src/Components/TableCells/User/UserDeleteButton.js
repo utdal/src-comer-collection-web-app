@@ -1,13 +1,13 @@
 import React, { useCallback } from "react";
 import { useAppUser } from "../../../ContextProviders/AppUser.js";
-import { useTableRowItem } from "../../../ContextProviders/TableRowProvider.js";
-import { useManagementCallbacks } from "../../../ContextProviders/ManagementPageProvider.js";
+import { useTableCellItem, useTableCellManagementCallbacks } from "../../../ContextProviders/TableCellProvider.js";
+
 import { DeleteButton } from "../Entity/DeleteButton.js";
 
 export const UserDeleteButton = () => {
-    const user = useTableRowItem();
+    const user = useTableCellItem();
     const appUser = useAppUser();
-    const { handleOpenUserDeleteDialog } = useManagementCallbacks();
+    const { handleOpenUserDeleteDialog } = useTableCellManagementCallbacks();
     const handleOpenDeleteDialog = useCallback(() => {
         handleOpenUserDeleteDialog(user);
     }, [user, handleOpenUserDeleteDialog]);
