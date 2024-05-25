@@ -111,16 +111,18 @@ const defaultItemsCombinedState = {
 
 const ManagementPageContext = createContext();
 
-export const ManagementPageProvider = ({ managementCallbacks, itemsCombinedState, setItems, setSelectedItems, setItemSelectionStatus, children }) => {
+export const ManagementPageProvider = ({ isLoaded, isError, managementCallbacks, itemsCombinedState, setItems, setSelectedItems, setItemSelectionStatus, children }) => {
     const contextValue = useMemo(() => {
         return {
             managementCallbacks,
             itemsCombinedState,
             setItems,
             setSelectedItems,
-            setItemSelectionStatus
+            setItemSelectionStatus,
+            isLoaded,
+            isError
         };
-    }, [managementCallbacks, itemsCombinedState, setItems, setSelectedItems, setItemSelectionStatus]);
+    }, [managementCallbacks, itemsCombinedState, setItems, setSelectedItems, setItemSelectionStatus, isLoaded, isError]);
     return (
         <ManagementPageContext.Provider value={contextValue}>
             {children}
@@ -130,6 +132,8 @@ export const ManagementPageProvider = ({ managementCallbacks, itemsCombinedState
 
 ManagementPageProvider.propTypes = {
     children: PropTypes.node.isRequired,
+    isError: PropTypes.bool.isRequired,
+    isLoaded: PropTypes.bool.isRequired,
     itemsCombinedState: PropTypes.shape(itemsCombinedStatePropTypeShape).isRequired,
     managementCallbacks: PropTypes.objectOf(PropTypes.func).isRequired,
     setItemSelectionStatus: PropTypes.func.isRequired,
@@ -193,6 +197,14 @@ export const useItemCounts = () => {
  */
 export const useEntity = () => {
     return useContext(ManagementPageContext).itemsCombinedState.Entity;
+};
+
+/**
+ * @returns {[isLoaded: boolean, isError: boolean]} [isLoaded, isError]
+ */
+export const useItemsLoadStatus = () => {
+    const { isLoaded, isError } = useContext(ManagementPageContext);
+    return [isLoaded, isError];
 };
 
 /**
