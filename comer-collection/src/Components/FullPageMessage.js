@@ -1,9 +1,9 @@
-import { Box, Button, Paper, Stack, Typography } from "@mui/material";
+import { Box, Button, LinearProgress, Paper, Stack, Typography } from "@mui/material";
 import React from "react";
 import { useNavigate } from "react-router";
 import PropTypes from "prop-types";
 
-export const FullPageMessage = ({ message, buttonText, buttonDestination = null, Icon, buttonAction = null }) => {
+export const FullPageMessage = ({ message, buttonText, buttonDestination = null, Icon, buttonAction = null, includeLinearProgress = false }) => {
     const navigate = useNavigate();
 
     return (
@@ -19,7 +19,9 @@ export const FullPageMessage = ({ message, buttonText, buttonDestination = null,
                 spacing={2}
                 sx={{ height: "100%" }}
             >
-                <Icon sx={{ fontSize: "150pt", opacity: 0.5 }} />
+                {Icon
+                    ? <Icon sx={{ fontSize: "150pt", opacity: 0.5 }} />
+                    : null}
 
                 <Typography variant="h4">
                     {message}
@@ -36,6 +38,8 @@ export const FullPageMessage = ({ message, buttonText, buttonDestination = null,
                     )
                     : null}
             </Stack>
+
+            {includeLinearProgress ? <LinearProgress /> : null}
         </Box>
     );
 };
@@ -45,5 +49,6 @@ FullPageMessage.propTypes = {
     buttonAction: PropTypes.func,
     buttonDestination: PropTypes.string,
     buttonText: PropTypes.string,
+    includeLinearProgress: PropTypes.bool,
     message: PropTypes.string.isRequired
 };
