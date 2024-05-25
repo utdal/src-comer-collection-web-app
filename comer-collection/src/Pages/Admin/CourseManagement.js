@@ -1,5 +1,4 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
-import { FullPageMessage } from "../../Components/FullPageMessage.js";
 import SearchBox from "../../Components/SearchBox.js";
 import { ItemSingleDeleteDialog } from "../../Components/Dialogs/ItemSingleDeleteDialog.js";
 import { ItemMultiCreateDialog } from "../../Components/Dialogs/ItemMultiCreateDialog.js";
@@ -7,14 +6,8 @@ import { ItemSingleEditDialog } from "../../Components/Dialogs/ItemSingleEditDia
 import { DataTable } from "../../Components/DataTable/DataTable.js";
 import { doesItemMatchSearchQuery } from "../../Helpers/SearchUtilities.js";
 import { AssociationManagementDialog } from "../../Components/Dialogs/AssociationManagementDialog/AssociationManagementDialog.js";
-import { Navigate, useNavigate } from "react-router";
+import { useNavigate } from "react-router";
 import { SelectionSummary } from "../../Components/SelectionSummary.js";
-import { useAppUser } from "../../ContextProviders/AppUser.js";
-import {
-    AccessTimeIcon,
-    WarningIcon,
-    LockIcon
-} from "../../Imports/Icons.js";
 import { useTitle } from "../../ContextProviders/AppFeatures.js";
 import { useAccountNavTitle } from "../../Hooks/useAccountNavTitle.js";
 import { Course } from "../../Classes/Entities/Course.js";
@@ -50,7 +43,6 @@ const CourseManagement = () => {
         setSearchQuery("");
     }, []);
 
-    const [appUser] = useAppUser();
     const navigate = useNavigate();
     useTitle("Course Management");
 
@@ -75,10 +67,8 @@ const CourseManagement = () => {
     }, [setCourses]);
 
     useEffect(() => {
-        if (appUser.is_admin) {
-            handleRefresh();
-        }
-    }, [appUser.is_admin, handleRefresh]);
+        handleRefresh();
+    }, [handleRefresh]);
 
     const courseFilterFunction = useCallback((course) => {
         return doesItemMatchSearchQuery(searchQuery, course, ["name", "notes"]);
@@ -119,31 +109,11 @@ const CourseManagement = () => {
         handleRefresh
     ]);
 
-    return (!appUser.is_admin &&
-        <FullPageMessage
-            Icon={LockIcon}
-            buttonDestination="/Account/Profile"
-            buttonText="Return to Profile"
-            message="Insufficient Privileges"
-        />
-    ) || (appUser.pw_change_required &&
-        <Navigate to="/Account/ChangePassword" />
-    ) || (isError &&
-        <FullPageMessage
-            Icon={WarningIcon}
-            buttonAction={handleRefresh}
-            buttonText="Retry"
-            message="Error loading courses"
-        />
-    ) || (!isLoaded &&
-        <FullPageMessage
-            Icon={AccessTimeIcon}
-            message="Loading courses..."
-        />
-    ) || (
-
+    return (
         <ManagementPageProvider
             Entity={Course}
+            isError={isError}
+            isLoaded={isLoaded}
             itemsCombinedState={coursesCombinedState}
             managementCallbacks={managementCallbacks}
             setItemSelectionStatus={setCourseSelectionStatus}

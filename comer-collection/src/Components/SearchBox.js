@@ -3,7 +3,7 @@ import React, { memo, useCallback, useMemo } from "react";
 import { TextField, InputAdornment, IconButton, styled } from "@mui/material";
 import { SearchIcon, ClearIcon } from "../Imports/Icons.js";
 import PropTypes from "prop-types";
-import { useEntity } from "../ContextProviders/ManagementPageProvider.js";
+import { useEntity, useItemCounts, useItemsLoadStatus } from "../ContextProviders/ManagementPageProvider.js";
 
 /**
  * Use as regular IconButton and add isVisible Boolean property
@@ -18,6 +18,9 @@ const FixedWidthTextField = styled(TextField)(({ width }) => ({
 
 const SearchBox = memo(function SearchBox ({ searchQuery, setSearchQuery, width }) {
     const { searchBoxPlaceholder } = useEntity();
+    const [isLoaded, isError] = useItemsLoadStatus();
+    const itemCounts = useItemCounts();
+
     const handleEditSearchQuery = useCallback((e) => {
         setSearchQuery(e.target.value);
     }, [setSearchQuery]);
@@ -49,6 +52,7 @@ const SearchBox = memo(function SearchBox ({ searchQuery, setSearchQuery, width 
     return (
         <FixedWidthTextField
             InputProps={textfieldInputProps}
+            disabled={itemCounts.all === 0 || !isLoaded || isError}
             onChange={handleEditSearchQuery}
             placeholder={searchBoxPlaceholder ?? "Search"}
             value={searchQuery}

@@ -1,6 +1,4 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
-import { LockIcon, AccessTimeIcon, WarningIcon } from "../../Imports/Icons.js";
-import { FullPageMessage } from "../../Components/FullPageMessage.js";
 import SearchBox from "../../Components/SearchBox.js";
 import { ItemSingleDeleteDialog } from "../../Components/Dialogs/ItemSingleDeleteDialog.js";
 import { ItemMultiCreateDialog } from "../../Components/Dialogs/ItemMultiCreateDialog.js";
@@ -8,12 +6,11 @@ import { ItemSingleEditDialog } from "../../Components/Dialogs/ItemSingleEditDia
 import { DataTable } from "../../Components/DataTable/DataTable.js";
 import { doesItemMatchSearchQuery } from "../../Helpers/SearchUtilities.js";
 import { AssociationManagementDialog } from "../../Components/Dialogs/AssociationManagementDialog/AssociationManagementDialog.js";
-import { Navigate, useNavigate } from "react-router";
+import { useNavigate } from "react-router";
 import { UserChangePrivilegesDialog } from "../../Components/Dialogs/UserChangePrivilegesDialog.js";
 import { SelectionSummary } from "../../Components/SelectionSummary.js";
 import { CourseFilterMenu } from "../../Components/Menus/CourseFilterMenu.js";
 import { useSnackbar, useTitle } from "../../ContextProviders/AppFeatures.js";
-import { useAppUser } from "../../ContextProviders/AppUser.js";
 
 import { UserResetPasswordDialog } from "../../Components/Dialogs/UserResetPasswordDialog.js";
 import { User } from "../../Classes/Entities/User.js";
@@ -60,7 +57,6 @@ const UserManagement = () => {
         setUserCourseIdFilter(null);
     }, []);
 
-    const [appUser] = useAppUser();
     const showSnackbar = useSnackbar();
     const navigate = useNavigate();
     useTitle("User Management");
@@ -88,10 +84,8 @@ const UserManagement = () => {
     }, [setUsers]);
 
     useEffect(() => {
-        if (appUser.is_admin) {
-            handleRefresh();
-        }
-    }, [appUser.is_admin, handleRefresh]);
+        handleRefresh();
+    }, [handleRefresh]);
 
     const userFilterFunction = useCallback((user) => {
         return (
@@ -178,30 +172,11 @@ const UserManagement = () => {
         handleOpenViewUserExhibitionDialog,
         handleRefresh]);
 
-    return (!appUser.is_admin &&
-        <FullPageMessage
-            Icon={LockIcon}
-            buttonDestination="/Account/Profile"
-            buttonText="Return to Profile"
-            message="Insufficient Privileges"
-        />
-    ) || (appUser.pw_change_required &&
-        <Navigate to="/Account/ChangePassword" />
-    ) || (isError &&
-    <FullPageMessage
-        Icon={WarningIcon}
-        buttonAction={handleRefresh}
-        buttonText="Retry"
-        message="Error loading users"
-    />
-    ) || (!isLoaded &&
-    <FullPageMessage
-        Icon={AccessTimeIcon}
-        message="Loading users..."
-    />
-    ) || (
+    return (
         <ManagementPageProvider
             Entity={User}
+            isError={isError}
+            isLoaded={isLoaded}
             itemsCombinedState={usersCombinedState}
             managementCallbacks={managementCallbacks}
             setItemSelectionStatus={setUserSelectionStatus}

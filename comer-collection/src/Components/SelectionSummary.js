@@ -5,18 +5,19 @@ import {
     Typography
 } from "@mui/material";
 import { CheckIcon, ArrowUpwardIcon, DeselectIcon } from "../Imports/Icons.js";
-import { useEntity, useItemCounts, useSelectedItems } from "../ContextProviders/ManagementPageProvider.js";
+import { useEntity, useItemCounts, useItemsLoadStatus, useSelectedItems } from "../ContextProviders/ManagementPageProvider.js";
 
 export const SelectionSummary = () => {
     const [, setSelectedItems] = useSelectedItems();
     const Entity = useEntity();
     const itemCounts = useItemCounts();
+    const [isLoaded, isError] = useItemsLoadStatus();
 
     const clearSelectedItems = useCallback(() => {
         setSelectedItems([]);
     }, [setSelectedItems]);
 
-    return (
+    return isLoaded && !isError && (
         <Stack
             alignItems="center"
             direction="row"

@@ -13,6 +13,8 @@ import ExhibitionManagement from "./Admin/ExhibitionManagement.js";
 import { useAppUser } from "../ContextProviders/AppUser.js";
 import { AccessTimeIcon, LockIcon } from "../Imports/Icons.js";
 import { AccountNavProvider } from "../ContextProviders/AccountNavProvider.js";
+import RequireAdmin from "../Components/AccessControl/RequireAdmin.js";
+import RequirePermanentPassword from "../Components/AccessControl/RequirePermanentPassword.js";
 
 const Account = () => {
     const [appUser, , , appUserIsLoaded] = useAppUser();
@@ -51,37 +53,52 @@ const Account = () => {
                         />
 
                         <Route
-                            element={<Profile />}
+                            element={(
+                                <RequirePermanentPassword
+                                    component={<Profile />}
+                                />
+                            )}
                             path="Profile"
                         />
 
                         <Route
-                            element={<ChangePassword />}
+                            element={(
+                                <ChangePassword />
+                            )}
                             path="ChangePassword"
                         />
 
                         <Route
-                            element={<MyExhibitions />}
+                            element={(
+                                <RequirePermanentPassword
+                                    component={<MyExhibitions />}
+                                />
+                            )}
                             path="MyExhibitions"
                         />
 
                         <Route
-                            element={<ImageManagement />}
+                            element={(
+                                <RequireAdmin
+                                    allowCollectionManager
+                                    component={<ImageManagement />}
+                                />
+                            )}
                             path="Admin/Images"
                         />
 
                         <Route
-                            element={<UserManagement />}
+                            element={<RequireAdmin component={<UserManagement />} />}
                             path="Admin/Users"
                         />
 
                         <Route
-                            element={<ExhibitionManagement />}
+                            element={<RequireAdmin component={<ExhibitionManagement />} />}
                             path="Admin/Exhibitions"
                         />
 
                         <Route
-                            element={<CourseManagement />}
+                            element={<RequireAdmin component={<CourseManagement />} />}
                             path="Admin/Courses"
                         />
 

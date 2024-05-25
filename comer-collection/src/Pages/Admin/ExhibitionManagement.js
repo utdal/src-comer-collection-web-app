@@ -1,14 +1,10 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
-import { FullPageMessage } from "../../Components/FullPageMessage.js";
 import SearchBox from "../../Components/SearchBox.js";
-import { LockIcon, WarningIcon, AccessTimeIcon } from "../../Imports/Icons.js";
 import { ItemSingleDeleteDialog } from "../../Components/Dialogs/ItemSingleDeleteDialog.js";
 import { DataTable } from "../../Components/DataTable/DataTable.js";
-import { Navigate } from "react-router";
 import { SelectionSummary } from "../../Components/SelectionSummary.js";
 import { ExhibitionSettingsDialog } from "../../Components/Dialogs/ExhibitionSettingsDialog.js";
 import { useTitle } from "../../ContextProviders/AppFeatures.js";
-import { useAppUser } from "../../ContextProviders/AppUser.js";
 import { doesItemMatchSearchQuery } from "../../Helpers/SearchUtilities.js";
 import { CourseFilterMenu } from "../../Components/Menus/CourseFilterMenu.js";
 
@@ -39,8 +35,6 @@ const ExhibitionManagement = () => {
     const [deleteDialogState, openDeleteDialog] = useDialogState(false);
 
     const [searchQuery, setSearchQuery] = useState("");
-
-    const [appUser] = useAppUser();
 
     const [userCourseIdFilter, setUserCourseIdFilter] = useState(null);
 
@@ -74,10 +68,8 @@ const ExhibitionManagement = () => {
     }, [setExhibitions]);
 
     useEffect(() => {
-        if (appUser.is_admin) {
-            handleRefresh();
-        }
-    }, [appUser, handleRefresh]);
+        handleRefresh();
+    }, [handleRefresh]);
 
     const exhibitionFilterFunction = useCallback((exhibition) => {
         return (
@@ -111,30 +103,11 @@ const ExhibitionManagement = () => {
         handleRefresh
     ]);
 
-    return (!appUser.is_admin &&
-        <FullPageMessage
-            Icon={LockIcon}
-            buttonDestination="/Account/Profile"
-            buttonText="Return to Profile"
-            message="Insufficient Privileges"
-        />
-    ) || (appUser.pw_change_required &&
-        <Navigate to="/Account/ChangePassword" />
-    ) || (isError &&
-        <FullPageMessage
-            Icon={WarningIcon}
-            buttonAction={handleRefresh}
-            buttonText="Retry"
-            message="Error loading exhibitions"
-        />
-    ) || (!isLoaded &&
-        <FullPageMessage
-            Icon={AccessTimeIcon}
-            message="Loading exhibitions..."
-        />
-    ) || (
+    return (
         <ManagementPageProvider
             Entity={Exhibition}
+            isError={isError}
+            isLoaded={isLoaded}
             itemsCombinedState={exhibitionsCombinedState}
             managementCallbacks={managementCallbacks}
             setItemSelectionStatus={setExhibitionSelectionStatus}

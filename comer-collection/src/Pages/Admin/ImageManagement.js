@@ -1,18 +1,15 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
-import { FullPageMessage } from "../../Components/FullPageMessage.js";
 import SearchBox from "../../Components/SearchBox.js";
-import { AccessTimeIcon, WarningIcon, LockIcon } from "../../Imports/Icons.js";
 import { ItemSingleDeleteDialog } from "../../Components/Dialogs/ItemSingleDeleteDialog.js";
 import { ItemMultiCreateDialog } from "../../Components/Dialogs/ItemMultiCreateDialog.js";
 import { ItemSingleEditDialog } from "../../Components/Dialogs/ItemSingleEditDialog.js";
 import { doesItemMatchSearchQuery } from "../../Helpers/SearchUtilities.js";
-import { Navigate, useNavigate } from "react-router";
+import { useNavigate } from "react-router";
 import { ImageFullScreenViewer } from "../../Components/Dialogs/ImageFullScreenViewer.js";
 import { EntityManageDialog } from "../../Components/Dialogs/EntityManageDialog.js";
 import { SelectionSummary } from "../../Components/SelectionSummary.js";
 import { AssociationManagementDialog } from "../../Components/Dialogs/AssociationManagementDialog/AssociationManagementDialog.js";
 import { useTitle } from "../../ContextProviders/AppFeatures.js";
-import { useAppUser } from "../../ContextProviders/AppUser.js";
 
 import { useAccountNavTitle } from "../../Hooks/useAccountNavTitle.js";
 import { Image } from "../../Classes/Entities/Image.js";
@@ -63,7 +60,6 @@ const ImageManagement = () => {
         setSearchQuery("");
     }, []);
 
-    const [appUser] = useAppUser();
     const navigate = useNavigate();
     useAccountNavTitle("Image Management");
     useTitle("Image Management");
@@ -81,10 +77,8 @@ const ImageManagement = () => {
     }, [setImages]);
 
     useEffect(() => {
-        if (appUser.is_admin_or_collection_manager) {
-            handleRefresh();
-        }
-    }, [appUser.is_admin_or_collection_manager, handleRefresh]);
+        handleRefresh();
+    }, [handleRefresh]);
 
     const imageFilterFunction = useCallback((image) => {
         return (
@@ -163,30 +157,11 @@ const ImageManagement = () => {
         handleOpenMultiCreateDialog,
         handleRefresh]);
 
-    return (!appUser.is_admin_or_collection_manager &&
-        <FullPageMessage
-            Icon={LockIcon}
-            buttonDestination="/Account/Profile"
-            buttonText="Return to Profile"
-            message="Insufficient Privileges"
-        />
-    ) || (appUser.pw_change_required &&
-        <Navigate to="/Account/ChangePassword" />
-    ) || (isError &&
-        <FullPageMessage
-            Icon={WarningIcon}
-            buttonAction={handleRefresh}
-            buttonText="Retry"
-            message="Error loading images"
-        />
-    ) || (!isLoaded &&
-        <FullPageMessage
-            Icon={AccessTimeIcon}
-            message="Loading images..."
-        />
-    ) || (
+    return (
         <ManagementPageProvider
             Entity={Image}
+            isError={isError}
+            isLoaded={isLoaded}
             itemsCombinedState={imagesCombinedState}
             managementCallbacks={managementCallbacks}
             setItemSelectionStatus={setImageSelectionStatuses}

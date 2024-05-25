@@ -2,7 +2,6 @@ import React, { useCallback, useEffect, useState } from "react";
 import {
     Typography, Stack, Paper, Box
 } from "@mui/material";
-import { Navigate } from "react-router";
 import { DataTable } from "../../Components/DataTable/DataTable.js";
 import { PhotoCameraBackIcon } from "../../Imports/Icons.js";
 import { ExhibitionSettingsDialog } from "../../Components/Dialogs/ExhibitionSettingsDialog.js";
@@ -92,9 +91,7 @@ const MyExhibitions = () => {
         openDeleteDialog(exhibition);
     }, [openDeleteDialog]);
 
-    return (appUser.pw_change_required &&
-        <Navigate to="/Account/ChangePassword" />
-    ) || (!appUser.pw_change_required &&
+    return (
         <ManagementPageProvider
             itemsCombinedState={exhibitionsCombinedState}
             managementCallbacks={{
