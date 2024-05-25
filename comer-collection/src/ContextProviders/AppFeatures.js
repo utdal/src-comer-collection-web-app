@@ -21,20 +21,38 @@ export const AppFeatureProvider = ({ children }) => {
 
     const [appDarkTheme, setAppDarkTheme] = useState(JSON.parse(localStorage.getItem("appDarkTheme")) ?? false);
 
-    const themeSettings = useMemo(() => ({
+    const finalTheme = useMemo(() => (createTheme({
         components: {
             MuiButton: {
                 styleOverrides: {
                     root: ({ theme }) => ({
                         ...theme.typography.body1
                     })
-                }
+                },
+                variants: [
+                    {
+                        props: { variant: "outlined" },
+                        style: {
+                            borderWidth: "2px !important"
+                        }
+                    }
+                ]
             },
             MuiStack: {
                 styleOverrides: {
                     root: ({ theme }) => ({
                         ...theme.typography.body1
                     })
+                }
+            },
+            MuiDialog: {
+                defaultProps: {
+                    disableEscapeKeyDown: true
+                },
+                styleOverrides: {
+                    root: {
+                        zIndex: 10000
+                    }
                 }
             },
             MuiDialogTitle: {
@@ -93,6 +111,11 @@ export const AppFeatureProvider = ({ children }) => {
                         zIndex: 10000000
                     })
                 }
+            },
+            MuiTextField: {
+                defaultProps: {
+                    autoComplete: "off"
+                }
             }
         },
         typography: {
@@ -132,9 +155,7 @@ export const AppFeatureProvider = ({ children }) => {
                 main: appDarkTheme ? grey["500"] : grey["700"]
             }
         }
-    }), [appDarkTheme]);
-
-    const finalTheme = createTheme(themeSettings);
+    })), [appDarkTheme]);
 
     useEffect(() => {
         if (!titleText) {

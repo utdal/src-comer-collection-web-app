@@ -26,7 +26,6 @@ export const PersistentDialog = ({ children, maxWidth, onClose, isForm, onSubmit
     return (
         <Dialog
             component={isForm ? "form" : "div"}
-            disableEscapeKeyDown
             fullWidth={Boolean(maxWidth)}
             maxWidth={maxWidth}
             onClose={handleClose}
