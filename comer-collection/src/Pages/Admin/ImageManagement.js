@@ -33,13 +33,13 @@ import EntityManageButton from "../../Components/Buttons/EntityManageButton.js";
 import AssociationManageButton from "../../Components/Buttons/AssociationManageButton.js";
 
 /**
- * Custom hook that manages fetching items on a management page
+ * Custom hook that manages fetching/refreshing items on a management page
  * @typedef {import("../../ContextProviders/ManagementPageProvider.js").Item} Item
  * @param {class} Entity the type of items to fetch
  * @param {React.Dispatch<React.SetStateAction<Item[]>>} setItems the setter method for the items state
  * @returns {[() => Promise<void>, boolean, boolean]} [handleRefresh, isLoaded, isError]
  */
-export const useItemsFetch = (Entity, setItems) => {
+export const useItemsRefresh = (Entity, setItems) => {
     const [isLoaded, setIsLoaded] = useState(false);
     const [isError, setIsError] = useState(false);
 
@@ -60,8 +60,7 @@ export const useItemsFetch = (Entity, setItems) => {
 const ImageManagement = () => {
     const [imagesCombinedState, setImages, setSelectedImages, filterImages, setImageSelectionStatuses] = useItemsReducer(Image);
 
-    // const [isLoaded, setIsLoaded] = useState(false);
-    // const [isError, setIsError] = useState(false);
+    const [handleRefresh, isLoaded, isError] = useItemsRefresh(Image, setImages);
 
     const [previewerImage, setPreviewerImage] = useState(null);
     const [previewerOpen, setPreviewerOpen] = useState(false);
@@ -86,8 +85,6 @@ const ImageManagement = () => {
     const navigate = useNavigate();
     useAccountNavTitle("Image Management");
     useTitle("Image Management");
-
-    const [handleRefresh, isLoaded, isError] = useItemsFetch(Image, setImages);
 
     useEffect(() => {
         handleRefresh();
