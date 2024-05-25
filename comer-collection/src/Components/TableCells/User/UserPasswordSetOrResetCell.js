@@ -12,7 +12,7 @@ export const UserPasswordSetOrResetCell = () => {
     const handleOpenPasswordResetDialog = useCallback(() => {
         handleOpenUserPasswordResetDialog(user);
     }, [handleOpenUserPasswordResetDialog, user]);
-    console.log(appUser.id, user.id);
+
     if (appUser.id === user.id) {
         return (
             <Button
