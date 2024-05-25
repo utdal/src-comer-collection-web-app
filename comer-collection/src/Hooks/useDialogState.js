@@ -6,7 +6,7 @@ import { DialogState } from "../Classes/DialogState.js";
  * @param {Boolean} multipleItems Set to false if dialog pertains to only one
  * primary item.  Set to true if dialog pertains to multiple primary items.
  * @param {Class} entity Optionally choose a specific type of item
- * @returns {[DialogState, openDialog: function(), closeDialog: function()]} [dialogState, openDialog, closeDialog]
+ * @returns {[DialogState, openDialog: () => void, closeDialog: () => void]} [dialogState, openDialog, closeDialog]
  */
 export const useDialogState = (multipleItems) => {
     const [dialogIsOpen, setDialogIsOpen] = useState(false);
