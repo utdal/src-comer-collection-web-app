@@ -1,8 +1,9 @@
-import { Dialog, Stack, DialogTitle, DialogContent, Typography, DialogActions, Button } from "@mui/material";
+import { Stack, DialogTitle, DialogContent, Typography, DialogActions, Button } from "@mui/material";
 import React from "react";
 import { PersonIcon } from "../../Imports/Icons.js";
 import PropTypes from "prop-types";
 import { entityPropTypeShape } from "../../Classes/Entity.js";
+import { PersistentDialog } from "./PersistentDialog.js";
 
 export const ImageFullScreenViewer = ({ image, setImage, previewerOpen, setPreviewerOpen }) => {
     const fields = [
@@ -56,10 +57,9 @@ export const ImageFullScreenViewer = ({ image, setImage, previewerOpen, setPrevi
     });
 
     return image && (
-        <Dialog
+        <PersistentDialog
             maxWidth="lg"
             open={previewerOpen}
-            sx={{ zIndex: 5000 }}
         >
 
             <DialogTitle>
@@ -174,7 +174,7 @@ export const ImageFullScreenViewer = ({ image, setImage, previewerOpen, setPrevi
                 </Button>
             </DialogActions>
 
-        </Dialog>
+        </PersistentDialog>
     );
 };
 

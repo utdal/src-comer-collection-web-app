@@ -1,7 +1,6 @@
 import React, { useCallback, useEffect, useState } from "react";
 import {
-    Stack, Dialog,
-    DialogTitle,
+    Stack, DialogTitle,
     DialogContent,
     DialogActions,
     Button,
@@ -13,6 +12,7 @@ import { useSnackbar } from "../../ContextProviders/AppFeatures.js";
 import { useManagementCallbacks } from "../../ContextProviders/ManagementPageProvider.js";
 import { DialogState } from "../../Classes/DialogState.js";
 import PropTypes from "prop-types";
+import { PersistentDialog } from "./PersistentDialog.js";
 
 const userPrivilegeOptions = () => [
     {
@@ -97,15 +97,12 @@ export const UserChangePrivilegesDialog = ({ dialogState }) => {
     }, [closeDialog, dialogUser, newAccess, handleRefresh, showSnackbar]);
 
     return (
-        <Dialog
-            component="form"
-            disableEscapeKeyDown
-            fullWidth
+        <PersistentDialog
+            isForm
             maxWidth="sm"
             onClose={handleClose}
             onSubmit={handleSubmit}
             open={dialogIsOpen}
-            sx={{ zIndex: 10000 }}
         >
             <DialogTitle>
                 Set Access Level for
@@ -217,7 +214,7 @@ export const UserChangePrivilegesDialog = ({ dialogState }) => {
                     </Button>
                 </Stack>
             </DialogActions>
-        </Dialog>
+        </PersistentDialog>
     );
 };
 

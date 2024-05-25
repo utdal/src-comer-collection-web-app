@@ -1,7 +1,6 @@
 import React, { useCallback, useEffect, useState } from "react";
 import {
-    Stack, Dialog,
-    DialogTitle,
+    Stack, DialogTitle,
     DialogContent,
     DialogActions,
     Button,
@@ -13,6 +12,7 @@ import { User } from "../../Classes/Entities/User.js";
 import { useManagementCallbacks } from "../../ContextProviders/ManagementPageProvider.js";
 import PropTypes from "prop-types";
 import { DialogState } from "../../Classes/DialogState.js";
+import { PersistentDialog } from "./PersistentDialog.js";
 
 const randomPassword = () => {
     const password = Math.random().toString(36).slice(-8) + Math.random().toString(36).slice(-8);
@@ -77,15 +77,12 @@ export const UserResetPasswordDialog = ({ dialogState }) => {
     }, [clipboard, newPassword]);
 
     return (
-        <Dialog
-            component="form"
-            disableEscapeKeyDown
-            fullWidth
+        <PersistentDialog
+            isForm
             maxWidth="sm"
             onClose={handleClose}
             onSubmit={handleSubmit}
             open={dialogIsOpen}
-            sx={{ zIndex: 10000 }}
         >
             <DialogTitle>
                 {dialogUser?.has_password ? "Reset Password" : "Set Password"}
@@ -200,7 +197,7 @@ export const UserResetPasswordDialog = ({ dialogState }) => {
                     )}
                 </Stack>
             </DialogActions>
-        </Dialog>
+        </PersistentDialog>
     );
 };
 

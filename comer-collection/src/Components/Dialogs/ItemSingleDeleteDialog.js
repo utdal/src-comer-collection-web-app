@@ -54,7 +54,6 @@ export const ItemSingleDeleteDialog = ({ requireTypedConfirmation, dialogState }
             onClose={closeDialog}
             onSubmit={handleSubmit}
             open={dialogIsOpen}
-            sx={{ zIndex: 10000 }}
         >
             <DialogTitle>
                 {"Delete "}

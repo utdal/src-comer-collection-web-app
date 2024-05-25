@@ -1,7 +1,6 @@
 import React, { useCallback } from "react";
 import {
-    Stack, Dialog,
-    DialogTitle,
+    Stack, DialogTitle,
     DialogContent,
     DialogActions,
     Button,
@@ -12,6 +11,7 @@ import PropTypes from "prop-types";
 import { Exhibition, MyExhibition } from "../../Classes/Entities/Exhibition.js";
 import { useSnackbar } from "../../ContextProviders/AppFeatures.js";
 import { useAppUser } from "../../ContextProviders/AppUser.js";
+import { PersistentDialog } from "./PersistentDialog.js";
 
 const exhibitionAccessOptions = (adminMode) => [
     {
@@ -93,17 +93,13 @@ export const ExhibitionSettingsDialog = ({ editMode, adminMode, dialogIsOpen, se
     }, [dialogExhibitionAccess, dialogExhibitionId, dialogExhibitionTitle, editMode, handleExhibitionCreate, handleExhibitionEdit]);
 
     return (
-        <Dialog
-            component="form"
-            disableEscapeKeyDown
-            fullWidth
-            onClose={(event, reason) => {
-                if (reason === "backdropClick") { return; }
+        <PersistentDialog
+            isForm
+            onClose={() => {
                 setDialogIsOpen(false);
             }}
             onSubmit={handleFormSubmit}
             open={dialogIsOpen}
-            sx={{ zIndex: 10000 }}
         >
             <DialogTitle>
                 {editMode ? "Edit Exhibition" : "Create Exhibition"}
@@ -208,7 +204,7 @@ export const ExhibitionSettingsDialog = ({ editMode, adminMode, dialogIsOpen, se
                     </Button>
                 </Stack>
             </DialogActions>
-        </Dialog>
+        </PersistentDialog>
     );
 };
 
