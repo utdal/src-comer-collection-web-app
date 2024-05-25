@@ -3,7 +3,9 @@ import { Button, Typography, styled } from "@mui/material";
 import { useNavigate } from "react-router";
 import PropTypes from "prop-types";
 
-const StyledButton = styled(Button)(({ theme, isPageActive }) => ({
+const StyledButton = styled(Button, {
+    shouldForwardProp: (prop) => prop !== "isPageActive"
+})(({ theme, isPageActive }) => ({
     height: "64px",
     minWidth: "120px",
     borderBottom: isPageActive ? `5px solid ${theme.palette.secondary.main}` : "5px solid rgba(0, 0, 0, 0)",

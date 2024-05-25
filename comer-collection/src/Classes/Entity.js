@@ -99,15 +99,15 @@ export const entityPropTypeShape = PropTypes.shape({
     id: PropTypes.number
 });
 
-export const itemsCombinedStatePropTypeShape = {
+export const itemsCombinedStatePropTypeShape = PropTypes.shape({
     items: PropTypes.arrayOf(entityPropTypeShape),
     selectedItems: PropTypes.arrayOf(entityPropTypeShape),
     visibleItems: PropTypes.arrayOf(entityPropTypeShape),
     selectedVisibleItems: PropTypes.arrayOf(entityPropTypeShape),
     filterFunction: PropTypes.func
-};
+});
 
-export const tableFieldPropTypeShape = {
+export const tableFieldPropTypeShape = PropTypes.shape({
     columnDescription: PropTypes.string,
     TableCellComponent: PropTypes.elementType
-};
+});

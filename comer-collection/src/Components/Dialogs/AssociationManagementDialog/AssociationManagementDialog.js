@@ -261,11 +261,11 @@ export const AssociationManagementDialog = ({
 };
 
 AssociationManagementDialog.propTypes = {
-    Association: PropTypes.node.isRequired,
+    Association: PropTypes.func.isRequired,
     defaultSortAscending: PropTypes.bool,
     defaultSortColumn: PropTypes.string,
     dialogState: PropTypes.instanceOf(DialogState),
-    editMode: PropTypes.bool.isRequired,
+    editMode: PropTypes.bool,
     handleSwitchToSecondary: PropTypes.func.isRequired,
     secondaryItemsAll: PropTypes.arrayOf(entityPropTypeShape).isRequired
 };

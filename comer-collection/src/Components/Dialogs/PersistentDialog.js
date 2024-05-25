@@ -10,7 +10,7 @@ import { Dialog } from "@mui/material";
  * }} props
  * @returns
  */
-export const PersistentDialog = ({ children, maxWidth, onClose, isForm, onSubmit, open }) => {
+export const PersistentDialog = ({ children, maxWidth, onClose, onSubmit, open }) => {
     const handleClose = useCallback((event, reason) => {
         if (reason === "backdropClick") {
             return;
@@ -25,11 +25,11 @@ export const PersistentDialog = ({ children, maxWidth, onClose, isForm, onSubmit
 
     return (
         <Dialog
-            component={isForm ? "form" : "div"}
+            component={onSubmit ? "form" : "div"}
             fullWidth={Boolean(maxWidth)}
             maxWidth={maxWidth}
             onClose={handleClose}
-            onSubmit={isForm ? handleSubmit : null}
+            onSubmit={onSubmit ? handleSubmit : null}
             open={open}
         >
             {children}
@@ -39,9 +39,8 @@ export const PersistentDialog = ({ children, maxWidth, onClose, isForm, onSubmit
 
 PersistentDialog.propTypes = {
     children: PropTypes.node.isRequired,
-    isForm: PropTypes.bool,
     maxWidth: PropTypes.oneOf(["xs", "sm", "md", "lg", "xl"]),
     onClose: PropTypes.func.isRequired,
-    onSubmit: PropTypes.func.isRequired,
+    onSubmit: PropTypes.func,
     open: PropTypes.bool.isRequired
 };

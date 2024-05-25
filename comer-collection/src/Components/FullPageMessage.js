@@ -45,7 +45,7 @@ export const FullPageMessage = ({ message, buttonText, buttonDestination = null,
 };
 
 FullPageMessage.propTypes = {
-    Icon: PropTypes.elementType.isRequired,
+    Icon: PropTypes.elementType,
     buttonAction: PropTypes.func,
     buttonDestination: PropTypes.string,
     buttonText: PropTypes.string,

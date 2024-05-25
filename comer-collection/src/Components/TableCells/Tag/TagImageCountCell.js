@@ -1,10 +1,10 @@
 import React from "react";
-import { useTableRowItem } from "../../../ContextProviders/TableRowProvider.js";
 import { Stack, Typography } from "@mui/material";
 import { ImageIcon } from "../../../Imports/Icons.js";
+import { useTableCellItem } from "../../../ContextProviders/TableCellProvider.js";
 
 export const TagImageCountCell = () => {
-    const tag = useTableRowItem();
+    const tag = useTableCellItem();
     return (
         <Stack
             alignItems="center"

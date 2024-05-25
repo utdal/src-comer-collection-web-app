@@ -1,9 +1,12 @@
 import { Snackbar, Alert, Stack, Typography, ThemeProvider, createTheme } from "@mui/material";
 import React, { useCallback, useContext, useState, createContext, useMemo, useEffect } from "react";
+import createCache from "@emotion/cache";
 
 import PropTypes from "prop-types";
 
 import { green, grey, orange } from "@mui/material/colors/index.js";
+import { CacheProvider } from "@emotion/react";
+import { Helmet, HelmetProvider } from "react-helmet-async";
 
 const defaultTitleSuffix = "Comer Collection";
 
@@ -180,11 +183,27 @@ export const AppFeatureProvider = ({ children }) => {
         };
     }, [showSnackbar, setTitleText, appDarkTheme, setAppDarkTheme]);
 
+    const cache = useMemo(() => createCache({
+        key: "comer-emotion-nonce-cache",
+        nonce: Math.random().toString(36).slice(2)
+    }), []);
+
     return (
         <AppFeatureContext.Provider value={appFeatureContextValue}>
 
             <ThemeProvider theme={finalTheme}>
-                {children}
+                <CacheProvider value={cache}>
+                    <HelmetProvider>
+                        <Helmet>
+                            <meta
+                                content={`default-src 'none'; manifest-src 'self'; script-src 'self'; style-src 'nonce-${cache.nonce}'; img-src 'self' ${process.env.REACT_APP_API_HOST}; connect-src 'self' ${process.env.REACT_APP_API_HOST}`}
+                                httpEquiv='Content-Security-Policy'
+                            />
+                        </Helmet>
+                    </HelmetProvider>
+
+                    {children}
+                </CacheProvider>
 
                 <Snackbar
                     onClose={() => {

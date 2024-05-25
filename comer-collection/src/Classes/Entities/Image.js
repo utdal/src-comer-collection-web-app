@@ -21,7 +21,7 @@ class Image extends Entity {
     static multiCreateDialogSubtitle = "You can add artists and tags after creating the images.";
 
     static searchBoxFields = ["title", "valuationNotes", "otherNotes"];
-    static searchBoxPlaceholder = ["Search images by title or notes"];
+    static searchBoxPlaceholder = "Search images by title or notes";
 
     static fieldDefinitions = [
         {

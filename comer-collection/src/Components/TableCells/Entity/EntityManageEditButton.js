@@ -1,11 +1,11 @@
 import React, { useCallback } from "react";
 import PropTypes from "prop-types";
 import { EditButton } from "./EditButton.js";
-import { useTableRowItem } from "../../../ContextProviders/TableRowProvider.js";
 import { useManagementCallbacks } from "../../../ContextProviders/ManagementPageProvider.js";
+import { useTableCellItem } from "../../../ContextProviders/TableCellProvider.js";
 
 export const EntityManageEditButton = ({ disabled = false }) => {
-    const item = useTableRowItem();
+    const item = useTableCellItem();
     const { handleOpenEntityEditDialog } = useManagementCallbacks();
     const handleOpenEditDialog = useCallback(() => {
         handleOpenEntityEditDialog(item);

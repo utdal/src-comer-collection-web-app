@@ -8,7 +8,9 @@ import { useEntity, useItemCounts, useItemsLoadStatus } from "../ContextProvider
 /**
  * Use as regular IconButton and add isVisible Boolean property
  */
-const DisappearingIconButton = styled(IconButton)(({ isVisible }) => ({
+const DisappearingIconButton = styled(IconButton, {
+    shouldForwardProp: (prop) => prop !== "isVisible"
+})(({ isVisible }) => ({
     display: isVisible ? "" : "none"
 }));
 

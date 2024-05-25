@@ -50,5 +50,5 @@ TableRowContainer.propTypes = {
     }),
     rowSelectionEnabled: PropTypes.bool,
     smallCheckboxes: PropTypes.bool,
-    tableFields: PropTypes.arrayOf(PropTypes.shape(tableFieldPropTypeShape)).isRequired
+    tableFields: PropTypes.arrayOf(tableFieldPropTypeShape).isRequired
 };

@@ -1,11 +1,11 @@
 import React, { useCallback } from "react";
 import PropTypes from "prop-types";
-import { useTableRowItem } from "../../../ContextProviders/TableRowProvider.js";
 import { useManagementCallbacks } from "../../../ContextProviders/ManagementPageProvider.js";
 import { DeleteButton } from "./DeleteButton.js";
+import { useTableCellItem } from "../../../ContextProviders/TableCellProvider.js";
 
 export const EntityManageDeleteButton = ({ disabled = false }) => {
-    const item = useTableRowItem();
+    const item = useTableCellItem();
     const { handleOpenEntityDeleteDialog } = useManagementCallbacks();
     const handleOpenDeleteDialog = useCallback(() => {
         handleOpenEntityDeleteDialog(item);

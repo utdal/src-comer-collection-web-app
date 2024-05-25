@@ -24,7 +24,7 @@ const EntityManageButton = ({ entity, handleOpenDialog }) => {
 };
 
 EntityManageButton.propTypes = {
-    entity: PropTypes.node.isRequired,
+    entity: PropTypes.func.isRequired,
     handleOpenDialog: PropTypes.func.isRequired
 };
 

@@ -128,7 +128,7 @@ SecondaryFilterMenu.propTypes = {
     SecondaryIcon: PropTypes.elementType.isRequired,
     displayFunction: PropTypes.func.isRequired,
     emptyMessage: PropTypes.string.isRequired,
-    filterValue: PropTypes.shape(entityPropTypeShape).isRequired,
+    filterValue: entityPropTypeShape,
     helpMessage: PropTypes.string.isRequired,
     nullMessage: PropTypes.string.isRequired,
     secondaries: PropTypes.arrayOf(entityPropTypeShape).isRequired,

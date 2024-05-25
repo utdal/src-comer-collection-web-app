@@ -22,6 +22,7 @@ import { PersistentDialog } from "./PersistentDialog.js";
 import { FullPageMessage } from "../FullPageMessage.js";
 import { RefreshButton } from "../Buttons/RefreshButton.js";
 import { SelectionSummary } from "../SelectionSummary.js";
+import useItemsRefresh from "../../Hooks/useItemsRefresh.js";
 
 /**
  * @param {{
@@ -40,31 +41,12 @@ export const EntityManageDialog = ({
     const { closeDialog, dialogIsOpen } = dialogState;
 
     const [dialogItemsCombinedState, setDialogItems, setSelectedDialogItems, filterDialogItems, setDialogItemSelectionStatus] = useItemsReducer(Entity);
-    const [isLoaded, setIsLoaded] = useState(false);
-    const [isError, setIsError] = useState(false);
+    const [handleRefresh, isLoaded, isError] = useItemsRefresh(Entity, setDialogItems, dialogIsOpen);
 
     const [itemSearchQuery, setItemSearchQuery] = useState("");
 
     const [editDialogState, openEditDialog] = useDialogState(false);
     const [deleteDialogState, openDeleteDialog] = useDialogState(false);
-
-    const handleRefresh = useCallback(async () => {
-        setIsError(false);
-        try {
-            const fetchedItems = await Entity.handleFetchAll();
-            setDialogItems(fetchedItems);
-            setIsLoaded(true);
-        } catch (e) {
-            setIsError(true);
-            setIsLoaded(false);
-        }
-    }, [Entity, setDialogItems]);
-
-    useEffect(() => {
-        if (dialogIsOpen) {
-            handleRefresh();
-        }
-    }, [dialogIsOpen, handleRefresh]);
 
     const itemFilterFunction = useCallback((item) => {
         return (
@@ -107,6 +89,8 @@ export const EntityManageDialog = ({
 
     return (
         <ManagementPageProvider
+            isError={isError}
+            isLoaded={isLoaded}
             itemsCombinedState={dialogItemsCombinedState}
             managementCallbacks={managementCallbacks}
             setItemSelectionStatus={setDialogItemSelectionStatus}

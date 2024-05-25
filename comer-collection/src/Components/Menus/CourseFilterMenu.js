@@ -46,6 +46,6 @@ export const CourseFilterMenu = memo(function CourseFilterMenu ({ filterValue, s
 
 CourseFilterMenu.propTypes = {
     courses: PropTypes.arrayOf(entityPropTypeShape).isRequired,
-    filterValue: PropTypes.shape(entityPropTypeShape).isRequired,
+    filterValue: entityPropTypeShape,
     setFilterValue: PropTypes.func.isRequired
 };

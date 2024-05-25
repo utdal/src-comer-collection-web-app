@@ -1,11 +1,11 @@
 import React, { useCallback } from "react";
-import { useTableRowItem } from "../../../ContextProviders/TableRowProvider.js";
 import { Button, Typography } from "@mui/material";
 import { ContentCopyIcon } from "../../../Imports/Icons.js";
 import { useClipboard } from "../../../ContextProviders/AppFeatures.js";
+import { useTableCellItem } from "../../../ContextProviders/TableCellProvider.js";
 
 export const ArtistWebsiteCell = () => {
-    const artist = useTableRowItem();
+    const artist = useTableCellItem();
     const clipboard = useClipboard();
     const handleCopy = useCallback(() => {
         clipboard(artist.website);

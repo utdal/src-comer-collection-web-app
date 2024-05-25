@@ -11,7 +11,7 @@ import { useCallback, useEffect, useState } from "react";
  * @returns {[() => Promise<void>, boolean, boolean]} [handleRefresh, isLoaded, isError]
  */
 
-export default function useItemsRefresh (Entity, setItems) {
+export default function useItemsRefresh (Entity, setItems, refreshCondition = true) {
     if (!Entity) {
         throw new Error("useItemsRefresh must have an entity type");
     } else if (!setItems) {
@@ -33,8 +33,10 @@ export default function useItemsRefresh (Entity, setItems) {
     }, [Entity, setItems]);
 
     useEffect(() => {
-        handleRefresh();
-    }, [handleRefresh]);
+        if (refreshCondition) {
+            handleRefresh();
+        }
+    }, [handleRefresh, refreshCondition]);
 
     return [handleRefresh, isLoaded, isError];
 };

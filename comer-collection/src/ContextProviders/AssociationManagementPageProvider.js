@@ -9,12 +9,14 @@ const defaultManagementCallbacks = {};
 export const AssociationManagementPageProvider = ({ managementCallbacks = defaultManagementCallbacks, secondaryItemsCombinedState, setSecondaryItems, setSelectedSecondaryItems, relevantPrimaryItems, AssociationType, children }) => {
     const contextValue = useMemo(() => {
         return {
-            relevantPrimaryItems, AssociationType
+            relevantPrimaryItems: relevantPrimaryItems ?? [], AssociationType
         };
     }, [relevantPrimaryItems, AssociationType]);
     return (
         <AssociationManagementPageContext.Provider value={contextValue}>
             <ManagementPageProvider
+                isError={false}
+                isLoaded={false}
                 itemsCombinedState={secondaryItemsCombinedState}
                 managementCallbacks={managementCallbacks}
                 setItems={setSecondaryItems}
@@ -27,11 +29,11 @@ export const AssociationManagementPageProvider = ({ managementCallbacks = defaul
 };
 
 AssociationManagementPageProvider.propTypes = {
-    AssociationType: PropTypes.node.isRequired,
+    AssociationType: PropTypes.func.isRequired,
     children: PropTypes.node.isRequired,
     managementCallbacks: PropTypes.objectOf(PropTypes.func),
     relevantPrimaryItems: PropTypes.arrayOf(entityPropTypeShape).isRequired,
-    secondaryItemsCombinedState: PropTypes.exact(itemsCombinedStatePropTypeShape).isRequired,
+    secondaryItemsCombinedState: itemsCombinedStatePropTypeShape.isRequired,
     setSecondaryItems: PropTypes.func.isRequired,
     setSelectedSecondaryItems: PropTypes.func.isRequired
 };
