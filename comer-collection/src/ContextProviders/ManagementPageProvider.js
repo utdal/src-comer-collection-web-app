@@ -188,9 +188,9 @@ ManagementPageProvider.propTypes = {
     isLoaded: PropTypes.bool.isRequired,
     itemsCombinedState: PropTypes.shape(itemsCombinedStatePropTypeShape).isRequired,
     managementCallbacks: PropTypes.objectOf(PropTypes.func).isRequired,
-    setItemSelectionStatus: PropTypes.func.isRequired,
+    setItemSelectionStatus: PropTypes.func,
     setItems: PropTypes.func.isRequired,
-    setSelectedItems: PropTypes.func.isRequired
+    setSelectedItems: PropTypes.func
 };
 
 /**

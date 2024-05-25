@@ -6,7 +6,9 @@ import { Checkbox, TableCell, TableRow, styled } from "@mui/material";
 import { DataTableFieldCells } from "./DataTableFieldCells.js";
 import { TableRowPlaceholder } from "./TableRowPlaceholder.js";
 
-const ColoredTableRow = styled(TableRow)(({ isSelected, theme, themeColor }) => ({
+const ColoredTableRow = styled(TableRow, {
+    shouldForwardProp: (prop) => !["themeColor", "isSelected"].includes(prop)
+})(({ isSelected, theme, themeColor }) => ({
     "&:hover": {
         backgroundColor: isSelected ? theme.palette[themeColor].translucent : theme.palette.grey.veryTranslucent
 

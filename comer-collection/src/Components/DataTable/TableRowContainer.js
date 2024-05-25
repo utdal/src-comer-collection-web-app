@@ -30,9 +30,9 @@ export const TableRowContainer = ({ itemDictionaryEntry, tableFields, rowSelecti
         <TableRowProvider
             itemDictionaryEntry={itemDictionaryEntry}
             managementCallbacks={managementCallbacks}
-            rowSelectionEnabled={rowSelectionEnabled}
+            rowSelectionEnabled={Boolean(rowSelectionEnabled)}
             setSelectionStatus={setSelectionStatus}
-            smallCheckboxes={smallCheckboxes}
+            smallCheckboxes={Boolean(smallCheckboxes)}
             tableFields={tableFields}
         >
             <DataTableRow

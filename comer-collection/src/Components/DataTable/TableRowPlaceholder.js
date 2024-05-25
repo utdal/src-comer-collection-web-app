@@ -5,9 +5,10 @@ import { useTableCheckboxSettings, useTableFields } from "../../ContextProviders
 export const TableRowPlaceholder = memo(function TableContainer () {
     const tableFields = useTableFields();
     const { rowSelectionEnabled } = useTableCheckboxSettings();
+    const colSpan = tableFields.length + (1 * rowSelectionEnabled);
     return (
         <TableCell
-            colSpan={tableFields.length + (1 * rowSelectionEnabled)}
+            colSpan={colSpan}
             size="medium"
         >
             <Skeleton

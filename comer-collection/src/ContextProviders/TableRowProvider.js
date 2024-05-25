@@ -99,7 +99,7 @@ export const useTableRowManagementCallbacks = () => {
 };
 
 /**
- * @returns {callbacksObject}
+ * @returns {{columnDescription: string}[]}
  */
 export const useTableFields = () => {
     return useContext(TableRowContext).tableFields;
