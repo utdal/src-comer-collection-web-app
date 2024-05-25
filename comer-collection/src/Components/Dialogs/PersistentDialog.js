@@ -31,7 +31,6 @@ export const PersistentDialog = ({ children, maxWidth, onClose, isForm, onSubmit
             onClose={handleClose}
             onSubmit={isForm ? handleSubmit : null}
             open={open}
-            sx={{ zIndex: 10000 }}
         >
             {children}
         </Dialog>
