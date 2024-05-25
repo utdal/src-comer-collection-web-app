@@ -2,7 +2,7 @@ import React, { useCallback } from "react";
 import { Button, Typography } from "@mui/material";
 import { useAppUser } from "../../../ContextProviders/AppUser.js";
 import { useTableRowItem } from "../../../ContextProviders/TableRowProvider.js";
-import { LockIcon, LockResetIcon, OpenInNewIcon } from "../../../Imports/Icons.js";
+import { LockIcon, LockResetIcon } from "../../../Imports/Icons.js";
 import { useManagementCallbacks } from "../../../ContextProviders/ManagementPageProvider.js";
 
 export const UserPasswordSetOrResetCell = () => {
@@ -18,7 +18,6 @@ export const UserPasswordSetOrResetCell = () => {
             <Button
                 color="secondary"
                 onClick={handleNavigateToChangePassword}
-                startIcon={<OpenInNewIcon />}
                 variant="outlined"
             >
                 <Typography variant="body1">
