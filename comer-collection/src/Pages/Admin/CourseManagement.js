@@ -24,11 +24,12 @@ import { ManagementPageBody } from "../../Components/ManagementPage/ManagementPa
 import { ManagementPageFooter } from "../../Components/ManagementPage/ManagementPageFooter.js";
 import { useDialogState } from "../../Hooks/useDialogState.js";
 import AssociationManageButton from "../../Components/Buttons/AssociationManageButton.js";
+import useItemsRefresh from "../../Hooks/useItemsRefresh.js";
 
 const CourseManagement = () => {
     const [coursesCombinedState, setCourses, setSelectedCourses, filterCourses, setCourseSelectionStatus] = useItemsReducer(Course);
-    const [isLoaded, setIsLoaded] = useState(false);
-    const [isError, setIsError] = useState(false);
+
+    const [handleRefresh, isLoaded, isError] = useItemsRefresh(Course, setCourses);
 
     const [createDialogState, handleOpenMultiCreateDialog] = useDialogState();
     const [editDialogState, openEditDialog] = useDialogState(false);
@@ -46,21 +47,6 @@ const CourseManagement = () => {
     useTitle("Course Management");
 
     useAccountNavTitle("Course Management");
-
-    const handleRefresh = useCallback(async () => {
-        try {
-            setIsError(false);
-            setCourses(await Course.handleFetchAll());
-            setIsLoaded(true);
-        } catch (error) {
-            setIsError(true);
-            setIsLoaded(false);
-        }
-    }, [setCourses]);
-
-    useEffect(() => {
-        handleRefresh();
-    }, [handleRefresh]);
 
     const courseFilterFunction = useCallback((course) => {
         return doesItemMatchSearchQuery(searchQuery, course, ["name", "notes"]);

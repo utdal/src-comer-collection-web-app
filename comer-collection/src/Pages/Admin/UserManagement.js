@@ -29,13 +29,12 @@ import { ManagementPageHeader } from "../../Components/ManagementPage/Management
 import { ManagementPageBody } from "../../Components/ManagementPage/ManagementPageBody.js";
 import { ManagementPageFooter } from "../../Components/ManagementPage/ManagementPageFooter.js";
 import AssociationManageButton from "../../Components/Buttons/AssociationManageButton.js";
+import useItemsRefresh from "../../Hooks/useItemsRefresh.js";
 
 const UserManagement = () => {
     const [usersCombinedState, setUsers, setSelectedUsers, filterUsers, setUserSelectionStatus] = useItemsReducer(User);
-    // const [courses, setCourses] = useState([]);
-    // const [exhibitions, setExhibitions] = useState([]);
-    const [isLoaded, setIsLoaded] = useState(false);
-    const [isError, setIsError] = useState(false);
+
+    const [handleRefresh, isLoaded, isError] = useItemsRefresh(User, setUsers);
 
     const [privilegesDialogState, openPrivilegesDialog] = useDialogState(false, User);
 
@@ -61,25 +60,6 @@ const UserManagement = () => {
     useTitle("User Management");
 
     useAccountNavTitle("User Management");
-
-    const handleRefresh = useCallback(async () => {
-        try {
-            setIsError(false);
-            setUsers(await User.handleFetchAll());
-            setIsLoaded(true);
-        } catch (e) {
-            setIsError(true);
-            setIsLoaded(false);
-        }
-    }, [setUsers]);
-
-    useEffect(() => {
-        console.log(usersCombinedState.selectionStatuses);
-    }, [usersCombinedState.selectionStatuses]);
-
-    useEffect(() => {
-        handleRefresh();
-    }, [handleRefresh]);
 
     const userFilterFunction = useCallback((user) => {
         return (

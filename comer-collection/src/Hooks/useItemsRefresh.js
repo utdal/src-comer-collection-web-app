@@ -1,14 +1,23 @@
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 /**
- * Custom hook that manages fetching/refreshing items on a management page
+ * Custom hook that fetches items of the specified Entity type
+ * on first render, and returns a helper method for managing
+ * fetching/refreshing items on a management page, as well as
+ * status variables isLoaded and isError
  * @typedef {import("../ContextProviders/ManagementPageProvider.js").Item} Item
  * @param {class} Entity the type of items to fetch
  * @param {React.Dispatch<React.SetStateAction<Item[]>>} setItems the setter method for the items state
  * @returns {[() => Promise<void>, boolean, boolean]} [handleRefresh, isLoaded, isError]
  */
 
-export const useItemsRefresh = (Entity, setItems) => {
+export default function useItemsRefresh (Entity, setItems) {
+    if (!Entity) {
+        throw new Error("useItemsRefresh must have an entity type");
+    } else if (!setItems) {
+        throw new Error("useItemsRefresh needs a state setter function");
+    }
+
     const [isLoaded, setIsLoaded] = useState(false);
     const [isError, setIsError] = useState(false);
 
@@ -22,6 +31,10 @@ export const useItemsRefresh = (Entity, setItems) => {
             setIsLoaded(false);
         }
     }, [Entity, setItems]);
+
+    useEffect(() => {
+        handleRefresh();
+    }, [handleRefresh]);
 
     return [handleRefresh, isLoaded, isError];
 };

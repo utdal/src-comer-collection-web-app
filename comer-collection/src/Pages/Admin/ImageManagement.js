@@ -31,7 +31,7 @@ import { ManagementPageFooter } from "../../Components/ManagementPage/Management
 import { useDialogState } from "../../Hooks/useDialogState.js";
 import EntityManageButton from "../../Components/Buttons/EntityManageButton.js";
 import AssociationManageButton from "../../Components/Buttons/AssociationManageButton.js";
-import { useItemsRefresh } from "../../Hooks/useItemsRefresh.js";
+import useItemsRefresh from "../../Hooks/useItemsRefresh.js";
 
 const ImageManagement = () => {
     const [imagesCombinedState, setImages, setSelectedImages, filterImages, setImageSelectionStatuses] = useItemsReducer(Image);
@@ -61,10 +61,6 @@ const ImageManagement = () => {
     const navigate = useNavigate();
     useAccountNavTitle("Image Management");
     useTitle("Image Management");
-
-    useEffect(() => {
-        handleRefresh();
-    }, [handleRefresh]);
 
     const imageFilterFunction = useCallback((image) => {
         return (

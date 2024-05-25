@@ -19,12 +19,12 @@ import { ManagementPageHeader } from "../../Components/ManagementPage/Management
 import { ManagementPageBody } from "../../Components/ManagementPage/ManagementPageBody.js";
 import { ManagementPageFooter } from "../../Components/ManagementPage/ManagementPageFooter.js";
 import { useDialogState } from "../../Hooks/useDialogState.js";
+import useItemsRefresh from "../../Hooks/useItemsRefresh.js";
 
 const ExhibitionManagement = () => {
     const [exhibitionsCombinedState, setExhibitions, setSelectedExhibitions, filterExhibitions, setExhibitionSelectionStatus] = useItemsReducer(Exhibition);
 
-    const [isLoaded, setIsLoaded] = useState(false);
-    const [isError, setIsError] = useState(false);
+    const [handleRefresh, isLoaded, isError] = useItemsRefresh(Exhibition, setExhibitions);
 
     const [editDialogIsOpen, setEditDialogIsOpen] = useState(false);
     const [editDialogExhibitionId, setEditDialogExhibitionId] = useState(null);
@@ -44,21 +44,6 @@ const ExhibitionManagement = () => {
         setUserCourseIdFilter(null);
         setSearchQuery("");
     }, []);
-
-    const handleRefresh = useCallback(async () => {
-        try {
-            setIsError(false);
-            setExhibitions(await Exhibition.handleFetchAll());
-            setIsLoaded(true);
-        } catch (error) {
-            setIsError(true);
-            setIsLoaded(false);
-        }
-    }, [setExhibitions]);
-
-    useEffect(() => {
-        handleRefresh();
-    }, [handleRefresh]);
 
     const exhibitionFilterFunction = useCallback((exhibition) => {
         return (
