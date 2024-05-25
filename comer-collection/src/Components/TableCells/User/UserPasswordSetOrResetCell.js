@@ -7,11 +7,12 @@ import { useManagementCallbacks } from "../../../ContextProviders/ManagementPage
 
 export const UserPasswordSetOrResetCell = () => {
     const user = useTableRowItem();
-    const appUser = useAppUser();
+    const [appUser] = useAppUser();
     const { handleOpenUserPasswordResetDialog, handleNavigateToChangePassword } = useManagementCallbacks();
     const handleOpenPasswordResetDialog = useCallback(() => {
         handleOpenUserPasswordResetDialog(user);
     }, [handleOpenUserPasswordResetDialog, user]);
+    console.log(appUser.id, user.id);
     if (appUser.id === user.id) {
         return (
             <Button

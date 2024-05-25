@@ -59,7 +59,7 @@ export const UserResetPasswordDialog = ({ dialogState }) => {
             setEditMode(false);
             showSnackbar(msg, "success");
         }).catch((err) => {
-            showSnackbar(err, "error");
+            showSnackbar(err.message, "error");
         });
     }, [dialogUser?.id, handleRefresh, newPassword, showSnackbar]);
 

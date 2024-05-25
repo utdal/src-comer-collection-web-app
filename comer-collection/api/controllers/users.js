@@ -105,7 +105,7 @@ const updateUser = async (req, res, next) => {
  * @param {import("express").NextFunction} next
  */
 const deactivateUser = async (req, res, next) => {
-    if (req.params.userId === req.app_user.id) {
+    if (parseInt(req.params.userId) === req.app_user.id) {
         next(createError(403, { debugMessage: "Admin cannot deactivate self" }));
     }
     req.body = { is_active: false };
@@ -122,7 +122,7 @@ const deactivateUser = async (req, res, next) => {
  * @param {import("express").NextFunction} next
  */
 const activateUser = async (req, res, next) => {
-    if (req.params.userId === req.app_user.id) {
+    if (parseInt(req.params.userId) === req.app_user.id) {
         next(createError(403, { debugMessage: "Admin cannot activate self" }));
     }
     req.body = { is_active: true };
@@ -138,7 +138,7 @@ const activateUser = async (req, res, next) => {
  * @param {import("express").NextFunction} next
  */
 const changeUserAccess = async (req, res, next) => {
-    if (req.params.userId === req.app_user.id) {
+    if (parseInt(req.params.userId) === req.app_user.id) {
         next(createError(403, { debugMessage: "Admin cannot promote self" }));
     }
     await updateItem(req, res, next, User, req.params.userId, ["access_level"]);
@@ -152,7 +152,7 @@ const changeUserAccess = async (req, res, next) => {
  * @param {import("express").NextFunction} next
  */
 const deleteUser = async (req, res, next) => {
-    if (req.params.userId === req.app_user.id) {
+    if (parseInt(req.params.userId) === req.app_user.id) {
         next(createError(401, { debugMessage: "Admin cannot delete self" }));
     }
     await deleteItem(req, res, next, User, req.params.userId);
@@ -194,7 +194,7 @@ const getCurrentUser = async (req, res, next) => {
  * @param {import("express").NextFunction} next
  */
 const resetUserPassword = async (req, res, next) => {
-    if (req.params.userId === req.app_user.id) {
+    if (parseInt(req.params.userId) === req.app_user.id) {
         next(createError(401, { debugMessage: "Admin cannot reset own password.  Use Change Password instead." }));
     } else if (!req.body.newPassword) {
         next(createError(400, { debugMessage: "Password reset request must contain the new password in the request body" }));
