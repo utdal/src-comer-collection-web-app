@@ -170,10 +170,6 @@ const ImageManagement = () => {
         handleOpenMultiCreateDialog,
         handleRefresh]);
 
-    useEffect(() => {
-        console.log(imagesCombinedState.selectionStatuses);
-    }, [imagesCombinedState.selectionStatuses]);
-
     return (
         <ManagementPageProvider
             Entity={Image}

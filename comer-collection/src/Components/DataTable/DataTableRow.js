@@ -31,7 +31,6 @@ const DataTableRow = memo(function DataTableRow ({ isSelected, themeColor }) {
     const { rowSelectionEnabled, smallCheckboxes } = useTableCheckboxSettings();
 
     const itemDictionaryEntry = useTableRowItem();
-    console.log("Rendering DataTableRow where itemId = ", itemDictionaryEntry.item.id, " and isSelected = ", isSelected);
 
     const tableFields = useTableFields();
 
