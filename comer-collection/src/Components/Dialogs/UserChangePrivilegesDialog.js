@@ -79,8 +79,7 @@ export const UserChangePrivilegesDialog = ({ dialogState }) => {
         closeDialog();
     }, [closeDialog]);
 
-    const handleSubmit = useCallback((e) => {
-        e.preventDefault();
+    const handleSubmit = useCallback(() => {
         if (dialogUser) {
             setSubmitEnabled(false);
             User.handleChangeUserAccess(dialogUser.id, newAccess).then((msg) => {
