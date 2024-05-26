@@ -25,10 +25,11 @@ const ColoredTableRow = styled(TableRow, {
 /**
  * @type {(props: {
  *      isSelected: boolean,
- *      themeColor: string
+ *      themeColor: string,
+ *      noSkeleton: boolean
  * }) => React.JSX.Element}
  */
-const DataTableRow = memo(function DataTableRow ({ item, isSelected, themeColor, managementCallbacks, tableFields, rowSelectionEnabled, smallCheckboxes, setItemSelectionStatus }) {
+const DataTableRow = memo(function DataTableRow ({ item, isSelected, themeColor, managementCallbacks, tableFields, rowSelectionEnabled, smallCheckboxes, setItemSelectionStatus, noSkeleton }) {
     const { inView, ref } = useInView({
         triggerOnce: true
     });
@@ -51,7 +52,7 @@ const DataTableRow = memo(function DataTableRow ({ item, isSelected, themeColor,
             themeColor={themeColor}
         >
             {
-                inView
+                inView || noSkeleton
                     ? (
                         <>
                             {rowSelectionEnabled
@@ -88,6 +89,7 @@ DataTableRow.propTypes = {
     isSelected: PropTypes.bool,
     item: entityPropTypeShape,
     managementCallbacks: PropTypes.objectOf(PropTypes.func),
+    noSkeleton: PropTypes.bool,
     rowSelectionEnabled: PropTypes.bool,
     setItemSelectionStatus: PropTypes.func,
     smallCheckboxes: PropTypes.bool,

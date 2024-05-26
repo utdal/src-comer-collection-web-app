@@ -1,5 +1,5 @@
 /* eslint-disable react/no-multi-comp */
-import React, { memo, useCallback, useMemo, useState } from "react";
+import React, { useCallback, useMemo, useState } from "react";
 import { Checkbox, Stack, TableCell, TableContainer, Typography, Table, TableBody, TableHead, TableRow, Paper } from "@mui/material";
 import { useTheme } from "@emotion/react";
 import { ColumnSortButton } from "../Buttons/ColumnSortButton.js";
@@ -10,9 +10,9 @@ import { FullPageMessage } from "../FullPageMessage.js";
 import { InfoIcon } from "../../Imports/Icons.js";
 import DataTableRow from "./DataTableRow.js";
 
-export const DataTable = memo(function DataTable ({
-    tableFields, rowSelectionEnabled, smallCheckboxes, defaultSortColumn, defaultSortAscending
-}) {
+export const DataTable = ({
+    tableFields, rowSelectionEnabled, smallCheckboxes, defaultSortColumn, defaultSortAscending, noSkeleton
+}) => {
     const theme = useTheme();
     const itemDictionary = useItemDictionary();
 
@@ -64,6 +64,7 @@ export const DataTable = memo(function DataTable ({
                         item={item}
                         key={item.id}
                         managementCallbacks={managementCallbacks}
+                        noSkeleton={noSkeleton}
                         rowSelectionEnabled={rowSelectionEnabled}
                         setItemSelectionStatus={setItemSelectionStatus}
                         smallCheckboxes={smallCheckboxes}
@@ -76,7 +77,7 @@ export const DataTable = memo(function DataTable ({
             })
         );
         return itemInformationToReturn;
-    }, [itemDictionary, managementCallbacks, rowSelectionEnabled, selectionStatuses, setItemSelectionStatus, smallCheckboxes, tableFields]);
+    }, [itemDictionary, managementCallbacks, noSkeleton, rowSelectionEnabled, selectionStatuses, setItemSelectionStatus, smallCheckboxes, tableFields]);
 
     const visibleItemInformation = useMemo(() => itemInformation.filter((r) => visibilityStatuses[r[0].id]), [itemInformation, visibilityStatuses]);
 
@@ -172,11 +173,12 @@ export const DataTable = memo(function DataTable ({
             )}
         </TableContainer>
     );
-});
+};
 
 DataTable.propTypes = {
     defaultSortAscending: PropTypes.bool,
     defaultSortColumn: PropTypes.string,
+    noSkeleton: PropTypes.bool,
     rowSelectionEnabled: PropTypes.bool,
     smallCheckboxes: PropTypes.bool,
     tableFields: PropTypes.arrayOf(tableFieldPropTypeShape).isRequired

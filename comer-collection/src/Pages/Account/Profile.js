@@ -116,7 +116,10 @@ const Profile = () => {
                             managementCallbacks={managementCallbacks}
                             setItems={setUsers}
                         >
-                            <DataTable tableFields={userTableFields} />
+                            <DataTable
+                                noSkeleton
+                                tableFields={userTableFields}
+                            />
                         </ManagementPageProvider>
                     </Box>
                 </Stack>
@@ -164,6 +167,7 @@ const Profile = () => {
                         <DataTable
                             defaultSortAscending={false}
                             defaultSortColumn="Start"
+                            noSkeleton
                             tableFields={courseTableFields}
                         />
                     </ManagementPageProvider>
