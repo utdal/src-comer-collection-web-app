@@ -29,13 +29,14 @@ export const NavBarUserMenu = () => {
                 aria-haspopup={Boolean(anchorElement)}
                 endIcon={<ArrowDropDownIcon sx={{ height: "100%", color: "white" }} />}
                 onClick={handleMenuOpen}
-                sx={{ textTransform: "unset", paddingLeft: "20px", paddingRight: "10px" }}
+                sx={{ height: "64px", textTransform: "unset", paddingLeft: "20px", paddingRight: "10px" }}
                 variant="text"
             >
                 <Stack
                     alignContent="center"
                     alignItems="center"
                     direction="row"
+                    height="64px"
                 >
                     <Typography
                         sx={{ color: "white" }}

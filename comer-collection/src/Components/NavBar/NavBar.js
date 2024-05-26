@@ -15,16 +15,20 @@ const NavBar = () => {
     const [appSettingsDialogState, openAppSettingsDialog] = useDialogState();
 
     return (
-        <AppBar color="primary">
+        <AppBar
+            color="primary"
+        >
             <Stack
                 alignItems="center"
                 direction="row"
+                height="64px"
                 justifyContent="space-between"
                 spacing={2}
             >
                 <Stack
                     alignItems="center"
                     direction="row"
+                    height="64px"
                     paddingLeft={2}
                     spacing={1}
                 >
@@ -41,7 +45,7 @@ const NavBar = () => {
                     </Typography>
                 </Stack>
 
-                <Toolbar>
+                <Toolbar sx={{ height: "64px" }}>
                     <Stack
                         direction="row"
                         spacing={2}
