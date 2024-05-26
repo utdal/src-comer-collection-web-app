@@ -18,17 +18,19 @@ import { ManagementPageHeader } from "../../Components/ManagementPage/Management
 import { ManagementPageBody } from "../../Components/ManagementPage/ManagementPageBody.js";
 import { ManagementPageFooter } from "../../Components/ManagementPage/ManagementPageFooter.js";
 import { useDialogState } from "../../Hooks/useDialogState.js";
-import useItemsRefresh from "../../Hooks/useItemsRefresh.js";
+import { useLoaderData } from "react-router";
 
 const ExhibitionManagement = () => {
+    const exhibitions = useLoaderData();
+
     const [exhibitionsCombinedState, {
         setItems: setExhibitions,
         setSelectedItems: setSelectedExhibitions,
         filterItems: filterExhibitions,
         setItemSelectionStatus: setExhibitionSelectionStatus
-    }] = useItemsReducer(Exhibition);
+    }] = useItemsReducer(exhibitions);
 
-    const [handleRefresh, isLoaded, isError] = useItemsRefresh(Exhibition, setExhibitions);
+    const handleRefresh = useCallback(async () => {}, []);
 
     const [editDialogIsOpen, setEditDialogIsOpen] = useState(false);
     const [editDialogExhibitionId, setEditDialogExhibitionId] = useState(null);
@@ -83,8 +85,6 @@ const ExhibitionManagement = () => {
     return (
         <ManagementPageProvider
             Entity={Exhibition}
-            isError={isError}
-            isLoaded={isLoaded}
             itemsCombinedState={exhibitionsCombinedState}
             managementCallbacks={managementCallbacks}
             setItemSelectionStatus={setExhibitionSelectionStatus}

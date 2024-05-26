@@ -22,6 +22,8 @@ import { sendAuthenticatedRequest } from "./Helpers/APICalls.js";
 import { User } from "./Classes/Entities/User.js";
 import { Image } from "./Classes/Entities/Image.js";
 import RouterErrorMessage from "./Components/RouterErrorMessage.js";
+import { Course } from "./Classes/Entities/Course.js";
+import { Exhibition, PublicExhibition } from "./Classes/Entities/Exhibition.js";
 
 const appUserLoader = async () => {
     if (!localStorage.getItem("token")) {
@@ -56,7 +58,9 @@ const router = createBrowserRouter([
             },
             {
                 element: <ExhibitionBrowser />,
-                path: "Exhibitions"
+                path: "Exhibitions",
+                loader: PublicExhibition.loader,
+                ErrorBoundary: RouterErrorMessage
             },
             {
                 element: <ExhibitionPage />,
@@ -108,7 +112,9 @@ const router = createBrowserRouter([
                                         component={<CourseManagement />}
                                     />
                                 ),
-                                path: "Courses"
+                                path: "Courses",
+                                loader: Course.loader,
+                                ErrorBoundary: RouterErrorMessage
                             },
                             {
                                 element: (
@@ -116,7 +122,9 @@ const router = createBrowserRouter([
                                         component={<ExhibitionManagement />}
                                     />
                                 ),
-                                path: "Exhibitions"
+                                path: "Exhibitions",
+                                loader: Exhibition.loader,
+                                ErrorBoundary: RouterErrorMessage
                             },
                             {
                                 element: (

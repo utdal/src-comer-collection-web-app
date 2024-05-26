@@ -16,6 +16,10 @@ class Exhibition extends Entity {
     static searchBoxFields = ["title"];
     static searchBoxPlaceholder = "Search by title";
 
+    static loader = async () => {
+        return await this.handleFetchAll();
+    };
+
     static tableFields = [
         {
             columnDescription: "ID",
@@ -56,10 +60,18 @@ class Exhibition extends Entity {
 
 class MyExhibition extends Exhibition {
     static baseUrl = "/api/user/exhibitions";
+
+    static loader = async () => {
+        return await this.handleFetchAll();
+    };
 }
 
 class PublicExhibition extends Exhibition {
     static baseUrl = "/api/public/exhibitions";
+
+    static loader = async () => {
+        return await this.handleFetchAll();
+    };
 }
 
 export const exhibitionStatePropTypesShape = {

@@ -39,13 +39,6 @@ const UserManagement = () => {
         setItemSelectionStatus: setUserSelectionStatus
     }] = useItemsReducer(users);
 
-    // const [handleRefresh, isLoaded, isError] = useItemsRefresh(User, setUsers);
-    const isLoaded = true;
-    const isError = false;
-    // useEffect(() => {
-    //     setUsers(users);
-    // }, [setUsers, users]);
-
     const handleRefresh = useCallback(async () => {}, []);
 
     const [privilegesDialogState, openPrivilegesDialog] = useDialogState(false, User);
@@ -159,8 +152,6 @@ const UserManagement = () => {
     return (
         <ManagementPageProvider
             Entity={User}
-            isError={isError}
-            isLoaded={isLoaded}
             itemsCombinedState={usersCombinedState}
             managementCallbacks={managementCallbacks}
             setItemSelectionStatus={setUserSelectionStatus}

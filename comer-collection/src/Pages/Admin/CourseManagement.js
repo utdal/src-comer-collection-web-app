@@ -6,7 +6,7 @@ import { ItemSingleEditDialog } from "../../Components/Dialogs/ItemSingleEditDia
 import { DataTable } from "../../Components/DataTable/DataTable.js";
 import { doesItemMatchSearchQuery } from "../../Helpers/SearchUtilities.js";
 import { AssociationManagementDialog } from "../../Components/Dialogs/AssociationManagementDialog/AssociationManagementDialog.js";
-import { useNavigate } from "react-router";
+import { useLoaderData, useNavigate } from "react-router";
 import { SelectionSummary } from "../../Components/SelectionSummary.js";
 import { useTitle } from "../../ContextProviders/AppFeatures.js";
 import { Course } from "../../Classes/Entities/Course.js";
@@ -23,17 +23,17 @@ import { ManagementPageBody } from "../../Components/ManagementPage/ManagementPa
 import { ManagementPageFooter } from "../../Components/ManagementPage/ManagementPageFooter.js";
 import { useDialogState } from "../../Hooks/useDialogState.js";
 import AssociationManageButton from "../../Components/Buttons/AssociationManageButton.js";
-import useItemsRefresh from "../../Hooks/useItemsRefresh.js";
 
 const CourseManagement = () => {
+    const courses = useLoaderData();
     const [coursesCombinedState, {
         setItems: setCourses,
         setSelectedItems: setSelectedCourses,
         filterItems: filterCourses,
         setItemSelectionStatus: setCourseSelectionStatus
-    }] = useItemsReducer(Course);
+    }] = useItemsReducer(courses);
 
-    const [handleRefresh, isLoaded, isError] = useItemsRefresh(Course, setCourses);
+    const handleRefresh = useCallback(async () => {}, []);
 
     const [createDialogState, handleOpenMultiCreateDialog] = useDialogState();
     const [editDialogState, openEditDialog] = useDialogState(false);
@@ -92,8 +92,6 @@ const CourseManagement = () => {
     return (
         <ManagementPageProvider
             Entity={Course}
-            isError={isError}
-            isLoaded={isLoaded}
             itemsCombinedState={coursesCombinedState}
             managementCallbacks={managementCallbacks}
             setItemSelectionStatus={setCourseSelectionStatus}
