@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useState } from "react";
 import {
     Typography, Stack, Paper, Box
 } from "@mui/material";
@@ -9,7 +9,6 @@ import { ItemSingleDeleteDialog } from "../../Components/Dialogs/ItemSingleDelet
 import { useTitle } from "../../ContextProviders/AppFeatures.js";
 import { useAppUser } from "../../ContextProviders/AppUser.js";
 
-import { MyExhibition } from "../../Classes/Entities/Exhibition.js";
 import { ExhibitionTitleCell } from "../../Components/TableCells/Exhibition/ExhibitionTitleCell.js";
 import { ExhibitionOpenInCurrentTabCell } from "../../Components/TableCells/Exhibition/ExhibitionOpenInCurrentTabCell.js";
 import { ExhibitionDateCreatedCell } from "../../Components/TableCells/Exhibition/ExhibitionDateCreatedCell.js";
@@ -65,11 +64,7 @@ const MyExhibitions = () => {
 
     const [deleteDialogState, openDeleteDialog] = useDialogState(false);
 
-    const [exhibitionsCombinedState, { setItems: setExhibitions }] = useItemsReducer(MyExhibition);
-
-    useEffect(() => {
-        setExhibitions(appUser.Exhibitions);
-    }, [appUser, setExhibitions]);
+    const [exhibitionsCombinedState, { setItems: setExhibitions }] = useItemsReducer(appUser.Exhibitions);
 
     const handleOpenExhibitionCreateDialog = useCallback(() => {
         setDialogEditMode(false);

@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from "react";
+import React, { useMemo } from "react";
 import {
     Typography, Stack, Paper,
     Box
@@ -8,7 +8,6 @@ import { AccountCircleIcon, SchoolIcon } from "../../Imports/Icons.js";
 import { useAppUser } from "../../ContextProviders/AppUser.js";
 import { useTitle } from "../../ContextProviders/AppFeatures.js";
 
-import { User } from "../../Classes/Entities/User.js";
 import { CourseNameCell } from "../../Components/TableCells/Course/CourseNameCell.js";
 import { CourseStartDateTimeCell } from "../../Components/TableCells/Course/CourseStartDateTimeCell.js";
 import { CourseEndDateTimeCell } from "../../Components/TableCells/Course/CourseEndDateTimeCell.js";
@@ -20,7 +19,6 @@ import { UserEmailCopyCell } from "../../Components/TableCells/User/UserEmailCop
 import { UserProfilePasswordInfoCell } from "../../Components/TableCells/User/UserProfilePasswordInfoCell.js";
 import { UserTypeCell } from "../../Components/TableCells/User/UserTypeCell.js";
 import { UserExhibitionQuotaCell } from "../../Components/TableCells/User/UserExhibitionQuotaCell.js";
-import { Course } from "../../Classes/Entities/Course.js";
 
 const courseTableFields = [
     {
@@ -72,13 +70,8 @@ const userTableFields = [
 const Profile = () => {
     const [appUser] = useAppUser();
 
-    const [usersCombinedState, { setItems: setUsers }] = useItemsReducer(User);
-    const [coursesCombinedState, { setItems: setCourses }] = useItemsReducer(Course);
-
-    useEffect(() => {
-        setUsers([appUser]);
-        setCourses(appUser.Courses);
-    }, [appUser, setCourses, setUsers]);
+    const [usersCombinedState, { setItems: setUsers }] = useItemsReducer([appUser]);
+    const [coursesCombinedState, { setItems: setCourses }] = useItemsReducer(appUser.Courses);
 
     useTitle("Profile");
 

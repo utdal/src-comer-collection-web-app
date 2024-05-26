@@ -4,7 +4,7 @@ import { ItemSingleDeleteDialog } from "../../Components/Dialogs/ItemSingleDelet
 import { ItemMultiCreateDialog } from "../../Components/Dialogs/ItemMultiCreateDialog.js";
 import { ItemSingleEditDialog } from "../../Components/Dialogs/ItemSingleEditDialog.js";
 import { doesItemMatchSearchQuery } from "../../Helpers/SearchUtilities.js";
-import { useNavigate } from "react-router";
+import { useLoaderData, useNavigate } from "react-router";
 import { ImageFullScreenViewer } from "../../Components/Dialogs/ImageFullScreenViewer.js";
 import { EntityManageDialog } from "../../Components/Dialogs/EntityManageDialog.js";
 import { SelectionSummary } from "../../Components/SelectionSummary.js";
@@ -30,17 +30,17 @@ import { ManagementPageFooter } from "../../Components/ManagementPage/Management
 import { useDialogState } from "../../Hooks/useDialogState.js";
 import EntityManageButton from "../../Components/Buttons/EntityManageButton.js";
 import AssociationManageButton from "../../Components/Buttons/AssociationManageButton.js";
-import useItemsRefresh from "../../Hooks/useItemsRefresh.js";
 
 const ImageManagement = () => {
+    const images = useLoaderData();
     const [imagesCombinedState, {
         setItems: setImages,
         setSelectedItems: setSelectedImages,
         filterItems: filterImages,
         setItemSelectionStatus: setImageSelectionStatuses
-    }] = useItemsReducer(Image);
+    }] = useItemsReducer(images);
 
-    const [handleRefresh, isLoaded, isError] = useItemsRefresh(Image, setImages);
+    const handleRefresh = useCallback(async () => {}, []);
 
     const [previewerImage, setPreviewerImage] = useState(null);
     const [previewerOpen, setPreviewerOpen] = useState(false);
@@ -145,8 +145,6 @@ const ImageManagement = () => {
     return (
         <ManagementPageProvider
             Entity={Image}
-            isError={isError}
-            isLoaded={isLoaded}
             itemsCombinedState={imagesCombinedState}
             managementCallbacks={managementCallbacks}
             setItemSelectionStatus={setImageSelectionStatuses}
