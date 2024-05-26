@@ -1,10 +1,14 @@
 import React, { memo, useCallback } from "react";
 import PropTypes from "prop-types";
 import { useInView } from "react-intersection-observer";
-import { useTableRowManagementCallbacks, useSetSelectionStatus, useTableCheckboxSettings, useTableRowItem, useTableFields } from "../../ContextProviders/TableRowProvider.js";
 import { Checkbox, TableCell, TableRow, styled } from "@mui/material";
 import { DataTableFieldCells } from "./DataTableFieldCells.js";
-import { TableRowPlaceholder } from "./TableRowPlaceholder.js";
+import { DataTableRowPlaceholder } from "./DataTableRowPlaceholder.js";
+import { entityPropTypeShape, tableFieldPropTypeShape } from "../../Classes/Entity.js";
+
+/**
+ * @typedef {import("../../ContextProviders/ManagementPageProvider.js").ItemDictionaryEntry} ItemDictionaryEntry
+ */
 
 const ColoredTableRow = styled(TableRow, {
     shouldForwardProp: (prop) => !["themeColor", "isSelected"].includes(prop)
@@ -19,25 +23,22 @@ const ColoredTableRow = styled(TableRow, {
 }));
 
 /**
- * @typedef {import("../../ContextProviders/ManagementPageProvider.js").ItemDictionaryEntry} ItemDictionaryEntry
  * @type {(props: {
  *      isSelected: boolean,
  *      themeColor: string
  * }) => React.JSX.Element}
  */
-const DataTableRow = memo(function DataTableRow ({ isSelected, themeColor }) {
+const DataTableRow = memo(function DataTableRow ({ itemDictionaryEntry, isSelected, themeColor, managementCallbacks, tableFields, rowSelectionEnabled, smallCheckboxes, setItemSelectionStatus }) {
     const { inView, ref } = useInView({
         triggerOnce: true
     });
 
-    const { rowSelectionEnabled, smallCheckboxes } = useTableCheckboxSettings();
-
-    const itemDictionaryEntry = useTableRowItem();
-
-    const tableFields = useTableFields();
-
-    const managementCallbacks = useTableRowManagementCallbacks();
-    const setSelectionStatus = useSetSelectionStatus();
+    /**
+     * @type {(newStatus: boolean) => void}
+     */
+    const setSelectionStatus = useCallback((newStatus) => {
+        setItemSelectionStatus(itemDictionaryEntry.item.id, newStatus);
+    }, [itemDictionaryEntry, setItemSelectionStatus]);
 
     const handleCheckboxChange = useCallback((e) => {
         setSelectionStatus(e.target.checked);
@@ -74,7 +75,9 @@ const DataTableRow = memo(function DataTableRow ({ isSelected, themeColor }) {
                         </>
                     )
                     : (
-                        <TableRowPlaceholder />
+                        <DataTableRowPlaceholder
+                            colSpan={tableFields.length + (rowSelectionEnabled ? 1 : 0)}
+                        />
                     )
             }
         </ColoredTableRow>
@@ -83,6 +86,15 @@ const DataTableRow = memo(function DataTableRow ({ isSelected, themeColor }) {
 
 DataTableRow.propTypes = {
     isSelected: PropTypes.bool,
+    itemDictionaryEntry: PropTypes.shape({
+        item: entityPropTypeShape,
+        itemString: PropTypes.string
+    }),
+    managementCallbacks: PropTypes.objectOf(PropTypes.func),
+    rowSelectionEnabled: PropTypes.bool,
+    setItemSelectionStatus: PropTypes.func,
+    smallCheckboxes: PropTypes.bool,
+    tableFields: PropTypes.arrayOf(tableFieldPropTypeShape).isRequired,
     themeColor: PropTypes.string
 };
 

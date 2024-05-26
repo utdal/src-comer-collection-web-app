@@ -30,9 +30,22 @@ import { itemsCombinedStatePropTypeShape } from "../Classes/Entity.js";
  *      itemCounts: ItemCounts
  * }} ItemsCombinedState
  *
- * @typedef {{
- *      type: ("setItems"|"setSelectedItems"|"filterItems"|"setItemSelectionStatus")
- * }} ItemsDispatchAction
+ * @typedef {(
+ *  {
+ *      type: "setItems"
+ *      items: Item[]
+ *  }|{
+ *      type: "setSelectedItems",
+ *      selectedItems: Item[]
+ *  }|{
+ *      type: "filterItems",
+ *      filterFunction: (item: Item) => boolean | null
+ *  }|{
+ *      type: "setItemSelectionStatus",
+ *      itemId: number,
+ *      newStatus: boolean
+ *  }
+ * )} ItemsDispatchAction
  *
  */
 
@@ -92,26 +105,19 @@ const itemsReducer = (state, action) => {
         return {
             ...state,
             items: action.items,
-            // selectionStatuses: newSelectionStatuses,
             visibilityStatuses: newVisibilityStatuses,
             itemCounts: getItemCounts(action.items, state.selectionStatuses, newVisibilityStatuses)
         };
     } else if (action.type === "setSelectedItems") {
-        const clearSelectionStatuses = {};
-        for (const itemId in state.selectionStatuses) {
-            clearSelectionStatuses[itemId] = false;
-        }
-        Object.assign(state.selectionStatuses, clearSelectionStatuses);
-
         const newSelectionStatuses = {};
         for (const { id } of action.selectedItems) {
             newSelectionStatuses[id] = true;
         }
-        Object.assign(state.selectionStatuses, newSelectionStatuses);
 
         return {
             ...state,
-            itemCounts: getItemCounts(state.items, state.selectionStatuses, state.visibilityStatuses)
+            selectionStatuses: newSelectionStatuses,
+            itemCounts: getItemCounts(state.items, newSelectionStatuses, state.visibilityStatuses)
         };
     } else if (action.type === "filterItems") {
         const filteredItems = state.items.filter(action.filterFunction);
@@ -127,15 +133,15 @@ const itemsReducer = (state, action) => {
             itemCounts: getItemCounts(state.items, state.selectionStatuses, newVisibilityStatuses)
         };
     } else if (action.type === "setItemSelectionStatus") {
-        /**
-         * Update the dictionary value without changing the pointer for selectionStatuses
-         */
-        state.selectionStatuses[action.itemId] = action.newStatus;
-        state.itemCounts = getItemCounts(state.items, state.selectionStatuses, state.visibilityStatuses);
-        /**
-         * Change the pointer to the state object to force React to re-render
-         */
-        return { ...state };
+        const newSelectionStatuses = {
+            ...state.selectionStatuses,
+            [action.itemId]: action.newStatus
+        };
+        return {
+            ...state,
+            selectionStatuses: newSelectionStatuses,
+            itemCounts: getItemCounts(state.items, newSelectionStatuses, state.visibilityStatuses)
+        };
     } else {
         console.warn("itemsReducer received invalid action object", action);
         return state;

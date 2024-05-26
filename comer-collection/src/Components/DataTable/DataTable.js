@@ -4,11 +4,11 @@ import { Checkbox, Stack, TableCell, TableContainer, Typography, Table, TableBod
 import { useTheme } from "@emotion/react";
 import { ColumnSortButton } from "../Buttons/ColumnSortButton.js";
 import PropTypes from "prop-types";
-import { useItemCounts, useItemDictionary, useItems, useVisibilityStatuses } from "../../ContextProviders/ManagementPageProvider.js";
+import { useItemCounts, useItemDictionary, useItems, useManagementCallbacks, useSelectionStatuses, useVisibilityStatuses } from "../../ContextProviders/ManagementPageProvider.js";
 import { tableFieldPropTypeShape } from "../../Classes/Entity.js";
-import { TableRowContainer } from "./TableRowContainer.js";
 import { FullPageMessage } from "../FullPageMessage.js";
 import { InfoIcon } from "../../Imports/Icons.js";
+import DataTableRow from "./DataTableRow.js";
 
 export const DataTable = memo(function DataTable ({
     tableFields, rowSelectionEnabled, smallCheckboxes, defaultSortColumn, defaultSortAscending
@@ -19,6 +19,10 @@ export const DataTable = memo(function DataTable ({
 
     const [visibilityStatuses] = useVisibilityStatuses();
     const itemCounts = useItemCounts();
+
+    const managementCallbacks = useManagementCallbacks();
+
+    const [selectionStatuses, setItemSelectionStatus] = useSelectionStatuses();
 
     const [sortColumn, setSortColumn] = useState(defaultSortColumn ?? "ID");
     const [sortAscending, setSortAscending] = useState(defaultSortAscending ?? true);
@@ -50,13 +54,19 @@ export const DataTable = memo(function DataTable ({
                 const sortableValues = sortableValuesByRow[item.id];
                 const itemDictionaryEntry = itemDictionary[item.id];
 
+                const themeColor = item.is_admin_or_collection_manager ? "secondary" : "primary";
+
                 const renderedTableRow = (
-                    <TableRowContainer
+                    <DataTableRow
+                        isSelected={Boolean(selectionStatuses[item.id])}
                         itemDictionaryEntry={itemDictionaryEntry}
                         key={item.id}
+                        managementCallbacks={managementCallbacks}
                         rowSelectionEnabled={rowSelectionEnabled}
+                        setItemSelectionStatus={setItemSelectionStatus}
                         smallCheckboxes={smallCheckboxes}
                         tableFields={tableFields}
+                        themeColor={themeColor}
                     />
                 );
 
@@ -64,7 +74,7 @@ export const DataTable = memo(function DataTable ({
             })
         );
         return itemInformationToReturn;
-    }, [itemDictionary, items, rowSelectionEnabled, smallCheckboxes, sortableValuesByRow, tableFields]);
+    }, [itemDictionary, items, managementCallbacks, rowSelectionEnabled, selectionStatuses, setItemSelectionStatus, smallCheckboxes, sortableValuesByRow, tableFields]);
 
     const visibleItemInformation = useMemo(() => itemInformation.filter((r) => visibilityStatuses[r[0].id]), [itemInformation, visibilityStatuses]);
 

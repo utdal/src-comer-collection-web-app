@@ -1,11 +1,13 @@
 import React, { memo } from "react";
+import PropTypes from "prop-types";
 import { TableCell, Skeleton } from "@mui/material";
-import { useTableCheckboxSettings, useTableFields } from "../../ContextProviders/TableRowProvider.js";
 
-export const TableRowPlaceholder = memo(function TableContainer () {
-    const tableFields = useTableFields();
-    const { rowSelectionEnabled } = useTableCheckboxSettings();
-    const colSpan = tableFields.length + (1 * rowSelectionEnabled);
+/**
+ * @type {(props: {
+ *      colSpan: number
+ * })}
+ */
+export const DataTableRowPlaceholder = memo(function TableRowPlaceholder ({ colSpan }) {
     return (
         <TableCell
             colSpan={colSpan}
@@ -19,3 +21,7 @@ export const TableRowPlaceholder = memo(function TableContainer () {
         </TableCell>
     );
 });
+
+DataTableRowPlaceholder.propTypes = {
+    colSpan: PropTypes.number
+};
