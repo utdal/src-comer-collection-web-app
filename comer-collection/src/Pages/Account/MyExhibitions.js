@@ -19,6 +19,7 @@ import { ManagementPageProvider, useItemsReducer } from "../../ContextProviders/
 import { CreateExhibitionButton } from "../../Components/Buttons/CreateExhibitionButton.js";
 import { ExhibitionCreationRestriction } from "../../Components/TextBanners/ExhibitionCreationRestriction.js";
 import { useDialogState } from "../../Hooks/useDialogState.js";
+import { MyExhibition } from "../../Classes/Entities/Exhibition.js";
 
 const exhibitionTableFields = [
     {
@@ -86,6 +87,7 @@ const MyExhibitions = () => {
 
     return (
         <ManagementPageProvider
+            Entity={MyExhibition}
             itemsCombinedState={exhibitionsCombinedState}
             managementCallbacks={{
                 handleOpenExhibitionCreateDialog,
@@ -142,29 +144,29 @@ const MyExhibitions = () => {
                     />
                 </Box>
 
-                <ItemSingleDeleteDialog
-                    dialogState={deleteDialogState}
-                    requireTypedConfirmation
-                />
-
-                <ExhibitionSettingsDialog
-                    dialogExhibitionAccess={dialogExhibitionAccess}
-                    dialogExhibitionId={dialogExhibitionId}
-                    dialogExhibitionTitle={dialogExhibitionTitle}
-                    dialogIsOpen={
-                        dialogIsOpen
-                            ? dialogEditMode || appUser.can_create_exhibition
-                            : null
-                    }
-                    editMode={dialogEditMode}
-                    refreshFunction={initializeAppUser}
-                    setDialogExhibitionAccess={setDialogExhibitionAccess}
-                    setDialogExhibitionId={setDialogExhibitionId}
-                    setDialogExhibitionTitle={setDialogExhibitionTitle}
-                    setDialogIsOpen={setDialogIsOpen}
-                />
-
             </Box>
+
+            <ItemSingleDeleteDialog
+                dialogState={deleteDialogState}
+                requireTypedConfirmation
+            />
+
+            <ExhibitionSettingsDialog
+                dialogExhibitionAccess={dialogExhibitionAccess}
+                dialogExhibitionId={dialogExhibitionId}
+                dialogExhibitionTitle={dialogExhibitionTitle}
+                dialogIsOpen={
+                    dialogIsOpen
+                        ? dialogEditMode || appUser.can_create_exhibition
+                        : false
+                }
+                editMode={dialogEditMode}
+                refreshFunction={initializeAppUser}
+                setDialogExhibitionAccess={setDialogExhibitionAccess}
+                setDialogExhibitionId={setDialogExhibitionId}
+                setDialogExhibitionTitle={setDialogExhibitionTitle}
+                setDialogIsOpen={setDialogIsOpen}
+            />
         </ManagementPageProvider>
     );
 };

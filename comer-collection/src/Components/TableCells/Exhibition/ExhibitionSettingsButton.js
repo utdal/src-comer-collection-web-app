@@ -15,6 +15,6 @@ export const ExhibitionSettingsButton = ({ onClick, disabled = false }) => {
 };
 
 ExhibitionSettingsButton.propTypes = {
-    disabled: PropTypes.bool.isRequired,
+    disabled: PropTypes.bool,
     onClick: PropTypes.func.isRequired
 };
