@@ -45,7 +45,7 @@ export const EntityManageDialog = ({
         setSelectedItems: setSelectedDialogItems,
         filterItems: filterDialogItems,
         setItemSelectionStatus: setDialogItemSelectionStatus
-    }] = useItemsReducer(Entity);
+    }] = useItemsReducer([]);
     const [handleRefresh, isLoaded, isError] = useItemsRefresh(Entity, setDialogItems, dialogIsOpen);
 
     const [itemSearchQuery, setItemSearchQuery] = useState("");
