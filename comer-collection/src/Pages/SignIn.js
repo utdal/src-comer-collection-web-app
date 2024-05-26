@@ -6,7 +6,7 @@ import { useAppUser } from "../ContextProviders/AppUser.js";
 import { useTitle } from "../ContextProviders/AppFeatures.js";
 
 const SignIn = () => {
-    const [appUser, setAppUser] = useAppUser();
+    const [appUser] = useAppUser();
     const revalidator = useRevalidator();
 
     const [email, setEmail] = useState("");
@@ -30,8 +30,6 @@ const SignIn = () => {
                 revalidator.revalidate();
             }
         } catch (e) {
-            setAppUser(null);
-            localStorage.removeItem("token");
             setPassword("");
             setFormEnabled(true);
             setError(true);

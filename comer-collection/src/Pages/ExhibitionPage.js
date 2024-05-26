@@ -9,7 +9,7 @@ import { useAppUser } from "../ContextProviders/AppUser.js";
 import { FullPageMessage } from "../Components/FullPageMessage.js";
 import { useSnackbar, useTitle } from "../ContextProviders/AppFeatures.js";
 
-import { AccessTimeIcon, InfoIcon } from "../Imports/Icons.js";
+import { InfoIcon } from "../Imports/Icons.js";
 
 const ExhibitionPage = () => {
     const exhibitionId = parseInt(useParams().exhibitionId);
@@ -29,7 +29,7 @@ const ExhibitionPage = () => {
         setGlobalImageCatalog(catalogData.data);
     };
 
-    const [appUser, , , appUserIsLoaded] = useAppUser();
+    const [appUser] = useAppUser();
     const showSnackbar = useSnackbar();
     const setTitleText = useTitle("Exhibition");
 
@@ -146,19 +146,14 @@ const ExhibitionPage = () => {
         }
     }, [editModeActive, handleControlS]);
 
-    return (!appUserIsLoaded &&
-        <FullPageMessage
-            Icon={AccessTimeIcon}
-            message="Loading exhibition..."
-        />
-    ) || (appUserIsLoaded && !isPermissionGranted &&
+    return (!isPermissionGranted &&
         <FullPageMessage
             Icon={InfoIcon}
             buttonDestination="/Exhibitions"
             buttonText="View Public Exhibitions"
             message="This exhibition is not available"
         />
-    ) || (appUserIsLoaded && isPermissionGranted &&
+    ) || (isPermissionGranted &&
         <Box
             sx={{
                 width: "100%",

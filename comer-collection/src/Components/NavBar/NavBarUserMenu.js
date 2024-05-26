@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 import { Typography, Button, Divider, Menu, MenuItem, Stack } from "@mui/material";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useRevalidator } from "react-router-dom";
 import { useAppUser } from "../../ContextProviders/AppUser.js";
 import {
     ArrowDropDownIcon,
@@ -11,16 +11,18 @@ import {
 
 export const NavBarUserMenu = () => {
     const [anchorElement, setAnchorElement] = useState(null);
-    const [appUser, setAppUser] = useAppUser();
+    const [appUser] = useAppUser();
     const navigate = useNavigate();
 
-    const handleMenuOpen = (event) => {
-        setAnchorElement(event.currentTarget);
-    };
+    const revalidator = useRevalidator();
 
-    const handleMenuClose = () => {
+    const handleMenuOpen = useCallback((event) => {
+        setAnchorElement(event.currentTarget);
+    }, []);
+
+    const handleMenuClose = useCallback(() => {
         setAnchorElement(null);
-    };
+    }, []);
 
     return (
         <>
@@ -100,8 +102,8 @@ export const NavBarUserMenu = () => {
 
                 <MenuItem onClick={() => {
                     handleMenuClose();
-                    setAppUser(null);
                     localStorage.removeItem("token");
+                    revalidator.revalidate();
                     navigate("/");
                 }}
                 >
