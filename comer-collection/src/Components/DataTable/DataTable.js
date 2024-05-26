@@ -4,7 +4,7 @@ import { Checkbox, Stack, TableCell, TableContainer, Typography, Table, TableBod
 import { useTheme } from "@emotion/react";
 import { ColumnSortButton } from "../Buttons/ColumnSortButton.js";
 import PropTypes from "prop-types";
-import { useItemCounts, useItemDictionary, useItems, useManagementCallbacks, useSelectionStatuses, useVisibilityStatuses } from "../../ContextProviders/ManagementPageProvider.js";
+import { useItemCounts, useItemDictionary, useManagementCallbacks, useSelectionStatuses, useVisibilityStatuses } from "../../ContextProviders/ManagementPageProvider.js";
 import { tableFieldPropTypeShape } from "../../Classes/Entity.js";
 import { FullPageMessage } from "../FullPageMessage.js";
 import { InfoIcon } from "../../Imports/Icons.js";
@@ -14,7 +14,6 @@ export const DataTable = memo(function DataTable ({
     tableFields, rowSelectionEnabled, smallCheckboxes, defaultSortColumn, defaultSortAscending
 }) {
     const theme = useTheme();
-    const [items] = useItems();
     const itemDictionary = useItemDictionary();
 
     const [visibilityStatuses] = useVisibilityStatuses();
@@ -33,30 +32,29 @@ export const DataTable = memo(function DataTable ({
         return ((aSortableValues[sortColumn] ?? "") > (bSortableValues[sortColumn] ?? "")) ? 1 : -1;
     }, [sortColumn]);
 
-    const sortableValuesByRow = useMemo(() => {
-        const output = { };
-        (items ?? []).map((item) => {
-            const sortableValues = {};
-            for (const tf of tableFields) {
-                if (tf.generateSortableValue) {
-                    sortableValues[tf.columnDescription] = tf.generateSortableValue(item);
-                }
-            }
-            output[item.id] = sortableValues;
-            return null;
-        });
-        return output;
-    }, [items, tableFields]);
+    // const sortableValuesByRow = useMemo(() => {
+    //     const output = { };
+    //     (items ?? []).map((item) => {
+    //         const sortableValues = {};
+    //         for (const tf of tableFields) {
+    //             if (tf.generateSortableValue) {
+    //                 sortableValues[tf.columnDescription] = tf.generateSortableValue(item);
+    //             }
+    //         }
+    //         output[item.id] = sortableValues;
+    //         return null;
+    //     });
+    //     return output;
+    // }, [items, tableFields]);
 
     const itemInformation = useMemo(() => {
         /**
          * @type {import("../../ContextProviders/ManagementPageProvider.js").Item[]}
          */
-        const items = Object.values(itemDictionary);
-        console.log(items);
+        const itemArray = Object.values(itemDictionary);
         const itemInformationToReturn = (
-            items.map((item) => {
-                const sortableValues = sortableValuesByRow[item.id];
+            itemArray.map((item) => {
+                // const sortableValues = sortableValuesByRow[item.id];
 
                 const themeColor = item.is_admin_or_collection_manager ? "secondary" : "primary";
 
@@ -74,11 +72,11 @@ export const DataTable = memo(function DataTable ({
                     />
                 );
 
-                return [item, sortableValues, renderedTableRow];
+                return [item, 1, renderedTableRow];
             })
         );
         return itemInformationToReturn;
-    }, [itemDictionary, managementCallbacks, rowSelectionEnabled, selectionStatuses, setItemSelectionStatus, smallCheckboxes, sortableValuesByRow, tableFields]);
+    }, [itemDictionary, managementCallbacks, rowSelectionEnabled, selectionStatuses, setItemSelectionStatus, smallCheckboxes, tableFields]);
 
     const visibleItemInformation = useMemo(() => itemInformation.filter((r) => visibilityStatuses[r[0].id]), [itemInformation, visibilityStatuses]);
 
