@@ -725,6 +725,7 @@ export const ExhibitionEditPane = ({ exhibitionMetadata, exhibitionState, exhibi
             <ImageChooserDialog
                 exhibitionEditDispatch={exhibitionEditDispatch}
                 exhibitionState={exhibitionState}
+                globalImageCatalog={globalImageCatalog}
                 imageChooserIsOpen={imageChooserIsOpen}
                 setImageChooserIsOpen={setImageChooserIsOpen}
                 setSelectedImageId={setSelectedImageId}

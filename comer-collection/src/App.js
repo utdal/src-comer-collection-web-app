@@ -20,7 +20,7 @@ import ExhibitionManagement from "./Pages/Admin/ExhibitionManagement.js";
 import ImageManagement from "./Pages/Admin/ImageManagement.js";
 import { sendAuthenticatedRequest } from "./Helpers/APICalls.js";
 import { User } from "./Classes/Entities/User.js";
-import { Image } from "./Classes/Entities/Image.js";
+import { Image, PublicImage } from "./Classes/Entities/Image.js";
 import RouterErrorMessage from "./Components/RouterErrorMessage.js";
 import { Course } from "./Classes/Entities/Course.js";
 import { Exhibition, PublicExhibition } from "./Classes/Entities/Exhibition.js";
@@ -53,7 +53,9 @@ const router = createBrowserRouter([
             },
             {
                 element: <CollectionBrowser isDialogMode={false} />,
-                path: "BrowseCollection"
+                path: "BrowseCollection",
+                loader: PublicImage.loader,
+                ErrorBoundary: RouterErrorMessage
             },
             {
                 element: <ExhibitionBrowser />,

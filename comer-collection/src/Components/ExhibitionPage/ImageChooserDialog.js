@@ -1,11 +1,12 @@
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Stack, Typography } from "@mui/material";
 import React, { useState } from "react";
-import { CollectionBrowser } from "../../Pages/Browsers/CollectionBrowser.js";
+import { CollectionGalleryDisplay } from "../CollectionGalleryDisplay.js";
 import { AddPhotoAlternateIcon } from "../../Imports/Icons.js";
 import PropTypes from "prop-types";
 import { exhibitionStatePropTypesShape } from "../../Classes/Entities/Exhibition.js";
+import { entityPropTypeShape } from "../../Classes/Entity.js";
 
-export const ImageChooserDialog = ({ imageChooserIsOpen, setImageChooserIsOpen, exhibitionState, setSelectedImageId, exhibitionEditDispatch }) => {
+export const ImageChooserDialog = ({ imageChooserIsOpen, setImageChooserIsOpen, exhibitionState, globalImageCatalog, setSelectedImageId, exhibitionEditDispatch }) => {
     const [imageChooserSelectedImage, setImageChooserSelectedImage] = useState(null);
 
     return (
@@ -32,8 +33,9 @@ export const ImageChooserDialog = ({ imageChooserIsOpen, setImageChooserIsOpen, 
             </DialogTitle>
 
             <DialogContent>
-                <CollectionBrowser
+                <CollectionGalleryDisplay
                     disabledImages={exhibitionState.images}
+                    images={globalImageCatalog}
                     isDialogMode
                     selectedItem={imageChooserSelectedImage}
                     setSelectedItem={setImageChooserSelectedImage}
@@ -82,6 +84,7 @@ export const ImageChooserDialog = ({ imageChooserIsOpen, setImageChooserIsOpen, 
 ImageChooserDialog.propTypes = {
     exhibitionEditDispatch: PropTypes.func.isRequired,
     exhibitionState: PropTypes.shape(exhibitionStatePropTypesShape).isRequired,
+    globalImageCatalog: PropTypes.arrayOf(entityPropTypeShape),
     imageChooserIsOpen: PropTypes.bool.isRequired,
     setImageChooserIsOpen: PropTypes.func.isRequired,
     setSelectedImageId: PropTypes.func.isRequired
