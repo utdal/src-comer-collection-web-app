@@ -1,13 +1,13 @@
 import React, { useCallback } from "react";
-import { useTableRowItemOld } from "../../../ContextProviders/TableRowProvider.js";
 import { Button, Stack, Typography } from "@mui/material";
 import { OpenInNewIcon } from "../../../Imports/Icons.js";
 import { ExhibitionSettingsButton } from "./ExhibitionSettingsButton.js";
 import { ExhibitionDeleteButton } from "./ExhibitionDeleteButton.js";
 import { useManagementCallbacks } from "../../../ContextProviders/ManagementPageProvider.js";
+import { useTableCellItem } from "../../../ContextProviders/TableCellProvider.js";
 
 export const ExhibitionOptionsCell = () => {
-    const exhibition = useTableRowItemOld();
+    const exhibition = useTableCellItem();
     const {
         handleOpenExhibitionSettings,
         handleOpenExhibitionDeleteDialog

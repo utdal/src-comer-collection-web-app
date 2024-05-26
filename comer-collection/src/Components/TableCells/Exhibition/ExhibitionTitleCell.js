@@ -1,9 +1,9 @@
 import React from "react";
-import { useTableRowItemOld } from "../../../ContextProviders/TableRowProvider.js";
 import { Typography } from "@mui/material";
+import { useTableCellItem } from "../../../ContextProviders/TableCellProvider.js";
 
 export const ExhibitionTitleCell = () => {
-    const exhibition = useTableRowItemOld();
+    const exhibition = useTableCellItem();
     return (
         exhibition.title
             ? (

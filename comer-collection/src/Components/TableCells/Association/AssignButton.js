@@ -1,14 +1,14 @@
 import React from "react";
 import { useSnackbar } from "../../../ContextProviders/AppFeatures.js";
-import { useTableRowItemOld } from "../../../ContextProviders/TableRowProvider.js";
 import { useAssociationType, useRelevantPrimaryItems } from "../../../ContextProviders/AssociationManagementPageProvider.js";
 import { User } from "../../../Classes/Entities/User.js";
 import { Button, Typography } from "@mui/material";
 import { CheckIcon } from "../../../Imports/Icons.js";
+import { useTableCellItem } from "../../../ContextProviders/TableCellProvider.js";
 
 export const AssignButton = () => {
     const showSnackbar = useSnackbar();
-    const secondaryItem = useTableRowItemOld();
+    const secondaryItem = useTableCellItem();
     const primaryItems = useRelevantPrimaryItems();
     const AssociationType = useAssociationType();
     const buttonColor = AssociationType.secondary === User && secondaryItem.is_admin_or_collection_manager ? "secondary" : "primary";

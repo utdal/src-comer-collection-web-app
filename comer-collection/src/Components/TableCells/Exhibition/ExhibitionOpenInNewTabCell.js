@@ -1,10 +1,10 @@
 import React from "react";
-import { useTableRowItemOld } from "../../../ContextProviders/TableRowProvider.js";
 import { Button, Typography } from "@mui/material";
 import { OpenInNewIcon } from "../../../Imports/Icons.js";
+import { useTableCellItem } from "../../../ContextProviders/TableCellProvider.js";
 
 export const ExhibitionOpenInNewTabCell = () => {
-    const exhibition = useTableRowItemOld();
+    const exhibition = useTableCellItem();
     return (
         <Button
             endIcon={<OpenInNewIcon />}

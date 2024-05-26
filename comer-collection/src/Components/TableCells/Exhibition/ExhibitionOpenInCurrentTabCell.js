@@ -1,10 +1,10 @@
 import React, { useCallback } from "react";
-import { useTableRowItem } from "../../../ContextProviders/TableRowProvider.js";
 import { Button, Typography } from "@mui/material";
 import { useNavigate } from "react-router";
+import { useTableCellItem } from "../../../ContextProviders/TableCellProvider.js";
 
 export const ExhibitionOpenInCurrentTabCell = () => {
-    const exhibition = useTableRowItem();
+    const exhibition = useTableCellItem();
     const navigate = useNavigate();
     const handleClick = useCallback(() => {
         navigate(`/Exhibitions/${exhibition.id}`);

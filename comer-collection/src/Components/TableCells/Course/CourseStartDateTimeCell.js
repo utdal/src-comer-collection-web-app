@@ -1,10 +1,10 @@
 import React from "react";
 import { Typography } from "@mui/material";
-import { useTableRowItem } from "../../../ContextProviders/TableRowProvider.js";
 import { Course } from "../../../Classes/Entities/Course.js";
+import { useTableCellItem } from "../../../ContextProviders/TableCellProvider.js";
 
 export const CourseStartDateTimeCell = () => {
-    const course = useTableRowItem();
+    const course = useTableCellItem();
     return (
         <Typography variant="body1">
             {Course.formatDate(course.date_start)}
