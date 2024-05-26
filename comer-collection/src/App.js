@@ -32,19 +32,25 @@ const appUserLoader = async () => {
     if (!localStorage.getItem("token")) {
         return null;
     }
-    const response = await sendAuthenticatedRequest("GET", "/api/user/profile");
-    if (response.status === 200) {
-        return response.data;
-    } else {
-        throw new Error("Response status was not 200");
+    try {
+        const response = await sendAuthenticatedRequest("GET", "/api/user/profile");
+        if (response.status === 200) {
+            return response.data;
+        } else {
+            throw new Error("Network request failed");
+        }
+    } catch (e) {
+        return null;
     }
 };
 
 const router = createBrowserRouter([
     {
         element: <AppLayout />,
+        path: "/",
         id: "root",
         loader: appUserLoader,
+        ErrorBoundary: RouterErrorMessage,
         children: [
             {
                 element: <Navigate to="SignIn" />,
@@ -108,7 +114,8 @@ const router = createBrowserRouter([
                                     />
                                 ),
                                 path: "Users",
-                                loader: User.loader
+                                loader: User.loader,
+                                ErrorBoundary: RouterErrorMessage
                             },
                             {
                                 element: (
