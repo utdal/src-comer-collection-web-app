@@ -142,6 +142,7 @@ const MyExhibitions = () => {
                     <DataTable
                         defaultSortAscending={false}
                         defaultSortColumn="Date Modified"
+                        noSkeleton
                         tableFields={exhibitionTableFields}
                     />
                 </Box>
