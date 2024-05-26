@@ -184,9 +184,9 @@ export const ManagementPageProvider = ({ isLoaded, isError, managementCallbacks,
 
 ManagementPageProvider.propTypes = {
     children: PropTypes.node.isRequired,
-    isError: PropTypes.bool.isRequired,
-    isLoaded: PropTypes.bool.isRequired,
-    itemsCombinedState: PropTypes.shape(itemsCombinedStatePropTypeShape).isRequired,
+    isError: PropTypes.bool,
+    isLoaded: PropTypes.bool,
+    itemsCombinedState: itemsCombinedStatePropTypeShape.isRequired,
     managementCallbacks: PropTypes.objectOf(PropTypes.func).isRequired,
     setItemSelectionStatus: PropTypes.func,
     setItems: PropTypes.func.isRequired,

@@ -19,5 +19,5 @@ export const EntityManageDeleteButton = ({ disabled = false }) => {
 };
 
 EntityManageDeleteButton.propTypes = {
-    disabled: PropTypes.bool.isRequired
+    disabled: PropTypes.bool
 };

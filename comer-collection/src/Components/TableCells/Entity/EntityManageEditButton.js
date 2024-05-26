@@ -19,5 +19,5 @@ export const EntityManageEditButton = ({ disabled = false }) => {
 };
 
 EntityManageEditButton.propTypes = {
-    disabled: PropTypes.bool.isRequired
+    disabled: PropTypes.bool
 };
