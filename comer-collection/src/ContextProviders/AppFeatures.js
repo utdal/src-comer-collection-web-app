@@ -161,14 +161,6 @@ export const AppFeatureProvider = ({ children }) => {
         }
     })), [appDarkTheme]);
 
-    useEffect(() => {
-        if (!titleText) {
-            document.title = defaultTitleSuffix;
-        } else {
-            document.title = `${titleText} - ${defaultTitleSuffix}`;
-        }
-    }, [titleText]);
-
     const showSnackbar = useCallback((message, severity = "info") => {
         setSnackbarText(message);
         setSnackbarSeverity(severity);
@@ -196,6 +188,12 @@ export const AppFeatureProvider = ({ children }) => {
                 <CacheProvider value={cache}>
                     <HelmetProvider>
                         <Helmet>
+                            <title>
+                                {titleText
+                                    ? `${titleText} - ${defaultTitleSuffix}`
+                                    : `${defaultTitleSuffix}`}
+                            </title>
+
                             <meta
                                 content={`default-src 'none'; manifest-src 'self'; script-src 'self'; style-src 'nonce-${cache.nonce}'; img-src 'self' ${process.env.REACT_APP_API_HOST}; connect-src 'self' ${process.env.REACT_APP_API_HOST}`}
                                 httpEquiv='Content-Security-Policy'
