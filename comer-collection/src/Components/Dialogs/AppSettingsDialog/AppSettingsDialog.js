@@ -6,7 +6,7 @@ import {
     Button, Divider,
     Typography, DialogContentText, ToggleButton, ToggleButtonGroup
 } from "@mui/material";
-import { useAppDarkTheme } from "../../../ContextProviders/AppFeatures.js";
+import { useAppDarkTheme } from "../../../ContextProviders/AppTheme.js";
 import { DarkModeIcon, LightModeIcon } from "../../../Imports/Icons.js";
 import PropTypes from "prop-types";
 import { AppSettingsDialogOption } from "./AppSettingsDialogOption.js";
