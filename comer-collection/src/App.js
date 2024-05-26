@@ -24,6 +24,9 @@ import { Image, PublicImage } from "./Classes/Entities/Image.js";
 import RouterErrorMessage from "./Components/RouterErrorMessage.js";
 import { Course } from "./Classes/Entities/Course.js";
 import { Exhibition, PublicExhibition } from "./Classes/Entities/Exhibition.js";
+import AppThemeProvider from "./ContextProviders/AppTheme.js";
+import { AppFeatureProvider } from "./ContextProviders/AppFeatures.js";
+import { AppUserProvider } from "./ContextProviders/AppUser.js";
 
 const appUserLoader = async () => {
     if (!localStorage.getItem("token")) {
@@ -156,7 +159,13 @@ const router = createBrowserRouter([
 
 const App = () => {
     return (
-        <RouterProvider router={router} />
+        <AppThemeProvider>
+            <AppFeatureProvider>
+                <AppUserProvider>
+                    <RouterProvider router={router} />
+                </AppUserProvider>
+            </AppFeatureProvider>
+        </AppThemeProvider>
     );
 };
 
