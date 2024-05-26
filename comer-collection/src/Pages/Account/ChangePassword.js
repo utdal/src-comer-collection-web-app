@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router";
+import { useNavigate, useRevalidator } from "react-router";
 import React, { useState } from "react";
 import { Box, Button, Divider, Paper, Stack, TextField, Typography } from "@mui/material";
 import { useAppUser } from "../../ContextProviders/AppUser.js";
@@ -13,7 +13,9 @@ const ChangePassword = () => {
     const [error, setError] = useState(false);
     const [submitEnabled, setSubmitEnabled] = useState(true);
 
-    const [appUser, , initializeAppUser] = useAppUser();
+    const [appUser] = useAppUser();
+
+    const revalidator = useRevalidator();
 
     const showSnackbar = useSnackbar();
 
@@ -30,10 +32,8 @@ const ChangePassword = () => {
 
             if (response.token) {
                 localStorage.setItem("token", response.token);
-
-                await initializeAppUser();
-                navigate("/Account");
                 showSnackbar("Password changed", "success");
+                revalidator.revalidate();
             } else {
                 throw new Error("Password change request did not get a token in the response");
             }
