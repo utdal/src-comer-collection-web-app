@@ -42,6 +42,13 @@ export const AppFeatureProvider = ({ children }) => {
                     }
                 ]
             },
+            MuiListItemButton: {
+                styleOverrides: {
+                    root: ({ theme }) => ({
+                        ...theme.typography.h6
+                    })
+                }
+            },
             MuiStack: {
                 styleOverrides: {
                     root: ({ theme }) => ({

@@ -1,5 +1,5 @@
 import React from "react";
-import { ListItemButton, ListItemIcon, ListItemText, Typography, styled } from "@mui/material";
+import { ListItemButton, ListItemIcon, styled } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { useAppUser } from "../../ContextProviders/AppUser.js";
 import PropTypes from "prop-types";
@@ -37,13 +37,7 @@ export const AccountNavButton = ({ linkDefinition }) => {
                 <linkDefinition.Icon fontSize="large" />
             </ListItemIcon>
 
-            <ListItemText
-                primary={(
-                    <Typography variant="body1">
-                        {linkDefinition.displayText ?? linkDefinition.title}
-                    </Typography>
-                )}
-            />
+            {linkDefinition.displayText ?? linkDefinition.title}
         </StyledListItemButton>
     );
 };
