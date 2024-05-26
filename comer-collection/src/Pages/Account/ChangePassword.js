@@ -34,6 +34,7 @@ const ChangePassword = () => {
                 localStorage.setItem("token", response.token);
                 showSnackbar("Password changed", "success");
                 revalidator.revalidate();
+                navigate("/Account/Profile");
             } else {
                 throw new Error("Password change request did not get a token in the response");
             }

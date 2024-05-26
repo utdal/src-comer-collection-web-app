@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Navigate, useNavigate } from "react-router";
+import { Navigate, useRevalidator } from "react-router";
 import { Box, Button, Divider, Paper, Stack, TextField } from "@mui/material";
 import { sendAuthenticatedRequest } from "../Helpers/APICalls.js";
 import { useAppUser } from "../ContextProviders/AppUser.js";
@@ -7,13 +7,13 @@ import { useTitle } from "../ContextProviders/AppFeatures.js";
 
 const SignIn = () => {
     const [appUser, setAppUser] = useAppUser();
+    const revalidator = useRevalidator();
 
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [error, setError] = useState(false);
     const [formEnabled, setFormEnabled] = useState(true);
 
-    const navigate = useNavigate();
     useTitle("Sign In");
 
     const handleSignIn = async (event) => {
@@ -27,9 +27,7 @@ const SignIn = () => {
 
             if (response.token) {
                 localStorage.setItem("token", response.token);
-                const profileResponse = await sendAuthenticatedRequest("GET", "/api/user/profile");
-                setAppUser(profileResponse.data);
-                navigate("/Account");
+                revalidator.revalidate();
             }
         } catch (e) {
             setAppUser(null);

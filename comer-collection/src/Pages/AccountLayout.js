@@ -1,9 +1,7 @@
 import React from "react";
-import { Outlet } from "react-router-dom"; // Import Route from react-router-dom
+import { Navigate, Outlet } from "react-router-dom"; // Import Route from react-router-dom
 import { AccountNavPane } from "../Components/AccountNavPane/AccountNavPane.js";
 import { Box } from "@mui/material";
-import { FullPageMessage } from "../Components/FullPageMessage.js";
-import { LockIcon } from "../Imports/Icons.js";
 import { useAppUser } from "../ContextProviders/AppUser.js";
 
 const AccountLayout = () => {
@@ -31,12 +29,7 @@ const AccountLayout = () => {
 
     </Box>
     ) || (!appUser &&
-        <FullPageMessage
-            Icon={LockIcon}
-            buttonDestination="/SignIn"
-            buttonText="Sign In"
-            message="Unauthorized"
-        />
+        <Navigate to="/SignIn" />
     );
 };
 
