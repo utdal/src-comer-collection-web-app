@@ -17,6 +17,10 @@ class Image extends Entity {
     static singular = "image";
     static plural = "images";
 
+    static loader = async () => {
+        return await this.handleFetchAll();
+    };
+
     static MultiCreateButtonIcon = AddPhotoAlternateIcon;
     static multiCreateDialogSubtitle = "You can add artists and tags after creating the images.";
 

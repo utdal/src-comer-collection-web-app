@@ -20,6 +20,8 @@ import ExhibitionManagement from "./Pages/Admin/ExhibitionManagement.js";
 import ImageManagement from "./Pages/Admin/ImageManagement.js";
 import { sendAuthenticatedRequest } from "./Helpers/APICalls.js";
 import { User } from "./Classes/Entities/User.js";
+import { Image } from "./Classes/Entities/Image.js";
+import RouterErrorMessage from "./Components/RouterErrorMessage.js";
 
 const appUserLoader = async () => {
     if (!localStorage.getItem("token")) {
@@ -123,7 +125,9 @@ const router = createBrowserRouter([
                                         component={<ImageManagement />}
                                     />
                                 ),
-                                path: "Images"
+                                path: "Images",
+                                loader: Image.loader,
+                                ErrorBoundary: RouterErrorMessage
                             }
                         ]
                     },
