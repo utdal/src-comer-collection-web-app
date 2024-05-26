@@ -1,84 +1,58 @@
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import SignIn from "./Pages/SignIn.js";
-import NavBar from "./Components/NavBar/NavBar.js";
 import React from "react";
 
-import { Box } from "@mui/material";
 import { CollectionBrowser } from "./Pages/Browsers/CollectionBrowser.js";
 import { ExhibitionBrowser } from "./Pages/Browsers/ExhibitionBrowser.js";
-import { AppFeatureProvider } from "./ContextProviders/AppFeatures.js";
-import { AppUserProvider } from "./ContextProviders/AppUser.js";
 
 import { ExhibitionPageWrapper } from "./Components/LazyLoaders/ExhibitionPageWrapper.js";
 import { AccountWrapper } from "./Components/LazyLoaders/AccountWrapper.js";
+import AppLayout from "./AppLayout.js";
 
 const App = () => {
     return (
 
-        <AppFeatureProvider >
-            <AppUserProvider>
-                <BrowserRouter>
-                    <Box sx={{
-                        height: "100vh",
-                        display: "grid",
-                        gridTemplateColumns: "1fr",
-                        gridTemplateRows: "64px calc(100vh - 64px)",
-                        gridTemplateAreas: `
-                                "header"
-                                "body"
-                            `
-                    }}
-                    >
-                        <NavBar sx={{ gridArea: "header" }} />
+        <BrowserRouter>
+            <Routes>
+                <Route element={<AppLayout />}>
+                    <Route
+                        element={<Navigate to="/SignIn" />}
+                        index
+                    />
 
-                        <Box sx={{ gridArea: "body", position: "relative" }} >
-                            <Routes>
+                    <Route
+                        element={<CollectionBrowser isDialogMode={false} />}
+                        path="/BrowseCollection"
+                    />
 
-                                <Route
-                                    element={<Navigate to="/SignIn" />}
-                                    index
-                                />
+                    <Route
+                        element={<ExhibitionBrowser />}
+                        path="/Exhibitions"
+                    />
 
-                                <Route
-                                    element={<CollectionBrowser isDialogMode={false} />}
-                                    path="/BrowseCollection"
-                                />
+                    <Route
+                        element={<ExhibitionPageWrapper />}
+                        path="/Exhibitions/:exhibitionId"
+                    />
 
-                                <Route
-                                    element={<ExhibitionBrowser />}
-                                    path="/Exhibitions"
-                                />
+                    <Route
+                        element={<AccountWrapper />}
+                        path="/Account/*"
+                    />
 
-                                <Route
-                                    element={<ExhibitionPageWrapper />}
-                                    path="/Exhibitions/:exhibitionId"
-                                />
+                    <Route
+                        element={<SignIn />}
+                        path="/SignIn"
+                    />
 
-                                <Route
-                                    element={<AccountWrapper />}
-                                    path="/Account/*"
-                                />
-
-                                <Route
-                                    element={<SignIn />}
-                                    path="/SignIn"
-                                />
-
-                                <Route
-                                    element={<Navigate to="/SignIn" />}
-                                    path="*"
-                                    replace
-                                />
-
-                            </Routes>
-
-                        </Box>
-                    </Box>
-
-                </BrowserRouter>
-
-            </AppUserProvider>
-        </AppFeatureProvider>
+                    <Route
+                        element={<Navigate to="/SignIn" />}
+                        path="*"
+                        replace
+                    />
+                </Route>
+            </Routes>
+        </BrowserRouter>
     );
 };
 
