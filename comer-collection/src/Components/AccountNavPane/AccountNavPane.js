@@ -74,7 +74,7 @@ export const AccountNavPane = () => {
                 sectionTitle="Account"
             />
 
-            {appUser.is_admin_or_collection_manager
+            {appUser?.is_admin_or_collection_manager
                 ? (
                     <>
                         <Divider sx={{
@@ -91,7 +91,7 @@ export const AccountNavPane = () => {
                 )
                 : null}
 
-            {appUser.is_admin
+            {appUser?.is_admin
                 ? (
                     <>
                         <Divider sx={{

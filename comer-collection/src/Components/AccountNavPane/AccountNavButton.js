@@ -26,7 +26,7 @@ export const AccountNavButton = ({ linkDefinition }) => {
     const navigate = useNavigate();
     return (
         <StyledListItemButton
-            disabled={Boolean(linkDefinition.requirePermanentPassword && appUser.pw_change_required)}
+            disabled={Boolean(linkDefinition.requirePermanentPassword && appUser?.pw_change_required)}
             key={linkDefinition.title}
             linkDefinition={linkDefinition}
             onClick={() => {

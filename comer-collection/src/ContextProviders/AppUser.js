@@ -1,11 +1,11 @@
-import React, { createContext, useCallback, useContext, useEffect, useMemo, useState } from "react";
+import React, { createContext, useCallback, useContext, useMemo, useState } from "react";
 import PropTypes from "prop-types";
+import { useRouteLoaderData } from "react-router";
 
 export const AppUserContext = createContext();
 
 export const AppUserProvider = ({ children }) => {
     const [appUser, setAppUser] = useState(null);
-    const [appUserIsLoaded, setAppUserIsLoaded] = useState(false);
 
     const initializeAppUser = useCallback(async () => {
         try {
@@ -28,20 +28,13 @@ export const AppUserProvider = ({ children }) => {
         }
     }, []);
 
-    useEffect(() => {
-        initializeAppUser().then(() => {
-            setAppUserIsLoaded(true);
-        });
-    }, [initializeAppUser]);
-
     const appUserContextValue = useMemo(() => {
         return {
             appUser,
             setAppUser,
-            initializeAppUser,
-            appUserIsLoaded
+            initializeAppUser
         };
-    }, [appUser, setAppUser, initializeAppUser, appUserIsLoaded]);
+    }, [appUser, setAppUser, initializeAppUser]);
 
     return (
         <AppUserContext.Provider value={appUserContextValue}>
@@ -59,6 +52,7 @@ AppUserProvider.propTypes = {
  * @returns {[object, function, function, boolean]} [appUser, setAppUser, initializeAppUser, appUserIsLoaded]
  */
 export const useAppUser = () => {
-    const { appUser, setAppUser, initializeAppUser, appUserIsLoaded } = useContext(AppUserContext);
-    return [appUser, setAppUser, initializeAppUser, appUserIsLoaded];
+    const { setAppUser, initializeAppUser } = useContext(AppUserContext);
+    const appUser = useRouteLoaderData("root");
+    return [appUser, setAppUser, initializeAppUser, true];
 };

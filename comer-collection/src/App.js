@@ -18,11 +18,26 @@ import UserManagement from "./Pages/Admin/UserManagement.js";
 import CourseManagement from "./Pages/Admin/CourseManagement.js";
 import ExhibitionManagement from "./Pages/Admin/ExhibitionManagement.js";
 import ImageManagement from "./Pages/Admin/ImageManagement.js";
+import { sendAuthenticatedRequest } from "./Helpers/APICalls.js";
+
+const appUserLoader = async () => {
+    if (!localStorage.getItem("token")) {
+        return null;
+    }
+    const response = await sendAuthenticatedRequest("GET", "/api/user/profile");
+    if (response.status === 200) {
+        return response.data;
+    } else {
+        throw new Error("Response status was not 200");
+    }
+};
 
 const router = createBrowserRouter([
     {
         element: <AppLayout />,
         path: "/",
+        id: "root",
+        loader: appUserLoader,
         children: [
             {
                 element: <Navigate to="SignIn" />,
