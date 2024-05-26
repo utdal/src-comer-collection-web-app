@@ -15,6 +15,7 @@ export const AssociationManagementPageProvider = ({ managementCallbacks = defaul
     return (
         <AssociationManagementPageContext.Provider value={contextValue}>
             <ManagementPageProvider
+                Entity={AssociationType.secondary}
                 isError={false}
                 isLoaded={false}
                 itemsCombinedState={secondaryItemsCombinedState}
