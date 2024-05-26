@@ -83,8 +83,7 @@ export const ExhibitionSettingsDialog = ({ editMode, adminMode, dialogIsOpen, se
         refreshFunction();
     }, [adminMode, initializeAppUser, refreshFunction, setDialogExhibitionAccess, setDialogExhibitionId, setDialogExhibitionTitle, setDialogIsOpen, showSnackbar]);
 
-    const handleFormSubmit = useCallback((e) => {
-        e.preventDefault();
+    const handleFormSubmit = useCallback(() => {
         if (editMode) {
             handleExhibitionEdit(dialogExhibitionId, dialogExhibitionTitle, dialogExhibitionAccess);
         } else {
