@@ -12,7 +12,7 @@ export const UserActivationSwitchCell = () => {
     }, [handleChangeUserActivationStatus, user]);
     return (
         <Switch
-            checked={user.is_active ? user.has_password : null}
+            checked={user.is_active ? user.has_password : false}
             color={user.is_admin_or_collection_manager ? "secondary" : "primary"}
             disabled={user.id === appUser.id || !user.has_password}
             itemID={user.id}
