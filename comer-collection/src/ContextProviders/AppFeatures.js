@@ -1,4 +1,4 @@
-import { Snackbar, Alert, Stack, Typography, ThemeProvider, createTheme } from "@mui/material";
+import { ThemeProvider, createTheme } from "@mui/material";
 import React, { useCallback, useContext, useState, createContext, useMemo, useEffect } from "react";
 import createCache from "@emotion/cache";
 
@@ -7,6 +7,7 @@ import PropTypes from "prop-types";
 import { green, grey, orange } from "@mui/material/colors/index.js";
 import { CacheProvider } from "@emotion/react";
 import { Helmet, HelmetProvider } from "react-helmet-async";
+import AppSnackbar from "../Components/AppSnackbar.js";
 
 const defaultTitleSuffix = "Comer Collection";
 
@@ -203,25 +204,15 @@ export const AppFeatureProvider = ({ children }) => {
                     </HelmetProvider>
 
                     {children}
-                </CacheProvider>
 
-                <Snackbar
-                    onClose={() => {
-                        setSnackbarOpen(false);
-                    }}
-                    open={snackbarOpen}
-                >
-                    <Alert severity={snackbarSeverity}>
-                        <Stack
-                            direction="row"
-                            spacing={2}
-                        >
-                            <Typography variant="body1">
-                                {snackbarText}
-                            </Typography>
-                        </Stack>
-                    </Alert>
-                </Snackbar>
+                    <AppSnackbar
+                        setSnackbarOpen={setSnackbarOpen}
+                        snackbarOpen={snackbarOpen}
+                        snackbarSeverity={snackbarSeverity}
+                        snackbarText={snackbarText}
+                    />
+
+                </CacheProvider>
             </ThemeProvider>
         </AppFeatureContext.Provider>
     );
