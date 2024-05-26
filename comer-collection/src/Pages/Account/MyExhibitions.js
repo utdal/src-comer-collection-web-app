@@ -19,7 +19,6 @@ import { ExhibitionOptionsCell } from "../../Components/TableCells/Exhibition/Ex
 import { ManagementPageProvider, useItemsReducer } from "../../ContextProviders/ManagementPageProvider.js";
 import { CreateExhibitionButton } from "../../Components/Buttons/CreateExhibitionButton.js";
 import { ExhibitionCreationRestriction } from "../../Components/TextBanners/ExhibitionCreationRestriction.js";
-import { useAccountNavTitle } from "../../Hooks/useAccountNavTitle.js";
 import { useDialogState } from "../../Hooks/useDialogState.js";
 
 const exhibitionTableFields = [
@@ -54,7 +53,6 @@ const exhibitionTableFields = [
 ];
 
 const MyExhibitions = () => {
-    useAccountNavTitle("My Exhibitions");
     useTitle("My Exhibitions");
 
     const [appUser, , initializeAppUser] = useAppUser();

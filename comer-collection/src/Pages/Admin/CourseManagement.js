@@ -9,7 +9,6 @@ import { AssociationManagementDialog } from "../../Components/Dialogs/Associatio
 import { useNavigate } from "react-router";
 import { SelectionSummary } from "../../Components/SelectionSummary.js";
 import { useTitle } from "../../ContextProviders/AppFeatures.js";
-import { useAccountNavTitle } from "../../Hooks/useAccountNavTitle.js";
 import { Course } from "../../Classes/Entities/Course.js";
 import { EnrollmentCoursePrimary } from "../../Classes/Associations/Enrollment.js";
 import { ManagementPageProvider, useItemsReducer } from "../../ContextProviders/ManagementPageProvider.js";
@@ -50,8 +49,6 @@ const CourseManagement = () => {
 
     const navigate = useNavigate();
     useTitle("Course Management");
-
-    useAccountNavTitle("Course Management");
 
     const courseFilterFunction = useCallback((course) => {
         return doesItemMatchSearchQuery(searchQuery, course, ["name", "notes"]);

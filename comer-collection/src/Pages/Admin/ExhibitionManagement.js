@@ -8,7 +8,6 @@ import { useTitle } from "../../ContextProviders/AppFeatures.js";
 import { doesItemMatchSearchQuery } from "../../Helpers/SearchUtilities.js";
 import { CourseFilterMenu } from "../../Components/Menus/CourseFilterMenu.js";
 
-import { useAccountNavTitle } from "../../Hooks/useAccountNavTitle.js";
 import { Exhibition } from "../../Classes/Entities/Exhibition.js";
 import { ManagementPageProvider, useItemsReducer } from "../../ContextProviders/ManagementPageProvider.js";
 import { ClearFilterButton } from "../../Components/Buttons/ClearFilterButton.js";
@@ -42,7 +41,6 @@ const ExhibitionManagement = () => {
 
     const [userCourseIdFilter, setUserCourseIdFilter] = useState(null);
 
-    useAccountNavTitle("Exhibition Management");
     useTitle("Exhibition Management");
 
     const handleClearFilters = useCallback(() => {

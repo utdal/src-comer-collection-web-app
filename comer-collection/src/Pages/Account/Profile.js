@@ -21,7 +21,6 @@ import { UserProfilePasswordInfoCell } from "../../Components/TableCells/User/Us
 import { UserTypeCell } from "../../Components/TableCells/User/UserTypeCell.js";
 import { UserExhibitionQuotaCell } from "../../Components/TableCells/User/UserExhibitionQuotaCell.js";
 import { Course } from "../../Classes/Entities/Course.js";
-import { useAccountNavTitle } from "../../Hooks/useAccountNavTitle.js";
 
 const courseTableFields = [
     {
@@ -82,8 +81,6 @@ const Profile = () => {
     }, [appUser, setCourses, setUsers]);
 
     useTitle("Profile");
-
-    useAccountNavTitle("Profile");
 
     const managementCallbacks = useMemo(() => ({}), []);
 

@@ -5,7 +5,6 @@ import { Box } from "@mui/material";
 import { FullPageMessage } from "../Components/FullPageMessage.js";
 import { useAppUser } from "../ContextProviders/AppUser.js";
 import { AccessTimeIcon, LockIcon } from "../Imports/Icons.js";
-import { AccountNavProvider } from "../ContextProviders/AccountNavProvider.js";
 
 const AccountLayout = () => {
     const [appUser, , , appUserIsLoaded] = useAppUser();
@@ -16,28 +15,26 @@ const AccountLayout = () => {
             message="Loading"
         />
     ) || (appUserIsLoaded && appUser &&
-        <AccountNavProvider>
 
-            <Box sx={{
-                display: "grid",
-                gridTemplateColumns: "250px auto",
-                gridTemplateAreas: `
+    <Box sx={{
+        display: "grid",
+        gridTemplateColumns: "250px auto",
+        gridTemplateAreas: `
           "sidebar main"
         `,
-                height: "100%"
-            }}
-            >
+        height: "100%"
+    }}
+    >
 
-                <AccountNavPane sx={{ gridArea: "sidebar" }} />
+        <AccountNavPane sx={{ gridArea: "sidebar" }} />
 
-                <Box sx={{ gridArea: "main", position: "relative", overflowY: "hidden", height: "100%" }}>
+        <Box sx={{ gridArea: "main", position: "relative", overflowY: "hidden", height: "100%" }}>
 
-                    <Outlet />
+            <Outlet />
 
-                </Box>
+        </Box>
 
-            </Box>
-        </AccountNavProvider>
+    </Box>
     ) || (appUserIsLoaded && !appUser &&
         <FullPageMessage
             Icon={LockIcon}

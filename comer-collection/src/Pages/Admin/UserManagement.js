@@ -22,7 +22,6 @@ import { RefreshButton } from "../../Components/Buttons/RefreshButton.js";
 import { MultiCreateButton } from "../../Components/Buttons/MultiCreateButton.js";
 import { ManagementButtonStack } from "../../Components/ManagementPage/ManagementButtonStack.js";
 import { useDialogState } from "../../Hooks/useDialogState.js";
-import { useAccountNavTitle } from "../../Hooks/useAccountNavTitle.js";
 import { Course } from "../../Classes/Entities/Course.js";
 import { ManagementPageContainer } from "../../Components/ManagementPage/ManagementPageContainer.js";
 import { ManagementPageHeader } from "../../Components/ManagementPage/ManagementPageHeader.js";
@@ -63,8 +62,6 @@ const UserManagement = () => {
     const showSnackbar = useSnackbar();
     const navigate = useNavigate();
     useTitle("User Management");
-
-    useAccountNavTitle("User Management");
 
     const userFilterFunction = useCallback((user) => {
         return (

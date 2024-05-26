@@ -11,7 +11,6 @@ import { SelectionSummary } from "../../Components/SelectionSummary.js";
 import { AssociationManagementDialog } from "../../Components/Dialogs/AssociationManagementDialog/AssociationManagementDialog.js";
 import { useTitle } from "../../ContextProviders/AppFeatures.js";
 
-import { useAccountNavTitle } from "../../Hooks/useAccountNavTitle.js";
 import { Image } from "../../Classes/Entities/Image.js";
 import { Artist } from "../../Classes/Entities/Artist.js";
 import { Tag } from "../../Classes/Entities/Tag.js";
@@ -64,7 +63,6 @@ const ImageManagement = () => {
     }, []);
 
     const navigate = useNavigate();
-    useAccountNavTitle("Image Management");
     useTitle("Image Management");
 
     const imageFilterFunction = useCallback((image) => {

@@ -1,15 +1,12 @@
 import { useNavigate } from "react-router";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Box, Button, Divider, Paper, Stack, TextField, Typography } from "@mui/material";
 import { useAppUser } from "../../ContextProviders/AppUser.js";
 import { useTitle, useSnackbar } from "../../ContextProviders/AppFeatures.js";
 
 import { sendAuthenticatedRequest } from "../../Helpers/APICalls.js";
-import { useAccountNav } from "../../Hooks/useAccountNav.js";
 
 const ChangePassword = () => {
-    const [, setSelectedNavItem] = useAccountNav();
-
     const [oldPassword, setOldPassword] = useState("");
     const [newPassword, setNewPassword] = useState("");
     const [newPasswordConfirm, setNewPasswordConfirm] = useState("");
@@ -48,10 +45,6 @@ const ChangePassword = () => {
             setSubmitEnabled(true);
         }
     };
-
-    useEffect(() => {
-        setSelectedNavItem("Change Password");
-    });
 
     return (
         <Box
