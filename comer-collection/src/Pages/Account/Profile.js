@@ -19,6 +19,8 @@ import { UserEmailCopyCell } from "../../Components/TableCells/User/UserEmailCop
 import { UserProfilePasswordInfoCell } from "../../Components/TableCells/User/UserProfilePasswordInfoCell.js";
 import { UserTypeCell } from "../../Components/TableCells/User/UserTypeCell.js";
 import { UserExhibitionQuotaCell } from "../../Components/TableCells/User/UserExhibitionQuotaCell.js";
+import { User } from "../../Classes/Entities/User.js";
+import { Course } from "../../Classes/Entities/Course.js";
 
 const courseTableFields = [
     {
@@ -103,8 +105,9 @@ const Profile = () => {
                         </Typography>
                     </Stack>
 
-                    <Box sx={{ height: "100px" }}>
+                    <Box height="100px">
                         <ManagementPageProvider
+                            Entity={User}
                             itemsCombinedState={usersCombinedState}
                             managementCallbacks={managementCallbacks}
                             setItems={setUsers}
@@ -153,6 +156,7 @@ const Profile = () => {
                     </Stack>
 
                     <ManagementPageProvider
+                        Entity={Course}
                         itemsCombinedState={coursesCombinedState}
                         managementCallbacks={managementCallbacks}
                         setItems={setCourses}
