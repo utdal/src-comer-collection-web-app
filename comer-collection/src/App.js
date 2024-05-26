@@ -38,13 +38,11 @@ const router = createBrowserRouter([
             },
             {
                 element: <ExhibitionBrowser />,
-                path: "Exhibitions",
-                children: [
-                    {
-                        element: <ExhibitionPage />,
-                        path: ":exhibitionId"
-                    }
-                ]
+                path: "Exhibitions"
+            },
+            {
+                element: <ExhibitionPage />,
+                path: "Exhibitions/:exhibitionId"
             },
             {
                 element: <AccountLayout />,
