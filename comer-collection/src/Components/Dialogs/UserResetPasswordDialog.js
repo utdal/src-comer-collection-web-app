@@ -52,8 +52,7 @@ export const UserResetPasswordDialog = ({ dialogState }) => {
         closeDialog();
     }, [closeDialog]);
 
-    const handleSubmit = useCallback((e) => {
-        e.preventDefault();
+    const handleSubmit = useCallback(() => {
         User.handleResetPassword(dialogUser?.id, newPassword).then((msg) => {
             handleRefresh();
             setEditMode(false);
