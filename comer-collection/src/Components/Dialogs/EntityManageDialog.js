@@ -287,6 +287,6 @@ export const EntityManageDialog = ({
 };
 
 EntityManageDialog.propTypes = {
-    Entity: PropTypes.node.isRequired,
+    Entity: PropTypes.func.isRequired,
     dialogState: PropTypes.instanceOf(DialogState).isRequired
 };
