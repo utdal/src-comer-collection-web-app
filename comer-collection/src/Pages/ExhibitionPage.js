@@ -12,7 +12,7 @@ import { useSnackbar, useTitle } from "../ContextProviders/AppFeatures.js";
 import { AccessTimeIcon, InfoIcon } from "../Imports/Icons.js";
 
 const ExhibitionPage = () => {
-    const { exhibitionId } = useParams();
+    const exhibitionId = parseInt(useParams().exhibitionId);
 
     const [globalImageCatalog, setGlobalImageCatalog] = useState([]);
 
