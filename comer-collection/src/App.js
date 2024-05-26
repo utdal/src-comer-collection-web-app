@@ -1,4 +1,5 @@
-import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
+/* eslint-disable react/no-multi-comp */
+import { Navigate, Route, RouterProvider, Routes, createBrowserRouter } from "react-router-dom";
 import SignIn from "./Pages/SignIn.js";
 import React from "react";
 
@@ -9,50 +10,60 @@ import { ExhibitionPageWrapper } from "./Components/LazyLoaders/ExhibitionPageWr
 import { AccountWrapper } from "./Components/LazyLoaders/AccountWrapper.js";
 import AppLayout from "./AppLayout.js";
 
+const TempAppRoot = () => {
+    return (
+        <Routes>
+            <Route element={<AppLayout />}>
+                <Route
+                    element={<Navigate to="/SignIn" />}
+                    index
+                />
+
+                <Route
+                    element={<CollectionBrowser isDialogMode={false} />}
+                    path="/BrowseCollection"
+                />
+
+                <Route
+                    element={<ExhibitionBrowser />}
+                    path="/Exhibitions"
+                />
+
+                <Route
+                    element={<ExhibitionPageWrapper />}
+                    path="/Exhibitions/:exhibitionId"
+                />
+
+                <Route
+                    element={<AccountWrapper />}
+                    path="/Account/*"
+                />
+
+                <Route
+                    element={<SignIn />}
+                    path="/SignIn"
+                />
+
+                <Route
+                    element={<Navigate to="/SignIn" />}
+                    path="*"
+                    replace
+                />
+            </Route>
+        </Routes>
+    );
+};
+
+const router = createBrowserRouter([
+    {
+        path: "*",
+        element: <TempAppRoot />
+    }
+]);
+
 const App = () => {
     return (
-
-        <BrowserRouter>
-            <Routes>
-                <Route element={<AppLayout />}>
-                    <Route
-                        element={<Navigate to="/SignIn" />}
-                        index
-                    />
-
-                    <Route
-                        element={<CollectionBrowser isDialogMode={false} />}
-                        path="/BrowseCollection"
-                    />
-
-                    <Route
-                        element={<ExhibitionBrowser />}
-                        path="/Exhibitions"
-                    />
-
-                    <Route
-                        element={<ExhibitionPageWrapper />}
-                        path="/Exhibitions/:exhibitionId"
-                    />
-
-                    <Route
-                        element={<AccountWrapper />}
-                        path="/Account/*"
-                    />
-
-                    <Route
-                        element={<SignIn />}
-                        path="/SignIn"
-                    />
-
-                    <Route
-                        element={<Navigate to="/SignIn" />}
-                        path="*"
-                        replace
-                    />
-                </Route>
-            </Routes>
-        </BrowserRouter>
+        <RouterProvider router={router} />
     );
 };
 
