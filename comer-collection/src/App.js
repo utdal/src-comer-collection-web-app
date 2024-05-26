@@ -40,7 +40,6 @@ const appUserLoader = async () => {
 const router = createBrowserRouter([
     {
         element: <AppLayout />,
-        path: "/",
         id: "root",
         loader: appUserLoader,
         children: [
