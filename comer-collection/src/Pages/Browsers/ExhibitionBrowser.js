@@ -1,5 +1,5 @@
 import { Box, Paper, Stack, Typography } from "@mui/material";
-import React from "react";
+import React, { useCallback } from "react";
 import { DataTable } from "../../Components/DataTable/DataTable.js";
 import { PhotoCameraBackIcon } from "../../Imports/Icons.js";
 import { useTitle } from "../../ContextProviders/AppFeatures.js";
@@ -8,8 +8,7 @@ import { ExhibitionCuratorCell } from "../../Components/TableCells/Exhibition/Ex
 import { ExhibitionDateModifiedCell } from "../../Components/TableCells/Exhibition/ExhibitionDateModifiedCell.js";
 import { ExhibitionOpenInCurrentTabCell } from "../../Components/TableCells/Exhibition/ExhibitionOpenInCurrentTabCell.js";
 import { ManagementPageProvider, useItemsReducer } from "../../ContextProviders/ManagementPageProvider.js";
-import { Exhibition, PublicExhibition } from "../../Classes/Entities/Exhibition.js";
-import useItemsRefresh from "../../Hooks/useItemsRefresh.js";
+import { useLoaderData } from "react-router";
 
 const exhibitionTableFields = [
     {
@@ -36,17 +35,16 @@ const exhibitionTableFields = [
 ];
 
 export const ExhibitionBrowser = () => {
-    const [exhibitionsCombinedState, { setItems: setExhibitions }] = useItemsReducer(Exhibition);
+    const exhibitions = useLoaderData();
+    const [exhibitionsCombinedState] = useItemsReducer(exhibitions);
 
     useTitle("Public Exhibitions");
 
-    const [handleRefresh, isLoaded, isError] = useItemsRefresh(PublicExhibition, setExhibitions);
+    const handleRefresh = useCallback(async () => {}, []);
 
     return (
         <ManagementPageProvider
             handleRefresh={handleRefresh}
-            isError={isError}
-            isLoaded={isLoaded}
             itemsCombinedState={exhibitionsCombinedState}
         >
             <Box
