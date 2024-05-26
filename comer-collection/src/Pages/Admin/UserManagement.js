@@ -6,7 +6,7 @@ import { ItemSingleEditDialog } from "../../Components/Dialogs/ItemSingleEditDia
 import { DataTable } from "../../Components/DataTable/DataTable.js";
 import { doesItemMatchSearchQuery } from "../../Helpers/SearchUtilities.js";
 import { AssociationManagementDialog } from "../../Components/Dialogs/AssociationManagementDialog/AssociationManagementDialog.js";
-import { useLoaderData, useNavigate } from "react-router";
+import { useLoaderData, useNavigate, useRevalidator } from "react-router";
 import { UserChangePrivilegesDialog } from "../../Components/Dialogs/UserChangePrivilegesDialog.js";
 import { SelectionSummary } from "../../Components/SelectionSummary.js";
 import { CourseFilterMenu } from "../../Components/Menus/CourseFilterMenu.js";
@@ -31,6 +31,7 @@ import AssociationManageButton from "../../Components/Buttons/AssociationManageB
 
 const UserManagement = () => {
     const users = useLoaderData();
+    const revalidator = useRevalidator();
 
     const [usersCombinedState, {
         setItems: setUsers,
@@ -39,7 +40,13 @@ const UserManagement = () => {
         setItemSelectionStatus: setUserSelectionStatus
     }] = useItemsReducer(users);
 
-    const handleRefresh = useCallback(async () => {}, []);
+    useEffect(() => {
+        setUsers(users);
+    }, [setUsers, users]);
+
+    const handleRefresh = useCallback(async () => {
+        revalidator.revalidate();
+    }, [revalidator]);
 
     const [privilegesDialogState, openPrivilegesDialog] = useDialogState(false, User);
 

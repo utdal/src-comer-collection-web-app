@@ -6,7 +6,7 @@ import { ItemSingleEditDialog } from "../../Components/Dialogs/ItemSingleEditDia
 import { DataTable } from "../../Components/DataTable/DataTable.js";
 import { doesItemMatchSearchQuery } from "../../Helpers/SearchUtilities.js";
 import { AssociationManagementDialog } from "../../Components/Dialogs/AssociationManagementDialog/AssociationManagementDialog.js";
-import { useLoaderData, useNavigate } from "react-router";
+import { useLoaderData, useNavigate, useRevalidator } from "react-router";
 import { SelectionSummary } from "../../Components/SelectionSummary.js";
 import { useTitle } from "../../ContextProviders/AppFeatures.js";
 import { Course } from "../../Classes/Entities/Course.js";
@@ -26,6 +26,8 @@ import AssociationManageButton from "../../Components/Buttons/AssociationManageB
 
 const CourseManagement = () => {
     const courses = useLoaderData();
+    const revalidator = useRevalidator();
+
     const [coursesCombinedState, {
         setItems: setCourses,
         setSelectedItems: setSelectedCourses,
@@ -33,7 +35,13 @@ const CourseManagement = () => {
         setItemSelectionStatus: setCourseSelectionStatus
     }] = useItemsReducer(courses);
 
-    const handleRefresh = useCallback(async () => {}, []);
+    useEffect(() => {
+        setCourses(courses);
+    }, [setCourses, courses]);
+
+    const handleRefresh = useCallback(async () => {
+        revalidator.revalidate();
+    }, [revalidator]);
 
     const [createDialogState, handleOpenMultiCreateDialog] = useDialogState();
     const [editDialogState, openEditDialog] = useDialogState(false);
