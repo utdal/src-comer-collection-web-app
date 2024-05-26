@@ -25,9 +25,35 @@ const router = createBrowserRouter([
         path: "/",
         children: [
             {
+                element: <Navigate to="SignIn" />,
+                index: true
+            },
+            {
+                element: <SignIn />,
+                path: "SignIn"
+            },
+            {
+                element: <CollectionBrowser isDialogMode={false} />,
+                path: "BrowseCollection"
+            },
+            {
+                element: <ExhibitionBrowser />,
+                path: "Exhibitions",
+                children: [
+                    {
+                        element: <ExhibitionPage />,
+                        path: ":exhibitionId"
+                    }
+                ]
+            },
+            {
                 element: <AccountLayout />,
                 path: "Account",
                 children: [
+                    {
+                        element: <Navigate to="Profile" />,
+                        index: true
+                    },
                     {
                         element: (
                             <RequirePermanentPassword
@@ -89,24 +115,6 @@ const router = createBrowserRouter([
                     {
                         element: <Navigate to="Profile" />,
                         path: "*"
-                    }
-                ]
-            },
-            {
-                element: <SignIn />,
-                path: "SignIn"
-            },
-            {
-                element: <CollectionBrowser isDialogMode={false} />,
-                path: "BrowseCollection"
-            },
-            {
-                element: <ExhibitionBrowser />,
-                path: "Exhibitions",
-                children: [
-                    {
-                        element: <ExhibitionPage />,
-                        path: ":exhibitionId"
                     }
                 ]
             },
