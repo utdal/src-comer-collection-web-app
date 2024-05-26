@@ -1,7 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { Button } from "@mui/material";
-import { useItemsLoadStatus } from "../../ContextProviders/ManagementPageProvider.js";
 
 /**
  * @param {{
@@ -9,11 +8,9 @@ import { useItemsLoadStatus } from "../../ContextProviders/ManagementPageProvide
  * }} props
  */
 const EntityManageButton = ({ entity, handleOpenDialog }) => {
-    const [isLoaded, isError] = useItemsLoadStatus();
     return (
         <Button
             color="primary"
-            disabled={!isLoaded || isError}
             onClick={handleOpenDialog}
             startIcon={<entity.DefaultIcon />}
             variant="outlined"
