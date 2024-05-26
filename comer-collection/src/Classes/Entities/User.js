@@ -50,6 +50,10 @@ class User extends Entity {
         }
     ];
 
+    static loader = async () => {
+        return await this.handleFetchAll();
+    };
+
     static handleChangeUserAccess (userId, newAccess) {
         return new Promise((resolve, reject) => {
             sendAuthenticatedRequest("PUT", `${this.baseUrl}/${userId}/access`, { access_level: newAccess }).then(() => {

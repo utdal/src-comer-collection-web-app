@@ -145,21 +145,32 @@ const itemsReducer = (state, action) => {
 };
 
 /**
- * @type {ItemsCombinedState}
+ * @param {Item[]} items
+ * @returns {ItemsCombinedState}
  */
-const defaultItemsCombinedState = ({
-    items: [],
-    itemDictionary: {},
-    selectionStatuses: {},
-    visibilityStatuses: {},
-    filterFunction: null,
-    itemCounts: {
-        all: 0,
-        selected: 0,
-        visible: 0,
-        selectedAndVisible: 0
+const defaultItemsCombinedState = (items) => {
+    const itemDictionary = {};
+    const selectionStatuses = {};
+    const visibilityStatuses = {};
+    for (const item of items) {
+        itemDictionary[item.id] = item;
+        selectionStatuses[item.id] = false;
+        visibilityStatuses[item.id] = true;
     }
-});
+    return {
+        items,
+        itemDictionary,
+        selectionStatuses,
+        visibilityStatuses,
+        filterFunction: null,
+        itemCounts: {
+            all: items.length,
+            selected: 0,
+            visible: items.length,
+            selectedAndVisible: 0
+        }
+    };
+};
 
 const ManagementPageContext = createContext();
 
@@ -265,7 +276,7 @@ export const useItemsLoadStatus = () => {
 };
 
 /**
- * @param {Class} Entity
+ * @param {Item[]} items
  * @returns {[
  *  itemsCombinedState: ItemsCombinedState,
  *  itemsCallbacks: {
@@ -277,8 +288,8 @@ export const useItemsLoadStatus = () => {
  * ]}
  * [itemsCombinedState, { setItems, setSelectedItems, filterItems, setItemSelectionStatus }]
  */
-export const useItemsReducer = () => {
-    const [itemsCombinedState, itemsDispatch] = useReducer(itemsReducer, defaultItemsCombinedState);
+export const useItemsReducer = ([...items]) => {
+    const [itemsCombinedState, itemsDispatch] = useReducer(itemsReducer, items, defaultItemsCombinedState);
     const setItems = useCallback((items) => {
         itemsDispatch({
             type: "setItems",

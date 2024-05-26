@@ -44,7 +44,7 @@ export const AssociationManagementDialog = ({
     const [secondaryItemsCombinedState, {
         setItems: setSecondaryItems,
         setSelectedItems: setSelectedSecondaryItems
-    }] = useItemsReducer(Association.secondary);
+    }] = useItemsReducer([]);
 
     const { dialogIsOpen, dialogItems: primaryItems, closeDialog } = dialogState;
 

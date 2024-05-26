@@ -19,6 +19,7 @@ import CourseManagement from "./Pages/Admin/CourseManagement.js";
 import ExhibitionManagement from "./Pages/Admin/ExhibitionManagement.js";
 import ImageManagement from "./Pages/Admin/ImageManagement.js";
 import { sendAuthenticatedRequest } from "./Helpers/APICalls.js";
+import { User } from "./Classes/Entities/User.js";
 
 const appUserLoader = async () => {
     if (!localStorage.getItem("token")) {
@@ -96,7 +97,8 @@ const router = createBrowserRouter([
                                         component={<UserManagement />}
                                     />
                                 ),
-                                path: "Users"
+                                path: "Users",
+                                loader: User.loader
                             },
                             {
                                 element: (

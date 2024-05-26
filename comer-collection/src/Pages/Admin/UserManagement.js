@@ -6,7 +6,7 @@ import { ItemSingleEditDialog } from "../../Components/Dialogs/ItemSingleEditDia
 import { DataTable } from "../../Components/DataTable/DataTable.js";
 import { doesItemMatchSearchQuery } from "../../Helpers/SearchUtilities.js";
 import { AssociationManagementDialog } from "../../Components/Dialogs/AssociationManagementDialog/AssociationManagementDialog.js";
-import { useNavigate } from "react-router";
+import { useLoaderData, useNavigate } from "react-router";
 import { UserChangePrivilegesDialog } from "../../Components/Dialogs/UserChangePrivilegesDialog.js";
 import { SelectionSummary } from "../../Components/SelectionSummary.js";
 import { CourseFilterMenu } from "../../Components/Menus/CourseFilterMenu.js";
@@ -28,17 +28,25 @@ import { ManagementPageHeader } from "../../Components/ManagementPage/Management
 import { ManagementPageBody } from "../../Components/ManagementPage/ManagementPageBody.js";
 import { ManagementPageFooter } from "../../Components/ManagementPage/ManagementPageFooter.js";
 import AssociationManageButton from "../../Components/Buttons/AssociationManageButton.js";
-import useItemsRefresh from "../../Hooks/useItemsRefresh.js";
 
 const UserManagement = () => {
+    const users = useLoaderData();
+
     const [usersCombinedState, {
         setItems: setUsers,
         setSelectedItems: setSelectedUsers,
         filterItems: filterUsers,
         setItemSelectionStatus: setUserSelectionStatus
-    }] = useItemsReducer(User);
+    }] = useItemsReducer(users);
 
-    const [handleRefresh, isLoaded, isError] = useItemsRefresh(User, setUsers);
+    // const [handleRefresh, isLoaded, isError] = useItemsRefresh(User, setUsers);
+    const isLoaded = true;
+    const isError = false;
+    // useEffect(() => {
+    //     setUsers(users);
+    // }, [setUsers, users]);
+
+    const handleRefresh = useCallback(async () => {}, []);
 
     const [privilegesDialogState, openPrivilegesDialog] = useDialogState(false, User);
 
