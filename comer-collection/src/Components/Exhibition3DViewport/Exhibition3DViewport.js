@@ -434,7 +434,7 @@ const Exhibition3DViewport = ({ exhibitionState, exhibitionMetadata, exhibitionI
                                 setEditModeActive(true);
                             }
                         }}
-                        sx={{ position: "absolute", right: 20, bottom: 20, zIndex: 1500 }}
+                        sx={{ position: "absolute", right: 20, bottom: 20 }}
                         variant="extended"
                     >
                         <Stack

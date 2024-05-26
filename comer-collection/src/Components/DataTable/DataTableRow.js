@@ -28,7 +28,7 @@ const ColoredTableRow = styled(TableRow, {
  *      themeColor: string
  * }) => React.JSX.Element}
  */
-const DataTableRow = memo(function DataTableRow ({ itemDictionaryEntry, isSelected, themeColor, managementCallbacks, tableFields, rowSelectionEnabled, smallCheckboxes, setItemSelectionStatus }) {
+const DataTableRow = memo(function DataTableRow ({ item, isSelected, themeColor, managementCallbacks, tableFields, rowSelectionEnabled, smallCheckboxes, setItemSelectionStatus }) {
     const { inView, ref } = useInView({
         triggerOnce: true
     });
@@ -37,8 +37,8 @@ const DataTableRow = memo(function DataTableRow ({ itemDictionaryEntry, isSelect
      * @type {(newStatus: boolean) => void}
      */
     const setSelectionStatus = useCallback((newStatus) => {
-        setItemSelectionStatus(itemDictionaryEntry.item.id, newStatus);
-    }, [itemDictionaryEntry, setItemSelectionStatus]);
+        setItemSelectionStatus(item.id, newStatus);
+    }, [item, setItemSelectionStatus]);
 
     const handleCheckboxChange = useCallback((e) => {
         setSelectionStatus(e.target.checked);
@@ -68,7 +68,7 @@ const DataTableRow = memo(function DataTableRow ({ itemDictionaryEntry, isSelect
                                 : null}
 
                             <DataTableFieldCells
-                                itemDictionaryEntry={itemDictionaryEntry}
+                                item={item}
                                 managementCallbacks={managementCallbacks}
                                 tableFields={tableFields}
                             />
@@ -86,10 +86,7 @@ const DataTableRow = memo(function DataTableRow ({ itemDictionaryEntry, isSelect
 
 DataTableRow.propTypes = {
     isSelected: PropTypes.bool,
-    itemDictionaryEntry: PropTypes.shape({
-        item: entityPropTypeShape,
-        itemString: PropTypes.string
-    }),
+    item: entityPropTypeShape,
     managementCallbacks: PropTypes.objectOf(PropTypes.func),
     rowSelectionEnabled: PropTypes.bool,
     setItemSelectionStatus: PropTypes.func,

@@ -1,16 +1,20 @@
 import React from "react";
-import { Button, Dialog, DialogActions, DialogContent, Stack, Typography } from "@mui/material";
+import { Button, Dialog, DialogActions, DialogContent, Stack, Typography, styled } from "@mui/material";
 import PropTypes from "prop-types";
+
+const PositionedDialog = styled(Dialog)(() => ({
+    position: "absolute",
+    zIndex: 5000
+}));
 
 export const ExhibitionIntro = ({ exhibitionMetadata, controls, dialogIsOpen, setDialogIsOpen }) => {
     return (
-        <Dialog
+        <PositionedDialog
             disablePortal
             fullWidth
             hideBackdrop
             maxWidth="md"
             open={dialogIsOpen}
-            sx={{ position: "absolute" }}
         >
             <DialogContent>
                 <Stack
@@ -77,7 +81,7 @@ export const ExhibitionIntro = ({ exhibitionMetadata, controls, dialogIsOpen, se
             </DialogContent>
 
             <DialogActions />
-        </Dialog>
+        </PositionedDialog>
     );
 };
 ExhibitionIntro.propTypes = {

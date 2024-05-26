@@ -34,7 +34,12 @@ import AssociationManageButton from "../../Components/Buttons/AssociationManageB
 import useItemsRefresh from "../../Hooks/useItemsRefresh.js";
 
 const ImageManagement = () => {
-    const [imagesCombinedState, setImages, setSelectedImages, filterImages, setImageSelectionStatuses] = useItemsReducer(Image);
+    const [imagesCombinedState, {
+        setItems: setImages,
+        setSelectedItems: setSelectedImages,
+        filterItems: filterImages,
+        setItemSelectionStatus: setImageSelectionStatuses
+    }] = useItemsReducer(Image);
 
     const [handleRefresh, isLoaded, isError] = useItemsRefresh(Image, setImages);
 

@@ -41,7 +41,10 @@ export const AssociationManagementDialog = ({
     dialogState,
     defaultSortColumn, defaultSortAscending
 }) => {
-    const [secondaryItemsCombinedState, setSecondaryItems, setSelectedSecondaryItems] = useItemsReducer(Association.secondary);
+    const [secondaryItemsCombinedState, {
+        setItems: setSecondaryItems,
+        setSelectedItems: setSelectedSecondaryItems
+    }] = useItemsReducer(Association.secondary);
 
     const { dialogIsOpen, dialogItems: primaryItems, closeDialog } = dialogState;
 

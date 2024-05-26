@@ -59,6 +59,13 @@ export const AppFeatureProvider = ({ children }) => {
                     }
                 }
             },
+            MuiFab: {
+                styleOverrides: {
+                    root: {
+                        zIndex: 8000
+                    }
+                }
+            },
             MuiDialogTitle: {
                 defaultProps: {
                     textAlign: "center",

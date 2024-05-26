@@ -73,8 +73,8 @@ const userTableFields = [
 const Profile = () => {
     const [appUser] = useAppUser();
 
-    const [usersCombinedState, setUsers] = useItemsReducer(User);
-    const [coursesCombinedState, setCourses] = useItemsReducer(Course);
+    const [usersCombinedState, { setItems: setUsers }] = useItemsReducer(User);
+    const [coursesCombinedState, { setItems: setCourses }] = useItemsReducer(Course);
 
     useEffect(() => {
         setUsers([appUser]);

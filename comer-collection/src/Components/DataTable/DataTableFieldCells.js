@@ -11,10 +11,10 @@ import { entityPropTypeShape, tableFieldPropTypeShape } from "../../Classes/Enti
  * }} props
  * @returns {React.JSX.Element}
  */
-export const DataTableFieldCells = memo(function DataTableFieldCells ({ tableFields, itemDictionaryEntry, managementCallbacks }) {
+export const DataTableFieldCells = memo(function DataTableFieldCells ({ tableFields, item, managementCallbacks }) {
     return useMemo(() => (
         <TableCellProvider
-            itemDictionaryEntry={itemDictionaryEntry}
+            item={item}
             managementCallbacks={managementCallbacks}
         >
             {tableFields.map((tf) => (
@@ -24,14 +24,11 @@ export const DataTableFieldCells = memo(function DataTableFieldCells ({ tableFie
                 />
             ))}
         </TableCellProvider>
-    ), [tableFields, itemDictionaryEntry, managementCallbacks]);
+    ), [tableFields, item, managementCallbacks]);
 });
 
 DataTableFieldCells.propTypes = {
-    itemDictionaryEntry: PropTypes.shape({
-        item: entityPropTypeShape,
-        itemString: PropTypes.string
-    }),
+    item: entityPropTypeShape,
     managementCallbacks: PropTypes.objectOf(PropTypes.func),
     tableFields: PropTypes.arrayOf(tableFieldPropTypeShape)
 };

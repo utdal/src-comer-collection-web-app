@@ -27,7 +27,12 @@ import AssociationManageButton from "../../Components/Buttons/AssociationManageB
 import useItemsRefresh from "../../Hooks/useItemsRefresh.js";
 
 const CourseManagement = () => {
-    const [coursesCombinedState, setCourses, setSelectedCourses, filterCourses, setCourseSelectionStatus] = useItemsReducer(Course);
+    const [coursesCombinedState, {
+        setItems: setCourses,
+        setSelectedItems: setSelectedCourses,
+        filterItems: filterCourses,
+        setItemSelectionStatus: setCourseSelectionStatus
+    }] = useItemsReducer(Course);
 
     const [handleRefresh, isLoaded, isError] = useItemsRefresh(Course, setCourses);
 

@@ -40,7 +40,12 @@ export const EntityManageDialog = ({
 
     const { closeDialog, dialogIsOpen } = dialogState;
 
-    const [dialogItemsCombinedState, setDialogItems, setSelectedDialogItems, filterDialogItems, setDialogItemSelectionStatus] = useItemsReducer(Entity);
+    const [dialogItemsCombinedState, {
+        setItems: setDialogItems,
+        setSelectedItems: setSelectedDialogItems,
+        filterItems: filterDialogItems,
+        setItemSelectionStatus: setDialogItemSelectionStatus
+    }] = useItemsReducer(Entity);
     const [handleRefresh, isLoaded, isError] = useItemsRefresh(Entity, setDialogItems, dialogIsOpen);
 
     const [itemSearchQuery, setItemSearchQuery] = useState("");
@@ -89,6 +94,7 @@ export const EntityManageDialog = ({
 
     return (
         <ManagementPageProvider
+            Entity={Entity}
             isError={isError}
             isLoaded={isLoaded}
             itemsCombinedState={dialogItemsCombinedState}

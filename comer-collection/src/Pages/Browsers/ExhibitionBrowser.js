@@ -1,6 +1,5 @@
 import { Box, Paper, Stack, Typography } from "@mui/material";
-import React, { useCallback, useEffect } from "react";
-import { sendAuthenticatedRequest } from "../../Helpers/APICalls.js";
+import React from "react";
 import { DataTable } from "../../Components/DataTable/DataTable.js";
 import { PhotoCameraBackIcon } from "../../Imports/Icons.js";
 import { useTitle } from "../../ContextProviders/AppFeatures.js";
@@ -9,7 +8,8 @@ import { ExhibitionCuratorCell } from "../../Components/TableCells/Exhibition/Ex
 import { ExhibitionDateModifiedCell } from "../../Components/TableCells/Exhibition/ExhibitionDateModifiedCell.js";
 import { ExhibitionOpenInCurrentTabCell } from "../../Components/TableCells/Exhibition/ExhibitionOpenInCurrentTabCell.js";
 import { ManagementPageProvider, useItemsReducer } from "../../ContextProviders/ManagementPageProvider.js";
-import { Exhibition } from "../../Classes/Entities/Exhibition.js";
+import { Exhibition, PublicExhibition } from "../../Classes/Entities/Exhibition.js";
+import useItemsRefresh from "../../Hooks/useItemsRefresh.js";
 
 const exhibitionTableFields = [
     {
@@ -36,25 +36,17 @@ const exhibitionTableFields = [
 ];
 
 export const ExhibitionBrowser = () => {
-    const [exhibitionsCombinedState, setExhibitions] = useItemsReducer(Exhibition);
+    const [exhibitionsCombinedState, { setItems: setExhibitions }] = useItemsReducer(Exhibition);
 
     useTitle("Public Exhibitions");
 
-    const fetchPublicExhibitionData = useCallback(async () => {
-        try {
-            const imageData = await sendAuthenticatedRequest("GET", "/api/public/exhibitions");
-            setExhibitions(imageData.data);
-        } catch (error) {
-            console.error("Error fetching image metadata:", error);
-        }
-    }, [setExhibitions]);
-
-    useEffect(() => {
-        fetchPublicExhibitionData();
-    }, [fetchPublicExhibitionData]);
+    const [handleRefresh, isLoaded, isError] = useItemsRefresh(PublicExhibition, setExhibitions);
 
     return (
         <ManagementPageProvider
+            handleRefresh={handleRefresh}
+            isError={isError}
+            isLoaded={isLoaded}
             itemsCombinedState={exhibitionsCombinedState}
         >
             <Box

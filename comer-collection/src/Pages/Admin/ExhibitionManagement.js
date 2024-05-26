@@ -22,7 +22,12 @@ import { useDialogState } from "../../Hooks/useDialogState.js";
 import useItemsRefresh from "../../Hooks/useItemsRefresh.js";
 
 const ExhibitionManagement = () => {
-    const [exhibitionsCombinedState, setExhibitions, setSelectedExhibitions, filterExhibitions, setExhibitionSelectionStatus] = useItemsReducer(Exhibition);
+    const [exhibitionsCombinedState, {
+        setItems: setExhibitions,
+        setSelectedItems: setSelectedExhibitions,
+        filterItems: filterExhibitions,
+        setItemSelectionStatus: setExhibitionSelectionStatus
+    }] = useItemsReducer(Exhibition);
 
     const [handleRefresh, isLoaded, isError] = useItemsRefresh(Exhibition, setExhibitions);
 

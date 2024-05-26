@@ -58,6 +58,10 @@ class MyExhibition extends Exhibition {
     static baseUrl = "/api/user/exhibitions";
 }
 
+class PublicExhibition extends Exhibition {
+    static baseUrl = "/api/public/exhibitions";
+}
+
 export const exhibitionStatePropTypesShape = {
     size: PropTypes.shape({
         length_ft: PropTypes.number,
@@ -76,4 +80,4 @@ export const exhibitionStatePropTypesShape = {
     images: PropTypes.arrayOf(entityPropTypeShape)
 };
 
-export { Exhibition, MyExhibition };
+export { Exhibition, MyExhibition, PublicExhibition };

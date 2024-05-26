@@ -13,12 +13,7 @@ import { itemsCombinedStatePropTypeShape } from "../Classes/Entity.js";
  *      selectedAndVisible: number
  * }} ItemCounts
  *
- * @typedef {{
- *      item: Item,
- *      itemString: string
- * }} ItemDictionaryEntry
- *
- * @typedef {Object<number, ItemDictionaryEntry>} ItemDictionary
+ * @typedef {Object<number, Item>} ItemDictionary
  *
  * @typedef {{
  *      Entity: class,
@@ -78,6 +73,10 @@ const getItemCounts = (items, selectionStatuses, visibilityStatuses) => {
     return itemCounts;
 };
 
+const compareItems = (item1, item2) => {
+    return JSON.stringify(item1) === JSON.stringify(item2);
+};
+
 /**
  * Reducer function for useItemsReducer
  * @param {ItemsCombinedState} state
@@ -87,24 +86,21 @@ const getItemCounts = (items, selectionStatuses, visibilityStatuses) => {
 const itemsReducer = (state, action) => {
     if (action.type === "setItems") {
         const newVisibilityStatuses = {};
+        const newItemDictionary = {};
 
         for (const newItem of action.items) {
-            const newItemString = JSON.stringify(newItem);
-            if (!state.itemDictionary[newItem.id] || state.itemDictionary[newItem.id].itemString !== newItemString) {
-                state.itemDictionary[newItem.id] = {
-                    item: newItem,
-                    itemString: JSON.stringify(newItem)
-                };
-            } else {
-                state.itemDictionary[newItem.id].item = newItem;
-                state.itemDictionary[newItem.id].itemString = newItemString;
-            }
+            const existingItem = state.itemDictionary[newItem.id];
+            newItemDictionary[newItem.id] = compareItems(newItem, existingItem)
+                ? existingItem
+                : newItem;
+
             newVisibilityStatuses[newItem.id] = state.filterFunction ? state.filterFunction(newItem) : true;
         }
 
         return {
             ...state,
             items: action.items,
+            itemDictionary: newItemDictionary,
             visibilityStatuses: newVisibilityStatuses,
             itemCounts: getItemCounts(action.items, state.selectionStatuses, newVisibilityStatuses)
         };
@@ -149,11 +145,9 @@ const itemsReducer = (state, action) => {
 };
 
 /**
- * @param {class} Entity
- * @returns {ItemsCombinedState}
+ * @type {ItemsCombinedState}
  */
-const defaultItemsCombinedState = (Entity) => ({
-    Entity,
+const defaultItemsCombinedState = ({
     items: [],
     itemDictionary: {},
     selectionStatuses: {},
@@ -169,9 +163,10 @@ const defaultItemsCombinedState = (Entity) => ({
 
 const ManagementPageContext = createContext();
 
-export const ManagementPageProvider = ({ isLoaded, isError, managementCallbacks, itemsCombinedState, setItems, setSelectedItems, setItemSelectionStatus, children }) => {
+export const ManagementPageProvider = ({ Entity, isLoaded, isError, managementCallbacks, itemsCombinedState, setItems, setSelectedItems, setItemSelectionStatus, children }) => {
     const contextValue = useMemo(() => {
         return {
+            Entity,
             managementCallbacks,
             itemsCombinedState,
             setItems,
@@ -180,7 +175,7 @@ export const ManagementPageProvider = ({ isLoaded, isError, managementCallbacks,
             isLoaded,
             isError
         };
-    }, [managementCallbacks, itemsCombinedState, setItems, setSelectedItems, setItemSelectionStatus, isLoaded, isError]);
+    }, [Entity, managementCallbacks, itemsCombinedState, setItems, setSelectedItems, setItemSelectionStatus, isLoaded, isError]);
     return (
         <ManagementPageContext.Provider value={contextValue}>
             {children}
@@ -189,6 +184,7 @@ export const ManagementPageProvider = ({ isLoaded, isError, managementCallbacks,
 };
 
 ManagementPageProvider.propTypes = {
+    Entity: PropTypes.func.isRequired,
     children: PropTypes.node.isRequired,
     isError: PropTypes.bool,
     isLoaded: PropTypes.bool,
@@ -257,7 +253,7 @@ export const useItemCounts = () => {
  * @returns {Class} type of entity
  */
 export const useEntity = () => {
-    return useContext(ManagementPageContext).itemsCombinedState.Entity;
+    return useContext(ManagementPageContext).Entity;
 };
 
 /**
@@ -272,14 +268,17 @@ export const useItemsLoadStatus = () => {
  * @param {Class} Entity
  * @returns {[
  *  itemsCombinedState: ItemsCombinedState,
- *  setItems: (items: object[]) => void,
- *  setSelectedItems: (selectedItems: object[]) => void,
- *  filterItems: (filterFunction: (item: object) => boolean) => void,
- *  setItemSelectionStatus: (itemId: number, newStatus: bool) => void]}
- * [itemsCombinedState, setItems, setSelectedItems, filterItems, setItemSelectionStatus]
+ *  itemsCallbacks: {
+ *      setItems: (items: object[]) => void,
+ *      setSelectedItems: (selectedItems: object[]) => void,
+ *      filterItems: (filterFunction: (item: object) => boolean) => void,
+ *      setItemSelectionStatus: (itemId: number, newStatus: bool) => void
+ *  }
+ * ]}
+ * [itemsCombinedState, { setItems, setSelectedItems, filterItems, setItemSelectionStatus }]
  */
-export const useItemsReducer = (Entity) => {
-    const [itemsCombinedState, itemsDispatch] = useReducer(itemsReducer, Entity, defaultItemsCombinedState);
+export const useItemsReducer = () => {
+    const [itemsCombinedState, itemsDispatch] = useReducer(itemsReducer, defaultItemsCombinedState);
     const setItems = useCallback((items) => {
         itemsDispatch({
             type: "setItems",
@@ -305,5 +304,5 @@ export const useItemsReducer = (Entity) => {
             newStatus
         });
     }, []);
-    return [itemsCombinedState, setItems, setSelectedItems, filterItems, setItemSelectionStatus];
+    return [itemsCombinedState, { setItems, setSelectedItems, filterItems, setItemSelectionStatus }];
 };

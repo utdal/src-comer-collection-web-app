@@ -32,7 +32,12 @@ import AssociationManageButton from "../../Components/Buttons/AssociationManageB
 import useItemsRefresh from "../../Hooks/useItemsRefresh.js";
 
 const UserManagement = () => {
-    const [usersCombinedState, setUsers, setSelectedUsers, filterUsers, setUserSelectionStatus] = useItemsReducer(User);
+    const [usersCombinedState, {
+        setItems: setUsers,
+        setSelectedItems: setSelectedUsers,
+        filterItems: filterUsers,
+        setItemSelectionStatus: setUserSelectionStatus
+    }] = useItemsReducer(User);
 
     const [handleRefresh, isLoaded, isError] = useItemsRefresh(User, setUsers);
 

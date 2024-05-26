@@ -49,17 +49,21 @@ export const DataTable = memo(function DataTable ({
     }, [items, tableFields]);
 
     const itemInformation = useMemo(() => {
+        /**
+         * @type {import("../../ContextProviders/ManagementPageProvider.js").Item[]}
+         */
+        const items = Object.values(itemDictionary);
+        console.log(items);
         const itemInformationToReturn = (
             items.map((item) => {
                 const sortableValues = sortableValuesByRow[item.id];
-                const itemDictionaryEntry = itemDictionary[item.id];
 
                 const themeColor = item.is_admin_or_collection_manager ? "secondary" : "primary";
 
                 const renderedTableRow = (
                     <DataTableRow
                         isSelected={Boolean(selectionStatuses[item.id])}
-                        itemDictionaryEntry={itemDictionaryEntry}
+                        item={item}
                         key={item.id}
                         managementCallbacks={managementCallbacks}
                         rowSelectionEnabled={rowSelectionEnabled}
@@ -74,7 +78,7 @@ export const DataTable = memo(function DataTable ({
             })
         );
         return itemInformationToReturn;
-    }, [itemDictionary, items, managementCallbacks, rowSelectionEnabled, selectionStatuses, setItemSelectionStatus, smallCheckboxes, sortableValuesByRow, tableFields]);
+    }, [itemDictionary, managementCallbacks, rowSelectionEnabled, selectionStatuses, setItemSelectionStatus, smallCheckboxes, sortableValuesByRow, tableFields]);
 
     const visibleItemInformation = useMemo(() => itemInformation.filter((r) => visibilityStatuses[r[0].id]), [itemInformation, visibilityStatuses]);
 

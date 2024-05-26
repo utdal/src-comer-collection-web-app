@@ -67,7 +67,7 @@ const MyExhibitions = () => {
 
     const [deleteDialogState, openDeleteDialog] = useDialogState(false);
 
-    const [exhibitionsCombinedState, setExhibitions] = useItemsReducer(MyExhibition);
+    const [exhibitionsCombinedState, { setItems: setExhibitions }] = useItemsReducer(MyExhibition);
 
     useEffect(() => {
         setExhibitions(appUser.Exhibitions);
