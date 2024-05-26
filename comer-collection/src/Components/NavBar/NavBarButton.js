@@ -1,6 +1,6 @@
-import React, { useCallback, useMemo } from "react";
+import React, { useCallback } from "react";
 import { Button, Typography, styled } from "@mui/material";
-import { useNavigate } from "react-router";
+import { useLocation, useNavigate } from "react-router";
 import PropTypes from "prop-types";
 
 const StyledButton = styled(Button, {
@@ -14,8 +14,8 @@ const StyledButton = styled(Button, {
 
 export const NavBarButton = ({ href, text }) => {
     const navigate = useNavigate();
+    const { pathname } = useLocation();
 
-    const isPageActive = useMemo(() => document.location.pathname === href, [href]);
 
     const handleClick = useCallback(() => {
         navigate(href);
@@ -24,7 +24,7 @@ export const NavBarButton = ({ href, text }) => {
     return (
         <StyledButton
             color="secondary"
-            isPageActive={isPageActive}
+            isPageActive={pathname === href}
             onClick={handleClick}
             spacing={1}
         >
