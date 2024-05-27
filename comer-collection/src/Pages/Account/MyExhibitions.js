@@ -151,12 +151,13 @@ const MyExhibitions = () => {
                 </Stack>
 
                 <Stack
-                    direction="row-reverse"
+                    direction="row"
                     justifyContent="space-between"
                 >
-                    <PaginationSummary />
 
                     <ExhibitionCreationRestriction />
+
+                    <PaginationSummary hideOnSinglePage />
                 </Stack>
 
                 <Box sx={{ gridArea: "table" }}>

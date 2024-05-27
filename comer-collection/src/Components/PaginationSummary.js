@@ -1,15 +1,22 @@
-import React, { useCallback } from "react";
+import React, { useCallback, useMemo } from "react";
+import PropTypes from "prop-types";
 import { useItemCounts, useItemsPagination } from "../ContextProviders/ManagementPageProvider.js";
 import { IconButton, Stack, Typography, styled } from "@mui/material";
 import { KeyboardArrowLeftIcon, KeyboardArrowRightIcon, KeyboardDoubleArrowLeftIcon, KeyboardDoubleArrowRightIcon } from "../Imports/Icons.js";
 
 const DisappearingStack = styled(Stack, {
-    shouldForwardProp: (prop) => prop !== "itemCounts"
-})(({ itemCounts }) => ({
-    display: itemCounts.visible === 0 ? "none" : ""
+    shouldForwardProp: (prop) => prop !== "isHidden"
+})(({ isHidden }) => ({
+    display: isHidden ? "none" : ""
 }));
 
-const PaginationSummary = () => {
+const DisappearingIconButton = styled(IconButton, {
+    shouldForwardProp: (prop) => prop !== "isHidden"
+})(({ isHidden }) => ({
+    display: isHidden ? "none" : ""
+}));
+
+const PaginationSummary = ({ hideOnSinglePage }) => {
     const { paginationStatus, setPaginationStartIndex } = useItemsPagination();
     const itemCounts = useItemCounts();
 
@@ -29,19 +36,30 @@ const PaginationSummary = () => {
         setPaginationStartIndex(Math.floor(itemCounts.visible / paginationStatus.itemsPerPage) * paginationStatus.itemsPerPage);
     }, [itemCounts.visible, paginationStatus.itemsPerPage, setPaginationStartIndex]);
 
+    const isHidden = itemCounts.visible === 0 ? "none" : "" || (hideOnSinglePage && itemCounts.visible <= paginationStatus.itemsPerPage);
+    const skipButtonsHidden = itemCounts.visible <= 2 * paginationStatus.itemsPerPage;
+
+    const textWidth = useMemo(() => (
+        `${50 + (Math.floor(Math.log10(itemCounts.visible)) + 1) * 20}px`
+    ), [itemCounts.visible]);
+
+    console.log(textWidth);
+
     return (
         <DisappearingStack
             alignItems="center"
             direction="row"
-            itemCounts={itemCounts}
+            isHidden={isHidden}
+
         >
-            <IconButton
+            <DisappearingIconButton
                 disabled={paginationStatus.startIndex <= 0}
+                isHidden={skipButtonsHidden}
                 onClick={handleFirstPage}
                 size="medium"
             >
                 <KeyboardDoubleArrowLeftIcon />
-            </IconButton>
+            </DisappearingIconButton>
 
             <IconButton
                 disabled={paginationStatus.startIndex <= 0}
@@ -56,7 +74,7 @@ const PaginationSummary = () => {
                 justifyContent="center"
                 margin={1}
                 spacing={1}
-                width="120px"
+                width={textWidth}
             >
 
                 <Typography>
@@ -86,15 +104,20 @@ const PaginationSummary = () => {
                 <KeyboardArrowRightIcon />
             </IconButton>
 
-            <IconButton
+            <DisappearingIconButton
                 disabled={paginationStatus.startIndex >= itemCounts.visible - paginationStatus.itemsPerPage}
+                isHidden={skipButtonsHidden}
                 onClick={handleLastPage}
                 size="medium"
             >
                 <KeyboardDoubleArrowRightIcon fontSize="medium" />
-            </IconButton>
+            </DisappearingIconButton>
         </DisappearingStack>
     );
+};
+
+PaginationSummary.propTypes = {
+    hideOnSinglePage: PropTypes.bool
 };
 
 export default PaginationSummary;

@@ -213,7 +213,7 @@ const UserManagement = () => {
 
                     </ManagementButtonStack>
 
-                    <PaginationSummary />
+                    <PaginationSummary hideOnSinglePage />
 
                 </ManagementPageFooter>
 
