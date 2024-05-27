@@ -30,18 +30,21 @@ import { ManagementPageFooter } from "../../Components/ManagementPage/Management
 import { useDialogState } from "../../Hooks/useDialogState.js";
 import EntityManageButton from "../../Components/Buttons/EntityManageButton.js";
 import AssociationManageButton from "../../Components/Buttons/AssociationManageButton.js";
+import PaginationSummary from "../../Components/PaginationSummary.js";
 
 const ImageManagement = () => {
     const images = useLoaderData();
     const revalidator = useRevalidator();
 
-    const [imagesCombinedState, {
+    const [imagesCombinedState, itemsCallbacks] = useItemsReducer(images);
+
+    const {
         setItems: setImages,
         setSelectedItems: setSelectedImages,
         filterItems: filterImages,
         setItemSelectionStatus: setImageSelectionStatuses,
         calculateSortableItemValues: calculateSortableImageValues
-    }] = useItemsReducer(images);
+    } = itemsCallbacks;
 
     useEffect(() => {
         setImages(images);
@@ -155,6 +158,7 @@ const ImageManagement = () => {
         <ManagementPageProvider
             Entity={Image}
             calculateSortableItemValues={calculateSortableImageValues}
+            itemsCallbacks={itemsCallbacks}
             itemsCombinedState={imagesCombinedState}
             managementCallbacks={managementCallbacks}
             setItemSelectionStatus={setImageSelectionStatuses}
@@ -210,6 +214,8 @@ const ImageManagement = () => {
                             secondaryEntity={Tag}
                         />
                     </ManagementButtonStack>
+
+                    <PaginationSummary />
                 </ManagementPageFooter>
 
             </ManagementPageContainer>

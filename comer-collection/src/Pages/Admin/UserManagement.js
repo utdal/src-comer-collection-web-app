@@ -28,18 +28,21 @@ import { ManagementPageHeader } from "../../Components/ManagementPage/Management
 import { ManagementPageBody } from "../../Components/ManagementPage/ManagementPageBody.js";
 import { ManagementPageFooter } from "../../Components/ManagementPage/ManagementPageFooter.js";
 import AssociationManageButton from "../../Components/Buttons/AssociationManageButton.js";
+import PaginationSummary from "../../Components/PaginationSummary.js";
 
 const UserManagement = () => {
     const users = useLoaderData();
     const revalidator = useRevalidator();
 
-    const [usersCombinedState, {
+    const [usersCombinedState, itemsCallbacks] = useItemsReducer(users);
+
+    const {
         setItems: setUsers,
         setSelectedItems: setSelectedUsers,
         filterItems: filterUsers,
         setItemSelectionStatus: setUserSelectionStatus,
         calculateSortableItemValues: calculateSortableUserValues
-    }] = useItemsReducer(users);
+    } = itemsCallbacks;
 
     useEffect(() => {
         setUsers(users);
@@ -161,6 +164,7 @@ const UserManagement = () => {
         <ManagementPageProvider
             Entity={User}
             calculateSortableItemValues={calculateSortableUserValues}
+            itemsCallbacks={itemsCallbacks}
             itemsCombinedState={usersCombinedState}
             managementCallbacks={managementCallbacks}
             setItemSelectionStatus={setUserSelectionStatus}
@@ -208,6 +212,9 @@ const UserManagement = () => {
                         />
 
                     </ManagementButtonStack>
+
+                    <PaginationSummary />
+
                 </ManagementPageFooter>
 
             </ManagementPageContainer>
