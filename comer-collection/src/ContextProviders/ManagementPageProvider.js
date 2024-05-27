@@ -17,6 +17,8 @@ import { itemsCombinedStatePropTypeShape } from "../Classes/Entity.js";
  *
  * @typedef {Object<number, number|string>} SortableValueDictionary
  *
+ * @typedef {(Item) => number | string} SortableValueFunction
+ *
  * @typedef {{
  *      Entity: class,
  *      items: Item[],
@@ -24,7 +26,8 @@ import { itemsCombinedStatePropTypeShape } from "../Classes/Entity.js";
  *      selectionStatuses: Object<number, boolean>,
  *      visibilityStatuses: Object<number, boolean>,
  *      filterFunction: (item: Item) => boolean | null,
- *      sortableValueDictionary: SortableValueDictionary
+ *      sortableValueDictionary: SortableValueDictionary,
+ *      sortableValueFunction: SortableValueFunction
  *      itemCounts: ItemCounts,
  *      paginationStatus: {
  *          enabled: boolean,
@@ -32,8 +35,6 @@ import { itemsCombinedStatePropTypeShape } from "../Classes/Entity.js";
  *          startIndex: number
  *      }
  * }} ItemsCombinedState
- *
- * @typedef {(Item) => number | string} SortableValueFunction
  *
  * @typedef {{
  *      startIndex: number,
@@ -118,6 +119,20 @@ const compareItems = (item1, item2) => {
 };
 
 /**
+ * Given an array of items and a sortable value function,
+ * compute and return the entire sortable value dictionary
+ * @param {Item[]} items
+ * @param {SortableValueFunction} sortableValueFunction
+ * @returns {SortableValueDictionary}
+ */
+const getSortableItemDictionary = (items, sortableValueFunction) => {
+    return Object.fromEntries(items.map((i) => [
+        i.id,
+        sortableValueFunction ? sortableValueFunction(i) : i.id
+    ]));
+};
+
+/**
  * Reducer function for useItemsReducer
  * @param {ItemsCombinedState} state
  * @param {ItemsDispatchAction} action
@@ -137,11 +152,14 @@ const itemsReducer = (state, action) => {
             newVisibilityStatuses[newItem.id] = state.filterFunction ? state.filterFunction(newItem) : true;
         }
 
+        const newSortableValueDictionary = getSortableItemDictionary(action.items, state.sortableValueFunction);
+
         return {
             ...state,
             items: action.items,
             itemDictionary: newItemDictionary,
             visibilityStatuses: newVisibilityStatuses,
+            sortableValueDictionary: newSortableValueDictionary,
             itemCounts: getItemCounts(action.items, state.selectionStatuses, newVisibilityStatuses)
         };
     } else if (action.type === "setSelectedItems") {
@@ -179,13 +197,10 @@ const itemsReducer = (state, action) => {
             itemCounts: getItemCounts(state.items, newSelectionStatuses, state.visibilityStatuses)
         };
     } else if (action.type === "calculateSortableItemValues") {
-        const sortableValueFunction = action.sortableValueFunction;
-        const newSortableValueDictionary = Object.fromEntries(state.items.map((i) => [
-            i.id,
-            action.sortableValueFunction ? sortableValueFunction(i) : i.id
-        ]));
+        const newSortableValueDictionary = getSortableItemDictionary(state.items, action.sortableValueFunction);
         return {
             ...state,
+            sortableValueFunction: action.sortableValueFunction,
             sortableValueDictionary: newSortableValueDictionary
         };
     } else if (action.type === "setPaginationEnabled") {
