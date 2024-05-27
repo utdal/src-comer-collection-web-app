@@ -1,7 +1,7 @@
 import React, { useCallback } from "react";
 import { useItemCounts, useItemsPagination } from "../ContextProviders/ManagementPageProvider.js";
 import { IconButton, Stack, Typography, styled } from "@mui/material";
-import { ArrowBackIcon, ArrowForwardIcon } from "../Imports/Icons.js";
+import { KeyboardArrowLeftIcon, KeyboardArrowRightIcon, KeyboardDoubleArrowLeftIcon, KeyboardDoubleArrowRightIcon } from "../Imports/Icons.js";
 
 const DisappearingStack = styled(Stack, {
     shouldForwardProp: (prop) => prop !== "itemCounts"
@@ -21,45 +21,76 @@ const PaginationSummary = () => {
         setPaginationStartIndex(paginationStatus.startIndex + paginationStatus.itemsPerPage);
     }, [paginationStatus.itemsPerPage, paginationStatus.startIndex, setPaginationStartIndex]);
 
+    const handleFirstPage = useCallback(() => {
+        setPaginationStartIndex(0);
+    }, [setPaginationStartIndex]);
+
+    const handleLastPage = useCallback(() => {
+        setPaginationStartIndex(Math.floor(itemCounts.visible / paginationStatus.itemsPerPage) * paginationStatus.itemsPerPage);
+    }, [itemCounts.visible, paginationStatus.itemsPerPage, setPaginationStartIndex]);
+
     return (
         <DisappearingStack
-            alignItems="center"
             direction="row"
             itemCounts={itemCounts}
-            spacing={1}
         >
             <IconButton
                 disabled={paginationStatus.startIndex <= 0}
-                onClick={handlePreviousPage}
-                size="large"
+                onClick={handleFirstPage}
+                size="medium"
             >
-                <ArrowBackIcon />
+                <KeyboardDoubleArrowLeftIcon />
             </IconButton>
 
-            <Typography>
+            <IconButton
+                disabled={paginationStatus.startIndex <= 0}
+                onClick={handlePreviousPage}
+                size="medium"
+            >
+                <KeyboardArrowLeftIcon />
+            </IconButton>
 
-                {paginationStatus.startIndex + 1}
+            <Stack
+                direction="row"
+                justifyContent="center"
+                margin={1}
+                spacing={1}
+                width="120px"
+            >
 
-                {" - "}
+                <Typography>
 
-                {paginationStatus.endIndex + 1}
+                    {paginationStatus.startIndex + 1}
 
-            </Typography>
+                    {" - "}
 
-            <Typography color="grey">
+                    {paginationStatus.endIndex + 1}
 
-                {" of "}
+                </Typography>
 
-                {itemCounts.visible}
+                <Typography color="grey">
 
-            </Typography>
+                    {" of "}
+
+                    {itemCounts.visible}
+
+                </Typography>
+            </Stack>
 
             <IconButton
                 disabled={paginationStatus.startIndex >= itemCounts.visible - paginationStatus.itemsPerPage}
                 onClick={handleNextPage}
-                size="large"
+                size="medium"
             >
-                <ArrowForwardIcon />
+                <KeyboardArrowRightIcon />
+            </IconButton>
+
+            <IconButton
+                disabled={paginationStatus.startIndex >= itemCounts.visible - paginationStatus.itemsPerPage}
+                onClick={handleLastPage}
+                size="medium"
+            >
+                <KeyboardDoubleArrowRightIcon fontSize="medium" />
             </IconButton>
         </DisappearingStack>
     );
