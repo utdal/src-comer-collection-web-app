@@ -206,6 +206,10 @@ const itemsReducer = (state, action) => {
         }
         return {
             ...state,
+            paginationStatus: {
+                ...state.paginationStatus,
+                startIndex: 0
+            },
             visibilityStatuses: newVisibilityStatuses,
             filterFunction: action.filterFunction,
             itemCounts: getItemCounts(state.items, state.selectionStatuses, newVisibilityStatuses)
@@ -224,6 +228,10 @@ const itemsReducer = (state, action) => {
         const newSortableValueDictionary = getSortableItemDictionary(state.items, action.sortableValueFunction);
         return {
             ...state,
+            paginationStatus: {
+                ...state.paginationStatus,
+                startIndex: 0
+            },
             sortableValueFunction: action.sortableValueFunction,
             sortableValueDictionary: newSortableValueDictionary
         };
