@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import {
     Typography, Stack, Paper, Box
 } from "@mui/material";
@@ -20,6 +20,7 @@ import { CreateExhibitionButton } from "../../Components/Buttons/CreateExhibitio
 import { ExhibitionCreationRestriction } from "../../Components/TextBanners/ExhibitionCreationRestriction.js";
 import { useDialogState } from "../../Hooks/useDialogState.js";
 import { MyExhibition } from "../../Classes/Entities/Exhibition.js";
+import { useRevalidator } from "react-router";
 
 const exhibitionTableFields = [
     {
@@ -55,7 +56,8 @@ const exhibitionTableFields = [
 const MyExhibitions = () => {
     useTitle("My Exhibitions");
 
-    const [appUser, , initializeAppUser] = useAppUser();
+    const [appUser] = useAppUser();
+    const revalidator = useRevalidator();
 
     const [dialogIsOpen, setDialogIsOpen] = useState(false);
     const [dialogExhibitionId, setDialogExhibitionId] = useState(null);
@@ -66,6 +68,14 @@ const MyExhibitions = () => {
     const [deleteDialogState, openDeleteDialog] = useDialogState(false);
 
     const [exhibitionsCombinedState, { setItems: setExhibitions }] = useItemsReducer(appUser.Exhibitions);
+
+    useEffect(() => {
+        setExhibitions(appUser.Exhibitions);
+    }, [setExhibitions, appUser.Exhibitions]);
+
+    const handleRefresh = useCallback(async () => {
+        revalidator.revalidate();
+    }, [revalidator]);
 
     const handleOpenExhibitionCreateDialog = useCallback(() => {
         setDialogEditMode(false);
@@ -161,7 +171,7 @@ const MyExhibitions = () => {
                         : false
                 }
                 editMode={dialogEditMode}
-                refreshFunction={initializeAppUser}
+                refreshFunction={handleRefresh}
                 setDialogExhibitionAccess={setDialogExhibitionAccess}
                 setDialogExhibitionId={setDialogExhibitionId}
                 setDialogExhibitionTitle={setDialogExhibitionTitle}

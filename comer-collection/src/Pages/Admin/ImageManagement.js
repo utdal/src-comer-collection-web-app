@@ -4,7 +4,7 @@ import { ItemSingleDeleteDialog } from "../../Components/Dialogs/ItemSingleDelet
 import { ItemMultiCreateDialog } from "../../Components/Dialogs/ItemMultiCreateDialog.js";
 import { ItemSingleEditDialog } from "../../Components/Dialogs/ItemSingleEditDialog.js";
 import { doesItemMatchSearchQuery } from "../../Helpers/SearchUtilities.js";
-import { useLoaderData, useNavigate } from "react-router";
+import { useLoaderData, useNavigate, useRevalidator } from "react-router";
 import { ImageFullScreenViewer } from "../../Components/Dialogs/ImageFullScreenViewer.js";
 import { EntityManageDialog } from "../../Components/Dialogs/EntityManageDialog.js";
 import { SelectionSummary } from "../../Components/SelectionSummary.js";
@@ -33,6 +33,8 @@ import AssociationManageButton from "../../Components/Buttons/AssociationManageB
 
 const ImageManagement = () => {
     const images = useLoaderData();
+    const revalidator = useRevalidator();
+
     const [imagesCombinedState, {
         setItems: setImages,
         setSelectedItems: setSelectedImages,
@@ -40,7 +42,13 @@ const ImageManagement = () => {
         setItemSelectionStatus: setImageSelectionStatuses
     }] = useItemsReducer(images);
 
-    const handleRefresh = useCallback(async () => {}, []);
+    useEffect(() => {
+        setImages(images);
+    }, [setImages, images]);
+
+    const handleRefresh = useCallback(async () => {
+        revalidator.revalidate();
+    }, [revalidator]);
 
     const [previewerImage, setPreviewerImage] = useState(null);
     const [previewerOpen, setPreviewerOpen] = useState(false);

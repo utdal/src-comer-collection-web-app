@@ -18,10 +18,11 @@ import { ManagementPageHeader } from "../../Components/ManagementPage/Management
 import { ManagementPageBody } from "../../Components/ManagementPage/ManagementPageBody.js";
 import { ManagementPageFooter } from "../../Components/ManagementPage/ManagementPageFooter.js";
 import { useDialogState } from "../../Hooks/useDialogState.js";
-import { useLoaderData } from "react-router";
+import { useLoaderData, useRevalidator } from "react-router";
 
 const ExhibitionManagement = () => {
     const exhibitions = useLoaderData();
+    const revalidator = useRevalidator();
 
     const [exhibitionsCombinedState, {
         setItems: setExhibitions,
@@ -30,7 +31,13 @@ const ExhibitionManagement = () => {
         setItemSelectionStatus: setExhibitionSelectionStatus
     }] = useItemsReducer(exhibitions);
 
-    const handleRefresh = useCallback(async () => {}, []);
+    useEffect(() => {
+        setExhibitions(exhibitions);
+    }, [setExhibitions, exhibitions]);
+
+    const handleRefresh = useCallback(async () => {
+        revalidator.revalidate();
+    }, [revalidator]);
 
     const [editDialogIsOpen, setEditDialogIsOpen] = useState(false);
     const [editDialogExhibitionId, setEditDialogExhibitionId] = useState(null);
