@@ -133,6 +133,25 @@ const getSortableItemDictionary = (items, sortableValueFunction) => {
 };
 
 /**
+ * Helper function that enforces a specific range for a value
+ * @param {number} originalValue value to test
+ * @param {number} minimum enforce a minimum value
+ * @param {number} maximum enforce a maximum value
+ * @returns {number} The original value if within range, the minimum
+ * if too low, or the maximum if too high
+ */
+const clampValue = (originalValue, minimum, maximum) => {
+    switch (true) {
+    case originalValue < minimum:
+        return minimum;
+    case originalValue > maximum:
+        return maximum;
+    default:
+        return originalValue;
+    }
+};
+
+/**
  * Reducer function for useItemsReducer
  * @param {ItemsCombinedState} state
  * @param {ItemsDispatchAction} action
@@ -153,6 +172,7 @@ const itemsReducer = (state, action) => {
         }
 
         const newSortableValueDictionary = getSortableItemDictionary(action.items, state.sortableValueFunction);
+        const newItemCounts = getItemCounts(action.items, state.selectionStatuses, newVisibilityStatuses);
 
         return {
             ...state,
@@ -160,7 +180,11 @@ const itemsReducer = (state, action) => {
             itemDictionary: newItemDictionary,
             visibilityStatuses: newVisibilityStatuses,
             sortableValueDictionary: newSortableValueDictionary,
-            itemCounts: getItemCounts(action.items, state.selectionStatuses, newVisibilityStatuses)
+            paginationStatus: {
+                ...state.paginationStatus,
+                startIndex: clampValue(state.paginationStatus.startIndex, 0, newItemCounts.visible)
+            },
+            itemCounts: newItemCounts
         };
     } else if (action.type === "setSelectedItems") {
         const newSelectionStatuses = {};
@@ -224,7 +248,7 @@ const itemsReducer = (state, action) => {
             ...state,
             paginationStatus: {
                 ...state.paginationStatus,
-                startIndex: action.startIndex
+                startIndex: clampValue(action.startIndex, 0, state.itemCounts.visible - 1)
             }
         };
     } else {
