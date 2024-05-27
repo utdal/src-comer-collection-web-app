@@ -43,6 +43,8 @@ import { itemsCombinedStatePropTypeShape } from "../Classes/Entity.js";
  *      enabled: boolean
  * }} PaginationStatus
  *
+ * @typedef {(item: object) => boolean} FilterFunction
+ *
  * @typedef {(
  *  {
  *      type: "setItems"
@@ -76,7 +78,7 @@ import { itemsCombinedStatePropTypeShape } from "../Classes/Entity.js";
  * @typedef {{
  *      setItems: (items: object[]) => void,
  *      setSelectedItems: (selectedItems: object[]) => void,
- *      filterItems: (filterFunction: (item: object) => boolean) => void,
+ *      filterItems: (filterFunction: FilterFunction) => void,
  *      setItemSelectionStatus: (itemId: number, newStatus: bool) => void,
  *      calculateSortableItemValues: (sortableValueFunction: SortableValueFunction) => void,
  *      setPaginationEnabled: (enabled: boolean) => void,
@@ -342,28 +344,20 @@ const ManagementPageContext = createContext();
  *      Entity: class,
  *      managementCallbacks: Object<string, () => void>,
  *      itemsCombinedState: ItemsCombinedState,
- *      setItems: (items: object[]) => void,
- *      setSelectedItems: (selectedItems: object[]) => void,
- *      setItemSelectionStatus: (itemId: number, newStatus: bool) => void,
- *      calculateSortableItemValues: (sortableValueFunction: SortableValueFunction) => void,
  *      itemsCallbacks: ItemsCallbacks,
  *      children
  * }} props
  * @returns {React.Provider}
  */
-export const ManagementPageProvider = ({ Entity, managementCallbacks, itemsCombinedState, setItems, setSelectedItems, setItemSelectionStatus, calculateSortableItemValues, itemsCallbacks, children }) => {
+export const ManagementPageProvider = ({ Entity, managementCallbacks, itemsCombinedState, itemsCallbacks, children }) => {
     const contextValue = useMemo(() => {
         return {
             Entity,
             managementCallbacks,
             itemsCombinedState,
-            setItems,
-            setSelectedItems,
-            setItemSelectionStatus,
-            calculateSortableItemValues,
             itemsCallbacks
         };
-    }, [Entity, managementCallbacks, itemsCombinedState, setItems, setSelectedItems, setItemSelectionStatus, calculateSortableItemValues, itemsCallbacks]);
+    }, [Entity, managementCallbacks, itemsCombinedState, itemsCallbacks]);
     return (
         <ManagementPageContext.Provider value={contextValue}>
             {children}
@@ -373,14 +367,10 @@ export const ManagementPageProvider = ({ Entity, managementCallbacks, itemsCombi
 
 ManagementPageProvider.propTypes = {
     Entity: PropTypes.func.isRequired,
-    calculateSortableItemValues: PropTypes.func,
     children: PropTypes.node.isRequired,
     itemsCallbacks: PropTypes.objectOf(PropTypes.func),
     itemsCombinedState: itemsCombinedStatePropTypeShape.isRequired,
-    managementCallbacks: PropTypes.objectOf(PropTypes.func).isRequired,
-    setItemSelectionStatus: PropTypes.func,
-    setItems: PropTypes.func.isRequired,
-    setSelectedItems: PropTypes.func
+    managementCallbacks: PropTypes.objectOf(PropTypes.func).isRequired
 };
 
 /**
@@ -391,30 +381,40 @@ export const useManagementCallbacks = () => {
 };
 
 /**
- * @returns {[Item[], function]} [items, setItems]
+ * @returns {[items: Item[], setItems: (items: Item[]) => void]} [items, setItems]
  */
 export const useItems = () => {
-    const { itemsCombinedState, setItems } = useContext(ManagementPageContext);
+    /**
+     * @type {{ itemsCombinedState: ItemsCombinedState, itemsCallbacks: {setItems: (items: Item[]) => void}}}
+     */
+    const { itemsCombinedState, itemsCallbacks: { setItems } } = useContext(ManagementPageContext);
     return [itemsCombinedState.items, setItems];
 };
 
 /**
- * @returns {[
- *      Object<number, boolean>,
- *      (itemId: number, newStatus: bool) => void,
- *      (items: Item[]) => void
- * ]} [selectionStatuses, setItemSelectionStatus, setSelectedItems]
+ * @returns [selectionStatuses, setItemSelectionStatus, setSelectedItems]
  */
 export const useSelectionStatuses = () => {
-    const { itemsCombinedState, setItemSelectionStatus, setSelectedItems } = useContext(ManagementPageContext);
+    /**
+     * @type {{ itemsCombinedState: ItemsCombinedState, itemsCallbacks: {
+     *  setSelectedItems: (items: Item[]) => void,
+     *  setItemSelectionStatus: (itemId: number, newStatus: boolean) => void
+     * }}}
+     */
+    const { itemsCombinedState, itemsCallbacks: { setItemSelectionStatus, setSelectedItems } } = useContext(ManagementPageContext);
     return [itemsCombinedState.selectionStatuses, setItemSelectionStatus, setSelectedItems];
 };
 
 /**
- * @returns {[Object<number, boolean>, (item: object) => boolean]} [visibilityStatuses, filterItems]
+ * @returns {[Object<number, boolean>, (filterFunction: FilterFunction) => void]} [visibilityStatuses, filterItems]
  */
 export const useVisibilityStatuses = () => {
-    const { itemsCombinedState, filterItems } = useContext(ManagementPageContext);
+    /**
+     * @type {{ itemsCombinedState: ItemsCombinedState, itemsCallbacks: {
+       *  filterItems: (FilterFunction) => void,
+       * }}}
+       */
+    const { itemsCombinedState, itemsCallbacks: { filterItems } } = useContext(ManagementPageContext);
     return [itemsCombinedState.visibilityStatuses, filterItems];
 };
 
@@ -437,10 +437,12 @@ export const useSortableValues = () => {
      *  itemsCombinedState: {
      *      sortableValueDictionary: SortableValueDictionary
      *  },
-     *  calculateSortableItemValues: (sortableValueFunction: SortableValueFunction) => void
+     *  itemsCallbacks: {
+     *      calculateSortableItemValues: (sortableValueFunction: SortableValueFunction) => void
+     *  }
      * }}
      */
-    const { itemsCombinedState: { sortableValueDictionary }, calculateSortableItemValues } = useContext(ManagementPageContext);
+    const { itemsCombinedState: { sortableValueDictionary }, itemsCallbacks: { calculateSortableItemValues } } = useContext(ManagementPageContext);
     return { sortableValueDictionary, calculateSortableItemValues };
 };
 
