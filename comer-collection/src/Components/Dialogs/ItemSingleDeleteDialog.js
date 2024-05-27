@@ -11,6 +11,7 @@ import { useSnackbar } from "../../ContextProviders/AppFeatures.js";
 import { useEntity, useItems } from "../../ContextProviders/ManagementPageProvider.js";
 import { DialogState } from "../../Classes/DialogState.js";
 import { PersistentDialog } from "./PersistentDialog.js";
+import { useActionData, useSubmit } from "react-router-dom";
 
 /**
  * @param {{
@@ -23,8 +24,12 @@ export const ItemSingleDeleteDialog = ({ requireTypedConfirmation, dialogState }
     const [submitEnabled, setSubmitEnabled] = useState(true);
     const showSnackbar = useSnackbar();
 
+    const actionData = useActionData();
+
     const [items, setItems] = useItems();
     const Entity = useEntity();
+
+    const submit = useSubmit();
 
     const { dialogIsOpen, closeDialog, dialogItem } = dialogState;
 
@@ -32,6 +37,7 @@ export const ItemSingleDeleteDialog = ({ requireTypedConfirmation, dialogState }
         if (dialogIsOpen) { setSubmitEnabled(true); }
     }, [dialogIsOpen]);
 
+    // eslint-disable-next-line no-unused-vars
     const handleSubmit = useCallback(() => {
         setSubmitEnabled(false);
         if (dialogItem) {
@@ -47,12 +53,33 @@ export const ItemSingleDeleteDialog = ({ requireTypedConfirmation, dialogState }
         setDeleteConfirmation("");
     }, [Entity, closeDialog, dialogItem, items, setItems, showSnackbar]);
 
+    const newHandleSubmit = useCallback(() => {
+        submit({
+            id: dialogItem?.id
+        }, {
+            method: "DELETE",
+            encType: "application/json"
+        });
+    }, [dialogItem?.id, submit]);
+
+    useEffect(() => {
+        if (actionData) {
+            if (actionData.status === "success") {
+                showSnackbar(actionData.message, "success");
+                closeDialog();
+            } else if (actionData.status === "error") {
+                setSubmitEnabled(true);
+                showSnackbar(actionData.error, "error");
+            }
+        }
+    }, [actionData, closeDialog, showSnackbar]);
+
     return (
         <PersistentDialog
             isForm
             maxWidth="sm"
             onClose={closeDialog}
-            onSubmit={handleSubmit}
+            onSubmit={newHandleSubmit}
             open={dialogIsOpen}
         >
             <DialogTitle>

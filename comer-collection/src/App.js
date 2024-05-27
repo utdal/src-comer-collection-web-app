@@ -39,6 +39,23 @@ const appUserLoader = async () => {
     }
 };
 
+const userManagementAction = async ({ request, params }) => {
+    const requestData = await request.json();
+    console.log(request, requestData, params);
+    try {
+        const result = await User.handleDelete(requestData.id);
+        return {
+            status: "success",
+            message: result
+        };
+    } catch (e) {
+        return {
+            status: "error",
+            error: e.message
+        };
+    }
+};
+
 const router = createBrowserRouter([
     {
         element: <AppLayout />,
@@ -103,13 +120,10 @@ const router = createBrowserRouter([
                         path: "Admin",
                         children: [
                             {
-                                element: (
-                                    <RequireAdmin
-                                        component={<UserManagement />}
-                                    />
-                                ),
+                                element: <UserManagement />,
                                 path: "Users",
                                 loader: User.loader,
+                                action: userManagementAction,
                                 ErrorBoundary: RouterErrorMessage
                             },
                             {
