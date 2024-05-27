@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 import { Navigate, useRevalidator } from "react-router";
 import { Box, Button, Divider, Paper, Stack, TextField } from "@mui/material";
 import { sendAuthenticatedRequest } from "../Helpers/APICalls.js";
@@ -16,7 +16,7 @@ const SignIn = () => {
 
     useTitle("Sign In");
 
-    const handleSignIn = async (event) => {
+    const handleSignIn = useCallback(async (event) => {
         event.preventDefault();
         setFormEnabled(false);
 
@@ -34,12 +34,12 @@ const SignIn = () => {
             setFormEnabled(true);
             setError(true);
         }
-    };
+    }, [email, password, revalidator]);
 
     return (appUser &&
         <Navigate
             replace
-            to="/Account"
+            to="/Account/Profile"
         />) ||
     (!appUser &&
         <Box
