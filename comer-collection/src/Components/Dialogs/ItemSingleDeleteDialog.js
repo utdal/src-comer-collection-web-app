@@ -8,7 +8,7 @@ import {
 import { DeleteIcon } from "../../Imports/Icons.js";
 import PropTypes from "prop-types";
 import { useSnackbar } from "../../ContextProviders/AppFeatures.js";
-import { useEntity, useItems } from "../../ContextProviders/ManagementPageProvider.js";
+import { useEntity } from "../../ContextProviders/ManagementPageProvider.js";
 import { DialogState } from "../../Classes/DialogState.js";
 import { PersistentDialog } from "./PersistentDialog.js";
 import { useActionData, useSubmit } from "react-router-dom";
@@ -26,7 +26,6 @@ export const ItemSingleDeleteDialog = ({ requireTypedConfirmation, dialogState }
 
     const actionData = useActionData();
 
-    const [items, setItems] = useItems();
     const Entity = useEntity();
 
     const submit = useSubmit();
@@ -36,22 +35,6 @@ export const ItemSingleDeleteDialog = ({ requireTypedConfirmation, dialogState }
     useEffect(() => {
         if (dialogIsOpen) { setSubmitEnabled(true); }
     }, [dialogIsOpen]);
-
-    // eslint-disable-next-line no-unused-vars
-    const handleSubmit = useCallback(() => {
-        setSubmitEnabled(false);
-        if (dialogItem) {
-            Entity.handleDelete(dialogItem.id).then((msg) => {
-                setItems(items.filter((i) => i.id !== dialogItem.id));
-                showSnackbar(msg, "success");
-                closeDialog();
-            }).catch((err) => {
-                setSubmitEnabled(true);
-                showSnackbar(err.message, "error");
-            });
-        }
-        setDeleteConfirmation("");
-    }, [Entity, closeDialog, dialogItem, items, setItems, showSnackbar]);
 
     const newHandleSubmit = useCallback(() => {
         submit({
