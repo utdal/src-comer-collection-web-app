@@ -240,20 +240,15 @@ export const useItems = () => {
 };
 
 /**
- * REMOVE THIS
- * @returns {[Item[], function]} [selectedItems, setSelectedItems]
- */
-export const useSelectedItems = () => {
-    const { setSelectedItems } = useContext(ManagementPageContext);
-    return [useMemo(() => [], []), setSelectedItems];
-};
-
-/**
- * @returns {[Object<number, boolean>, (itemId: number, newStatus: bool) => void]} [selectionStatuses, setItemSelectionStatus]
+ * @returns {[
+ *      Object<number, boolean>,
+ *      (itemId: number, newStatus: bool) => void,
+ *      (items: Item[]) => void
+ * ]} [selectionStatuses, setItemSelectionStatus, setSelectedItems]
  */
 export const useSelectionStatuses = () => {
-    const { itemsCombinedState, setItemSelectionStatus } = useContext(ManagementPageContext);
-    return [itemsCombinedState.selectionStatuses, setItemSelectionStatus];
+    const { itemsCombinedState, setItemSelectionStatus, setSelectedItems } = useContext(ManagementPageContext);
+    return [itemsCombinedState.selectionStatuses, setItemSelectionStatus, setSelectedItems];
 };
 
 /**
