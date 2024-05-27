@@ -8,8 +8,6 @@ import {
 import { SaveIcon } from "../../Imports/Icons.js";
 import { getLocalISOString } from "../../Helpers/getLocalISOString.js";
 import { useSnackbar } from "../../ContextProviders/AppFeatures.js";
-import { useAppUser } from "../../ContextProviders/AppUser.js";
-import { User } from "../../Classes/Entities/User.js";
 import { useEntity, useManagementCallbacks } from "../../ContextProviders/ManagementPageProvider.js";
 import { DialogInputFieldWithRef } from "../Inputs/DialogInputFieldWithRef.js";
 import { PersistentDialog } from "./PersistentDialog.js";
@@ -21,7 +19,6 @@ import { DialogState } from "../../Classes/DialogState.js";
  */
 export const ItemSingleEditDialog = ({ dialogState }) => {
     const showSnackbar = useSnackbar();
-    const [appUser, , initializeAppUser] = useAppUser();
     const Entity = useEntity();
     const { handleRefresh } = useManagementCallbacks();
 
@@ -47,15 +44,12 @@ export const ItemSingleEditDialog = ({ dialogState }) => {
                 showSnackbar(msg, "success");
                 handleRefresh();
                 closeDialog();
-                if (Entity === User && dialogItem.id === appUser.id) {
-                    initializeAppUser();
-                }
             }).catch((err) => {
                 setSubmitEnabled(true);
                 showSnackbar(err.message, "error");
             });
         }
-    }, [Entity, appUser.id, closeDialog, dialogItem, handleRefresh, initializeAppUser, showSnackbar]);
+    }, [Entity, closeDialog, dialogItem, handleRefresh, showSnackbar]);
 
     const singularCapitalized = Entity?.singular.substr(0, 1).toUpperCase() + Entity?.singular.substr(1).toLowerCase();
 

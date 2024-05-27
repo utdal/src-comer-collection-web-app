@@ -10,7 +10,6 @@ import { SaveIcon, PublicIcon, LockIcon, VpnLockIcon } from "../../Imports/Icons
 import PropTypes from "prop-types";
 import { Exhibition, MyExhibition } from "../../Classes/Entities/Exhibition.js";
 import { useSnackbar } from "../../ContextProviders/AppFeatures.js";
-import { useAppUser } from "../../ContextProviders/AppUser.js";
 import { PersistentDialog } from "./PersistentDialog.js";
 
 const exhibitionAccessOptions = (adminMode) => [
@@ -42,7 +41,6 @@ const exhibitionAccessOptions = (adminMode) => [
 
 export const ExhibitionSettingsDialog = ({ editMode, adminMode, dialogIsOpen, setDialogIsOpen, dialogExhibitionId, dialogExhibitionTitle, dialogExhibitionAccess, setDialogExhibitionId, setDialogExhibitionTitle, setDialogExhibitionAccess, refreshFunction }) => {
     const showSnackbar = useSnackbar();
-    const [, , initializeAppUser] = useAppUser();
 
     const handleExhibitionCreate = useCallback((title, privacy) => {
         MyExhibition.handleMultiCreate([{
@@ -61,9 +59,9 @@ export const ExhibitionSettingsDialog = ({ editMode, adminMode, dialogIsOpen, se
         }).catch((err) => {
             showSnackbar(err.message, "error");
         }).finally(() => {
-            initializeAppUser();
+            refreshFunction();
         });
-    }, [initializeAppUser, setDialogExhibitionAccess, setDialogExhibitionId, setDialogExhibitionTitle, setDialogIsOpen, showSnackbar]);
+    }, [refreshFunction, setDialogExhibitionAccess, setDialogExhibitionId, setDialogExhibitionTitle, setDialogIsOpen, showSnackbar]);
 
     const handleExhibitionEdit = useCallback((exhibitionId, title, privacy) => {
         const ExhibitionClass = adminMode ? Exhibition : MyExhibition;
@@ -78,10 +76,9 @@ export const ExhibitionSettingsDialog = ({ editMode, adminMode, dialogIsOpen, se
         }).catch((err) => {
             showSnackbar(err.message, "error");
         }).finally(() => {
-            initializeAppUser();
+            refreshFunction();
         });
-        refreshFunction();
-    }, [adminMode, initializeAppUser, refreshFunction, setDialogExhibitionAccess, setDialogExhibitionId, setDialogExhibitionTitle, setDialogIsOpen, showSnackbar]);
+    }, [adminMode, refreshFunction, setDialogExhibitionAccess, setDialogExhibitionId, setDialogExhibitionTitle, setDialogIsOpen, showSnackbar]);
 
     const handleFormSubmit = useCallback(() => {
         if (editMode) {
