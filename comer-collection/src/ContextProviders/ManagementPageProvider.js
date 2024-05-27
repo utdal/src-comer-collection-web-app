@@ -25,10 +25,21 @@ import { itemsCombinedStatePropTypeShape } from "../Classes/Entity.js";
  *      visibilityStatuses: Object<number, boolean>,
  *      filterFunction: (item: Item) => boolean | null,
  *      sortableValueDictionary: SortableValueDictionary
- *      itemCounts: ItemCounts
+ *      itemCounts: ItemCounts,
+ *      paginationStatus: {
+ *          enabled: boolean,
+ *          itemsPerPage: number,
+ *          startIndex: number
+ *      }
  * }} ItemsCombinedState
  *
  * @typedef {(Item) => number | string} SortableValueFunction
+ *
+ * @typedef {{
+ *      startIndex: number,
+ *      itemsPerPage: number
+ *      enabled: boolean
+ * }} PaginationStatus
  *
  * @typedef {(
  *  {
@@ -47,8 +58,29 @@ import { itemsCombinedStatePropTypeShape } from "../Classes/Entity.js";
  *  }|{
  *      type: "calculateSortableItemValues",
  *      sortableValueFunction: SortableValueFunction
+ *  }|{
+ *      type: "setPaginationEnabled",
+ *      enabled: boolean
+ *  }|{
+ *      type: "setPaginationItemsPerPage",
+ *      itemsPerPage: number
+ *  }|{
+ *      type: "setPaginationStartIndex",
+ *      startIndex: number
  *  }
  * )} ItemsDispatchAction
+ *
+ *
+ * @typedef {{
+ *      setItems: (items: object[]) => void,
+ *      setSelectedItems: (selectedItems: object[]) => void,
+ *      filterItems: (filterFunction: (item: object) => boolean) => void,
+ *      setItemSelectionStatus: (itemId: number, newStatus: bool) => void,
+ *      calculateSortableItemValues: (sortableValueFunction: SortableValueFunction) => void,
+ *      setPaginationEnabled: (enabled: boolean) => void,
+ *      setPaginationItemsPerPage: (itemsPerPage: number) => void,
+ *      setPaginationStartIndex: (startIndex: number) => void
+ * }} ItemsCallbacks
  *
  */
 
@@ -156,6 +188,30 @@ const itemsReducer = (state, action) => {
             ...state,
             sortableValueDictionary: newSortableValueDictionary
         };
+    } else if (action.type === "setPaginationEnabled") {
+        return {
+            ...state,
+            paginationStatus: {
+                ...state.paginationStatus,
+                enabled: action.enabled
+            }
+        };
+    } else if (action.type === "setPaginationItemsPerPage") {
+        return {
+            ...state,
+            paginationStatus: {
+                ...state.paginationStatus,
+                itemsPerPage: action.itemsPerPage
+            }
+        };
+    } else if (action.type === "setPaginationStartIndex") {
+        return {
+            ...state,
+            paginationStatus: {
+                ...state.paginationStatus,
+                startIndex: action.startIndex
+            }
+        };
     } else {
         console.warn("itemsReducer received invalid action object", action);
         return state;
@@ -175,6 +231,9 @@ const defaultItemsCombinedState = (items) => {
         selectionStatuses[item.id] = false;
         visibilityStatuses[item.id] = true;
     }
+    /**
+     * @type {Object<number, number>}
+     */
     const sortableValueDictionary = Object.fromEntries(items.map((i) => [i.id, i.id]));
     return {
         items,
@@ -188,13 +247,32 @@ const defaultItemsCombinedState = (items) => {
             selected: 0,
             visible: items.length,
             selectedAndVisible: 0
+        },
+        paginationStatus: {
+            enabled: true,
+            itemsPerPage: 20,
+            startIndex: 0
         }
     };
 };
 
 const ManagementPageContext = createContext();
 
-export const ManagementPageProvider = ({ Entity, managementCallbacks, itemsCombinedState, setItems, setSelectedItems, setItemSelectionStatus, calculateSortableItemValues, children }) => {
+/**
+ * @param {{
+ *      Entity: class,
+ *      managementCallbacks: Object<string, () => void>,
+ *      itemsCombinedState: ItemsCombinedState,
+ *      setItems: (items: object[]) => void,
+ *      setSelectedItems: (selectedItems: object[]) => void,
+ *      setItemSelectionStatus: (itemId: number, newStatus: bool) => void,
+ *      calculateSortableItemValues: (sortableValueFunction: SortableValueFunction) => void,
+ *      itemsCallbacks: ItemsCallbacks,
+ *      children
+ * }} props
+ * @returns {React.Provider}
+ */
+export const ManagementPageProvider = ({ Entity, managementCallbacks, itemsCombinedState, setItems, setSelectedItems, setItemSelectionStatus, calculateSortableItemValues, itemsCallbacks, children }) => {
     const contextValue = useMemo(() => {
         return {
             Entity,
@@ -203,9 +281,10 @@ export const ManagementPageProvider = ({ Entity, managementCallbacks, itemsCombi
             setItems,
             setSelectedItems,
             setItemSelectionStatus,
-            calculateSortableItemValues
+            calculateSortableItemValues,
+            itemsCallbacks
         };
-    }, [Entity, managementCallbacks, itemsCombinedState, setItems, setSelectedItems, setItemSelectionStatus, calculateSortableItemValues]);
+    }, [Entity, managementCallbacks, itemsCombinedState, setItems, setSelectedItems, setItemSelectionStatus, calculateSortableItemValues, itemsCallbacks]);
     return (
         <ManagementPageContext.Provider value={contextValue}>
             {children}
@@ -217,6 +296,7 @@ ManagementPageProvider.propTypes = {
     Entity: PropTypes.func.isRequired,
     calculateSortableItemValues: PropTypes.func,
     children: PropTypes.node.isRequired,
+    itemsCallbacks: PropTypes.objectOf(PropTypes.func),
     itemsCombinedState: itemsCombinedStatePropTypeShape.isRequired,
     managementCallbacks: PropTypes.objectOf(PropTypes.func).isRequired,
     setItemSelectionStatus: PropTypes.func,
@@ -307,16 +387,24 @@ export const useItemsLoadStatus = () => {
 };
 
 /**
+ * Allows components inside the ManagementPageContext
+ * to access and modify pagination settings
+ */
+export const useItemsPagination = () => {
+    /**
+     * @type {{itemsCallbacks: ItemsCallbacks, itemsCombinedState: ItemsCombinedState}}
+     */
+    const { itemsCallbacks, itemsCombinedState } = useContext(ManagementPageContext);
+    const { setPaginationEnabled, setPaginationItemsPerPage, setPaginationStartIndex } = itemsCallbacks;
+    const { paginationStatus } = itemsCombinedState;
+    return { paginationStatus, setPaginationEnabled, setPaginationItemsPerPage, setPaginationStartIndex };
+};
+
+/**
  * @param {Item[]} items
  * @returns {[
  *  itemsCombinedState: ItemsCombinedState,
- *  itemsCallbacks: {
- *      setItems: (items: object[]) => void,
- *      setSelectedItems: (selectedItems: object[]) => void,
- *      filterItems: (filterFunction: (item: object) => boolean) => void,
- *      setItemSelectionStatus: (itemId: number, newStatus: bool) => void,
- *      calculateSortableItemValues: (sortableValueFunction: SortableValueFunction) => void
- *  }
+ *  itemsCallbacks: ItemsCallbacks
  * ]}
  * [itemsCombinedState, { setItems, setSelectedItems, filterItems, setItemSelectionStatus }]
  */
@@ -353,5 +441,33 @@ export const useItemsReducer = ([...items]) => {
             newStatus
         });
     }, []);
-    return [itemsCombinedState, { setItems, setSelectedItems, filterItems, setItemSelectionStatus, calculateSortableItemValues }];
+    const setPaginationEnabled = useCallback((enabled) => {
+        itemsDispatch({
+            type: "setPaginationEnabled",
+            enabled
+        });
+    }, []);
+    const setPaginationItemsPerPage = useCallback((itemsPerPage) => {
+        itemsDispatch({
+            type: "setPaginationItemsPerPage",
+            itemsPerPage
+        });
+    }, []);
+    const setPaginationStartIndex = useCallback((startIndex) => {
+        itemsDispatch({
+            type: "setPaginationStartIndex",
+            startIndex
+        });
+    }, []);
+
+    return [itemsCombinedState, {
+        setItems,
+        setSelectedItems,
+        filterItems,
+        setItemSelectionStatus,
+        calculateSortableItemValues,
+        setPaginationEnabled,
+        setPaginationItemsPerPage,
+        setPaginationStartIndex
+    }];
 };
