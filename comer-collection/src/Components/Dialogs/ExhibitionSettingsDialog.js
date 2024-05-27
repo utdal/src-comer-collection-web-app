@@ -151,7 +151,10 @@ export const ExhibitionSettingsDialog = ({ editMode, adminMode, dialogIsOpen, se
                                 >
                                     <option.icon fontSize="large" />
 
-                                    <Stack direction="column">
+                                    <Stack
+                                        direction="column"
+                                        width="460px"
+                                    >
                                         <Typography fontWeight="bold">
                                             {option.displayText}
                                         </Typography>
