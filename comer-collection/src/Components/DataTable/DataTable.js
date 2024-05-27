@@ -4,7 +4,7 @@ import { Checkbox, Stack, TableCell, TableContainer, Typography, Table, TableBod
 import { useTheme } from "@emotion/react";
 import { ColumnSortButton } from "../Buttons/ColumnSortButton.js";
 import PropTypes from "prop-types";
-import { useItemCounts, useItemDictionary, useManagementCallbacks, useSelectionStatuses, useSortableValues, useVisibilityStatuses } from "../../ContextProviders/ManagementPageProvider.js";
+import { useItemCounts, useItemDictionary, useItemsPagination, useManagementCallbacks, useSelectionStatuses, useSortableValues, useVisibilityStatuses } from "../../ContextProviders/ManagementPageProvider.js";
 import { tableFieldPropTypeShape } from "../../Classes/Entity.js";
 import { FullPageMessage } from "../FullPageMessage.js";
 import { InfoIcon } from "../../Imports/Icons.js";
@@ -34,6 +34,7 @@ export const DataTable = ({
 
     const [visibilityStatuses] = useVisibilityStatuses();
     const itemCounts = useItemCounts();
+    const { paginationStatus } = useItemsPagination();
 
     const managementCallbacks = useManagementCallbacks();
 
@@ -59,6 +60,7 @@ export const DataTable = ({
      * 2) Filter the items
      * 3) Sort the items
      * 4) Reverse the items if descending order is requested
+     * 5) Splice the items based on pagination status
      */
 
     /**
@@ -87,6 +89,9 @@ export const DataTable = ({
         return visibleItemArray.toSorted(sortRoutine);
     }, [sortRoutine, visibleItemArray]);
 
+    /**
+     * Reverse the array if descending sort order is requested
+     */
     const directionallySortedVisibleItemArray = useMemo(() => {
         if (sortAscending) {
             return [...sortedVisibleItemArray];
@@ -95,8 +100,19 @@ export const DataTable = ({
         }
     }, [sortAscending, sortedVisibleItemArray]);
 
+    /**
+     * Apply pagination to the array
+     */
+    const finalItemArray = useMemo(() => {
+        if (paginationStatus.enabled) {
+            return directionallySortedVisibleItemArray.slice(paginationStatus.startIndex, paginationStatus.endIndex + 1);
+        } else {
+            return directionallySortedVisibleItemArray;
+        }
+    }, [directionallySortedVisibleItemArray, paginationStatus]);
+
     const renderedTableRows = useMemo(() => (
-        directionallySortedVisibleItemArray.map((item) => {
+        finalItemArray.map((item) => {
             const themeColor = item.is_admin_or_collection_manager ? "secondary" : "primary";
 
             const renderedTableRow = (
@@ -116,7 +132,7 @@ export const DataTable = ({
 
             return renderedTableRow;
         })
-    ), [directionallySortedVisibleItemArray, managementCallbacks, noSkeleton, rowSelectionEnabled, selectionStatuses, setItemSelectionStatus, smallCheckboxes, tableFields]);
+    ), [finalItemArray, managementCallbacks, noSkeleton, rowSelectionEnabled, selectionStatuses, setItemSelectionStatus, smallCheckboxes, tableFields]);
 
     return (
         <TableContainer
