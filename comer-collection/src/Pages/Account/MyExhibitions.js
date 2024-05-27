@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import {
     Typography, Stack, Paper, Box
 } from "@mui/material";
@@ -21,6 +21,7 @@ import { ExhibitionCreationRestriction } from "../../Components/TextBanners/Exhi
 import { useDialogState } from "../../Hooks/useDialogState.js";
 import { MyExhibition } from "../../Classes/Entities/Exhibition.js";
 import { useRevalidator } from "react-router";
+import PaginationSummary from "../../Components/PaginationSummary.js";
 
 const exhibitionTableFields = [
     {
@@ -67,10 +68,11 @@ const MyExhibitions = () => {
 
     const [deleteDialogState, openDeleteDialog] = useDialogState(false);
 
-    const [exhibitionsCombinedState, {
-        setItems: setExhibitions,
-        calculateSortableItemValues: calculateSortableExhibitionValues
-    }] = useItemsReducer(appUser.Exhibitions);
+    const [exhibitionsCombinedState, itemsCallbacks] = useItemsReducer(appUser.Exhibitions);
+
+    const {
+        setItems: setExhibitions
+    } = itemsCallbacks;
 
     useEffect(() => {
         setExhibitions(appUser.Exhibitions);
@@ -98,17 +100,18 @@ const MyExhibitions = () => {
         openDeleteDialog(exhibition);
     }, [openDeleteDialog]);
 
+    const managementCallbacks = useMemo(() => ({
+        handleOpenExhibitionCreateDialog,
+        handleOpenExhibitionSettings,
+        handleOpenExhibitionDeleteDialog
+    }), [handleOpenExhibitionCreateDialog, handleOpenExhibitionDeleteDialog, handleOpenExhibitionSettings]);
+
     return (
         <ManagementPageProvider
             Entity={MyExhibition}
-            calculateSortableItemValues={calculateSortableExhibitionValues}
+            itemsCallbacks={itemsCallbacks}
             itemsCombinedState={exhibitionsCombinedState}
-            managementCallbacks={{
-                handleOpenExhibitionCreateDialog,
-                handleOpenExhibitionSettings,
-                handleOpenExhibitionDeleteDialog
-            }}
-            setItems={setExhibitions}
+            managementCallbacks={managementCallbacks}
         >
             <Box
                 component={Paper}
@@ -157,6 +160,8 @@ const MyExhibitions = () => {
                         tableFields={exhibitionTableFields}
                     />
                 </Box>
+
+                <PaginationSummary />
 
             </Box>
 
