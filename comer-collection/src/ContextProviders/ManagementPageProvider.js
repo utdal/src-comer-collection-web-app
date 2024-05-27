@@ -225,16 +225,17 @@ const itemsReducer = (state, action) => {
         for (const { id } of filteredItems) {
             newVisibilityStatuses[id] = true;
         }
+        const newItemCounts = getItemCounts(state.items, state.selectionStatuses, newVisibilityStatuses);
         return {
             ...state,
             paginationStatus: {
                 ...state.paginationStatus,
                 startIndex: 0,
-                endIndex: calculatePaginationEndIndex(0, state.paginationStatus.itemsPerPage, state.itemCounts.visible)
+                endIndex: calculatePaginationEndIndex(0, state.paginationStatus.itemsPerPage, newItemCounts.visible)
             },
             visibilityStatuses: newVisibilityStatuses,
             filterFunction: action.filterFunction,
-            itemCounts: getItemCounts(state.items, state.selectionStatuses, newVisibilityStatuses)
+            itemCounts: newItemCounts
         };
     } else if (action.type === "setItemSelectionStatus") {
         const newSelectionStatuses = {
