@@ -19,18 +19,18 @@ import { ManagementPageBody } from "../../Components/ManagementPage/ManagementPa
 import { ManagementPageFooter } from "../../Components/ManagementPage/ManagementPageFooter.js";
 import { useDialogState } from "../../Hooks/useDialogState.js";
 import { useLoaderData, useRevalidator } from "react-router";
+import PaginationSummary from "../../Components/PaginationSummary.js";
 
 const ExhibitionManagement = () => {
     const exhibitions = useLoaderData();
     const revalidator = useRevalidator();
 
-    const [exhibitionsCombinedState, {
+    const [exhibitionsCombinedState, itemsCallbacks] = useItemsReducer(exhibitions);
+
+    const {
         setItems: setExhibitions,
-        setSelectedItems: setSelectedExhibitions,
-        filterItems: filterExhibitions,
-        setItemSelectionStatus: setExhibitionSelectionStatus,
-        calculateSortableItemValues: calculateSortableExhibitionValues
-    }] = useItemsReducer(exhibitions);
+        filterItems: filterExhibitions
+    } = itemsCallbacks;
 
     useEffect(() => {
         setExhibitions(exhibitions);
@@ -93,12 +93,9 @@ const ExhibitionManagement = () => {
     return (
         <ManagementPageProvider
             Entity={Exhibition}
-            calculateSortableItemValues={calculateSortableExhibitionValues}
+            itemsCallbacks={itemsCallbacks}
             itemsCombinedState={exhibitionsCombinedState}
             managementCallbacks={managementCallbacks}
-            setItemSelectionStatus={setExhibitionSelectionStatus}
-            setItems={setExhibitions}
-            setSelectedItems={setSelectedExhibitions}
         >
             <ManagementPageContainer>
                 <ManagementPageHeader>
@@ -134,6 +131,8 @@ const ExhibitionManagement = () => {
 
                 <ManagementPageFooter>
                     <SelectionSummary />
+
+                    <PaginationSummary />
                 </ManagementPageFooter>
 
             </ManagementPageContainer>

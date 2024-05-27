@@ -40,10 +40,7 @@ const ImageManagement = () => {
 
     const {
         setItems: setImages,
-        setSelectedItems: setSelectedImages,
-        filterItems: filterImages,
-        setItemSelectionStatus: setImageSelectionStatuses,
-        calculateSortableItemValues: calculateSortableImageValues
+        filterItems: filterImages
     } = itemsCallbacks;
 
     useEffect(() => {
@@ -157,13 +154,9 @@ const ImageManagement = () => {
     return (
         <ManagementPageProvider
             Entity={Image}
-            calculateSortableItemValues={calculateSortableImageValues}
             itemsCallbacks={itemsCallbacks}
             itemsCombinedState={imagesCombinedState}
             managementCallbacks={managementCallbacks}
-            setItemSelectionStatus={setImageSelectionStatuses}
-            setItems={setImages}
-            setSelectedItems={setSelectedImages}
         >
             <ManagementPageContainer>
                 <ManagementPageHeader>

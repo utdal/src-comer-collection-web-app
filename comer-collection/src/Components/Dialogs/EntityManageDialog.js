@@ -23,6 +23,7 @@ import { FullPageMessage } from "../FullPageMessage.js";
 import { RefreshButton } from "../Buttons/RefreshButton.js";
 import { SelectionSummary } from "../SelectionSummary.js";
 import useItemsRefresh from "../../Hooks/useItemsRefresh.js";
+import PaginationSummary from "../PaginationSummary.js";
 
 /**
  * @param {{
@@ -40,12 +41,13 @@ export const EntityManageDialog = ({
 
     const { closeDialog, dialogIsOpen } = dialogState;
 
-    const [dialogItemsCombinedState, {
+    const [dialogItemsCombinedState, itemsCallbacks] = useItemsReducer([]);
+
+    const {
         setItems: setDialogItems,
-        setSelectedItems: setSelectedDialogItems,
-        filterItems: filterDialogItems,
-        setItemSelectionStatus: setDialogItemSelectionStatus
-    }] = useItemsReducer([]);
+        filterItems: filterDialogItems
+    } = itemsCallbacks;
+
     const [handleRefresh, isLoaded, isError] = useItemsRefresh(Entity, setDialogItems, dialogIsOpen);
 
     const [itemSearchQuery, setItemSearchQuery] = useState("");
@@ -97,11 +99,9 @@ export const EntityManageDialog = ({
             Entity={Entity}
             isError={isError}
             isLoaded={isLoaded}
+            itemsCallbacks={itemsCallbacks}
             itemsCombinedState={dialogItemsCombinedState}
             managementCallbacks={managementCallbacks}
-            setItemSelectionStatus={setDialogItemSelectionStatus}
-            setItems={setDialogItems}
-            setSelectedItems={setSelectedDialogItems}
         >
             <PersistentDialog
                 maxWidth="lg"
@@ -162,6 +162,8 @@ export const EntityManageDialog = ({
                                                                 setSearchQuery={setItemSearchQuery}
                                                                 width="40%"
                                                             />
+
+                                                            <PaginationSummary />
 
                                                             <RefreshButton />
 

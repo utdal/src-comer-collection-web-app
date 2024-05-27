@@ -23,18 +23,18 @@ import { ManagementPageBody } from "../../Components/ManagementPage/ManagementPa
 import { ManagementPageFooter } from "../../Components/ManagementPage/ManagementPageFooter.js";
 import { useDialogState } from "../../Hooks/useDialogState.js";
 import AssociationManageButton from "../../Components/Buttons/AssociationManageButton.js";
+import PaginationSummary from "../../Components/PaginationSummary.js";
 
 const CourseManagement = () => {
     const courses = useLoaderData();
     const revalidator = useRevalidator();
 
-    const [coursesCombinedState, {
+    const [coursesCombinedState, itemsCallbacks] = useItemsReducer(courses);
+
+    const {
         setItems: setCourses,
-        setSelectedItems: setSelectedCourses,
-        filterItems: filterCourses,
-        setItemSelectionStatus: setCourseSelectionStatus,
-        calculateSortableItemValues: calculateSortableCourseValues
-    }] = useItemsReducer(courses);
+        filterItems: filterCourses
+    } = itemsCallbacks;
 
     useEffect(() => {
         setCourses(courses);
@@ -101,12 +101,9 @@ const CourseManagement = () => {
     return (
         <ManagementPageProvider
             Entity={Course}
-            calculateSortableItemValues={calculateSortableCourseValues}
+            itemsCallbacks={itemsCallbacks}
             itemsCombinedState={coursesCombinedState}
             managementCallbacks={managementCallbacks}
-            setItemSelectionStatus={setCourseSelectionStatus}
-            setItems={setCourses}
-            setSelectedItems={setSelectedCourses}
         >
             <ManagementPageContainer>
                 <ManagementPageHeader>
@@ -127,11 +124,8 @@ const CourseManagement = () => {
 
                 <ManagementPageBody>
                     <DataTable
-                        defaultSortAscending
-                        defaultSortColumn="ID"
                         emptyMinHeight="300px"
                         rowSelectionEnabled
-                        sx={{ gridArea: "table" }}
                         tableFields={Course.tableFields}
                     />
                 </ManagementPageBody>
@@ -145,6 +139,8 @@ const CourseManagement = () => {
                             secondaryEntity={User}
                         />
                     </ManagementButtonStack>
+
+                    <PaginationSummary />
                 </ManagementPageFooter>
 
             </ManagementPageContainer>
