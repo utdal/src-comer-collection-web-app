@@ -1,15 +1,31 @@
 /* eslint-disable react/no-multi-comp */
-import React, { useCallback, useMemo, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { Checkbox, Stack, TableCell, TableContainer, Typography, Table, TableBody, TableHead, TableRow, Paper } from "@mui/material";
 import { useTheme } from "@emotion/react";
 import { ColumnSortButton } from "../Buttons/ColumnSortButton.js";
 import PropTypes from "prop-types";
-import { useItemCounts, useItemDictionary, useManagementCallbacks, useSelectionStatuses, useVisibilityStatuses } from "../../ContextProviders/ManagementPageProvider.js";
+import { useItemCounts, useItemDictionary, useManagementCallbacks, useSelectionStatuses, useSortableValues, useVisibilityStatuses } from "../../ContextProviders/ManagementPageProvider.js";
 import { tableFieldPropTypeShape } from "../../Classes/Entity.js";
 import { FullPageMessage } from "../FullPageMessage.js";
 import { InfoIcon } from "../../Imports/Icons.js";
 import DataTableRow from "./DataTableRow.js";
 
+/**
+ * @typedef {import("../../ContextProviders/ManagementPageProvider.js").Item} Item
+ */
+
+/**
+ * Functional component for DataTable
+ * @param {{
+ *  tableFields,
+ *  rowSelectionEnabled,
+ *  smallCheckboxes,
+ *  defaultSortColumn,
+ *  defaultSortAscending,
+ *  noSkeleton
+ * }} props
+ * @returns {React.JSX.Element}
+ */
 export const DataTable = ({
     tableFields, rowSelectionEnabled, smallCheckboxes, defaultSortColumn, defaultSortAscending, noSkeleton
 }) => {
@@ -26,36 +42,24 @@ export const DataTable = ({
     const [sortColumn, setSortColumn] = useState(defaultSortColumn ?? "ID");
     const [sortAscending, setSortAscending] = useState(defaultSortAscending ?? true);
 
-    const sortRoutine = useCallback((a, b) => {
-        const [, aSortableValues] = a;
-        const [, bSortableValues] = b;
-        return ((aSortableValues[sortColumn] ?? "") > (bSortableValues[sortColumn] ?? "")) ? 1 : -1;
-    }, [sortColumn]);
+    const { sortableValueDictionary, calculateSortableItemValues } = useSortableValues();
 
-    // const sortableValuesByRow = useMemo(() => {
-    //     const output = { };
-    //     (items ?? []).map((item) => {
-    //         const sortableValues = {};
-    //         for (const tf of tableFields) {
-    //             if (tf.generateSortableValue) {
-    //                 sortableValues[tf.columnDescription] = tf.generateSortableValue(item);
-    //             }
-    //         }
-    //         output[item.id] = sortableValues;
-    //         return null;
-    //     });
-    //     return output;
-    // }, [items, tableFields]);
+    useEffect(() => {
+        calculateSortableItemValues(tableFields.find((tf) => tf.columnDescription === sortColumn)?.generateSortableValue);
+    }, [calculateSortableItemValues, sortColumn, tableFields]);
+
+    const sortRoutine = useCallback((itemA, itemB) => {
+        return sortableValueDictionary[itemA.id] > sortableValueDictionary[itemB.id] ? 1 : -1;
+    }, [sortableValueDictionary]);
 
     const itemInformation = useMemo(() => {
         /**
-         * @type {import("../../ContextProviders/ManagementPageProvider.js").Item[]}
+         * @type {Item[]}
          */
         const itemArray = Object.values(itemDictionary);
+        const sortedItemArray = itemArray.toSorted(sortRoutine);
         const itemInformationToReturn = (
-            itemArray.map((item) => {
-                // const sortableValues = sortableValuesByRow[item.id];
-
+            sortedItemArray.map((item) => {
                 const themeColor = item.is_admin_or_collection_manager ? "secondary" : "primary";
 
                 const renderedTableRow = (
@@ -73,17 +77,15 @@ export const DataTable = ({
                     />
                 );
 
-                return [item, 1, renderedTableRow];
+                return [item, sortableValueDictionary[item.id], renderedTableRow];
             })
         );
         return itemInformationToReturn;
-    }, [itemDictionary, managementCallbacks, noSkeleton, rowSelectionEnabled, selectionStatuses, setItemSelectionStatus, smallCheckboxes, tableFields]);
+    }, [itemDictionary, managementCallbacks, noSkeleton, rowSelectionEnabled, selectionStatuses, setItemSelectionStatus, smallCheckboxes, sortRoutine, sortableValueDictionary, tableFields]);
 
     const visibleItemInformation = useMemo(() => itemInformation.filter((r) => visibilityStatuses[r[0].id]), [itemInformation, visibilityStatuses]);
 
-    const sortedItemInformation = useMemo(() => visibleItemInformation.toSorted(sortRoutine), [visibleItemInformation, sortRoutine]);
-
-    const renderedItems = useMemo(() => sortedItemInformation.map((r) => r[2]), [sortedItemInformation]);
+    const renderedItems = useMemo(() => visibleItemInformation.map((r) => r[2]), [visibleItemInformation]);
 
     const itemsInFinalDisplayOrder = useMemo(() => {
         if (sortAscending) {

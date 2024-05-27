@@ -15,6 +15,8 @@ import { itemsCombinedStatePropTypeShape } from "../Classes/Entity.js";
  *
  * @typedef {Object<number, Item>} ItemDictionary
  *
+ * @typedef {Object<number, number|string>} SortableValueDictionary
+ *
  * @typedef {{
  *      Entity: class,
  *      items: Item[],
@@ -22,8 +24,11 @@ import { itemsCombinedStatePropTypeShape } from "../Classes/Entity.js";
  *      selectionStatuses: Object<number, boolean>,
  *      visibilityStatuses: Object<number, boolean>,
  *      filterFunction: (item: Item) => boolean | null,
+ *      sortableValueDictionary: SortableValueDictionary
  *      itemCounts: ItemCounts
  * }} ItemsCombinedState
+ *
+ * @typedef {(Item) => number | string} SortableValueFunction
  *
  * @typedef {(
  *  {
@@ -39,6 +44,9 @@ import { itemsCombinedStatePropTypeShape } from "../Classes/Entity.js";
  *      type: "setItemSelectionStatus",
  *      itemId: number,
  *      newStatus: boolean
+ *  }|{
+ *      type: "calculateSortableItemValues",
+ *      sortableValueFunction: SortableValueFunction
  *  }
  * )} ItemsDispatchAction
  *
@@ -138,6 +146,16 @@ const itemsReducer = (state, action) => {
             selectionStatuses: newSelectionStatuses,
             itemCounts: getItemCounts(state.items, newSelectionStatuses, state.visibilityStatuses)
         };
+    } else if (action.type === "calculateSortableItemValues") {
+        const sortableValueFunction = action.sortableValueFunction;
+        const newSortableValueDictionary = Object.fromEntries(state.items.map((i) => [
+            i.id,
+            action.sortableValueFunction ? sortableValueFunction(i) : i.id
+        ]));
+        return {
+            ...state,
+            sortableValueDictionary: newSortableValueDictionary
+        };
     } else {
         console.warn("itemsReducer received invalid action object", action);
         return state;
@@ -157,11 +175,13 @@ const defaultItemsCombinedState = (items) => {
         selectionStatuses[item.id] = false;
         visibilityStatuses[item.id] = true;
     }
+    const sortableValueDictionary = Object.fromEntries(items.map((i) => [i.id, i.id]));
     return {
         items,
         itemDictionary,
         selectionStatuses,
         visibilityStatuses,
+        sortableValueDictionary,
         filterFunction: null,
         itemCounts: {
             all: items.length,
@@ -174,7 +194,7 @@ const defaultItemsCombinedState = (items) => {
 
 const ManagementPageContext = createContext();
 
-export const ManagementPageProvider = ({ Entity, managementCallbacks, itemsCombinedState, setItems, setSelectedItems, setItemSelectionStatus, children }) => {
+export const ManagementPageProvider = ({ Entity, managementCallbacks, itemsCombinedState, setItems, setSelectedItems, setItemSelectionStatus, calculateSortableItemValues, children }) => {
     const contextValue = useMemo(() => {
         return {
             Entity,
@@ -182,9 +202,10 @@ export const ManagementPageProvider = ({ Entity, managementCallbacks, itemsCombi
             itemsCombinedState,
             setItems,
             setSelectedItems,
-            setItemSelectionStatus
+            setItemSelectionStatus,
+            calculateSortableItemValues
         };
-    }, [Entity, managementCallbacks, itemsCombinedState, setItems, setSelectedItems, setItemSelectionStatus]);
+    }, [Entity, managementCallbacks, itemsCombinedState, setItems, setSelectedItems, setItemSelectionStatus, calculateSortableItemValues]);
     return (
         <ManagementPageContext.Provider value={contextValue}>
             {children}
@@ -194,6 +215,7 @@ export const ManagementPageProvider = ({ Entity, managementCallbacks, itemsCombi
 
 ManagementPageProvider.propTypes = {
     Entity: PropTypes.func.isRequired,
+    calculateSortableItemValues: PropTypes.func,
     children: PropTypes.node.isRequired,
     itemsCombinedState: itemsCombinedStatePropTypeShape.isRequired,
     managementCallbacks: PropTypes.objectOf(PropTypes.func).isRequired,
@@ -250,6 +272,25 @@ export const useItemDictionary = () => {
 };
 
 /**
+ * @returns {{
+ *  sortableValueDictionary: SortableValueDictionary,
+ *  calculateSortableItemValues: (sortableValueFunction: SortableValueFunction) => void
+ * }}
+ */
+export const useSortableValues = () => {
+    /**
+     * @type {{
+     *  itemsCombinedState: {
+     *      sortableValueDictionary: SortableValueDictionary
+     *  },
+     *  calculateSortableItemValues: (sortableValueFunction: SortableValueFunction) => void
+     * }}
+     */
+    const { itemsCombinedState: { sortableValueDictionary }, calculateSortableItemValues } = useContext(ManagementPageContext);
+    return { sortableValueDictionary, calculateSortableItemValues };
+};
+
+/**
  * @returns {ItemCounts}
  */
 export const useItemCounts = () => {
@@ -278,7 +319,8 @@ export const useItemsLoadStatus = () => {
  *      setItems: (items: object[]) => void,
  *      setSelectedItems: (selectedItems: object[]) => void,
  *      filterItems: (filterFunction: (item: object) => boolean) => void,
- *      setItemSelectionStatus: (itemId: number, newStatus: bool) => void
+ *      setItemSelectionStatus: (itemId: number, newStatus: bool) => void,
+ *      calculateSortableItemValues: (sortableValueFunction: SortableValueFunction) => void
  *  }
  * ]}
  * [itemsCombinedState, { setItems, setSelectedItems, filterItems, setItemSelectionStatus }]
@@ -303,6 +345,12 @@ export const useItemsReducer = ([...items]) => {
             filterFunction
         });
     }, []);
+    const calculateSortableItemValues = useCallback((sortableValueFunction) => {
+        itemsDispatch({
+            type: "calculateSortableItemValues",
+            sortableValueFunction
+        });
+    }, []);
     const setItemSelectionStatus = useCallback((itemId, newStatus) => {
         itemsDispatch({
             type: "setItemSelectionStatus",
@@ -310,5 +358,5 @@ export const useItemsReducer = ([...items]) => {
             newStatus
         });
     }, []);
-    return [itemsCombinedState, { setItems, setSelectedItems, filterItems, setItemSelectionStatus }];
+    return [itemsCombinedState, { setItems, setSelectedItems, filterItems, setItemSelectionStatus, calculateSortableItemValues }];
 };

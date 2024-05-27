@@ -32,7 +32,8 @@ const CourseManagement = () => {
         setItems: setCourses,
         setSelectedItems: setSelectedCourses,
         filterItems: filterCourses,
-        setItemSelectionStatus: setCourseSelectionStatus
+        setItemSelectionStatus: setCourseSelectionStatus,
+        calculateSortableItemValues: calculateSortableCourseValues
     }] = useItemsReducer(courses);
 
     useEffect(() => {
@@ -100,6 +101,7 @@ const CourseManagement = () => {
     return (
         <ManagementPageProvider
             Entity={Course}
+            calculateSortableItemValues={calculateSortableCourseValues}
             itemsCombinedState={coursesCombinedState}
             managementCallbacks={managementCallbacks}
             setItemSelectionStatus={setCourseSelectionStatus}

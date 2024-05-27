@@ -28,7 +28,8 @@ const ExhibitionManagement = () => {
         setItems: setExhibitions,
         setSelectedItems: setSelectedExhibitions,
         filterItems: filterExhibitions,
-        setItemSelectionStatus: setExhibitionSelectionStatus
+        setItemSelectionStatus: setExhibitionSelectionStatus,
+        calculateSortableItemValues: calculateSortableExhibitionValues
     }] = useItemsReducer(exhibitions);
 
     useEffect(() => {
@@ -92,6 +93,7 @@ const ExhibitionManagement = () => {
     return (
         <ManagementPageProvider
             Entity={Exhibition}
+            calculateSortableItemValues={calculateSortableExhibitionValues}
             itemsCombinedState={exhibitionsCombinedState}
             managementCallbacks={managementCallbacks}
             setItemSelectionStatus={setExhibitionSelectionStatus}

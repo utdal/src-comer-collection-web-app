@@ -72,8 +72,15 @@ const userTableFields = [
 const Profile = () => {
     const appUser = useAppUser();
 
-    const [usersCombinedState, { setItems: setUsers }] = useItemsReducer([appUser]);
-    const [coursesCombinedState, { setItems: setCourses }] = useItemsReducer(appUser.Courses);
+    const [usersCombinedState, {
+        setItems: setUsers,
+        calculateSortableItemValues: calculateSortableUserValues
+    }] = useItemsReducer([appUser]);
+
+    const [coursesCombinedState, {
+        setItems: setCourses,
+        calculateSortableItemValues: calculateSortableCourseValues
+    }] = useItemsReducer(appUser.Courses);
 
     useTitle("Profile");
 
@@ -108,6 +115,7 @@ const Profile = () => {
                     <Box height="100px">
                         <ManagementPageProvider
                             Entity={User}
+                            calculateSortableItemValues={calculateSortableUserValues}
                             itemsCombinedState={usersCombinedState}
                             managementCallbacks={managementCallbacks}
                             setItems={setUsers}
@@ -157,6 +165,7 @@ const Profile = () => {
 
                     <ManagementPageProvider
                         Entity={Course}
+                        calculateSortableItemValues={calculateSortableCourseValues}
                         itemsCombinedState={coursesCombinedState}
                         managementCallbacks={managementCallbacks}
                         setItems={setCourses}

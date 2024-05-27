@@ -39,7 +39,8 @@ const ImageManagement = () => {
         setItems: setImages,
         setSelectedItems: setSelectedImages,
         filterItems: filterImages,
-        setItemSelectionStatus: setImageSelectionStatuses
+        setItemSelectionStatus: setImageSelectionStatuses,
+        calculateSortableItemValues: calculateSortableImageValues
     }] = useItemsReducer(images);
 
     useEffect(() => {
@@ -153,6 +154,7 @@ const ImageManagement = () => {
     return (
         <ManagementPageProvider
             Entity={Image}
+            calculateSortableItemValues={calculateSortableImageValues}
             itemsCombinedState={imagesCombinedState}
             managementCallbacks={managementCallbacks}
             setItemSelectionStatus={setImageSelectionStatuses}

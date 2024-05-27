@@ -37,7 +37,8 @@ const UserManagement = () => {
         setItems: setUsers,
         setSelectedItems: setSelectedUsers,
         filterItems: filterUsers,
-        setItemSelectionStatus: setUserSelectionStatus
+        setItemSelectionStatus: setUserSelectionStatus,
+        calculateSortableItemValues: calculateSortableUserValues
     }] = useItemsReducer(users);
 
     useEffect(() => {
@@ -159,6 +160,7 @@ const UserManagement = () => {
     return (
         <ManagementPageProvider
             Entity={User}
+            calculateSortableItemValues={calculateSortableUserValues}
             itemsCombinedState={usersCombinedState}
             managementCallbacks={managementCallbacks}
             setItemSelectionStatus={setUserSelectionStatus}

@@ -67,7 +67,10 @@ const MyExhibitions = () => {
 
     const [deleteDialogState, openDeleteDialog] = useDialogState(false);
 
-    const [exhibitionsCombinedState, { setItems: setExhibitions }] = useItemsReducer(appUser.Exhibitions);
+    const [exhibitionsCombinedState, {
+        setItems: setExhibitions,
+        calculateSortableItemValues: calculateSortableExhibitionValues
+    }] = useItemsReducer(appUser.Exhibitions);
 
     useEffect(() => {
         setExhibitions(appUser.Exhibitions);
@@ -98,6 +101,7 @@ const MyExhibitions = () => {
     return (
         <ManagementPageProvider
             Entity={MyExhibition}
+            calculateSortableItemValues={calculateSortableExhibitionValues}
             itemsCombinedState={exhibitionsCombinedState}
             managementCallbacks={{
                 handleOpenExhibitionCreateDialog,

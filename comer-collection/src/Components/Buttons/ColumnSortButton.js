@@ -1,18 +1,20 @@
-import React from "react";
+import React, { useCallback } from "react";
 import { IconButton } from "@mui/material";
 import { SwapVertIcon, ArrowUpwardIcon, ArrowDownwardIcon } from "../../Imports/Icons.js";
 import PropTypes from "prop-types";
 
 export const ColumnSortButton = ({ columnName, sortColumn, setSortColumn, sortAscending, setSortAscending }) => {
+    const handleClick = useCallback(() => {
+        if (sortColumn === columnName) { setSortAscending((current) => !current); } else {
+            setSortColumn(columnName);
+            setSortAscending(true);
+        }
+    }, [columnName, setSortAscending, setSortColumn, sortColumn]);
+
     return (
         <IconButton
             color={sortColumn === columnName ? "primary" : "grey"}
-            onClick={() => {
-                if (sortColumn === columnName) { setSortAscending((current) => !current); } else {
-                    setSortColumn(columnName);
-                    setSortAscending(true);
-                }
-            }}
+            onClick={handleClick}
             size="medium"
         >
             {sortColumn === columnName
