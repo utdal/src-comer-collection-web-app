@@ -1,52 +1,71 @@
-import React from "react";
-import { useEntity, useItemCounts, useItemsPagination } from "../ContextProviders/ManagementPageProvider.js";
-import { Stack } from "@mui/material";
+import React, { useCallback } from "react";
+import { useItemCounts, useItemsPagination } from "../ContextProviders/ManagementPageProvider.js";
+import { IconButton, Stack, Typography, styled } from "@mui/material";
+import { ArrowBackIcon, ArrowForwardIcon } from "../Imports/Icons.js";
+
+const DisappearingStack = styled(Stack, {
+    shouldForwardProp: (prop) => prop !== "itemCounts"
+})(({ itemCounts }) => ({
+    visibility: itemCounts.visible === 0 ? "hidden" : "visible"
+}));
 
 const PaginationSummary = () => {
-    const { paginationStatus } = useItemsPagination();
+    const { paginationStatus, setPaginationStartIndex } = useItemsPagination();
     const itemCounts = useItemCounts();
-    const Entity = useEntity();
 
     const endIndex = paginationStatus.startIndex + paginationStatus.itemsPerPage < itemCounts.visible
         ? paginationStatus.startIndex + paginationStatus.itemsPerPage - 1
         : itemCounts.visible - 1;
 
+    const handlePreviousPage = useCallback(() => {
+        setPaginationStartIndex(paginationStatus.startIndex - paginationStatus.itemsPerPage);
+    }, [paginationStatus.itemsPerPage, paginationStatus.startIndex, setPaginationStartIndex]);
+
+    const handleNextPage = useCallback(() => {
+        setPaginationStartIndex(paginationStatus.startIndex + paginationStatus.itemsPerPage);
+    }, [paginationStatus.itemsPerPage, paginationStatus.startIndex, setPaginationStartIndex]);
+
     return (
-        <Stack
+        <DisappearingStack
             alignItems="center"
             direction="row"
-            spacing={2}
+            itemCounts={itemCounts}
+            spacing={1}
         >
-            (TEST ONLY) Showing items
-            {" "}
+            <IconButton
+                disabled={paginationStatus.startIndex <= 0}
+                onClick={handlePreviousPage}
+                size="large"
+            >
+                <ArrowBackIcon />
+            </IconButton>
 
-            {paginationStatus.startIndex}
+            <Typography>
 
-            {" "}
-            through
+                {paginationStatus.startIndex + 1}
 
-            {" "}
+                {" - "}
 
-            {endIndex}
+                {endIndex + 1}
 
-            {" "}
+            </Typography>
 
-            {paginationStatus.itemsPerPage}
+            <Typography color="grey">
 
-            {" "}
-            of
+                {" of "}
 
-            {" "}
+                {itemCounts.visible}
 
-            {itemCounts.visible}
+            </Typography>
 
-            {" "}
-            visible
-
-            {" "}
-
-            {Entity.plural}
-        </Stack>
+            <IconButton
+                disabled={paginationStatus.startIndex >= itemCounts.visible - paginationStatus.itemsPerPage}
+                onClick={handleNextPage}
+                size="large"
+            >
+                <ArrowForwardIcon />
+            </IconButton>
+        </DisappearingStack>
     );
 };
 
