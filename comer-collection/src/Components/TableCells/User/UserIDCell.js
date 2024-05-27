@@ -1,12 +1,12 @@
 import React from "react";
 import { Stack, Typography } from "@mui/material";
-import { useAppUser } from "../../../ContextProviders/AppUser.js";
+import { useAppUser } from "../../../Hooks/useAppUser.js";
 import { PersonIcon } from "../../../Imports/Icons.js";
 import { useTableCellItem } from "../../../ContextProviders/TableCellProvider.js";
 
 export const UserIDCell = () => {
     const user = useTableCellItem();
-    const [appUser] = useAppUser();
+    const appUser = useAppUser();
     return (
         <Stack
             alignItems="center"

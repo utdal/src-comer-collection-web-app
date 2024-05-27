@@ -1,12 +1,12 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { useAppUser } from "../../ContextProviders/AppUser.js";
+import { useAppUser } from "../../Hooks/useAppUser.js";
 import { FullPageMessage } from "../FullPageMessage.js";
 import { LockIcon } from "../../Imports/Icons.js";
 import RequirePermanentPassword from "./RequirePermanentPassword.js";
 
 const RequireAdmin = ({ component, allowCollectionManager }) => {
-    const [appUser] = useAppUser();
+    const appUser = useAppUser();
     return appUser?.is_admin || (appUser?.is_collection_manager && allowCollectionManager)
         ? (
             <RequirePermanentPassword component={component} />

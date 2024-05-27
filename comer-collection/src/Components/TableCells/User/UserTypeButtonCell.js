@@ -1,13 +1,13 @@
 import React, { useCallback } from "react";
 import { Button, Typography } from "@mui/material";
-import { useAppUser } from "../../../ContextProviders/AppUser.js";
+import { useAppUser } from "../../../Hooks/useAppUser.js";
 import { useTableCellItem, useTableCellManagementCallbacks } from "../../../ContextProviders/TableCellProvider.js";
 
 import { CollectionManagerIcon, PersonIcon, SecurityIcon } from "../../../Imports/Icons.js";
 
 export const UserTypeButtonCell = () => {
     const user = useTableCellItem();
-    const [appUser] = useAppUser();
+    const appUser = useAppUser();
     const { handleOpenUserPrivilegesDialog } = useTableCellManagementCallbacks();
     const handleOpenPrivilegesDialog = useCallback(() => {
         handleOpenUserPrivilegesDialog(user);

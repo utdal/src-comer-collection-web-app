@@ -5,7 +5,7 @@ import {
 } from "@mui/material";
 import { DataTable } from "../../Components/DataTable/DataTable.js";
 import { AccountCircleIcon, SchoolIcon } from "../../Imports/Icons.js";
-import { useAppUser } from "../../ContextProviders/AppUser.js";
+import { useAppUser } from "../../Hooks/useAppUser.js";
 import { useTitle } from "../../ContextProviders/AppFeatures.js";
 
 import { CourseNameCell } from "../../Components/TableCells/Course/CourseNameCell.js";
@@ -70,9 +70,9 @@ const userTableFields = [
 ];
 
 const Profile = () => {
-    const [appUser] = useAppUser();
+    const appUser = useAppUser();
 
-    const [usersCombinedState, { setItems: setUsers }] = useItemsReducer([appUser]);
+    const [usersCombinedState, { setItems: setUsers }] = useItemsReducer(appUser);
     const [coursesCombinedState, { setItems: setCourses }] = useItemsReducer(appUser.Courses);
 
     useTitle("Profile");

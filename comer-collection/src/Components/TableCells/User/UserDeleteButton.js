@@ -1,5 +1,5 @@
 import React, { useCallback } from "react";
-import { useAppUser } from "../../../ContextProviders/AppUser.js";
+import { useAppUser } from "../../../Hooks/useAppUser.js";
 import { useTableCellItem, useTableCellManagementCallbacks } from "../../../ContextProviders/TableCellProvider.js";
 
 import { DeleteButton } from "../Entity/DeleteButton.js";

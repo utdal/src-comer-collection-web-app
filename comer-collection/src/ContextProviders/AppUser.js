@@ -1,6 +1,5 @@
 import React, { createContext, useMemo, useState } from "react";
 import PropTypes from "prop-types";
-import { useRouteLoaderData } from "react-router";
 
 export const AppUserContext = createContext();
 
@@ -23,13 +22,4 @@ export const AppUserProvider = ({ children }) => {
 
 AppUserProvider.propTypes = {
     children: PropTypes.node.isRequired
-};
-
-/**
- * Hook to retrieve current app user within AppUserContext
- * @returns {[object, function, function, boolean]} [appUser, setAppUser, initializeAppUser, appUserIsLoaded]
- */
-export const useAppUser = () => {
-    const appUser = useRouteLoaderData("root");
-    return [appUser];
 };

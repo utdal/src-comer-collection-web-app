@@ -1,11 +1,11 @@
 import React, { useCallback } from "react";
 import { Switch } from "@mui/material";
-import { useAppUser } from "../../../ContextProviders/AppUser.js";
+import { useAppUser } from "../../../Hooks/useAppUser.js";
 import { useTableCellItem, useTableCellManagementCallbacks } from "../../../ContextProviders/TableCellProvider.js";
 
 export const UserActivationSwitchCell = () => {
     const user = useTableCellItem();
-    const [appUser] = useAppUser();
+    const appUser = useAppUser();
     const { handleChangeUserActivationStatus } = useTableCellManagementCallbacks();
     const handleChangeActivationStatus = useCallback((e) => {
         handleChangeUserActivationStatus(user, e.target.checked);

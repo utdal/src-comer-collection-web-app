@@ -9,7 +9,7 @@ import { createArt } from "./js/Art.js";
 import { Box, Fab, Stack, Typography } from "@mui/material";
 import { PointerLockControls } from "three/examples/jsm/controls/PointerLockControls.js";
 import { EditIcon, SecurityIcon, VisibilityIcon } from "../../Imports/Icons.js";
-import { useAppUser } from "../../ContextProviders/AppUser.js";
+import { useAppUser } from "../../Hooks/useAppUser.js";
 import PropTypes from "prop-types";
 import { ExhibitionIntro } from "./ExhibitionIntro.js";
 import { ArtInfoPopup } from "./ArtInfoPopup.js";
@@ -68,7 +68,7 @@ const Exhibition3DViewport = ({ exhibitionState, exhibitionMetadata, exhibitionI
         height: null
     });
 
-    const [appUser] = useAppUser();
+    const appUser = useAppUser();
 
     const [dialogIsOpen, setDialogIsOpen] = useState(true);
 

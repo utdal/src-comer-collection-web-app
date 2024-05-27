@@ -1,11 +1,11 @@
 import React from "react";
 import { Button } from "@mui/material";
-import { useAppUser } from "../../ContextProviders/AppUser.js";
+import { useAppUser } from "../../Hooks/useAppUser.js";
 import { useManagementCallbacks } from "../../ContextProviders/ManagementPageProvider.js";
 import { AddIcon } from "../../Imports/Icons.js";
 
 export const CreateExhibitionButton = () => {
-    const [appUser] = useAppUser();
+    const appUser = useAppUser();
     const { handleOpenExhibitionCreateDialog } = useManagementCallbacks();
     return (
         <Button

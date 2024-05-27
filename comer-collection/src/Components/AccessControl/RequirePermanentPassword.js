@@ -1,10 +1,10 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { Navigate } from "react-router";
-import { useAppUser } from "../../ContextProviders/AppUser.js";
+import { useAppUser } from "../../Hooks/useAppUser.js";
 
 const RequirePermanentPassword = ({ component }) => {
-    const [appUser] = useAppUser();
+    const appUser = useAppUser();
     return appUser?.pw_change_required === false
         ? component
         : (

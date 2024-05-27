@@ -1,7 +1,7 @@
 import React, { useCallback, useState } from "react";
 import { Typography, Button, Divider, Menu, MenuItem, Stack } from "@mui/material";
 import { useNavigate, useRevalidator } from "react-router-dom";
-import { useAppUser } from "../../ContextProviders/AppUser.js";
+import { useAppUser } from "../../Hooks/useAppUser.js";
 import {
     ArrowDropDownIcon,
     AccountCircleIcon,
@@ -11,7 +11,7 @@ import {
 
 export const NavBarUserMenu = () => {
     const [anchorElement, setAnchorElement] = useState(null);
-    const [appUser] = useAppUser();
+    const appUser = useAppUser();
     const navigate = useNavigate();
 
     const revalidator = useRevalidator();

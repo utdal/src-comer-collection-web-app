@@ -9,7 +9,7 @@ import {
     CollectionsIcon,
     SecurityIcon
 } from "../../Imports/Icons.js";
-import { useAppUser } from "../../ContextProviders/AppUser.js";
+import { useAppUser } from "../../Hooks/useAppUser.js";
 import PropTypes from "prop-types";
 import { ColorInput } from "./ColorInput.js";
 import { AccordionSubHeading } from "./AccordionSubHeading.js";
@@ -117,7 +117,7 @@ export const ExhibitionEditPane = ({ exhibitionMetadata, exhibitionState, exhibi
     const [deleteImageDialogIsOpen, setDeleteImageDialogIsOpen] = useState(false);
 
     const theme = useTheme();
-    const [appUser] = useAppUser();
+    const appUser = useAppUser();
 
     useEffect(() => {
         const saveInterval = setInterval(saveExhibition, 30000);

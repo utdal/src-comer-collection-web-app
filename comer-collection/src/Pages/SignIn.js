@@ -2,11 +2,11 @@ import React, { useCallback, useState } from "react";
 import { Navigate, useRevalidator } from "react-router";
 import { Box, Button, Divider, Paper, Stack, TextField } from "@mui/material";
 import { sendAuthenticatedRequest } from "../Helpers/APICalls.js";
-import { useAppUser } from "../ContextProviders/AppUser.js";
+import { useAppUser } from "../Hooks/useAppUser.js";
 import { useTitle } from "../ContextProviders/AppFeatures.js";
 
 const SignIn = () => {
-    const [appUser] = useAppUser();
+    const appUser = useAppUser();
     const revalidator = useRevalidator();
 
     const [email, setEmail] = useState("");

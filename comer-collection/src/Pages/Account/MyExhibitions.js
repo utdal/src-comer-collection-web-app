@@ -7,7 +7,7 @@ import { PhotoCameraBackIcon } from "../../Imports/Icons.js";
 import { ExhibitionSettingsDialog } from "../../Components/Dialogs/ExhibitionSettingsDialog.js";
 import { ItemSingleDeleteDialog } from "../../Components/Dialogs/ItemSingleDeleteDialog.js";
 import { useTitle } from "../../ContextProviders/AppFeatures.js";
-import { useAppUser } from "../../ContextProviders/AppUser.js";
+import { useAppUser } from "../../Hooks/useAppUser.js";
 
 import { ExhibitionTitleCell } from "../../Components/TableCells/Exhibition/ExhibitionTitleCell.js";
 import { ExhibitionOpenInCurrentTabCell } from "../../Components/TableCells/Exhibition/ExhibitionOpenInCurrentTabCell.js";
@@ -56,7 +56,7 @@ const exhibitionTableFields = [
 const MyExhibitions = () => {
     useTitle("My Exhibitions");
 
-    const [appUser] = useAppUser();
+    const appUser = useAppUser();
     const revalidator = useRevalidator();
 
     const [dialogIsOpen, setDialogIsOpen] = useState(false);

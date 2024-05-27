@@ -1,12 +1,12 @@
 import React, { useCallback } from "react";
 import { Button, Stack, Typography } from "@mui/material";
-import { useAppUser } from "../../../ContextProviders/AppUser.js";
+import { useAppUser } from "../../../Hooks/useAppUser.js";
 import { PhotoCameraBackIcon } from "../../../Imports/Icons.js";
 import { useTableCellItem, useTableCellManagementCallbacks } from "../../../ContextProviders/TableCellProvider.js";
 
 export const ImageExhibitionCountCell = () => {
     const image = useTableCellItem();
-    const [appUser] = useAppUser();
+    const appUser = useAppUser();
     const { handleOpenImageViewExhibitionDialog } = useTableCellManagementCallbacks();
     const handleOpenViewExhibitionDialog = useCallback(() => {
         handleOpenImageViewExhibitionDialog([image]);

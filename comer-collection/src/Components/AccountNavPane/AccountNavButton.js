@@ -1,7 +1,7 @@
 import React from "react";
 import { ListItemButton, ListItemIcon, styled } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-import { useAppUser } from "../../ContextProviders/AppUser.js";
+import { useAppUser } from "../../Hooks/useAppUser.js";
 import PropTypes from "prop-types";
 
 export const accountLlinkDefinitionPropTypeShape = PropTypes.shape({
@@ -22,7 +22,7 @@ const StyledListItemButton = styled(ListItemButton, {
 }));
 
 export const AccountNavButton = ({ linkDefinition }) => {
-    const [appUser] = useAppUser();
+    const appUser = useAppUser();
     const navigate = useNavigate();
     return (
         <StyledListItemButton

@@ -2,7 +2,7 @@ import React from "react";
 import { Stack, Divider } from "@mui/material";
 import { useTheme } from "@emotion/react";
 import { AccountCircleIcon, GroupsIcon, PhotoCameraBackIcon, ImageIcon, SchoolIcon, LockIcon } from "../../Imports/Icons.js";
-import { useAppUser } from "../../ContextProviders/AppUser.js";
+import { useAppUser } from "../../Hooks/useAppUser.js";
 import { AccountNavSection } from "./AccountNavSection.js";
 
 const navLinks = [
@@ -61,7 +61,7 @@ const adminNavLinks = [
 ];
 
 export const AccountNavPane = () => {
-    const [appUser] = useAppUser();
+    const appUser = useAppUser();
     const theme = useTheme();
 
     return (

@@ -1,7 +1,7 @@
 import React from "react";
 import { AppBar, Toolbar, Typography, Button, Divider, IconButton, Stack } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-import { useAppUser } from "../../ContextProviders/AppUser.js";
+import { useAppUser } from "../../Hooks/useAppUser.js";
 import { SettingsIcon } from "../../Imports/Icons.js";
 import { AppSettingsDialog } from "../Dialogs/AppSettingsDialog/AppSettingsDialog.js";
 import { NavBarUserMenu } from "./NavBarUserMenu.js";
@@ -9,7 +9,7 @@ import { NavBarButton } from "./NavBarButton.js";
 import { useDialogState } from "../../Hooks/useDialogState.js";
 
 const NavBar = () => {
-    const [appUser] = useAppUser();
+    const appUser = useAppUser();
     const navigate = useNavigate();
 
     const [appSettingsDialogState, openAppSettingsDialog] = useDialogState();

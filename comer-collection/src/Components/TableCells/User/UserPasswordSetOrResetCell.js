@@ -1,12 +1,12 @@
 import React, { useCallback } from "react";
 import { Button, Typography } from "@mui/material";
-import { useAppUser } from "../../../ContextProviders/AppUser.js";
+import { useAppUser } from "../../../Hooks/useAppUser.js";
 import { useTableCellItem, useTableCellManagementCallbacks } from "../../../ContextProviders/TableCellProvider.js";
 import { LockIcon, LockResetIcon } from "../../../Imports/Icons.js";
 
 export const UserPasswordSetOrResetCell = () => {
     const user = useTableCellItem();
-    const [appUser] = useAppUser();
+    const appUser = useAppUser();
     const { handleOpenUserPasswordResetDialog, handleNavigateToChangePassword } = useTableCellManagementCallbacks();
     const handleOpenPasswordResetDialog = useCallback(() => {
         handleOpenUserPasswordResetDialog(user);

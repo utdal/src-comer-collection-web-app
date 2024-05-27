@@ -1,7 +1,7 @@
 import { useNavigate, useRevalidator } from "react-router";
 import React, { useState } from "react";
 import { Box, Button, Divider, Paper, Stack, TextField, Typography } from "@mui/material";
-import { useAppUser } from "../../ContextProviders/AppUser.js";
+import { useAppUser } from "../../Hooks/useAppUser.js";
 import { useTitle, useSnackbar } from "../../ContextProviders/AppFeatures.js";
 
 import { sendAuthenticatedRequest } from "../../Helpers/APICalls.js";
@@ -13,7 +13,7 @@ const ChangePassword = () => {
     const [error, setError] = useState(false);
     const [submitEnabled, setSubmitEnabled] = useState(true);
 
-    const [appUser] = useAppUser();
+    const appUser = useAppUser();
 
     const revalidator = useRevalidator();
 
