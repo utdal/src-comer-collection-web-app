@@ -31,6 +31,7 @@ const PaginationSummary = () => {
 
     return (
         <DisappearingStack
+            alignItems="center"
             direction="row"
             itemCounts={itemCounts}
         >
