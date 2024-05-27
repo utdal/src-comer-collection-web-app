@@ -52,48 +52,71 @@ export const DataTable = ({
         return sortableValueDictionary[itemA.id] > sortableValueDictionary[itemB.id] ? 1 : -1;
     }, [sortableValueDictionary]);
 
-    const itemInformation = useMemo(() => {
-        /**
-         * @type {Item[]}
-         */
-        const itemArray = Object.values(itemDictionary);
-        const sortedItemArray = itemArray.toSorted(sortRoutine);
-        const itemInformationToReturn = (
-            sortedItemArray.map((item) => {
-                const themeColor = item.is_admin_or_collection_manager ? "secondary" : "primary";
+    /**
+     * The array of items to render in the table is determined in four steps,
+     * with each step building on the previous one:
+     * 1) Derive items array from item dictionary.
+     * 2) Filter the items
+     * 3) Sort the items
+     * 4) Reverse the items if descending order is requested
+     */
 
-                const renderedTableRow = (
-                    <DataTableRow
-                        isSelected={Boolean(selectionStatuses[item.id])}
-                        item={item}
-                        key={item.id}
-                        managementCallbacks={managementCallbacks}
-                        noSkeleton={noSkeleton}
-                        rowSelectionEnabled={rowSelectionEnabled}
-                        setItemSelectionStatus={setItemSelectionStatus}
-                        smallCheckboxes={smallCheckboxes}
-                        tableFields={tableFields}
-                        themeColor={themeColor}
-                    />
-                );
+    /**
+     * Memoize the array representation of the items (converted from Object format)
+     * @type {Item[]}
+     */
+    const itemArray = useMemo(() => {
+        return Object.values(itemDictionary);
+    }, [itemDictionary]);
 
-                return [item, sortableValueDictionary[item.id], renderedTableRow];
-            })
-        );
-        return itemInformationToReturn;
-    }, [itemDictionary, managementCallbacks, noSkeleton, rowSelectionEnabled, selectionStatuses, setItemSelectionStatus, smallCheckboxes, sortRoutine, sortableValueDictionary, tableFields]);
+    /**
+     * Reapply the filter when any visibility status changes
+     * or when the items change
+     * @type {Item[]}
+     */
+    const visibleItemArray = useMemo(() => {
+        return itemArray.filter((item) => visibilityStatuses[item.id]);
+    }, [itemArray, visibilityStatuses]);
 
-    const visibleItemInformation = useMemo(() => itemInformation.filter((r) => visibilityStatuses[r[0].id]), [itemInformation, visibilityStatuses]);
+    /**
+     * Reapply the sort order when the sort function changes
+     * or the visible items change
+     * @type {Item[]}
+     */
+    const sortedVisibleItemArray = useMemo(() => {
+        return visibleItemArray.toSorted(sortRoutine);
+    }, [sortRoutine, visibleItemArray]);
 
-    const renderedItems = useMemo(() => visibleItemInformation.map((r) => r[2]), [visibleItemInformation]);
-
-    const itemsInFinalDisplayOrder = useMemo(() => {
+    const directionallySortedVisibleItemArray = useMemo(() => {
         if (sortAscending) {
-            return renderedItems;
+            return [...sortedVisibleItemArray];
         } else {
-            return renderedItems.toReversed();
+            return [...sortedVisibleItemArray].reverse();
         }
-    }, [renderedItems, sortAscending]);
+    }, [sortAscending, sortedVisibleItemArray]);
+
+    const renderedTableRows = useMemo(() => (
+        directionallySortedVisibleItemArray.map((item) => {
+            const themeColor = item.is_admin_or_collection_manager ? "secondary" : "primary";
+
+            const renderedTableRow = (
+                <DataTableRow
+                    isSelected={Boolean(selectionStatuses[item.id])}
+                    item={item}
+                    key={item.id}
+                    managementCallbacks={managementCallbacks}
+                    noSkeleton={noSkeleton}
+                    rowSelectionEnabled={rowSelectionEnabled}
+                    setItemSelectionStatus={setItemSelectionStatus}
+                    smallCheckboxes={smallCheckboxes}
+                    tableFields={tableFields}
+                    themeColor={themeColor}
+                />
+            );
+
+            return renderedTableRow;
+        })
+    ), [directionallySortedVisibleItemArray, managementCallbacks, noSkeleton, rowSelectionEnabled, selectionStatuses, setItemSelectionStatus, smallCheckboxes, tableFields]);
 
     return (
         <TableContainer
@@ -161,7 +184,7 @@ export const DataTable = ({
                 </TableHead>
 
                 <TableBody>
-                    {itemsInFinalDisplayOrder}
+                    {renderedTableRows}
                 </TableBody>
             </Table>
 
