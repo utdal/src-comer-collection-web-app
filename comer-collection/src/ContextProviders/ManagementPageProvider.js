@@ -32,7 +32,8 @@ import { itemsCombinedStatePropTypeShape } from "../Classes/Entity.js";
  *      paginationStatus: {
  *          enabled: boolean,
  *          itemsPerPage: number,
- *          startIndex: number
+ *          startIndex: number,
+ *          endIndex: number
  *      }
  * }} ItemsCombinedState
  *
@@ -152,6 +153,21 @@ const clampValue = (originalValue, minimum, maximum) => {
 };
 
 /**
+ * Calculate the appropriate pagination end index based on the
+ * start index, number of items per page, and number of visible items
+ * @param {number} startIndex
+ * @param {number} itemsPerPage
+ * @param {number} visibleItems retrieve this from ItemCounts object
+ */
+const calculatePaginationEndIndex = (startIndex, itemsPerPage, visibleItems) => {
+    const endIndex = startIndex + itemsPerPage < visibleItems
+        ? startIndex + itemsPerPage - 1
+        : visibleItems - 1;
+    console.log(startIndex, itemsPerPage, visibleItems, endIndex);
+    return endIndex;
+};
+
+/**
  * Reducer function for useItemsReducer
  * @param {ItemsCombinedState} state
  * @param {ItemsDispatchAction} action
@@ -174,6 +190,10 @@ const itemsReducer = (state, action) => {
         const newSortableValueDictionary = getSortableItemDictionary(action.items, state.sortableValueFunction);
         const newItemCounts = getItemCounts(action.items, state.selectionStatuses, newVisibilityStatuses);
 
+        const newPaginationStartIndex = state.paginationStatus.startIndex < newItemCounts.visible
+            ? clampValue(state.paginationStatus.startIndex, 0, newItemCounts.visible - 1)
+            : clampValue(state.paginationStatus.startIndex - state.paginationStatus.itemsPerPage, 0, newItemCounts.visible - 1);
+
         return {
             ...state,
             items: action.items,
@@ -182,7 +202,8 @@ const itemsReducer = (state, action) => {
             sortableValueDictionary: newSortableValueDictionary,
             paginationStatus: {
                 ...state.paginationStatus,
-                startIndex: clampValue(state.paginationStatus.startIndex, 0, newItemCounts.visible)
+                startIndex: newPaginationStartIndex,
+                endIndex: calculatePaginationEndIndex(newPaginationStartIndex, state.paginationStatus.itemsPerPage, newItemCounts.visible)
             },
             itemCounts: newItemCounts
         };
@@ -208,7 +229,8 @@ const itemsReducer = (state, action) => {
             ...state,
             paginationStatus: {
                 ...state.paginationStatus,
-                startIndex: 0
+                startIndex: 0,
+                endIndex: calculatePaginationEndIndex(0, state.paginationStatus.itemsPerPage, state.itemCounts.visible)
             },
             visibilityStatuses: newVisibilityStatuses,
             filterFunction: action.filterFunction,
@@ -230,7 +252,8 @@ const itemsReducer = (state, action) => {
             ...state,
             paginationStatus: {
                 ...state.paginationStatus,
-                startIndex: 0
+                startIndex: 0,
+                endIndex: calculatePaginationEndIndex(0, state.paginationStatus.itemsPerPage, state.itemCounts.visible)
             },
             sortableValueFunction: action.sortableValueFunction,
             sortableValueDictionary: newSortableValueDictionary
@@ -240,7 +263,9 @@ const itemsReducer = (state, action) => {
             ...state,
             paginationStatus: {
                 ...state.paginationStatus,
-                enabled: action.enabled
+                enabled: action.enabled,
+                startIndex: 0,
+                endIndex: calculatePaginationEndIndex(0, state.paginationStatus.itemsPerPage, state.itemCounts.visible)
             }
         };
     } else if (action.type === "setPaginationItemsPerPage") {
@@ -248,15 +273,18 @@ const itemsReducer = (state, action) => {
             ...state,
             paginationStatus: {
                 ...state.paginationStatus,
-                itemsPerPage: action.itemsPerPage
+                itemsPerPage: action.itemsPerPage,
+                endIndex: calculatePaginationEndIndex(state.paginationStatus.startIndex, state.paginationStatus.itemsPerPage, state.itemCounts.visible)
             }
         };
     } else if (action.type === "setPaginationStartIndex") {
+        const newStartIndex = clampValue(action.startIndex, 0, state.itemCounts.visible - 1);
         return {
             ...state,
             paginationStatus: {
                 ...state.paginationStatus,
-                startIndex: clampValue(action.startIndex, 0, state.itemCounts.visible - 1)
+                startIndex: newStartIndex,
+                endIndex: calculatePaginationEndIndex(newStartIndex, state.paginationStatus.itemsPerPage, state.itemCounts.visible)
             }
         };
     } else {
@@ -298,7 +326,8 @@ const defaultItemsCombinedState = (items) => {
         paginationStatus: {
             enabled: true,
             itemsPerPage: 20,
-            startIndex: 0
+            startIndex: 0,
+            endIndex: calculatePaginationEndIndex(0, 20, items.length)
         }
     };
 };

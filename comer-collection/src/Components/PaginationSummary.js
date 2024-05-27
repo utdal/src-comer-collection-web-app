@@ -13,10 +13,6 @@ const PaginationSummary = () => {
     const { paginationStatus, setPaginationStartIndex } = useItemsPagination();
     const itemCounts = useItemCounts();
 
-    const endIndex = paginationStatus.startIndex + paginationStatus.itemsPerPage < itemCounts.visible
-        ? paginationStatus.startIndex + paginationStatus.itemsPerPage - 1
-        : itemCounts.visible - 1;
-
     const handlePreviousPage = useCallback(() => {
         setPaginationStartIndex(paginationStatus.startIndex - paginationStatus.itemsPerPage);
     }, [paginationStatus.itemsPerPage, paginationStatus.startIndex, setPaginationStartIndex]);
@@ -46,7 +42,7 @@ const PaginationSummary = () => {
 
                 {" - "}
 
-                {endIndex + 1}
+                {paginationStatus.endIndex + 1}
 
             </Typography>
 
