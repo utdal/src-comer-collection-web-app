@@ -6,7 +6,7 @@ import { ArrowBackIcon, ArrowForwardIcon } from "../Imports/Icons.js";
 const DisappearingStack = styled(Stack, {
     shouldForwardProp: (prop) => prop !== "itemCounts"
 })(({ itemCounts }) => ({
-    visibility: itemCounts.visible === 0 ? "hidden" : "visible"
+    display: itemCounts.visible === 0 ? "none" : ""
 }));
 
 const PaginationSummary = () => {
