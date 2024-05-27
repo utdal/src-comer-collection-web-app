@@ -150,7 +150,14 @@ const MyExhibitions = () => {
 
                 </Stack>
 
-                <ExhibitionCreationRestriction />
+                <Stack
+                    direction="row-reverse"
+                    justifyContent="space-between"
+                >
+                    <PaginationSummary />
+
+                    <ExhibitionCreationRestriction />
+                </Stack>
 
                 <Box sx={{ gridArea: "table" }}>
                     <DataTable
@@ -160,8 +167,6 @@ const MyExhibitions = () => {
                         tableFields={exhibitionTableFields}
                     />
                 </Box>
-
-                <PaginationSummary />
 
             </Box>
 

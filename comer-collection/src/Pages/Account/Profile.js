@@ -21,6 +21,7 @@ import { UserTypeCell } from "../../Components/TableCells/User/UserTypeCell.js";
 import { UserExhibitionQuotaCell } from "../../Components/TableCells/User/UserExhibitionQuotaCell.js";
 import { User } from "../../Classes/Entities/User.js";
 import { Course } from "../../Classes/Entities/Course.js";
+import PaginationSummary from "../../Components/PaginationSummary.js";
 
 const courseTableFields = [
     {
@@ -85,91 +86,101 @@ const Profile = () => {
             square
             sx={{ height: "100%", overflowY: "auto" }}
         >
-            <Stack
-                paddingLeft={5}
-                paddingRight={5}
-                paddingTop={5}
-                spacing={4}
+            <ManagementPageProvider
+                Entity={User}
+                itemsCallbacks={usersCallbacks}
+                itemsCombinedState={usersCombinedState}
+                managementCallbacks={managementCallbacks}
             >
-                <Stack spacing={2}>
-                    <Stack
-                        alignItems="center"
-                        direction="row"
-                        paddingLeft={1}
-                        spacing={2}
-                    >
-                        <AccountCircleIcon fontSize="large" />
-
-                        <Typography variant="h4">
-                            Profile Information
-                        </Typography>
-                    </Stack>
-
-                    <Box height="100px">
-                        <ManagementPageProvider
-                            Entity={User}
-                            itemsCallbacks={usersCallbacks}
-                            itemsCombinedState={usersCombinedState}
-                            managementCallbacks={managementCallbacks}
+                <Stack
+                    paddingLeft={5}
+                    paddingRight={5}
+                    paddingTop={5}
+                    spacing={4}
+                >
+                    <Stack spacing={2}>
+                        <Stack
+                            alignItems="center"
+                            direction="row"
+                            paddingLeft={1}
+                            spacing={2}
                         >
+                            <AccountCircleIcon fontSize="large" />
+
+                            <Typography variant="h4">
+                                Profile Information
+                            </Typography>
+                        </Stack>
+
+                        <Box height="100px">
                             <DataTable
                                 noSkeleton
                                 tableFields={userTableFields}
                             />
-                        </ManagementPageProvider>
-                    </Box>
+                        </Box>
+                    </Stack>
                 </Stack>
-            </Stack>
+            </ManagementPageProvider>
 
-            <Stack
-                height="400px"
-                paddingLeft={5}
-                paddingRight={5}
-                paddingTop={5}
-                spacing={4}
+            <ManagementPageProvider
+                Entity={Course}
+                itemsCallbacks={coursesCallbacks}
+                itemsCombinedState={coursesCombinedState}
+                managementCallbacks={managementCallbacks}
             >
                 <Stack
-                    overflow="hidden"
-                    spacing={2}
-                    sx={{
-                        display: "grid",
-                        gridTemplateRows: "50px 350px",
-                        gridTemplateColumns: "1fr",
-                        gridTemplateAreas: `
+                    height="400px"
+                    paddingLeft={5}
+                    paddingRight={5}
+                    paddingTop={5}
+                    spacing={4}
+                >
+                    <Stack
+                        overflow="hidden"
+                        spacing={2}
+                        sx={{
+                            display: "grid",
+                            gridTemplateRows: "50px 350px",
+                            gridTemplateColumns: "1fr",
+                            gridTemplateAreas: `
                             "title"
                             "content"
                         `
-                    }}
-                >
-                    <Stack
-                        alignItems="center"
-                        direction="row"
-                        paddingLeft={1}
-                        spacing={2}
-                        sx={{ gridArea: "title" }}
+                        }}
                     >
-                        <SchoolIcon fontSize="large" />
+                        <Stack
+                            alignItems="center"
+                            direction="row"
+                            justifyContent="space-between"
+                            paddingLeft={1}
+                            spacing={2}
+                            sx={{ gridArea: "title" }}
+                        >
+                            <Stack
+                                alignItems="center"
+                                direction="row"
+                                spacing={2}
+                            >
+                                <SchoolIcon fontSize="large" />
 
-                        <Typography variant="h4">
-                            My Courses
-                        </Typography>
-                    </Stack>
+                                <Typography variant="h4">
+                                    My Courses
+                                </Typography>
 
-                    <ManagementPageProvider
-                        Entity={Course}
-                        itemsCallbacks={coursesCallbacks}
-                        itemsCombinedState={coursesCombinedState}
-                        managementCallbacks={managementCallbacks}
-                    >
+                            </Stack>
+
+                            <PaginationSummary />
+                        </Stack>
+
                         <DataTable
                             defaultSortAscending={false}
                             defaultSortColumn="Start"
                             noSkeleton
                             tableFields={courseTableFields}
                         />
-                    </ManagementPageProvider>
+                    </Stack>
                 </Stack>
-            </Stack>
+            </ManagementPageProvider>
         </Box>
     );
 };
