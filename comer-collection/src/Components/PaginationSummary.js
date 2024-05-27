@@ -43,8 +43,6 @@ const PaginationSummary = ({ hideOnSinglePage }) => {
         `${50 + (Math.floor(Math.log10(itemCounts.visible)) + 1) * 20}px`
     ), [itemCounts.visible]);
 
-    console.log(textWidth);
-
     return (
         <DisappearingStack
             alignItems="center"

@@ -165,7 +165,6 @@ const calculatePaginationEndIndex = (startIndex, itemsPerPage, visibleItems) => 
     const endIndex = startIndex + itemsPerPage < visibleItems
         ? startIndex + itemsPerPage - 1
         : visibleItems - 1;
-    console.log(startIndex, itemsPerPage, visibleItems, endIndex);
     return endIndex;
 };
 
