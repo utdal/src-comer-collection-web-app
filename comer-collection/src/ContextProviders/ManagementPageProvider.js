@@ -190,9 +190,11 @@ const itemsReducer = (state, action) => {
         const newSortableValueDictionary = getSortableItemDictionary(action.items, state.sortableValueFunction);
         const newItemCounts = getItemCounts(action.items, state.selectionStatuses, newVisibilityStatuses);
 
-        const newPaginationStartIndex = state.paginationStatus.startIndex < newItemCounts.visible
-            ? clampValue(state.paginationStatus.startIndex, 0, newItemCounts.visible - 1)
-            : clampValue(state.paginationStatus.startIndex - state.paginationStatus.itemsPerPage, 0, newItemCounts.visible - 1);
+        let newPaginationStartIndex = state.paginationStatus.startIndex;
+
+        while (newPaginationStartIndex >= newItemCounts.visible && newPaginationStartIndex >= 1) {
+            newPaginationStartIndex = clampValue(newPaginationStartIndex - state.paginationStatus.itemsPerPage, 0, newItemCounts.visible - 1);
+        }
 
         return {
             ...state,
