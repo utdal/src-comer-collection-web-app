@@ -72,7 +72,7 @@ const userTableFields = [
 const Profile = () => {
     const appUser = useAppUser();
 
-    const [usersCombinedState, { setItems: setUsers }] = useItemsReducer(appUser);
+    const [usersCombinedState, { setItems: setUsers }] = useItemsReducer([appUser]);
     const [coursesCombinedState, { setItems: setCourses }] = useItemsReducer(appUser.Courses);
 
     useTitle("Profile");
