@@ -41,7 +41,7 @@ const SignIn = () => {
             replace
             to="/Account/Profile"
         />) ||
-    (!appUser &&
+    (appUser === false &&
         <Box
             component={Paper}
             square

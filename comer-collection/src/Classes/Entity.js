@@ -55,7 +55,7 @@ export class Entity {
             sendAuthenticatedRequest("GET", `${this.baseUrl}`).then((response) => {
                 resolve(response.data);
             }).catch((e) => {
-                reject(e);
+                reject(new Error("Access Denied"));
             });
         });
     }

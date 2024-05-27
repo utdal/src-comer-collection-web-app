@@ -29,17 +29,13 @@ import { AppFeatureProvider } from "./ContextProviders/AppFeatures.js";
 
 const appUserLoader = async () => {
     if (!localStorage.getItem("token")) {
-        return null;
+        return false;
     }
-    try {
-        const response = await sendAuthenticatedRequest("GET", "/api/user/profile");
-        if (response.status === 200) {
-            return response.data;
-        } else {
-            throw new Error("Network request failed");
-        }
-    } catch (e) {
-        return null;
+    const response = await sendAuthenticatedRequest("GET", "/api/user/profile");
+    if (response.status === 200) {
+        return response.data;
+    } else {
+        throw new Error("Network request failed");
     }
 };
 

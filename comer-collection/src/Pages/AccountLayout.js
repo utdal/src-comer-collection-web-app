@@ -28,7 +28,7 @@ const AccountLayout = () => {
         </Box>
 
     </Box>
-    ) || (!appUser &&
+    ) || (appUser === false &&
         <Navigate to="/SignIn" />
     );
 };
