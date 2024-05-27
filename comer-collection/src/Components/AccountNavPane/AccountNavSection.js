@@ -1,18 +1,22 @@
 import React from "react";
-import { List, Typography } from "@mui/material";
+import { List, Typography, styled } from "@mui/material";
 import PropTypes from "prop-types";
 import { AccountNavButton, accountLlinkDefinitionPropTypeShape } from "./AccountNavButton.js";
+
+const ColoredText = styled(Typography)(({ theme }) => ({
+    color: theme.palette.grey.main
+}));
 
 export const AccountNavSection = ({ sectionTitle, linkDefinitions }) => {
     return (
         <>
-            <Typography
+            <ColoredText
                 alignSelf="center"
                 paddingTop="10px"
                 variant="h5"
             >
                 {sectionTitle}
-            </Typography>
+            </ColoredText>
 
             <List>
                 {linkDefinitions.map((linkDefinition) => (
