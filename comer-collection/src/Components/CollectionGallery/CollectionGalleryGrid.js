@@ -2,18 +2,20 @@ import { Box, Paper, Stack, ToggleButton, ToggleButtonGroup } from "@mui/materia
 import React, { useMemo, useState } from "react";
 import { GridOnIcon, ViewListIcon } from "../../Imports/Icons.js";
 import SearchBox from "../SearchBox.js";
-import { doesItemMatchSearchQuery } from "../../Helpers/SearchUtilities.js";
 import PropTypes from "prop-types";
-import { ManagementPageProvider, useItemsReducer } from "../../ContextProviders/ManagementPageProvider.js";
 import { entityPropTypeShape } from "../../Classes/Entity.js";
 import { CollectionBrowserImageDetails } from "./CollectionGalleryImageDetails.js";
+import { useItems, useItemsPagination, useVisibilityStatuses } from "../../ContextProviders/ManagementPageProvider.js";
+import PaginationSummary from "../PaginationSummary/PaginationSummary.js";
 
 const disabledImagesDefaultValue = [];
 
-export const CollectionGalleryGrid = ({ isDialogMode, selectedItem = null, setSelectedItem = null, images, disabledImages = disabledImagesDefaultValue }) => {
+export const CollectionGalleryGrid = ({ isDialogMode, selectedItem = null, setSelectedItem = null, disabledImages = disabledImagesDefaultValue }) => {
     const [viewMode, setViewMode] = useState("grid");
 
-    const [imagesCombinedState, { setItems: setImages }] = useItemsReducer(images);
+    const [imagesArray] = useItems();
+    const [visibilityStatuses] = useVisibilityStatuses();
+    const { paginationStatus } = useItemsPagination();
 
     const handleViewModeChange = (event, next) => {
         setViewMode(next);
@@ -21,9 +23,20 @@ export const CollectionGalleryGrid = ({ isDialogMode, selectedItem = null, setSe
 
     const [searchQuery, setSearchQuery] = useState("");
 
-    const renderedImageContainerData = useMemo(() => imagesCombinedState.items.map((image) => (
-        [
-            image,
+    const filteredImagesArray = useMemo(() => {
+        return imagesArray.filter((image) => visibilityStatuses[image.id]);
+    }, [imagesArray, visibilityStatuses]);
+
+    const finalImagesArray = useMemo(() => {
+        if (paginationStatus.enabled) {
+            return filteredImagesArray.slice(paginationStatus.startIndex, paginationStatus.endIndex + 1);
+        } else {
+            return filteredImagesArray;
+        }
+    }, [filteredImagesArray, paginationStatus.enabled, paginationStatus.endIndex, paginationStatus.startIndex]);
+
+    const renderedImageDetailContainers = useMemo(() => {
+        return finalImagesArray.map((image) => (
             <CollectionBrowserImageDetails
                 image={image}
                 isDisabled={(disabledImages ?? []).map((di) => di.image_id).includes(image.id)}
@@ -32,63 +45,47 @@ export const CollectionGalleryGrid = ({ isDialogMode, selectedItem = null, setSe
                 setSelectedItem={setSelectedItem}
                 viewMode={viewMode}
             />
-        ]
-    )), [imagesCombinedState.items, disabledImages, selectedItem?.id, setSelectedItem, viewMode]);
-
-    const renderedImageContainerDataFiltered = useMemo(() => renderedImageContainerData.filter((imageContainerData) => {
-        return (
-            !searchQuery || doesItemMatchSearchQuery(searchQuery, imageContainerData[0], ["title"])
-            // ) && (
-            //     !artistFilter || imageContainerData[0].Artists.map((a) => a.id).includes(parseInt(artistFilter.id))
-            // ) && (
-            //     !tagFilter || imageContainerData[0].Tags.map((t) => t.id).includes(parseInt(tagFilter.id))
-        );
-    }), [renderedImageContainerData, searchQuery]);
-
-    const finalRenderedImageContainers = useMemo(() => renderedImageContainerDataFiltered.map((i) => i[1]), [renderedImageContainerDataFiltered]);
+        ));
+    }, [disabledImages, finalImagesArray, selectedItem?.id, setSelectedItem, viewMode]);
 
     return (
-        <ManagementPageProvider
-            Entity={Image}
-            itemsCombinedState={imagesCombinedState}
-            setItems={setImages}
-        >
-            <Box
-                component={Paper}
-                justifyItems="center"
-                paddingLeft={1}
-                square
-                sx={{
-                    display: "grid",
-                    gridTemplateColumns: "1fr",
-                    gridTemplateRows: isDialogMode ? "80px 400px" : "80px calc(100vh - 144px)",
-                    gridTemplateAreas: `
+
+        <Box
+            component={Paper}
+            justifyItems="center"
+            paddingLeft={1}
+            square
+            sx={{
+                display: "grid",
+                gridTemplateColumns: "1fr",
+                gridTemplateRows: isDialogMode ? "80px 400px" : "80px calc(100vh - 144px)",
+                gridTemplateAreas: `
             "toolbar"
             "gallery"
             `
-                }}
+            }}
+        >
+            <Stack
+                direction="row"
+                justifyContent="space-around"
+                paddingBottom={2}
+                paddingTop={2}
+                spacing={2}
+                width="100%"
             >
                 <Stack
                     direction="row"
-                    justifyContent="space-around"
-                    paddingBottom={2}
-                    paddingTop={2}
                     spacing={2}
-                    width="100%"
+                    sx={{ gridArea: "toolbar" }}
                 >
-                    <Stack
-                        direction="row"
-                        spacing={2}
-                        sx={{ gridArea: "toolbar" }}
-                    >
-                        <SearchBox
-                            placeholder="Search by image title"
-                            searchQuery={searchQuery}
-                            setSearchQuery={setSearchQuery}
-                            width="300px"
-                        />
+                    <SearchBox
+                        placeholder="Search by image title"
+                        searchQuery={searchQuery}
+                        setSearchQuery={setSearchQuery}
+                        width="300px"
+                    />
 
-                        {/* <ArtistFilterMenu
+                    {/* <ArtistFilterMenu
             artists={artists}
             filterValue={artistFilter}
             setFilterValue={setArtistFilter}
@@ -99,48 +96,46 @@ export const CollectionGalleryGrid = ({ isDialogMode, selectedItem = null, setSe
             setFilterValue={setTagFilter}
             tags={tags}
         /> */}
-                    </Stack>
-
-                    <ToggleButtonGroup
-                        exclusive
-                        onChange={handleViewModeChange}
-                        value={viewMode}
-                    >
-                        <ToggleButton
-                            key="grid"
-                            value="grid"
-                        >
-                            <GridOnIcon />
-                        </ToggleButton>
-
-                        <ToggleButton
-                            key="list"
-                            value="list"
-                        >
-                            <ViewListIcon />
-                        </ToggleButton>
-                    </ToggleButtonGroup>
+                    <PaginationSummary />
                 </Stack>
 
-                <Stack
-                    direction="row"
-                    flexWrap="wrap"
-                    justifyContent="center"
-                    spacing={1}
-                    sx={{ gridArea: "gallery", overflowY: "scroll", justifyItems: "center", width: "100%" }}
-                    useFlexGap
-                    variant="standard"
+                <ToggleButtonGroup
+                    exclusive
+                    onChange={handleViewModeChange}
+                    value={viewMode}
                 >
-                    {finalRenderedImageContainers}
-                </Stack>
-            </Box>
+                    <ToggleButton
+                        key="grid"
+                        value="grid"
+                    >
+                        <GridOnIcon />
+                    </ToggleButton>
 
-        </ManagementPageProvider>
+                    <ToggleButton
+                        key="list"
+                        value="list"
+                    >
+                        <ViewListIcon />
+                    </ToggleButton>
+                </ToggleButtonGroup>
+            </Stack>
+
+            <Stack
+                direction="row"
+                flexWrap="wrap"
+                justifyContent="center"
+                spacing={1}
+                sx={{ gridArea: "gallery", overflowY: "scroll", justifyItems: "center", width: "100%" }}
+                useFlexGap
+                variant="standard"
+            >
+                {renderedImageDetailContainers}
+            </Stack>
+        </Box>
     );
 };
 CollectionGalleryGrid.propTypes = {
     disabledImages: PropTypes.arrayOf(entityPropTypeShape),
-    images: PropTypes.arrayOf(entityPropTypeShape),
     isDialogMode: PropTypes.bool.isRequired,
     selectedItem: PropTypes.shape({
         id: PropTypes.number
