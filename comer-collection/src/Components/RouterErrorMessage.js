@@ -10,6 +10,7 @@ const RouterErrorMessage = () => {
             Icon={WarningIcon}
             buttonDestination="/SignIn"
             buttonText="Home"
+            includeLogo
             message={error.message}
         />
     );

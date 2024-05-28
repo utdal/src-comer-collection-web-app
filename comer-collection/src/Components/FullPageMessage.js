@@ -2,8 +2,9 @@ import { Box, Button, LinearProgress, Paper, Stack, Typography } from "@mui/mate
 import React, { useCallback } from "react";
 import { useNavigate } from "react-router";
 import PropTypes from "prop-types";
+import FullLogo from "./Logos/FullLogo.js";
 
-export const FullPageMessage = ({ message, buttonText, buttonDestination = null, Icon, buttonAction = null, includeLinearProgress = false }) => {
+export const FullPageMessage = ({ message, buttonText, buttonDestination = null, Icon, buttonAction = null, includeLinearProgress = false, includeLogo = false }) => {
     const navigate = useNavigate();
 
     const handleNavigate = useCallback(() => {
@@ -23,6 +24,8 @@ export const FullPageMessage = ({ message, buttonText, buttonDestination = null,
                 spacing={2}
                 sx={{ height: "100%" }}
             >
+                {includeLogo ? <FullLogo maxWidth={250} /> : null}
+
                 {Icon
                     ? <Icon sx={{ fontSize: "150pt", opacity: 0.5 }} />
                     : null}
@@ -54,5 +57,6 @@ FullPageMessage.propTypes = {
     buttonDestination: PropTypes.string,
     buttonText: PropTypes.string,
     includeLinearProgress: PropTypes.bool,
+    includeLogo: PropTypes.bool,
     message: PropTypes.string.isRequired
 };

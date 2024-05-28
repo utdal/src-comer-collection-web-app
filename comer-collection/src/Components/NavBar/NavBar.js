@@ -1,5 +1,5 @@
 import React from "react";
-import { AppBar, Toolbar, Typography, Button, Divider, IconButton, Stack } from "@mui/material";
+import { AppBar, Toolbar, Button, Divider, IconButton, Stack } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { useAppUser } from "../../Hooks/useAppUser.js";
 import { SettingsIcon } from "../../Imports/Icons.js";
@@ -7,6 +7,7 @@ import { AppSettingsDialog } from "../Dialogs/AppSettingsDialog/AppSettingsDialo
 import { NavBarUserMenu } from "./NavBarUserMenu.js";
 import { NavBarButton } from "./NavBarButton.js";
 import { useDialogState } from "../../Hooks/useDialogState.js";
+import NavBarLogo from "./NavBarLogo.js";
 
 const NavBar = () => {
     const appUser = useAppUser();
@@ -25,25 +26,7 @@ const NavBar = () => {
                 justifyContent="space-between"
                 spacing={2}
             >
-                <Stack
-                    alignItems="center"
-                    direction="row"
-                    height="64px"
-                    paddingLeft={2}
-                    spacing={1}
-                >
-                    <img
-                        height="48px"
-                        src="/images/logo_image_only_orange.png"
-                    />
-
-                    <Typography
-                        sx={{ fontWeight: "bold" }}
-                        variant="h5"
-                    >
-                        Comer Collection
-                    </Typography>
-                </Stack>
+                <NavBarLogo />
 
                 <Toolbar sx={{ height: "64px" }}>
                     <Stack

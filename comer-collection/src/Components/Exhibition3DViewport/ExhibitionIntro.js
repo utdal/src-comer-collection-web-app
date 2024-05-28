@@ -1,6 +1,7 @@
 import React from "react";
 import { Button, Dialog, DialogActions, DialogContent, Stack, Typography, styled } from "@mui/material";
 import PropTypes from "prop-types";
+import FullLogo from "../Logos/FullLogo.js";
 
 const PositionedDialog = styled(Dialog)(() => ({
     position: "absolute",
@@ -21,10 +22,7 @@ export const ExhibitionIntro = ({ exhibitionMetadata, controls, dialogIsOpen, se
                     alignItems="center"
                     spacing={2}
                 >
-                    <img
-                        src="/images/logo_square_orange.png"
-                        style={{ maxWidth: "200px" }}
-                    />
+                    <FullLogo />
 
                     <Typography variant="h4">
                         {exhibitionMetadata.title}
