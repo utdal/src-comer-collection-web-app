@@ -1,6 +1,6 @@
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Stack, Typography } from "@mui/material";
 import React, { useState } from "react";
-import { CollectionGalleryDisplay } from "../CollectionGallery/CollectionGalleryDisplay.js";
+import { CollectionGalleryGrid } from "../CollectionGallery/CollectionGalleryGrid.js";
 import { AddPhotoAlternateIcon } from "../../Imports/Icons.js";
 import PropTypes from "prop-types";
 import { exhibitionStatePropTypesShape } from "../../Classes/Entities/Exhibition.js";
@@ -33,7 +33,7 @@ export const ImageChooserDialog = ({ imageChooserIsOpen, setImageChooserIsOpen, 
             </DialogTitle>
 
             <DialogContent>
-                <CollectionGalleryDisplay
+                <CollectionGalleryGrid
                     disabledImages={exhibitionState.images}
                     images={globalImageCatalog}
                     isDialogMode

@@ -6,11 +6,11 @@ import { doesItemMatchSearchQuery } from "../../Helpers/SearchUtilities.js";
 import PropTypes from "prop-types";
 import { ManagementPageProvider, useItemsReducer } from "../../ContextProviders/ManagementPageProvider.js";
 import { entityPropTypeShape } from "../../Classes/Entity.js";
-import { CollectionBrowserImageContainer } from "./CollectionGalleryImageContainer.js";
+import { CollectionBrowserImageDetails } from "./CollectionGalleryImageDetails.js";
 
 const disabledImagesDefaultValue = [];
 
-export const CollectionGalleryDisplay = ({ isDialogMode, selectedItem = null, setSelectedItem = null, images, disabledImages = disabledImagesDefaultValue }) => {
+export const CollectionGalleryGrid = ({ isDialogMode, selectedItem = null, setSelectedItem = null, images, disabledImages = disabledImagesDefaultValue }) => {
     const [viewMode, setViewMode] = useState("grid");
 
     const [imagesCombinedState, { setItems: setImages }] = useItemsReducer(images);
@@ -24,7 +24,7 @@ export const CollectionGalleryDisplay = ({ isDialogMode, selectedItem = null, se
     const renderedImageContainerData = useMemo(() => imagesCombinedState.items.map((image) => (
         [
             image,
-            <CollectionBrowserImageContainer
+            <CollectionBrowserImageDetails
                 image={image}
                 isDisabled={(disabledImages ?? []).map((di) => di.image_id).includes(image.id)}
                 isSelected={image.id === selectedItem?.id}
@@ -138,7 +138,7 @@ export const CollectionGalleryDisplay = ({ isDialogMode, selectedItem = null, se
         </ManagementPageProvider>
     );
 };
-CollectionGalleryDisplay.propTypes = {
+CollectionGalleryGrid.propTypes = {
     disabledImages: PropTypes.arrayOf(entityPropTypeShape),
     images: PropTypes.arrayOf(entityPropTypeShape),
     isDialogMode: PropTypes.bool.isRequired,

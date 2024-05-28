@@ -3,7 +3,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import { InView } from "react-intersection-observer";
 
-export const ThumbnailBox = ({ image }) => (
+export const CollectionGalleryThumbnailBox = ({ image }) => (
     <InView triggerOnce>
         {({ inView, ref }) => (
             <Box
@@ -21,7 +21,7 @@ export const ThumbnailBox = ({ image }) => (
         )}
     </InView>
 );
-ThumbnailBox.propTypes = {
+CollectionGalleryThumbnailBox.propTypes = {
     image: PropTypes.shape({
         id: PropTypes.number
     }).isRequired

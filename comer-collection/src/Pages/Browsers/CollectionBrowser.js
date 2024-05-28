@@ -1,12 +1,12 @@
 import React from "react";
 import { useLoaderData } from "react-router";
-import { CollectionGalleryDisplay } from "../../Components/CollectionGallery/CollectionGalleryDisplay.js";
+import { CollectionGalleryGrid } from "../../Components/CollectionGallery/CollectionGalleryGrid.js";
 
 export const CollectionBrowser = () => {
     const images = useLoaderData();
 
     return (
-        <CollectionGalleryDisplay
+        <CollectionGalleryGrid
             images={images}
             isDialogMode={false}
         />

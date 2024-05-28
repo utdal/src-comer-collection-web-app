@@ -1,10 +1,10 @@
 import { Chip, Stack, Typography, ListItemButton } from "@mui/material";
 import React, { useMemo } from "react";
 import { SellIcon, PersonIcon } from "../../Imports/Icons.js";
-import { ThumbnailBox } from "./ThumbnailBox.js";
+import { CollectionGalleryThumbnailBox } from "./CollectionGalleryThumbnailBox.js";
 import { useInView } from "react-intersection-observer";
 
-export const CollectionBrowserImageContainer = ({ image, viewMode, isSelected, setSelectedItem, isDisabled }) => {
+export const CollectionBrowserImageDetails = ({ image, viewMode, isSelected, setSelectedItem, isDisabled }) => {
     const { inView, ref } = useInView();
 
     const infoStack = useMemo(() => (
@@ -17,7 +17,7 @@ export const CollectionBrowserImageContainer = ({ image, viewMode, isSelected, s
                 width: viewMode === "list" ? "500px" : "200px"
             }}
         >
-            <ThumbnailBox image={image} />
+            <CollectionGalleryThumbnailBox image={image} />
 
             {inView
                 ? (
