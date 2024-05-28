@@ -8,7 +8,7 @@ import { BrushIcon } from "../../Imports/Icons.js";
 import { Entity } from "../Entity.js";
 
 class Artist extends Entity {
-    static baseUrl = "/api/admin/artists";
+    static baseUrl = "/api/artists";
     static singular = "artist";
     static plural = "artists";
 
@@ -76,7 +76,7 @@ class Artist extends Entity {
 }
 
 class PublicArtist extends Artist {
-    static baseUrl = "/api/public/artists";
+    static baseUrl = "/api/artists";
 }
 
 export { Artist, PublicArtist };

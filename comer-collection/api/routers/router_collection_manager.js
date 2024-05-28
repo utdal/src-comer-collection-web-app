@@ -1,17 +1,9 @@
 import { Router } from "express";
 
-import { listArtists, createArtist, updateArtist, deleteArtist, getArtist } from "../controllers/artists.js";
 import { deleteTag, listTags, getTag, createTag, updateTag } from "../controllers/tags.js";
 import { manageImageTags } from "../controllers/imagetags.js";
 import { manageImageArtists } from "../controllers/imageartists.js";
 const router = Router();
-
-// Handle artists
-router.get("/artists", listArtists);
-router.get("/artists/:artistId(\\d+)", getArtist);
-router.post("/artists", createArtist);
-router.put("/artists/:artistId(\\d+)", updateArtist);
-router.delete("/artists/:artistId(\\d+)", deleteArtist);
 
 // Handle tags
 router.get("/tags", listTags);
