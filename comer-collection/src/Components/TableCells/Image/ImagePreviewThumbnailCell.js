@@ -21,7 +21,7 @@ export const ImagePreviewThumbnailCell = () => {
                     <img
                         height="50px"
                         loading="lazy"
-                        src={`${process.env.REACT_APP_API_HOST}/api/public/images/${image.id}/download`}
+                        src={`${process.env.REACT_APP_API_HOST}/api/images/${image.id}/download`}
                     />
                 </Button>
             ) || (image.url &&
