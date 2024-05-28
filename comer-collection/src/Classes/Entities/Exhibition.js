@@ -67,7 +67,7 @@ class MyExhibition extends Exhibition {
 }
 
 class PublicExhibition extends Exhibition {
-    static baseUrl = "/api/exhibitions";
+    static baseUrl = "/api/exhibitions?public_only=1";
 
     static loader = async () => {
         return await this.handleFetchAll();

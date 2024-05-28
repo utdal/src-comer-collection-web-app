@@ -20,7 +20,7 @@ const listExhibitions = async (req, res, next) => {
 };
 
 const listPublicExhibitions = async (req, res, next) => {
-    if (req.app_user) {
+    if (req.app_user && parseInt(req.query.public_only) !== 1) {
         return next();
     }
     await listItems(req, res, next, Exhibition.scope("with_public_curators"), [], {
