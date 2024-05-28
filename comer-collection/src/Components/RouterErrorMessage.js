@@ -8,6 +8,8 @@ const RouterErrorMessage = () => {
     return (
         <FullPageMessage
             Icon={WarningIcon}
+            buttonDestination="/SignIn"
+            buttonText="Home"
             message={error.message}
         />
     );

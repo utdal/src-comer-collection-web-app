@@ -1,10 +1,14 @@
 import { Box, Button, LinearProgress, Paper, Stack, Typography } from "@mui/material";
-import React from "react";
+import React, { useCallback } from "react";
 import { useNavigate } from "react-router";
 import PropTypes from "prop-types";
 
 export const FullPageMessage = ({ message, buttonText, buttonDestination = null, Icon, buttonAction = null, includeLinearProgress = false }) => {
     const navigate = useNavigate();
+
+    const handleNavigate = useCallback(() => {
+        navigate(buttonDestination ?? "/SignIn");
+    }, [buttonDestination, navigate]);
 
     return (
         <Box
@@ -30,7 +34,7 @@ export const FullPageMessage = ({ message, buttonText, buttonDestination = null,
                 {(buttonDestination || buttonText)
                     ? (
                         <Button
-                            onClick={buttonAction ?? (() => navigate(buttonDestination ?? "/SignIn"))}
+                            onClick={buttonAction ?? handleNavigate}
                             variant="contained"
                         >
                             {buttonText ?? "Return to Login Page"}
