@@ -53,9 +53,10 @@ export class Entity {
     static handleFetchAll () {
         return new Promise((resolve, reject) => {
             sendAuthenticatedRequest("GET", `${this.baseUrl}`).then((response) => {
+                console.log(response);
                 resolve(response.data);
             }).catch((e) => {
-                reject(new Error("Access Denied"));
+                reject(e);
             });
         });
     }

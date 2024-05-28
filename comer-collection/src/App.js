@@ -65,6 +65,7 @@ const router = createBrowserRouter([
         errorElement: (
             <RouterErrorMessage
                 includeLogo
+                suggestReload
                 viewportHeight
             />
         ),
