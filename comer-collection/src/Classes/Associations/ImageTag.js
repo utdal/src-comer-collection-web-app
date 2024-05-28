@@ -6,7 +6,7 @@ import { TagDataCell } from "../../Components/TableCells/Tag/TagDataCell.js";
 import { TagNotesCell } from "../../Components/TableCells/Tag/TagNotesCell.js";
 
 class ImageTag extends Association {
-    static url = "/api/admin/imagetags";
+    static url = "/api/imagetags";
     static primary = Image;
     static secondary = Tag;
 

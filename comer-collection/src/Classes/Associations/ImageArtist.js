@@ -6,7 +6,7 @@ import { ArtistNameCell } from "../../Components/TableCells/Artist/ArtistNameCel
 import { ArtistNotesCell } from "../../Components/TableCells/Artist/ArtistNotesCell.js";
 
 class ImageArtist extends Association {
-    static url = "/api/admin/imageartists";
+    static url = "/api/imageartists";
     static primary = Image;
     static secondary = Artist;
 
