@@ -1,11 +1,7 @@
 import { Router } from "express";
 
-import { manageUserCourses } from "../controllers/enrollments.js";
 import { listExhibitions, getExhibition, adminEditExhibitionSettings, adminDeleteExhibition, loadExhibitionAdmin, saveExhibitionAdmin } from "../controllers/exhibitions.js";
 const router = Router();
-
-// Handle user/course assignments
-router.put("/enrollments", manageUserCourses);
 
 // Handle exhibitions
 router.get("/exhibitions", listExhibitions);

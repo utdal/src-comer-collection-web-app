@@ -9,7 +9,7 @@ import { UserIDWithAccessIconCell } from "../../Components/TableCells/User/UserI
 import { UserStackedNameEmailCell } from "../../Components/TableCells/User/UserStackedNameEmailCell.js";
 
 class Enrollment extends Association {
-    static url = "/api/admin/enrollments";
+    static url = "/api/enrollments";
 
     static singular = "enrollment";
     static plural = "enrollments";

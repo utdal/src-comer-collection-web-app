@@ -10,6 +10,7 @@ import apiRouterAdmin from "./router_admin.js";
 
 import apiRouterCoursesAdmin from "./router_courses_admin.js";
 import apiRouterUsersAdmin from "./router_users_admin.js";
+import apiRouterEnrollmentsAdmin from "./router_enrollments_admin.js";
 
 import db from "../sequelize.js";
 const router = Router();
@@ -105,5 +106,6 @@ router.use("/admin", requireAdmin, apiRouterAdmin);
 
 router.use("/users", requireAuthenticatedUser, requireAdmin, apiRouterUsersAdmin);
 router.use("/courses", requireAuthenticatedUser, requireAdmin, apiRouterCoursesAdmin);
+router.use("/enrollments", requireAuthenticatedUser, requireAdmin, apiRouterEnrollmentsAdmin);
 
 export default router;
