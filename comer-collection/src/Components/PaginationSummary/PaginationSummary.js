@@ -1,8 +1,9 @@
-import React, { useCallback, useMemo } from "react";
+import React, { useCallback } from "react";
 import PropTypes from "prop-types";
 import { useItemCounts, useItemsPagination } from "../../ContextProviders/ManagementPageProvider.js";
-import { IconButton, Stack, Typography, styled } from "@mui/material";
+import { IconButton, Stack, styled } from "@mui/material";
 import { KeyboardArrowLeftIcon, KeyboardArrowRightIcon, KeyboardDoubleArrowLeftIcon, KeyboardDoubleArrowRightIcon } from "../../Imports/Icons.js";
+import PaginationSummaryMenu from "./PaginationSummaryMenu.js";
 
 const DisappearingStack = styled(Stack, {
     shouldForwardProp: (prop) => prop !== "isHidden"
@@ -39,10 +40,6 @@ const PaginationSummary = ({ hideOnSinglePage }) => {
     const isHidden = itemCounts.visible === 0 ? "none" : "" || (hideOnSinglePage && itemCounts.visible <= paginationStatus.itemsPerPage);
     const skipButtonsHidden = itemCounts.visible <= 2 * paginationStatus.itemsPerPage;
 
-    const textWidth = useMemo(() => (
-        `${50 + (Math.floor(Math.log10(itemCounts.visible)) + 1) * 20}px`
-    ), [itemCounts.visible]);
-
     return (
         <DisappearingStack
             alignItems="center"
@@ -67,32 +64,10 @@ const PaginationSummary = ({ hideOnSinglePage }) => {
                 <KeyboardArrowLeftIcon />
             </IconButton>
 
-            <Stack
-                direction="row"
-                justifyContent="center"
-                margin={1}
-                spacing={1}
-                width={textWidth}
-            >
-
-                <Typography>
-
-                    {paginationStatus.startIndex + 1}
-
-                    {" - "}
-
-                    {paginationStatus.endIndex + 1}
-
-                </Typography>
-
-                <Typography color="grey">
-
-                    {" of "}
-
-                    {itemCounts.visible}
-
-                </Typography>
-            </Stack>
+            <PaginationSummaryMenu
+                paginationStatus={paginationStatus}
+                visibleItemCount={itemCounts.visible}
+            />
 
             <IconButton
                 disabled={paginationStatus.startIndex >= itemCounts.visible - paginationStatus.itemsPerPage}
