@@ -79,7 +79,7 @@ const router = createBrowserRouter([
                 path: "SignIn"
             },
             {
-                element: <CollectionBrowser isDialogMode={false} />,
+                element: <CollectionBrowser />,
                 path: "BrowseCollection",
                 loader: PublicImage.loader,
                 ErrorBoundary: RouterErrorMessage

@@ -1,12 +1,12 @@
 import { Box, Paper, Stack, ToggleButton, ToggleButtonGroup } from "@mui/material";
 import React, { useMemo, useState } from "react";
-import { GridOnIcon, ViewListIcon } from "../Imports/Icons.js";
-import SearchBox from "./SearchBox.js";
-import { doesItemMatchSearchQuery } from "../Helpers/SearchUtilities.js";
+import { GridOnIcon, ViewListIcon } from "../../Imports/Icons.js";
+import SearchBox from "../SearchBox.js";
+import { doesItemMatchSearchQuery } from "../../Helpers/SearchUtilities.js";
 import PropTypes from "prop-types";
-import { ManagementPageProvider, useItemsReducer } from "../ContextProviders/ManagementPageProvider.js";
-import { entityPropTypeShape } from "../Classes/Entity.js";
-import { CollectionBrowserImageContainer } from "../Pages/Browsers/CollectionBrowser.js";
+import { ManagementPageProvider, useItemsReducer } from "../../ContextProviders/ManagementPageProvider.js";
+import { entityPropTypeShape } from "../../Classes/Entity.js";
+import { CollectionBrowserImageContainer } from "./CollectionGalleryImageContainer.js";
 
 const disabledImagesDefaultValue = [];
 
