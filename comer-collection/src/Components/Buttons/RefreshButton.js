@@ -1,21 +1,18 @@
 import { Button } from "@mui/material";
 import React, { memo, useCallback, useState } from "react";
 import { RefreshIcon } from "../../Imports/Icons.js";
-import { useManagementCallbacks } from "../../ContextProviders/ManagementPageProvider.js";
 import { sleepAsync } from "../../Helpers/sleepAsync.js";
+import { useRevalidator } from "react-router";
 
 export const RefreshButton = memo(function RefreshButton () {
-    const { handleRefresh } = useManagementCallbacks();
+    const revalidator = useRevalidator();
     const [refreshInProgress, setRefreshInProgress] = useState(false);
     const handleClickRefresh = useCallback(() => {
-        setRefreshInProgress(true);
-        Promise.all([
-            handleRefresh(),
-            sleepAsync(1000)
-        ]).then(() => {
+        revalidator.revalidate();
+        sleepAsync(1000).then(() => {
             setRefreshInProgress(false);
         });
-    }, [handleRefresh]);
+    }, [revalidator]);
     return (
         <Button
             color="primary"
