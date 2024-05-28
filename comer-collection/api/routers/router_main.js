@@ -17,6 +17,7 @@ import { routerArtistsCollectionManager, routerArtistsPublic } from "./router_ar
 import { routerTagsCollectionManager, routerTagsPublic } from "./router_tags.js";
 import { routerImageArtistsAdmin } from "./router_imageartists.js";
 import { routerImageTagsAdmin } from "./router_imagetags.js";
+import { routerAccountPublic, routerAccountTempPw } from "./router_account.js";
 const router = Router();
 const { User, Course, Exhibition } = db;
 
@@ -141,6 +142,12 @@ router.use("/public", apiRouterPublic);
 router.use("/user", requireAuthenticatedUser, apiRouterUserTempPw);
 router.use("/user", requirePermanentPassword, apiRouterUser);
 router.use("/admin", requireAdmin, apiRouterAdmin);
+
+router.use("/account",
+    routerAccountPublic,
+    requireAuthenticatedUser,
+    routerAccountTempPw
+);
 
 router.use("/users",
     requireAuthenticatedUser,

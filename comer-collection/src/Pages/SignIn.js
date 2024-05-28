@@ -21,7 +21,7 @@ const SignIn = () => {
         setFormEnabled(false);
 
         try {
-            const response = await sendAuthenticatedRequest("PUT", "/api/public/signin", {
+            const response = await sendAuthenticatedRequest("PUT", "/api/account/signin", {
                 email, password
             });
 

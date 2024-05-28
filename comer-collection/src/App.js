@@ -31,7 +31,7 @@ const appUserLoader = async () => {
     if (!localStorage.getItem("token")) {
         return false;
     }
-    const response = await sendAuthenticatedRequest("GET", "/api/user/profile");
+    const response = await sendAuthenticatedRequest("GET", "/api/account/profile");
     if (response.status === 200) {
         return response.data;
     } else {

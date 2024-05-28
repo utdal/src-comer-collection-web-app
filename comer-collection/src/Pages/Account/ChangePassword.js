@@ -28,7 +28,7 @@ const ChangePassword = () => {
         setSubmitEnabled(false);
 
         try {
-            const response = await sendAuthenticatedRequest("PUT", "/api/user/changepassword", { oldPassword, newPassword });
+            const response = await sendAuthenticatedRequest("PUT", "/api/account/password", { oldPassword, newPassword });
 
             if (response.token) {
                 localStorage.setItem("token", response.token);
