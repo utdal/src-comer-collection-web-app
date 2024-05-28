@@ -15,6 +15,7 @@ import { routerEnrollmentsAdmin } from "./router_enrollments.js";
 import db from "../sequelize.js";
 import { routerImagesCollectionManager, routerImagesPublic } from "./router_images.js";
 import { routerArtistsCollectionManager, routerArtistsPublic } from "./router_artists.js";
+import { routerTagsCollectionManager, routerTagsPublic } from "./router_tags.js";
 const router = Router();
 const { User, Course, Exhibition } = db;
 
@@ -167,6 +168,13 @@ router.use("/artists",
     requireAuthenticatedUser,
     requireAtLeastCollectionManager,
     routerArtistsCollectionManager
+);
+
+router.use("/tags",
+    routerTagsPublic,
+    requireAuthenticatedUser,
+    requireAtLeastCollectionManager,
+    routerTagsCollectionManager
 );
 
 export default router;

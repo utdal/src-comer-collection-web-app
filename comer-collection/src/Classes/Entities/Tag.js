@@ -7,7 +7,7 @@ import { SellIcon } from "../../Imports/Icons.js";
 import { Entity } from "../Entity.js";
 
 class Tag extends Entity {
-    static baseUrl = "/api/admin/tags";
+    static baseUrl = "/api/tags";
     static singular = "tag";
     static plural = "tags";
 
@@ -59,7 +59,7 @@ class Tag extends Entity {
 }
 
 class PublicTag extends Tag {
-    static baseUrl = "/api/public/tags";
+    static baseUrl = "/api/tags";
 };
 
 export { Tag, PublicTag };
