@@ -8,9 +8,9 @@ import apiRouterUser from "./router_user.js";
 import apiRouterCollectionManager from "./router_collection_manager.js";
 import apiRouterAdmin from "./router_admin.js";
 
-import { routerCoursesAdmin } from "./router_courses_admin.js";
-import { routerUsersAdmin } from "./router_users_admin.js";
-import { routerEnrollmentsAdmin } from "./router_enrollments_admin.js";
+import { routerCoursesAdmin } from "./router_courses.js";
+import { routerUsersAdmin } from "./router_users.js";
+import { routerEnrollmentsAdmin } from "./router_enrollments.js";
 
 import db from "../sequelize.js";
 const router = Router();
