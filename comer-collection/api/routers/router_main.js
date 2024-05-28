@@ -2,10 +2,6 @@ import { Router } from "express";
 import createError from "http-errors";
 import jwt from "jsonwebtoken";
 
-import apiRouterPublic from "./router_public.js";
-import apiRouterUser from "./router_user.js";
-import apiRouterAdmin from "./router_admin.js";
-
 import { routerCoursesAdmin } from "./router_courses.js";
 import { routerUsersAdmin } from "./router_users.js";
 import { routerEnrollmentsAdmin } from "./router_enrollments.js";
@@ -17,6 +13,7 @@ import { routerTagsCollectionManager, routerTagsPublic } from "./router_tags.js"
 import { routerImageArtistsAdmin } from "./router_imageartists.js";
 import { routerImageTagsAdmin } from "./router_imagetags.js";
 import { routerAccountPublic, routerAccountTempPw } from "./router_account.js";
+import { routerExhibitionAdmin, routerExhibitionPublic, routerExhibitionUser } from "./router_exhibition.js";
 const router = Router();
 const { User, Course, Exhibition } = db;
 
@@ -137,14 +134,20 @@ const requirePermanentPassword = async (req, res, next) => {
 router.use(authenticateUser);
 
 // Routes for querying data
-router.use("/public", apiRouterPublic);
-router.use("/user", requirePermanentPassword, apiRouterUser);
-router.use("/admin", requireAdmin, apiRouterAdmin);
 
 router.use("/account",
     routerAccountPublic,
     requireAuthenticatedUser,
     routerAccountTempPw
+);
+
+router.use("/exhibitions",
+    routerExhibitionPublic,
+    requireAuthenticatedUser,
+    requirePermanentPassword,
+    routerExhibitionUser,
+    requireAdmin,
+    routerExhibitionAdmin
 );
 
 router.use("/users",

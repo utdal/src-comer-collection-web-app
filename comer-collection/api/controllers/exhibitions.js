@@ -20,6 +20,9 @@ const listExhibitions = async (req, res, next) => {
 };
 
 const listPublicExhibitions = async (req, res, next) => {
+    if (req.app_user) {
+        return next();
+    }
     await listItems(req, res, next, Exhibition.scope("with_public_curators"), [], {
         privacy: ["PUBLIC", "PUBLIC_ANONYMOUS"]
     });
@@ -27,7 +30,7 @@ const listPublicExhibitions = async (req, res, next) => {
 
 const createExhibition = async (req, res, next) => {
     if (!canUserCreateExhibition(req.app_user)) {
-        return next(createError(403));
+        return next();
     }
     const now = Date.now();
     req.body = {
@@ -52,7 +55,7 @@ const getExhibition = async (req, res, next) => {
 
 const ownerEditExhibitionSettings = async (req, res, next) => {
     if (!isAppUserExhibitionOwner(req.app_user, req.params.exhibitionId)) {
-        return next(createError(403));
+        return next();
     }
     await updateItem(req, res, next, Exhibition, req.params.exhibitionId, [
         "title", "privacy"
@@ -61,7 +64,7 @@ const ownerEditExhibitionSettings = async (req, res, next) => {
 
 const ownerDeleteExhibition = async (req, res, next) => {
     if (!isAppUserExhibitionOwner(req.app_user, req.params.exhibitionId)) {
-        return next(createError(403));
+        return next();
     }
     await deleteItem(req, res, next, Exhibition, req.params.exhibitionId);
 };
@@ -76,9 +79,9 @@ const adminDeleteExhibition = async (req, res, next) => {
     await deleteItem(req, res, next, Exhibition, req.params.exhibitionId);
 };
 
-const loadExhibitionOwner = async (req, res, next) => {
+const ownerLoadExhibition = async (req, res, next) => {
     if (!isAppUserExhibitionOwner(req.app_user, req.params.exhibitionId)) {
-        return next(createError(403));
+        return next();
     }
     try {
         const exhibition = await Exhibition.scope([
@@ -100,7 +103,7 @@ const loadExhibitionOwner = async (req, res, next) => {
     }
 };
 
-const loadExhibitionAdmin = async (req, res, next) => {
+const adminLoadExhibition = async (req, res, next) => {
     try {
         const exhibition = await Exhibition.scope([
             "with_data",
@@ -121,7 +124,10 @@ const loadExhibitionAdmin = async (req, res, next) => {
     }
 };
 
-const loadExhibitionPublic = async (req, res, next) => {
+const publicLoadExhibition = async (req, res, next) => {
+    if (req.app_user && (isAppUserExhibitionOwner(req.app_user, req.params.exhibitionId) || req.app_user.is_admin)) {
+        return next();
+    }
     try {
         const exhibition = await Exhibition.scope([
             "with_data",
@@ -147,7 +153,7 @@ const loadExhibitionPublic = async (req, res, next) => {
     }
 };
 
-const saveExhibition = async (req, res, next) => {
+const saveExhibitionHelper = async (req, res, next) => {
     try {
         await sequelize.transaction(async (t) => {
             const exhibition = await Exhibition.findByPk(req.params.exhibitionId, {
@@ -169,15 +175,15 @@ const saveExhibition = async (req, res, next) => {
     }
 };
 
-const saveExhibitionOwner = async (req, res, next) => {
+const ownerSaveExhibition = async (req, res, next) => {
     if (!isAppUserExhibitionOwner(req.app_user, req.params.exhibitionId)) {
-        return next(createError(403));
+        return next();
     }
-    await saveExhibition(req, res, next);
+    await saveExhibitionHelper(req, res, next);
 };
 
-const saveExhibitionAdmin = async (req, res, next) => {
-    await saveExhibition(req, res, next);
+const adminSaveExhibition = async (req, res, next) => {
+    await saveExhibitionHelper(req, res, next);
 };
 
-export { listPublicExhibitions, createExhibition, adminEditExhibitionSettings, ownerEditExhibitionSettings, ownerDeleteExhibition, adminDeleteExhibition, listExhibitions, getExhibition, loadExhibitionOwner, loadExhibitionAdmin, loadExhibitionPublic, saveExhibitionOwner, saveExhibitionAdmin };
+export { listPublicExhibitions, createExhibition, adminEditExhibitionSettings, ownerEditExhibitionSettings, ownerDeleteExhibition, adminDeleteExhibition, listExhibitions, getExhibition, ownerLoadExhibition, adminLoadExhibition, publicLoadExhibition, ownerSaveExhibition, adminSaveExhibition };

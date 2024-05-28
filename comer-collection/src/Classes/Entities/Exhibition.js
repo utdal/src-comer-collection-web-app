@@ -9,7 +9,7 @@ import { Entity, entityPropTypeShape } from "../Entity.js";
 import PropTypes from "prop-types";
 
 class Exhibition extends Entity {
-    static baseUrl = "/api/admin/exhibitions";
+    static baseUrl = "/api/exhibitions";
     static singular = "exhibition";
     static plural = "exhibitions";
 
@@ -59,7 +59,7 @@ class Exhibition extends Entity {
 }
 
 class MyExhibition extends Exhibition {
-    static baseUrl = "/api/user/exhibitions";
+    static baseUrl = "/api/exhibitions";
 
     static loader = async () => {
         return await this.handleFetchAll();
@@ -67,7 +67,7 @@ class MyExhibition extends Exhibition {
 }
 
 class PublicExhibition extends Exhibition {
-    static baseUrl = "/api/public/exhibitions";
+    static baseUrl = "/api/exhibitions";
 
     static loader = async () => {
         return await this.handleFetchAll();

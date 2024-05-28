@@ -33,47 +33,24 @@ const ExhibitionPage = () => {
     const showSnackbar = useSnackbar();
     const setTitleText = useTitle("Exhibition");
 
-    const getSaveUrl = useCallback(() => {
-        if (appUser?.Exhibitions.filter((ex) => ex.id === exhibitionId).length) {
-            return `/api/user/exhibitions/${exhibitionId}/save`;
-        } else if (appUser?.is_admin) {
-            return `/api/admin/exhibitions/${exhibitionId}/save`;
-        } else {
-            throw Error("Save operation is not permitted");
-        }
-    }, [appUser, exhibitionId]);
+    const exhibitionUrl = `/api/exhibitions/${exhibitionId}/data`;
 
     const saveExhibition = useCallback(async () => {
         try {
-            const saveUrl = getSaveUrl();
-            try {
-                await sendAuthenticatedRequest("PUT", saveUrl, {
-                    data: JSON.stringify(exhibitionState)
-                });
-                window.onbeforeunload = null;
-                showSnackbar("Exhibition saved", "success");
-            } catch (e) {
-                console.log("Error saving exhibition", e.message);
-                showSnackbar("Could not save exhibition", "error");
-            }
+            await sendAuthenticatedRequest("PUT", exhibitionUrl, {
+                data: JSON.stringify(exhibitionState)
+            });
+            window.onbeforeunload = null;
+            showSnackbar("Exhibition saved", "success");
         } catch (e) {
-            console.log("No save URL available", e.message);
+            console.log("Error saving exhibition", e.message);
+            showSnackbar("Could not save exhibition", "error");
         }
-    }, [exhibitionState, getSaveUrl, showSnackbar]);
-
-    const getLoadUrl = useCallback(() => {
-        if (appUser?.Exhibitions.filter((ex) => ex.id === exhibitionId).length) {
-            return `/api/user/exhibitions/${exhibitionId}/load`;
-        } else if (appUser?.is_admin) {
-            return `/api/admin/exhibitions/${exhibitionId}/load`;
-        } else {
-            return `/api/public/exhibitions/${exhibitionId}/load`;
-        }
-    }, [appUser, exhibitionId]);
+    }, [exhibitionState, exhibitionUrl, showSnackbar]);
 
     const loadExhibition = useCallback(async () => {
         try {
-            const exhibitionData = await sendAuthenticatedRequest("GET", getLoadUrl());
+            const exhibitionData = await sendAuthenticatedRequest("GET", exhibitionUrl);
 
             setIsPermissionGranted(true);
 
@@ -94,11 +71,11 @@ const ExhibitionPage = () => {
                 setExhibitionIsLoaded(true);
             }
         } catch (e) {
-            console.log("Error getting permission to open exhibition");
+            console.log("Error getting permission to open exhibition", e.message);
             setIsPermissionGranted(false);
             setTitleText("Exhibition Unavailable");
         }
-    }, [getLoadUrl, setTitleText]);
+    }, [exhibitionUrl, setTitleText]);
 
     useEffect(() => {
         loadExhibition();
