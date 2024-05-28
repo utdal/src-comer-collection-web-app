@@ -5,7 +5,6 @@ import jwt from "jsonwebtoken";
 import apiRouterPublic from "./router_public.js";
 import apiRouterUserTempPw from "./router_user_temp_pw.js";
 import apiRouterUser from "./router_user.js";
-import apiRouterCollectionManager from "./router_collection_manager.js";
 import apiRouterAdmin from "./router_admin.js";
 
 import { routerCoursesAdmin } from "./router_courses.js";
@@ -141,7 +140,6 @@ router.use(authenticateUser);
 router.use("/public", apiRouterPublic);
 router.use("/user", requireAuthenticatedUser, apiRouterUserTempPw);
 router.use("/user", requirePermanentPassword, apiRouterUser);
-router.use("/admin", requireAuthenticatedUser, requirePermanentPassword, requireAtLeastCollectionManager, apiRouterCollectionManager);
 router.use("/admin", requireAdmin, apiRouterAdmin);
 
 router.use("/users",
