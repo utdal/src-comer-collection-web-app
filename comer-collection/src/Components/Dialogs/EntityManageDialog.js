@@ -23,7 +23,7 @@ import { FullPageMessage } from "../FullPageMessage.js";
 import { RefreshButton } from "../Buttons/RefreshButton.js";
 import { SelectionSummary } from "../SelectionSummary.js";
 import useItemsRefresh from "../../Hooks/useItemsRefresh.js";
-import PaginationSummary from "../PaginationSummary.js";
+import PaginationSummary from "../PaginationSummary/PaginationSummary.js";
 
 /**
  * @param {{

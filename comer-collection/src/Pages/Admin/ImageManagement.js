@@ -30,7 +30,7 @@ import { ManagementPageFooter } from "../../Components/ManagementPage/Management
 import { useDialogState } from "../../Hooks/useDialogState.js";
 import EntityManageButton from "../../Components/Buttons/EntityManageButton.js";
 import AssociationManageButton from "../../Components/Buttons/AssociationManageButton.js";
-import PaginationSummary from "../../Components/PaginationSummary.js";
+import PaginationSummary from "../../Components/PaginationSummary/PaginationSummary.js";
 
 const ImageManagement = () => {
     const images = useLoaderData();

@@ -23,7 +23,7 @@ import { ManagementPageBody } from "../../Components/ManagementPage/ManagementPa
 import { ManagementPageFooter } from "../../Components/ManagementPage/ManagementPageFooter.js";
 import { useDialogState } from "../../Hooks/useDialogState.js";
 import AssociationManageButton from "../../Components/Buttons/AssociationManageButton.js";
-import PaginationSummary from "../../Components/PaginationSummary.js";
+import PaginationSummary from "../../Components/PaginationSummary/PaginationSummary.js";
 
 const CourseManagement = () => {
     const courses = useLoaderData();

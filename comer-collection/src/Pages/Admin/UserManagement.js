@@ -28,7 +28,7 @@ import { ManagementPageHeader } from "../../Components/ManagementPage/Management
 import { ManagementPageBody } from "../../Components/ManagementPage/ManagementPageBody.js";
 import { ManagementPageFooter } from "../../Components/ManagementPage/ManagementPageFooter.js";
 import AssociationManageButton from "../../Components/Buttons/AssociationManageButton.js";
-import PaginationSummary from "../../Components/PaginationSummary.js";
+import PaginationSummary from "../../Components/PaginationSummary/PaginationSummary.js";
 
 const UserManagement = () => {
     const users = useLoaderData();

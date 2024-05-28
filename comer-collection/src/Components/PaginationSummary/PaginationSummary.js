@@ -1,8 +1,8 @@
 import React, { useCallback, useMemo } from "react";
 import PropTypes from "prop-types";
-import { useItemCounts, useItemsPagination } from "../ContextProviders/ManagementPageProvider.js";
+import { useItemCounts, useItemsPagination } from "../../ContextProviders/ManagementPageProvider.js";
 import { IconButton, Stack, Typography, styled } from "@mui/material";
-import { KeyboardArrowLeftIcon, KeyboardArrowRightIcon, KeyboardDoubleArrowLeftIcon, KeyboardDoubleArrowRightIcon } from "../Imports/Icons.js";
+import { KeyboardArrowLeftIcon, KeyboardArrowRightIcon, KeyboardDoubleArrowLeftIcon, KeyboardDoubleArrowRightIcon } from "../../Imports/Icons.js";
 
 const DisappearingStack = styled(Stack, {
     shouldForwardProp: (prop) => prop !== "isHidden"

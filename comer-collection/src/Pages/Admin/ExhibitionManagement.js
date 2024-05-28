@@ -19,7 +19,7 @@ import { ManagementPageBody } from "../../Components/ManagementPage/ManagementPa
 import { ManagementPageFooter } from "../../Components/ManagementPage/ManagementPageFooter.js";
 import { useDialogState } from "../../Hooks/useDialogState.js";
 import { useLoaderData, useRevalidator } from "react-router";
-import PaginationSummary from "../../Components/PaginationSummary.js";
+import PaginationSummary from "../../Components/PaginationSummary/PaginationSummary.js";
 
 const ExhibitionManagement = () => {
     const exhibitions = useLoaderData();

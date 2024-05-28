@@ -21,7 +21,7 @@ import { ExhibitionCreationRestriction } from "../../Components/TextBanners/Exhi
 import { useDialogState } from "../../Hooks/useDialogState.js";
 import { MyExhibition } from "../../Classes/Entities/Exhibition.js";
 import { useRevalidator } from "react-router";
-import PaginationSummary from "../../Components/PaginationSummary.js";
+import PaginationSummary from "../../Components/PaginationSummary/PaginationSummary.js";
 
 const exhibitionTableFields = [
     {
