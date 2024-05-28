@@ -34,7 +34,7 @@ const PaginationSummary = ({ hideOnSinglePage }) => {
     }, [setPaginationStartIndex]);
 
     const handleLastPage = useCallback(() => {
-        setPaginationStartIndex(Math.floor(itemCounts.visible / paginationStatus.itemsPerPage) * paginationStatus.itemsPerPage);
+        setPaginationStartIndex(Math.ceil(itemCounts.visible / paginationStatus.itemsPerPage - 1) * paginationStatus.itemsPerPage);
     }, [itemCounts.visible, paginationStatus.itemsPerPage, setPaginationStartIndex]);
 
     const isHidden = itemCounts.visible === 0 ? "none" : "" || (hideOnSinglePage && itemCounts.visible <= paginationStatus.itemsPerPage);
