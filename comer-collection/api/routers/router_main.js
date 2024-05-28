@@ -76,12 +76,16 @@ const requireAuthenticatedUser = async (req, res, next) => {
     }
 };
 
+export const hasPermanentPassword = (appUser) => {
+    return appUser && !appUser.pw_change_required;
+};
+
 export const isAtLeastCollectionManager = (appUser) => {
-    return appUser?.is_admin || appUser?.is_collection_manager;
+    return hasPermanentPassword(appUser) && (appUser?.is_admin || appUser?.is_collection_manager);
 };
 
 export const isAdmin = (appUser) => {
-    return appUser?.is_admin;
+    return hasPermanentPassword(appUser) && appUser?.is_admin;
 };
 
 /**
@@ -122,7 +126,7 @@ const requireAdmin = async (req, res, next) => {
  */
 const requirePermanentPassword = async (req, res, next) => {
     const { app_user: appUser } = req;
-    if (appUser && !appUser.pw_change_required) {
+    if (hasPermanentPassword(appUser)) {
         next();
     } else {
         next(createError(401, { debugMessage: "Please change your password and try again" }));
