@@ -92,7 +92,8 @@ const router = createBrowserRouter([
             },
             {
                 element: <ExhibitionPage />,
-                path: "Exhibitions/:exhibitionId"
+                path: "Exhibitions/:exhibitionId",
+                ErrorBoundary: RouterErrorMessage
             },
             {
                 element: <AccountLayout />,
