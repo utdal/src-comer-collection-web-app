@@ -13,7 +13,7 @@ import { UserOptionsCell } from "../../Components/TableCells/User/UserOptionsCel
 import { GroupAddIcon, PersonIcon } from "../../Imports/Icons.js";
 
 class User extends Entity {
-    static baseUrl = "/api/admin/users";
+    static baseUrl = "/api/users";
     static singular = "user";
     static plural = "users";
 

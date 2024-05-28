@@ -11,7 +11,7 @@ import { SchoolIcon } from "../../Imports/Icons.js";
 import { Entity } from "../Entity.js";
 
 class Course extends Entity {
-    static baseUrl = "/api/admin/courses";
+    static baseUrl = "/api/courses";
     static singular = "course";
     static plural = "courses";
 
