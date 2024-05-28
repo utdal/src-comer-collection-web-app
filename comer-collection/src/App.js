@@ -62,7 +62,12 @@ const router = createBrowserRouter([
         path: "/",
         id: "root",
         loader: appUserLoader,
-        ErrorBoundary: RouterErrorMessage,
+        errorElement: (
+            <RouterErrorMessage
+                includeLogo
+                viewportHeight
+            />
+        ),
         children: [
             {
                 element: <Navigate to="SignIn" />,

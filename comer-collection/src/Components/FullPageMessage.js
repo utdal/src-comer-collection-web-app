@@ -2,9 +2,9 @@ import { Box, Button, LinearProgress, Paper, Stack, Typography } from "@mui/mate
 import React, { useCallback } from "react";
 import { useNavigate } from "react-router";
 import PropTypes from "prop-types";
-import FullLogo from "./Logos/FullLogo.js";
+import SideBySideLogo from "./Logos/SideBySideLogo.js";
 
-export const FullPageMessage = ({ message, buttonText, buttonDestination = null, Icon, buttonAction = null, includeLinearProgress = false, includeLogo = false }) => {
+export const FullPageMessage = ({ message, buttonText, buttonDestination = null, Icon, buttonAction = null, includeLinearProgress = false, includeLogo = false, viewportHeight = false }) => {
     const navigate = useNavigate();
 
     const handleNavigate = useCallback(() => {
@@ -15,7 +15,12 @@ export const FullPageMessage = ({ message, buttonText, buttonDestination = null,
         <Box
             component={Paper}
             square
-            sx={{ width: "100%", height: "100%", boxSizing: "border-box", padding: "50px" }}
+            sx={{
+                width: "100%",
+                height: viewportHeight ? "100vh" : "100%",
+                boxSizing: "border-box",
+                padding: "50px"
+            }}
         >
             <Stack
                 alignItems="center"
@@ -24,7 +29,7 @@ export const FullPageMessage = ({ message, buttonText, buttonDestination = null,
                 spacing={2}
                 sx={{ height: "100%" }}
             >
-                {includeLogo ? <FullLogo maxWidth={250} /> : null}
+                {includeLogo ? <SideBySideLogo /> : null}
 
                 {Icon
                     ? <Icon sx={{ fontSize: "150pt", opacity: 0.5 }} />
@@ -58,5 +63,6 @@ FullPageMessage.propTypes = {
     buttonText: PropTypes.string,
     includeLinearProgress: PropTypes.bool,
     includeLogo: PropTypes.bool,
-    message: PropTypes.string.isRequired
+    message: PropTypes.string.isRequired,
+    viewportHeight: PropTypes.bool
 };
