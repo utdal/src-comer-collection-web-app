@@ -4,6 +4,7 @@ import path, { join } from "path";
 import { deleteItem, updateItem, listItems, getItem, createItem } from "./items.js";
 import imageType from "image-type";
 import url from "url";
+import { isAtLeastCollectionManager } from "../routers/router_main.js";
 const { Image, Artist, Tag, Exhibition } = db;
 
 /**
@@ -13,6 +14,13 @@ const { Image, Artist, Tag, Exhibition } = db;
  * @param {import("express").NextFunction} next
  */
 const listImagesPublic = async (req, res, next) => {
+    /**
+     * More suitable function is available for collection managers and above
+     */
+    if (isAtLeastCollectionManager(req.app_user)) {
+        console.log("Test1");
+        next();
+    }
     await listItems(req, res, next, Image, [
         Artist, Tag
     ]);
@@ -59,6 +67,12 @@ const createImage = async (req, res, next) => {
  * @param {import("express").NextFunction} next
  */
 const getImagePublic = async (req, res, next) => {
+    /**
+     * More suitable function is available for collection managers and above
+     */
+    if (isAtLeastCollectionManager(req.app_user)) {
+        next();
+    }
     await getItem(req, res, next, Image, [
         Artist, Tag
     ], req.params.imageId);

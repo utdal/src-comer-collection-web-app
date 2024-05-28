@@ -13,7 +13,7 @@ import { routerUsersAdmin } from "./router_users.js";
 import { routerEnrollmentsAdmin } from "./router_enrollments.js";
 
 import db from "../sequelize.js";
-import { routerImagesCollectionManager } from "./router_images.js";
+import { routerImagesCollectionManager, routerImagesPublic } from "./router_images.js";
 const router = Router();
 const { User, Course, Exhibition } = db;
 
@@ -24,10 +24,14 @@ const { User, Course, Exhibition } = db;
  * @param {import("express").Response} res
  * @param {import("express").NextFunction} next
  */
-const requireAuthenticatedUser = async (req, res, next) => {
+const authenticateUser = async (req, res, next) => {
     try {
         const header = req.get("Authorization");
-        if (!header) { throw new Error("Authorization header not present"); } else if (!header.startsWith("Bearer ")) { throw new Error("Authorization header does not start with Bearer"); }
+        if (!header) {
+            throw new Error("Authorization header not present");
+        } else if (!header.startsWith("Bearer ")) {
+            throw new Error("Authorization header does not start with Bearer");
+        }
 
         const token = header.replace("Bearer ", "");
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
@@ -47,10 +51,35 @@ const requireAuthenticatedUser = async (req, res, next) => {
 
         req.app_user = user;
         console.log("authorized successfully and User instance attached to request object");
-        next();
     } catch (e) {
-        next(createError(401, { debugMessage: e.message }));
+        req.app_user = null;
+        req.app_user_auth_error = e.message;
+    } finally {
+        next();
     }
+};
+
+/**
+ * @description Check the request for a valid JSON web token.  If the token is valid,
+ * attach information about the associated user to the request: req.app_user.
+ * @param {import("express").Request} req
+ * @param {import("express").Response} res
+ * @param {import("express").NextFunction} next
+ */
+const requireAuthenticatedUser = async (req, res, next) => {
+    if (req.app_user) {
+        next();
+    } else {
+        next(createError(401, { debugMessage: req.app_user_auth_error }));
+    }
+};
+
+export const isAtLeastCollectionManager = (appUser) => {
+    return appUser?.is_admin || appUser?.is_collection_manager;
+};
+
+export const isAdmin = (appUser) => {
+    return appUser?.is_admin;
 };
 
 /**
@@ -61,7 +90,7 @@ const requireAuthenticatedUser = async (req, res, next) => {
  */
 const requireAtLeastCollectionManager = async (req, res, next) => {
     const { app_user: appUser } = req;
-    if (appUser?.is_collection_manager || appUser?.is_admin) {
+    if (isAtLeastCollectionManager(appUser)) {
         next();
     } else {
         next(createError(403, { debugMessage: "Action requires at least collection manager privileges" }));
@@ -76,7 +105,7 @@ const requireAtLeastCollectionManager = async (req, res, next) => {
  */
 const requireAdmin = async (req, res, next) => {
     const { app_user: appUser } = req;
-    if (appUser?.is_admin) {
+    if (isAdmin(appUser)) {
         next();
     } else {
         next(createError(403, { debugMessage: "Action requires admin privileges" }));
@@ -97,6 +126,8 @@ const requirePermanentPassword = async (req, res, next) => {
         next(createError(401, { debugMessage: "Please change your password and try again" }));
     }
 };
+
+router.use(authenticateUser);
 
 // Routes for querying data
 router.use("/public", apiRouterPublic);
@@ -124,6 +155,7 @@ router.use("/enrollments",
 );
 
 router.use("/images",
+    routerImagesPublic,
     requireAuthenticatedUser,
     requireAtLeastCollectionManager,
     routerImagesCollectionManager

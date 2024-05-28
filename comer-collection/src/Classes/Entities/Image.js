@@ -176,7 +176,7 @@ class Image extends Entity {
 }
 
 class PublicImage extends Image {
-    static baseUrl = "/api/public/images";
+    static baseUrl = "/api/images";
 
     static loader = async () => {
         return await this.handleFetchAll();

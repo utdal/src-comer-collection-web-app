@@ -126,7 +126,11 @@ const router = createBrowserRouter([
                         path: "Admin",
                         children: [
                             {
-                                element: <UserManagement />,
+                                element: (
+                                    <RequireAdmin
+                                        component={<UserManagement />}
+                                    />
+                                ),
                                 path: "Users",
                                 loader: User.loader,
                                 action: userManagementAction,

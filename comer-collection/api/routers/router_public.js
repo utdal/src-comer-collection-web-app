@@ -2,19 +2,12 @@ import { Router } from "express";
 
 import { listArtists, getArtist } from "../controllers/artists.js";
 import { listTags, getTag } from "../controllers/tags.js";
-import { listImagesPublic, getImagePublic, downloadImagePublic } from "../controllers/images.js";
 import { listPublicExhibitions, loadExhibitionPublic } from "../controllers/exhibitions.js";
 import { signIn } from "../controllers/users.js";
 const router = Router();
 
 // Authentication
 router.put("/signin", signIn);
-
-// Read images
-router.get("/images", listImagesPublic);
-router.get("/images/:imageId(\\d+)", getImagePublic);
-// Download images
-router.get("/images/:imageId/download", downloadImagePublic);
 
 // Read artists
 router.get("/artists", listArtists);
