@@ -3,7 +3,6 @@ import createError from "http-errors";
 import jwt from "jsonwebtoken";
 
 import apiRouterPublic from "./router_public.js";
-import apiRouterUserTempPw from "./router_user_temp_pw.js";
 import apiRouterUser from "./router_user.js";
 import apiRouterAdmin from "./router_admin.js";
 
@@ -139,7 +138,6 @@ router.use(authenticateUser);
 
 // Routes for querying data
 router.use("/public", apiRouterPublic);
-router.use("/user", requireAuthenticatedUser, apiRouterUserTempPw);
 router.use("/user", requirePermanentPassword, apiRouterUser);
 router.use("/admin", requireAdmin, apiRouterAdmin);
 
