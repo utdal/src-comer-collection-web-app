@@ -1,12 +1,12 @@
 import { Router } from "express";
 import { createCourse, deleteCourse, getCourse, listCourses, updateCourse } from "../controllers/courses.js";
 
-const router = Router();
+const routerCoursesAdmin = Router();
 
-router.get("/", listCourses);
-router.get("/:courseId(\\d+)", getCourse);
-router.post("/", createCourse);
-router.put("/:courseId(\\d+)", updateCourse);
-router.delete("/:courseId(\\d+)", deleteCourse);
+routerCoursesAdmin.get("/", listCourses);
+routerCoursesAdmin.get("/:courseId(\\d+)", getCourse);
+routerCoursesAdmin.post("/", createCourse);
+routerCoursesAdmin.put("/:courseId(\\d+)", updateCourse);
+routerCoursesAdmin.delete("/:courseId(\\d+)", deleteCourse);
 
-export default router;
+export { routerCoursesAdmin };

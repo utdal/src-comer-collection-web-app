@@ -8,9 +8,9 @@ import apiRouterUser from "./router_user.js";
 import apiRouterCollectionManager from "./router_collection_manager.js";
 import apiRouterAdmin from "./router_admin.js";
 
-import apiRouterCoursesAdmin from "./router_courses_admin.js";
-import apiRouterUsersAdmin from "./router_users_admin.js";
-import apiRouterEnrollmentsAdmin from "./router_enrollments_admin.js";
+import { routerCoursesAdmin } from "./router_courses_admin.js";
+import { routerUsersAdmin } from "./router_users_admin.js";
+import { routerEnrollmentsAdmin } from "./router_enrollments_admin.js";
 
 import db from "../sequelize.js";
 const router = Router();
@@ -104,8 +104,8 @@ router.use("/user", requirePermanentPassword, apiRouterUser);
 router.use("/admin", requireAuthenticatedUser, requirePermanentPassword, requireAtLeastCollectionManager, apiRouterCollectionManager);
 router.use("/admin", requireAdmin, apiRouterAdmin);
 
-router.use("/users", requireAuthenticatedUser, requireAdmin, apiRouterUsersAdmin);
-router.use("/courses", requireAuthenticatedUser, requireAdmin, apiRouterCoursesAdmin);
-router.use("/enrollments", requireAuthenticatedUser, requireAdmin, apiRouterEnrollmentsAdmin);
+router.use("/users", requireAuthenticatedUser, requireAdmin, routerUsersAdmin);
+router.use("/courses", requireAuthenticatedUser, requireAdmin, routerCoursesAdmin);
+router.use("/enrollments", requireAuthenticatedUser, requireAdmin, routerEnrollmentsAdmin);
 
 export default router;
