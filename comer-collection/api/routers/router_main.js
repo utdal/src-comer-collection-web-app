@@ -105,9 +105,28 @@ router.use("/user", requirePermanentPassword, apiRouterUser);
 router.use("/admin", requireAuthenticatedUser, requirePermanentPassword, requireAtLeastCollectionManager, apiRouterCollectionManager);
 router.use("/admin", requireAdmin, apiRouterAdmin);
 
-router.use("/users", requireAuthenticatedUser, requireAdmin, routerUsersAdmin);
-router.use("/courses", requireAuthenticatedUser, requireAdmin, routerCoursesAdmin);
-router.use("/enrollments", requireAuthenticatedUser, requireAdmin, routerEnrollmentsAdmin);
-router.use("/images", requireAuthenticatedUser, requireAtLeastCollectionManager, routerImagesCollectionManager);
+router.use("/users",
+    requireAuthenticatedUser,
+    requireAdmin,
+    routerUsersAdmin
+);
+
+router.use("/courses",
+    requireAuthenticatedUser,
+    requireAdmin,
+    routerCoursesAdmin
+);
+
+router.use("/enrollments",
+    requireAuthenticatedUser,
+    requireAdmin,
+    routerEnrollmentsAdmin
+);
+
+router.use("/images",
+    requireAuthenticatedUser,
+    requireAtLeastCollectionManager,
+    routerImagesCollectionManager
+);
 
 export default router;
