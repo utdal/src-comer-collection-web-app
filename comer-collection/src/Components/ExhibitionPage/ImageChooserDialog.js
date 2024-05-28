@@ -83,7 +83,7 @@ export const ImageChooserDialog = ({ imageChooserIsOpen, setImageChooserIsOpen, 
 };
 ImageChooserDialog.propTypes = {
     exhibitionEditDispatch: PropTypes.func.isRequired,
-    exhibitionState: PropTypes.shape(exhibitionStatePropTypesShape).isRequired,
+    exhibitionState: exhibitionStatePropTypesShape.isRequired,
     globalImageCatalog: PropTypes.arrayOf(entityPropTypeShape),
     imageChooserIsOpen: PropTypes.bool.isRequired,
     setImageChooserIsOpen: PropTypes.func.isRequired,

@@ -808,7 +808,7 @@ export const ExhibitionEditPane = ({ exhibitionMetadata, exhibitionState, exhibi
 ExhibitionEditPane.propTypes = {
     exhibitionEditDispatch: PropTypes.func.isRequired,
     exhibitionMetadata: exhibitionStatePropTypesShape.isRequired,
-    exhibitionState: PropTypes.shape(exhibitionStatePropTypesShape).isRequired,
+    exhibitionState: exhibitionStatePropTypesShape,
     globalImageCatalog: PropTypes.arrayOf(entityPropTypeShape).isRequired,
     saveExhibition: PropTypes.func.isRequired
 };
