@@ -26,6 +26,8 @@ import { Course } from "./Classes/Entities/Course.js";
 import { Exhibition, PublicExhibition } from "./Classes/Entities/Exhibition.js";
 import AppThemeProvider from "./ContextProviders/AppTheme.js";
 import { AppFeatureProvider } from "./ContextProviders/AppFeatures.js";
+import { FullPageMessage } from "./Components/FullPageMessage.js";
+import { InfoIcon } from "./Imports/Icons.js";
 
 const appUserLoader = async () => {
     if (!localStorage.getItem("token")) {
@@ -53,6 +55,17 @@ const userManagementAction = async ({ request, params }) => {
             status: "error",
             error: e.message
         };
+    }
+};
+
+const exhibitionPageLoader = async ({ params }) => {
+    const exhibitionId = parseInt(params.exhibitionId);
+    const exhibitionUrl = `/api/exhibitions/${exhibitionId}/data`;
+    const response = await sendAuthenticatedRequest("GET", exhibitionUrl);
+    if (response.status === 200) {
+        return response.data;
+    } else {
+        throw new Error("Exhibition unavailable");
     }
 };
 
@@ -93,7 +106,15 @@ const router = createBrowserRouter([
             {
                 element: <ExhibitionPage />,
                 path: "Exhibitions/:exhibitionId",
-                ErrorBoundary: RouterErrorMessage
+                loader: exhibitionPageLoader,
+                errorElement: (
+                    <FullPageMessage
+                        Icon={InfoIcon}
+                        buttonDestination="/Exhibitions"
+                        buttonText="View Public Exhibitions"
+                        message="This exhibition is not available"
+                    />
+                )
             },
             {
                 element: <AccountLayout />,

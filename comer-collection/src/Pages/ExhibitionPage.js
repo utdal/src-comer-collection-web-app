@@ -1,26 +1,23 @@
 import { Box } from "@mui/material";
-import { useParams } from "react-router";
+import { useLoaderData, useParams } from "react-router";
 import { ExhibitionEditPane } from "../Components/ExhibitionPage/ExhibitionEditPane.js";
 import React, { useCallback, useEffect, useReducer, useState } from "react";
 import { exhibitionEditReducer, blankExhibitionData } from "../Components/ExhibitionPage/exhibitionEditReducer.js";
 import Exhibition3DViewport from "../Components/Exhibition3DViewport/Exhibition3DViewport.js";
 import { sendAuthenticatedRequest } from "../Helpers/APICalls.js";
 import { useAppUser } from "../Hooks/useAppUser.js";
-import { FullPageMessage } from "../Components/FullPageMessage.js";
 import { useSnackbar, useTitle } from "../ContextProviders/AppFeatures.js";
-
-import { InfoIcon } from "../Imports/Icons.js";
 
 const ExhibitionPage = () => {
     const exhibitionId = parseInt(useParams().exhibitionId);
 
+    const exhibitionData = useLoaderData();
+
     const [globalImageCatalog, setGlobalImageCatalog] = useState([]);
 
-    const [exhibitionMetadata, setExhibitionMetadata] = useState(null);
+    const [exhibitionMetadata, setExhibitionMetadata] = useState(exhibitionData);
 
     const [exhibitionState, exhibitionEditDispatch] = useReducer(exhibitionEditReducer, blankExhibitionData);
-    const [exhibitionIsLoaded, setExhibitionIsLoaded] = useState(false);
-    const [isPermissionGranted, setIsPermissionGranted] = useState(false);
     const [exhibitionIsEditable, setExhibitionIsEditable] = useState(false);
     const [editModeActive, setEditModeActive] = useState(false);
 
@@ -49,43 +46,28 @@ const ExhibitionPage = () => {
     }, [exhibitionState, exhibitionUrl, showSnackbar]);
 
     const loadExhibition = useCallback(async () => {
-        try {
-            const exhibitionData = await sendAuthenticatedRequest("GET", exhibitionUrl);
+        setExhibitionMetadata(exhibitionData);
 
-            setIsPermissionGranted(true);
-
-            if (exhibitionData.data) {
-                setExhibitionMetadata(exhibitionData.data);
-
-                if (exhibitionData.data?.data) {
-                    exhibitionEditDispatch({
-                        scope: "exhibition",
-                        type: "set_everything",
-                        newExhibition: JSON.parse(exhibitionData.data.data)
-                    });
-                }
-                if (exhibitionData.data?.isEditable) {
-                    setExhibitionIsEditable(true);
-                }
-                setTitleText(exhibitionData.data?.title);
-                setExhibitionIsLoaded(true);
-            }
-        } catch (e) {
-            console.log("Error getting permission to open exhibition", e.message);
-            setIsPermissionGranted(false);
-            setTitleText("Exhibition Unavailable");
+        if (exhibitionData?.data) {
+            exhibitionEditDispatch({
+                scope: "exhibition",
+                type: "set_everything",
+                newExhibition: JSON.parse(exhibitionData.data)
+            });
         }
-    }, [exhibitionUrl, setTitleText]);
+        if (exhibitionData?.isEditable) {
+            setExhibitionIsEditable(true);
+        }
+        setTitleText(exhibitionData?.title);
+    }, [exhibitionData, setTitleText]);
 
     useEffect(() => {
         loadExhibition();
     }, [appUser, loadExhibition]);
 
     useEffect(() => {
-        if (isPermissionGranted) {
-            loadCatalog();
-        }
-    }, [isPermissionGranted]);
+        loadCatalog();
+    }, []);
 
     const onUnload = useCallback(async () => {
         await saveExhibition();
@@ -93,19 +75,17 @@ const ExhibitionPage = () => {
     }, [saveExhibition]);
 
     useEffect(() => {
-        if (exhibitionIsLoaded) {
-            window.onbeforeunload = onUnload;
-            return () => {
-                window.onbeforeunload = null;
-            };
-        }
-    }, [exhibitionState, exhibitionIsLoaded, onUnload]);
+        window.onbeforeunload = onUnload;
+        return () => {
+            window.onbeforeunload = null;
+        };
+    }, [exhibitionState, onUnload]);
 
     useEffect(() => {
-        if (exhibitionIsLoaded && !editModeActive) {
+        if (exhibitionIsEditable && !editModeActive) {
             saveExhibition();
         }
-    }, [editModeActive, exhibitionIsLoaded, saveExhibition]);
+    }, [editModeActive, exhibitionIsEditable, saveExhibition]);
 
     const handleControlS = useCallback((e) => {
         if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "s") {
@@ -123,14 +103,7 @@ const ExhibitionPage = () => {
         }
     }, [editModeActive, handleControlS]);
 
-    return (!isPermissionGranted &&
-        <FullPageMessage
-            Icon={InfoIcon}
-            buttonDestination="/Exhibitions"
-            buttonText="View Public Exhibitions"
-            message="This exhibition is not available"
-        />
-    ) || (isPermissionGranted &&
+    return (
         <Box
             sx={{
                 width: "100%",
@@ -147,7 +120,6 @@ const ExhibitionPage = () => {
             <Exhibition3DViewport
                 editModeActive={editModeActive}
                 exhibitionIsEditable={exhibitionIsEditable}
-                exhibitionIsLoaded={exhibitionIsLoaded}
                 exhibitionMetadata={exhibitionMetadata}
                 exhibitionState={exhibitionState}
                 globalImageCatalog={globalImageCatalog}
@@ -165,7 +137,6 @@ const ExhibitionPage = () => {
                         editModeActive={editModeActive}
                         exhibitionEditDispatch={exhibitionEditDispatch}
                         exhibitionId={exhibitionId}
-                        exhibitionIsLoaded={exhibitionIsLoaded}
                         exhibitionMetadata={exhibitionMetadata}
                         exhibitionState={exhibitionState}
                         globalImageCatalog={globalImageCatalog}

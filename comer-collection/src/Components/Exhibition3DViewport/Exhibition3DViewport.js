@@ -39,7 +39,7 @@ const getCanvasDimensions = (boundingBoxElement) => {
     return [0, 0];
 };
 
-const Exhibition3DViewport = ({ exhibitionState, exhibitionMetadata, exhibitionIsLoaded, exhibitionIsEditable, globalImageCatalog, editModeActive, setEditModeActive }) => {
+const Exhibition3DViewport = ({ exhibitionState, exhibitionMetadata, exhibitionIsEditable, globalImageCatalog, editModeActive, setEditModeActive }) => {
     const containerRef = useRef(null);
     const canvasRef = useRef(null);
 
@@ -101,76 +101,74 @@ const Exhibition3DViewport = ({ exhibitionState, exhibitionMetadata, exhibitionI
     };
 
     useEffect(() => {
-        if (exhibitionIsLoaded) {
-            const scene = new THREE.Scene();
+        const scene = new THREE.Scene();
 
-            if (!containerRef || !containerRef.current) {
-                return;
-            }
-
-            const [canvasHeight, canvasWidth] = getCanvasDimensions(containerRef.current);
-
-            // camera set up
-            const camera = new THREE.PerspectiveCamera(
-                60, // field of view: 60-90 is normal for viewing on a monitor
-                canvasWidth / canvasHeight, // aspect ratio: assumption that ar should be the current window size
-                0.1, // near setting for camera frustum
-                1000 // far setting for camera frustum
-            );
-
-            scene.add(camera);
-
-            // set camera slighly back from middle of gallery
-            camera.position.set(0, 0, exhibitionState.size.length_ft / 4);
-            camera.updateProjectionMatrix();
-
-            // enable antialiasing
-            const renderer = new THREE.WebGLRenderer({
-                antialias: true
-            });
-
-            // set initial canvas size
-            renderer.setSize(canvasWidth, canvasHeight);
-
-            // render options
-
-            renderer.outputColorSpace = THREE.LinearSRGBColorSpace;
-
-            // add mouse controls
-            const controls = new PointerLockControls(camera, renderer.domElement);
-            scene.add(controls.getObject());
-
-            // resize window when window is resized
-            window.addEventListener("resize", handleWindowResize);
-
-            const clock = new THREE.Clock();
-            clock.getDelta();
-
-            setMyRenderer(renderer);
-            setMyCamera(camera);
-            setMyScene(scene);
-            setMyControls(controls);
-            setMyClock(clock);
-
-            controls.addEventListener("unlock", restoreMenu);
-
-            window.addEventListener("keydown", handleKeydown);
-            window.addEventListener("keyup", handleKeyup);
-
-            const textureLoader = new THREE.TextureLoader();
-            setMyTextureLoader(textureLoader);
-
-            return () => {
-                controls.removeEventListener("unlock", restoreMenu);
-                window.removeEventListener("keydown", handleKeydown);
-                window.removeEventListener("keyup", handleKeyup);
-                setMyRenderer(null);
-                setMyCamera(null);
-                setMyScene(null);
-                setMyControls(null);
-            };
+        if (!containerRef || !containerRef.current) {
+            return;
         }
-    }, [exhibitionIsLoaded]);
+
+        const [canvasHeight, canvasWidth] = getCanvasDimensions(containerRef.current);
+
+        // camera set up
+        const camera = new THREE.PerspectiveCamera(
+            60, // field of view: 60-90 is normal for viewing on a monitor
+            canvasWidth / canvasHeight, // aspect ratio: assumption that ar should be the current window size
+            0.1, // near setting for camera frustum
+            1000 // far setting for camera frustum
+        );
+
+        scene.add(camera);
+
+        // set camera slighly back from middle of gallery
+        camera.position.set(0, 0, exhibitionState.size.length_ft / 4);
+        camera.updateProjectionMatrix();
+
+        // enable antialiasing
+        const renderer = new THREE.WebGLRenderer({
+            antialias: true
+        });
+
+        // set initial canvas size
+        renderer.setSize(canvasWidth, canvasHeight);
+
+        // render options
+
+        renderer.outputColorSpace = THREE.LinearSRGBColorSpace;
+
+        // add mouse controls
+        const controls = new PointerLockControls(camera, renderer.domElement);
+        scene.add(controls.getObject());
+
+        // resize window when window is resized
+        window.addEventListener("resize", handleWindowResize);
+
+        const clock = new THREE.Clock();
+        clock.getDelta();
+
+        setMyRenderer(renderer);
+        setMyCamera(camera);
+        setMyScene(scene);
+        setMyControls(controls);
+        setMyClock(clock);
+
+        controls.addEventListener("unlock", restoreMenu);
+
+        window.addEventListener("keydown", handleKeydown);
+        window.addEventListener("keyup", handleKeyup);
+
+        const textureLoader = new THREE.TextureLoader();
+        setMyTextureLoader(textureLoader);
+
+        return () => {
+            controls.removeEventListener("unlock", restoreMenu);
+            window.removeEventListener("keydown", handleKeydown);
+            window.removeEventListener("keyup", handleKeyup);
+            setMyRenderer(null);
+            setMyCamera(null);
+            setMyScene(null);
+            setMyControls(null);
+        };
+    }, []);
 
     // Manage movement based on key presses
     // and constrain camera position to exhibition boundaries
@@ -480,7 +478,6 @@ const Exhibition3DViewport = ({ exhibitionState, exhibitionMetadata, exhibitionI
 Exhibition3DViewport.propTypes = {
     editModeActive: PropTypes.bool.isRequired,
     exhibitionIsEditable: PropTypes.bool.isRequired,
-    exhibitionIsLoaded: PropTypes.bool.isRequired,
     exhibitionMetadata: PropTypes.shape({
         exhibition_owner: PropTypes.number
     }).isRequired,

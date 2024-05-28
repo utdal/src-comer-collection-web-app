@@ -9,6 +9,7 @@ const PositionedDialog = styled(Dialog)(() => ({
 }));
 
 export const ExhibitionIntro = ({ exhibitionMetadata, controls, dialogIsOpen, setDialogIsOpen }) => {
+    console.log("exhibitionMetadata in ExhibitionIntro", exhibitionMetadata);
     return (
         <PositionedDialog
             disablePortal
