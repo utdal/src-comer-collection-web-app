@@ -18,8 +18,7 @@ const listImagesPublic = async (req, res, next) => {
      * More suitable function is available for collection managers and above
      */
     if (isAtLeastCollectionManager(req.app_user)) {
-        console.log("Test1");
-        next();
+        return next();
     }
     await listItems(req, res, next, Image, [
         Artist, Tag
@@ -71,7 +70,7 @@ const getImagePublic = async (req, res, next) => {
      * More suitable function is available for collection managers and above
      */
     if (isAtLeastCollectionManager(req.app_user)) {
-        next();
+        return next();
     }
     await getItem(req, res, next, Image, [
         Artist, Tag
