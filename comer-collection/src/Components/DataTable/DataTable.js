@@ -1,5 +1,5 @@
 /* eslint-disable react/no-multi-comp */
-import React, { useCallback, useEffect, useMemo, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Checkbox, Stack, TableCell, TableContainer, Typography, Table, TableBody, TableHead, TableRow, Paper } from "@mui/material";
 import { useTheme } from "@emotion/react";
 import { ColumnSortButton } from "../Buttons/ColumnSortButton.js";
@@ -44,6 +44,20 @@ export const DataTable = ({
     const [sortAscending, setSortAscending] = useState(defaultSortAscending ?? true);
 
     const { sortableValueDictionary, calculateSortableItemValues } = useSortableValues();
+
+    /**
+     * @type {{current: Element}}
+     */
+    const tableContainerRef = useRef();
+
+    /**
+     * When the page is changed, scroll to the top
+     */
+    useEffect(() => {
+        if (paginationStatus.startIndex >= 0) {
+            tableContainerRef.current.scrollTo(0, 0);
+        }
+    }, [paginationStatus.startIndex]);
 
     useEffect(() => {
         calculateSortableItemValues(tableFields.find((tf) => tf.columnDescription === sortColumn)?.generateSortableValue);
@@ -137,6 +151,7 @@ export const DataTable = ({
     return (
         <TableContainer
             component={Paper}
+            ref={tableContainerRef}
         >
             <Table>
                 <TableHead>
