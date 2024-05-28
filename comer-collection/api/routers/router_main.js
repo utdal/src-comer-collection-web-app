@@ -13,6 +13,7 @@ import { routerUsersAdmin } from "./router_users.js";
 import { routerEnrollmentsAdmin } from "./router_enrollments.js";
 
 import db from "../sequelize.js";
+import { routerImagesCollectionManager } from "./router_images.js";
 const router = Router();
 const { User, Course, Exhibition } = db;
 
@@ -107,5 +108,6 @@ router.use("/admin", requireAdmin, apiRouterAdmin);
 router.use("/users", requireAuthenticatedUser, requireAdmin, routerUsersAdmin);
 router.use("/courses", requireAuthenticatedUser, requireAdmin, routerCoursesAdmin);
 router.use("/enrollments", requireAuthenticatedUser, requireAdmin, routerEnrollmentsAdmin);
+router.use("/images", requireAuthenticatedUser, requireAtLeastCollectionManager, routerImagesCollectionManager);
 
 export default router;

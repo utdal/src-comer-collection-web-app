@@ -1,7 +1,6 @@
 import { Router } from "express";
 
 import { listArtists, createArtist, updateArtist, deleteArtist, getArtist } from "../controllers/artists.js";
-import { deleteImage, updateImage, listImages, getImage, createImage } from "../controllers/images.js";
 import { deleteTag, listTags, getTag, createTag, updateTag } from "../controllers/tags.js";
 import { manageImageTags } from "../controllers/imagetags.js";
 import { manageImageArtists } from "../controllers/imageartists.js";
@@ -13,13 +12,6 @@ router.get("/artists/:artistId(\\d+)", getArtist);
 router.post("/artists", createArtist);
 router.put("/artists/:artistId(\\d+)", updateArtist);
 router.delete("/artists/:artistId(\\d+)", deleteArtist);
-
-// Handle images
-router.get("/images", listImages);
-router.get("/images/:imageId(\\d+)", getImage);
-router.post("/images", createImage);
-router.put("/images/:imageId(\\d+)", updateImage);
-router.delete("/images/:imageId(\\d+)", deleteImage);
 
 // Handle tags
 router.get("/tags", listTags);

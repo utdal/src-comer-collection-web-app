@@ -13,7 +13,7 @@ import { ImageOptionsCell } from "../../Components/TableCells/Image/ImageOptions
 import { AddPhotoAlternateIcon } from "../../Imports/Icons.js";
 
 class Image extends Entity {
-    static baseUrl = "/api/admin/images";
+    static baseUrl = "/api/images";
     static singular = "image";
     static plural = "images";
 
