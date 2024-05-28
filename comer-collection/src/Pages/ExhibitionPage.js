@@ -25,7 +25,7 @@ const ExhibitionPage = () => {
     const [editModeActive, setEditModeActive] = useState(false);
 
     const loadCatalog = async () => {
-        const catalogData = await sendAuthenticatedRequest("GET", "/api/public/images");
+        const catalogData = await sendAuthenticatedRequest("GET", "/api/images");
         setGlobalImageCatalog(catalogData.data);
     };
 

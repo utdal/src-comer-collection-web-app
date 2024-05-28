@@ -84,7 +84,7 @@ export const ImageFullScreenViewer = ({ image, setImage, previewerOpen, setPrevi
                 >
                     <img
                         height="100%"
-                        src={`${process.env.REACT_APP_API_HOST}/api/public/images/${image.id}/download`}
+                        src={`${process.env.REACT_APP_API_HOST}/api/images/${image.id}/download`}
                         style={{ objectFit: "contain" }}
                         width="auto"
                     />
