@@ -29,7 +29,7 @@ const PaginationSummaryMenuItem = ({ startIndex, endIndex, handleMenuClose }) =>
                 block: "center"
             });
         }
-    });
+    }, [isCurrentPage]);
 
     return (
         <MenuItem

@@ -63,7 +63,6 @@ const PaginationSummaryMenu = ({ visibleItemCount, paginationStatus }) => {
             </Button>
 
             <Menu
-                MenuListProps={{}}
                 anchorEl={anchorElement}
                 anchorOrigin={{
                     vertical: "top",
