@@ -9,7 +9,6 @@ const PositionedDialog = styled(Dialog)(() => ({
 }));
 
 export const ExhibitionIntro = ({ exhibitionMetadata, controls, dialogIsOpen, setDialogIsOpen }) => {
-    console.log("exhibitionMetadata in ExhibitionIntro", exhibitionMetadata);
     return (
         <PositionedDialog
             disablePortal
@@ -86,7 +85,7 @@ export const ExhibitionIntro = ({ exhibitionMetadata, controls, dialogIsOpen, se
 ExhibitionIntro.propTypes = {
     controls: PropTypes.shape({
         lock: PropTypes.func
-    }).isRequired,
+    }),
     dialogIsOpen: PropTypes.bool.isRequired,
     exhibitionMetadata: PropTypes.shape({
         title: PropTypes.string,

@@ -74,7 +74,7 @@ class PublicExhibition extends Exhibition {
     };
 }
 
-export const exhibitionStatePropTypesShape = {
+export const exhibitionStatePropTypesShape = PropTypes.shape({
     size: PropTypes.shape({
         length_ft: PropTypes.number,
         width_ft: PropTypes.number,
@@ -90,6 +90,6 @@ export const exhibitionStatePropTypesShape = {
         ambient_light_color: PropTypes.string
     }),
     images: PropTypes.arrayOf(entityPropTypeShape)
-};
+});
 
 export { Exhibition, MyExhibition, PublicExhibition };

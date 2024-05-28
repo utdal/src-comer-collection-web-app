@@ -481,7 +481,7 @@ Exhibition3DViewport.propTypes = {
     exhibitionMetadata: PropTypes.shape({
         exhibition_owner: PropTypes.number
     }).isRequired,
-    exhibitionState: PropTypes.shape(exhibitionStatePropTypesShape).isRequired,
+    exhibitionState: exhibitionStatePropTypesShape,
     globalImageCatalog: PropTypes.arrayOf(entityPropTypeShape).isRequired,
     setEditModeActive: PropTypes.func.isRequired
 };

@@ -77,7 +77,7 @@ export const ArtInfoPopup = ({ globalImageCatalog, imageId, exhibitionState }) =
     );
 };
 ArtInfoPopup.propTypes = {
-    exhibitionState: PropTypes.shape(exhibitionStatePropTypesShape).isRequired,
+    exhibitionState: exhibitionStatePropTypesShape,
     globalImageCatalog: PropTypes.arrayOf(entityPropTypeShape).isRequired,
-    imageId: PropTypes.number.isRequired
+    imageId: PropTypes.number
 };
