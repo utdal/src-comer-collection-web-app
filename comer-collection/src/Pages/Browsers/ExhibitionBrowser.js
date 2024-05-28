@@ -9,6 +9,7 @@ import { ExhibitionDateModifiedCell } from "../../Components/TableCells/Exhibiti
 import { ExhibitionOpenInCurrentTabCell } from "../../Components/TableCells/Exhibition/ExhibitionOpenInCurrentTabCell.js";
 import { ManagementPageProvider, useItemsReducer } from "../../ContextProviders/ManagementPageProvider.js";
 import { useLoaderData } from "react-router";
+import { PublicExhibition } from "../../Classes/Entities/Exhibition.js";
 
 const exhibitionTableFields = [
     {
@@ -36,7 +37,7 @@ const exhibitionTableFields = [
 
 export const ExhibitionBrowser = () => {
     const exhibitions = useLoaderData();
-    const [exhibitionsCombinedState] = useItemsReducer(exhibitions);
+    const [exhibitionsCombinedState, itemsCallbacks] = useItemsReducer(exhibitions);
 
     useTitle("Public Exhibitions");
 
@@ -44,7 +45,9 @@ export const ExhibitionBrowser = () => {
 
     return (
         <ManagementPageProvider
+            Entity={PublicExhibition}
             handleRefresh={handleRefresh}
+            itemsCallbacks={itemsCallbacks}
             itemsCombinedState={exhibitionsCombinedState}
         >
             <Box

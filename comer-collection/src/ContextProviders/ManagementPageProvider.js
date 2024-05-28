@@ -369,7 +369,7 @@ ManagementPageProvider.propTypes = {
     children: PropTypes.node.isRequired,
     itemsCallbacks: PropTypes.objectOf(PropTypes.func),
     itemsCombinedState: itemsCombinedStatePropTypeShape.isRequired,
-    managementCallbacks: PropTypes.objectOf(PropTypes.func).isRequired
+    managementCallbacks: PropTypes.objectOf(PropTypes.func)
 };
 
 /**
