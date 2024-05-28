@@ -10,7 +10,7 @@ export const CollectionGalleryThumbnailBox = ({ image }) => (
                 height="150px"
                 ref={ref}
                 sx={{
-                    backgroundImage: inView ? `url(${`http://localhost:9000/api/public/images/${image.id}/download`})` : "none",
+                    backgroundImage: inView ? `url(${`http://localhost:9000/api/images/${image.id}/download`})` : "none",
                     backgroundRepeat: "no-repeat",
                     backgroundSize: "contain",
                     backgroundPositionX: "center",
