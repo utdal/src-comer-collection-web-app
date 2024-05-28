@@ -6,7 +6,7 @@ import { entityPropTypeShape, itemsCombinedStatePropTypeShape } from "../Classes
 const AssociationManagementPageContext = createContext();
 const defaultManagementCallbacks = {};
 
-export const AssociationManagementPageProvider = ({ managementCallbacks = defaultManagementCallbacks, secondaryItemsCombinedState, setSecondaryItems, setSelectedSecondaryItems, relevantPrimaryItems, AssociationType, children }) => {
+export const AssociationManagementPageProvider = ({ managementCallbacks = defaultManagementCallbacks, secondaryItemsCombinedState, secondaryItemsCallbacks, relevantPrimaryItems, AssociationType, children }) => {
     const contextValue = useMemo(() => {
         return {
             relevantPrimaryItems: relevantPrimaryItems ?? [], AssociationType
@@ -18,10 +18,9 @@ export const AssociationManagementPageProvider = ({ managementCallbacks = defaul
                 Entity={AssociationType.secondary}
                 isError={false}
                 isLoaded={false}
+                itemsCallbacks={secondaryItemsCallbacks}
                 itemsCombinedState={secondaryItemsCombinedState}
                 managementCallbacks={managementCallbacks}
-                setItems={setSecondaryItems}
-                setSelectedItems={setSelectedSecondaryItems}
             >
                 {children}
             </ManagementPageProvider>
@@ -34,9 +33,8 @@ AssociationManagementPageProvider.propTypes = {
     children: PropTypes.node.isRequired,
     managementCallbacks: PropTypes.objectOf(PropTypes.func),
     relevantPrimaryItems: PropTypes.arrayOf(entityPropTypeShape).isRequired,
-    secondaryItemsCombinedState: itemsCombinedStatePropTypeShape.isRequired,
-    setSecondaryItems: PropTypes.func.isRequired,
-    setSelectedSecondaryItems: PropTypes.func.isRequired
+    secondaryItemsCallbacks: PropTypes.objectOf(PropTypes.func),
+    secondaryItemsCombinedState: itemsCombinedStatePropTypeShape.isRequired
 };
 
 /**

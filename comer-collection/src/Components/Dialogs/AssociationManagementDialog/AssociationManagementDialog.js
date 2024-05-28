@@ -41,10 +41,12 @@ export const AssociationManagementDialog = ({
     dialogState,
     defaultSortColumn, defaultSortAscending
 }) => {
-    const [secondaryItemsCombinedState, {
+    const [secondaryItemsCombinedState, secondaryItemsCallbacks] = useItemsReducer([]);
+
+    const {
         setItems: setSecondaryItems,
         setSelectedItems: setSelectedSecondaryItems
-    }] = useItemsReducer([]);
+    } = secondaryItemsCallbacks;
 
     const { dialogIsOpen, dialogItems: primaryItems, closeDialog } = dialogState;
 
@@ -150,8 +152,8 @@ export const AssociationManagementDialog = ({
     return (
         <AssociationManagementPageProvider
             AssociationType={Association}
-            managementCallbacks={{}}
             relevantPrimaryItems={primaryItems}
+            secondaryItemsCallbacks={secondaryItemsCallbacks}
             secondaryItemsCombinedState={secondaryItemsCombinedState}
             setSecondaryItems={setSecondaryItems}
             setSelectedSecondaryItems={setSelectedSecondaryItems}
