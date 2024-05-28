@@ -1,7 +1,7 @@
 import React, { useMemo } from "react";
 import PropTypes from "prop-types";
 import { Button, styled } from "@mui/material";
-import { useEntity, useItemCounts } from "../../ContextProviders/ManagementPageProvider.js";
+import { useItemCounts } from "../../ContextProviders/ManagementPageProvider.js";
 
 const DisappearingButton = styled(Button, {
     shouldForwardProp: (prop) => prop !== "itemCounts"
@@ -10,7 +10,6 @@ const DisappearingButton = styled(Button, {
 }));
 
 const AssociationManageButton = ({ secondaryEntity, handleOpenDialog }) => {
-    const primaryEntity = useEntity();
     const itemCounts = useItemCounts();
     const startIcon = useMemo(() => <secondaryEntity.DefaultIcon />, []);
     return (
@@ -20,19 +19,15 @@ const AssociationManageButton = ({ secondaryEntity, handleOpenDialog }) => {
             startIcon={startIcon}
             variant="outlined"
         >
-            {"Update "}
+            {"Assign "}
 
             {secondaryEntity.plural}
 
-            {" for "}
+            {" ("}
 
             {itemCounts.selected}
 
-            {" "}
-
-            {itemCounts.selected === 1
-                ? primaryEntity.singular
-                : primaryEntity.plural}
+            )
         </DisappearingButton>
     );
 };

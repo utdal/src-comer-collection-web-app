@@ -7,7 +7,7 @@ import { KeyboardArrowLeftIcon, KeyboardArrowRightIcon, KeyboardDoubleArrowLeftI
 const DisappearingStack = styled(Stack, {
     shouldForwardProp: (prop) => prop !== "isHidden"
 })(({ isHidden }) => ({
-    display: isHidden ? "none" : ""
+    visibility: isHidden ? "hidden" : "visible"
 }));
 
 const DisappearingIconButton = styled(IconButton, {

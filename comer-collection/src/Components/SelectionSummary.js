@@ -77,7 +77,7 @@ export const SelectionSummary = () => {
                     startIcon={<DeselectIcon />}
                     variant="outlined"
                 >
-                    Clear Selection
+                    Clear
                 </Button>
             )}
         </Stack>
