@@ -8,11 +8,12 @@ import {
 import { SaveIcon } from "../../Imports/Icons.js";
 import { getLocalISOString } from "../../Helpers/getLocalISOString.js";
 import { useSnackbar } from "../../ContextProviders/AppFeatures.js";
-import { useEntity, useManagementCallbacks } from "../../ContextProviders/ManagementPageProvider.js";
+import { useEntity } from "../../ContextProviders/ManagementPageProvider.js";
 import { DialogInputFieldWithRef } from "../Inputs/DialogInputFieldWithRef.js";
 import { PersistentDialog } from "./PersistentDialog.js";
 import PropTypes from "prop-types";
 import { DialogState } from "../../Classes/DialogState.js";
+import { useActionData, useSubmit } from "react-router-dom";
 
 /**
  * @param {{ dialogState: DialogState }} props
@@ -20,13 +21,31 @@ import { DialogState } from "../../Classes/DialogState.js";
 export const ItemSingleEditDialog = ({ dialogState }) => {
     const showSnackbar = useSnackbar();
     const Entity = useEntity();
-    const { handleRefresh } = useManagementCallbacks();
 
     const [submitEnabled, setSubmitEnabled] = useState(true);
 
     const { dialogItem, dialogIsOpen, closeDialog } = dialogState;
 
     const editDialogFieldRefs = useRef([]);
+
+    const submit = useSubmit();
+
+    /**
+     * @type {import("../../Classes/buildRouterAction.js").RouterActionResponse}
+     */
+    const actionData = useActionData();
+
+    useEffect(() => {
+        if (actionData) {
+            if (actionData.status === "success") {
+                showSnackbar(actionData.snackbarText, "success");
+                closeDialog();
+            } else if (actionData.status === "error") {
+                setSubmitEnabled(true);
+                showSnackbar(actionData.snackbarText, "error");
+            }
+        }
+    }, [actionData, closeDialog, showSnackbar]);
 
     useEffect(() => {
         if (dialogIsOpen || !dialogIsOpen) {
@@ -35,21 +54,23 @@ export const ItemSingleEditDialog = ({ dialogState }) => {
     }, [dialogIsOpen]);
 
     const handleSubmit = useCallback(() => {
-        if (dialogItem) {
-            const editDialogFieldData = {};
-            for (const r of editDialogFieldRefs.current) {
-                editDialogFieldData[r.name] = r.value;
-            }
-            Entity.handleEdit(dialogItem.id, editDialogFieldData).then((msg) => {
-                showSnackbar(msg, "success");
-                handleRefresh();
-                closeDialog();
-            }).catch((err) => {
-                setSubmitEnabled(true);
-                showSnackbar(err.message, "error");
-            });
+        const editDialogFieldData = {};
+        for (const r of editDialogFieldRefs.current) {
+            editDialogFieldData[r.name] = r.value;
         }
-    }, [Entity, closeDialog, dialogItem, handleRefresh, showSnackbar]);
+        /**
+         * @type {import("../../Classes/buildRouterAction.js").RouterActionRequest}
+         */
+        const request = {
+            intent: "single-edit",
+            body: editDialogFieldData,
+            itemId: dialogItem?.id
+        };
+        submit(request, {
+            encType: "application/json",
+            method: "PUT"
+        });
+    }, [dialogItem, submit]);
 
     const singularCapitalized = Entity?.singular.substr(0, 1).toUpperCase() + Entity?.singular.substr(1).toLowerCase();
 

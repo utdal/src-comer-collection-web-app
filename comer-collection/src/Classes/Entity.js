@@ -72,26 +72,6 @@ export class Entity {
         }));
     }
 
-    static handleDelete (itemId) {
-        return new Promise((resolve, reject) => {
-            sendAuthenticatedRequest("DELETE", `${this.baseUrl}/${itemId}`).then(() => {
-                resolve(`${capitalized(this.singular)} deleted`);
-            }).catch(() => {
-                reject(new Error(`Failed to delete ${this.singular.toLowerCase()}`));
-            });
-        });
-    }
-
-    static handleEdit (itemId, updateFields) {
-        return new Promise((resolve, reject) => {
-            sendAuthenticatedRequest("PUT", `${this.baseUrl}/${itemId}`, updateFields).then(() => {
-                resolve(`${capitalized(this.singular)} updated`);
-            }).catch(() => {
-                reject(new Error(`Failed to update ${this.singular.toLowerCase()}`));
-            });
-        });
-    }
-
     static tableFields = [];
 }
 
