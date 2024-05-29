@@ -1,14 +1,9 @@
 import { sendAuthenticatedRequest } from "../Helpers/APICalls.js";
 
 const buildRouterLoader = (entityType) => {
-    const routerLoader = () => {
-        return new Promise((resolve, reject) => {
-            sendAuthenticatedRequest("GET", `${entityType.baseUrl}`).then((response) => {
-                resolve(response.data);
-            }).catch((e) => {
-                reject(e);
-            });
-        });
+    const routerLoader = async () => {
+        const response = await sendAuthenticatedRequest("GET", `${entityType.baseUrl}`);
+        return response.data;
     };
     return routerLoader;
 };
