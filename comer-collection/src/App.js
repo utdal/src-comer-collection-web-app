@@ -29,6 +29,7 @@ import { AppFeatureProvider } from "./ContextProviders/AppFeatures.js";
 import { FullPageMessage } from "./Components/FullPageMessage.js";
 import { InfoIcon } from "./Imports/Icons.js";
 import buildRouterAction from "./Classes/buildRouterAction.js";
+import buildRouterLoader from "./Classes/buildRouterLoader.js";
 
 const appUserLoader = async () => {
     if (!localStorage.getItem("token")) {
@@ -173,7 +174,7 @@ const router = createBrowserRouter([
                                     />
                                 ),
                                 path: "Users",
-                                loader: User.loader,
+                                loader: buildRouterLoader(User),
                                 action: buildRouterAction(User),
                                 ErrorBoundary: RouterErrorMessage
                             },
@@ -184,7 +185,7 @@ const router = createBrowserRouter([
                                     />
                                 ),
                                 path: "Courses",
-                                loader: Course.loader,
+                                loader: buildRouterLoader(Course),
                                 action: buildRouterAction(Course),
                                 ErrorBoundary: RouterErrorMessage
                             },
@@ -195,7 +196,7 @@ const router = createBrowserRouter([
                                     />
                                 ),
                                 path: "Exhibitions",
-                                loader: Exhibition.loader,
+                                loader: buildRouterLoader(Exhibition),
                                 ErrorBoundary: RouterErrorMessage
                             },
                             {
@@ -206,7 +207,7 @@ const router = createBrowserRouter([
                                     />
                                 ),
                                 path: "Images",
-                                loader: Image.loader,
+                                loader: buildRouterLoader(Image),
                                 action: buildRouterAction(Image),
                                 ErrorBoundary: RouterErrorMessage
                             }
