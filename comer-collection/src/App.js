@@ -41,23 +41,6 @@ const appUserLoader = async () => {
     }
 };
 
-const userManagementAction = async ({ request, params }) => {
-    const requestData = await request.json();
-    console.log(request, requestData, params);
-    try {
-        const result = await User.handleDelete(requestData.id);
-        return {
-            status: "success",
-            message: result
-        };
-    } catch (e) {
-        return {
-            status: "error",
-            error: e.message
-        };
-    }
-};
-
 const exhibitionPageLoader = async ({ params }) => {
     const exhibitionId = parseInt(params.exhibitionId);
     const exhibitionUrl = `/api/exhibitions/${exhibitionId}/data`;
@@ -66,6 +49,40 @@ const exhibitionPageLoader = async ({ params }) => {
         return response.data;
     } else {
         throw new Error("Exhibition unavailable");
+    }
+};
+
+const myExhibitionsAction = async ({ request }) => {
+    const requestData = await request.json();
+    if (request.method === "POST") {
+        try {
+            await Exhibition.handleMultiCreate([requestData]);
+            return {
+                status: "success",
+                message: "Exhibition created"
+            };
+        } catch (e) {
+            return {
+                status: "error",
+                error: e.message
+            };
+        }
+    } else if (request.method === "PUT") {
+        const { id, ...requestBody } = requestData;
+        try {
+            const result = await Exhibition.handleEdit(id, requestBody);
+            return {
+                status: "success",
+                message: result
+            };
+        } catch (e) {
+            return {
+                status: "error",
+                error: e.message
+            };
+        }
+    } else {
+        throw new Response(null, { status: 405 });
     }
 };
 
@@ -138,7 +155,8 @@ const router = createBrowserRouter([
                                 component={<MyExhibitions />}
                             />
                         ),
-                        path: "MyExhibitions"
+                        path: "MyExhibitions",
+                        action: myExhibitionsAction
                     },
                     {
                         element: <ChangePassword />,
@@ -155,7 +173,7 @@ const router = createBrowserRouter([
                                 ),
                                 path: "Users",
                                 loader: User.loader,
-                                action: userManagementAction,
+                                action: User.routerAction,
                                 ErrorBoundary: RouterErrorMessage
                             },
                             {
@@ -166,6 +184,7 @@ const router = createBrowserRouter([
                                 ),
                                 path: "Courses",
                                 loader: Course.loader,
+                                action: Course.routerAction,
                                 ErrorBoundary: RouterErrorMessage
                             },
                             {

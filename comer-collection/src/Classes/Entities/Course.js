@@ -8,7 +8,7 @@ import { CourseStartDateTimeStackedCell } from "../../Components/TableCells/Cour
 import { CourseStatusCell } from "../../Components/TableCells/Course/CourseStatusCell.js";
 import { CourseUserAssignmentCell } from "../../Components/TableCells/Course/CourseUserAssignmentCell.js";
 import { SchoolIcon } from "../../Imports/Icons.js";
-import { Entity } from "../Entity.js";
+import { Entity, buildRouterAction } from "../Entity.js";
 
 class Course extends Entity {
     static baseUrl = "/api/courses";
@@ -21,6 +21,8 @@ class Course extends Entity {
     static loader = async () => {
         return await this.handleFetchAll();
     };
+
+    static routerAction = buildRouterAction(this);
 
     static searchBoxFields = ["name"];
     static searchBoxPlaceholder = "Search courses by name";

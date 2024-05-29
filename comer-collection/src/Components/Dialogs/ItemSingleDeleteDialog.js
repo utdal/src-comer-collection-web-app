@@ -36,14 +36,14 @@ export const ItemSingleDeleteDialog = ({ requireTypedConfirmation, dialogState }
         if (dialogIsOpen) { setSubmitEnabled(true); }
     }, [dialogIsOpen]);
 
-    const newHandleSubmit = useCallback(() => {
+    const handleSubmit = useCallback(() => {
         submit({
             id: dialogItem?.id
         }, {
             method: "DELETE",
             encType: "application/json"
         });
-    }, [dialogItem?.id, submit]);
+    }, [dialogItem, submit]);
 
     useEffect(() => {
         if (actionData) {
@@ -62,7 +62,7 @@ export const ItemSingleDeleteDialog = ({ requireTypedConfirmation, dialogState }
             isForm
             maxWidth="sm"
             onClose={closeDialog}
-            onSubmit={newHandleSubmit}
+            onSubmit={handleSubmit}
             open={dialogIsOpen}
         >
             <DialogTitle>

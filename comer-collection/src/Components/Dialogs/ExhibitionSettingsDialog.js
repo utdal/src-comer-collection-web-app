@@ -1,4 +1,4 @@
-import React, { useCallback } from "react";
+import React, { useCallback, useEffect } from "react";
 import {
     Stack, DialogTitle,
     DialogContent,
@@ -8,9 +8,9 @@ import {
 } from "@mui/material";
 import { SaveIcon, PublicIcon, LockIcon, VpnLockIcon } from "../../Imports/Icons.js";
 import PropTypes from "prop-types";
-import { Exhibition, MyExhibition } from "../../Classes/Entities/Exhibition.js";
 import { useSnackbar } from "../../ContextProviders/AppFeatures.js";
 import { PersistentDialog } from "./PersistentDialog.js";
+import { useActionData, useSubmit } from "react-router-dom";
 
 const exhibitionAccessOptions = (adminMode) => [
     {
@@ -42,51 +42,80 @@ const exhibitionAccessOptions = (adminMode) => [
 export const ExhibitionSettingsDialog = ({ editMode, adminMode, dialogIsOpen, setDialogIsOpen, dialogExhibitionId, dialogExhibitionTitle, dialogExhibitionAccess, setDialogExhibitionId, setDialogExhibitionTitle, setDialogExhibitionAccess, refreshFunction }) => {
     const showSnackbar = useSnackbar();
 
-    const handleExhibitionCreate = useCallback((title, privacy) => {
-        MyExhibition.handleMultiCreate([{
-            title, privacy
-        }]).then((exhibitionPromises) => {
-            const [{ status }] = exhibitionPromises;
-            if (status === "fulfilled") {
-                setDialogIsOpen(false);
-                setDialogExhibitionId(null);
-                setDialogExhibitionTitle("");
-                setDialogExhibitionAccess(null);
-                showSnackbar("Successfully created exhibition", "success");
-            } else {
-                throw new Error("Could not create exhibition");
-            }
-        }).catch((err) => {
-            showSnackbar(err.message, "error");
-        }).finally(() => {
-            refreshFunction();
-        });
-    }, [refreshFunction, setDialogExhibitionAccess, setDialogExhibitionId, setDialogExhibitionTitle, setDialogIsOpen, showSnackbar]);
+    // const handleExhibitionCreate = useCallback((title, privacy) => {
+    //     MyExhibition.handleMultiCreate([{
+    //         title, privacy
+    //     }]).then((exhibitionPromises) => {
+    //         const [{ status }] = exhibitionPromises;
+    //         if (status === "fulfilled") {
+    //             setDialogIsOpen(false);
+    //             setDialogExhibitionId(null);
+    //             setDialogExhibitionTitle("");
+    //             setDialogExhibitionAccess(null);
+    //             showSnackbar("Successfully created exhibition", "success");
+    //         } else {
+    //             throw new Error("Could not create exhibition");
+    //         }
+    //     }).catch((err) => {
+    //         showSnackbar(err.message, "error");
+    //     }).finally(() => {
+    //         refreshFunction();
+    //     });
+    // }, [refreshFunction, setDialogExhibitionAccess, setDialogExhibitionId, setDialogExhibitionTitle, setDialogIsOpen, showSnackbar]);
 
-    const handleExhibitionEdit = useCallback((exhibitionId, title, privacy) => {
-        const ExhibitionClass = adminMode ? Exhibition : MyExhibition;
-        ExhibitionClass.handleEdit(exhibitionId, {
-            title, privacy
-        }).then((msg) => {
-            setDialogIsOpen(false);
-            setDialogExhibitionId(null);
-            setDialogExhibitionTitle("");
-            setDialogExhibitionAccess(null);
-            showSnackbar(msg, "success");
-        }).catch((err) => {
-            showSnackbar(err.message, "error");
-        }).finally(() => {
-            refreshFunction();
-        });
-    }, [adminMode, refreshFunction, setDialogExhibitionAccess, setDialogExhibitionId, setDialogExhibitionTitle, setDialogIsOpen, showSnackbar]);
+    // const handleExhibitionEdit = useCallback((exhibitionId, title, privacy) => {
+    //     const ExhibitionClass = adminMode ? Exhibition : MyExhibition;
+    //     ExhibitionClass.handleEdit(exhibitionId, {
+    //         title, privacy
+    //     }).then((msg) => {
+    //         setDialogIsOpen(false);
+    //         setDialogExhibitionId(null);
+    //         setDialogExhibitionTitle("");
+    //         setDialogExhibitionAccess(null);
+    //         showSnackbar(msg, "success");
+    //     }).catch((err) => {
+    //         showSnackbar(err.message, "error");
+    //     }).finally(() => {
+    //         refreshFunction();
+    //     });
+    // }, [adminMode, refreshFunction, setDialogExhibitionAccess, setDialogExhibitionId, setDialogExhibitionTitle, setDialogIsOpen, showSnackbar]);
+
+    const submit = useSubmit();
+    const actionData = useActionData();
 
     const handleFormSubmit = useCallback(() => {
         if (editMode) {
-            handleExhibitionEdit(dialogExhibitionId, dialogExhibitionTitle, dialogExhibitionAccess);
+            submit({
+                id: dialogExhibitionId,
+                title: dialogExhibitionTitle,
+                privacy: dialogExhibitionAccess
+            }, {
+                encType: "application/json",
+                method: "PUT"
+            });
+            // handleExhibitionEdit(dialogExhibitionId, dialogExhibitionTitle, dialogExhibitionAccess);
         } else {
-            handleExhibitionCreate(dialogExhibitionTitle, dialogExhibitionAccess);
+            submit({
+                title: dialogExhibitionTitle,
+                privacy: dialogExhibitionAccess
+            }, {
+                encType: "application/json",
+                method: "POST"
+            });
+            // handleExhibitionCreate(dialogExhibitionTitle, dialogExhibitionAccess);
         }
-    }, [dialogExhibitionAccess, dialogExhibitionId, dialogExhibitionTitle, editMode, handleExhibitionCreate, handleExhibitionEdit]);
+    }, [dialogExhibitionAccess, dialogExhibitionId, dialogExhibitionTitle, editMode, submit]);
+
+    useEffect(() => {
+        if (actionData) {
+            if (actionData.status === "success") {
+                showSnackbar(actionData.message, "success");
+                setDialogIsOpen(false);
+            } else if (actionData.status === "error") {
+                showSnackbar(actionData.error, "error");
+            }
+        }
+    }, [actionData, setDialogIsOpen, showSnackbar]);
 
     return (
         <PersistentDialog
