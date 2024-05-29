@@ -9,17 +9,50 @@ import {
 import { DeleteIcon } from "../../Imports/Icons.js";
 import { getBlankItemFields } from "../../Helpers/fields.js";
 import { useSnackbar } from "../../ContextProviders/AppFeatures.js";
-import { useEntity, useManagementCallbacks } from "../../ContextProviders/ManagementPageProvider.js";
+import { useEntity } from "../../ContextProviders/ManagementPageProvider.js";
 import { PersistentDialog } from "./PersistentDialog.js";
 import { DialogState } from "../../Classes/DialogState.js";
+import { useActionData, useSubmit } from "react-router-dom";
+
+/**
+ * @typedef {Object<string, any>} Item
+ *
+ * @typedef {{
+ *  type: "add"
+ * }|{
+ *  type: "change",
+ *  index: number,
+ *  field: string,
+ *  newValue: any
+ * }|{
+ *  type: "remove",
+ *  index: number
+ * }|{
+ *  type: "filterByIndex",
+ *  indicesToKeep: number[]
+ * }|{
+ *  type: "set",
+ *  newArray: Item[]
+ * }} MultiCreateDialogDispatchAction
+ */
 
 export const ItemMultiCreateDialog = ({ dialogState }) => {
-    const { handleRefresh } = useManagementCallbacks();
     const Entity = useEntity();
     const showSnackbar = useSnackbar();
 
     const { dialogIsOpen, closeDialog } = dialogState;
 
+    /**
+     * @type {import("../../Classes/buildRouterAction.js").RouterActionResponse}
+     */
+    const actionData = useActionData();
+
+    const submit = useSubmit();
+    const [submitEnabled, setSubmitEnabled] = useState(true);
+
+    /**
+     * @type {(createDialogItems: Item[], action: MultiCreateDialogDispatchAction) => void}
+     */
     const createDialogReducer = useCallback((createDialogItems, action) => {
         switch (action.type) {
         case "add":
@@ -35,6 +68,11 @@ export const ItemMultiCreateDialog = ({ dialogState }) => {
                 return action.index !== i;
             });
 
+        case "filterByIndex":
+            return createDialogItems.filter((r, i) => {
+                return action.indicesToKeep.includes(i);
+            });
+
         case "set":
             return action.newArray;
 
@@ -43,8 +81,34 @@ export const ItemMultiCreateDialog = ({ dialogState }) => {
         }
     }, [Entity.fieldDefinitions]);
 
+    /**
+     * @type {[Item[], (action: MultiCreateDialogDispatchAction) => void]}
+     */
     const [createDialogItems, createDialogDispatch] = useReducer(createDialogReducer, []);
-    const [submitEnabled, setSubmitEnabled] = useState(true);
+
+    useEffect(() => {
+        if (actionData) {
+            console.log(actionData);
+            if (actionData.status === "success") {
+                closeDialog();
+                createDialogDispatch({
+                    type: "set",
+                    newArray: []
+                });
+                showSnackbar(actionData.snackbarText, "success");
+            } else if (actionData.status === "error") {
+                setSubmitEnabled(true);
+                showSnackbar(actionData.snackbarText, "error");
+            } else if (actionData.status === "partial") {
+                setSubmitEnabled(true);
+                showSnackbar(actionData.snackbarText, "warning");
+                createDialogDispatch({
+                    type: "filterByIndex",
+                    indicesToKeep: actionData.indicesWithErrors
+                });
+            }
+        }
+    }, [actionData, closeDialog, showSnackbar]);
 
     useEffect(() => {
         if (dialogIsOpen) {
@@ -56,29 +120,43 @@ export const ItemMultiCreateDialog = ({ dialogState }) => {
 
     const handleSubmit = useCallback(() => {
         setSubmitEnabled(false);
-        Entity.handleMultiCreate(createDialogItems).then((itemPromises) => {
-            const itemsWithErrors = createDialogItems.filter((u, i) => {
-                return itemPromises[i].status !== "fulfilled";
-            });
-            createDialogDispatch({
-                type: "set",
-                newArray: itemsWithErrors
-            });
-            if (itemsWithErrors.length > 0) {
-                setSubmitEnabled(true);
-                if (itemsWithErrors.length === createDialogItems.length) {
-                    showSnackbar(`Could not create ${createDialogItems.length === 1 ? Entity.singular : Entity.plural}`, "error");
-                } else if (itemsWithErrors.length < createDialogItems.length) {
-                    handleRefresh();
-                    showSnackbar(`${createDialogItems.length - itemsWithErrors.length} of ${createDialogItems.length} ${Entity.plural} created`, "warning");
-                }
-            } else {
-                handleRefresh();
-                closeDialog();
-                showSnackbar(`${createDialogItems.length} ${createDialogItems.length === 1 ? Entity.singular : Entity.plural} created`, "success");
+        /**
+         * @type {import("../../Classes/buildRouterAction.js").RouterActionRequest}
+         */
+        const request = {
+            intent: "multi-create",
+            body: {
+                itemsToCreate: createDialogItems
             }
+        };
+        submit(request, {
+            method: "POST",
+            encType: "application/json"
         });
-    }, [Entity, closeDialog, createDialogItems, handleRefresh, showSnackbar]);
+
+        // Entity.handleMultiCreate(createDialogItems).then((itemPromises) => {
+        //     const itemsWithErrors = createDialogItems.filter((u, i) => {
+        //         return itemPromises[i].status !== "fulfilled";
+        //     });
+        //     createDialogDispatch({
+        //         type: "set",
+        //         newArray: itemsWithErrors
+        //     });
+        //     if (itemsWithErrors.length > 0) {
+        //         setSubmitEnabled(true);
+        //         if (itemsWithErrors.length === createDialogItems.length) {
+        //             showSnackbar(`Could not create ${createDialogItems.length === 1 ? Entity.singular : Entity.plural}`, "error");
+        //         } else if (itemsWithErrors.length < createDialogItems.length) {
+        //             handleRefresh();
+        //             showSnackbar(`${createDialogItems.length - itemsWithErrors.length} of ${createDialogItems.length} ${Entity.plural} created`, "warning");
+        //         }
+        //     } else {
+        //         handleRefresh();
+        //         closeDialog();
+        //         showSnackbar(`${createDialogItems.length} ${createDialogItems.length === 1 ? Entity.singular : Entity.plural} created`, "success");
+        //     }
+        // });
+    }, [createDialogItems, submit]);
 
     return (
         <PersistentDialog

@@ -60,18 +60,6 @@ export class Entity {
         });
     }
 
-    static handleMultiCreate ([...newItems]) {
-        return Promise.allSettled(newItems.map((newItem) => {
-            return new Promise((resolve, reject) => {
-                sendAuthenticatedRequest("POST", `${this.baseUrl}`, newItem).then(() => {
-                    resolve();
-                }).catch((e) => {
-                    reject(e);
-                });
-            });
-        }));
-    }
-
     static tableFields = [];
 }
 

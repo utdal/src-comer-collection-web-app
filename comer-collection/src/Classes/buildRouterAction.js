@@ -8,6 +8,17 @@ import { sendAuthenticatedRequest } from "../Helpers/APICalls.js";
 import { capitalized } from "./Entity.js";
 
 /**
+ * @typedef {(
+ * "single-delete"|
+ * "multi-delete"|
+ * "single-edit"|
+ * "user-reset-password"|
+ * "multi-create"|
+ * "extra"
+ * )} Intent
+ */
+
+/**
  * @typedef {{
  *  intent: ("single-delete"),
  *  itemId: number
@@ -24,8 +35,9 @@ import { capitalized } from "./Entity.js";
  *  body: Object<string, any>
  * }|{
  *  intent: ("multi-create"),
- *  itemId: number,
- *  body: Object<string, any>
+ *  body: {
+ *      itemsToCreate: Object<string, any>[]
+ *  }
  * }} RouterActionRequest
  */
 
@@ -38,12 +50,35 @@ import { capitalized } from "./Entity.js";
  *  status: "error",
  *  error: string,
  *  snackbarText: string
+ * }|{
+ *  status: "partial",
+ *  indicesWithErrors: number[],
+ *  errors: (string | null)[],
+ *  snackbarText: string
+ * }|{
+ *  status: "partial",
+ *  itemIdsWithErrors: number[],
+ *  snackbarText: string
  * }} RouterActionResponse
  */
 
 /**
- * @typedef {(User|Course)} EntityType
+ * @type {Object<string, Function[]>}
  */
+const permittedEntitiesByIntent = {
+    "single-delete": [User, Course, Image, Artist, Tag, Exhibition],
+    "single-edit": [User, Course, Image, Artist, Tag],
+    "multi-create": [User, Course, Image]
+};
+
+/**
+ * @type {Object<string, import("react-router-dom").V7_FormMethod}
+ */
+const requiredMethodsByIntent = {
+    "single-delete": "DELETE",
+    "single-edit": "PUT",
+    "multi-create": "POST"
+};
 
 /**
  * This higher-order function returns a function that can be used
@@ -67,7 +102,14 @@ const buildRouterAction = (entityType) => {
     const routerAction = async ({ request, params }) => {
         const requestData = await request.json();
         const { intent } = requestData;
-        if (request.method === "DELETE" && intent === "single-delete" && [User, Course, Image, Artist, Tag, Exhibition].includes(entityType)) {
+
+        if (!permittedEntitiesByIntent[intent].includes(entityType)) {
+            throw new Error(`The intent '${intent}' is not permitted on the entity '${entityType.singular}'`);
+        } else if (requiredMethodsByIntent[intent] !== request.method) {
+            throw new Error(`The intent '${intent}' requires the ${requiredMethodsByIntent[intent]} method, but the route received a ${request.method} request`);
+        }
+
+        if (intent === "single-delete") {
             const { itemId } = requestData;
             try {
                 const result = await sendAuthenticatedRequest("DELETE", `${entityType.baseUrl}/${itemId}`);
@@ -83,7 +125,7 @@ const buildRouterAction = (entityType) => {
                     snackbarText: `Could not delete ${entityType.singular}`
                 };
             }
-        } else if (request.method === "PUT" && intent === "single-edit" && [User, Course, Image, Artist, Tag].includes(entityType)) {
+        } else if (intent === "single-edit") {
             const { itemId } = requestData;
             try {
                 const result = await sendAuthenticatedRequest("PUT", `${entityType.baseUrl}/${itemId}`, requestData.body);
@@ -97,6 +139,56 @@ const buildRouterAction = (entityType) => {
                     status: "error",
                     error: e.message,
                     snackbarText: `Could not edit ${entityType.singular}`
+                };
+            }
+        } else if (intent === "multi-create") {
+            const { body } = requestData;
+            try {
+                const promiseResults = await Promise.allSettled(body.itemsToCreate.map((newItem) => {
+                    return new Promise((resolve, reject) => {
+                        sendAuthenticatedRequest("POST", `${entityType.baseUrl}`, newItem).then(() => {
+                            resolve();
+                        }).catch((e) => {
+                            reject(e);
+                        });
+                    });
+                }));
+                console.log(promiseResults);
+                const indicesWithErrors = promiseResults
+                    .map((promiseResult, index) => ({ index, promiseResult }))
+                    .filter(({ promiseResult }) => promiseResult.status === "rejected")
+                    .map(({ index }) => index);
+
+                switch (indicesWithErrors.length) {
+                case 0:
+                    return {
+                        status: "success",
+                        message: "all items created",
+                        snackbarText: body.itemsToCreate.length > 1
+                            ? `Created ${body.itemsToCreate.length} ${entityType.plural}`
+                            : `Created ${entityType.singular}`
+                    };
+                case body.itemsToCreate.length:
+                    return {
+                        status: "error",
+                        error: "no items created",
+                        snackbarText: body.itemsToCreate.length > 1
+                            ? `Could not create ${indicesWithErrors.length} ${entityType.plural}`
+                            : `Could not create ${entityType.singular}`
+                    };
+                default:
+                    return {
+                        status: "partial",
+                        indicesWithErrors,
+                        errors: promiseResults.map((promiseResult) => promiseResult.reason),
+                        snackbarText: `Created ${body.itemsToCreate.length - indicesWithErrors.length} of ${body.itemsToCreate.length} ${entityType.plural}`
+                    };
+                };
+            } catch (e) {
+                return {
+                    status: "error",
+                    error: e.message,
+                    snackbarText: `Could not create ${entityType.plural}`
                 };
             }
         } else {
