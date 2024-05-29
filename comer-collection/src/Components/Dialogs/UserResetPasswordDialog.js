@@ -106,7 +106,13 @@ export const UserResetPasswordDialog = ({ dialogState }) => {
             open={dialogIsOpen}
         >
             <DialogTitle>
-                {dialogUser?.has_password ? "Reset Password" : "Set Password"}
+                {editMode
+                    ? (
+                        dialogUser?.has_password ? "Reset Password" : "Set Password"
+                    )
+                    : (
+                        dialogUser?.has_password ? "Password Reset" : "Password Set"
+                    )}
             </DialogTitle>
 
             <DialogContent>
