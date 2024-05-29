@@ -111,37 +111,3 @@ export const tableFieldPropTypeShape = PropTypes.shape({
     columnDescription: PropTypes.string,
     TableCellComponent: PropTypes.elementType
 });
-
-/**
- * This higher-order function returns a function that can be used
- * as an action in React Router
- * @param {*} entityType
- * @returns {({request, params}) => {
- *  status: "success",
- *  message: string
- * }|{
- *  status: "error",
- *  error: string
- * }}
- */
-export const buildRouterAction = (entityType) => {
-    return async ({ request, params }) => {
-        const { id } = await request.json();
-        if (request.method === "DELETE") {
-            try {
-                const result = await entityType.handleDelete(id);
-                return {
-                    status: "success",
-                    message: result
-                };
-            } catch (e) {
-                return {
-                    status: "error",
-                    error: e.message
-                };
-            }
-        } else {
-            throw new Response(null, { status: 405 });
-        }
-    };
-};

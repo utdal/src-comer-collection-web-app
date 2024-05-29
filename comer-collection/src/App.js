@@ -28,6 +28,7 @@ import AppThemeProvider from "./ContextProviders/AppTheme.js";
 import { AppFeatureProvider } from "./ContextProviders/AppFeatures.js";
 import { FullPageMessage } from "./Components/FullPageMessage.js";
 import { InfoIcon } from "./Imports/Icons.js";
+import buildRouterAction from "./Classes/buildRouterAction.js";
 
 const appUserLoader = async () => {
     if (!localStorage.getItem("token")) {
@@ -173,7 +174,7 @@ const router = createBrowserRouter([
                                 ),
                                 path: "Users",
                                 loader: User.loader,
-                                action: User.routerAction,
+                                action: buildRouterAction(User),
                                 ErrorBoundary: RouterErrorMessage
                             },
                             {
@@ -184,7 +185,7 @@ const router = createBrowserRouter([
                                 ),
                                 path: "Courses",
                                 loader: Course.loader,
-                                action: Course.routerAction,
+                                action: buildRouterAction(Course),
                                 ErrorBoundary: RouterErrorMessage
                             },
                             {
@@ -206,6 +207,7 @@ const router = createBrowserRouter([
                                 ),
                                 path: "Images",
                                 loader: Image.loader,
+                                action: buildRouterAction(Image),
                                 ErrorBoundary: RouterErrorMessage
                             }
                         ]

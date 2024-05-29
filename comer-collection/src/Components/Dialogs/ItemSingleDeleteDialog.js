@@ -24,6 +24,9 @@ export const ItemSingleDeleteDialog = ({ requireTypedConfirmation, dialogState }
     const [submitEnabled, setSubmitEnabled] = useState(true);
     const showSnackbar = useSnackbar();
 
+    /**
+     * @type {import("../../Classes/buildRouterAction.js").RouterActionResponse}
+     */
     const actionData = useActionData();
 
     const Entity = useEntity();
@@ -37,9 +40,14 @@ export const ItemSingleDeleteDialog = ({ requireTypedConfirmation, dialogState }
     }, [dialogIsOpen]);
 
     const handleSubmit = useCallback(() => {
-        submit({
-            id: dialogItem?.id
-        }, {
+        /**
+         * @type {import("../../Classes/buildRouterAction.js").RouterActionRequest}
+         */
+        const request = {
+            intent: "single-delete",
+            itemId: dialogItem?.id
+        };
+        submit(request, {
             method: "DELETE",
             encType: "application/json"
         });
@@ -48,11 +56,11 @@ export const ItemSingleDeleteDialog = ({ requireTypedConfirmation, dialogState }
     useEffect(() => {
         if (actionData) {
             if (actionData.status === "success") {
-                showSnackbar(actionData.message, "success");
+                showSnackbar(actionData.snackbarText, "success");
                 closeDialog();
             } else if (actionData.status === "error") {
                 setSubmitEnabled(true);
-                showSnackbar(actionData.error, "error");
+                showSnackbar(actionData.snackbarText, "error");
             }
         }
     }, [actionData, closeDialog, showSnackbar]);
