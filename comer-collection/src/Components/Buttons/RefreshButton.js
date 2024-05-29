@@ -8,6 +8,7 @@ export const RefreshButton = memo(function RefreshButton () {
     const revalidator = useRevalidator();
     const [refreshInProgress, setRefreshInProgress] = useState(false);
     const handleClickRefresh = useCallback(() => {
+        setRefreshInProgress(true);
         revalidator.revalidate();
         sleepAsync(1000).then(() => {
             setRefreshInProgress(false);
@@ -16,7 +17,7 @@ export const RefreshButton = memo(function RefreshButton () {
     return (
         <Button
             color="primary"
-            disabled={refreshInProgress}
+            disabled={refreshInProgress || revalidator.state === "loading"}
             onClick={handleClickRefresh}
             startIcon={<RefreshIcon />}
             variant="outlined"
