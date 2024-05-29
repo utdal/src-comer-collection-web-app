@@ -31,6 +31,7 @@ export const PersistentDialog = ({ children, maxWidth, onClose, onSubmit, open }
             onClose={handleClose}
             onSubmit={onSubmit ? handleSubmit : null}
             open={open}
+            transitionDuration={0}
         >
             {children}
         </Dialog>
