@@ -12,8 +12,9 @@ import { capitalized } from "./Entity.js";
  * "single-delete"|
  * "multi-delete"|
  * "single-edit"|
- * "user-reset-password"|
  * "multi-create"|
+ * "user-reset-password"|
+ * "user-change-activation-status"|
  * "extra"
  * )} Intent
  */
@@ -30,13 +31,21 @@ import { capitalized } from "./Entity.js";
  *  itemId: number,
  *  body: Object<string, any>
  * }|{
- *  intent: ("user-reset-password"),
- *  userId: number,
- *  body: Object<string, any>
- * }|{
  *  intent: ("multi-create"),
  *  body: {
  *      itemsToCreate: Object<string, any>[]
+ *  }
+ * }|{
+ *  intent: ("user-reset-password"),
+ *  userId: number,
+ *  body: {
+ *      newPassword: string
+ *  }
+ * }|{
+ *  intent: ("user-change-activation-status"),
+ *  userId: number,
+ *  body: {
+ *      newStatus: boolean
  *  }
  * }} RouterActionRequest
  */
@@ -68,7 +77,9 @@ import { capitalized } from "./Entity.js";
 const permittedEntitiesByIntent = {
     "single-delete": [User, Course, Image, Artist, Tag, Exhibition],
     "single-edit": [User, Course, Image, Artist, Tag],
-    "multi-create": [User, Course, Image]
+    "multi-create": [User, Course, Image],
+    "user-reset-password": [User],
+    "user-change-activation-status": [User]
 };
 
 /**
@@ -77,7 +88,9 @@ const permittedEntitiesByIntent = {
 const requiredMethodsByIntent = {
     "single-delete": "DELETE",
     "single-edit": "PUT",
-    "multi-create": "POST"
+    "multi-create": "POST",
+    "user-reset-password": "PUT",
+    "user-change-activation-status": "PUT"
 };
 
 /**
@@ -126,9 +139,9 @@ const buildRouterAction = (entityType) => {
                 };
             }
         } else if (intent === "single-edit") {
-            const { itemId } = requestData;
+            const { body, itemId } = requestData;
             try {
-                const result = await sendAuthenticatedRequest("PUT", `${entityType.baseUrl}/${itemId}`, requestData.body);
+                const result = await sendAuthenticatedRequest("PUT", `${entityType.baseUrl}/${itemId}`, body);
                 return {
                     status: "success",
                     message: result,
@@ -189,6 +202,23 @@ const buildRouterAction = (entityType) => {
                     status: "error",
                     error: e.message,
                     snackbarText: `Could not create ${entityType.plural}`
+                };
+            }
+        } else if (intent === "user-reset-password") {
+            const { body, userId } = requestData;
+            try {
+                const { newPassword } = body;
+                await sendAuthenticatedRequest("PUT", `${entityType.baseUrl}/${userId}/password`, { newPassword });
+                return {
+                    status: "success",
+                    message: "Reset user password",
+                    snackbarText: "User password reset"
+                };
+            } catch (e) {
+                return {
+                    status: "error",
+                    error: e.message,
+                    snackbarText: "Could not reset user password"
                 };
             }
         } else {

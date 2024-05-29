@@ -8,11 +8,10 @@ import {
 } from "@mui/material";
 import { ContentCopyIcon, SyncIcon } from "../../Imports/Icons.js";
 import { useClipboard, useSnackbar } from "../../ContextProviders/AppFeatures.js";
-import { User } from "../../Classes/Entities/User.js";
-import { useManagementCallbacks } from "../../ContextProviders/ManagementPageProvider.js";
 import PropTypes from "prop-types";
 import { DialogState } from "../../Classes/DialogState.js";
 import { PersistentDialog } from "./PersistentDialog.js";
+import { useActionData, useSubmit } from "react-router-dom";
 
 const randomPassword = () => {
     const password = Math.random().toString(36).slice(-8) + Math.random().toString(36).slice(-8);
@@ -30,11 +29,27 @@ export const UserResetPasswordDialog = ({ dialogState }) => {
     const showSnackbar = useSnackbar();
     const clipboard = useClipboard();
 
-    const { handleRefresh } = useManagementCallbacks();
+    const submit = useSubmit();
+
+    /**
+     * @type {import("../../Classes/buildRouterAction.js").RouterActionResponse}
+     */
+    const actionData = useActionData();
 
     const { dialogItem: dialogUser, dialogIsOpen, closeDialog } = dialogState;
 
     const themeColor = dialogUser?.is_admin_or_collection_manager ? "secondary" : "primary";
+
+    useEffect(() => {
+        if (actionData) {
+            if (actionData.status === "success") {
+                showSnackbar(actionData.snackbarText, "success");
+                setEditMode(false);
+            } else if (actionData.status === "error") {
+                showSnackbar(actionData.snackbarText, "error");
+            }
+        }
+    }, [actionData, closeDialog, showSnackbar]);
 
     useEffect(() => {
         if (!dialogIsOpen) {
@@ -53,14 +68,21 @@ export const UserResetPasswordDialog = ({ dialogState }) => {
     }, [closeDialog]);
 
     const handleSubmit = useCallback(() => {
-        User.handleResetPassword(dialogUser?.id, newPassword).then((msg) => {
-            handleRefresh();
-            setEditMode(false);
-            showSnackbar(msg, "success");
-        }).catch((err) => {
-            showSnackbar(err.message, "error");
+        /**
+         * @type {import("../../Classes/buildRouterAction.js").RouterActionRequest}
+         */
+        const request = {
+            intent: "user-reset-password",
+            userId: dialogUser?.id,
+            body: {
+                newPassword
+            }
+        };
+        submit(request, {
+            method: "PUT",
+            encType: "application/json"
         });
-    }, [dialogUser?.id, handleRefresh, newPassword, showSnackbar]);
+    }, [dialogUser?.id, newPassword, submit]);
 
     const handleNewPasswordInput = useCallback((e) => {
         setNewPassword(e.target.value);
