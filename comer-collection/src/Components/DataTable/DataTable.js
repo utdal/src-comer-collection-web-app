@@ -57,7 +57,7 @@ export const DataTable = ({
         if (paginationStatus.startIndex >= 0) {
             tableContainerRef.current.scrollTo(0, 0);
         }
-    }, [paginationStatus]);
+    }, [paginationStatus.startIndex]);
 
     useEffect(() => {
         calculateSortableItemValues(tableFields.find((tf) => tf.columnDescription === sortColumn)?.generateSortableValue);
