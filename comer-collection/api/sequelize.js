@@ -25,7 +25,9 @@ const sequelize = new Sequelize(DB_SCHEMA, DB_USER, DB_PASSWORD, {
     host: DB_HOST,
     port: DB_PORT,
     define: {
-        timestamps: false
+        timestamps: true,
+        createdAt: "time_created",
+        updatedAt: "time_modified"
     }
 });
 

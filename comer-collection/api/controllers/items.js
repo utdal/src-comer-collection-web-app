@@ -111,7 +111,7 @@ const updateItem = async (req, res, next, model, itemId, restrictFields = null) 
                 where: { id: itemId },
                 transaction: t
             });
-            if (rowsUpdated > 1) {
+            if (rowsUpdated !== 1) {
                 throw new Error(`Number of updated rows was ${rowsUpdated}`);
             }
         });
