@@ -10,7 +10,7 @@ import { ImageArtistAssignmentCell } from "../../Components/TableCells/Image/Ima
 import { ImageTagAssignmentCell } from "../../Components/TableCells/Image/ImageTagAssignmentCell.js";
 import { ImageExhibitionCountCell } from "../../Components/TableCells/Image/ImageExhibitionCountCell.js";
 import { ImageOptionsCell } from "../../Components/TableCells/Image/ImageOptionsCell.js";
-import { AddPhotoAlternateIcon } from "../../Imports/Icons.js";
+import { AddPhotoAlternateIcon, DeleteIcon } from "../../Imports/Icons.js";
 
 class Image extends Entity {
     static baseUrl = "/api/images";
@@ -187,4 +187,16 @@ class PublicImage extends Image {
     };
 };
 
-export { Image, PublicImage };
+class DeletedImage extends Image {
+    static isTrash = true;
+    static baseUrl = "/api/deletedimages";
+    static plural = "images";
+
+    static DefaultIcon = DeleteIcon;
+
+    static fetcherUrl = "/Account/Admin/Images/Trash";
+}
+
+Image.TrashEntity = DeletedImage;
+
+export { Image, PublicImage, DeletedImage };

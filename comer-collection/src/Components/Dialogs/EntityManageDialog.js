@@ -6,7 +6,7 @@ import {
     Button, DialogContentText, Divider, TextField, Box,
     LinearProgress
 } from "@mui/material";
-import { AddIcon, WarningIcon } from "../../Imports/Icons.js";
+import { AddIcon, DeleteIcon, WarningIcon } from "../../Imports/Icons.js";
 import { getBlankItemFields } from "../../Helpers/fields.js";
 import { DataTable } from "../DataTable/DataTable.js";
 import SearchBox from "../SearchBox.js";
@@ -122,11 +122,23 @@ export const EntityManageDialog = ({
                 onSubmit={handleCreate}
                 open={dialogIsOpen}
             >
-                <DialogTitle>
-                    {"Manage "}
+                {Entity.isTrash
+                    ? (
+                        <DialogTitle>
+                            <DeleteIcon />
 
-                    {pluralCapitalized}
-                </DialogTitle>
+                            {"Trashed "}
+
+                            {pluralCapitalized}
+                        </DialogTitle>
+                    )
+                    : (
+                        <DialogTitle>
+                            {"Manage "}
+
+                            {pluralCapitalized}
+                        </DialogTitle>
+                    )}
 
                 <DialogContent sx={{ overflow: "hidden" }}>
                     {isError

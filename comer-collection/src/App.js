@@ -20,7 +20,7 @@ import ExhibitionManagement from "./Pages/Admin/ExhibitionManagement.js";
 import ImageManagement from "./Pages/Admin/ImageManagement.js";
 import { sendAuthenticatedRequest } from "./Helpers/APICalls.js";
 import { User } from "./Classes/Entities/User.js";
-import { Image, PublicImage } from "./Classes/Entities/Image.js";
+import { DeletedImage, Image, PublicImage } from "./Classes/Entities/Image.js";
 import RouterErrorMessage from "./Components/RouterErrorMessage.js";
 import { Course } from "./Classes/Entities/Course.js";
 import { Exhibition, PublicExhibition } from "./Classes/Entities/Exhibition.js";
@@ -212,7 +212,14 @@ const router = createBrowserRouter([
                                 path: "Images",
                                 loader: buildRouterLoader(Image),
                                 action: buildRouterAction(Image),
-                                ErrorBoundary: RouterErrorMessage
+                                ErrorBoundary: RouterErrorMessage,
+                                children: [
+                                    {
+                                        path: "Trash",
+                                        loader: buildRouterLoader(DeletedImage),
+                                        action: buildRouterAction(DeletedImage)
+                                    }
+                                ]
                             },
                             {
                                 path: "Artists",

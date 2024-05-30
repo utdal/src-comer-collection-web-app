@@ -11,7 +11,7 @@ import { SelectionSummary } from "../../Components/SelectionSummary.js";
 import { AssociationManagementDialog } from "../../Components/Dialogs/AssociationManagementDialog/AssociationManagementDialog.js";
 import { useTitle } from "../../ContextProviders/AppFeatures.js";
 
-import { Image } from "../../Classes/Entities/Image.js";
+import { DeletedImage, Image } from "../../Classes/Entities/Image.js";
 import { Artist } from "../../Classes/Entities/Artist.js";
 import { Tag } from "../../Classes/Entities/Tag.js";
 import { ImageArtist } from "../../Classes/Associations/ImageArtist.js";
@@ -56,6 +56,8 @@ const ImageManagement = () => {
 
     const [manageArtistDialogState, openManageArtistDialog] = useDialogState();
     const [manageTagDialogState, openManageTagDialog] = useDialogState();
+
+    const [manageImageTrashDialogState, openManageImageTrashDialog] = useDialogState();
 
     const [createDialogState, handleOpenMultiCreateDialog] = useDialogState();
     const [editDialogState, openEditDialog] = useDialogState(false);
@@ -181,6 +183,11 @@ const ImageManagement = () => {
                             handleOpenDialog={openManageArtistDialog}
                         />
 
+                        <EntityManageButton
+                            entity={DeletedImage}
+                            handleOpenDialog={openManageImageTrashDialog}
+                        />
+
                         <MultiCreateButton />
                     </ManagementButtonStack>
                 </ManagementPageHeader>
@@ -229,6 +236,12 @@ const ImageManagement = () => {
                 Entity={Tag}
                 dialogState={manageTagDialogState}
                 searchBoxPlaceholder="Search tags by name or notes"
+            />
+
+            <EntityManageDialog
+                Entity={DeletedImage}
+                dialogState={manageImageTrashDialogState}
+                searchBoxPlaceholder="trash placeholder"
             />
 
             <ImageFullScreenViewer

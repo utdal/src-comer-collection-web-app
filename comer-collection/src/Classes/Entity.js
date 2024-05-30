@@ -20,6 +20,8 @@ export class Entity {
     ];
 
     static hasTrash = false;
+    static isTrash = false;
+    static TrashEntity = null;
 
     static deleteDialogAdditionalInstructions = null;
     static permanentDeleteDialogAdditionalInstructions = null;
