@@ -19,6 +19,11 @@ export class Entity {
         }
     ];
 
+    static hasTrash = false;
+
+    static deleteDialogAdditionalInstructions = null;
+    static permanentDeleteDialogAdditionalInstructions = null;
+
     /**
      * @type {React.ElementType}
      */

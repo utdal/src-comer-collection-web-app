@@ -27,6 +27,10 @@ class Image extends Entity {
     static searchBoxFields = ["title", "valuationNotes", "otherNotes"];
     static searchBoxPlaceholder = "Search images by title or notes";
 
+    static hasTrash = true;
+
+    static deleteDialogAdditionalInstructions = "Any exhibitions currently featuring this image will show a placeholder image instead.";
+
     static fieldDefinitions = [
         {
             fieldName: "title",

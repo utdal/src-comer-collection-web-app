@@ -129,7 +129,7 @@ const buildRouterAction = (entityType) => {
                 return {
                     status: "success",
                     message: result,
-                    snackbarText: `${capitalized(entityType.singular)} deleted`
+                    snackbarText: `${capitalized(entityType.singular)} ${entityType.hasTrash ? "moved to trash" : "deleted"}`
                 };
             } catch (e) {
                 return {

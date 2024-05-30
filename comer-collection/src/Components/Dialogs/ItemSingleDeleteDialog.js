@@ -101,34 +101,70 @@ export const ItemSingleDeleteDialog = ({ requireTypedConfirmation, dialogState }
             onSubmit={handleSubmit}
             open={dialogIsOpen}
         >
-            <DialogTitle>
-                {"Delete "}
+            {Entity.hasTrash
+                ? (
+                    <DialogTitle>
+                        {"Move "}
 
-                {Entity?.singular.substr(0, 1).toUpperCase()}
+                        {Entity?.singular.substr(0, 1).toUpperCase()}
 
-                {Entity?.singular.substr(1).toLowerCase()}
-            </DialogTitle>
+                        {Entity?.singular.substr(1).toLowerCase()}
+
+                        {" to Trash "}
+                    </DialogTitle>
+                )
+                : (
+                    <DialogTitle>
+                        {"Delete "}
+
+                        {Entity?.singular.substr(0, 1).toUpperCase()}
+
+                        {Entity?.singular.substr(1).toLowerCase()}
+                    </DialogTitle>
+                )}
 
             <DialogContent>
                 <Stack spacing={2}>
-                    <DialogContentText
-                        sx={{ wordWrap: "break-word" }}
-                        variant="body1"
-                    >
-                        {"Are you sure you want to delete the "}
+                    {Entity.hasTrash
+                        ? (
+                            <DialogContentText
+                                sx={{ wordWrap: "break-word" }}
+                                variant="body1"
+                            >
+                                {"Are you sure you want to move the "}
 
-                        {Entity?.singular}
+                                {Entity?.singular}
 
-                        {" "}
+                                {" "}
 
-                        <i>
-                            {dialogItem?.safe_display_name}
-                        </i>
+                                <i>
+                                    {dialogItem?.safe_display_name}
+                                </i>
 
-                        {
-                            /* */
-                        }
-                        ?
+                                {" to the trash? "}
+                            </DialogContentText>
+                        )
+                        : (
+                            <DialogContentText
+                                sx={{ wordWrap: "break-word" }}
+                                variant="body1"
+                            >
+                                {"Are you sure you want to delete the "}
+
+                                {Entity?.singular}
+
+                                {" "}
+
+                                <i>
+                                    {dialogItem?.safe_display_name}
+                                </i>
+
+                                {"? "}
+                            </DialogContentText>
+                        )}
+
+                    <DialogContentText>
+                        {Entity?.deleteDialogAdditionalInstructions}
                     </DialogContentText>
 
                     {requireTypedConfirmation
@@ -164,18 +200,35 @@ export const ItemSingleDeleteDialog = ({ requireTypedConfirmation, dialogState }
                         Cancel
                     </Button>
 
-                    <Button
-                        color="error"
-                        disabled={!submitEnabled || (requireTypedConfirmation && deleteConfirmation.toLowerCase() !== "delete")}
-                        fullWidth
-                        size="large"
-                        startIcon={<DeleteIcon />}
-                        type="submit"
-                        variant="contained"
-                    >
-                        Delete
+                    {Entity.hasTrash
+                        ? (
+                            <Button
+                                color="primary"
+                                disabled={!submitEnabled || (requireTypedConfirmation && deleteConfirmation.toLowerCase() !== "delete")}
+                                fullWidth
+                                size="large"
+                                startIcon={<DeleteIcon />}
+                                type="submit"
+                                variant="contained"
+                            >
+                                Trash
 
-                    </Button>
+                            </Button>
+                        )
+                        : (
+                            <Button
+                                color="error"
+                                disabled={!submitEnabled || (requireTypedConfirmation && deleteConfirmation.toLowerCase() !== "delete")}
+                                fullWidth
+                                size="large"
+                                startIcon={<DeleteIcon />}
+                                type="submit"
+                                variant="contained"
+                            >
+                                Delete
+
+                            </Button>
+                        )}
                 </Stack>
             </DialogActions>
         </PersistentDialog>
