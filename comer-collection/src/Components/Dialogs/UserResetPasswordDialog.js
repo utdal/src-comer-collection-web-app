@@ -54,10 +54,10 @@ export const UserResetPasswordDialog = ({ dialogState }) => {
     useEffect(() => {
         if (!dialogIsOpen) {
             closeDialog();
-            setEditMode(true);
-            setHasCopied(false);
-            setNewPassword("");
         }
+        setEditMode(true);
+        setHasCopied(false);
+        setNewPassword("");
     }, [closeDialog, dialogIsOpen]);
 
     const handleClose = useCallback((event, reason) => {
