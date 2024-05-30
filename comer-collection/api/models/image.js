@@ -145,7 +145,12 @@ export default (sequelize) => {
                     include: ["url", "thumbnailUrl"]
                 }
             }
-        }
+        },
+        timestamps: true,
+        paranoid: true,
+        createdAt: "time_created",
+        updatedAt: "time_modified",
+        deletedAt: "time_trashed"
     });
 
     return Image;
