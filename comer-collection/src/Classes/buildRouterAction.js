@@ -1,6 +1,6 @@
 import { User } from "./Entities/User.js";
 import { Course } from "./Entities/Course.js";
-import { Image } from "./Entities/Image.js";
+import { DeletedImage, Image } from "./Entities/Image.js";
 import { Artist } from "./Entities/Artist.js";
 import { Tag } from "./Entities/Tag.js";
 import { Exhibition } from "./Entities/Exhibition.js";
@@ -22,6 +22,9 @@ import { capitalized } from "./Entity.js";
 /**
  * @typedef {{
  *  intent: ("single-delete"),
+ *  itemId: number
+ * }|{
+ *  intent: ("single-permanent-delete"),
  *  itemId: number
  * }|{
  *  intent: ("multi-delete"),
@@ -76,6 +79,7 @@ import { capitalized } from "./Entity.js";
  */
 const permittedEntitiesByIntent = {
     "single-delete": [User, Course, Image, Artist, Tag, Exhibition],
+    "single-permanent-delete": [DeletedImage],
     "single-edit": [User, Course, Image, Artist, Tag],
     "multi-create": [User, Course, Image],
     "user-reset-password": [User],
@@ -87,6 +91,7 @@ const permittedEntitiesByIntent = {
  */
 const requiredMethodsByIntent = {
     "single-delete": "DELETE",
+    "single-permanent-delete": "DELETE",
     "single-edit": "PUT",
     "multi-create": "POST",
     "user-reset-password": "PUT",
@@ -136,6 +141,22 @@ const buildRouterAction = (entityType) => {
                     status: "error",
                     error: e.message,
                     snackbarText: entityType.hasTrash ? `Could not delete ${entityType.singular}` : `Could not move ${entityType.singular} to trash`
+                };
+            }
+        } else if (intent === "single-permanent-delete") {
+            const { itemId } = requestData;
+            try {
+                const result = await sendAuthenticatedRequest("DELETE", `${entityType.baseUrl}/${itemId}`);
+                return {
+                    status: "success",
+                    message: result,
+                    snackbarText: `${capitalized(entityType.singular)} permanently deleted`
+                };
+            } catch (e) {
+                return {
+                    status: "error",
+                    error: e.message,
+                    snackbarText: `Could not permanently delete ${entityType.singular}`
                 };
             }
         } else if (intent === "single-edit") {

@@ -124,12 +124,21 @@ export const EntityManageDialog = ({
             >
                 {Entity.isTrash
                     ? (
-                        <DialogTitle>
-                            <DeleteIcon />
-
-                            {"Trashed "}
+                        <DialogTitle
+                            alignItems="center"
+                            component={Stack}
+                            direction="row"
+                            justifyContent="center"
+                        >
+                            <DeleteIcon
+                                fontSize="large"
+                                sx={{ marginRight: 1 }}
+                            />
 
                             {pluralCapitalized}
+
+                            {" In Trash"}
+
                         </DialogTitle>
                     )
                     : (
@@ -168,113 +177,128 @@ export const EntityManageDialog = ({
                                             `
                                         }}
                                     >
-                                        {dialogItemsCombinedState.items.length > 0 && (
-                                            <>
-                                                <Box sx={{ gridArea: "update", overflowX: "auto" }}>
-                                                    <Stack
-                                                        spacing={2}
-                                                        sx={{ height: "300px" }}
-                                                    >
+                                        <>
+                                            <Box sx={{ gridArea: "update", overflowX: "auto" }}>
+                                                {dialogItemsCombinedState.itemCounts.all
+                                                    ? (
+                                                        <Stack
+                                                            spacing={2}
+                                                            sx={{ height: "300px" }}
+                                                        >
+                                                            <Stack
+                                                                alignItems="center"
+                                                                direction="row"
+                                                                justifyContent="space-between"
+                                                                spacing={2}
+                                                            >
+
+                                                                <SearchBox
+                                                                    searchQuery={itemSearchQuery}
+                                                                    setSearchQuery={setItemSearchQuery}
+                                                                    width="40%"
+                                                                />
+
+                                                                <PaginationSummary />
+
+                                                                <RefreshButton />
+
+                                                            </Stack>
+
+                                                            <DataTable
+                                                                NoContentIcon="div"
+                                                                rowSelectionEnabled
+                                                                smallCheckboxes
+                                                                tableFields={Entity.tableFields}
+                                                            />
+
+                                                        </Stack>
+                                                    )
+                                                    : (
+                                                        Entity.isTrash
+                                                            ? (
+                                                                <FullPageMessage
+                                                                    Icon={DeleteIcon}
+                                                                    message={`No ${Entity.plural} in trash`}
+                                                                />
+                                                            )
+                                                            : null
+                                                    ) }
+                                            </Box>
+
+                                            <Divider />
+                                        </>
+
+                                        {!Entity.isTrash
+                                            ? (
+                                                <Box sx={{ gridArea: "create" }}>
+                                                    <Stack spacing={2}>
+                                                        <DialogContentText
+                                                            textAlign="left"
+                                                            variant="h6"
+                                                        >
+                                                            {"Create a new "}
+
+                                                            {Entity.singular}
+                                                        </DialogContentText>
+
                                                         <Stack
                                                             alignItems="center"
                                                             direction="row"
-                                                            justifyContent="space-between"
+                                                            justifyContent="space-around"
                                                             spacing={2}
                                                         >
+                                                            <Stack
+                                                                alignItems="center"
+                                                                direction="row"
+                                                                flexWrap="wrap"
+                                                                spacing={2}
+                                                                useFlexGap
+                                                            >
+                                                                {Entity.fieldDefinitions.map((f, fi) => (
+                                                                    <TextField
+                                                                        autoFocus={fi === 0}
+                                                                        inputProps={{
+                                                                            type: f.inputType ?? "text",
+                                                                            sx: {
+                                                                                ...{
+                                                                                    textAlign: f.inputType === "datetime-local" ? "center" : ""
+                                                                                }
+                                                                            }
+                                                                        }}
+                                                                        key={f.fieldName}
+                                                                        label={f.displayName}
+                                                                        minRows={2}
+                                                                        multiline={f.multiline}
+                                                                        name={f.fieldName}
+                                                                        onChange={(e) => {
+                                                                            setItemToAdd({
+                                                                                ...itemToAdd,
+                                                                                [f.fieldName]: e.target.value
+                                                                            });
+                                                                        }}
+                                                                        required={Boolean(f.isRequired)}
+                                                                        sx={{
+                                                                            minWidth: "200px"
+                                                                        }}
+                                                                        value={itemToAdd[f.fieldName]}
+                                                                    />
+                                                                ))}
 
-                                                            <SearchBox
-                                                                searchQuery={itemSearchQuery}
-                                                                setSearchQuery={setItemSearchQuery}
-                                                                width="40%"
-                                                            />
+                                                            </Stack>
 
-                                                            <PaginationSummary />
-
-                                                            <RefreshButton />
-
+                                                            <Button
+                                                                startIcon={<AddIcon />}
+                                                                sx={{ minWidth: "200px", height: "100%" }}
+                                                                type="submit"
+                                                                variant="contained"
+                                                            >
+                                                                {`Create ${Entity.singular}`}
+                                                            </Button>
                                                         </Stack>
-
-                                                        <DataTable
-                                                            NoContentIcon="div"
-                                                            rowSelectionEnabled
-                                                            smallCheckboxes
-                                                            tableFields={Entity.tableFields}
-                                                        />
-
                                                     </Stack>
                                                 </Box>
-
-                                                <Divider />
-                                            </>
-                                        )}
-
-                                        <Box sx={{ gridArea: "create" }}>
-                                            <Stack spacing={2}>
-                                                <DialogContentText
-                                                    textAlign="left"
-                                                    variant="h6"
-                                                >
-                                                    {"Create a new "}
-
-                                                    {Entity.singular}
-                                                </DialogContentText>
-
-                                                <Stack
-                                                    alignItems="center"
-                                                    direction="row"
-                                                    justifyContent="space-around"
-                                                    spacing={2}
-                                                >
-                                                    <Stack
-                                                        alignItems="center"
-                                                        direction="row"
-                                                        flexWrap="wrap"
-                                                        spacing={2}
-                                                        useFlexGap
-                                                    >
-                                                        {Entity.fieldDefinitions.map((f, fi) => (
-                                                            <TextField
-                                                                autoFocus={fi === 0}
-                                                                inputProps={{
-                                                                    type: f.inputType ?? "text",
-                                                                    sx: {
-                                                                        ...{
-                                                                            textAlign: f.inputType === "datetime-local" ? "center" : ""
-                                                                        }
-                                                                    }
-                                                                }}
-                                                                key={f.fieldName}
-                                                                label={f.displayName}
-                                                                minRows={2}
-                                                                multiline={f.multiline}
-                                                                name={f.fieldName}
-                                                                onChange={(e) => {
-                                                                    setItemToAdd({
-                                                                        ...itemToAdd,
-                                                                        [f.fieldName]: e.target.value
-                                                                    });
-                                                                }}
-                                                                required={Boolean(f.isRequired)}
-                                                                sx={{
-                                                                    minWidth: "200px"
-                                                                }}
-                                                                value={itemToAdd[f.fieldName]}
-                                                            />
-                                                        ))}
-
-                                                    </Stack>
-
-                                                    <Button
-                                                        startIcon={<AddIcon />}
-                                                        sx={{ minWidth: "200px", height: "100%" }}
-                                                        type="submit"
-                                                        variant="contained"
-                                                    >
-                                                        {`Create ${Entity.singular}`}
-                                                    </Button>
-                                                </Stack>
-                                            </Stack>
-                                        </Box>
+                                            )
+                                            : null}
                                     </Stack>
 
                                 )
@@ -302,7 +326,7 @@ export const EntityManageDialog = ({
                             Close
                         </Button>
 
-                        {isLoaded && !isError
+                        {isLoaded && !isError && dialogItemsCombinedState.itemCounts.all > 0
                             ? (
                                 <SelectionSummary />
                             )

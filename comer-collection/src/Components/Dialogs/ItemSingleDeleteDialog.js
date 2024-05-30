@@ -52,7 +52,7 @@ export const ItemSingleDeleteDialog = ({ requireTypedConfirmation, dialogState }
          * @type {import("../../Classes/buildRouterAction.js").RouterActionRequest}
          */
         const request = {
-            intent: "single-delete",
+            intent: Entity.isTrash ? "single-permanent-delete" : "single-delete",
             itemId: dialogItem?.id
         };
         if (Entity.fetcherUrl) {
@@ -67,7 +67,7 @@ export const ItemSingleDeleteDialog = ({ requireTypedConfirmation, dialogState }
                 encType: "application/json"
             });
         }
-    }, [Entity.fetcherUrl, dialogItem?.id, fetcher, submit]);
+    }, [Entity, dialogItem?.id, fetcher, submit]);
 
     useEffect(() => {
         if (actionData) {
@@ -115,7 +115,7 @@ export const ItemSingleDeleteDialog = ({ requireTypedConfirmation, dialogState }
                 )
                 : (
                     <DialogTitle>
-                        {"Delete "}
+                        {Entity.isTrash ? "Permanently Delete " : "Delete "}
 
                         {Entity?.singular.substr(0, 1).toUpperCase()}
 
@@ -144,28 +144,55 @@ export const ItemSingleDeleteDialog = ({ requireTypedConfirmation, dialogState }
                                 {" to the trash? "}
                             </DialogContentText>
                         )
-                        : (
-                            <DialogContentText
-                                sx={{ wordWrap: "break-word" }}
-                                variant="body1"
-                            >
-                                {"Are you sure you want to delete the "}
+                        : Entity.isTrash
+                            ? (
+                                <DialogContentText
+                                    sx={{ wordWrap: "break-word" }}
+                                    variant="body1"
+                                >
+                                    {"Are you sure you want to delete the "}
 
-                                {Entity?.singular}
+                                    {Entity?.singular}
 
-                                {" "}
+                                    {" "}
 
-                                <i>
-                                    {dialogItem?.safe_display_name}
-                                </i>
+                                    <i>
+                                        {dialogItem?.safe_display_name}
+                                    </i>
 
-                                {"? "}
+                                    <b>
+                                        {" permanently"}
+                                    </b>
+
+                                    {"? "}
+                                </DialogContentText>
+                            )
+                            : (
+                                <DialogContentText
+                                    sx={{ wordWrap: "break-word" }}
+                                    variant="body1"
+                                >
+                                    {"Are you sure you want to delete the "}
+
+                                    {Entity?.singular}
+
+                                    {" "}
+
+                                    <i>
+                                        {dialogItem?.safe_display_name}
+                                    </i>
+
+                                    {"? "}
+                                </DialogContentText>
+                            )}
+
+                    {Entity?.deleteDialogAdditionalInstructions
+                        ? (
+                            <DialogContentText>
+                                {Entity?.deleteDialogAdditionalInstructions}
                             </DialogContentText>
-                        )}
-
-                    <DialogContentText>
-                        {Entity?.deleteDialogAdditionalInstructions}
-                    </DialogContentText>
+                        )
+                        : null}
 
                     {requireTypedConfirmation
                         ? (

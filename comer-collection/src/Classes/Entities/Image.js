@@ -11,6 +11,7 @@ import { ImageTagAssignmentCell } from "../../Components/TableCells/Image/ImageT
 import { ImageExhibitionCountCell } from "../../Components/TableCells/Image/ImageExhibitionCountCell.js";
 import { ImageOptionsCell } from "../../Components/TableCells/Image/ImageOptionsCell.js";
 import { AddPhotoAlternateIcon, DeleteIcon } from "../../Imports/Icons.js";
+import { ImageDeletedOptionsCell } from "../../Components/TableCells/Image/ImageDeletedOptionsCell.js";
 
 class Image extends Entity {
     static baseUrl = "/api/images";
@@ -189,12 +190,49 @@ class PublicImage extends Image {
 
 class DeletedImage extends Image {
     static isTrash = true;
+    static hasTrash = false;
     static baseUrl = "/api/deletedimages";
+    static deleteDialogAdditionalInstructions = null;
+
     static plural = "images";
 
     static DefaultIcon = DeleteIcon;
 
     static fetcherUrl = "/Account/Admin/Images/Trash";
+
+    static tableFields = [
+        {
+            columnDescription: "ID",
+            TableCellComponent: ImageIDCell,
+            generateSortableValue: (image) => image.id
+        },
+        {
+            columnDescription: "Title",
+            TableCellComponent: ImageTitleCell,
+            generateSortableValue: (image) => image.title.toLowerCase()
+        },
+        {
+            columnDescription: "Preview",
+            TableCellComponent: ImagePreviewThumbnailCell
+        },
+        {
+            columnDescription: "Accession Number",
+            TableCellComponent: ImageAccessionNumberCell,
+            generateSortableValue: (image) => image.accessionNumber?.toLowerCase()
+        },
+        {
+            columnDescription: "Location",
+            TableCellComponent: ImageLocationCell
+        },
+        {
+            columnDescription: "Exhibitions",
+            TableCellComponent: ImageExhibitionCountCell
+        },
+        {
+            columnDescription: "Options",
+            TableCellComponent: ImageDeletedOptionsCell
+        }
+    ];
 }
 
 Image.TrashEntity = DeletedImage;
