@@ -6,23 +6,23 @@ import {
     Button, DialogContentText, Divider, TextField, Box,
     LinearProgress
 } from "@mui/material";
-import { AddIcon, DeleteIcon, WarningIcon } from "../../Imports/Icons.js";
-import { getBlankItemFields } from "../../Helpers/fields.js";
-import { DataTable } from "../DataTable/DataTable.js";
-import SearchBox from "../SearchBox.js";
-import { doesItemMatchSearchQuery } from "../../Helpers/SearchUtilities.js";
-import { ItemSingleDeleteDialog } from "./ItemSingleDeleteDialog.js";
-import { ItemSingleEditDialog } from "./ItemSingleEditDialog.js";
+import { AddIcon, DeleteIcon, WarningIcon } from "../../../Imports/Icons.js";
+import { getBlankItemFields } from "../../../Helpers/fields.js";
+import { DataTable } from "../../DataTable/DataTable.js";
+import SearchBox from "../../SearchBox.js";
+import { doesItemMatchSearchQuery } from "../../../Helpers/SearchUtilities.js";
+import { ItemSingleDeleteDialog } from "../ItemSingleDeleteDialog.js";
+import { ItemSingleEditDialog } from "../ItemSingleEditDialog.js";
 import PropTypes from "prop-types";
-import { useSnackbar } from "../../ContextProviders/AppFeatures.js";
-import { ManagementPageProvider, useItemsReducer } from "../../ContextProviders/ManagementPageProvider.js";
-import { useDialogState } from "../../Hooks/useDialogState.js";
-import { DialogState } from "../../Classes/DialogState.js";
-import { PersistentDialog } from "./PersistentDialog.js";
-import { FullPageMessage } from "../FullPageMessage.js";
-import { RefreshButton } from "../Buttons/RefreshButton.js";
-import { SelectionSummary } from "../SelectionSummary.js";
-import PaginationSummary from "../PaginationSummary/PaginationSummary.js";
+import { useSnackbar } from "../../../ContextProviders/AppFeatures.js";
+import { ManagementPageProvider, useItemsReducer } from "../../../ContextProviders/ManagementPageProvider.js";
+import { useDialogState } from "../../../Hooks/useDialogState.js";
+import { DialogState } from "../../../Classes/DialogState.js";
+import { PersistentDialog } from "../PersistentDialog.js";
+import { FullPageMessage } from "../../FullPageMessage.js";
+import { RefreshButton } from "../../Buttons/RefreshButton.js";
+import { SelectionSummary } from "../../SelectionSummary.js";
+import PaginationSummary from "../../PaginationSummary/PaginationSummary.js";
 import { useFetcher } from "react-router-dom";
 
 /**

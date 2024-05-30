@@ -6,7 +6,7 @@ import { ItemSingleEditDialog } from "../../Components/Dialogs/ItemSingleEditDia
 import { doesItemMatchSearchQuery } from "../../Helpers/SearchUtilities.js";
 import { useLoaderData, useNavigate, useRevalidator } from "react-router";
 import { ImageFullScreenViewer } from "../../Components/Dialogs/ImageFullScreenViewer.js";
-import { EntityManageDialog } from "../../Components/Dialogs/EntityManageDialog.js";
+import { EntityManageDialog } from "../../Components/Dialogs/EntityManageDialog/EntityManageDialog.js";
 import { SelectionSummary } from "../../Components/SelectionSummary.js";
 import { AssociationManagementDialog } from "../../Components/Dialogs/AssociationManagementDialog/AssociationManagementDialog.js";
 import { useTitle } from "../../ContextProviders/AppFeatures.js";
