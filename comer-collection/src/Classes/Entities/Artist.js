@@ -14,6 +14,8 @@ class Artist extends Entity {
 
     static fetcherUrl = "/Account/Admin/Artists";
 
+    static entityManageRelativeUrl = "Artists";
+
     static fieldDefinitions = [
         {
             fieldName: "familyName",

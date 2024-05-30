@@ -13,6 +13,8 @@ class Tag extends Entity {
 
     static fetcherUrl = "/Account/Admin/Tags";
 
+    static entityManageRelativeUrl = "Tags";
+
     static fieldDefinitions = [
         {
             fieldName: "data",

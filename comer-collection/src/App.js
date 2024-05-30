@@ -32,6 +32,7 @@ import buildRouterAction from "./Classes/buildRouterAction.js";
 import buildRouterLoader from "./Classes/buildRouterLoader.js";
 import { Artist } from "./Classes/Entities/Artist.js";
 import { Tag } from "./Classes/Entities/Tag.js";
+import { EntityManageDialog } from "./Components/Dialogs/EntityManageDialog/EntityManageDialog.js";
 
 const appUserLoader = async () => {
     if (!localStorage.getItem("token")) {
@@ -215,23 +216,23 @@ const router = createBrowserRouter([
                                 ErrorBoundary: RouterErrorMessage,
                                 children: [
                                     {
+                                        path: "Artists",
+                                        loader: buildRouterLoader(Artist),
+                                        action: buildRouterAction(Artist),
+                                        element: <EntityManageDialog Entity={Artist} />
+                                    },
+                                    {
+                                        path: "Tags",
+                                        loader: buildRouterLoader(Tag),
+                                        action: buildRouterAction(Tag),
+                                        element: <EntityManageDialog Entity={Tag} />
+                                    },
+                                    {
                                         path: "Trash",
                                         loader: buildRouterLoader(DeletedImage),
                                         action: buildRouterAction(DeletedImage)
                                     }
                                 ]
-                            },
-                            {
-                                path: "Artists",
-                                loader: buildRouterLoader(Artist),
-                                action: buildRouterAction(Artist),
-                                element: <Navigate to="/Account/Profile" />
-                            },
-                            {
-                                path: "Tags",
-                                loader: buildRouterLoader(Tag),
-                                action: buildRouterAction(Tag),
-                                element: <Navigate to="/Account/Profile" />
                             },
                             {
                                 path: "*",

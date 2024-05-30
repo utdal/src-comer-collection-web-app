@@ -15,29 +15,30 @@ import PropTypes from "prop-types";
 import { useSnackbar } from "../../../ContextProviders/AppFeatures.js";
 import { ManagementPageProvider, useItemsReducer } from "../../../ContextProviders/ManagementPageProvider.js";
 import { useDialogState } from "../../../Hooks/useDialogState.js";
-import { DialogState } from "../../../Classes/DialogState.js";
 import { PersistentDialog } from "../PersistentDialog.js";
 import { SelectionSummary } from "../../SelectionSummary.js";
-import { useFetcher } from "react-router-dom";
+import { useLoaderData, useNavigate } from "react-router-dom";
 import EntityManageUpdateSection from "./EntityManageUpdateSection.js";
 
 /**
- * @param {{
- *  dialogState: DialogState
+ * @param //{{
+//  *  dialogState: DialogState
  * }} props
  * @returns
  */
 export const EntityManageDialog = ({
-    Entity,
-    dialogState
+    Entity
+    // dialogState
 }) => {
     const blankItem = useMemo(() => getBlankItemFields(Entity.fieldDefinitions), [Entity.fieldDefinitions]);
     const [itemToAdd, setItemToAdd] = useState(blankItem);
     const showSnackbar = useSnackbar();
 
-    const { closeDialog, dialogIsOpen } = dialogState;
+    // const { closeDialog, dialogIsOpen } = dialogState;
 
-    const fetcher = useFetcher();
+    // const fetcher = useFetcher();
+
+    const dialogItems = useLoaderData();
 
     const [dialogItemsCombinedState, itemsCallbacks] = useItemsReducer([]);
 
@@ -46,21 +47,27 @@ export const EntityManageDialog = ({
         filterItems: filterDialogItems
     } = itemsCallbacks;
 
-    useEffect(() => {
-        if (dialogIsOpen && fetcher.state === "idle" && !fetcher.data) {
-            fetcher.load(Entity.fetcherUrl);
-        }
-    }, [Entity.fetcherUrl, dialogIsOpen, fetcher]);
+    const navigate = useNavigate();
+
+    const handleClose = useCallback(() => {
+        navigate("..");
+    }, [navigate]);
+
+    // useEffect(() => {
+    //     if (dialogIsOpen && fetcher.state === "idle" && !fetcher.data) {
+    //         fetcher.load(Entity.fetcherUrl);
+    //     }
+    // }, [Entity.fetcherUrl, dialogIsOpen, fetcher]);
 
     const [isLoaded, setIsLoaded] = useState(false);
     const isError = false;
 
     useEffect(() => {
-        if (fetcher.data) {
+        if (dialogItems) {
             setIsLoaded(true);
-            setDialogItems(fetcher.data);
+            setDialogItems(dialogItems);
         }
-    }, [fetcher.data, setDialogItems]);
+    }, [dialogItems, setDialogItems]);
     const [itemSearchQuery, setItemSearchQuery] = useState("");
 
     const [editDialogState, openEditDialog] = useDialogState(false);
@@ -114,9 +121,9 @@ export const EntityManageDialog = ({
         >
             <PersistentDialog
                 maxWidth="lg"
-                onClose={closeDialog}
+                // onClose={closeDialog}
                 onSubmit={handleCreate}
-                open={dialogIsOpen}
+                open
             >
                 {Entity.isTrash
                     ? (
@@ -258,7 +265,7 @@ export const EntityManageDialog = ({
 
                         <Button
                             color="primary"
-                            onClick={closeDialog}
+                            onClick={handleClose}
                             size="large"
                             sx={{
                                 width: "30%"
@@ -286,6 +293,6 @@ export const EntityManageDialog = ({
 };
 
 EntityManageDialog.propTypes = {
-    Entity: PropTypes.func.isRequired,
-    dialogState: PropTypes.instanceOf(DialogState).isRequired
+    Entity: PropTypes.func.isRequired
+    // dialogState: PropTypes.instanceOf(DialogState).isRequired
 };

@@ -26,6 +26,8 @@ export class Entity {
     static deleteDialogAdditionalInstructions = null;
     static permanentDeleteDialogAdditionalInstructions = null;
 
+    static entityManageRelativeUrl = null;
+
     /**
      * @type {React.ElementType}
      */

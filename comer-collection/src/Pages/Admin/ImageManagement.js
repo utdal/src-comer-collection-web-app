@@ -4,9 +4,8 @@ import { ItemSingleDeleteDialog } from "../../Components/Dialogs/ItemSingleDelet
 import { ItemMultiCreateDialog } from "../../Components/Dialogs/ItemMultiCreateDialog.js";
 import { ItemSingleEditDialog } from "../../Components/Dialogs/ItemSingleEditDialog.js";
 import { doesItemMatchSearchQuery } from "../../Helpers/SearchUtilities.js";
-import { useLoaderData, useNavigate, useRevalidator } from "react-router";
+import { Outlet, useLoaderData, useNavigate, useRevalidator } from "react-router";
 import { ImageFullScreenViewer } from "../../Components/Dialogs/ImageFullScreenViewer.js";
-import { EntityManageDialog } from "../../Components/Dialogs/EntityManageDialog/EntityManageDialog.js";
 import { SelectionSummary } from "../../Components/SelectionSummary.js";
 import { AssociationManagementDialog } from "../../Components/Dialogs/AssociationManagementDialog/AssociationManagementDialog.js";
 import { useTitle } from "../../ContextProviders/AppFeatures.js";
@@ -54,17 +53,12 @@ const ImageManagement = () => {
     const [previewerImage, setPreviewerImage] = useState(null);
     const [previewerOpen, setPreviewerOpen] = useState(false);
 
-    const [manageArtistDialogState, openManageArtistDialog] = useDialogState();
-    const [manageTagDialogState, openManageTagDialog] = useDialogState();
-
-    const [manageImageTrashDialogState, openManageImageTrashDialog] = useDialogState();
-
     const [createDialogState, handleOpenMultiCreateDialog] = useDialogState();
     const [editDialogState, openEditDialog] = useDialogState(false);
     const [deleteDialogState, openDeleteDialog] = useDialogState(false);
 
-    const [assignArtistDialogState, openAssignArtistDialog, closeAssignArtistDialog] = useDialogState(true);
-    const [assignTagDialogState, openAssignTagDialog, closeAssignTagDialog] = useDialogState(true);
+    const [assignArtistDialogState, openAssignArtistDialog] = useDialogState(true);
+    const [assignTagDialogState, openAssignTagDialog] = useDialogState(true);
     const [viewExhibitionDialogState, openViewExhibitionDialog] = useDialogState(true);
 
     const [searchQuery, setSearchQuery] = useState("");
@@ -115,15 +109,15 @@ const ImageManagement = () => {
         openDeleteDialog(image);
     }, [openDeleteDialog]);
 
-    const handleSwitchToArtistsView = useCallback(() => {
-        closeAssignArtistDialog(false);
-        openManageArtistDialog();
-    }, [closeAssignArtistDialog, openManageArtistDialog]);
+    // const handleSwitchToArtistsView = useCallback(() => {
+    //     closeAssignArtistDialog(false);
+    //     openManageArtistDialog();
+    // }, [closeAssignArtistDialog, openManageArtistDialog]);
 
-    const handleSwitchToTagsView = useCallback(() => {
-        closeAssignTagDialog(false);
-        openManageTagDialog();
-    }, [closeAssignTagDialog, openManageTagDialog]);
+    // const handleSwitchToTagsView = useCallback(() => {
+    //     closeAssignTagDialog(false);
+    //     openManageTagDialog();
+    // }, [closeAssignTagDialog, openManageTagDialog]);
 
     const handleSwitchToExhibitionsView = useCallback(() => {
         navigate("/Account/Admin/Exhibitions");
@@ -175,17 +169,17 @@ const ImageManagement = () => {
 
                         <EntityManageButton
                             entity={Tag}
-                            handleOpenDialog={openManageTagDialog}
+                            // handleOpenDialog={openManageTagDialog}
                         />
 
                         <EntityManageButton
                             entity={Artist}
-                            handleOpenDialog={openManageArtistDialog}
+                            // handleOpenDialog={openManageArtistDialog}
                         />
 
                         <EntityManageButton
                             entity={DeletedImage}
-                            handleOpenDialog={openManageImageTrashDialog}
+                            // handleOpenDialog={openManageImageTrashDialog}
                         />
 
                         <MultiCreateButton />
@@ -226,23 +220,8 @@ const ImageManagement = () => {
 
             <ItemSingleDeleteDialog dialogState={deleteDialogState} />
 
-            <EntityManageDialog
-                Entity={Artist}
-                dialogState={manageArtistDialogState}
-                searchBoxPlaceholder="Search artists by name or notes"
-            />
-
-            <EntityManageDialog
-                Entity={Tag}
-                dialogState={manageTagDialogState}
-                searchBoxPlaceholder="Search tags by name or notes"
-            />
-
-            <EntityManageDialog
-                Entity={DeletedImage}
-                dialogState={manageImageTrashDialogState}
-                searchBoxPlaceholder="trash placeholder"
-            />
+            {/* Entity manage dialogs and any trash dialogs are child routes of the page and use the outlet */}
+            <Outlet />
 
             <ImageFullScreenViewer
                 image={previewerImage}
@@ -255,7 +234,7 @@ const ImageManagement = () => {
                 Association={ImageArtist}
                 dialogState={assignArtistDialogState}
                 editMode
-                handleSwitchToSecondary={handleSwitchToArtistsView}
+                // handleSwitchToSecondary={handleSwitchToArtistsView}
                 // secondaryItemsAll={artistsCombinedState.items}
                 secondaryItemsAll={[]}
             />
@@ -264,7 +243,7 @@ const ImageManagement = () => {
                 Association={ImageTag}
                 dialogState={assignTagDialogState}
                 editMode
-                handleSwitchToSecondary={handleSwitchToTagsView}
+                // handleSwitchToSecondary={handleSwitchToTagsView}
                 // secondaryItemsAll={tagsCombinedState.items}
                 secondaryItemsAll={[]}
             />
