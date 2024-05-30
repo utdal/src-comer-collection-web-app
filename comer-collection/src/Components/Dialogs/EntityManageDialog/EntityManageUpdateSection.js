@@ -1,17 +1,32 @@
-import React from "react";
-import PropTypes from "prop-types";
+import React, { useCallback, useEffect, useState } from "react";
 import { Box, Stack } from "@mui/material";
 import SearchBox from "../../SearchBox.js";
 import PaginationSummary from "../../PaginationSummary/PaginationSummary.js";
 import { RefreshButton } from "../../Buttons/RefreshButton.js";
 import { DataTable } from "../../DataTable/DataTable.js";
-import { useEntity } from "../../../ContextProviders/ManagementPageProvider.js";
+import { useEntity, useVisibilityStatuses } from "../../../ContextProviders/ManagementPageProvider.js";
 import { FullPageMessage } from "../../FullPageMessage.js";
 import { DeleteIcon } from "../../../Imports/Icons.js";
 import { itemsCombinedStatePropTypeShape } from "../../../Classes/Entity.js";
+import { doesItemMatchSearchQuery } from "../../../Helpers/SearchUtilities.js";
 
-const EntityManageUpdateSection = ({ dialogItemsCombinedState, itemSearchQuery, setItemSearchQuery }) => {
+const EntityManageUpdateSection = ({ dialogItemsCombinedState }) => {
     const Entity = useEntity();
+
+    const [itemSearchQuery, setItemSearchQuery] = useState("");
+
+    const [, filterDialogItems] = useVisibilityStatuses();
+
+    const itemFilterFunction = useCallback((item) => {
+        return (
+            doesItemMatchSearchQuery(itemSearchQuery, item, Entity.searchBoxFields)
+        );
+    }, [itemSearchQuery, Entity.searchBoxFields]);
+
+    useEffect(() => {
+        filterDialogItems(itemFilterFunction);
+    }, [filterDialogItems, itemFilterFunction]);
+
     return (
         <Box sx={{ gridArea: "update", overflowX: "auto" }}>
             {dialogItemsCombinedState.itemCounts.all
@@ -63,9 +78,7 @@ const EntityManageUpdateSection = ({ dialogItemsCombinedState, itemSearchQuery, 
 };
 
 EntityManageUpdateSection.propTypes = {
-    dialogItemsCombinedState: itemsCombinedStatePropTypeShape,
-    itemSearchQuery: PropTypes.string,
-    setItemSearchQuery: PropTypes.func
+    dialogItemsCombinedState: itemsCombinedStatePropTypeShape
 };
 
 export default EntityManageUpdateSection;
