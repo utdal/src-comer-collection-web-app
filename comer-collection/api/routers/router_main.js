@@ -7,7 +7,7 @@ import { routerUsersAdmin } from "./router_users.js";
 import { routerEnrollmentsAdmin } from "./router_enrollments.js";
 
 import db from "../sequelize.js";
-import { routerImagesCollectionManager, routerImagesPublic } from "./router_images.js";
+import { routerDeletedImagesAdmin, routerDeletedImagesCollectionManager, routerImagesCollectionManager, routerImagesPublic } from "./router_images.js";
 import { routerArtistsCollectionManager, routerArtistsPublic } from "./router_artists.js";
 import { routerTagsCollectionManager, routerTagsPublic } from "./router_tags.js";
 import { routerImageArtistsAdmin } from "./router_imageartists.js";
@@ -173,6 +173,13 @@ router.use("/images",
     requireAuthenticatedUser,
     requireAtLeastCollectionManager,
     routerImagesCollectionManager
+);
+
+router.use("/deletedimages",
+    requireAtLeastCollectionManager,
+    routerDeletedImagesCollectionManager,
+    requireAdmin,
+    routerDeletedImagesAdmin
 );
 
 router.use("/artists",

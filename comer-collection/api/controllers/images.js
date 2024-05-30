@@ -1,7 +1,7 @@
 import createError from "http-errors";
 import db from "../sequelize.js";
 import path, { join } from "path";
-import { deleteItem, updateItem, listItems, getItem, createItem } from "./items.js";
+import { deleteItem, updateItem, listItems, getItem, createItem, listDeletedItems, permanentlyDeleteItem } from "./items.js";
 import imageType from "image-type";
 import url from "url";
 import { isAtLeastCollectionManager } from "../routers/router_main.js";
@@ -39,6 +39,29 @@ const listImagesPublic = async (req, res, next) => {
  */
 const listImages = async (req, res, next) => {
     await listItems(req, res, next, Image.scope("admin"), [
+        Artist, Tag,
+        (req.app_user.is_admin && Exhibition) ||
+        (req.app_user.is_collection_manager && {
+            model: Exhibition,
+            attributes: ["id"]
+        })
+    ]);
+};
+
+/**
+ * Uses the listDeletedItems function on the Image model and includes Artists, Tags, and Exhibitions.
+ *
+ * If the current user is an admin, return all information about the Exhibitions.
+ *
+ * If the current user is a collection manager, return only the ID numbers to allow
+ * calculation of the length of the Exhibitions array.  Sequelize will not include
+ * the Exhibitions array unless at least one field is included from the Exhibition model.
+ * @param {import("express").Request} req
+ * @param {import("express").Response} res
+ * @param {import("express").NextFunction} next
+ */
+const listDeletedImages = async (req, res, next) => {
+    await listDeletedItems(req, res, next, Image.scope("admin"), [
         Artist, Tag,
         (req.app_user.is_admin && Exhibition) ||
         (req.app_user.is_collection_manager && {
@@ -171,4 +194,15 @@ const deleteImage = async (req, res, next) => {
     await deleteItem(req, res, next, Image, req.params.imageId);
 };
 
-export { downloadImagePublic, listImages, listImagesPublic, createImage, getImage, getImagePublic, updateImage, deleteImage };
+/**
+ * Uses the permanentlyDeleteItem function on the User model
+ * The userId parameter in the request URL params object is used as the primary key
+ * @param {import("express").Request} req
+ * @param {import("express").Response} res
+ * @param {import("express").NextFunction} next
+ */
+const permanentlyDeleteImage = async (req, res, next) => {
+    await permanentlyDeleteItem(req, res, next, Image, req.params.imageId);
+};
+
+export { downloadImagePublic, listImages, listDeletedImages, listImagesPublic, createImage, getImage, getImagePublic, updateImage, deleteImage, permanentlyDeleteImage };
