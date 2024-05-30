@@ -135,7 +135,7 @@ const buildRouterAction = (entityType) => {
                 return {
                     status: "error",
                     error: e.message,
-                    snackbarText: `Could not delete ${entityType.singular}`
+                    snackbarText: entityType.hasTrash ? `Could not delete ${entityType.singular}` : `Could not move ${entityType.singular} to trash`
                 };
             }
         } else if (intent === "single-edit") {
