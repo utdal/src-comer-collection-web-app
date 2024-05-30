@@ -15,6 +15,7 @@ import { SelectionSummary } from "../../SelectionSummary.js";
 import { useLoaderData, useNavigate } from "react-router-dom";
 import EntityManageUpdateSection from "./EntityManageUpdateSection.js";
 import EntityManageCreateSection from "./EntityManageCreateSection.js";
+import { DeleteIcon } from "../../../Imports/Icons.js";
 
 /**
  * @returns {React.JSX.Element}
@@ -67,11 +68,35 @@ export const EntityManageDialog = ({ Entity }) => {
                 maxWidth="lg"
                 open
             >
-                <DialogTitle>
-                    {"Manage "}
+                {Entity.isTrash
+                    ? (
+                        <DialogTitle
+                            alignItems="center"
+                            component={Stack}
+                            direction="row"
+                            justifyContent="center"
+                        >
+                            <DeleteIcon
+                                color="disabled"
+                                fontSize="large"
+                                sx={{
+                                    marginRight: 1
+                                }}
+                            />
 
-                    {pluralCapitalized}
-                </DialogTitle>
+                            {pluralCapitalized}
+
+                            {" in Trash"}
+
+                        </DialogTitle>
+                    )
+                    : (
+                        <DialogTitle>
+                            {"Manage "}
+
+                            {pluralCapitalized}
+                        </DialogTitle>
+                    )}
 
                 <DialogContent sx={{ overflow: "hidden" }}>
                     <Stack
@@ -112,7 +137,7 @@ export const EntityManageDialog = ({ Entity }) => {
                             sx={{
                                 width: "30%"
                             }}
-                            variant="contained"
+                            variant="outlined"
                         >
                             Close
                         </Button>
