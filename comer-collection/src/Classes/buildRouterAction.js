@@ -27,6 +27,9 @@ import { capitalized } from "./Entity.js";
  *  intent: ("single-permanent-delete"),
  *  itemId: number
  * }|{
+ *  intent: ("single-restore"),
+ *  itemId: number
+ * }|{
  *  intent: ("multi-delete"),
  *  itemIds: number[]
  * }|{
@@ -80,6 +83,7 @@ import { capitalized } from "./Entity.js";
 const permittedEntitiesByIntent = {
     "single-delete": [User, Course, Image, Artist, Tag, Exhibition],
     "single-permanent-delete": [DeletedImage],
+    "single-restore": [DeletedImage],
     "single-edit": [User, Course, Image, Artist, Tag],
     "multi-create": [User, Course, Image],
     "user-reset-password": [User],
@@ -92,6 +96,7 @@ const permittedEntitiesByIntent = {
 const requiredMethodsByIntent = {
     "single-delete": "DELETE",
     "single-permanent-delete": "DELETE",
+    "single-restore": "PUT",
     "single-edit": "PUT",
     "multi-create": "POST",
     "user-reset-password": "PUT",
@@ -157,6 +162,22 @@ const buildRouterAction = (entityType) => {
                     status: "error",
                     error: e.message,
                     snackbarText: `Could not permanently delete ${entityType.singular}`
+                };
+            }
+        } else if (intent === "single-restore") {
+            const { itemId } = requestData;
+            try {
+                const result = await sendAuthenticatedRequest("PUT", `${entityType.baseUrl}/${itemId}`);
+                return {
+                    status: "success",
+                    message: result,
+                    snackbarText: `${capitalized(entityType.singular)} restored`
+                };
+            } catch (e) {
+                return {
+                    status: "error",
+                    error: e.message,
+                    snackbarText: `Could not restore ${entityType.singular}`
                 };
             }
         } else if (intent === "single-edit") {

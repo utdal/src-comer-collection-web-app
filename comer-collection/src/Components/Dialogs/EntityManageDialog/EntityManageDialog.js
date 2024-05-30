@@ -39,6 +39,7 @@ export const EntityManageDialog = ({ Entity }) => {
 
     const [editDialogState, openEditDialog] = useDialogState(false);
     const [deleteDialogState, openDeleteDialog] = useDialogState(false);
+    const [restoreDialogState, openRestoreDialog] = useDialogState(false);
 
     const pluralCapitalized = Entity?.plural.substr(0, 1).toUpperCase() + Entity?.plural.substr(1).toLowerCase();
 
@@ -50,10 +51,15 @@ export const EntityManageDialog = ({ Entity }) => {
         openDeleteDialog(item);
     }, [openDeleteDialog]);
 
+    const handleOpenEntityRestoreDialog = useCallback((item) => {
+        openRestoreDialog(item);
+    }, [openRestoreDialog]);
+
     const managementCallbacks = useMemo(() => ({
         handleOpenEntityEditDialog,
-        handleOpenEntityDeleteDialog
-    }), [handleOpenEntityDeleteDialog, handleOpenEntityEditDialog]);
+        handleOpenEntityDeleteDialog,
+        handleOpenEntityRestoreDialog
+    }), [handleOpenEntityDeleteDialog, handleOpenEntityEditDialog, handleOpenEntityRestoreDialog]);
 
     const isTrashMode = Entity.isTrash;
 
@@ -137,7 +143,7 @@ export const EntityManageDialog = ({ Entity }) => {
                             sx={{
                                 width: "30%"
                             }}
-                            variant="outlined"
+                            variant="contained"
                         >
                             Close
                         </Button>
@@ -150,6 +156,11 @@ export const EntityManageDialog = ({ Entity }) => {
             <ItemSingleEditDialog dialogState={editDialogState} />
 
             <ItemSingleDeleteDialog dialogState={deleteDialogState} />
+
+            <ItemSingleDeleteDialog
+                dialogState={restoreDialogState}
+                restoreMode
+            />
 
         </ManagementPageProvider>
     );

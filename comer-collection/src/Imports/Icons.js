@@ -54,6 +54,7 @@ export { default as PublicIcon } from "@mui/icons-material/esm/Public.js";
 export { default as RefreshIcon } from "@mui/icons-material/esm/Refresh.js";
 export { default as RemoveIcon } from "@mui/icons-material/esm/Remove.js";
 export { default as RemoveCircleOutlineIcon } from "@mui/icons-material/esm/RemoveCircleOutline.js";
+export { default as RestoreIcon } from "@mui/icons-material/esm/Restore.js";
 export { default as SaveIcon } from "@mui/icons-material/esm/Save.js";
 export { default as SchoolIcon } from "@mui/icons-material/esm/School.js";
 export { default as SearchIcon } from "@mui/icons-material/esm/Search.js";

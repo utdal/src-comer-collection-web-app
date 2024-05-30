@@ -5,13 +5,14 @@ import {
     DialogActions,
     Button, DialogContentText, TextField
 } from "@mui/material";
-import { DeleteIcon } from "../../Imports/Icons.js";
+import { DeleteIcon, RestoreIcon } from "../../Imports/Icons.js";
 import PropTypes from "prop-types";
 import { useSnackbar } from "../../ContextProviders/AppFeatures.js";
 import { useEntity } from "../../ContextProviders/ManagementPageProvider.js";
 import { DialogState } from "../../Classes/DialogState.js";
 import { PersistentDialog } from "./PersistentDialog.js";
 import { useActionData, useSubmit } from "react-router-dom";
+import { capitalized } from "../../Classes/Entity.js";
 
 /**
  * @param {{
@@ -19,7 +20,7 @@ import { useActionData, useSubmit } from "react-router-dom";
  * }} param0
  * @returns
  */
-export const ItemSingleDeleteDialog = ({ requireTypedConfirmation, dialogState }) => {
+export const ItemSingleDeleteDialog = ({ requireTypedConfirmation, dialogState, restoreMode = false }) => {
     const [deleteConfirmation, setDeleteConfirmation] = useState("");
     const [submitEnabled, setSubmitEnabled] = useState(true);
     const showSnackbar = useSnackbar();
@@ -46,14 +47,18 @@ export const ItemSingleDeleteDialog = ({ requireTypedConfirmation, dialogState }
          * @type {import("../../Classes/buildRouterAction.js").RouterActionRequest}
          */
         const request = {
-            intent: Entity.isTrash ? "single-permanent-delete" : "single-delete",
+            intent: Entity.isTrash
+                ? (
+                    restoreMode ? "single-restore" : "single-permanent-delete"
+                )
+                : "single-delete",
             itemId: dialogItem?.id
         };
         submit(request, {
-            method: "DELETE",
+            method: restoreMode ? "PUT" : "DELETE",
             encType: "application/json"
         });
-    }, [Entity, dialogItem?.id, submit]);
+    }, [Entity.isTrash, dialogItem?.id, restoreMode, submit]);
 
     useEffect(() => {
         if (actionData) {
@@ -87,15 +92,21 @@ export const ItemSingleDeleteDialog = ({ requireTypedConfirmation, dialogState }
                         {" to Trash "}
                     </DialogTitle>
                 )
-                : (
-                    <DialogTitle>
-                        {Entity.isTrash ? "Permanently Delete " : "Delete "}
+                : restoreMode
+                    ? (
+                        <DialogTitle>
+                            {`Restore ${capitalized(Entity?.singular)} from Trash`}
+                        </DialogTitle>
+                    )
+                    : (
+                        <DialogTitle>
+                            {Entity.isTrash ? "Permanently Delete " : "Delete "}
 
-                        {Entity?.singular.substr(0, 1).toUpperCase()}
+                            {Entity?.singular.substr(0, 1).toUpperCase()}
 
-                        {Entity?.singular.substr(1).toLowerCase()}
-                    </DialogTitle>
-                )}
+                            {Entity?.singular.substr(1).toLowerCase()}
+                        </DialogTitle>
+                    )}
 
             <DialogContent>
                 <Stack spacing={2}>
@@ -119,28 +130,47 @@ export const ItemSingleDeleteDialog = ({ requireTypedConfirmation, dialogState }
                             </DialogContentText>
                         )
                         : Entity.isTrash
-                            ? (
-                                <DialogContentText
-                                    sx={{ wordWrap: "break-word" }}
-                                    variant="body1"
-                                >
-                                    {"Are you sure you want to delete the "}
+                            ? restoreMode
+                                ? (
+                                    <DialogContentText
+                                        sx={{ wordWrap: "break-word" }}
+                                        variant="body1"
+                                    >
+                                        {"Are you sure you want to restore the "}
 
-                                    {Entity?.singular}
+                                        {Entity?.singular}
 
-                                    {" "}
+                                        {" "}
 
-                                    <i>
-                                        {dialogItem?.safe_display_name}
-                                    </i>
+                                        <i>
+                                            {dialogItem?.safe_display_name}
+                                        </i>
 
-                                    <b>
-                                        {" permanently"}
-                                    </b>
+                                        {" from the trash? "}
+                                    </DialogContentText>
+                                )
+                                : (
+                                    <DialogContentText
+                                        sx={{ wordWrap: "break-word" }}
+                                        variant="body1"
+                                    >
+                                        {"Are you sure you want to delete the "}
 
-                                    {"? "}
-                                </DialogContentText>
-                            )
+                                        {Entity?.singular}
+
+                                        {" "}
+
+                                        <i>
+                                            {dialogItem?.safe_display_name}
+                                        </i>
+
+                                        <b>
+                                            {" permanently"}
+                                        </b>
+
+                                        {"? "}
+                                    </DialogContentText>
+                                )
                             : (
                                 <DialogContentText
                                     sx={{ wordWrap: "break-word" }}
@@ -201,35 +231,19 @@ export const ItemSingleDeleteDialog = ({ requireTypedConfirmation, dialogState }
                         Cancel
                     </Button>
 
-                    {Entity.hasTrash
-                        ? (
-                            <Button
-                                color="primary"
-                                disabled={!submitEnabled || (requireTypedConfirmation && deleteConfirmation.toLowerCase() !== "delete")}
-                                fullWidth
-                                size="large"
-                                startIcon={<DeleteIcon />}
-                                type="submit"
-                                variant="contained"
-                            >
-                                Trash
+                    <Button
+                        color={Entity.hasTrash || restoreMode ? "primary" : "error"}
+                        disabled={!submitEnabled || (requireTypedConfirmation && deleteConfirmation.toLowerCase() !== "delete")}
+                        fullWidth
+                        size="large"
+                        startIcon={restoreMode ? <RestoreIcon /> : <DeleteIcon />}
+                        type="submit"
+                        variant="contained"
+                    >
+                        {restoreMode ? "Restore" : Entity.hasTrash ? "Move to Trash" : "Delete"}
 
-                            </Button>
-                        )
-                        : (
-                            <Button
-                                color="error"
-                                disabled={!submitEnabled || (requireTypedConfirmation && deleteConfirmation.toLowerCase() !== "delete")}
-                                fullWidth
-                                size="large"
-                                startIcon={<DeleteIcon />}
-                                type="submit"
-                                variant="contained"
-                            >
-                                Delete
+                    </Button>
 
-                            </Button>
-                        )}
                 </Stack>
             </DialogActions>
         </PersistentDialog>
@@ -238,5 +252,6 @@ export const ItemSingleDeleteDialog = ({ requireTypedConfirmation, dialogState }
 
 ItemSingleDeleteDialog.propTypes = {
     dialogState: PropTypes.instanceOf(DialogState),
-    requireTypedConfirmation: PropTypes.bool
+    requireTypedConfirmation: PropTypes.bool,
+    restoreMode: PropTypes.bool
 };
