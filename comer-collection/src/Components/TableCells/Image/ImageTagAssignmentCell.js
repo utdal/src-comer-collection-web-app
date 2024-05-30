@@ -1,6 +1,6 @@
 import React, { useCallback } from "react";
 import { Button, Stack, Typography } from "@mui/material";
-import { BrushIcon } from "../../../Imports/Icons.js";
+import { SellIcon } from "../../../Imports/Icons.js";
 import { useTableCellItem, useTableCellManagementCallbacks } from "../../../ContextProviders/TableCellProvider.js";
 
 export const ImageTagAssignmentCell = () => {
@@ -18,7 +18,7 @@ export const ImageTagAssignmentCell = () => {
             <Button
                 color="primary"
                 onClick={handleOpenAssignTagDialog}
-                startIcon={<BrushIcon />}
+                startIcon={<SellIcon />}
                 variant="text"
             >
                 <Typography variant="body1">
