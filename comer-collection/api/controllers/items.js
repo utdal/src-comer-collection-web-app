@@ -157,7 +157,7 @@ const updateItem = async (req, res, next, model, itemId, restrictFields = null) 
 };
 
 /**
- * Generic DELETE function for database items
+ * Generic DELETE function for database items.  This does a soft delete for paranoid models.
  * @param {import("express").Request} req
  * @param {import("express").Response} res
  * @param {import("express").NextFunction} next
@@ -218,4 +218,34 @@ const permanentlyDeleteItem = async (req, res, next, model, itemId) => {
     }
 };
 
-export { getItem, listItems, listDeletedItems, updateItem, deleteItem, createItem, permanentlyDeleteItem };
+/**
+ * Generic RESTORE function for database items with paranoid models
+ * @param {import("express").Request} req
+ * @param {import("express").Response} res
+ * @param {import("express").NextFunction} next
+ * @param {import("sequelize").Model} model The Sequelize model to query
+ * @param {String | number} itemId The primary key of the item to update
+ */
+const restoreItem = async (req, res, next, model, itemId) => {
+    try {
+        if (req.body.id) {
+            throw new Error("The request body should not contain an ID.  Put the ID in the URL.");
+        }
+        await sequelize.transaction(async (t) => {
+            const rowsUpdated = await model.restore({
+                where: {
+                    id: itemId
+                },
+                transaction: t
+            });
+            if (rowsUpdated !== 1) {
+                throw new Error(`Number of updated rows was ${rowsUpdated}`);
+            }
+        });
+        res.sendStatus(204);
+    } catch (e) {
+        next(createError(400, { debugMessage: e.message }));
+    }
+};
+
+export { getItem, listItems, listDeletedItems, updateItem, deleteItem, createItem, restoreItem, permanentlyDeleteItem };

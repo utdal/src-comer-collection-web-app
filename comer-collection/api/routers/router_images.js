@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { createImage, deleteImage, downloadImagePublic, getImage, getImagePublic, listDeletedImages, listImages, listImagesPublic, permanentlyDeleteImage, updateImage } from "../controllers/images.js";
+import { createImage, deleteImage, downloadImagePublic, getImage, getImagePublic, listDeletedImages, listImages, listImagesPublic, permanentlyDeleteImage, restoreImage, updateImage } from "../controllers/images.js";
 
 const routerImagesPublic = Router();
 const routerImagesCollectionManager = Router();
@@ -19,6 +19,7 @@ routerImagesCollectionManager.put("/:imageId(\\d+)", updateImage);
 routerImagesCollectionManager.delete("/:imageId(\\d+)", deleteImage);
 
 routerDeletedImagesCollectionManager.get("/", listDeletedImages);
+routerDeletedImagesCollectionManager.put("/:imageId(\\d+)", restoreImage);
 routerDeletedImagesAdmin.delete("/:imageId(\\d+)", permanentlyDeleteImage);
 
 export { routerImagesPublic, routerImagesCollectionManager, routerDeletedImagesCollectionManager, routerDeletedImagesAdmin };

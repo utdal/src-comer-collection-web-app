@@ -1,7 +1,7 @@
 import createError from "http-errors";
 import db from "../sequelize.js";
 import path, { join } from "path";
-import { deleteItem, updateItem, listItems, getItem, createItem, listDeletedItems, permanentlyDeleteItem } from "./items.js";
+import { deleteItem, updateItem, listItems, getItem, createItem, listDeletedItems, permanentlyDeleteItem, restoreItem } from "./items.js";
 import imageType from "image-type";
 import url from "url";
 import { isAtLeastCollectionManager } from "../routers/router_main.js";
@@ -205,4 +205,15 @@ const permanentlyDeleteImage = async (req, res, next) => {
     await permanentlyDeleteItem(req, res, next, Image, req.params.imageId);
 };
 
-export { downloadImagePublic, listImages, listDeletedImages, listImagesPublic, createImage, getImage, getImagePublic, updateImage, deleteImage, permanentlyDeleteImage };
+/**
+ * Uses the permanentlyDeleteItem function on the User model
+ * The userId parameter in the request URL params object is used as the primary key
+ * @param {import("express").Request} req
+ * @param {import("express").Response} res
+ * @param {import("express").NextFunction} next
+ */
+const restoreImage = async (req, res, next) => {
+    await restoreItem(req, res, next, Image, req.params.imageId);
+};
+
+export { downloadImagePublic, listImages, listDeletedImages, listImagesPublic, createImage, getImage, getImagePublic, updateImage, deleteImage, restoreImage, permanentlyDeleteImage };
