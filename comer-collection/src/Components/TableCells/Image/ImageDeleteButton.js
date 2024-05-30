@@ -10,7 +10,6 @@ export const ImageDeleteButton = () => {
     }, [image, handleOpenImageDeleteDialog]);
     return (
         <DeleteButton
-            disabled={image.Exhibitions.length > 0}
             onClick={handleOpenDeleteDialog}
         />
     );
