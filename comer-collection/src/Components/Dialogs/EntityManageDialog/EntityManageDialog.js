@@ -8,8 +8,6 @@ import {
 } from "@mui/material";
 import { AddIcon, DeleteIcon } from "../../../Imports/Icons.js";
 import { getBlankItemFields } from "../../../Helpers/fields.js";
-import { DataTable } from "../../DataTable/DataTable.js";
-import SearchBox from "../../SearchBox.js";
 import { doesItemMatchSearchQuery } from "../../../Helpers/SearchUtilities.js";
 import { ItemSingleDeleteDialog } from "../ItemSingleDeleteDialog.js";
 import { ItemSingleEditDialog } from "../ItemSingleEditDialog.js";
@@ -19,11 +17,9 @@ import { ManagementPageProvider, useItemsReducer } from "../../../ContextProvide
 import { useDialogState } from "../../../Hooks/useDialogState.js";
 import { DialogState } from "../../../Classes/DialogState.js";
 import { PersistentDialog } from "../PersistentDialog.js";
-import { FullPageMessage } from "../../FullPageMessage.js";
-import { RefreshButton } from "../../Buttons/RefreshButton.js";
 import { SelectionSummary } from "../../SelectionSummary.js";
-import PaginationSummary from "../../PaginationSummary/PaginationSummary.js";
 import { useFetcher } from "react-router-dom";
+import EntityManageUpdateSection from "./EntityManageUpdateSection.js";
 
 /**
  * @param {{
@@ -167,56 +163,13 @@ export const EntityManageDialog = ({
                                             `
                                 }}
                             >
-                                <>
-                                    <Box sx={{ gridArea: "update", overflowX: "auto" }}>
-                                        {dialogItemsCombinedState.itemCounts.all
-                                            ? (
-                                                <Stack
-                                                    spacing={2}
-                                                    sx={{ height: "300px" }}
-                                                >
-                                                    <Stack
-                                                        alignItems="center"
-                                                        direction="row"
-                                                        justifyContent="space-between"
-                                                        spacing={2}
-                                                    >
+                                <EntityManageUpdateSection
+                                    dialogItemsCombinedState={dialogItemsCombinedState}
+                                    itemSearchQuery={itemSearchQuery}
+                                    setItemSearchQuery={setItemSearchQuery}
+                                />
 
-                                                        <SearchBox
-                                                            searchQuery={itemSearchQuery}
-                                                            setSearchQuery={setItemSearchQuery}
-                                                            width="40%"
-                                                        />
-
-                                                        <PaginationSummary />
-
-                                                        <RefreshButton />
-
-                                                    </Stack>
-
-                                                    <DataTable
-                                                        NoContentIcon="div"
-                                                        rowSelectionEnabled
-                                                        smallCheckboxes
-                                                        tableFields={Entity.tableFields}
-                                                    />
-
-                                                </Stack>
-                                            )
-                                            : (
-                                                Entity.isTrash
-                                                    ? (
-                                                        <FullPageMessage
-                                                            Icon={DeleteIcon}
-                                                            message={`No ${Entity.plural} in trash`}
-                                                        />
-                                                    )
-                                                    : null
-                                            ) }
-                                    </Box>
-
-                                    <Divider />
-                                </>
+                                <Divider />
 
                                 {!Entity.isTrash
                                     ? (
