@@ -22,8 +22,8 @@ import { PersistentDialog } from "./PersistentDialog.js";
 import { FullPageMessage } from "../FullPageMessage.js";
 import { RefreshButton } from "../Buttons/RefreshButton.js";
 import { SelectionSummary } from "../SelectionSummary.js";
-import useItemsRefresh from "../../Hooks/useItemsRefresh.js";
 import PaginationSummary from "../PaginationSummary/PaginationSummary.js";
+import { useFetcher } from "react-router-dom";
 
 /**
  * @param {{
@@ -41,6 +41,8 @@ export const EntityManageDialog = ({
 
     const { closeDialog, dialogIsOpen } = dialogState;
 
+    const fetcher = useFetcher();
+
     const [dialogItemsCombinedState, itemsCallbacks] = useItemsReducer([]);
 
     const {
@@ -48,8 +50,21 @@ export const EntityManageDialog = ({
         filterItems: filterDialogItems
     } = itemsCallbacks;
 
-    const [handleRefresh, isLoaded, isError] = useItemsRefresh(Entity, setDialogItems, dialogIsOpen);
+    useEffect(() => {
+        if (dialogIsOpen && fetcher.state === "idle" && !fetcher.data) {
+            fetcher.load(Entity.fetcherUrl);
+        }
+    }, [Entity.fetcherUrl, dialogIsOpen, fetcher]);
 
+    const [isLoaded, setIsLoaded] = useState(false);
+    const isError = false;
+
+    useEffect(() => {
+        if (fetcher.data) {
+            setIsLoaded(true);
+            setDialogItems(fetcher.data);
+        }
+    }, [fetcher.data, setDialogItems]);
     const [itemSearchQuery, setItemSearchQuery] = useState("");
 
     const [editDialogState, openEditDialog] = useDialogState(false);
@@ -71,14 +86,13 @@ export const EntityManageDialog = ({
     const handleCreate = useCallback(() => {
         Entity.handleMultiCreate([itemToAdd]).then(([{ status }]) => {
             if (status === "fulfilled") {
-                handleRefresh();
                 showSnackbar(`${singularCapitalized} created`, "success");
             } else {
                 showSnackbar(`Failed to create ${Entity.singular}`, "error");
             }
         });
         setItemToAdd(blankItem);
-    }, [Entity, itemToAdd, blankItem, handleRefresh, showSnackbar, singularCapitalized]);
+    }, [Entity, itemToAdd, blankItem, showSnackbar, singularCapitalized]);
 
     const handleOpenEntityEditDialog = useCallback((item) => {
         openEditDialog(item);
@@ -90,9 +104,8 @@ export const EntityManageDialog = ({
 
     const managementCallbacks = useMemo(() => ({
         handleOpenEntityEditDialog,
-        handleOpenEntityDeleteDialog,
-        handleRefresh
-    }), [handleOpenEntityDeleteDialog, handleOpenEntityEditDialog, handleRefresh]);
+        handleOpenEntityDeleteDialog
+    }), [handleOpenEntityDeleteDialog, handleOpenEntityEditDialog]);
 
     return (
         <ManagementPageProvider
@@ -120,7 +133,7 @@ export const EntityManageDialog = ({
                         ? (
                             <FullPageMessage
                                 Icon={WarningIcon}
-                                buttonAction={handleRefresh}
+                                // buttonAction={handleRefresh}
                                 buttonText="Retry"
                                 message={`Failed to load ${Entity.plural}`}
                             />

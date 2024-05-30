@@ -12,6 +12,8 @@ class Artist extends Entity {
     static singular = "artist";
     static plural = "artists";
 
+    static fetcherUrl = "/Account/Admin/Artists";
+
     static fieldDefinitions = [
         {
             fieldName: "familyName",

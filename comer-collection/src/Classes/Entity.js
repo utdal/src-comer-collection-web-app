@@ -61,6 +61,8 @@ export class Entity {
     }
 
     static tableFields = [];
+
+    static fetcherUrl = null;
 }
 
 export const entityPropTypeShape = PropTypes.shape({

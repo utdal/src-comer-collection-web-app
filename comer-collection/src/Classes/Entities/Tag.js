@@ -11,6 +11,8 @@ class Tag extends Entity {
     static singular = "tag";
     static plural = "tags";
 
+    static fetcherUrl = "/Account/Admin/Tags";
+
     static fieldDefinitions = [
         {
             fieldName: "data",

@@ -30,6 +30,8 @@ import { FullPageMessage } from "./Components/FullPageMessage.js";
 import { InfoIcon } from "./Imports/Icons.js";
 import buildRouterAction from "./Classes/buildRouterAction.js";
 import buildRouterLoader from "./Classes/buildRouterLoader.js";
+import { Artist } from "./Classes/Entities/Artist.js";
+import { Tag } from "./Classes/Entities/Tag.js";
 
 const appUserLoader = async () => {
     if (!localStorage.getItem("token")) {
@@ -197,6 +199,7 @@ const router = createBrowserRouter([
                                 ),
                                 path: "Exhibitions",
                                 loader: buildRouterLoader(Exhibition),
+                                action: buildRouterAction(Exhibition),
                                 ErrorBoundary: RouterErrorMessage
                             },
                             {
@@ -210,6 +213,22 @@ const router = createBrowserRouter([
                                 loader: buildRouterLoader(Image),
                                 action: buildRouterAction(Image),
                                 ErrorBoundary: RouterErrorMessage
+                            },
+                            {
+                                path: "Artists",
+                                loader: buildRouterLoader(Artist),
+                                action: buildRouterAction(Artist),
+                                element: <Navigate to="/Account/Profile" />
+                            },
+                            {
+                                path: "Tags",
+                                loader: buildRouterLoader(Tag),
+                                action: buildRouterAction(Tag),
+                                element: <Navigate to="/Account/Profile" />
+                            },
+                            {
+                                path: "*",
+                                element: <Navigate to="/Account/Profile" />
                             }
                         ]
                     },
