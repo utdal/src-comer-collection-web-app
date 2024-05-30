@@ -109,16 +109,6 @@ const ImageManagement = () => {
         openDeleteDialog(image);
     }, [openDeleteDialog]);
 
-    // const handleSwitchToArtistsView = useCallback(() => {
-    //     closeAssignArtistDialog(false);
-    //     openManageArtistDialog();
-    // }, [closeAssignArtistDialog, openManageArtistDialog]);
-
-    // const handleSwitchToTagsView = useCallback(() => {
-    //     closeAssignTagDialog(false);
-    //     openManageTagDialog();
-    // }, [closeAssignTagDialog, openManageTagDialog]);
-
     const handleSwitchToExhibitionsView = useCallback(() => {
         navigate("/Account/Admin/Exhibitions");
     }, [navigate]);
@@ -167,20 +157,11 @@ const ImageManagement = () => {
 
                         <ClearFilterButton />
 
-                        <EntityManageButton
-                            entity={Tag}
-                            // handleOpenDialog={openManageTagDialog}
-                        />
+                        <EntityManageButton entity={Tag} />
 
-                        <EntityManageButton
-                            entity={Artist}
-                            // handleOpenDialog={openManageArtistDialog}
-                        />
+                        <EntityManageButton entity={Artist} />
 
-                        <EntityManageButton
-                            entity={DeletedImage}
-                            // handleOpenDialog={openManageImageTrashDialog}
-                        />
+                        <EntityManageButton entity={DeletedImage} />
 
                         <MultiCreateButton />
                     </ManagementButtonStack>

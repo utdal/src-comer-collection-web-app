@@ -3,8 +3,7 @@ import {
     Stack, DialogTitle,
     DialogContent,
     DialogActions,
-    Button, DialogContentText, Divider, TextField, Box,
-    LinearProgress
+    Button, DialogContentText, Divider, TextField, Box
 } from "@mui/material";
 import { AddIcon, DeleteIcon } from "../../../Imports/Icons.js";
 import { getBlankItemFields } from "../../../Helpers/fields.js";
@@ -21,22 +20,12 @@ import { useLoaderData, useNavigate } from "react-router-dom";
 import EntityManageUpdateSection from "./EntityManageUpdateSection.js";
 
 /**
- * @param //{{
-//  *  dialogState: DialogState
- * }} props
- * @returns
+ * @returns {React.JSX.Element}
  */
-export const EntityManageDialog = ({
-    Entity
-    // dialogState
-}) => {
+export const EntityManageDialog = ({ Entity }) => {
     const blankItem = useMemo(() => getBlankItemFields(Entity.fieldDefinitions), [Entity.fieldDefinitions]);
     const [itemToAdd, setItemToAdd] = useState(blankItem);
     const showSnackbar = useSnackbar();
-
-    // const { closeDialog, dialogIsOpen } = dialogState;
-
-    // const fetcher = useFetcher();
 
     const dialogItems = useLoaderData();
 
@@ -53,20 +42,8 @@ export const EntityManageDialog = ({
         navigate("..");
     }, [navigate]);
 
-    // useEffect(() => {
-    //     if (dialogIsOpen && fetcher.state === "idle" && !fetcher.data) {
-    //         fetcher.load(Entity.fetcherUrl);
-    //     }
-    // }, [Entity.fetcherUrl, dialogIsOpen, fetcher]);
-
-    const [isLoaded, setIsLoaded] = useState(false);
-    const isError = false;
-
     useEffect(() => {
-        if (dialogItems) {
-            setIsLoaded(true);
-            setDialogItems(dialogItems);
-        }
+        setDialogItems(dialogItems);
     }, [dialogItems, setDialogItems]);
     const [itemSearchQuery, setItemSearchQuery] = useState("");
 
@@ -113,8 +90,6 @@ export const EntityManageDialog = ({
     return (
         <ManagementPageProvider
             Entity={Entity}
-            isError={isError}
-            isLoaded={isLoaded}
             itemsCallbacks={itemsCallbacks}
             itemsCombinedState={dialogItemsCombinedState}
             managementCallbacks={managementCallbacks}
@@ -153,105 +128,99 @@ export const EntityManageDialog = ({
                     )}
 
                 <DialogContent sx={{ overflow: "hidden" }}>
-                    {!isLoaded
-                        ? (
-                            <LinearProgress />
-                        )
-                        : (
-                            <Stack
-                                spacing={2}
-                                sx={{
-                                    display: "grid",
-                                    gridTemplateColumns: "1fr",
-                                    gridTemplateRows: "auto auto",
-                                    gridTemplateAreas: `
+                    <Stack
+                        spacing={2}
+                        sx={{
+                            display: "grid",
+                            gridTemplateColumns: "1fr",
+                            gridTemplateRows: "auto auto",
+                            gridTemplateAreas: `
                                             "update"
                                             "create"
                                             `
-                                }}
-                            >
-                                <EntityManageUpdateSection
-                                    dialogItemsCombinedState={dialogItemsCombinedState}
-                                    itemSearchQuery={itemSearchQuery}
-                                    setItemSearchQuery={setItemSearchQuery}
-                                />
+                        }}
+                    >
+                        <EntityManageUpdateSection
+                            dialogItemsCombinedState={dialogItemsCombinedState}
+                            itemSearchQuery={itemSearchQuery}
+                            setItemSearchQuery={setItemSearchQuery}
+                        />
 
-                                <Divider />
+                        <Divider />
 
-                                {!Entity.isTrash
-                                    ? (
-                                        <Box sx={{ gridArea: "create" }}>
-                                            <Stack spacing={2}>
-                                                <DialogContentText
-                                                    textAlign="left"
-                                                    variant="h6"
-                                                >
-                                                    {"Create a new "}
+                        {!Entity.isTrash
+                            ? (
+                                <Box sx={{ gridArea: "create" }}>
+                                    <Stack spacing={2}>
+                                        <DialogContentText
+                                            textAlign="left"
+                                            variant="h6"
+                                        >
+                                            {"Create a new "}
 
-                                                    {Entity.singular}
-                                                </DialogContentText>
+                                            {Entity.singular}
+                                        </DialogContentText>
 
-                                                <Stack
-                                                    alignItems="center"
-                                                    direction="row"
-                                                    justifyContent="space-around"
-                                                    spacing={2}
-                                                >
-                                                    <Stack
-                                                        alignItems="center"
-                                                        direction="row"
-                                                        flexWrap="wrap"
-                                                        spacing={2}
-                                                        useFlexGap
-                                                    >
-                                                        {Entity.fieldDefinitions.map((f, fi) => (
-                                                            <TextField
-                                                                autoFocus={fi === 0}
-                                                                inputProps={{
-                                                                    type: f.inputType ?? "text",
-                                                                    sx: {
-                                                                        ...{
-                                                                            textAlign: f.inputType === "datetime-local" ? "center" : ""
-                                                                        }
-                                                                    }
-                                                                }}
-                                                                key={f.fieldName}
-                                                                label={f.displayName}
-                                                                minRows={2}
-                                                                multiline={f.multiline}
-                                                                name={f.fieldName}
-                                                                onChange={(e) => {
-                                                                    setItemToAdd({
-                                                                        ...itemToAdd,
-                                                                        [f.fieldName]: e.target.value
-                                                                    });
-                                                                }}
-                                                                required={Boolean(f.isRequired)}
-                                                                sx={{
-                                                                    minWidth: "200px"
-                                                                }}
-                                                                value={itemToAdd[f.fieldName]}
-                                                            />
-                                                        ))}
+                                        <Stack
+                                            alignItems="center"
+                                            direction="row"
+                                            justifyContent="space-around"
+                                            spacing={2}
+                                        >
+                                            <Stack
+                                                alignItems="center"
+                                                direction="row"
+                                                flexWrap="wrap"
+                                                spacing={2}
+                                                useFlexGap
+                                            >
+                                                {Entity.fieldDefinitions.map((f, fi) => (
+                                                    <TextField
+                                                        autoFocus={fi === 0}
+                                                        inputProps={{
+                                                            type: f.inputType ?? "text",
+                                                            sx: {
+                                                                ...{
+                                                                    textAlign: f.inputType === "datetime-local" ? "center" : ""
+                                                                }
+                                                            }
+                                                        }}
+                                                        key={f.fieldName}
+                                                        label={f.displayName}
+                                                        minRows={2}
+                                                        multiline={f.multiline}
+                                                        name={f.fieldName}
+                                                        onChange={(e) => {
+                                                            setItemToAdd({
+                                                                ...itemToAdd,
+                                                                [f.fieldName]: e.target.value
+                                                            });
+                                                        }}
+                                                        required={Boolean(f.isRequired)}
+                                                        sx={{
+                                                            minWidth: "200px"
+                                                        }}
+                                                        value={itemToAdd[f.fieldName]}
+                                                    />
+                                                ))}
 
-                                                    </Stack>
-
-                                                    <Button
-                                                        startIcon={<AddIcon />}
-                                                        sx={{ minWidth: "200px", height: "100%" }}
-                                                        type="submit"
-                                                        variant="contained"
-                                                    >
-                                                        {`Create ${Entity.singular}`}
-                                                    </Button>
-                                                </Stack>
                                             </Stack>
-                                        </Box>
-                                    )
-                                    : null}
-                            </Stack>
 
-                        )}
+                                            <Button
+                                                startIcon={<AddIcon />}
+                                                sx={{ minWidth: "200px", height: "100%" }}
+                                                type="submit"
+                                                variant="contained"
+                                            >
+                                                {`Create ${Entity.singular}`}
+                                            </Button>
+                                        </Stack>
+                                    </Stack>
+                                </Box>
+                            )
+                            : null}
+                    </Stack>
+
                 </DialogContent>
 
                 <DialogActions>
@@ -275,11 +244,7 @@ export const EntityManageDialog = ({
                             Close
                         </Button>
 
-                        {isLoaded && !isError && dialogItemsCombinedState.itemCounts.all > 0
-                            ? (
-                                <SelectionSummary />
-                            )
-                            : null}
+                        <SelectionSummary />
                     </Stack>
                 </DialogActions>
             </PersistentDialog>
@@ -294,5 +259,4 @@ export const EntityManageDialog = ({
 
 EntityManageDialog.propTypes = {
     Entity: PropTypes.func.isRequired
-    // dialogState: PropTypes.instanceOf(DialogState).isRequired
 };

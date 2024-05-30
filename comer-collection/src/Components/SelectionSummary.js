@@ -16,6 +16,10 @@ export const SelectionSummary = () => {
         setSelectedItems([]);
     }, [setSelectedItems]);
 
+    if (itemCounts.all === 0) {
+        return null;
+    }
+
     return (
         <Stack
             alignItems="center"
