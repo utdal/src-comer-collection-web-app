@@ -7,7 +7,7 @@ const PaginationSummaryMenu = ({ visibleItemCount, paginationStatus }) => {
     const [anchorElement, setAnchorElement] = useState(null);
 
     const textWidth = useMemo(() => (
-        `${50 + (Math.floor(Math.log10(visibleItemCount)) + 1) * 20}px`
+        `${55 + (Math.floor(Math.log10(visibleItemCount)) + 1) * 20}px`
     ), [visibleItemCount]);
 
     const handleMenuOpen = useCallback((event) => {
