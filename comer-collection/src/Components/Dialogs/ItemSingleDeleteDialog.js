@@ -11,7 +11,7 @@ import { useSnackbar } from "../../ContextProviders/AppFeatures.js";
 import { useEntity } from "../../ContextProviders/ManagementPageProvider.js";
 import { DialogState } from "../../Classes/DialogState.js";
 import { PersistentDialog } from "./PersistentDialog.js";
-import { useActionData, useFetcher, useSubmit } from "react-router-dom";
+import { useActionData, useSubmit } from "react-router-dom";
 
 /**
  * @param {{
@@ -27,17 +27,11 @@ export const ItemSingleDeleteDialog = ({ requireTypedConfirmation, dialogState }
     const Entity = useEntity();
 
     const submit = useSubmit();
-    const fetcher = useFetcher();
 
     /**
      * @type {import("../../Classes/buildRouterAction.js").RouterActionResponse}
      */
     const actionData = useActionData();
-
-    // /**
-    //  * @type {import("../../Classes/buildRouterAction.js").RouterActionResponse}
-    //  */
-    // const fetcherActionData = fetcher.data;
 
     const { dialogIsOpen, closeDialog, dialogItem } = dialogState;
 
@@ -55,19 +49,11 @@ export const ItemSingleDeleteDialog = ({ requireTypedConfirmation, dialogState }
             intent: Entity.isTrash ? "single-permanent-delete" : "single-delete",
             itemId: dialogItem?.id
         };
-        if (Entity.fetcherUrl) {
-            fetcher.submit(request, {
-                method: "DELETE",
-                encType: "application/json",
-                action: Entity.fetcherUrl
-            });
-        } else {
-            submit(request, {
-                method: "DELETE",
-                encType: "application/json"
-            });
-        }
-    }, [Entity, dialogItem?.id, fetcher, submit]);
+        submit(request, {
+            method: "DELETE",
+            encType: "application/json"
+        });
+    }, [Entity, dialogItem?.id, submit]);
 
     useEffect(() => {
         if (actionData) {
@@ -80,18 +66,6 @@ export const ItemSingleDeleteDialog = ({ requireTypedConfirmation, dialogState }
             }
         }
     }, [actionData, closeDialog, showSnackbar]);
-
-    useEffect(() => {
-        if (fetcher.data) {
-            if (fetcher.data.status === "success") {
-                showSnackbar(fetcher.data.snackbarText, "success");
-                closeDialog();
-            } else if (fetcher.data.status === "error") {
-                setSubmitEnabled(true);
-                showSnackbar(fetcher.data.snackbarText, "error");
-            }
-        }
-    }, [fetcher.data, closeDialog, showSnackbar]);
 
     return (
         <PersistentDialog
