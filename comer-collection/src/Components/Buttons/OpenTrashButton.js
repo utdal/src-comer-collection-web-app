@@ -1,33 +1,29 @@
 import React, { useCallback } from "react";
-import PropTypes from "prop-types";
 import { Button } from "@mui/material";
 import { useNavigate } from "react-router";
+import { DeleteIcon } from "../../Imports/Icons.js";
 
 /**
  * @param {{
  *  entity: Class
  * }} props
  */
-const EntityManageButton = ({ entity }) => {
+const OpenTrashButton = () => {
     const navigate = useNavigate();
 
     const handleClick = useCallback(() => {
-        navigate(entity.entityManageRelativeUrl);
-    }, [entity.entityManageRelativeUrl, navigate]);
+        navigate("Trash");
+    }, [navigate]);
+
     return (
         <Button
             color="primary"
             onClick={handleClick}
-            startIcon={<entity.DefaultIcon />}
             variant="outlined"
         >
-            {entity.plural}
+            <DeleteIcon />
         </Button>
     );
 };
 
-EntityManageButton.propTypes = {
-    entity: PropTypes.func.isRequired
-};
-
-export default EntityManageButton;
+export default OpenTrashButton;

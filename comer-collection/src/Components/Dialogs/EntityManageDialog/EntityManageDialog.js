@@ -54,6 +54,8 @@ export const EntityManageDialog = ({ Entity }) => {
         handleOpenEntityDeleteDialog
     }), [handleOpenEntityDeleteDialog, handleOpenEntityEditDialog]);
 
+    const isTrashMode = Entity.isTrash;
+
     return (
         <ManagementPageProvider
             Entity={Entity}
@@ -84,13 +86,11 @@ export const EntityManageDialog = ({ Entity }) => {
                             `
                         }}
                     >
-                        <EntityManageUpdateSection
-                            dialogItemsCombinedState={dialogItemsCombinedState}
-                        />
+                        <EntityManageUpdateSection dialogItemsCombinedState={dialogItemsCombinedState} />
 
                         <Divider />
 
-                        <EntityManageCreateSection />
+                        {!isTrashMode ? <EntityManageCreateSection /> : null}
 
                     </Stack>
 

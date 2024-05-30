@@ -10,7 +10,7 @@ import { SelectionSummary } from "../../Components/SelectionSummary.js";
 import { AssociationManagementDialog } from "../../Components/Dialogs/AssociationManagementDialog/AssociationManagementDialog.js";
 import { useTitle } from "../../ContextProviders/AppFeatures.js";
 
-import { DeletedImage, Image } from "../../Classes/Entities/Image.js";
+import { Image } from "../../Classes/Entities/Image.js";
 import { Artist } from "../../Classes/Entities/Artist.js";
 import { Tag } from "../../Classes/Entities/Tag.js";
 import { ImageArtist } from "../../Classes/Associations/ImageArtist.js";
@@ -30,6 +30,7 @@ import { useDialogState } from "../../Hooks/useDialogState.js";
 import EntityManageButton from "../../Components/Buttons/EntityManageButton.js";
 import AssociationManageButton from "../../Components/Buttons/AssociationManageButton.js";
 import PaginationSummary from "../../Components/PaginationSummary/PaginationSummary.js";
+import OpenTrashButton from "../../Components/Buttons/OpenTrashButton.js";
 
 const ImageManagement = () => {
     const images = useLoaderData();
@@ -157,11 +158,11 @@ const ImageManagement = () => {
 
                         <ClearFilterButton />
 
-                        <EntityManageButton entity={Tag} />
-
                         <EntityManageButton entity={Artist} />
 
-                        <EntityManageButton entity={DeletedImage} />
+                        <EntityManageButton entity={Tag} />
+
+                        <OpenTrashButton />
 
                         <MultiCreateButton />
                     </ManagementButtonStack>

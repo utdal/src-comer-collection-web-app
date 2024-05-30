@@ -230,7 +230,8 @@ const router = createBrowserRouter([
                                     {
                                         path: "Trash",
                                         loader: buildRouterLoader(DeletedImage),
-                                        action: buildRouterAction(DeletedImage)
+                                        action: buildRouterAction(DeletedImage),
+                                        element: <EntityManageDialog Entity={DeletedImage} />
                                     }
                                 ]
                             },
