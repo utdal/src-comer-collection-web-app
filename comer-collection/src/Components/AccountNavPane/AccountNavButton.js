@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useCallback } from "react";
 import { ListItemButton, ListItemIcon, styled } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { useAppUser } from "../../Hooks/useAppUser.js";
@@ -12,11 +12,11 @@ export const accountLlinkDefinitionPropTypeShape = PropTypes.shape({
 });
 
 const StyledListItemButton = styled(ListItemButton, {
-    shouldForwardProp: (prop) => prop !== "linkDefinition"
-})(({ theme, linkDefinition }) => ({
-    backgroundColor: location.pathname === linkDefinition.link ? theme.palette.secondary.main : "unset",
+    shouldForwardProp: (prop) => prop !== "isSelected"
+})(({ theme, isSelected }) => ({
+    backgroundColor: isSelected ? theme.palette.secondary.main : "unset",
     "&:hover": {
-        backgroundColor: location.pathname === linkDefinition.link ? theme.palette.secondary.main : theme.palette.grey.main,
+        backgroundColor: isSelected ? theme.palette.secondary.main : theme.palette.grey.main,
         textDecoration: "underline"
     }
 }));
@@ -24,14 +24,19 @@ const StyledListItemButton = styled(ListItemButton, {
 export const AccountNavButton = ({ linkDefinition }) => {
     const appUser = useAppUser();
     const navigate = useNavigate();
+
+    const handleClick = useCallback(() => {
+        navigate(linkDefinition.link);
+    }, [linkDefinition.link, navigate]);
+
+    const isSelected = location.pathname === linkDefinition.link || location.pathname.startsWith(`${linkDefinition.link}/`);
+
     return (
         <StyledListItemButton
             disabled={Boolean(linkDefinition.requirePermanentPassword && appUser?.pw_change_required)}
+            isSelected={isSelected}
             key={linkDefinition.title}
-            linkDefinition={linkDefinition}
-            onClick={() => {
-                navigate(linkDefinition.link);
-            }}
+            onClick={handleClick}
         >
             <ListItemIcon sx={{ color: "white" }}>
                 <linkDefinition.Icon fontSize="large" />
