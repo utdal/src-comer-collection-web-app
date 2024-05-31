@@ -1,10 +1,21 @@
 import { Box, Button, LinearProgress, Paper, Stack, Typography } from "@mui/material";
 import React, { useCallback } from "react";
 import { useNavigate } from "react-router";
+import type { ReactComponentLike } from "prop-types";
 import PropTypes from "prop-types";
 import SideBySideLogo from "./Logos/SideBySideLogo.js";
 
-export const FullPageMessage = ({ message, button = true, buttonText, buttonDestination = "/SignIn", Icon, buttonAction, includeLinearProgress = false, includeLogo = false, viewportHeight = false }) => {
+export const FullPageMessage = ({ message, button = true, buttonText, buttonDestination = "/SignIn", Icon, buttonAction, includeLinearProgress = false, includeLogo = false, viewportHeight = false }: {
+    readonly message: string;
+    readonly button?: boolean;
+    readonly Icon?: ReactComponentLike;
+    readonly buttonAction: (() => void) | undefined;
+    readonly includeLinearProgress?: boolean;
+    readonly includeLogo?: boolean;
+    readonly viewportHeight?: boolean;
+    readonly buttonText?: string;
+    readonly buttonDestination?: string;
+}): React.JSX.Element => {
     const navigate = useNavigate();
 
     const handleNavigate = useCallback(() => {
@@ -31,7 +42,7 @@ export const FullPageMessage = ({ message, button = true, buttonText, buttonDest
             >
                 {includeLogo ? <SideBySideLogo /> : null}
 
-                {Icon
+                {(Icon !== undefined)
                     ? <Icon sx={{ fontSize: "150pt", opacity: 0.5 }} />
                     : null}
 
@@ -39,7 +50,7 @@ export const FullPageMessage = ({ message, button = true, buttonText, buttonDest
                     {message}
                 </Typography>
 
-                {button && (buttonDestination || buttonText)
+                {button && (buttonDestination)
                     ? (
                         <Button
                             onClick={buttonAction ?? handleNavigate}

@@ -2,7 +2,7 @@ import React from "react";
 import type { ReactElementLike } from "prop-types";
 import PropTypes from "prop-types";
 import { useAppUser } from "../../Hooks/useAppUser";
-import { FullPageMessage } from "../FullPageMessage.js";
+import { FullPageMessage } from "../FullPageMessage.tsx";
 import { LockIcon } from "../../Imports/Icons.js";
 import RequirePermanentPassword from "./RequirePermanentPassword";
 import type { AppUser } from "../../index.js";

@@ -5,7 +5,7 @@ import PaginationSummary from "../../PaginationSummary/PaginationSummary.js";
 import { RefreshButton } from "../../Buttons/RefreshButton.js";
 import { DataTable } from "../../DataTable/DataTable.js";
 import { useEntity, useVisibilityStatuses } from "../../../ContextProviders/ManagementPageProvider.js";
-import { FullPageMessage } from "../../FullPageMessage.js";
+import { FullPageMessage } from "../../FullPageMessage.tsx";
 import { DeleteIcon } from "../../../Imports/Icons.js";
 import { itemsCombinedStatePropTypeShape } from "../../../Classes/Entity.ts";
 import { doesItemMatchSearchQuery } from "../../../Helpers/SearchUtilities.js";

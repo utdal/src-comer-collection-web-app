@@ -11,7 +11,7 @@ import { User } from "../Classes/Entities/User";
 import RequireAdmin from "../Components/AccessControl/RequireAdmin";
 import RequirePermanentPassword from "../Components/AccessControl/RequirePermanentPassword";
 import { EntityManageDialog } from "../Components/Dialogs/EntityManageDialog/EntityManageDialog.js";
-import { FullPageMessage } from "../Components/FullPageMessage.js";
+import { FullPageMessage } from "../Components/FullPageMessage.tsx";
 import RouterErrorMessage from "../Components/RouterErrorMessage";
 import { InfoIcon } from "../Imports/Icons.js";
 import ChangePassword from "../Pages/Account/ChangePassword.js";

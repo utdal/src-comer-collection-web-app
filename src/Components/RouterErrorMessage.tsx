@@ -2,7 +2,7 @@ import React, { useCallback } from "react";
 import PropTypes from "prop-types";
 import { useRouteError } from "react-router";
 import { WarningIcon } from "../Imports/Icons.js";
-import { FullPageMessage } from "./FullPageMessage.js";
+import { FullPageMessage } from "./FullPageMessage";
 
 const RouterErrorMessage = ({ viewportHeight, includeLogo, suggestReload }: {
     readonly viewportHeight?: boolean;
