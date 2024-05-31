@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
 import { sendAuthenticatedRequest } from "../../Helpers/APICalls.js";
-import { Entity } from "../Entity.ts";
+import { Entity } from "../Entity";
 import { UserIDCell } from "../../Components/TableCells/User/UserIDCell.js";
 import { UserFullNameReverseCell } from "../../Components/TableCells/User/UserFullNameReverseCell.js";
 import { UserEmailCopyCell } from "../../Components/TableCells/User/UserEmailCopyCell.js";
@@ -11,31 +11,36 @@ import UserTypeButtonCell from "../../Components/TableCells/User/UserTypeButtonC
 import { UserActivationSwitchCell } from "../../Components/TableCells/User/UserActivationSwitchCell.js";
 import UserOptionsCell from "../../Components/TableCells/User/UserOptionsCell.js";
 import { GroupAddIcon, PersonIcon } from "../../Imports/Icons.js";
+import type React from "react";
+import type { EntityFieldDefinition, Item, SortableValue, TableFieldDefinition } from "../../index.js";
 
 class User extends Entity {
-    static baseUrl = "/api/users";
-    static singular = "user";
-    static plural = "users";
+    public static baseUrl = "/api/users";
 
-    static DefaultIcon = PersonIcon;
+    public static singular = "user";
 
-    static MultiCreateButtonIcon = GroupAddIcon;
-    static multiCreateDialogSubtitle = "You can set passwords, roles, and course enrollments after creating the users.";
+    public static plural = "users";
 
-    static searchBoxFields = ["full_name", "full_name_reverse", "email_without_domain"];
-    static searchBoxPlaceholder = "Search by user name or email";
+    public static DefaultIcon = PersonIcon as React.FunctionComponent;
 
-    /**
-     * @type {EntityFieldDefinition[]}
-     */
-    static fieldDefinitions = [
+    public static MultiCreateButtonIcon = GroupAddIcon as React.FunctionComponent;
+
+    public static multiCreateDialogSubtitle = "You can set passwords, roles, and course enrollments after creating the users.";
+
+    public static searchBoxFields = ["full_name", "full_name_reverse", "email_without_domain"];
+
+    public static searchBoxPlaceholder = "Search by user name or email";
+
+    public static fieldDefinitions: EntityFieldDefinition[] = [
         {
             fieldName: "given_name",
-            displayName: "First Name"
+            displayName: "First Name",
+            isRequired: false
         },
         {
             fieldName: "family_name",
-            displayName: "Last Name"
+            displayName: "Last Name",
+            isRequired: false
         },
         {
             fieldName: "email",
@@ -53,45 +58,22 @@ class User extends Entity {
         }
     ];
 
-    static handleChangeUserAccess (userId, newAccess) {
-        return new Promise((resolve, reject) => {
-            sendAuthenticatedRequest("PUT", `${this.baseUrl}/${userId}/access`, { access_level: newAccess }).then(() => {
-                resolve("User access updated");
-            }).catch(() => {
-                reject(new Error("Failed to update user access"));
-            });
-        });
-    }
-
-    static handleChangeUserActivationStatus (userId, newActivationStatus) {
-        return new Promise((resolve, reject) => {
-            sendAuthenticatedRequest("PUT", `${this.baseUrl}/${userId}/${newActivationStatus ? "activate" : "deactivate"}`).then(() => {
-                resolve(newActivationStatus ? "User activated" : "User deactivated");
-            }).catch(() => {
-                reject(new Error(newActivationStatus ? "Failed to activate user" : "Failed to deactivate user"));
-            });
-        });
-    }
-
-    /**
-     * @type {TableFieldDefinition[]}
-     */
-    static tableFields = [
+    public static tableFields: TableFieldDefinition[] = [
         {
             columnDescription: "ID",
             TableCellComponent: UserIDCell,
-            generateSortableValue: (user) => user.id
+            generateSortableValue: (user: Item): SortableValue => user.id
         },
         {
             columnDescription: "Name",
             maxWidth: "150px",
             TableCellComponent: UserFullNameReverseCell,
-            generateSortableValue: (user) => user.full_name_reverse.toLowerCase()
+            generateSortableValue: (user: Item): SortableValue => (user.full_name_reverse as string).toLowerCase()
         },
         {
             columnDescription: "Email",
             TableCellComponent: UserEmailCopyCell,
-            generateSortableValue: (user) => user.email
+            generateSortableValue: (user: Item): SortableValue => user.email as string
         },
         {
             columnDescription: "Password",
@@ -118,6 +100,26 @@ class User extends Entity {
             TableCellComponent: UserOptionsCell
         }
     ];
+
+    public static async handleChangeUserAccess (userId: number, newAccess: string): Promise<string> {
+        return new Promise((resolve, reject) => {
+            sendAuthenticatedRequest("PUT", `${this.baseUrl}/${userId}/access`, { access_level: newAccess }).then(() => {
+                resolve("User access updated");
+            }).catch(() => {
+                reject(new Error("Failed to update user access"));
+            });
+        });
+    }
+
+    public static async handleChangeUserActivationStatus (userId: number, newActivationStatus: boolean): Promise<string> {
+        return new Promise((resolve, reject) => {
+            sendAuthenticatedRequest("PUT", `${this.baseUrl}/${userId}/${newActivationStatus ? "activate" : "deactivate"}`).then(() => {
+                resolve(newActivationStatus ? "User activated" : "User deactivated");
+            }).catch(() => {
+                reject(new Error(newActivationStatus ? "Failed to activate user" : "Failed to deactivate user"));
+            });
+        });
+    }
 }
 
 export { User };

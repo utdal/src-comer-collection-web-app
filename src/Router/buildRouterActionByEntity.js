@@ -1,4 +1,4 @@
-import { User } from "../Classes/Entities/User.js";
+import { User } from "../Classes/Entities/User.ts";
 import { Course } from "../Classes/Entities/Course.ts";
 import { DeletedImage, Image } from "../Classes/Entities/Image.ts";
 import { Artist } from "../Classes/Entities/Artist.ts";

@@ -1,7 +1,7 @@
 import React from "react";
 import { useSnackbar } from "../../../ContextProviders/AppFeatures.js";
 import { useAssociationType, useRelevantPrimaryItems } from "../../../ContextProviders/AssociationManagementPageProvider.js";
-import { User } from "../../../Classes/Entities/User.js";
+import { User } from "../../../Classes/Entities/User.ts";
 import { Button, Typography } from "@mui/material";
 import { CheckIcon } from "../../../Imports/Icons.js";
 import { useTableCellItem } from "../../../ContextProviders/TableCellProvider.js";

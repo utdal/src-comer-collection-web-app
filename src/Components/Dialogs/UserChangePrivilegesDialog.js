@@ -7,7 +7,7 @@ import {
     Typography, DialogContentText, Checkbox, ToggleButtonGroup, ToggleButton
 } from "@mui/material";
 import { SecurityIcon, PersonIcon, CollectionManagerIcon } from "../../Imports/Icons.js";
-import { User } from "../../Classes/Entities/User.js";
+import { User } from "../../Classes/Entities/User.ts";
 import { useSnackbar } from "../../ContextProviders/AppFeatures.js";
 import { useManagementCallbacks } from "../../ContextProviders/ManagementPageProvider.js";
 import { DialogStateOld } from "../../Classes/DialogState.js";

@@ -245,6 +245,8 @@ export interface EntityFieldDefinition {
     inputType?: "datetime-local" | "email" | "number" | "textarea" | "url";
     blank?: number | string;
     multiline?: boolean;
+    maxValue?: number;
+    minValue?: number;
 }
 
 export interface TableFieldDefinition {

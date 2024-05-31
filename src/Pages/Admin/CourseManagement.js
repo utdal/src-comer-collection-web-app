@@ -13,7 +13,7 @@ import { ClearFilterButton } from "../../Components/Buttons/ClearFilterButton.js
 import { RefreshButton } from "../../Components/Buttons/RefreshButton.js";
 import { MultiCreateButton } from "../../Components/Buttons/MultiCreateButton.js";
 import { ManagementButtonStack } from "../../Components/ManagementPage/ManagementButtonStack.js";
-import { User } from "../../Classes/Entities/User.js";
+import { User } from "../../Classes/Entities/User.ts";
 import { ManagementPageContainer } from "../../Components/ManagementPage/ManagementPageContainer.js";
 import { ManagementPageHeader } from "../../Components/ManagementPage/ManagementPageHeader.js";
 import { ManagementPageBody } from "../../Components/ManagementPage/ManagementPageBody.js";

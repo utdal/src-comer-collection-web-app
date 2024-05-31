@@ -19,7 +19,7 @@ import { UserEmailCopyCell } from "../../Components/TableCells/User/UserEmailCop
 import { UserProfilePasswordInfoCell } from "../../Components/TableCells/User/UserProfilePasswordInfoCell.js";
 import UserTypeCell from "../../Components/TableCells/User/UserTypeCell.js";
 import { UserExhibitionQuotaCell } from "../../Components/TableCells/User/UserExhibitionQuotaCell.js";
-import { User } from "../../Classes/Entities/User.js";
+import { User } from "../../Classes/Entities/User.ts";
 import { Course } from "../../Classes/Entities/Course.ts";
 import PaginationSummary from "../../Components/PaginationSummary/PaginationSummary.js";
 

@@ -8,7 +8,7 @@ import { SelectionSummary } from "../../Components/SelectionSummary.js";
 import { CourseFilterMenu } from "../../Components/Menus/CourseFilterMenu.js";
 import { useSnackbar, useTitle } from "../../ContextProviders/AppFeatures.js";
 
-import { User } from "../../Classes/Entities/User.js";
+import { User } from "../../Classes/Entities/User.ts";
 import { EnrollmentUserPrimary } from "../../Classes/Associations/Enrollment.js";
 import { UserExhibition } from "../../Classes/Associations/UserExhibition.js";
 import { ManagementPageProvider, useItemsReducer } from "../../ContextProviders/ManagementPageProvider.js";

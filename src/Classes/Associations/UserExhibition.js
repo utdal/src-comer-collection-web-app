@@ -1,5 +1,5 @@
 import { Exhibition } from "../Entities/Exhibition.ts";
-import { User } from "../Entities/User.js";
+import { User } from "../Entities/User.ts";
 import { Association } from "../Association.ts";
 import { ExhibitionIDCell } from "../../Components/TableCells/Exhibition/ExhibitionIDCell.js";
 import { ExhibitionTitleCell } from "../../Components/TableCells/Exhibition/ExhibitionTitleCell.js";
