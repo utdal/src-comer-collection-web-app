@@ -1,19 +1,26 @@
 import React from "react";
+import type { ReactNodeLike } from "prop-types";
 import PropTypes from "prop-types";
-import { useAppUser } from "../../Hooks/useAppUser.js";
+import { useAppUser } from "../../Hooks/useAppUser";
 import { FullPageMessage } from "../FullPageMessage.js";
 import { LockIcon } from "../../Imports/Icons.js";
 import RequirePermanentPassword from "./RequirePermanentPassword.js";
+import type { AppUser } from "../../index.js";
 
-const RequireAdmin = ({ component, allowCollectionManager }) => {
-    const appUser = useAppUser();
-    return appUser?.is_admin || (appUser?.is_collection_manager && allowCollectionManager)
+interface RequireAdminProps {
+    readonly component: Readonly<ReactNodeLike>;
+    readonly allowCollectionManager: boolean;
+}
+
+const RequireAdmin = ({ component, allowCollectionManager }: RequireAdminProps): React.JSX.Element => {
+    const appUser = useAppUser() as AppUser;
+    return appUser.is_admin || (appUser.is_collection_manager && allowCollectionManager)
         ? (
             <RequirePermanentPassword component={component} />
         )
         : (
             <FullPageMessage
-                Icon={LockIcon}
+                Icon={LockIcon as React.FunctionComponent}
                 buttonDestination="/Account/Profile"
                 buttonText="Return to Profile"
                 message="Insufficient Privileges"

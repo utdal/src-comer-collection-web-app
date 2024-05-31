@@ -9,7 +9,7 @@ import {
     CollectionsIcon,
     SecurityIcon
 } from "../../Imports/Icons.js";
-import { useAppUser } from "../../Hooks/useAppUser.js";
+import { useAppUser } from "../../Hooks/useAppUser.ts";
 import PropTypes from "prop-types";
 import { ColorInput } from "./ColorInput.js";
 import { AccordionSubHeading } from "./AccordionSubHeading.js";

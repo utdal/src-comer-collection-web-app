@@ -9,6 +9,13 @@ export interface Item {
     readonly id: number;
 }
 
+export interface AppUser {
+    id: number;
+    is_admin: boolean;
+    is_collection_manager: boolean;
+    is_admin_or_collection_manager: boolean;
+}
+
 export interface ItemCounts {
     all: number;
     selected: number;

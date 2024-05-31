@@ -2,7 +2,7 @@ import React from "react";
 import { Navigate, Outlet } from "react-router-dom"; // Import Route from react-router-dom
 import { AccountNavPane } from "../Components/AccountNavPane/AccountNavPane.js";
 import { Box } from "@mui/material";
-import { useAppUser } from "../Hooks/useAppUser.js";
+import { useAppUser } from "../Hooks/useAppUser.ts";
 
 const AccountLayout = () => {
     const appUser = useAppUser();

@@ -1,6 +1,6 @@
 import React, { useCallback } from "react";
 import { Button, Stack, Typography } from "@mui/material";
-import { useAppUser } from "../../../Hooks/useAppUser.js";
+import { useAppUser } from "../../../Hooks/useAppUser.ts";
 import { PhotoCameraBackIcon } from "../../../Imports/Icons.js";
 import { useTableCellItem, useTableCellManagementCallbacks } from "../../../ContextProviders/TableCellProvider.js";
 

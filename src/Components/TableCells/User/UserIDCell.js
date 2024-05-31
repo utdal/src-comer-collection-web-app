@@ -1,6 +1,6 @@
 import React from "react";
 import { Stack, Typography } from "@mui/material";
-import { useAppUser } from "../../../Hooks/useAppUser.js";
+import { useAppUser } from "../../../Hooks/useAppUser.ts";
 import { PersonIcon } from "../../../Imports/Icons.js";
 import { useTableCellItem } from "../../../ContextProviders/TableCellProvider.js";
 

@@ -1,7 +1,7 @@
 import React, { useCallback } from "react";
 import { ListItemButton, ListItemIcon, styled } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-import { useAppUser } from "../../Hooks/useAppUser.js";
+import { useAppUser } from "../../Hooks/useAppUser.ts";
 import PropTypes from "prop-types";
 
 export const accountLlinkDefinitionPropTypeShape = PropTypes.shape({

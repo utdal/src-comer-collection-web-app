@@ -8,7 +8,7 @@ import { Exhibition, PublicExhibition } from "../Classes/Entities/Exhibition.ts"
 import { Image, DeletedImage } from "../Classes/Entities/Image.ts";
 import { Tag } from "../Classes/Entities/Tag.ts";
 import { User } from "../Classes/Entities/User.ts";
-import RequireAdmin from "../Components/AccessControl/RequireAdmin.js";
+import RequireAdmin from "../Components/AccessControl/RequireAdmin.tsx";
 import RequirePermanentPassword from "../Components/AccessControl/RequirePermanentPassword.js";
 import { EntityManageDialog } from "../Components/Dialogs/EntityManageDialog/EntityManageDialog.js";
 import { FullPageMessage } from "../Components/FullPageMessage.js";

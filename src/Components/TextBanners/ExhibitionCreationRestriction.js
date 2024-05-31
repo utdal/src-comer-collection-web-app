@@ -1,6 +1,6 @@
 import { Stack, Typography } from "@mui/material";
 import React from "react";
-import { useAppUser } from "../../Hooks/useAppUser.js";
+import { useAppUser } from "../../Hooks/useAppUser.ts";
 import { InfoIcon, SecurityIcon } from "../../Imports/Icons.js";
 
 export const ExhibitionCreationRestriction = () => {

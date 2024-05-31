@@ -5,7 +5,7 @@ import React, { useCallback, useEffect, useReducer, useState } from "react";
 import { exhibitionEditReducer, blankExhibitionData } from "../Components/ExhibitionPage/exhibitionEditReducer.js";
 import Exhibition3DViewport from "../Components/Exhibition3DViewport/Exhibition3DViewport.js";
 import { sendAuthenticatedRequest } from "../Helpers/APICalls.js";
-import { useAppUser } from "../Hooks/useAppUser.js";
+import { useAppUser } from "../Hooks/useAppUser.ts";
 import { useSnackbar, useTitle } from "../ContextProviders/AppFeatures.js";
 
 const ExhibitionPage = () => {

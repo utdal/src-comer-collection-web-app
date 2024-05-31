@@ -1,6 +1,6 @@
 import React from "react";
 import { Button } from "@mui/material";
-import { useAppUser } from "../../Hooks/useAppUser.js";
+import { useAppUser } from "../../Hooks/useAppUser.ts";
 import { useManagementCallbacks } from "../../ContextProviders/ManagementPageProvider.js";
 import { AddIcon } from "../../Imports/Icons.js";
 

@@ -1,6 +1,6 @@
 import React, { useCallback } from "react";
 import { Button } from "@mui/material";
-import { useAppUser } from "../../../Hooks/useAppUser.js";
+import { useAppUser } from "../../../Hooks/useAppUser.ts";
 import { useTableCellItem, useTableCellManagementCallbacks } from "../../../ContextProviders/TableCellProvider.js";
 import { LockIcon, LockResetIcon } from "../../../Imports/Icons.js";
 import { useNavigate } from "react-router";

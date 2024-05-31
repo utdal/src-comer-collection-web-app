@@ -1,5 +1,5 @@
 import React from "react";
-import { useAppUser } from "../../../Hooks/useAppUser.js";
+import { useAppUser } from "../../../Hooks/useAppUser.ts";
 import { useTableCellItem } from "../../../ContextProviders/TableCellProvider.js";
 import EntityDeleteButton from "../Entity/EntityDeleteButton.js";
 

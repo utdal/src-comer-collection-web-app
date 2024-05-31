@@ -1,6 +1,6 @@
 import React, { useCallback } from "react";
 import { Switch } from "@mui/material";
-import { useAppUser } from "../../../Hooks/useAppUser.js";
+import { useAppUser } from "../../../Hooks/useAppUser.ts";
 import { useTableCellItem, useTableCellManagementCallbacks } from "../../../ContextProviders/TableCellProvider.js";
 
 export const UserActivationSwitchCell = () => {
