@@ -12,7 +12,7 @@ import { useEntity, useManagementCallbacks } from "../../ContextProviders/Manage
 import { DialogStateOld } from "../../Classes/DialogState.js";
 import { PersistentDialog } from "./PersistentDialog.js";
 import { useActionData, useSubmit } from "react-router-dom";
-import { capitalized } from "../../Classes/Entity.js";
+import { capitalized } from "../../Classes/Entity.ts";
 import DialogCancelButton from "../Buttons/DialogCancelButton.js";
 
 /**

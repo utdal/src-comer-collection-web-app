@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
 import { sendAuthenticatedRequest } from "../../Helpers/APICalls.js";
-import { Entity } from "../Entity.js";
+import { Entity } from "../Entity.ts";
 import { UserIDCell } from "../../Components/TableCells/User/UserIDCell.js";
 import { UserFullNameReverseCell } from "../../Components/TableCells/User/UserFullNameReverseCell.js";
 import { UserEmailCopyCell } from "../../Components/TableCells/User/UserEmailCopyCell.js";

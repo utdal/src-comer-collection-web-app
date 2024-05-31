@@ -1,6 +1,6 @@
 import { Artist } from "../Entities/Artist.js";
 import { Image } from "../Entities/Image.js";
-import { Association } from "../Association.js";
+import { Association } from "../Association.ts";
 import { ArtistIDCell } from "../../Components/TableCells/Artist/ArtistIDCell.js";
 import { ArtistNameCell } from "../../Components/TableCells/Artist/ArtistNameCell.js";
 import { ArtistNotesCell } from "../../Components/TableCells/Artist/ArtistNotesCell.js";

@@ -3,7 +3,7 @@ import React, { useMemo, useState } from "react";
 import { GridOnIcon, ViewListIcon } from "../../Imports/Icons.js";
 import SearchBox from "../SearchBox.js";
 import PropTypes from "prop-types";
-import { entityPropTypeShape } from "../../Classes/Entity.js";
+import { entityPropTypeShape } from "../../Classes/Entity.ts";
 import { CollectionBrowserImageDetails } from "./CollectionGalleryImageDetails.js";
 import { useItems, useItemsPagination, useVisibilityStatuses } from "../../ContextProviders/ManagementPageProvider.js";
 import PaginationSummary from "../PaginationSummary/PaginationSummary.js";

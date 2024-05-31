@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import { Entity } from "../Entity.js";
+import { Entity } from "../Entity.ts";
 import { ImageIDCell } from "../../Components/TableCells/Image/ImageIDCell.js";
 import { ImageTitleCell } from "../../Components/TableCells/Image/ImageTitleCell.js";
 import { ImagePreviewThumbnailCell } from "../../Components/TableCells/Image/ImagePreviewThumbnailCell.js";

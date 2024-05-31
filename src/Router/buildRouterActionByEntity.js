@@ -5,7 +5,7 @@ import { Artist } from "../Classes/Entities/Artist.js";
 import { Tag } from "../Classes/Entities/Tag.js";
 import { Exhibition } from "../Classes/Entities/Exhibition.js";
 import { sendAuthenticatedRequest } from "../Helpers/APICalls.js";
-import { capitalized } from "../Classes/Entity.js";
+import { capitalized } from "../Classes/Entity.ts";
 
 /**
  * @type {{

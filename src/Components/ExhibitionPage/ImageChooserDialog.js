@@ -4,7 +4,7 @@ import { CollectionGalleryGrid } from "../CollectionGallery/CollectionGalleryGri
 import { AddPhotoAlternateIcon } from "../../Imports/Icons.js";
 import PropTypes from "prop-types";
 import { exhibitionStatePropTypesShape } from "../../Classes/Entities/Exhibition.js";
-import { entityPropTypeShape } from "../../Classes/Entity.js";
+import { entityPropTypeShape } from "../../Classes/Entity.ts";
 import { ManagementPageProvider, useItemsReducer } from "../../ContextProviders/ManagementPageProvider.js";
 import { Image } from "../../Classes/Entities/Image.js";
 

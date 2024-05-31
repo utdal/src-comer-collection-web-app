@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useMemo } from "react";
 import PropTypes from "prop-types";
 import { ManagementPageProvider, useItemCounts, useItems } from "./ManagementPageProvider.js";
-import { entityPropTypeShape, itemsCombinedStatePropTypeShape } from "../Classes/Entity.js";
+import { entityPropTypeShape, itemsCombinedStatePropTypeShape } from "../Classes/Entity.ts";
 
 const AssociationManagementPageContext = createContext();
 const defaultManagementCallbacks = {};

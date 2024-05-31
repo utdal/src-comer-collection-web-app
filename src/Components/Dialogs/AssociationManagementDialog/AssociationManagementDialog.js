@@ -13,7 +13,7 @@ import { AssignButton } from "../../TableCells/Association/AssignButton.js";
 import { UnassignButton } from "../../TableCells/Association/UnassignButton.js";
 import { computeSecondaryItemsAssigned } from "../../../Helpers/computeSecondaryItemsAssigned.js";
 import { AssociationTableDisplay } from "./AssociationTableDisplay.js";
-import { entityPropTypeShape } from "../../../Classes/Entity.js";
+import { entityPropTypeShape } from "../../../Classes/Entity.ts";
 import { AssociationManagementPageProvider } from "../../../ContextProviders/AssociationManagementPageProvider.js";
 import { useItemsReducer, useManagementCallbacks } from "../../../ContextProviders/ManagementPageProvider.js";
 import { DialogStateOld } from "../../../Classes/DialogState.js";

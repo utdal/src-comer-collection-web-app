@@ -3,7 +3,7 @@ import { BrushIcon } from "../../Imports/Icons.js";
 import PropTypes from "prop-types";
 import { SecondaryFilterMenu } from "./SecondaryFilterMenu.js";
 import { Typography } from "@mui/material";
-import { entityPropTypeShape } from "../../Classes/Entity.js";
+import { entityPropTypeShape } from "../../Classes/Entity.ts";
 
 const artistSortFunction = (a, b) => {
     return a.fullNameReverse > b.fullNameReverse;

@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useMemo } from "react";
 import PropTypes from "prop-types";
-import { entityPropTypeShape } from "../Classes/Entity.js";
+import { entityPropTypeShape } from "../Classes/Entity.ts";
 
 const TableCellContext = createContext();
 

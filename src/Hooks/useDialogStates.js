@@ -1,6 +1,6 @@
 import { useCallback, useReducer } from "react";
 import PropTypes from "prop-types";
-import { entityPropTypeShape } from "../Classes/Entity.js";
+import { entityPropTypeShape } from "../Classes/Entity.ts";
 
 /**
  * @type {{

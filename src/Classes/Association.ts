@@ -1,5 +1,5 @@
 import { AddIcon, RemoveIcon } from "../Imports/Icons.js";
-import { Entity, capitalized } from "./Entity.js";
+import { Entity, capitalized } from "./Entity.ts";
 import { sendAuthenticatedRequest } from "../Helpers/APICalls.js";
 
 class Association {

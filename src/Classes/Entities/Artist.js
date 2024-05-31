@@ -5,7 +5,7 @@ import { ArtistNameCell } from "../../Components/TableCells/Artist/ArtistNameCel
 import { ArtistNotesCell } from "../../Components/TableCells/Artist/ArtistNotesCell.js";
 import { ArtistWebsiteCell } from "../../Components/TableCells/Artist/ArtistWebsiteCell.js";
 import { BrushIcon } from "../../Imports/Icons.js";
-import { Entity } from "../Entity.js";
+import { Entity } from "../Entity.ts";
 
 class Artist extends Entity {
     static baseUrl = "/api/artists";

@@ -4,7 +4,7 @@ import { useInView } from "react-intersection-observer";
 import { Checkbox, TableCell, TableRow, styled } from "@mui/material";
 import { DataTableFieldCells } from "./DataTableFieldCells.js";
 import { DataTableRowPlaceholder } from "./DataTableRowPlaceholder.js";
-import { entityPropTypeShape, tableFieldPropTypeShape } from "../../Classes/Entity.js";
+import { entityPropTypeShape, tableFieldPropTypeShape } from "../../Classes/Entity.ts";
 
 const ColoredTableRow = styled(TableRow, {
     shouldForwardProp: (prop) => !["themeColor", "isSelected"].includes(prop)

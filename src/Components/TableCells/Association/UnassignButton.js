@@ -2,7 +2,7 @@ import React from "react";
 import { useSnackbar } from "../../../ContextProviders/AppFeatures.js";
 import { useAssociationType, useRelevantPrimaryItems } from "../../../ContextProviders/AssociationManagementPageProvider.js";
 import { User } from "../../../Classes/Entities/User.js";
-import { capitalized } from "../../../Classes/Entity.js";
+import { capitalized } from "../../../Classes/Entity.ts";
 import { Button, Typography } from "@mui/material";
 import { useTableCellItem } from "../../../ContextProviders/TableCellProvider.js";
 

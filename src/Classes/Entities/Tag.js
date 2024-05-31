@@ -4,7 +4,7 @@ import { TagImageCountCell } from "../../Components/TableCells/Tag/TagImageCount
 import TagManageOptionsArray from "../../Components/TableCells/Tag/TagManageOptionsArray.js";
 import { TagNotesCell } from "../../Components/TableCells/Tag/TagNotesCell.js";
 import { SellIcon } from "../../Imports/Icons.js";
-import { Entity } from "../Entity.js";
+import { Entity } from "../Entity.ts";
 
 class Tag extends Entity {
     static baseUrl = "/api/tags";

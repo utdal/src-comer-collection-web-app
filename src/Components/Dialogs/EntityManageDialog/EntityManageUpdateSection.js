@@ -7,7 +7,7 @@ import { DataTable } from "../../DataTable/DataTable.js";
 import { useEntity, useVisibilityStatuses } from "../../../ContextProviders/ManagementPageProvider.js";
 import { FullPageMessage } from "../../FullPageMessage.js";
 import { DeleteIcon } from "../../../Imports/Icons.js";
-import { itemsCombinedStatePropTypeShape } from "../../../Classes/Entity.js";
+import { itemsCombinedStatePropTypeShape } from "../../../Classes/Entity.ts";
 import { doesItemMatchSearchQuery } from "../../../Helpers/SearchUtilities.js";
 
 const EntityManageUpdateSection = ({ dialogItemsCombinedState }) => {

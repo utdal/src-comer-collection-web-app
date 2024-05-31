@@ -8,7 +8,7 @@ import { CourseStartDateTimeStackedCell } from "../../Components/TableCells/Cour
 import { CourseStatusCell } from "../../Components/TableCells/Course/CourseStatusCell.js";
 import { CourseUserAssignmentCell } from "../../Components/TableCells/Course/CourseUserAssignmentCell.js";
 import { SchoolIcon } from "../../Imports/Icons.js";
-import { Entity } from "../Entity.js";
+import { Entity } from "../Entity.ts";
 
 class Course extends Entity {
     static baseUrl = "/api/courses";

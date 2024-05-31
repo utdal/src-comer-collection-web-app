@@ -2,7 +2,7 @@ import React, { memo } from "react";
 import { Stack, Typography, Select, ListItemButton, Divider } from "@mui/material";
 import { CheckIcon, RemoveCircleOutlineIcon } from "../../Imports/Icons.js";
 import PropTypes from "prop-types";
-import { entityPropTypeShape } from "../../Classes/Entity.js";
+import { entityPropTypeShape } from "../../Classes/Entity.ts";
 
 export const SecondaryFilterMenu = memo(function SecondaryFilterMenu ({ filterValue, setFilterValue, secondaries, helpMessage, emptyMessage, nullMessage, displayFunction, sortFunction, SecondaryIcon }) {
     return (

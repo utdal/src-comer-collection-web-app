@@ -5,7 +5,7 @@ import { ExhibitionIDCell } from "../../Components/TableCells/Exhibition/Exhibit
 import { ExhibitionOptionsCell } from "../../Components/TableCells/Exhibition/ExhibitionOptionsCell.js";
 import { ExhibitionOwnerStackedNameEmailCell } from "../../Components/TableCells/Exhibition/ExhibitionOwnerStackedNameEmailCell.js";
 import { ExhibitionTitleCell } from "../../Components/TableCells/Exhibition/ExhibitionTitleCell.js";
-import { Entity, entityPropTypeShape } from "../Entity.js";
+import { Entity, entityPropTypeShape } from "../Entity.ts";
 import PropTypes from "prop-types";
 
 class Exhibition extends Entity {

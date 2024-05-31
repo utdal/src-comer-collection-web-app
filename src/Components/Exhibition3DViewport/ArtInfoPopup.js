@@ -2,7 +2,7 @@ import React from "react";
 import { Card, CardContent, Divider, Paper, Stack, Typography } from "@mui/material";
 import PropTypes from "prop-types";
 import { exhibitionStatePropTypesShape } from "../../Classes/Entities/Exhibition.js";
-import { entityPropTypeShape } from "../../Classes/Entity.js";
+import { entityPropTypeShape } from "../../Classes/Entity.ts";
 
 export const ArtInfoPopup = ({ globalImageCatalog, imageId, exhibitionState }) => {
     const infoFromCatalog = globalImageCatalog.find((i) => i.id === imageId);

@@ -1,7 +1,7 @@
 import { PersonAddIcon, PersonRemoveIcon } from "../../Imports/Icons.js";
 import { Course } from "../Entities/Course.js";
 import { User } from "../Entities/User.js";
-import { Association } from "../Association.js";
+import { Association } from "../Association.ts";
 import { CourseIDCell } from "../../Components/TableCells/Course/CourseIDCell.js";
 import { CourseNameCell } from "../../Components/TableCells/Course/CourseNameCell.js";
 import { CourseDateRangeStackedCell } from "../../Components/TableCells/Course/CourseDateRangeStackedCell.js";

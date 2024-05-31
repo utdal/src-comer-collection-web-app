@@ -13,7 +13,7 @@ import { useAppUser } from "../../Hooks/useAppUser.js";
 import PropTypes from "prop-types";
 import { ExhibitionIntro } from "./ExhibitionIntro.js";
 import { ArtInfoPopup } from "./ArtInfoPopup.js";
-import { entityPropTypeShape } from "../../Classes/Entity.js";
+import { entityPropTypeShape } from "../../Classes/Entity.ts";
 import { exhibitionStatePropTypesShape } from "../../Classes/Entities/Exhibition.js";
 
 const getAmbientLightIntensity = (moodiness) => {

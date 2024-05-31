@@ -1,6 +1,6 @@
 import React, { createContext, useCallback, useContext, useMemo, useReducer } from "react";
 import PropTypes from "prop-types";
-import { itemsCombinedStatePropTypeShape } from "../Classes/Entity.js";
+import { itemsCombinedStatePropTypeShape } from "../Classes/Entity.ts";
 
 /**
  * Return an itemCounts object based on an array of items,

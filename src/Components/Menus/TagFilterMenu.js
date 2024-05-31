@@ -3,7 +3,7 @@ import { Typography } from "@mui/material";
 import { SellIcon } from "../../Imports/Icons.js";
 import PropTypes from "prop-types";
 import { SecondaryFilterMenu } from "./SecondaryFilterMenu.js";
-import { entityPropTypeShape } from "../../Classes/Entity.js";
+import { entityPropTypeShape } from "../../Classes/Entity.ts";
 
 const tagSortFunction = (a, b) => {
     return a.data > b.data;

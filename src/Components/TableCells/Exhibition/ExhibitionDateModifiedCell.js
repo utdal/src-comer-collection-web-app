@@ -1,6 +1,6 @@
 import React from "react";
 import { Typography } from "@mui/material";
-import { Entity } from "../../../Classes/Entity.js";
+import { Entity } from "../../../Classes/Entity.ts";
 import { useTableCellItem } from "../../../ContextProviders/TableCellProvider.js";
 
 export const ExhibitionDateModifiedCell = () => {

@@ -2,7 +2,7 @@ import { Stack, DialogTitle, DialogContent, Typography, DialogActions, Button } 
 import React from "react";
 import { PersonIcon } from "../../Imports/Icons.js";
 import PropTypes from "prop-types";
-import { entityPropTypeShape } from "../../Classes/Entity.js";
+import { entityPropTypeShape } from "../../Classes/Entity.ts";
 import { PersistentDialog } from "./PersistentDialog.js";
 
 export const ImageFullScreenViewer = ({ image, setImage, previewerOpen, setPreviewerOpen }) => {

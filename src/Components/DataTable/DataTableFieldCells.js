@@ -2,7 +2,7 @@ import React, { memo, useMemo } from "react";
 import PropTypes from "prop-types";
 import { DataTableCell } from "./DataTableCell.js";
 import { TableCellProvider } from "../../ContextProviders/TableCellProvider.js";
-import { entityPropTypeShape, tableFieldPropTypeShape } from "../../Classes/Entity.js";
+import { entityPropTypeShape, tableFieldPropTypeShape } from "../../Classes/Entity.ts";
 
 /**
  * @returns {React.JSX.Element}
