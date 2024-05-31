@@ -4,6 +4,7 @@ import { useCallback, useReducer } from "react";
  * @type {Object<string, import("../Classes/buildRouterAction").DialogItemsMultiplicity>}
  */
 const dialogItemsMultiplicityByIntent = {
+    "single-delete": "single",
     "single-permanent-delete": "single",
     "single-restore": "single",
     "single-edit": "single",

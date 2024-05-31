@@ -8,15 +8,16 @@ import {
 import { DeleteIcon, RestoreIcon } from "../../Imports/Icons.js";
 import PropTypes from "prop-types";
 import { useSnackbar } from "../../ContextProviders/AppFeatures.js";
-import { useEntity } from "../../ContextProviders/ManagementPageProvider.js";
+import { useEntity, useManagementCallbacks } from "../../ContextProviders/ManagementPageProvider.js";
 import { DialogStateOld } from "../../Classes/DialogState.js";
 import { PersistentDialog } from "./PersistentDialog.js";
 import { useActionData, useSubmit } from "react-router-dom";
 import { capitalized } from "../../Classes/Entity.js";
+import DialogCancelButton from "../Buttons/DialogCancelButton.js";
 
 /**
  * @param {{
- *  dialogState: DialogStateOld
+ *  dialogState: import("../../Hooks/useDialogStates.js").DialogState
  * }} param0
  * @returns
  */
@@ -34,7 +35,12 @@ export const ItemSingleDeleteDialog = ({ requireTypedConfirmation, dialogState, 
      */
     const actionData = useActionData();
 
-    const { dialogIsOpen, closeDialog, dialogItem } = dialogState;
+    const { dialogIsOpen, underlyingItem: dialogItem } = dialogState;
+
+    const { closeDialogByIntent } = useManagementCallbacks();
+    const handleClose = useCallback(() => {
+        closeDialogByIntent("single-delete");
+    }, [closeDialogByIntent]);
 
     useEffect(() => {
         if (dialogIsOpen) {
@@ -64,19 +70,19 @@ export const ItemSingleDeleteDialog = ({ requireTypedConfirmation, dialogState, 
         if (actionData) {
             if (actionData.status === "success") {
                 showSnackbar(actionData.snackbarText, "success");
-                closeDialog();
+                handleClose();
             } else if (actionData.status === "error") {
                 setSubmitEnabled(true);
                 showSnackbar(actionData.snackbarText, "error");
             }
         }
-    }, [actionData, closeDialog, showSnackbar]);
+    }, [actionData, handleClose, showSnackbar]);
 
     return (
         <PersistentDialog
             isForm
             maxWidth="sm"
-            onClose={closeDialog}
+            onClose={handleClose}
             onSubmit={handleSubmit}
             open={dialogIsOpen}
         >
@@ -221,15 +227,11 @@ export const ItemSingleDeleteDialog = ({ requireTypedConfirmation, dialogState, 
                     spacing={1}
                     sx={{ width: "100%" }}
                 >
-                    <Button
-                        color="primary"
+                    <DialogCancelButton
+                        dialogIntent="single-delete"
                         disabled={!submitEnabled}
                         fullWidth
-                        onClick={closeDialog}
-                        variant="outlined"
-                    >
-                        Cancel
-                    </Button>
+                    />
 
                     <Button
                         color={Entity.hasTrash || restoreMode ? "primary" : "error"}

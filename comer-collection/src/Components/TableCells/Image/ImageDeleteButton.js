@@ -4,10 +4,10 @@ import { useTableCellItem, useTableCellManagementCallbacks } from "../../../Cont
 
 export const ImageDeleteButton = () => {
     const image = useTableCellItem();
-    const { handleOpenImageDeleteDialog } = useTableCellManagementCallbacks();
+    const { openDialogByIntentWithSingleUnderlyingItem } = useTableCellManagementCallbacks();
     const handleOpenDeleteDialog = useCallback(() => {
-        handleOpenImageDeleteDialog(image);
-    }, [image, handleOpenImageDeleteDialog]);
+        openDialogByIntentWithSingleUnderlyingItem("single-delete", image);
+    }, [openDialogByIntentWithSingleUnderlyingItem, image]);
     return (
         <DeleteButton
             onClick={handleOpenDeleteDialog}

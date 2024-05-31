@@ -5,7 +5,7 @@ import { entityPropTypeShape } from "../Classes/Entity.js";
 const TableCellContext = createContext();
 
 /**
- * @typedef {Object<string, () => void>} callbacksObject
+ * @typedef {import("./ManagementPageProvider.js").ManagementCallbacks} ManagementCallbacks
  * @typedef {import("./ManagementPageProvider.js").Item} Item
  *
  * @param {{
@@ -44,7 +44,7 @@ export const useTableCellItem = () => {
 };
 
 /**
- * @returns {callbacksObject}
+ * @returns {ManagementCallbacks}
  */
 export const useTableCellManagementCallbacks = () => {
     return useContext(TableCellContext).managementCallbacks;

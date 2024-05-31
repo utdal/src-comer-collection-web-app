@@ -68,7 +68,6 @@ const ImageManagement = () => {
     } = useDialogStates(intentArray);
 
     const [editDialogState, openEditDialog] = useDialogState(false);
-    const [deleteDialogState, openDeleteDialog] = useDialogState(false);
 
     const [assignArtistDialogState, openAssignArtistDialog] = useDialogState(true);
     const [assignTagDialogState, openAssignTagDialog] = useDialogState(true);
@@ -118,10 +117,6 @@ const ImageManagement = () => {
         openEditDialog(image);
     }, [openEditDialog]);
 
-    const handleOpenImageDeleteDialog = useCallback((image) => {
-        openDeleteDialog(image);
-    }, [openDeleteDialog]);
-
     const handleSwitchToExhibitionsView = useCallback(() => {
         navigate("/Account/Admin/Exhibitions");
     }, [navigate]);
@@ -136,7 +131,6 @@ const ImageManagement = () => {
         handleOpenImageViewExhibitionDialog,
         handleOpenImagePreviewer,
         handleOpenImageEditDialog,
-        handleOpenImageDeleteDialog,
         handleClearFilters,
         handleRefresh,
         openDialogByIntentWithNoUnderlyingItems,
@@ -146,7 +140,6 @@ const ImageManagement = () => {
     }), [handleClearFilters,
         handleOpenImageAssignArtistDialog,
         handleOpenImageAssignTagDialog,
-        handleOpenImageDeleteDialog,
         handleOpenImageEditDialog,
         handleOpenImagePreviewer,
         handleOpenImageViewExhibitionDialog,
@@ -219,7 +212,7 @@ const ImageManagement = () => {
 
             <ItemSingleEditDialog dialogState={editDialogState} />
 
-            <ItemSingleDeleteDialog dialogState={deleteDialogState} />
+            <ItemSingleDeleteDialog dialogState={dialogStateDictionary["single-delete"]} />
 
             {/* Entity manage dialogs and any trash dialogs are child routes of the page and use the outlet */}
             <Outlet />
