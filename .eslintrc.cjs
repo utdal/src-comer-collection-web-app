@@ -51,6 +51,7 @@ module.exports = {
         "@typescript-eslint/no-type-alias": "off",
         "@typescript-eslint/no-magic-numbers": "off",
         "@typescript-eslint/no-extra-parens": "off",
-        "@typescript-eslint/indent": "off"
+        "@typescript-eslint/indent": "off",
+        "@typescript-eslint/prefer-readonly-parameter-types": "off"
     }
 };
