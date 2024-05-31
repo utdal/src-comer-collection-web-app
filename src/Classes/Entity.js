@@ -1,7 +1,7 @@
 import PropTypes from "prop-types";
 import { AddIcon } from "../Imports/Icons.js";
 
-export const capitalized = (string) => {
+export const capitalized = (string): string => {
     return string.substr(0, 1).toUpperCase() + string.substr(1).toLowerCase();
 };
 

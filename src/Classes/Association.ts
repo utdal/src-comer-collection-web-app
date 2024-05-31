@@ -1,29 +1,42 @@
 import { AddIcon, RemoveIcon } from "../Imports/Icons.js";
-import { capitalized } from "./Entity.js";
+import { Entity, capitalized } from "./Entity.js";
 import { sendAuthenticatedRequest } from "../Helpers/APICalls.js";
 
 class Association {
-    static url = null;
-    static primary = null;
-    static secondary = null;
+    public static url = "/";
 
-    static singular = "association";
-    static plural = "associations";
+    public static primary = Entity;
 
-    static assignPresent = "assign";
-    static assignPast = "assigned";
-    static unassignPresent = "unassign";
-    static unassignPast = "unassigned";
+    public static secondary = Entity;
 
-    static AssignIcon = AddIcon;
-    static UnassignIcon = RemoveIcon;
+    public static singular = "association";
 
-    static secondaryFieldInPrimary = null;
+    public static plural = "associations";
 
-    static secondarySearchBoxFields = ["id"];
-    static secondarySearchBoxPlaceholder = "Search secondary items by ID";
+    public static assignPresent = "assign";
 
-    static handleAssign ([...primaries], [...secondaries]) {
+    public static assignPast = "assigned";
+
+    public static unassignPresent = "unassign";
+
+    public static unassignPast = "unassigned";
+
+    public static AssignIcon = AddIcon;
+
+    public static UnassignIcon = RemoveIcon;
+
+    public static secondaryFieldInPrimary = null;
+
+    public static secondarySearchBoxFields = ["id"];
+
+    public static secondarySearchBoxPlaceholder = "Search secondary items by ID";
+
+    /**
+     * @type {TableFieldDefinition[]}
+     */
+    public static tableFields = [];
+
+    public static async handleAssign ([...primaries]: number[], [...secondaries]: number[]): Promise<void> {
         return new Promise((resolve, reject) => {
             sendAuthenticatedRequest("PUT", `${this.url}`, {
                 action: "assign",
@@ -37,7 +50,7 @@ class Association {
         });
     }
 
-    static handleUnassign ([...primaries], [...secondaries]) {
+    public static async handleUnassign ([...primaries]: number, [...secondaries]: number) {
         return new Promise((resolve, reject) => {
             sendAuthenticatedRequest("PUT", `${this.url}`, {
                 action: "unassign",
@@ -50,11 +63,6 @@ class Association {
             });
         });
     }
-
-    /**
-     * @type {TableFieldDefinition[]}
-     */
-    static tableFields = [];
 }
 
 export { Association };
