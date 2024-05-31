@@ -9,6 +9,10 @@ export interface Item {
     readonly id: number;
 }
 
+export interface EntityType {
+    readonly baseUrl: string;
+}
+
 export interface AppUser {
     id: number;
     is_admin: boolean;

@@ -9,7 +9,7 @@ interface APIResponse {
     status: number;
 }
 
-export const sendAuthenticatedRequest = async (method: AxiosMethod, url: string, payload: object): Promise<APIResponse> => {
+export const sendAuthenticatedRequest = async (method: AxiosMethod, url: string, payload?: object): Promise<APIResponse> => {
     const token = localStorage.getItem("token") ?? "";
     const options = token.length > 0
         ? {
