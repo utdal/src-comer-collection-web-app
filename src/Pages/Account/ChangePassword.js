@@ -4,7 +4,7 @@ import { Box, Button, Divider, Paper, Stack, TextField, Typography } from "@mui/
 import { useAppUser } from "../../Hooks/useAppUser.ts";
 import { useTitle, useSnackbar } from "../../ContextProviders/AppFeatures.tsx";
 
-import { sendAuthenticatedRequest } from "../../Helpers/APICalls.ts";
+import { sendAuthenticatedRequest } from "../../Helpers/APICalls.js";
 
 const ChangePassword = () => {
     const [oldPassword, setOldPassword] = useState("");

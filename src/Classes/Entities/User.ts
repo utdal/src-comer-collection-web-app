@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import { sendAuthenticatedRequest } from "../../Helpers/APICalls.ts";
+import { sendAuthenticatedRequest } from "../../Helpers/APICalls";
 import { Entity } from "../Entity";
 import { UserIDCell } from "../../Components/TableCells/User/UserIDCell.js";
 import { UserFullNameReverseCell } from "../../Components/TableCells/User/UserFullNameReverseCell.js";

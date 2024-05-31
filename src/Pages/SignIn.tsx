@@ -1,8 +1,8 @@
 import React, { useCallback, useState } from "react";
 import { Navigate, useRevalidator } from "react-router";
 import { Box, Button, Divider, Paper, Stack, TextField } from "@mui/material";
-import type { APIResponse } from "../Helpers/APICalls.ts";
-import { sendAuthenticatedRequest } from "../Helpers/APICalls.ts";
+import type { APIResponse } from "../Helpers/APICalls";
+import { sendAuthenticatedRequest } from "../Helpers/APICalls";
 import { useAppUser } from "../Hooks/useAppUser";
 import { useSnackbar, useTitle } from "../ContextProviders/AppFeatures.tsx";
 

@@ -1,6 +1,6 @@
 import { AddIcon, RemoveIcon } from "../Imports/Icons.js";
 import { Entity, capitalized } from "./Entity";
-import { sendAuthenticatedRequest } from "../Helpers/APICalls.ts";
+import { sendAuthenticatedRequest } from "../Helpers/APICalls";
 import type React from "react";
 import type { TableFieldDefinition } from "../index.js";
 
