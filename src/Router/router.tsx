@@ -11,7 +11,7 @@ import { User } from "../Classes/Entities/User";
 import RequireAdmin from "../Components/AccessControl/RequireAdmin";
 import RequirePermanentPassword from "../Components/AccessControl/RequirePermanentPassword";
 import { EntityManageDialog } from "../Components/Dialogs/EntityManageDialog/EntityManageDialog.js";
-import { FullPageMessage } from "../Components/FullPageMessage.tsx";
+import { FullPageMessage } from "../Components/FullPageMessage";
 import RouterErrorMessage from "../Components/RouterErrorMessage";
 import { InfoIcon } from "../Imports/Icons.js";
 import ChangePassword from "../Pages/Account/ChangePassword.js";
@@ -28,7 +28,7 @@ import ExhibitionPage from "../Pages/ExhibitionPage.js";
 import SignIn from "../Pages/SignIn.js";
 import { myExhibitionsAction } from "./actions.js";
 import buildRouterActionByEntity from "./buildRouterActionByEntity.js";
-import buildRouterLoaderByEntity from "./buildRouterLoaderByEntity.js";
+import buildRouterLoaderByEntity from "./buildRouterLoaderByEntity.ts";
 import { appUserLoader, exhibitionPageLoader } from "./loaders.js";
 
 const router = createBrowserRouter([

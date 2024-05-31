@@ -4,7 +4,7 @@ import { DeletedImage, Image } from "../Classes/Entities/Image.ts";
 import { Artist } from "../Classes/Entities/Artist.ts";
 import { Tag } from "../Classes/Entities/Tag.ts";
 import { Exhibition } from "../Classes/Entities/Exhibition.ts";
-import { sendAuthenticatedRequest } from "../Helpers/APICalls.js";
+import { sendAuthenticatedRequest } from "../Helpers/APICalls.ts";
 import { capitalized } from "../Classes/Entity.ts";
 
 /**

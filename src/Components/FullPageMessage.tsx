@@ -9,7 +9,7 @@ export const FullPageMessage = ({ message, button = true, buttonText, buttonDest
     readonly message: string;
     readonly button?: boolean;
     readonly Icon?: ReactComponentLike;
-    readonly buttonAction: (() => void) | undefined;
+    readonly buttonAction?: (() => void) | undefined;
     readonly includeLinearProgress?: boolean;
     readonly includeLogo?: boolean;
     readonly viewportHeight?: boolean;

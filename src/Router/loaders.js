@@ -1,4 +1,4 @@
-import { sendAuthenticatedRequest } from "../Helpers/APICalls.js";
+import { sendAuthenticatedRequest } from "../Helpers/APICalls.ts";
 import { Image } from "../Classes/Entities/Image.ts";
 
 export const appUserLoader = async () => {
