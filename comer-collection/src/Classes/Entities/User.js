@@ -25,6 +25,9 @@ class User extends Entity {
     static searchBoxFields = ["full_name", "full_name_reverse", "email_without_domain"];
     static searchBoxPlaceholder = "Search by user name or email";
 
+    /**
+     * @type {EntityFieldDefinition[]}
+     */
     static fieldDefinitions = [
         {
             fieldName: "given_name",

@@ -28,6 +28,9 @@ class Image extends Entity {
 
     static deleteDialogAdditionalInstructions = "Any exhibitions currently featuring this image will show a placeholder image instead.";
 
+    /**
+     * @type {EntityFieldDefinition[]}
+     */
     static fieldDefinitions = [
         {
             fieldName: "title",

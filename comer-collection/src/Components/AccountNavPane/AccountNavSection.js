@@ -7,6 +7,10 @@ const ColoredText = styled(Typography)(({ theme }) => ({
     color: theme.palette.grey.main
 }));
 
+/**
+ * @param {{sectionTitle: string, linkDefinitions: AccountNavPaneLinkDefinition[]}} props
+ * @returns {React.JSX.Element}
+ */
 export const AccountNavSection = ({ sectionTitle, linkDefinitions }) => {
     return (
         <>

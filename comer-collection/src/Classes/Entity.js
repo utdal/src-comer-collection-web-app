@@ -11,6 +11,9 @@ export class Entity {
     static singular = "item";
     static plural = "items";
 
+    /**
+     * @type {EntityFieldDefinition[]}
+     */
     static fieldDefinitions = [
         {
             fieldName: "id",

@@ -31,7 +31,7 @@ type SortableValue = number | string;
 
 type SortableValueDictionary = {
     [id: number]: SortableValue
-};;
+};
 
 type SortableValueFunction = (item: Item) => SortableValue;
 
@@ -89,7 +89,7 @@ type ItemsCallbacks = {
     setItems: (items: object[]) => void,
     setSelectedItems: (selectedItems: object[]) => void,
     filterItems: (filterFunction: FilterFunction) => void,
-    setItemSelectionStatus: (itemId: number, newStatus: bool) => void,
+    setItemSelectionStatus: (itemId: number, newStatus: boolean) => void,
     calculateSortableItemValues: (sortableValueFunction: SortableValueFunction) => void,
     setPaginationEnabled: (enabled: boolean) => void,
     setPaginationItemsPerPage: (itemsPerPage: number) => void,
@@ -238,3 +238,20 @@ type OpenDialogByIntentFunctionSingleUnderlyingItem = (intent: Intent, item: Ite
 type OpenDialogByIntentFunctionMultipleUnderlyingItems = (intent: Intent, items: Item[]) => void;
 
 type CloseDialogByIntentFunction = (intent: Intent) => void;
+
+type AccountNavPaneLinkDefinition = {
+    title: string,
+    Icon: Function,
+    link: string,
+    requirePermanentPassword: boolean,
+    displayText: string
+};
+
+type EntityFieldDefinition = {
+    fieldName: string,
+    displayName: string,
+    isRequired: boolean,
+    inputType?: "email" | "number" | "url" | "textarea" | "datetime-local",
+    blank?: string | number,
+    multiline?: boolean
+};

@@ -18,7 +18,7 @@ import DataTableRow from "./DataTableRow.js";
  *  smallCheckboxes,
  *  defaultSortColumn,
  *  defaultSortAscending,
- *  noSkeleton
+ *  noSkeleton?: boolean
  * }} props
  * @returns {React.JSX.Element}
  */

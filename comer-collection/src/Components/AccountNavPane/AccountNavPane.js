@@ -5,6 +5,9 @@ import { AccountCircleIcon, GroupsIcon, PhotoCameraBackIcon, ImageIcon, SchoolIc
 import { useAppUser } from "../../Hooks/useAppUser.js";
 import { AccountNavSection } from "./AccountNavSection.js";
 
+/**
+ * @type {AccountNavPaneLinkDefinition[]}
+ */
 const navLinks = [
     {
         title: "Profile",
@@ -25,6 +28,9 @@ const navLinks = [
     }
 ];
 
+/**
+ * @type {AccountNavPaneLinkDefinition[]}
+ */
 const collectionManagerNavLinks = [
     {
         displayText: "Images",
@@ -35,6 +41,9 @@ const collectionManagerNavLinks = [
     }
 ];
 
+/**
+ * @type {AccountNavPaneLinkDefinition[]}
+ */
 const adminNavLinks = [
     {
         displayText: "Users",

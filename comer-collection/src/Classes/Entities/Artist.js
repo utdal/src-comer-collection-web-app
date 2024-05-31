@@ -16,6 +16,9 @@ class Artist extends Entity {
 
     static entityManageRelativeUrl = "Artists";
 
+    /**
+     * @type {EntityFieldDefinition[]}
+     */
     static fieldDefinitions = [
         {
             fieldName: "familyName",

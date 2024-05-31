@@ -20,6 +20,9 @@ class Course extends Entity {
 
     static searchBoxPlaceholder = "Search courses by name";
 
+    /**
+     * @type {EntityFieldDefinition[]}
+     */
     static fieldDefinitions = [
         {
             fieldName: "name",

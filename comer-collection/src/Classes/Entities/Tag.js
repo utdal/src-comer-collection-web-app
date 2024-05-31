@@ -15,6 +15,9 @@ class Tag extends Entity {
 
     static entityManageRelativeUrl = "Tags";
 
+    /**
+     * @type {EntityFieldDefinition[]}
+     */
     static fieldDefinitions = [
         {
             fieldName: "data",
