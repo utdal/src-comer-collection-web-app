@@ -7,12 +7,10 @@ import { LockIcon } from "../../Imports/Icons.js";
 import RequirePermanentPassword from "./RequirePermanentPassword.js";
 import type { AppUser } from "../../index.js";
 
-interface RequireAdminProps {
+const RequireAdmin = ({ component, allowCollectionManager }: {
     readonly component: Readonly<ReactNodeLike>;
     readonly allowCollectionManager: boolean;
-}
-
-const RequireAdmin = ({ component, allowCollectionManager }: RequireAdminProps): React.JSX.Element => {
+}): React.JSX.Element => {
     const appUser = useAppUser() as AppUser;
     return appUser.is_admin || (appUser.is_collection_manager && allowCollectionManager)
         ? (
