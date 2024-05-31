@@ -1,8 +1,9 @@
 import { AddIcon, RemoveIcon } from "../Imports/Icons.js";
-import { Entity, capitalized } from "./Entity.ts";
+import { Entity, capitalized } from "./Entity";
 import { sendAuthenticatedRequest } from "../Helpers/APICalls.js";
+import type React from "react";
 
-class Association {
+class Association extends null {
     public static url = "/";
 
     public static primary = Entity;
@@ -21,9 +22,9 @@ class Association {
 
     public static unassignPast = "unassigned";
 
-    public static AssignIcon = AddIcon;
+    public static AssignIcon = AddIcon as React.FunctionComponent;
 
-    public static UnassignIcon = RemoveIcon;
+    public static UnassignIcon = RemoveIcon as React.FunctionComponent;
 
     public static secondaryFieldInPrimary = null;
 
@@ -36,7 +37,7 @@ class Association {
      */
     public static tableFields = [];
 
-    public static async handleAssign ([...primaries]: number[], [...secondaries]: number[]): Promise<void> {
+    public static async handleAssign ([...primaries]: readonly number[], [...secondaries]: readonly number[]): Promise<string> {
         return new Promise((resolve, reject) => {
             sendAuthenticatedRequest("PUT", `${this.url}`, {
                 action: "assign",
@@ -50,7 +51,7 @@ class Association {
         });
     }
 
-    public static async handleUnassign ([...primaries]: number, [...secondaries]: number) {
+    public static async handleUnassign ([...primaries]: readonly number[], [...secondaries]: readonly number[]): Promise<string> {
         return new Promise((resolve, reject) => {
             sendAuthenticatedRequest("PUT", `${this.url}`, {
                 action: "unassign",
