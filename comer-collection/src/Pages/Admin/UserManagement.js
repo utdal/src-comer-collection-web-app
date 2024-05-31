@@ -1,8 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import SearchBox from "../../Components/SearchBox.js";
-import { ItemSingleDeleteDialog } from "../../Components/Dialogs/ItemSingleDeleteDialog.js";
-import { ItemMultiCreateDialog } from "../../Components/Dialogs/ItemMultiCreateDialog.js";
-import { ItemSingleEditDialog } from "../../Components/Dialogs/ItemSingleEditDialog.js";
 import { DataTable } from "../../Components/DataTable/DataTable.js";
 import { doesItemMatchSearchQuery } from "../../Helpers/SearchUtilities.js";
 import { AssociationManagementDialog } from "../../Components/Dialogs/AssociationManagementDialog/AssociationManagementDialog.js";
@@ -29,6 +26,8 @@ import { ManagementPageBody } from "../../Components/ManagementPage/ManagementPa
 import { ManagementPageFooter } from "../../Components/ManagementPage/ManagementPageFooter.js";
 import AssociationManageButton from "../../Components/Buttons/AssociationManageButton.js";
 import PaginationSummary from "../../Components/PaginationSummary/PaginationSummary.js";
+import useDialogStates from "../../Hooks/useDialogStates.js";
+import DialogByIntent from "../../Components/Dialogs/DialogByIntent.js";
 
 const UserManagement = () => {
     const users = useLoaderData();
@@ -52,13 +51,21 @@ const UserManagement = () => {
         revalidator.revalidate();
     }, [revalidator]);
 
+    /**
+     * @type {import("../../Classes/buildRouterAction.js").Intent[]}
+     */
+    const intentArray = ["multi-create", "single-edit", "single-delete"];
+    const {
+        dialogStateDictionary,
+        openDialogByIntentWithNoUnderlyingItems,
+        openDialogByIntentWithSingleUnderlyingItem,
+        openDialogByIntentWithMultipleUnderlyingItems,
+        closeDialogByIntent
+    } = useDialogStates(intentArray);
+
     const [privilegesDialogState, openPrivilegesDialog] = useDialogState(false, User);
 
     const [resetPasswordDialogState, openResetPasswordDialog] = useDialogState(false, User);
-
-    const [createDialogState, handleOpenMultiCreateDialog] = useDialogState();
-    const [editDialogState, openEditDialog] = useDialogState(false);
-    const [deleteDialogState, openDeleteDialog] = useDialogState(false);
 
     const [courseDialogState, openCourseDialog] = useDialogState(true);
     const [exhibitionDialogState, openExhibitionDialog] = useDialogState(true);
@@ -116,14 +123,6 @@ const UserManagement = () => {
         });
     }, [handleRefresh, showSnackbar]);
 
-    const handleOpenUserEditDialog = useCallback((user) => {
-        openEditDialog(user);
-    }, [openEditDialog]);
-
-    const handleOpenUserDeleteDialog = useCallback((user) => {
-        openDeleteDialog(user);
-    }, [openDeleteDialog]);
-
     const handleSwitchToCoursesView = useCallback(() => {
         navigate("/Account/Admin/Courses");
     }, [navigate]);
@@ -143,18 +142,20 @@ const UserManagement = () => {
         handleOpenViewUserExhibitionDialog,
         handleOpenUserPrivilegesDialog,
         handleChangeUserActivationStatus,
-        handleOpenMultiCreateDialog,
-        handleOpenUserEditDialog,
-        handleOpenUserDeleteDialog,
+        openDialogByIntentWithNoUnderlyingItems,
+        openDialogByIntentWithSingleUnderlyingItem,
+        openDialogByIntentWithMultipleUnderlyingItems,
+        closeDialogByIntent,
         handleClearFilters,
         handleRefresh
     }), [handleChangeUserActivationStatus,
         handleClearFilters,
         handleNavigateToChangePassword,
-        handleOpenMultiCreateDialog,
+        openDialogByIntentWithNoUnderlyingItems,
+        openDialogByIntentWithSingleUnderlyingItem,
+        openDialogByIntentWithMultipleUnderlyingItems,
+        closeDialogByIntent,
         handleOpenUserAssignCourseDialog,
-        handleOpenUserDeleteDialog,
-        handleOpenUserEditDialog,
         handleOpenUserPasswordResetDialog,
         handleOpenUserPrivilegesDialog,
         handleOpenViewUserExhibitionDialog,
@@ -219,11 +220,13 @@ const UserManagement = () => {
 
             </ManagementPageContainer>
 
-            <ItemMultiCreateDialog dialogState={createDialogState} />
-
-            <ItemSingleEditDialog dialogState={editDialogState} />
-
-            <ItemSingleDeleteDialog dialogState={deleteDialogState} />
+            {intentArray.map((intent) => (
+                <DialogByIntent
+                    dialogState={dialogStateDictionary[intent]}
+                    intent={intent}
+                    key={intent}
+                />
+            ))}
 
             <AssociationManagementDialog
                 Association={EnrollmentUserPrimary}

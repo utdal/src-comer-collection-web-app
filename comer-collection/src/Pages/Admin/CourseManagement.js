@@ -146,7 +146,7 @@ const CourseManagement = () => {
 
             </ManagementPageContainer>
 
-            {["single-edit", "multi-create", "single-delete"].map((intent) => (
+            {intentArray.map((intent) => (
                 <DialogByIntent
                     dialogState={dialogStateDictionary[intent]}
                     intent={intent}
