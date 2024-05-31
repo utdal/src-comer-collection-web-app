@@ -1,4 +1,3 @@
-import { sendAuthenticatedRequest } from "../Helpers/APICalls.js";
 import PropTypes from "prop-types";
 import { AddIcon } from "../Imports/Icons.js";
 
@@ -55,19 +54,6 @@ export class Entity {
             second: "2-digit"
         });
     };
-
-    /**
-     * @returns {Promise<Object[]>} The requested data
-     */
-    static handleFetchAll () {
-        return new Promise((resolve, reject) => {
-            sendAuthenticatedRequest("GET", `${this.baseUrl}`).then((response) => {
-                resolve(response.data);
-            }).catch((e) => {
-                reject(e);
-            });
-        });
-    }
 
     static tableFields = [];
 
