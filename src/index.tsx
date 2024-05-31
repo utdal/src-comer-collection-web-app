@@ -14,6 +14,7 @@ export interface AppUser {
     is_admin: boolean;
     is_collection_manager: boolean;
     is_admin_or_collection_manager: boolean;
+    pw_change_required: boolean;
 }
 
 export interface ItemCounts {

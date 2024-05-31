@@ -9,7 +9,7 @@ import { Image, DeletedImage } from "../Classes/Entities/Image.ts";
 import { Tag } from "../Classes/Entities/Tag.ts";
 import { User } from "../Classes/Entities/User.ts";
 import RequireAdmin from "../Components/AccessControl/RequireAdmin.tsx";
-import RequirePermanentPassword from "../Components/AccessControl/RequirePermanentPassword.js";
+import RequirePermanentPassword from "../Components/AccessControl/RequirePermanentPassword.tsx";
 import { EntityManageDialog } from "../Components/Dialogs/EntityManageDialog/EntityManageDialog.js";
 import { FullPageMessage } from "../Components/FullPageMessage.js";
 import RouterErrorMessage from "../Components/RouterErrorMessage.js";
