@@ -1,6 +1,6 @@
 import { sendAuthenticatedRequest } from "../Helpers/APICalls.js";
 
-const buildRouterLoader = (entityType) => {
+const buildRouterLoaderByEntity = (entityType) => {
     const routerLoader = async () => {
         const response = await sendAuthenticatedRequest("GET", `${entityType.baseUrl}`);
         return response.data;
@@ -8,4 +8,4 @@ const buildRouterLoader = (entityType) => {
     return routerLoader;
 };
 
-export default buildRouterLoader;
+export default buildRouterLoaderByEntity;
