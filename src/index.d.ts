@@ -249,7 +249,7 @@ type AccountNavPaneLinkDefinition = {
     displayText: string
 };
 
-type EntityFieldDefinition = {
+export type EntityFieldDefinition = {
     fieldName: string,
     displayName: string,
     isRequired: boolean,

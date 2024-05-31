@@ -1,53 +1,54 @@
 import PropTypes from "prop-types";
 import { AddIcon } from "../Imports/Icons.js";
+import type React from "react";
+import type { EntityFieldDefinition } from "../index.js";
 
-export const capitalized = (string): string => {
+export const capitalized = (string: string): string => {
     return string.substr(0, 1).toUpperCase() + string.substr(1).toLowerCase();
 };
 
 export class Entity {
-    static baseUrl = null;
+    public static baseUrl = null;
 
-    static singular = "item";
+    public static singular = "item";
 
-    static plural = "items";
+    public static plural = "items";
 
-    /**
-     * @type {EntityFieldDefinition[]}
-     */
-    static fieldDefinitions = [
+    public static fieldDefinitions: EntityFieldDefinition[] = [
         {
             fieldName: "id",
-            displayName: "ID"
+            displayName: "ID",
+            isRequired: false
         }
     ];
 
-    static hasTrash = false;
+    public static hasTrash = false;
 
-    static isTrash = false;
+    public static isTrash = false;
 
-    static TrashEntity = null;
+    public static TrashEntity = null;
 
-    static deleteDialogAdditionalInstructions = null;
+    public static deleteDialogAdditionalInstructions = null;
 
-    static permanentDeleteDialogAdditionalInstructions = null;
+    public static permanentDeleteDialogAdditionalInstructions = null;
 
-    static entityManageRelativeUrl = null;
+    public static entityManageRelativeUrl = null;
 
-    /**
-     * @type {React.ElementType}
-     */
-    static DefaultIcon = null;
+    public static DefaultIcon: React.ElementType | null = null;
 
-    static searchBoxFields = ["id"];
+    public static searchBoxFields = ["id"];
 
-    static searchBoxPlaceholder = "Search items by ID";
+    public static searchBoxPlaceholder = "Search items by ID";
 
-    static MultiCreateButtonIcon = AddIcon;
+    public static MultiCreateButtonIcon: React.ElementType | null = AddIcon;
 
-    static multiCreateDialogSubtitle = null;
+    public static multiCreateDialogSubtitle = null;
 
-    static formatDate = (date) => {
+    public static tableFields = [];
+
+    public static fetcherUrl = null;
+
+    public static formatDate = (date) => {
         return new Date(date).toLocaleDateString([], {
             year: "numeric",
             month: "short",
@@ -56,17 +57,13 @@ export class Entity {
         });
     };
 
-    static formatTime = (date) => {
+    public static formatTime = (date) => {
         return new Date(date).toLocaleTimeString([], {
             hour: "numeric",
             minute: "2-digit",
             second: "2-digit"
         });
     };
-
-    static tableFields = [];
-
-    static fetcherUrl = null;
 }
 
 export const entityPropTypeShape = PropTypes.shape({
