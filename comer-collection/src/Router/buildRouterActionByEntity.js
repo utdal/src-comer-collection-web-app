@@ -53,7 +53,7 @@ const buildRouterActionByEntity = (entityType) => {
      * @param {{request: {
      *  method: import("react-router-dom").V7_FormMethod,
      *  json: () => RouterActionRequest
-     * }, params: Object<string, string>}}
+     * }, params: import("react-router").Params}}
      * @returns {RouterActionResponse}
      */
     const routerAction = async ({ request, params }) => {

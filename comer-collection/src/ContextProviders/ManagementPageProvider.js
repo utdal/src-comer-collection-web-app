@@ -6,8 +6,8 @@ import { itemsCombinedStatePropTypeShape } from "../Classes/Entity.js";
  * Return an itemCounts object based on an array of items,
  * and its associated selection and visibility status dictionaries
  * @param {Item[]} items
- * @param {Object<number, boolean>} selectionStatuses
- * @param {Object<number, boolean>} visibilityStatuses
+ * @param {SelectionStatusDictionary} selectionStatuses
+ * @param {VisibilityStatusDictionary} visibilityStatuses
  * @returns {ItemCounts}
 */
 const getItemCounts = (items, selectionStatuses, visibilityStatuses) => {
@@ -225,7 +225,7 @@ const defaultItemsCombinedState = (items) => {
         visibilityStatuses[item.id] = true;
     }
     /**
-     * @type {Object<number, number>}
+     * @type {SortableValueDictionary}
      */
     const sortableValueDictionary = Object.fromEntries(items.map((i) => [i.id, i.id]));
     return {
@@ -319,7 +319,7 @@ export const useSelectionStatuses = () => {
 };
 
 /**
- * @returns {[Object<number, boolean>, (filterFunction: FilterFunction) => void]} [visibilityStatuses, filterItems]
+ * @returns {[VisibilityStatusDictionary, (filterFunction: FilterFunction) => void]} [visibilityStatuses, filterItems]
  */
 export const useVisibilityStatuses = () => {
     /**

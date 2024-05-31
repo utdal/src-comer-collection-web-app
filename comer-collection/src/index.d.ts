@@ -15,13 +15,21 @@ type ItemCounts = {
     selectedAndVisible: number
 };
 
-type ItemDictionary = Object<number, Item>;
+type ItemDictionary = {
+    [id: number]: Item
+};
 
-type SelectionStatusDictionary = Object<number, boolean>;
+type SelectionStatusDictionary = {
+    [id: number]: boolean
+};
 
-type VisibilityStatusDictionary = Object<number, boolean>;
+type VisibilityStatusDictionary = {
+    [id: number]: boolean
+};
 
-type SortableValueDictionary = Object<number, number|string>;
+type SortableValueDictionary = {
+    [id: number]: number | string
+};;
 
 type SortableValueFunction = (item: Item) => number | string;
 
