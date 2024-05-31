@@ -12,6 +12,7 @@ import PropTypes from "prop-types";
 import { DialogStateOld } from "../../Classes/DialogState.js";
 import { PersistentDialog } from "./PersistentDialog.js";
 import { useActionData, useSubmit } from "react-router-dom";
+import { useManagementCallbacks } from "../../ContextProviders/ManagementPageProvider.js";
 
 const randomPassword = () => {
     const password = Math.random().toString(36).slice(-8) + Math.random().toString(36).slice(-8);
@@ -19,7 +20,7 @@ const randomPassword = () => {
 };
 
 /**
- * @param {{ dialogState: DialogStateOld }} props
+ * @param {{ dialogState: import("../../Hooks/useDialogStates.js").DialogState }} props
  */
 export const UserResetPasswordDialog = ({ dialogState }) => {
     const [newPassword, setNewPassword] = useState("");
@@ -30,13 +31,14 @@ export const UserResetPasswordDialog = ({ dialogState }) => {
     const clipboard = useClipboard();
 
     const submit = useSubmit();
+    const { closeDialogByIntent } = useManagementCallbacks();
 
     /**
      * @type {import("../../Classes/buildRouterAction.js").RouterActionResponse}
      */
     const actionData = useActionData();
 
-    const { dialogItem: dialogUser, dialogIsOpen, closeDialog } = dialogState;
+    const { dialogIsOpen, underlyingItem: dialogUser } = dialogState;
 
     const themeColor = dialogUser?.is_admin_or_collection_manager ? "secondary" : "primary";
 
@@ -49,23 +51,20 @@ export const UserResetPasswordDialog = ({ dialogState }) => {
                 showSnackbar(actionData.snackbarText, "error");
             }
         }
-    }, [actionData, closeDialog, showSnackbar]);
+    }, [actionData, showSnackbar]);
+
+    const handleClose = useCallback(() => {
+        closeDialogByIntent("user-reset-password");
+    }, [closeDialogByIntent]);
 
     useEffect(() => {
         if (!dialogIsOpen) {
-            closeDialog();
+            handleClose();
         }
         setEditMode(true);
         setHasCopied(false);
         setNewPassword("");
-    }, [closeDialog, dialogIsOpen]);
-
-    const handleClose = useCallback((event, reason) => {
-        if (reason === "backdropClick") {
-            return;
-        }
-        closeDialog();
-    }, [closeDialog]);
+    }, [handleClose, dialogIsOpen]);
 
     const handleSubmit = useCallback(() => {
         /**

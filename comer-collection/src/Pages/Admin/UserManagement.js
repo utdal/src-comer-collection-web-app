@@ -4,7 +4,6 @@ import { DataTable } from "../../Components/DataTable/DataTable.js";
 import { doesItemMatchSearchQuery } from "../../Helpers/SearchUtilities.js";
 import { AssociationManagementDialog } from "../../Components/Dialogs/AssociationManagementDialog/AssociationManagementDialog.js";
 import { useLoaderData, useNavigate, useRevalidator } from "react-router";
-import { UserChangePrivilegesDialog } from "../../Components/Dialogs/UserChangePrivilegesDialog.js";
 import { SelectionSummary } from "../../Components/SelectionSummary.js";
 import { CourseFilterMenu } from "../../Components/Menus/CourseFilterMenu.js";
 import { useSnackbar, useTitle } from "../../ContextProviders/AppFeatures.js";
@@ -53,7 +52,7 @@ const UserManagement = () => {
     /**
      * @type {import("../../Classes/buildRouterAction.js").Intent[]}
      */
-    const intentArray = ["multi-create", "single-edit", "single-delete", "user-reset-password"];
+    const intentArray = ["multi-create", "single-edit", "single-delete", "user-reset-password", "user-change-privileges"];
     const {
         dialogStateDictionary,
         openDialogByIntentWithNoUnderlyingItems,
@@ -61,8 +60,6 @@ const UserManagement = () => {
         openDialogByIntentWithMultipleUnderlyingItems,
         closeDialogByIntent
     } = useDialogStates(intentArray);
-
-    const [privilegesDialogState, openPrivilegesDialog] = useDialogState(false, User);
 
     const [courseDialogState, openCourseDialog] = useDialogState(true);
     const [exhibitionDialogState, openExhibitionDialog] = useDialogState(true);
@@ -87,10 +84,6 @@ const UserManagement = () => {
         );
     }, [userCourseIdFilter, searchQuery]);
 
-    const handleNavigateToChangePassword = useCallback(() => {
-        navigate("/Account/ChangePassword");
-    }, [navigate]);
-
     const handleOpenUserAssignCourseDialog = useCallback((user) => {
         openCourseDialog([user]);
     }, [openCourseDialog]);
@@ -102,10 +95,6 @@ const UserManagement = () => {
     const handleOpenViewUserExhibitionDialog = useCallback((user) => {
         openExhibitionDialog([user]);
     }, [openExhibitionDialog]);
-
-    const handleOpenUserPrivilegesDialog = useCallback((user) => {
-        openPrivilegesDialog(user);
-    }, [openPrivilegesDialog]);
 
     const handleChangeUserActivationStatus = useCallback((user, newStatus) => {
         User.handleChangeUserActivationStatus(user.id, newStatus).then((msg) => {
@@ -129,10 +118,8 @@ const UserManagement = () => {
     }, [filterUsers, userFilterFunction]);
 
     const managementCallbacks = useMemo(() => ({
-        handleNavigateToChangePassword,
         handleOpenUserAssignCourseDialog,
         handleOpenViewUserExhibitionDialog,
-        handleOpenUserPrivilegesDialog,
         handleChangeUserActivationStatus,
         openDialogByIntentWithNoUnderlyingItems,
         openDialogByIntentWithSingleUnderlyingItem,
@@ -142,13 +129,11 @@ const UserManagement = () => {
         handleRefresh
     }), [handleChangeUserActivationStatus,
         handleClearFilters,
-        handleNavigateToChangePassword,
         openDialogByIntentWithNoUnderlyingItems,
         openDialogByIntentWithSingleUnderlyingItem,
         openDialogByIntentWithMultipleUnderlyingItems,
         closeDialogByIntent,
         handleOpenUserAssignCourseDialog,
-        handleOpenUserPrivilegesDialog,
         handleOpenViewUserExhibitionDialog,
         handleRefresh]);
 
@@ -233,8 +218,6 @@ const UserManagement = () => {
                 handleSwitchToSecondary={handleSwitchToExhibitionsView}
                 secondaryItemsAll={[]}
             />
-
-            <UserChangePrivilegesDialog dialogState={privilegesDialogState} />
 
         </ManagementPageProvider>
     );
