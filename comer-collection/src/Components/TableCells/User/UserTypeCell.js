@@ -3,7 +3,7 @@ import { Stack, Typography } from "@mui/material";
 import { useTableCellItem } from "../../../ContextProviders/TableCellProvider.js";
 import { CollectionManagerIcon, PersonIcon, SecurityIcon } from "../../../Imports/Icons.js";
 
-export const UserTypeCell = () => {
+const UserTypeCell = () => {
     const user = useTableCellItem();
     return (
         <Stack
@@ -18,3 +18,5 @@ export const UserTypeCell = () => {
         </Stack>
     );
 };
+
+export default UserTypeCell;

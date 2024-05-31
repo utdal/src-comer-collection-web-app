@@ -1,16 +1,24 @@
 import React, { useCallback } from "react";
-import { Button, Typography } from "@mui/material";
+import { Button } from "@mui/material";
 import { useAppUser } from "../../../Hooks/useAppUser.js";
 import { useTableCellItem, useTableCellManagementCallbacks } from "../../../ContextProviders/TableCellProvider.js";
 import { LockIcon, LockResetIcon } from "../../../Imports/Icons.js";
+import { useNavigate } from "react-router";
 
-export const UserPasswordSetOrResetCell = () => {
+const UserPasswordSetOrResetCell = () => {
     const user = useTableCellItem();
     const appUser = useAppUser();
-    const { handleOpenUserPasswordResetDialog, handleNavigateToChangePassword } = useTableCellManagementCallbacks();
+    const navigate = useNavigate();
+
+    const { openDialogByIntentWithSingleUnderlyingItem } = useTableCellManagementCallbacks();
+
     const handleOpenPasswordResetDialog = useCallback(() => {
-        handleOpenUserPasswordResetDialog(user);
-    }, [handleOpenUserPasswordResetDialog, user]);
+        openDialogByIntentWithSingleUnderlyingItem("user-reset-password", user);
+    }, [openDialogByIntentWithSingleUnderlyingItem, user]);
+
+    const handleNavigateToChangePassword = useCallback(() => {
+        navigate("/Account/ChangePassword");
+    }, [navigate]);
 
     if (appUser.id === user.id) {
         return (
@@ -19,9 +27,7 @@ export const UserPasswordSetOrResetCell = () => {
                 onClick={handleNavigateToChangePassword}
                 variant="outlined"
             >
-                <Typography variant="body1">
-                    Change
-                </Typography>
+                Change
             </Button>
         );
     } else {
@@ -33,10 +39,10 @@ export const UserPasswordSetOrResetCell = () => {
                 startIcon={user.has_password ? <LockResetIcon /> : <LockIcon />}
                 variant={user.has_password ? "outlined" : "contained"}
             >
-                <Typography variant="body1">
-                    {user.has_password ? "Reset" : "Set"}
-                </Typography>
+                {user.has_password ? "Reset" : "Set"}
             </Button>
         );
     }
 };
+
+export default UserPasswordSetOrResetCell;

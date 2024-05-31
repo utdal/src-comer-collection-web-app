@@ -5,6 +5,7 @@ import { dialogStatePropTypeShape } from "../../Hooks/useDialogStates.js";
 import { ItemSingleDeleteDialog } from "./ItemSingleDeleteDialog.js";
 import { ItemSingleEditDialog } from "./ItemSingleEditDialog.js";
 import { UserResetPasswordDialog } from "./UserResetPasswordDialog.js";
+import { UserChangePrivilegesDialog } from "./UserChangePrivilegesDialog.js";
 
 /**
  * This component acts as a switchboard for all the types of dialogs
@@ -22,6 +23,8 @@ const DialogByIntent = ({ intent, dialogState }) => {
         return <ItemSingleEditDialog dialogState={dialogState} />;
     case "user-reset-password":
         return <UserResetPasswordDialog dialogState={dialogState} />;
+    case "user-change-privileges":
+        return <UserChangePrivilegesDialog dialogState={dialogState} />;
     default:
         console.warn(`DialogByIntent received an invalid intent ${intent}`);
         return null;

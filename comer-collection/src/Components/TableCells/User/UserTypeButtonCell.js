@@ -5,13 +5,13 @@ import { useTableCellItem, useTableCellManagementCallbacks } from "../../../Cont
 
 import { CollectionManagerIcon, PersonIcon, SecurityIcon } from "../../../Imports/Icons.js";
 
-export const UserTypeButtonCell = () => {
+const UserTypeButtonCell = () => {
     const user = useTableCellItem();
     const appUser = useAppUser();
-    const { handleOpenUserPrivilegesDialog } = useTableCellManagementCallbacks();
+    const { openDialogByIntentWithSingleUnderlyingItem } = useTableCellManagementCallbacks();
     const handleOpenPrivilegesDialog = useCallback(() => {
-        handleOpenUserPrivilegesDialog(user);
-    }, [handleOpenUserPrivilegesDialog, user]);
+        openDialogByIntentWithSingleUnderlyingItem("user-change-privileges", user);
+    }, [openDialogByIntentWithSingleUnderlyingItem, user]);
     return (
         <Button
             color="lightgrey"
@@ -34,3 +34,5 @@ export const UserTypeButtonCell = () => {
         </Button>
     );
 };
+
+export default UserTypeButtonCell;

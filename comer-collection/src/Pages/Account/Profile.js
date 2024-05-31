@@ -17,7 +17,7 @@ import { ManagementPageProvider, useItemsReducer } from "../../ContextProviders/
 import { UserFullNameReverseCell } from "../../Components/TableCells/User/UserFullNameReverseCell.js";
 import { UserEmailCopyCell } from "../../Components/TableCells/User/UserEmailCopyCell.js";
 import { UserProfilePasswordInfoCell } from "../../Components/TableCells/User/UserProfilePasswordInfoCell.js";
-import { UserTypeCell } from "../../Components/TableCells/User/UserTypeCell.js";
+import UserTypeCell from "../../Components/TableCells/User/UserTypeCell.js";
 import { UserExhibitionQuotaCell } from "../../Components/TableCells/User/UserExhibitionQuotaCell.js";
 import { User } from "../../Classes/Entities/User.js";
 import { Course } from "../../Classes/Entities/Course.js";

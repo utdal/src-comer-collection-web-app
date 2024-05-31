@@ -15,6 +15,7 @@ import { capitalized } from "./Entity.js";
  * "multi-create"|
  * "user-reset-password"|
  * "user-change-activation-status"|
+ * "user-change-privileges"|
  * "extra"
  * )} Intent
  */
@@ -52,6 +53,12 @@ import { capitalized } from "./Entity.js";
  *  userId: number,
  *  body: {
  *      newStatus: boolean
+ *  }
+ * }|{
+ *  intent: ("user-change-privileges"),
+ *  userId: number,
+ *  body: {
+ *      newRole: "CURATOR" | "COLLECTION_MANAGER" | "ADMINISTRATOR"
  *  }
  * }} RouterActionRequest
  */

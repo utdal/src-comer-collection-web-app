@@ -166,7 +166,7 @@ const dialogStateReducer = (state, action) => {
  *
  * Hook to help manage the states of multiple dialogs
  * @typedef {(intent: Intent) => void} OpenDialogByIntentFunctionNoUnderlyingItems
- * @typedef {(intent: Intent, item, Item) => void} OpenDialogByIntentFunctionSingleUnderlyingItem
+ * @typedef {(intent: Intent, item: Item) => void} OpenDialogByIntentFunctionSingleUnderlyingItem
  * @typedef {(intent: Intent, items: Item[]) => void} OpenDialogByIntentFunctionMultipleUnderlyingItems
  * @typedef {(intent: Intent) => void} CloseDialogByIntentFunction
  *

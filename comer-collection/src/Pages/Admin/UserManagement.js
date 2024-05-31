@@ -9,7 +9,6 @@ import { SelectionSummary } from "../../Components/SelectionSummary.js";
 import { CourseFilterMenu } from "../../Components/Menus/CourseFilterMenu.js";
 import { useSnackbar, useTitle } from "../../ContextProviders/AppFeatures.js";
 
-import { UserResetPasswordDialog } from "../../Components/Dialogs/UserResetPasswordDialog.js";
 import { User } from "../../Classes/Entities/User.js";
 import { EnrollmentUserPrimary } from "../../Classes/Associations/Enrollment.js";
 import { UserExhibition } from "../../Classes/Associations/UserExhibition.js";
@@ -54,7 +53,7 @@ const UserManagement = () => {
     /**
      * @type {import("../../Classes/buildRouterAction.js").Intent[]}
      */
-    const intentArray = ["multi-create", "single-edit", "single-delete"];
+    const intentArray = ["multi-create", "single-edit", "single-delete", "user-reset-password"];
     const {
         dialogStateDictionary,
         openDialogByIntentWithNoUnderlyingItems,
@@ -64,8 +63,6 @@ const UserManagement = () => {
     } = useDialogStates(intentArray);
 
     const [privilegesDialogState, openPrivilegesDialog] = useDialogState(false, User);
-
-    const [resetPasswordDialogState, openResetPasswordDialog] = useDialogState(false, User);
 
     const [courseDialogState, openCourseDialog] = useDialogState(true);
     const [exhibitionDialogState, openExhibitionDialog] = useDialogState(true);
@@ -93,10 +90,6 @@ const UserManagement = () => {
     const handleNavigateToChangePassword = useCallback(() => {
         navigate("/Account/ChangePassword");
     }, [navigate]);
-
-    const handleOpenUserPasswordResetDialog = useCallback((user) => {
-        openResetPasswordDialog(user);
-    }, [openResetPasswordDialog]);
 
     const handleOpenUserAssignCourseDialog = useCallback((user) => {
         openCourseDialog([user]);
@@ -137,7 +130,6 @@ const UserManagement = () => {
 
     const managementCallbacks = useMemo(() => ({
         handleNavigateToChangePassword,
-        handleOpenUserPasswordResetDialog,
         handleOpenUserAssignCourseDialog,
         handleOpenViewUserExhibitionDialog,
         handleOpenUserPrivilegesDialog,
@@ -156,7 +148,6 @@ const UserManagement = () => {
         openDialogByIntentWithMultipleUnderlyingItems,
         closeDialogByIntent,
         handleOpenUserAssignCourseDialog,
-        handleOpenUserPasswordResetDialog,
         handleOpenUserPrivilegesDialog,
         handleOpenViewUserExhibitionDialog,
         handleRefresh]);
@@ -245,7 +236,6 @@ const UserManagement = () => {
 
             <UserChangePrivilegesDialog dialogState={privilegesDialogState} />
 
-            <UserResetPasswordDialog dialogState={resetPasswordDialogState} />
         </ManagementPageProvider>
     );
 };
