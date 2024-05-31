@@ -6,7 +6,8 @@ module.exports = {
     },
     extends: [
         "standard",
-        "plugin:react/all"
+        "plugin:react/all",
+        "plugin:@typescript-eslint/recommended"
     ],
     overrides: [
         {
@@ -26,7 +27,7 @@ module.exports = {
         sourceType: "module"
     },
     plugins: [
-        "react", "react-hooks"
+        "react", "react-hooks", "@typescript-eslint"
     ],
     rules: {
         indent: ["error", 4],
