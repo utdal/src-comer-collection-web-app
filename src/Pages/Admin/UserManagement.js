@@ -6,7 +6,7 @@ import { AssociationManagementDialog } from "../../Components/Dialogs/Associatio
 import { useLoaderData, useNavigate, useRevalidator } from "react-router";
 import { SelectionSummary } from "../../Components/SelectionSummary.js";
 import { CourseFilterMenu } from "../../Components/Menus/CourseFilterMenu.js";
-import { useSnackbar, useTitle } from "../../ContextProviders/AppFeatures.js";
+import { useSnackbar, useTitle } from "../../ContextProviders/AppFeatures.tsx";
 
 import { User } from "../../Classes/Entities/User.ts";
 import { EnrollmentUserPrimary } from "../../Classes/Associations/Enrollment.ts";

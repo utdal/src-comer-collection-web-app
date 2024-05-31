@@ -4,7 +4,7 @@ import { Box, Button, Divider, Paper, Stack, TextField } from "@mui/material";
 import type { APIResponse } from "../Helpers/APICalls.ts";
 import { sendAuthenticatedRequest } from "../Helpers/APICalls.ts";
 import { useAppUser } from "../Hooks/useAppUser";
-import { useSnackbar, useTitle } from "../ContextProviders/AppFeatures.js";
+import { useSnackbar, useTitle } from "../ContextProviders/AppFeatures.tsx";
 
 const SignIn = (): React.JSX.Element => {
     const appUser = useAppUser();

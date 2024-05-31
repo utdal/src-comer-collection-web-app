@@ -8,7 +8,7 @@ import {
 } from "@mui/material";
 import { DeleteIcon } from "../../Imports/Icons.js";
 import { getBlankItemFields } from "../../Helpers/fields.js";
-import { useSnackbar } from "../../ContextProviders/AppFeatures.js";
+import { useSnackbar } from "../../ContextProviders/AppFeatures.tsx";
 import { useEntity, useManagementCallbacks } from "../../ContextProviders/ManagementPageProvider.js";
 import { PersistentDialog } from "./PersistentDialog.js";
 import { DialogStateOld } from "../../Classes/DialogState.js";

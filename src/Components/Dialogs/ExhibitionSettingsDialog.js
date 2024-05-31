@@ -8,7 +8,7 @@ import {
 } from "@mui/material";
 import { SaveIcon, PublicIcon, LockIcon, VpnLockIcon } from "../../Imports/Icons.js";
 import PropTypes from "prop-types";
-import { useSnackbar } from "../../ContextProviders/AppFeatures.js";
+import { useSnackbar } from "../../ContextProviders/AppFeatures.tsx";
 import { PersistentDialog } from "./PersistentDialog.js";
 import { useActionData, useSubmit } from "react-router-dom";
 

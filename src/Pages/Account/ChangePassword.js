@@ -2,7 +2,7 @@ import { useNavigate, useRevalidator } from "react-router";
 import React, { useState } from "react";
 import { Box, Button, Divider, Paper, Stack, TextField, Typography } from "@mui/material";
 import { useAppUser } from "../../Hooks/useAppUser.ts";
-import { useTitle, useSnackbar } from "../../ContextProviders/AppFeatures.js";
+import { useTitle, useSnackbar } from "../../ContextProviders/AppFeatures.tsx";
 
 import { sendAuthenticatedRequest } from "../../Helpers/APICalls.ts";
 

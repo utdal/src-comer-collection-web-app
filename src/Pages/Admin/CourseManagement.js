@@ -5,7 +5,7 @@ import { doesItemMatchSearchQuery } from "../../Helpers/SearchUtilities.js";
 import { AssociationManagementDialog } from "../../Components/Dialogs/AssociationManagementDialog/AssociationManagementDialog.js";
 import { useLoaderData, useNavigate, useRevalidator } from "react-router";
 import { SelectionSummary } from "../../Components/SelectionSummary.js";
-import { useTitle } from "../../ContextProviders/AppFeatures.js";
+import { useTitle } from "../../ContextProviders/AppFeatures.tsx";
 import { Course } from "../../Classes/Entities/Course.ts";
 import { EnrollmentCoursePrimary } from "../../Classes/Associations/Enrollment.ts";
 import { ManagementPageProvider, useItemsReducer } from "../../ContextProviders/ManagementPageProvider.js";

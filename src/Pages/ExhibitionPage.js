@@ -6,7 +6,7 @@ import { exhibitionEditReducer, blankExhibitionData } from "../Components/Exhibi
 import Exhibition3DViewport from "../Components/Exhibition3DViewport/Exhibition3DViewport.js";
 import { sendAuthenticatedRequest } from "../Helpers/APICalls.ts";
 import { useAppUser } from "../Hooks/useAppUser.ts";
-import { useSnackbar, useTitle } from "../ContextProviders/AppFeatures.js";
+import { useSnackbar, useTitle } from "../ContextProviders/AppFeatures.tsx";
 
 const ExhibitionPage = () => {
     const exhibitionId = parseInt(useParams().exhibitionId);

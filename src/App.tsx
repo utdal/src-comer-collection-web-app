@@ -3,7 +3,7 @@ import { RouterProvider } from "react-router-dom";
 import React from "react";
 
 import AppThemeProvider from "./ContextProviders/AppTheme.js";
-import { AppFeatureProvider } from "./ContextProviders/AppFeatures.js";
+import { AppFeatureProvider } from "./ContextProviders/AppFeatures.tsx";
 import router from "./Router/router";
 
 const App = (): React.JSX.Element => {

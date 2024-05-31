@@ -1,5 +1,5 @@
 import React from "react";
-import { useSnackbar } from "../../../ContextProviders/AppFeatures.js";
+import { useSnackbar } from "../../../ContextProviders/AppFeatures.tsx";
 import { useAssociationType, useRelevantPrimaryItems } from "../../../ContextProviders/AssociationManagementPageProvider.js";
 import { User } from "../../../Classes/Entities/User.ts";
 import { capitalized } from "../../../Classes/Entity.ts";

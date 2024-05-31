@@ -6,7 +6,7 @@ import { DataTable } from "../../Components/DataTable/DataTable.js";
 import { PhotoCameraBackIcon } from "../../Imports/Icons.js";
 import { ExhibitionSettingsDialog } from "../../Components/Dialogs/ExhibitionSettingsDialog.js";
 import { ItemSingleDeleteDialog } from "../../Components/Dialogs/ItemSingleDeleteDialog.js";
-import { useTitle } from "../../ContextProviders/AppFeatures.js";
+import { useTitle } from "../../ContextProviders/AppFeatures.tsx";
 import { useAppUser } from "../../Hooks/useAppUser.ts";
 
 import { ExhibitionTitleCell } from "../../Components/TableCells/Exhibition/ExhibitionTitleCell.js";

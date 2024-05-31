@@ -2,7 +2,7 @@ import { Box, Paper, Stack, Typography } from "@mui/material";
 import React, { useCallback } from "react";
 import { DataTable } from "../../Components/DataTable/DataTable.js";
 import { PhotoCameraBackIcon } from "../../Imports/Icons.js";
-import { useTitle } from "../../ContextProviders/AppFeatures.js";
+import { useTitle } from "../../ContextProviders/AppFeatures.tsx";
 import { ExhibitionTitleCell } from "../../Components/TableCells/Exhibition/ExhibitionTitleCell.js";
 import { ExhibitionCuratorCell } from "../../Components/TableCells/Exhibition/ExhibitionCuratorCell.js";
 import { ExhibitionDateModifiedCell } from "../../Components/TableCells/Exhibition/ExhibitionDateModifiedCell.js";

@@ -7,7 +7,7 @@ import {
     Typography, DialogContentText, TextField
 } from "@mui/material";
 import { ContentCopyIcon, SyncIcon } from "../../Imports/Icons.js";
-import { useClipboard, useSnackbar } from "../../ContextProviders/AppFeatures.js";
+import { useClipboard, useSnackbar } from "../../ContextProviders/AppFeatures.tsx";
 import PropTypes from "prop-types";
 import { DialogStateOld } from "../../Classes/DialogState.js";
 import { PersistentDialog } from "./PersistentDialog.js";
