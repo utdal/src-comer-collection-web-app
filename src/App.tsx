@@ -2,8 +2,8 @@
 import { RouterProvider } from "react-router-dom";
 import React from "react";
 
-import AppThemeProvider from "./ContextProviders/AppTheme.js";
-import { AppFeatureProvider } from "./ContextProviders/AppFeatures.tsx";
+import AppThemeProvider from "./ContextProviders/AppTheme";
+import { AppFeatureProvider } from "./ContextProviders/AppFeatures";
 import router from "./Router/router";
 
 const App = (): React.JSX.Element => {

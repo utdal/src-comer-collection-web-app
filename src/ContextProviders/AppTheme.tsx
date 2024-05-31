@@ -1,16 +1,29 @@
+import type { ReactNode } from "react";
 import React, { createContext, useCallback, useContext, useMemo, useState } from "react";
 import PropTypes from "prop-types";
 import { ThemeProvider, createTheme } from "@mui/material";
 import { green, grey, orange } from "@mui/material/colors/index.js";
 
-const storedDarkThemeSetting = JSON.parse(localStorage.getItem("appDarkTheme")) ?? false;
+const DARK_THEME_LOCAL_STORAGE_KEY = "appDarkTheme";
+
+type DarkThemeSetting = "dark" | "light";
+type DarkThemeSetter = (darkThemeSetting: DarkThemeSetting) => void;
+
+interface AppThemeContextValue {
+    appDarkTheme: DarkThemeSetting;
+    setAppDarkTheme: DarkThemeSetter;
+}
+
+const storedDarkThemeSetting: DarkThemeSetting = (localStorage.getItem(DARK_THEME_LOCAL_STORAGE_KEY) ?? "light") as DarkThemeSetting;
 
 const primaryColor = green;
 const secondaryColor = orange;
 
-const AppThemeContext = createContext();
+const AppThemeContext = createContext((null as unknown) as AppThemeContextValue);
 
-const AppThemeProvider = ({ children }) => {
+const AppThemeProvider = ({ children }: {
+    readonly children: ReactNode;
+}): React.JSX.Element => {
     const [appDarkTheme, setAppDarkTheme] = useState(storedDarkThemeSetting);
 
     const finalTheme = useMemo(() => (createTheme({
@@ -133,9 +146,9 @@ const AppThemeProvider = ({ children }) => {
             }
         },
         palette: {
-            mode: appDarkTheme ? "dark" : "light",
+            mode: appDarkTheme,
             primary: {
-                main: appDarkTheme ? primaryColor["700"] : primaryColor["900"],
+                main: appDarkTheme === "dark" ? primaryColor["700"] : primaryColor["900"],
                 light: primaryColor["500"],
                 contrastText: "white",
                 200: primaryColor["200"],
@@ -153,17 +166,17 @@ const AppThemeProvider = ({ children }) => {
             },
             grey: {
                 main: grey["600"],
-                contrastText: appDarkTheme ? "white" : "black",
-                translucent: appDarkTheme ? grey["800"] : "#CCC",
-                veryTranslucent: appDarkTheme ? "#333" : "#EEE"
+                contrastText: appDarkTheme === "dark" ? "white" : "black",
+                translucent: appDarkTheme === "dark" ? grey["800"] : "#CCC",
+                veryTranslucent: appDarkTheme === "light" ? "#333" : "#EEE"
             },
             lightgrey: {
-                main: appDarkTheme ? grey["500"] : grey["700"]
+                main: appDarkTheme === "dark" ? grey["500"] : grey["700"]
             }
         }
     })), [appDarkTheme]);
 
-    const appThemeContextValue = useMemo(() => {
+    const appThemeContextValue: AppThemeContextValue = useMemo(() => {
         return {
             appDarkTheme,
             setAppDarkTheme
@@ -179,13 +192,16 @@ const AppThemeProvider = ({ children }) => {
     );
 };
 
-export const useAppDarkTheme = () => {
+export const useAppDarkTheme = (): {
+    appDarkTheme: DarkThemeSetting;
+    handleSetDarkTheme: DarkThemeSetter;
+} => {
     const { appDarkTheme, setAppDarkTheme } = useContext(AppThemeContext);
-    const handleDarkThemeChange = useCallback((isEnabled) => {
-        setAppDarkTheme(isEnabled);
-        localStorage.setItem("appDarkTheme", JSON.stringify(isEnabled));
+    const handleSetDarkTheme: DarkThemeSetter = useCallback((darkThemeSetting: DarkThemeSetting) => {
+        setAppDarkTheme(darkThemeSetting);
+        localStorage.setItem(DARK_THEME_LOCAL_STORAGE_KEY, darkThemeSetting);
     }, [setAppDarkTheme]);
-    return { appDarkTheme, setAppDarkTheme: handleDarkThemeChange };
+    return { appDarkTheme, handleSetDarkTheme };
 };
 
 AppThemeProvider.propTypes = {
