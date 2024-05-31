@@ -4,7 +4,7 @@ import { entityPropTypeShape } from "../Classes/Entity.js";
 
 /**
  * @type {{
- *  [S in Intent]: import("../Classes/buildRouterAction").DialogItemsMultiplicity
+ *  [S in Intent]: import("../Router/buildRouterActionByEntity.js").DialogItemsMultiplicity
  * }}
  */
 const dialogItemsMultiplicityByIntent = {
@@ -44,7 +44,7 @@ export const dialogStatePropTypeShape = PropTypes.shape({
 });
 
 /**
- * @param {import("../Classes/buildRouterAction").Intent[]} intentArray
+ * @param {import("../Router/buildRouterActionByEntity.js").Intent[]} intentArray
  * @returns {DialogStateDictionary}
  */
 const generateDefaultDialogStates = (intentArray) => {
@@ -165,7 +165,7 @@ const dialogStateReducer = (state, action) => {
 };
 
 /**
- * @typedef {import("../Classes/buildRouterAction").Intent} Intent
+ * @typedef {import("../Router/buildRouterActionByEntity.js").Intent} Intent
  * @typedef {import("../ContextProviders/ManagementPageProvider").Item} Item
  *
  * Hook to help manage the states of multiple dialogs

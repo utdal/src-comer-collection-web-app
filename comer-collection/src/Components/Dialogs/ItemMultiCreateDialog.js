@@ -51,7 +51,7 @@ export const ItemMultiCreateDialog = ({ dialogState }) => {
     const { closeDialogByIntent } = useManagementCallbacks();
 
     /**
-     * @type {import("../../Classes/buildRouterAction.js").RouterActionResponse}
+     * @type {import("../../Router/buildRouterActionByEntity.js").RouterActionResponse}
      */
     const actionData = useActionData();
 
@@ -105,7 +105,7 @@ export const ItemMultiCreateDialog = ({ dialogState }) => {
     const handleSubmit = useCallback(() => {
         setSubmitEnabled(false);
         /**
-         * @type {import("../../Classes/buildRouterAction.js").RouterActionRequest}
+         * @type {import("../../Router/buildRouterActionByEntity.js").RouterActionRequest}
          */
         const request = {
             intent: "multi-create",

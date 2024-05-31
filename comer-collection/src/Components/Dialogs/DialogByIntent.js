@@ -10,7 +10,7 @@ import { UserChangePrivilegesDialog } from "./UserChangePrivilegesDialog.js";
 /**
  * This component acts as a switchboard for all the types of dialogs
  * and renders the correct type of dialog based on the "intent" property.
- * @param {{intent: import("../../Classes/buildRouterAction").Intent, dialogState: import("../../Hooks/useDialogStates").DialogState}} props
+ * @param {{intent: import("../../Router/buildRouterActionByEntity.js").Intent, dialogState: import("../../Hooks/useDialogStates").DialogState}} props
  * @returns {React.JSX.Element}
  */
 const DialogByIntent = ({ intent, dialogState }) => {

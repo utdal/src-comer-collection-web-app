@@ -18,7 +18,6 @@ import UserManagement from "./Pages/Admin/UserManagement.js";
 import CourseManagement from "./Pages/Admin/CourseManagement.js";
 import ExhibitionManagement from "./Pages/Admin/ExhibitionManagement.js";
 import ImageManagement from "./Pages/Admin/ImageManagement.js";
-import { sendAuthenticatedRequest } from "./Helpers/APICalls.js";
 import { User } from "./Classes/Entities/User.js";
 import { DeletedImage, Image } from "./Classes/Entities/Image.js";
 import RouterErrorMessage from "./Components/RouterErrorMessage.js";
@@ -28,71 +27,13 @@ import AppThemeProvider from "./ContextProviders/AppTheme.js";
 import { AppFeatureProvider } from "./ContextProviders/AppFeatures.js";
 import { FullPageMessage } from "./Components/FullPageMessage.js";
 import { InfoIcon } from "./Imports/Icons.js";
-import buildRouterAction from "./Classes/buildRouterAction.js";
-import buildRouterLoader from "./Classes/buildRouterLoader.js";
+import buildRouterActionByEntity from "./Router/buildRouterActionByEntity.js";
+import buildRouterLoader from "./Router/buildRouterLoaderByEntity.js";
 import { Artist } from "./Classes/Entities/Artist.js";
 import { Tag } from "./Classes/Entities/Tag.js";
 import { EntityManageDialog } from "./Components/Dialogs/EntityManageDialog/EntityManageDialog.js";
-
-const appUserLoader = async () => {
-    if (!localStorage.getItem("token")) {
-        return false;
-    }
-    const response = await sendAuthenticatedRequest("GET", "/api/account/profile");
-    if (response.status === 200) {
-        return response.data;
-    } else {
-        throw new Error("Network request failed");
-    }
-};
-
-const exhibitionPageLoader = async ({ params }) => {
-    const exhibitionId = parseInt(params.exhibitionId);
-    const exhibitionUrl = `/api/exhibitions/${exhibitionId}/data`;
-    try {
-        const [{ data: exhibitionData }, { data: globalImageCatalog }] = await Promise.all([
-            sendAuthenticatedRequest("GET", exhibitionUrl),
-            sendAuthenticatedRequest("GET", Image.baseUrl)
-        ]);
-        return { exhibitionData, globalImageCatalog };
-    } catch (e) {
-        throw new Error("Exhibition Unavailable");
-    }
-};
-
-const myExhibitionsAction = async ({ request }) => {
-    const requestData = await request.json();
-    if (request.method === "POST") {
-        try {
-            await Exhibition.handleMultiCreate([requestData]);
-            return {
-                status: "success",
-                message: "Exhibition created"
-            };
-        } catch (e) {
-            return {
-                status: "error",
-                error: e.message
-            };
-        }
-    } else if (request.method === "PUT") {
-        const { id, ...requestBody } = requestData;
-        try {
-            const result = await Exhibition.handleEdit(id, requestBody);
-            return {
-                status: "success",
-                message: result
-            };
-        } catch (e) {
-            return {
-                status: "error",
-                error: e.message
-            };
-        }
-    } else {
-        throw new Response(null, { status: 405 });
-    }
-};
+import { appUserLoader, exhibitionPageLoader } from "./Router/loaders.js";
+import { myExhibitionsAction } from "./Router/actions.js";
 
 const router = createBrowserRouter([
     {
@@ -181,7 +122,7 @@ const router = createBrowserRouter([
                                 ),
                                 path: "Users",
                                 loader: buildRouterLoader(User),
-                                action: buildRouterAction(User),
+                                action: buildRouterActionByEntity(User),
                                 ErrorBoundary: RouterErrorMessage
                             },
                             {
@@ -192,7 +133,7 @@ const router = createBrowserRouter([
                                 ),
                                 path: "Courses",
                                 loader: buildRouterLoader(Course),
-                                action: buildRouterAction(Course),
+                                action: buildRouterActionByEntity(Course),
                                 ErrorBoundary: RouterErrorMessage
                             },
                             {
@@ -203,7 +144,7 @@ const router = createBrowserRouter([
                                 ),
                                 path: "Exhibitions",
                                 loader: buildRouterLoader(Exhibition),
-                                action: buildRouterAction(Exhibition),
+                                action: buildRouterActionByEntity(Exhibition),
                                 ErrorBoundary: RouterErrorMessage
                             },
                             {
@@ -215,25 +156,25 @@ const router = createBrowserRouter([
                                 ),
                                 path: "Images",
                                 loader: buildRouterLoader(Image),
-                                action: buildRouterAction(Image),
+                                action: buildRouterActionByEntity(Image),
                                 ErrorBoundary: RouterErrorMessage,
                                 children: [
                                     {
                                         path: "Artists",
                                         loader: buildRouterLoader(Artist),
-                                        action: buildRouterAction(Artist),
+                                        action: buildRouterActionByEntity(Artist),
                                         element: <EntityManageDialog Entity={Artist} />
                                     },
                                     {
                                         path: "Tags",
                                         loader: buildRouterLoader(Tag),
-                                        action: buildRouterAction(Tag),
+                                        action: buildRouterActionByEntity(Tag),
                                         element: <EntityManageDialog Entity={Tag} />
                                     },
                                     {
                                         path: "Trash",
                                         loader: buildRouterLoader(DeletedImage),
-                                        action: buildRouterAction(DeletedImage),
+                                        action: buildRouterActionByEntity(DeletedImage),
                                         element: <EntityManageDialog Entity={DeletedImage} />
                                     }
                                 ]

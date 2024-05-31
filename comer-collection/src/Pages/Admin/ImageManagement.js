@@ -54,7 +54,7 @@ const ImageManagement = () => {
     const [previewerOpen, setPreviewerOpen] = useState(false);
 
     /**
-     * @type {import("../../Classes/buildRouterAction.js").Intent[]}
+     * @type {import("../../Router/buildRouterActionByEntity.js").Intent[]}
      */
     const intentArray = ["multi-create", "single-edit", "single-delete"];
     const {

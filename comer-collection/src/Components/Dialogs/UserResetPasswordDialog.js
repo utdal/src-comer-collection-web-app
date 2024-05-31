@@ -34,7 +34,7 @@ export const UserResetPasswordDialog = ({ dialogState }) => {
     const { closeDialogByIntent } = useManagementCallbacks();
 
     /**
-     * @type {import("../../Classes/buildRouterAction.js").RouterActionResponse}
+     * @type {import("../../Router/buildRouterActionByEntity.js").RouterActionResponse}
      */
     const actionData = useActionData();
 
@@ -68,7 +68,7 @@ export const UserResetPasswordDialog = ({ dialogState }) => {
 
     const handleSubmit = useCallback(() => {
         /**
-         * @type {import("../../Classes/buildRouterAction.js").RouterActionRequest}
+         * @type {import("../../Router/buildRouterActionByEntity.js").RouterActionRequest}
          */
         const request = {
             intent: "user-reset-password",

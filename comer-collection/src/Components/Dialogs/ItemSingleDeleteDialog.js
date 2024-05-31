@@ -31,7 +31,7 @@ export const ItemSingleDeleteDialog = ({ requireTypedConfirmation, dialogState, 
     const submit = useSubmit();
 
     /**
-     * @type {import("../../Classes/buildRouterAction.js").RouterActionResponse}
+     * @type {import("../../Router/buildRouterActionByEntity.js").RouterActionResponse}
      */
     const actionData = useActionData();
 
@@ -50,7 +50,7 @@ export const ItemSingleDeleteDialog = ({ requireTypedConfirmation, dialogState, 
 
     const handleSubmit = useCallback(() => {
         /**
-         * @type {import("../../Classes/buildRouterAction.js").RouterActionRequest}
+         * @type {import("../../Router/buildRouterActionByEntity.js").RouterActionRequest}
          */
         const request = {
             intent: Entity.isTrash

@@ -1,11 +1,11 @@
-import { User } from "./Entities/User.js";
-import { Course } from "./Entities/Course.js";
-import { DeletedImage, Image } from "./Entities/Image.js";
-import { Artist } from "./Entities/Artist.js";
-import { Tag } from "./Entities/Tag.js";
-import { Exhibition } from "./Entities/Exhibition.js";
+import { User } from "../Classes/Entities/User.js";
+import { Course } from "../Classes/Entities/Course.js";
+import { DeletedImage, Image } from "../Classes/Entities/Image.js";
+import { Artist } from "../Classes/Entities/Artist.js";
+import { Tag } from "../Classes/Entities/Tag.js";
+import { Exhibition } from "../Classes/Entities/Exhibition.js";
 import { sendAuthenticatedRequest } from "../Helpers/APICalls.js";
-import { capitalized } from "./Entity.js";
+import { capitalized } from "../Classes/Entity.js";
 
 /**
  * @typedef {(
@@ -128,7 +128,7 @@ const requiredMethodsByIntent = {
  * @returns {({request, params}) => RouterActionResponse}
  */
 
-const buildRouterAction = (entityType) => {
+const buildRouterActionByEntity = (entityType) => {
     /**
      * @param {{request: {
      *  method: import("react-router-dom").V7_FormMethod,
@@ -284,4 +284,4 @@ const buildRouterAction = (entityType) => {
     return routerAction;
 };
 
-export default buildRouterAction;
+export default buildRouterActionByEntity;
