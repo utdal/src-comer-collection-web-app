@@ -1,5 +1,5 @@
 import { Image } from "../Entities/Image.ts";
-import { Tag } from "../Entities/Tag.js";
+import { Tag } from "../Entities/Tag.ts";
 import { Association } from "../Association.ts";
 import { TagIDCell } from "../../Components/TableCells/Tag/TagIDCell.js";
 import { TagDataCell } from "../../Components/TableCells/Tag/TagDataCell.js";

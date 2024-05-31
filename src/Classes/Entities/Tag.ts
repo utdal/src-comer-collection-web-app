@@ -1,24 +1,25 @@
+import type React from "react";
 import { TagDataCell } from "../../Components/TableCells/Tag/TagDataCell.js";
 import { TagIDCell } from "../../Components/TableCells/Tag/TagIDCell.js";
 import { TagImageCountCell } from "../../Components/TableCells/Tag/TagImageCountCell.js";
 import TagManageOptionsArray from "../../Components/TableCells/Tag/TagManageOptionsArray.js";
 import { TagNotesCell } from "../../Components/TableCells/Tag/TagNotesCell.js";
 import { SellIcon } from "../../Imports/Icons.js";
-import { Entity } from "../Entity.ts";
+import type { EntityFieldDefinition, Item, SortableValue } from "../../index.js";
+import { Entity } from "../Entity";
 
 class Tag extends Entity {
-    static baseUrl = "/api/tags";
-    static singular = "tag";
-    static plural = "tags";
+    public static baseUrl = "/api/tags";
 
-    static fetcherUrl = "/Account/Admin/Tags";
+    public static singular = "tag";
 
-    static entityManageRelativeUrl = "Tags";
+    public static plural = "tags";
 
-    /**
-     * @type {EntityFieldDefinition[]}
-     */
-    static fieldDefinitions = [
+    public static fetcherUrl = "/Account/Admin/Tags";
+
+    public static entityManageRelativeUrl = "Tags";
+
+    public static fieldDefinitions: EntityFieldDefinition[] = [
         {
             fieldName: "data",
             displayName: "Tag",
@@ -33,25 +34,26 @@ class Tag extends Entity {
         }
     ];
 
-    static DefaultIcon = SellIcon;
+    public static DefaultIcon = SellIcon as React.FunctionComponent;
 
-    static searchBoxFields = ["data", "notes"];
-    static searchBoxPlaceholder = "Search tags by name or notes";
+    public static searchBoxFields = ["data", "notes"];
+
+    public static searchBoxPlaceholder = "Search tags by name or notes";
 
     /**
      * @type {TableFieldDefinition[]}
      */
-    static tableFields = [
+    public static tableFields = [
         {
             columnDescription: "ID",
             TableCellComponent: TagIDCell,
-            generateSortableValue: (tag) => tag.id
+            generateSortableValue: (tag: Item): SortableValue => tag.id
         },
         {
             columnDescription: "Data",
             maxWidth: "300px",
             TableCellComponent: TagDataCell,
-            generateSortableValue: (tag) => tag.data.toLowerCase()
+            generateSortableValue: (tag: Item): SortableValue => (tag.data as string).toLowerCase()
         },
         {
             columnDescription: "Images",
@@ -69,7 +71,7 @@ class Tag extends Entity {
 }
 
 class PublicTag extends Tag {
-    static baseUrl = "/api/tags";
-};
+    public static baseUrl = "/api/tags";
+}
 
 export { Tag, PublicTag };

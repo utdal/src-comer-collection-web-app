@@ -9,7 +9,7 @@ import { useTitle } from "../../ContextProviders/AppFeatures.js";
 
 import { Image } from "../../Classes/Entities/Image.ts";
 import { Artist } from "../../Classes/Entities/Artist.ts";
-import { Tag } from "../../Classes/Entities/Tag.js";
+import { Tag } from "../../Classes/Entities/Tag.ts";
 import { ImageArtist } from "../../Classes/Associations/ImageArtist.js";
 import { ImageTag } from "../../Classes/Associations/ImageTag.js";
 import { ImageExhibition } from "../../Classes/Associations/ImageExhibition.js";
