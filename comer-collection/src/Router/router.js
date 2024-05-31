@@ -1,7 +1,7 @@
 import React from "react";
 import { Navigate } from "react-router";
 import { createBrowserRouter } from "react-router-dom";
-import AppLayout from "../AppLayout.js";
+import AppLayout from "../Layouts/AppLayout.js";
 import { Artist } from "../Classes/Entities/Artist.js";
 import { Course } from "../Classes/Entities/Course.js";
 import { Exhibition, PublicExhibition } from "../Classes/Entities/Exhibition.js";
@@ -17,7 +17,7 @@ import { InfoIcon } from "../Imports/Icons.js";
 import ChangePassword from "../Pages/Account/ChangePassword.js";
 import MyExhibitions from "../Pages/Account/MyExhibitions.js";
 import Profile from "../Pages/Account/Profile.js";
-import AccountLayout from "../Pages/AccountLayout.js";
+import AccountLayout from "../Layouts/AccountLayout.js";
 import CourseManagement from "../Pages/Admin/CourseManagement.js";
 import ExhibitionManagement from "../Pages/Admin/ExhibitionManagement.js";
 import ImageManagement from "../Pages/Admin/ImageManagement.js";
