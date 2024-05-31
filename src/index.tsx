@@ -18,7 +18,10 @@ export interface AppUser {
     is_admin: boolean;
     is_collection_manager: boolean;
     is_admin_or_collection_manager: boolean;
+    exhibition_quota: number;
     pw_change_required: boolean;
+    Courses: Item[];
+    Exhibitions: Item[];
 }
 
 export interface ItemCounts {

@@ -1,10 +1,11 @@
 import { Stack, Typography } from "@mui/material";
 import React from "react";
-import { useAppUser } from "../../Hooks/useAppUser.ts";
+import { useAppUser } from "../../Hooks/useAppUser";
 import { InfoIcon, SecurityIcon } from "../../Imports/Icons.js";
+import type { AppUser } from "../../index.js";
 
-export const ExhibitionCreationRestriction = () => {
-    const appUser = useAppUser();
+export const ExhibitionCreationRestriction = (): React.JSX.Element => {
+    const appUser = useAppUser() as AppUser;
     return (
         <Stack
             direction="column"

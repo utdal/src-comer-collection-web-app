@@ -17,7 +17,7 @@ import { ExhibitionAccessCell } from "../../Components/TableCells/Exhibition/Exh
 import { ExhibitionOptionsCell } from "../../Components/TableCells/Exhibition/ExhibitionOptionsCell.js";
 import { ManagementPageProvider, useItemsReducer } from "../../ContextProviders/ManagementPageProvider.js";
 import { CreateExhibitionButton } from "../../Components/Buttons/CreateExhibitionButton.js";
-import { ExhibitionCreationRestriction } from "../../Components/TextBanners/ExhibitionCreationRestriction.js";
+import { ExhibitionCreationRestriction } from "../../Components/TextBanners/ExhibitionCreationRestriction.tsx";
 import { useDialogState } from "../../Hooks/useDialogState.js";
 import { Exhibition } from "../../Classes/Entities/Exhibition.ts";
 import { useRevalidator } from "react-router";
