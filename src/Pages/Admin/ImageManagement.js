@@ -8,7 +8,7 @@ import { AssociationManagementDialog } from "../../Components/Dialogs/Associatio
 import { useTitle } from "../../ContextProviders/AppFeatures.js";
 
 import { Image } from "../../Classes/Entities/Image.js";
-import { Artist } from "../../Classes/Entities/Artist.js";
+import { Artist } from "../../Classes/Entities/Artist.ts";
 import { Tag } from "../../Classes/Entities/Tag.js";
 import { ImageArtist } from "../../Classes/Associations/ImageArtist.js";
 import { ImageTag } from "../../Classes/Associations/ImageTag.js";

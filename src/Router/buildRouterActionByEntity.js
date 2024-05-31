@@ -1,7 +1,7 @@
 import { User } from "../Classes/Entities/User.js";
 import { Course } from "../Classes/Entities/Course.ts";
 import { DeletedImage, Image } from "../Classes/Entities/Image.js";
-import { Artist } from "../Classes/Entities/Artist.js";
+import { Artist } from "../Classes/Entities/Artist.ts";
 import { Tag } from "../Classes/Entities/Tag.js";
 import { Exhibition } from "../Classes/Entities/Exhibition.js";
 import { sendAuthenticatedRequest } from "../Helpers/APICalls.js";

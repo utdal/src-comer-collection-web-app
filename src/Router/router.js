@@ -2,7 +2,7 @@ import React from "react";
 import { Navigate } from "react-router";
 import { createBrowserRouter } from "react-router-dom";
 import AppLayout from "../Layouts/AppLayout.js";
-import { Artist } from "../Classes/Entities/Artist.js";
+import { Artist } from "../Classes/Entities/Artist.ts";
 import { Course } from "../Classes/Entities/Course.ts";
 import { Exhibition, PublicExhibition } from "../Classes/Entities/Exhibition.js";
 import { Image, DeletedImage } from "../Classes/Entities/Image.js";

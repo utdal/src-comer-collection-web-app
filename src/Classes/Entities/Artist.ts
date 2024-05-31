@@ -1,3 +1,4 @@
+import type React from "react";
 import { ArtistIDCell } from "../../Components/TableCells/Artist/ArtistIDCell.js";
 import { ArtistImageCountCell } from "../../Components/TableCells/Artist/ArtistImageCountCell.js";
 import { ArtistManageOptionsCell } from "../../Components/TableCells/Artist/ArtistManageOptionsCell.js";
@@ -5,21 +6,21 @@ import { ArtistNameCell } from "../../Components/TableCells/Artist/ArtistNameCel
 import { ArtistNotesCell } from "../../Components/TableCells/Artist/ArtistNotesCell.js";
 import { ArtistWebsiteCell } from "../../Components/TableCells/Artist/ArtistWebsiteCell.js";
 import { BrushIcon } from "../../Imports/Icons.js";
-import { Entity } from "../Entity.ts";
+import { Entity } from "../Entity";
+import type { EntityFieldDefinition, Item, SortableValue } from "../../index.js";
 
 class Artist extends Entity {
-    static baseUrl = "/api/artists";
-    static singular = "artist";
-    static plural = "artists";
+    public static baseUrl = "/api/artists";
 
-    static fetcherUrl = "/Account/Admin/Artists";
+    public static singular = "artist";
 
-    static entityManageRelativeUrl = "Artists";
+    public static plural = "artists";
 
-    /**
-     * @type {EntityFieldDefinition[]}
-     */
-    static fieldDefinitions = [
+    public static fetcherUrl = "/Account/Admin/Artists";
+
+    public static entityManageRelativeUrl = "Artists";
+
+    public static fieldDefinitions: EntityFieldDefinition[] = [
         {
             fieldName: "familyName",
             displayName: "Last Name",
@@ -46,25 +47,26 @@ class Artist extends Entity {
         }
     ];
 
-    static DefaultIcon = BrushIcon;
+    public static DefaultIcon = BrushIcon as React.FunctionComponent;
 
-    static searchBoxFields = ["fullName", "fullNameReverse", "notes"];
-    static searchBoxPlaceholder = "Search artists by name or notes";
+    public static searchBoxFields = ["fullName", "fullNameReverse", "notes"];
+
+    public static searchBoxPlaceholder = "Search artists by name or notes";
 
     /**
      * @type {TableFieldDefinition[]}
      */
-    static tableFields = [
+    public static tableFields = [
         {
             columnDescription: "ID",
             TableCellComponent: ArtistIDCell,
-            generateSortableValue: (artist) => artist.id
+            generateSortableValue: (artist: Item): SortableValue => artist.id
         },
         {
             columnDescription: "Name",
             maxWidth: "300px",
             TableCellComponent: ArtistNameCell,
-            generateSortableValue: (artist) => `${artist.familyName?.toLowerCase()}, ${artist.givenName?.toLowerCase()}`
+            generateSortableValue: (artist: Item): SortableValue => `${(artist.familyName as string).toLowerCase()}, ${(artist.givenName as string).toLowerCase()}`
         },
         {
             columnDescription: "Images",
@@ -86,7 +88,7 @@ class Artist extends Entity {
 }
 
 class PublicArtist extends Artist {
-    static baseUrl = "/api/artists";
+    public static baseUrl = "/api/artists";
 }
 
 export { Artist, PublicArtist };

@@ -1,4 +1,4 @@
-import { Artist } from "../Entities/Artist.js";
+import { Artist } from "../Entities/Artist.ts";
 import { Image } from "../Entities/Image.js";
 import { Association } from "../Association.ts";
 import { ArtistIDCell } from "../../Components/TableCells/Artist/ArtistIDCell.js";

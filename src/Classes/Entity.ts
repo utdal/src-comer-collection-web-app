@@ -29,13 +29,13 @@ export class Entity extends null {
 
     public static TrashEntity = null;
 
-    public static deleteDialogAdditionalInstructions = null;
+    public static deleteDialogAdditionalInstructions = "";
 
-    public static permanentDeleteDialogAdditionalInstructions = null;
+    public static permanentDeleteDialogAdditionalInstructions = "";
 
-    public static entityManageRelativeUrl = null;
+    public static entityManageRelativeUrl = "";
 
-    public static DefaultIcon: React.ElementType | null = null;
+    public static DefaultIcon: React.FunctionComponent;
 
     public static searchBoxFields = ["id"];
 
@@ -47,7 +47,7 @@ export class Entity extends null {
 
     public static tableFields = [] as TableFieldDefinition[];
 
-    public static fetcherUrl = null;
+    public static fetcherUrl = "";
 
     public static formatDate = (date: string): string => {
         return new Date(date).toLocaleDateString([], {
