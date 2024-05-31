@@ -17,7 +17,7 @@ import DialogCancelButton from "../Buttons/DialogCancelButton.js";
 
 /**
  * @param {{
- *  dialogState: import("../../Hooks/useDialogStates.js").DialogState
+ *  dialogState: DialogState
  * }} param0
  * @returns
  */
@@ -31,7 +31,7 @@ export const ItemSingleDeleteDialog = ({ requireTypedConfirmation, dialogState, 
     const submit = useSubmit();
 
     /**
-     * @type {import("../../Router/buildRouterActionByEntity.js").RouterActionResponse}
+     * @type {RouterActionResponse}
      */
     const actionData = useActionData();
 
@@ -50,7 +50,7 @@ export const ItemSingleDeleteDialog = ({ requireTypedConfirmation, dialogState, 
 
     const handleSubmit = useCallback(() => {
         /**
-         * @type {import("../../Router/buildRouterActionByEntity.js").RouterActionRequest}
+         * @type {RouterActionRequest}
          */
         const request = {
             intent: Entity.isTrash

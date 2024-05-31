@@ -97,10 +97,10 @@ type ItemsCallbacks = {
 };
 
 type ManagementCallbacks = {
-    openDialogByIntentWithNoUnderlyingItems: import("../Hooks/useDialogStates.js").OpenDialogByIntentFunctionNoUnderlyingItems,
-    openDialogByIntentWithSingleUnderlyingItem: import("../Hooks/useDialogStates.js").OpenDialogByIntentFunctionSingleUnderlyingItem,
-    openDialogByIntentWithMultipleUnderlyingItems: import("../Hooks/useDialogStates.js").OpenDialogByIntentFunctionMultipleUnderlyingItems,
-    closeDialogByIntent: import("../Hooks/useDialogStates.js").CloseDialogByIntentFunction
+    openDialogByIntentWithNoUnderlyingItems: OpenDialogByIntentFunctionNoUnderlyingItems,
+    openDialogByIntentWithSingleUnderlyingItem: OpenDialogByIntentFunctionSingleUnderlyingItem,
+    openDialogByIntentWithMultipleUnderlyingItems: OpenDialogByIntentFunctionMultipleUnderlyingItems,
+    closeDialogByIntent: CloseDialogByIntentFunction
 };
 
 type Intent = "single-delete" | "multi-delete" | "single-edit" | "multi-create" | "user-reset-password" | "user-change-activation-status" | "user-change-privileges";

@@ -50,7 +50,7 @@ const UserManagement = () => {
     }, [revalidator]);
 
     /**
-     * @type {import("../../Router/buildRouterActionByEntity.js").Intent[]}
+     * @type {Intent[]}
      */
     const intentArray = ["multi-create", "single-edit", "single-delete", "user-reset-password", "user-change-privileges"];
     const {

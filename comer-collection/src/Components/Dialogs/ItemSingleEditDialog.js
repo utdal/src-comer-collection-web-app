@@ -17,7 +17,7 @@ import { useActionData, useSubmit } from "react-router-dom";
 import DialogCancelButton from "../Buttons/DialogCancelButton.js";
 
 /**
- * @param {{ dialogState: import("../../Hooks/useDialogStates.js").DialogState }} props
+ * @param {{ dialogState: DialogState }} props
  */
 export const ItemSingleEditDialog = ({ dialogState }) => {
     const showSnackbar = useSnackbar();
@@ -37,7 +37,7 @@ export const ItemSingleEditDialog = ({ dialogState }) => {
     const submit = useSubmit();
 
     /**
-     * @type {import("../../Router/buildRouterActionByEntity.js").RouterActionResponse}
+     * @type {RouterActionResponse}
      */
     const actionData = useActionData();
 
@@ -65,7 +65,7 @@ export const ItemSingleEditDialog = ({ dialogState }) => {
             editDialogFieldData[r.name] = r.value;
         }
         /**
-         * @type {import("../../Router/buildRouterActionByEntity.js").RouterActionRequest}
+         * @type {RouterActionRequest}
          */
         const request = {
             intent: "single-edit",

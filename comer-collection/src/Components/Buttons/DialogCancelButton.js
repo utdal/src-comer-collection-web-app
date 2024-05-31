@@ -8,7 +8,7 @@ import { useManagementCallbacks } from "../../ContextProviders/ManagementPagePro
  * to identify the correct dialog to close.  This only closes the dialog;
  * each dialog should have a useEffect loop to clean up any lingering form inputs.
  * @param {{
- *  dialogIntent: import("../../Router/buildRouterActionByEntity.js").Intent,
+ *  dialogIntent: Intent,
  *  displayText: string,
  *  disabled: boolean,
  *  prominent: boolean

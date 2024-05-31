@@ -20,7 +20,7 @@ const randomPassword = () => {
 };
 
 /**
- * @param {{ dialogState: import("../../Hooks/useDialogStates.js").DialogState }} props
+ * @param {{ dialogState: DialogState }} props
  */
 export const UserResetPasswordDialog = ({ dialogState }) => {
     const [newPassword, setNewPassword] = useState("");
@@ -34,7 +34,7 @@ export const UserResetPasswordDialog = ({ dialogState }) => {
     const { closeDialogByIntent } = useManagementCallbacks();
 
     /**
-     * @type {import("../../Router/buildRouterActionByEntity.js").RouterActionResponse}
+     * @type {RouterActionResponse}
      */
     const actionData = useActionData();
 
@@ -68,7 +68,7 @@ export const UserResetPasswordDialog = ({ dialogState }) => {
 
     const handleSubmit = useCallback(() => {
         /**
-         * @type {import("../../Router/buildRouterActionByEntity.js").RouterActionRequest}
+         * @type {RouterActionRequest}
          */
         const request = {
             intent: "user-reset-password",

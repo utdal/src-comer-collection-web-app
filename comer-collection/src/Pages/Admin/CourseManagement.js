@@ -44,7 +44,7 @@ const CourseManagement = () => {
     }, [revalidator]);
 
     /**
-     * @type {import("../../Router/buildRouterActionByEntity.js").Intent[]}
+     * @type {Intent[]}
      */
     const intentArray = ["multi-create", "single-edit", "single-delete"];
     const {
