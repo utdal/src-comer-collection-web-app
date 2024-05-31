@@ -1,8 +1,8 @@
 import React from "react";
-import { ImageEditButton } from "./ImageEditButton.js";
-import { ImageDeleteButton } from "./ImageDeleteButton.js";
+import ImageEditButton from "./ImageEditButton.js";
+import ImageDeleteButton from "./ImageDeleteButton.js";
 
-export const ImageOptionsCell = () => {
+const ImageOptionsCell = () => {
     return (
         <>
             <ImageEditButton />
@@ -11,3 +11,5 @@ export const ImageOptionsCell = () => {
         </>
     );
 };
+
+export default ImageOptionsCell;

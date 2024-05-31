@@ -1,9 +1,8 @@
 import React from "react";
 import { useTableCellItem } from "../../../ContextProviders/TableCellProvider.js";
-
 import EntityDeleteButton from "../Entity/EntityDeleteButton.js";
 
-export const CourseDeleteButton = () => {
+const CourseDeleteButton = () => {
     const course = useTableCellItem();
     return (
         <EntityDeleteButton
@@ -11,3 +10,5 @@ export const CourseDeleteButton = () => {
         />
     );
 };
+
+export default CourseDeleteButton;

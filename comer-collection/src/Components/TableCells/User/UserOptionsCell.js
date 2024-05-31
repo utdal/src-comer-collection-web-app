@@ -1,8 +1,8 @@
 import React from "react";
-import { UserEditButton } from "./UserEditButton.js";
-import { UserDeleteButton } from "./UserDeleteButton.js";
+import UserEditButton from "./UserEditButton.js";
+import UserDeleteButton from "./UserDeleteButton.js";
 
-export const UserOptionsCell = () => {
+const UserOptionsCell = () => {
     return (
         <>
             <UserEditButton />
@@ -11,3 +11,5 @@ export const UserOptionsCell = () => {
         </>
     );
 };
+
+export default UserOptionsCell;

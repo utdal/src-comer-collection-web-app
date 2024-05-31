@@ -9,7 +9,7 @@ import { ImageLocationCell } from "../../Components/TableCells/Image/ImageLocati
 import { ImageArtistAssignmentCell } from "../../Components/TableCells/Image/ImageArtistAssignmentCell.js";
 import { ImageTagAssignmentCell } from "../../Components/TableCells/Image/ImageTagAssignmentCell.js";
 import { ImageExhibitionCountCell } from "../../Components/TableCells/Image/ImageExhibitionCountCell.js";
-import { ImageOptionsCell } from "../../Components/TableCells/Image/ImageOptionsCell.js";
+import ImageOptionsCell from "../../Components/TableCells/Image/ImageOptionsCell.js";
 import { AddPhotoAlternateIcon, DeleteIcon } from "../../Imports/Icons.js";
 import { ImageDeletedOptionsCell } from "../../Components/TableCells/Image/ImageDeletedOptionsCell.js";
 

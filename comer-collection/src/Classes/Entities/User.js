@@ -9,7 +9,7 @@ import { UserCourseAssignmentCell } from "../../Components/TableCells/User/UserC
 import { UserExhibitionCountCell } from "../../Components/TableCells/User/UserExhibitionCountCell.js";
 import { UserTypeButtonCell } from "../../Components/TableCells/User/UserTypeButtonCell.js";
 import { UserActivationSwitchCell } from "../../Components/TableCells/User/UserActivationSwitchCell.js";
-import { UserOptionsCell } from "../../Components/TableCells/User/UserOptionsCell.js";
+import UserOptionsCell from "../../Components/TableCells/User/UserOptionsCell.js";
 import { GroupAddIcon, PersonIcon } from "../../Imports/Icons.js";
 
 class User extends Entity {

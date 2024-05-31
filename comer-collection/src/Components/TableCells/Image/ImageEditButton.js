@@ -1,14 +1,10 @@
-import React, { useCallback } from "react";
-import { EditButton } from "../Entity/EditButton.js";
-import { useTableCellItem, useTableCellManagementCallbacks } from "../../../ContextProviders/TableCellProvider.js";
+import React from "react";
+import EntityEditButton from "../Entity/EntityEditButton.js";
 
-export const ImageEditButton = () => {
-    const image = useTableCellItem();
-    const { openDialogByIntentWithSingleUnderlyingItem } = useTableCellManagementCallbacks();
-    const handleOpenEditDialog = useCallback(() => {
-        openDialogByIntentWithSingleUnderlyingItem("single-edit", image);
-    }, [openDialogByIntentWithSingleUnderlyingItem, image]);
+const ImageEditButton = () => {
     return (
-        <EditButton onClick={handleOpenEditDialog} />
+        <EntityEditButton />
     );
 };
+
+export default ImageEditButton;

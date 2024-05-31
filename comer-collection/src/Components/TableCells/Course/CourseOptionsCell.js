@@ -1,8 +1,8 @@
 import React from "react";
-import { CourseEditButton } from "./CourseEditButton.js";
-import { CourseDeleteButton } from "./CourseDeleteButton.js";
+import CourseEditButton from "./CourseEditButton.js";
+import CourseDeleteButton from "./CourseDeleteButton.js";
 
-export const CourseOptionsCell = () => {
+const CourseOptionsCell = () => {
     return (
         <>
             <CourseEditButton />
@@ -11,3 +11,5 @@ export const CourseOptionsCell = () => {
         </>
     );
 };
+
+export default CourseOptionsCell;

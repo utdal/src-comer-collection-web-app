@@ -1,8 +1,10 @@
 import React from "react";
 import EntityDeleteButton from "../Entity/EntityDeleteButton.js";
 
-export const ImageDeleteButton = () => {
+const ImageDeleteButton = () => {
     return (
         <EntityDeleteButton />
     );
 };
+
+export default ImageDeleteButton;

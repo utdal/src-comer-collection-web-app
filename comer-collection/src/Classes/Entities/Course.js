@@ -3,7 +3,7 @@ import { CourseEndDateTimeStackedCell } from "../../Components/TableCells/Course
 import { CourseIDCell } from "../../Components/TableCells/Course/CourseIDCell.js";
 import { CourseNameCell } from "../../Components/TableCells/Course/CourseNameCell.js";
 import { CourseNotesCell } from "../../Components/TableCells/Course/CourseNotesCell.js";
-import { CourseOptionsCell } from "../../Components/TableCells/Course/CourseOptionsCell.js";
+import CourseOptionsCell from "../../Components/TableCells/Course/CourseOptionsCell.js";
 import { CourseStartDateTimeStackedCell } from "../../Components/TableCells/Course/CourseStartDateTimeStackedCell.js";
 import { CourseStatusCell } from "../../Components/TableCells/Course/CourseStatusCell.js";
 import { CourseUserAssignmentCell } from "../../Components/TableCells/Course/CourseUserAssignmentCell.js";

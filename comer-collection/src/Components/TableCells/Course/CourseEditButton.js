@@ -1,15 +1,10 @@
-import React, { useCallback } from "react";
-import { useTableCellItem, useTableCellManagementCallbacks } from "../../../ContextProviders/TableCellProvider.js";
+import React from "react";
+import EntityEditButton from "../Entity/EntityEditButton.js";
 
-import { EditButton } from "../Entity/EditButton.js";
-
-export const CourseEditButton = () => {
-    const course = useTableCellItem();
-    const { handleOpenCourseEditDialog } = useTableCellManagementCallbacks();
-    const handleOpenEditDialog = useCallback(() => {
-        handleOpenCourseEditDialog(course);
-    }, [course, handleOpenCourseEditDialog]);
+const CourseEditButton = () => {
     return (
-        <EditButton onClick={handleOpenEditDialog} />
+        <EntityEditButton />
     );
 };
+
+export default CourseEditButton;
