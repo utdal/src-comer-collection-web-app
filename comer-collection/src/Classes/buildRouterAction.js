@@ -15,47 +15,46 @@ import { capitalized } from "./Entity.js";
  * "multi-create"|
  * "user-reset-password"|
  * "user-change-activation-status"|
- * "user-change-privileges"|
- * "extra"
+ * "user-change-privileges"
  * )} Intent
  */
 
 /**
  * @typedef {{
- *  intent: ("single-delete"),
+ *  intent: "single-delete",
  *  itemId: number
  * }|{
- *  intent: ("single-permanent-delete"),
+ *  intent: "single-permanent-delete",
  *  itemId: number
  * }|{
- *  intent: ("single-restore"),
+ *  intent: "single-restore",
  *  itemId: number
  * }|{
- *  intent: ("multi-delete"),
+ *  intent: "multi-delete",
  *  itemIds: number[]
  * }|{
- *  intent: ("single-edit"),
+ *  intent: "single-edit",
  *  itemId: number,
  *  body: Object<string, any>
  * }|{
- *  intent: ("multi-create"),
+ *  intent: "multi-create",
  *  body: {
  *      itemsToCreate: Object<string, any>[]
  *  }
  * }|{
- *  intent: ("user-reset-password"),
+ *  intent: "user-reset-password",
  *  userId: number,
  *  body: {
  *      newPassword: string
  *  }
  * }|{
- *  intent: ("user-change-activation-status"),
+ *  intent: "user-change-activation-status",
  *  userId: number,
  *  body: {
  *      newStatus: boolean
  *  }
  * }|{
- *  intent: ("user-change-privileges"),
+ *  intent: "user-change-privileges",
  *  userId: number,
  *  body: {
  *      newRole: "CURATOR" | "COLLECTION_MANAGER" | "ADMINISTRATOR"
@@ -89,7 +88,9 @@ import { capitalized } from "./Entity.js";
  */
 
 /**
- * @type {Object<string, Function[]>}
+ * @type {{
+ *  [I in Intent]: Function[]
+ * }}
  */
 const permittedEntitiesByIntent = {
     "single-delete": [User, Course, Image, Artist, Tag, Exhibition],
@@ -102,7 +103,9 @@ const permittedEntitiesByIntent = {
 };
 
 /**
- * @type {Object<string, import("react-router-dom").V7_FormMethod}
+ * @type {{
+ *  [I in Intent]: import("react-router-dom").V7_FormMethod
+ * }}
  */
 const requiredMethodsByIntent = {
     "single-delete": "DELETE",

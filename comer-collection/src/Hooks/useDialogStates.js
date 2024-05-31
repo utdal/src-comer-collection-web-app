@@ -3,7 +3,9 @@ import PropTypes from "prop-types";
 import { entityPropTypeShape } from "../Classes/Entity.js";
 
 /**
- * @type {Object<string, import("../Classes/buildRouterAction").DialogItemsMultiplicity>}
+ * @type {{
+ *  [S in Intent]: import("../Classes/buildRouterAction").DialogItemsMultiplicity
+ * }}
  */
 const dialogItemsMultiplicityByIntent = {
     "single-delete": "single",
@@ -29,7 +31,9 @@ const dialogItemsMultiplicityByIntent = {
  *  underlyingItems: import("../ContextProviders/ManagementPageProvider").Item[]
  * }} DialogState
  *
- * @typedef {Object<string, DialogState>} DialogStateDictionary
+ * @typedef {{
+ *  [S in Intent]: DialogState
+ * }} DialogStateDictionary
  */
 
 export const dialogStatePropTypeShape = PropTypes.shape({
