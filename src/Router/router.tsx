@@ -25,11 +25,11 @@ import UserManagement from "../Pages/Admin/UserManagement.js";
 import { CollectionBrowser } from "../Pages/Browsers/CollectionBrowser.js";
 import { ExhibitionBrowser } from "../Pages/Browsers/ExhibitionBrowser.js";
 import ExhibitionPage from "../Pages/ExhibitionPage.js";
-import SignIn from "../Pages/SignIn.js";
-import { myExhibitionsAction } from "./actions.js";
-import buildRouterActionByEntity from "./buildRouterActionByEntity.js";
+import SignIn from "../Pages/SignIn.tsx";
+import { myExhibitionsAction } from "./actions";
+import buildRouterActionByEntity from "./buildRouterActionByEntity";
 import buildRouterLoaderByEntity from "./buildRouterLoaderByEntity";
-import { appUserLoader, exhibitionPageLoader } from "./loaders.js";
+import { appUserLoader, exhibitionPageLoader } from "./loaders";
 
 const router = createBrowserRouter([
     {

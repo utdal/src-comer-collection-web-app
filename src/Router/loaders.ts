@@ -1,5 +1,5 @@
-import { sendAuthenticatedRequest } from "../Helpers/APICalls.js";
-import { Image } from "../Classes/Entities/Image.js";
+import { sendAuthenticatedRequest } from "../Helpers/APICalls";
+import { Image } from "../Classes/Entities/Image";
 import type { LoaderFunction, Params } from "react-router";
 
 export const appUserLoader: LoaderFunction = async () => {
@@ -8,9 +8,10 @@ export const appUserLoader: LoaderFunction = async () => {
     }
     const response = await sendAuthenticatedRequest("GET", "/api/account/profile");
     if (response.status === 200) {
+        console.log(response.data);
         return response.data;
     } else {
-        throw new Error("Network request failed");
+        throw new Response("Network request failed", { status: 405 });
     }
 };
 

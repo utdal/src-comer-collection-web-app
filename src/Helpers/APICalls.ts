@@ -4,9 +4,10 @@ const apiLocation: string = process.env.REACT_APP_API_HOST ?? "";
 
 type AxiosMethod = "DELETE" | "GET" | "POST" | "PUT";
 
-interface APIResponse {
-    data: object;
-    status: number;
+export interface APIResponse {
+    readonly data?: object;
+    readonly token?: string;
+    readonly status: number;
 }
 
 export const sendAuthenticatedRequest = async (method: AxiosMethod, url: string, payload?: object): Promise<APIResponse> => {
@@ -21,7 +22,8 @@ export const sendAuthenticatedRequest = async (method: AxiosMethod, url: string,
 
     let response = {} as {
         data: {
-            data: object;
+            data?: object;
+            token?: string;
         };
         status: number;
     };
@@ -34,5 +36,9 @@ export const sendAuthenticatedRequest = async (method: AxiosMethod, url: string,
     } else {
         response = await axios.get(`${apiLocation}${url}`, options);
     }
-    return { data: response.data.data, status: response.status };
+    return {
+        data: response.data.data,
+        token: response.data.token,
+        status: response.status
+    };
 };

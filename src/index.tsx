@@ -104,15 +104,15 @@ export interface ItemsCallbacks {
     setPaginationStartIndex: (startIndex: number) => void;
 }
 
-type Intent = "multi-create" | "multi-delete" | "single-delete" | "single-edit" | "user-change-activation-status" | "user-change-privileges" | "user-reset-password";
+export type Intent = "multi-create" | "multi-delete" | "single-delete" | "single-edit" | "single-permanent-delete" | "user-change-activation-status" | "user-change-privileges" | "user-reset-password";
 
-type OpenDialogByIntentFunctionNoUnderlyingItems = (intent: Intent) => void;
+export type OpenDialogByIntentFunctionNoUnderlyingItems = (intent: Intent) => void;
 
-type OpenDialogByIntentFunctionSingleUnderlyingItem = (intent: Intent, item: Item) => void;
+export type OpenDialogByIntentFunctionSingleUnderlyingItem = (intent: Intent, item: Item) => void;
 
-type OpenDialogByIntentFunctionMultipleUnderlyingItems = (intent: Intent, items: readonly Item[]) => void;
+export type OpenDialogByIntentFunctionMultipleUnderlyingItems = (intent: Intent, items: readonly Item[]) => void;
 
-type CloseDialogByIntentFunction = (intent: Intent) => void;
+export type CloseDialogByIntentFunction = (intent: Intent) => void;
 
 export interface ManagementCallbacks {
     openDialogByIntentWithNoUnderlyingItems: OpenDialogByIntentFunctionNoUnderlyingItems;

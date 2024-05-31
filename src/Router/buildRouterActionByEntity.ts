@@ -1,18 +1,16 @@
-import { User } from "../Classes/Entities/User.ts";
-import { Course } from "../Classes/Entities/Course.ts";
-import { DeletedImage, Image } from "../Classes/Entities/Image.ts";
-import { Artist } from "../Classes/Entities/Artist.ts";
-import { Tag } from "../Classes/Entities/Tag.ts";
-import { Exhibition } from "../Classes/Entities/Exhibition.ts";
-import { sendAuthenticatedRequest } from "../Helpers/APICalls.ts";
-import { capitalized } from "../Classes/Entity.ts";
+import { User } from "../Classes/Entities/User";
+import { Course } from "../Classes/Entities/Course";
+import { DeletedImage, Image } from "../Classes/Entities/Image";
+import { Artist } from "../Classes/Entities/Artist";
+import { Tag } from "../Classes/Entities/Tag";
+import { Exhibition } from "../Classes/Entities/Exhibition";
+import { sendAuthenticatedRequest } from "../Helpers/APICalls";
+import type { Entity } from "../Classes/Entity";
+import { capitalized } from "../Classes/Entity";
+import type { Intent } from "../index.js";
+import type { V7_FormMethod as FormMethod } from "react-router-dom";
 
-/**
- * @type {{
- *  [I in Intent]: Function[]
- * }}
- */
-const permittedEntitiesByIntent = {
+const permittedEntitiesByIntent: Record<Intent, typeof Entity> = {
     "single-delete": [User, Course, Image, Artist, Tag, Exhibition],
     "single-permanent-delete": [DeletedImage],
     "single-restore": [DeletedImage],
@@ -22,12 +20,7 @@ const permittedEntitiesByIntent = {
     "user-change-activation-status": [User]
 };
 
-/**
- * @type {{
- *  [I in Intent]: import("react-router-dom").V7_FormMethod
- * }}
- */
-const requiredMethodsByIntent = {
+const requiredMethodsByIntent: Record<Intent, FormMethod> = {
     "single-delete": "DELETE",
     "single-permanent-delete": "DELETE",
     "single-restore": "PUT",
@@ -133,7 +126,7 @@ const buildRouterActionByEntity = (entityType) => {
         } else if (intent === "multi-create") {
             const { body } = requestData;
             try {
-                const promiseResults = await Promise.allSettled(body.itemsToCreate.map((newItem) => {
+                const promiseResults = await Promise.allSettled(body.itemsToCreate.map(async (newItem) => {
                     return new Promise((resolve, reject) => {
                         sendAuthenticatedRequest("POST", `${entityType.baseUrl}`, newItem).then(() => {
                             resolve();
@@ -172,7 +165,7 @@ const buildRouterActionByEntity = (entityType) => {
                         errors: promiseResults.map((promiseResult) => promiseResult.reason),
                         snackbarText: `Created ${body.itemsToCreate.length - indicesWithErrors.length} of ${body.itemsToCreate.length} ${entityType.plural}`
                     };
-                };
+                }
             } catch (e) {
                 return {
                     status: "error",

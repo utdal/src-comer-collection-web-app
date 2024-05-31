@@ -1,5 +1,5 @@
 import type { ActionFunction, ActionFunctionArgs } from "react-router";
-import { Exhibition } from "../Classes/Entities/Exhibition.js";
+import { Exhibition } from "../Classes/Entities/Exhibition";
 import type { RouterActionRequest, RouterActionResponse } from "../index.js";
 
 // eslint-disable-next-line @typescript-eslint/prefer-readonly-parameter-types
