@@ -4,17 +4,22 @@ import { useRouteError } from "react-router";
 import { WarningIcon } from "../Imports/Icons.js";
 import { FullPageMessage } from "./FullPageMessage.js";
 
-const RouterErrorMessage = ({ viewportHeight, includeLogo, suggestReload }) => {
+const RouterErrorMessage = ({ viewportHeight, includeLogo, suggestReload }: {
+    readonly viewportHeight?: boolean;
+    readonly includeLogo?: boolean;
+    readonly suggestReload?: boolean;
+}): React.JSX.Element => {
     const handleTabReload = useCallback(() => {
         window.location.reload();
-    }, []);
-    const error = useRouteError();
+    }, []) as () => void;
+
+    const error = useRouteError() as Error;
     return (
         <FullPageMessage
-            Icon={WarningIcon}
-            buttonAction={suggestReload ? handleTabReload : null}
-            buttonDestination={suggestReload ? null : "/SignIn"}
-            buttonText={suggestReload ? "Refresh" : "Home"}
+            Icon={WarningIcon as React.FunctionComponent}
+            buttonAction={(suggestReload === true) ? handleTabReload : undefined}
+            buttonDestination={(suggestReload === true) ? undefined : "/SignIn"}
+            buttonText={(suggestReload === true) ? "Refresh" : "Home"}
             includeLogo={includeLogo}
             message={error.message}
             viewportHeight={viewportHeight}

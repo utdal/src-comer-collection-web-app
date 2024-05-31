@@ -2,17 +2,17 @@ import React from "react";
 import { Navigate } from "react-router";
 import { createBrowserRouter } from "react-router-dom";
 import AppLayout from "../Layouts/AppLayout.js";
-import { Artist } from "../Classes/Entities/Artist.ts";
-import { Course } from "../Classes/Entities/Course.ts";
-import { Exhibition, PublicExhibition } from "../Classes/Entities/Exhibition.ts";
-import { Image, DeletedImage } from "../Classes/Entities/Image.ts";
-import { Tag } from "../Classes/Entities/Tag.ts";
-import { User } from "../Classes/Entities/User.ts";
-import RequireAdmin from "../Components/AccessControl/RequireAdmin.tsx";
-import RequirePermanentPassword from "../Components/AccessControl/RequirePermanentPassword.tsx";
+import { Artist } from "../Classes/Entities/Artist";
+import { Course } from "../Classes/Entities/Course";
+import { Exhibition, PublicExhibition } from "../Classes/Entities/Exhibition";
+import { Image, DeletedImage } from "../Classes/Entities/Image";
+import { Tag } from "../Classes/Entities/Tag";
+import { User } from "../Classes/Entities/User";
+import RequireAdmin from "../Components/AccessControl/RequireAdmin";
+import RequirePermanentPassword from "../Components/AccessControl/RequirePermanentPassword";
 import { EntityManageDialog } from "../Components/Dialogs/EntityManageDialog/EntityManageDialog.js";
 import { FullPageMessage } from "../Components/FullPageMessage.js";
-import RouterErrorMessage from "../Components/RouterErrorMessage.js";
+import RouterErrorMessage from "../Components/RouterErrorMessage";
 import { InfoIcon } from "../Imports/Icons.js";
 import ChangePassword from "../Pages/Account/ChangePassword.js";
 import MyExhibitions from "../Pages/Account/MyExhibitions.js";
@@ -71,7 +71,7 @@ const router = createBrowserRouter([
                 loader: exhibitionPageLoader,
                 errorElement: (
                     <FullPageMessage
-                        Icon={InfoIcon}
+                        Icon={InfoIcon as React.FunctionComponent}
                         buttonDestination="/Exhibitions"
                         buttonText="View Public Exhibitions"
                         message="This exhibition is not available"
@@ -124,6 +124,7 @@ const router = createBrowserRouter([
                             {
                                 element: (
                                     <RequireAdmin
+                                        allowCollectionManager={false}
                                         component={<CourseManagement />}
                                     />
                                 ),

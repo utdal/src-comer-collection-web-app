@@ -4,7 +4,7 @@ import React from "react";
 
 import AppThemeProvider from "./ContextProviders/AppTheme.js";
 import { AppFeatureProvider } from "./ContextProviders/AppFeatures.js";
-import router from "./Router/router.js";
+import router from "./Router/router";
 
 const App = (): React.JSX.Element => {
     return (
