@@ -9,6 +9,7 @@ export class Entity {
     static baseUrl = null;
 
     static singular = "item";
+
     static plural = "items";
 
     /**
@@ -22,10 +23,13 @@ export class Entity {
     ];
 
     static hasTrash = false;
+
     static isTrash = false;
+
     static TrashEntity = null;
 
     static deleteDialogAdditionalInstructions = null;
+
     static permanentDeleteDialogAdditionalInstructions = null;
 
     static entityManageRelativeUrl = null;
@@ -36,9 +40,11 @@ export class Entity {
     static DefaultIcon = null;
 
     static searchBoxFields = ["id"];
+
     static searchBoxPlaceholder = "Search items by ID";
 
     static MultiCreateButtonIcon = AddIcon;
+
     static multiCreateDialogSubtitle = null;
 
     static formatDate = (date) => {
