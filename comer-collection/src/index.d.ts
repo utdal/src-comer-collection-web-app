@@ -27,11 +27,13 @@ type VisibilityStatusDictionary = {
     [id: number]: boolean
 };
 
+type SortableValue = number | string;
+
 type SortableValueDictionary = {
-    [id: number]: number | string
+    [id: number]: SortableValue
 };;
 
-type SortableValueFunction = (item: Item) => number | string;
+type SortableValueFunction = (item: Item) => SortableValue;
 
 type FilterFunction = (item: Item) => boolean;
 
