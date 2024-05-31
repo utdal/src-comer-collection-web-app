@@ -67,8 +67,6 @@ const ImageManagement = () => {
         closeDialogByIntent
     } = useDialogStates(intentArray);
 
-    const [editDialogState, openEditDialog] = useDialogState(false);
-
     const [assignArtistDialogState, openAssignArtistDialog] = useDialogState(true);
     const [assignTagDialogState, openAssignTagDialog] = useDialogState(true);
     const [viewExhibitionDialogState, openViewExhibitionDialog] = useDialogState(true);
@@ -113,10 +111,6 @@ const ImageManagement = () => {
         openViewExhibitionDialog([image]);
     }, [openViewExhibitionDialog]);
 
-    const handleOpenImageEditDialog = useCallback((image) => {
-        openEditDialog(image);
-    }, [openEditDialog]);
-
     const handleSwitchToExhibitionsView = useCallback(() => {
         navigate("/Account/Admin/Exhibitions");
     }, [navigate]);
@@ -130,7 +124,6 @@ const ImageManagement = () => {
         handleOpenImageAssignTagDialog,
         handleOpenImageViewExhibitionDialog,
         handleOpenImagePreviewer,
-        handleOpenImageEditDialog,
         handleClearFilters,
         handleRefresh,
         openDialogByIntentWithNoUnderlyingItems,
@@ -140,7 +133,6 @@ const ImageManagement = () => {
     }), [handleClearFilters,
         handleOpenImageAssignArtistDialog,
         handleOpenImageAssignTagDialog,
-        handleOpenImageEditDialog,
         handleOpenImagePreviewer,
         handleOpenImageViewExhibitionDialog,
         handleRefresh,
@@ -210,7 +202,7 @@ const ImageManagement = () => {
 
             <ItemMultiCreateDialog dialogState={dialogStateDictionary["multi-create"]} />
 
-            <ItemSingleEditDialog dialogState={editDialogState} />
+            <ItemSingleEditDialog dialogState={dialogStateDictionary["single-edit"]} />
 
             <ItemSingleDeleteDialog dialogState={dialogStateDictionary["single-delete"]} />
 

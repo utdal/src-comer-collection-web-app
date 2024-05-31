@@ -8,15 +8,16 @@ import {
 import { SaveIcon } from "../../Imports/Icons.js";
 import { getLocalISOString } from "../../Helpers/getLocalISOString.js";
 import { useSnackbar } from "../../ContextProviders/AppFeatures.js";
-import { useEntity } from "../../ContextProviders/ManagementPageProvider.js";
+import { useEntity, useManagementCallbacks } from "../../ContextProviders/ManagementPageProvider.js";
 import { DialogInputFieldWithRef } from "../Inputs/DialogInputFieldWithRef.js";
 import { PersistentDialog } from "./PersistentDialog.js";
 import PropTypes from "prop-types";
 import { DialogStateOld } from "../../Classes/DialogState.js";
 import { useActionData, useSubmit } from "react-router-dom";
+import DialogCancelButton from "../Buttons/DialogCancelButton.js";
 
 /**
- * @param {{ dialogState: DialogStateOld }} props
+ * @param {{ dialogState: import("../../Hooks/useDialogStates.js").DialogState }} props
  */
 export const ItemSingleEditDialog = ({ dialogState }) => {
     const showSnackbar = useSnackbar();
@@ -24,7 +25,12 @@ export const ItemSingleEditDialog = ({ dialogState }) => {
 
     const [submitEnabled, setSubmitEnabled] = useState(true);
 
-    const { dialogItem, dialogIsOpen, closeDialog } = dialogState;
+    const { dialogIsOpen, underlyingItem: dialogItem } = dialogState;
+
+    const { closeDialogByIntent } = useManagementCallbacks();
+    const handleClose = useCallback(() => {
+        closeDialogByIntent("single-edit");
+    }, [closeDialogByIntent]);
 
     const editDialogFieldRefs = useRef([]);
 
@@ -39,13 +45,13 @@ export const ItemSingleEditDialog = ({ dialogState }) => {
         if (actionData) {
             if (actionData.status === "success") {
                 showSnackbar(actionData.snackbarText, "success");
-                closeDialog();
+                handleClose();
             } else if (actionData.status === "error") {
                 setSubmitEnabled(true);
                 showSnackbar(actionData.snackbarText, "error");
             }
         }
-    }, [actionData, closeDialog, showSnackbar]);
+    }, [actionData, handleClose, showSnackbar]);
 
     useEffect(() => {
         if (dialogIsOpen || !dialogIsOpen) {
@@ -77,7 +83,7 @@ export const ItemSingleEditDialog = ({ dialogState }) => {
     return (
         <PersistentDialog
             isForm
-            onClose={closeDialog}
+            onClose={handleClose}
             onSubmit={handleSubmit}
             open={dialogIsOpen}
         >
@@ -131,17 +137,7 @@ export const ItemSingleEditDialog = ({ dialogState }) => {
                     spacing={1}
                     sx={{ width: "100%" }}
                 >
-                    <Button
-                        color="primary"
-                        fullWidth
-                        onClick={() => {
-                            closeDialog();
-                            editDialogFieldRefs.current = [];
-                        }}
-                        variant="outlined"
-                    >
-                        Cancel
-                    </Button>
+                    <DialogCancelButton dialogIntent="single-edit" />
 
                     <Button
                         color="primary"

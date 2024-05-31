@@ -4,10 +4,10 @@ import { useTableCellItem, useTableCellManagementCallbacks } from "../../../Cont
 
 export const ImageEditButton = () => {
     const image = useTableCellItem();
-    const { handleOpenImageEditDialog } = useTableCellManagementCallbacks();
+    const { openDialogByIntentWithSingleUnderlyingItem } = useTableCellManagementCallbacks();
     const handleOpenEditDialog = useCallback(() => {
-        handleOpenImageEditDialog(image);
-    }, [image, handleOpenImageEditDialog]);
+        openDialogByIntentWithSingleUnderlyingItem("single-edit", image);
+    }, [openDialogByIntentWithSingleUnderlyingItem, image]);
     return (
         <EditButton onClick={handleOpenEditDialog} />
     );
