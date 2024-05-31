@@ -1,30 +1,30 @@
-import { Exhibition } from "../Entities/Exhibition.ts";
-import { User } from "../Entities/User.ts";
-import { Association } from "../Association.ts";
+import { Exhibition } from "../Entities/Exhibition";
+import { User } from "../Entities/User";
+import { Association } from "../Association";
 import { ExhibitionIDCell } from "../../Components/TableCells/Exhibition/ExhibitionIDCell.js";
 import { ExhibitionTitleCell } from "../../Components/TableCells/Exhibition/ExhibitionTitleCell.js";
 import { ExhibitionOpenInNewTabCell } from "../../Components/TableCells/Exhibition/ExhibitionOpenInNewTabCell.js";
 import { ExhibitionDateCreatedStackedCell } from "../../Components/TableCells/Exhibition/ExhibitionDateCreatedStackedCell.js";
 import { ExhibitionDateModifiedStackedCell } from "../../Components/TableCells/Exhibition/ExhibitionDateModifiedStackedCell.js";
 import { ExhibitionAccessCell } from "../../Components/TableCells/Exhibition/ExhibitionAccessCell.js";
+import type { TableFieldDefinition } from "../../index.js";
 
 class UserExhibition extends Association {
-    static url = null;
-    static primary = User;
-    static secondary = Exhibition;
+    public static primary = User;
 
-    static singular = "exhibition";
-    static plural = "exhibitions";
+    public static secondary = Exhibition;
 
-    static secondaryFieldInPrimary = "Exhibitions";
+    public static singular = "exhibition";
 
-    static secondarySearchBoxFields = ["title"];
-    static secondarySearchBoxPlaceholder = "Search exhibitions by title";
+    public static plural = "exhibitions";
 
-    /**
-     * @type {TableFieldDefinition[]}
-     */
-    static tableFields = [
+    public static secondaryFieldInPrimary = "Exhibitions";
+
+    public static secondarySearchBoxFields = ["title"];
+
+    public static secondarySearchBoxPlaceholder = "Search exhibitions by title";
+
+    public static tableFields: TableFieldDefinition[] = [
         {
             columnDescription: "ID",
             TableCellComponent: ExhibitionIDCell

@@ -9,8 +9,8 @@ import { CourseFilterMenu } from "../../Components/Menus/CourseFilterMenu.js";
 import { useSnackbar, useTitle } from "../../ContextProviders/AppFeatures.js";
 
 import { User } from "../../Classes/Entities/User.ts";
-import { EnrollmentUserPrimary } from "../../Classes/Associations/Enrollment.js";
-import { UserExhibition } from "../../Classes/Associations/UserExhibition.js";
+import { EnrollmentUserPrimary } from "../../Classes/Associations/Enrollment.ts";
+import { UserExhibition } from "../../Classes/Associations/UserExhibition.ts";
 import { ManagementPageProvider, useItemsReducer } from "../../ContextProviders/ManagementPageProvider.js";
 import { ClearFilterButton } from "../../Components/Buttons/ClearFilterButton.js";
 import { RefreshButton } from "../../Components/Buttons/RefreshButton.js";

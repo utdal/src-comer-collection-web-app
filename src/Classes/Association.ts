@@ -2,6 +2,7 @@ import { AddIcon, RemoveIcon } from "../Imports/Icons.js";
 import { Entity, capitalized } from "./Entity";
 import { sendAuthenticatedRequest } from "../Helpers/APICalls.js";
 import type React from "react";
+import type { TableFieldDefinition } from "../index.js";
 
 class Association extends null {
     public static url = "/";
@@ -26,16 +27,13 @@ class Association extends null {
 
     public static UnassignIcon = RemoveIcon as React.FunctionComponent;
 
-    public static secondaryFieldInPrimary = null;
+    public static secondaryFieldInPrimary = "";
 
     public static secondarySearchBoxFields = ["id"];
 
     public static secondarySearchBoxPlaceholder = "Search secondary items by ID";
 
-    /**
-     * @type {TableFieldDefinition[]}
-     */
-    public static tableFields = [];
+    public static tableFields = [] as TableFieldDefinition[];
 
     public static async handleAssign ([...primaries]: readonly number[], [...secondaries]: readonly number[]): Promise<string> {
         return new Promise((resolve, reject) => {

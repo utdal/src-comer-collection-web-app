@@ -1,25 +1,24 @@
-import { Exhibition } from "../Entities/Exhibition.ts";
-import { Association } from "../Association.ts";
-import { Image } from "../Entities/Image.ts";
+import { Exhibition } from "../Entities/Exhibition";
+import { Association } from "../Association";
+import { Image } from "../Entities/Image";
 import { ExhibitionIDCell } from "../../Components/TableCells/Exhibition/ExhibitionIDCell.js";
 import { ExhibitionTitleCell } from "../../Components/TableCells/Exhibition/ExhibitionTitleCell.js";
 import { ExhibitionOpenInNewTabCell } from "../../Components/TableCells/Exhibition/ExhibitionOpenInNewTabCell.js";
 import { ExhibitionDateCreatedStackedCell } from "../../Components/TableCells/Exhibition/ExhibitionDateCreatedStackedCell.js";
 import { ExhibitionDateModifiedStackedCell } from "../../Components/TableCells/Exhibition/ExhibitionDateModifiedStackedCell.js";
 import { ExhibitionAccessCell } from "../../Components/TableCells/Exhibition/ExhibitionAccessCell.js";
+import type { TableFieldDefinition } from "../../index.js";
 
 class ImageExhibition extends Association {
-    static url = null;
-    static primary = Image;
-    static secondary = Exhibition;
+    public static primary = Image;
 
-    static singular = "exhibition";
-    static plural = "exhibitions";
+    public static secondary = Exhibition;
 
-    /**
-     * @type {TableFieldDefinition[]}
-     */
-    static tableFields = [
+    public static singular = "exhibition";
+
+    public static plural = "exhibitions";
+
+    public static tableFields: TableFieldDefinition[] = [
         {
             columnDescription: "ID",
             TableCellComponent: ExhibitionIDCell
