@@ -6,7 +6,7 @@ import AppThemeProvider from "./ContextProviders/AppTheme.js";
 import { AppFeatureProvider } from "./ContextProviders/AppFeatures.js";
 import router from "./Router/router.js";
 
-const App = () => {
+const App = (): React.JSX.Element => {
     return (
         <AppThemeProvider>
             <AppFeatureProvider>
