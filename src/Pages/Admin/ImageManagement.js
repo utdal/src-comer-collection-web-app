@@ -7,7 +7,7 @@ import { SelectionSummary } from "../../Components/SelectionSummary.js";
 import { AssociationManagementDialog } from "../../Components/Dialogs/AssociationManagementDialog/AssociationManagementDialog.js";
 import { useTitle } from "../../ContextProviders/AppFeatures.js";
 
-import { Image } from "../../Classes/Entities/Image.js";
+import { Image } from "../../Classes/Entities/Image.ts";
 import { Artist } from "../../Classes/Entities/Artist.ts";
 import { Tag } from "../../Classes/Entities/Tag.js";
 import { ImageArtist } from "../../Classes/Associations/ImageArtist.js";

@@ -1,5 +1,5 @@
 import { sendAuthenticatedRequest } from "../Helpers/APICalls.js";
-import { Image } from "../Classes/Entities/Image.js";
+import { Image } from "../Classes/Entities/Image.ts";
 
 export const appUserLoader = async () => {
     if (!localStorage.getItem("token")) {

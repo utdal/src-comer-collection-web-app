@@ -1,4 +1,4 @@
-import { Image } from "../Entities/Image.js";
+import { Image } from "../Entities/Image.ts";
 import { Tag } from "../Entities/Tag.js";
 import { Association } from "../Association.ts";
 import { TagIDCell } from "../../Components/TableCells/Tag/TagIDCell.js";

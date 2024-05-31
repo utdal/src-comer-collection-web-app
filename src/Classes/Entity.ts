@@ -27,8 +27,6 @@ export class Entity extends null {
 
     public static isTrash = false;
 
-    public static TrashEntity = null;
-
     public static deleteDialogAdditionalInstructions = "";
 
     public static permanentDeleteDialogAdditionalInstructions = "";

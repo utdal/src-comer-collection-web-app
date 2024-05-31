@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import { Entity } from "../Entity.ts";
+import { Entity } from "../Entity";
 import { ImageIDCell } from "../../Components/TableCells/Image/ImageIDCell.js";
 import { ImageTitleCell } from "../../Components/TableCells/Image/ImageTitleCell.js";
 import { ImagePreviewThumbnailCell } from "../../Components/TableCells/Image/ImagePreviewThumbnailCell.js";
@@ -12,26 +12,29 @@ import { ImageExhibitionCountCell } from "../../Components/TableCells/Image/Imag
 import ImageOptionsCell from "../../Components/TableCells/Image/ImageOptionsCell.js";
 import { AddPhotoAlternateIcon, DeleteIcon } from "../../Imports/Icons.js";
 import { ImageDeletedOptionsCell } from "../../Components/TableCells/Image/ImageDeletedOptionsCell.js";
+import type React from "react";
+import type { EntityFieldDefinition, Item, SortableValue, TableFieldDefinition } from "../..";
 
 class Image extends Entity {
-    static baseUrl = "/api/images";
-    static singular = "image";
-    static plural = "images";
+    public static baseUrl = "/api/images";
 
-    static MultiCreateButtonIcon = AddPhotoAlternateIcon;
-    static multiCreateDialogSubtitle = "You can add artists and tags after creating the images.";
+    public static singular = "image";
 
-    static searchBoxFields = ["title", "valuationNotes", "otherNotes"];
-    static searchBoxPlaceholder = "Search images by title or notes";
+    public static plural = "images";
 
-    static hasTrash = true;
+    public static MultiCreateButtonIcon = AddPhotoAlternateIcon as React.FunctionComponent;
 
-    static deleteDialogAdditionalInstructions = "Any exhibitions currently featuring this image will show a placeholder image instead.";
+    public static multiCreateDialogSubtitle = "You can add artists and tags after creating the images.";
 
-    /**
-     * @type {EntityFieldDefinition[]}
-     */
-    static fieldDefinitions = [
+    public static searchBoxFields = ["title", "valuationNotes", "otherNotes"];
+
+    public static searchBoxPlaceholder = "Search images by title or notes";
+
+    public static hasTrash = true;
+
+    public static deleteDialogAdditionalInstructions = "Any exhibitions currently featuring this image will show a placeholder image instead.";
+
+    public static fieldDefinitions: EntityFieldDefinition[] = [
         {
             fieldName: "title",
             displayName: "Image Title",
@@ -59,14 +62,16 @@ class Image extends Entity {
             displayName: "URL",
             inputType: "url",
             multiline: true,
-            blank: "https://atecquilt01.utdallas.edu/comer/public/images/"
+            blank: "https://atecquilt01.utdallas.edu/comer/public/images/",
+            isRequired: false
         },
         {
             fieldName: "thumbnailUrl",
             displayName: "Thumbnail URL",
             inputType: "url",
             multiline: true,
-            blank: "https://atecquilt01.utdallas.edu/comer/public/images/"
+            blank: "https://atecquilt01.utdallas.edu/comer/public/images/",
+            isRequired: false
         },
         {
             fieldName: "medium",
@@ -88,18 +93,21 @@ class Image extends Entity {
         {
             fieldName: "matWidth",
             displayName: "Mat Width",
-            inputType: "number"
+            inputType: "number",
+            isRequired: false
         },
         {
             fieldName: "matHeight",
             displayName: "Mat Height",
-            inputType: "number"
+            inputType: "number",
+            isRequired: false
         },
         {
             fieldName: "copyright",
             displayName: "Copyright",
             inputType: "textarea",
-            multiline: true
+            multiline: true,
+            isRequired: false
         },
         {
             fieldName: "location",
@@ -110,40 +118,41 @@ class Image extends Entity {
             fieldName: "subject",
             displayName: "Subject",
             inputType: "textarea",
-            multiline: true
+            multiline: true,
+            isRequired: false
         },
         {
             fieldName: "condition",
             displayName: "Condition",
-            inputType: "textarea"
+            inputType: "textarea",
+            isRequired: false
         },
         {
             fieldName: "valuationNotes",
             displayName: "Valuation Notes",
             inputType: "textarea",
-            multiline: true
+            multiline: true,
+            isRequired: false
         },
         {
             fieldName: "otherNotes",
             displayName: "Other Notes",
             inputType: "textarea",
-            multiline: true
+            multiline: true,
+            isRequired: false
         }
     ];
 
-    /**
-     * @type {TableFieldDefinition[]}
-     */
-    static tableFields = [
+    public static tableFields: TableFieldDefinition[] = [
         {
             columnDescription: "ID",
             TableCellComponent: ImageIDCell,
-            generateSortableValue: (image) => image.id
+            generateSortableValue: (image: Item): SortableValue => image.id
         },
         {
             columnDescription: "Title",
             TableCellComponent: ImageTitleCell,
-            generateSortableValue: (image) => image.title.toLowerCase()
+            generateSortableValue: (image: Item): SortableValue => (image.title as string).toLowerCase()
         },
         {
             columnDescription: "Preview",
@@ -152,12 +161,12 @@ class Image extends Entity {
         {
             columnDescription: "Accession Number",
             TableCellComponent: ImageAccessionNumberCell,
-            generateSortableValue: (image) => image.accessionNumber?.toLowerCase()
+            generateSortableValue: (image: Item): SortableValue => (image.accessionNumber as string).toLowerCase()
         },
         {
             columnDescription: "Year",
             TableCellComponent: ImageYearCell,
-            generateSortableValue: (image) => image.year
+            generateSortableValue: (image: Item): SortableValue => image.year as number
         },
         {
             columnDescription: "Location",
@@ -183,27 +192,30 @@ class Image extends Entity {
 }
 
 class DeletedImage extends Image {
-    static isTrash = true;
-    static hasTrash = false;
-    static baseUrl = "/api/deletedimages";
-    static deleteDialogAdditionalInstructions = null;
+    public static isTrash = true;
 
-    static plural = "images";
+    public static hasTrash = false;
 
-    static DefaultIcon = DeleteIcon;
+    public static baseUrl = "/api/deletedimages";
 
-    static fetcherUrl = "/Account/Admin/Images/Trash";
+    public static deleteDialogAdditionalInstructions = "";
 
-    static tableFields = [
+    public static plural = "images";
+
+    public static DefaultIcon = DeleteIcon as React.FunctionComponent;
+
+    public static fetcherUrl = "/Account/Admin/Images/Trash";
+
+    public static tableFields: TableFieldDefinition[] = [
         {
             columnDescription: "ID",
             TableCellComponent: ImageIDCell,
-            generateSortableValue: (image) => image.id
+            generateSortableValue: (image: Item): SortableValue => image.id
         },
         {
             columnDescription: "Title",
             TableCellComponent: ImageTitleCell,
-            generateSortableValue: (image) => image.title.toLowerCase()
+            generateSortableValue: (image: Item): SortableValue => (image.title as string).toLowerCase()
         },
         {
             columnDescription: "Preview",
@@ -212,7 +224,7 @@ class DeletedImage extends Image {
         {
             columnDescription: "Accession Number",
             TableCellComponent: ImageAccessionNumberCell,
-            generateSortableValue: (image) => image.accessionNumber?.toLowerCase()
+            generateSortableValue: (image: Item): SortableValue => (image.accessionNumber as string).toLowerCase()
         },
         {
             columnDescription: "Location",
@@ -228,7 +240,5 @@ class DeletedImage extends Image {
         }
     ];
 }
-
-Image.TrashEntity = DeletedImage;
 
 export { Image, DeletedImage };

@@ -1,6 +1,6 @@
 import { Exhibition } from "../Entities/Exhibition.ts";
 import { Association } from "../Association.ts";
-import { Image } from "../Entities/Image.js";
+import { Image } from "../Entities/Image.ts";
 import { ExhibitionIDCell } from "../../Components/TableCells/Exhibition/ExhibitionIDCell.js";
 import { ExhibitionTitleCell } from "../../Components/TableCells/Exhibition/ExhibitionTitleCell.js";
 import { ExhibitionOpenInNewTabCell } from "../../Components/TableCells/Exhibition/ExhibitionOpenInNewTabCell.js";

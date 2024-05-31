@@ -5,7 +5,7 @@ import AppLayout from "../Layouts/AppLayout.js";
 import { Artist } from "../Classes/Entities/Artist.ts";
 import { Course } from "../Classes/Entities/Course.ts";
 import { Exhibition, PublicExhibition } from "../Classes/Entities/Exhibition.ts";
-import { Image, DeletedImage } from "../Classes/Entities/Image.js";
+import { Image, DeletedImage } from "../Classes/Entities/Image.ts";
 import { Tag } from "../Classes/Entities/Tag.js";
 import { User } from "../Classes/Entities/User.js";
 import RequireAdmin from "../Components/AccessControl/RequireAdmin.js";

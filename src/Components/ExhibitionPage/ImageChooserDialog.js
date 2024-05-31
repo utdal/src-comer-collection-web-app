@@ -6,7 +6,7 @@ import PropTypes from "prop-types";
 import { exhibitionStatePropTypesShape } from "../../Classes/Entities/Exhibition.ts";
 import { entityPropTypeShape } from "../../Classes/Entity.ts";
 import { ManagementPageProvider, useItemsReducer } from "../../ContextProviders/ManagementPageProvider.js";
-import { Image } from "../../Classes/Entities/Image.js";
+import { Image } from "../../Classes/Entities/Image.ts";
 
 export const ImageChooserDialog = ({ imageChooserIsOpen, setImageChooserIsOpen, exhibitionState, globalImageCatalog, setSelectedImageId, exhibitionEditDispatch }) => {
     const [imageChooserSelectedImage, setImageChooserSelectedImage] = useState(null);
