@@ -19,7 +19,7 @@ import { ManagementPageProvider, useItemsReducer } from "../../ContextProviders/
 import { CreateExhibitionButton } from "../../Components/Buttons/CreateExhibitionButton.js";
 import { ExhibitionCreationRestriction } from "../../Components/TextBanners/ExhibitionCreationRestriction.js";
 import { useDialogState } from "../../Hooks/useDialogState.js";
-import { Exhibition } from "../../Classes/Entities/Exhibition.js";
+import { Exhibition } from "../../Classes/Entities/Exhibition.ts";
 import { useRevalidator } from "react-router";
 import PaginationSummary from "../../Components/PaginationSummary/PaginationSummary.js";
 

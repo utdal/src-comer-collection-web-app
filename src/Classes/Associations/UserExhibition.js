@@ -1,4 +1,4 @@
-import { Exhibition } from "../Entities/Exhibition.js";
+import { Exhibition } from "../Entities/Exhibition.ts";
 import { User } from "../Entities/User.js";
 import { Association } from "../Association.ts";
 import { ExhibitionIDCell } from "../../Components/TableCells/Exhibition/ExhibitionIDCell.js";

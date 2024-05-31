@@ -9,7 +9,7 @@ import { ExhibitionDateModifiedCell } from "../../Components/TableCells/Exhibiti
 import { ExhibitionOpenInCurrentTabCell } from "../../Components/TableCells/Exhibition/ExhibitionOpenInCurrentTabCell.js";
 import { ManagementPageProvider, useItemsReducer } from "../../ContextProviders/ManagementPageProvider.js";
 import { useLoaderData } from "react-router";
-import { PublicExhibition } from "../../Classes/Entities/Exhibition.js";
+import { PublicExhibition } from "../../Classes/Entities/Exhibition.ts";
 
 const exhibitionTableFields = [
     {

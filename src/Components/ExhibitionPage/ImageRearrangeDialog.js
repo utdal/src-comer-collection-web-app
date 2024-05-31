@@ -7,7 +7,7 @@ import {
 } from "../../Imports/Icons.js";
 import PropTypes from "prop-types";
 import { getSwappedImageArray, directionOptions } from "./ExhibitionEditPane.js";
-import { exhibitionStatePropTypesShape } from "../../Classes/Entities/Exhibition.js";
+import { exhibitionStatePropTypesShape } from "../../Classes/Entities/Exhibition.ts";
 import { entityPropTypeShape } from "../../Classes/Entity.ts";
 
 export const ImageRearrangeDialog = ({ imageRearrangerIsOpen, setImageRearrangerIsOpen, exhibitionState, exhibitionEditDispatch, globalImageCatalog }) => {

@@ -1,4 +1,4 @@
-import { Exhibition } from "../Classes/Entities/Exhibition.js";
+import { Exhibition } from "../Classes/Entities/Exhibition.ts";
 
 export const myExhibitionsAction = async ({ request }) => {
     const requestData = await request.json();

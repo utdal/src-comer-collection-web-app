@@ -1,6 +1,6 @@
 import React from "react";
 import { Stack, Typography } from "@mui/material";
-import { Exhibition } from "../../../Classes/Entities/Exhibition.js";
+import { Exhibition } from "../../../Classes/Entities/Exhibition.ts";
 import { useTableCellItem } from "../../../ContextProviders/TableCellProvider.js";
 
 export const ExhibitionDateModifiedStackedCell = () => {

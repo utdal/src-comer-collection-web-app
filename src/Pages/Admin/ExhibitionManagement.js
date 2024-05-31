@@ -8,7 +8,7 @@ import { useTitle } from "../../ContextProviders/AppFeatures.js";
 import { doesItemMatchSearchQuery } from "../../Helpers/SearchUtilities.js";
 import { CourseFilterMenu } from "../../Components/Menus/CourseFilterMenu.js";
 
-import { Exhibition } from "../../Classes/Entities/Exhibition.js";
+import { Exhibition } from "../../Classes/Entities/Exhibition.ts";
 import { ManagementPageProvider, useItemsReducer } from "../../ContextProviders/ManagementPageProvider.js";
 import { ClearFilterButton } from "../../Components/Buttons/ClearFilterButton.js";
 import { RefreshButton } from "../../Components/Buttons/RefreshButton.js";

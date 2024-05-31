@@ -1,3 +1,4 @@
+import PropTypes from "prop-types";
 import { ExhibitionAccessCell } from "../../Components/TableCells/Exhibition/ExhibitionAccessCell.js";
 import { ExhibitionDateCreatedStackedCell } from "../../Components/TableCells/Exhibition/ExhibitionDateCreatedStackedCell.js";
 import { ExhibitionDateModifiedStackedCell } from "../../Components/TableCells/Exhibition/ExhibitionDateModifiedStackedCell.js";
@@ -5,46 +6,46 @@ import { ExhibitionIDCell } from "../../Components/TableCells/Exhibition/Exhibit
 import { ExhibitionOptionsCell } from "../../Components/TableCells/Exhibition/ExhibitionOptionsCell.js";
 import { ExhibitionOwnerStackedNameEmailCell } from "../../Components/TableCells/Exhibition/ExhibitionOwnerStackedNameEmailCell.js";
 import { ExhibitionTitleCell } from "../../Components/TableCells/Exhibition/ExhibitionTitleCell.js";
-import { Entity, entityPropTypeShape } from "../Entity.ts";
-import PropTypes from "prop-types";
+import type { Item, SortableValue, TableFieldDefinition } from "../../index.js";
+import { Entity, entityPropTypeShape } from "../Entity";
 
 class Exhibition extends Entity {
-    static baseUrl = "/api/exhibitions";
-    static singular = "exhibition";
-    static plural = "exhibitions";
+    public static baseUrl = "/api/exhibitions";
 
-    static searchBoxFields = ["title"];
-    static searchBoxPlaceholder = "Search by title";
+    public static singular = "exhibition";
 
-    /**
-     * @type {TableFieldDefinition[]}
-     */
-    static tableFields = [
+    public static plural = "exhibitions";
+
+    public static searchBoxFields = ["title"];
+
+    public static searchBoxPlaceholder = "Search by title";
+
+    public static tableFields: TableFieldDefinition[] = [
         {
             columnDescription: "ID",
             TableCellComponent: ExhibitionIDCell,
-            generateSortableValue: (exhibition) => exhibition.id
+            generateSortableValue: (exhibition: Item): SortableValue => exhibition.id
         },
         {
             columnDescription: "Title",
             maxWidth: "150px",
             TableCellComponent: ExhibitionTitleCell,
-            generateSortableValue: (exhibition) => exhibition.title?.toLowerCase()
+            generateSortableValue: (exhibition: Item): SortableValue => (exhibition.title as string).toLowerCase()
         },
         {
             columnDescription: "Owner",
             TableCellComponent: ExhibitionOwnerStackedNameEmailCell,
-            generateSortableValue: (exhibition) => exhibition.User.full_name_reverse?.toLowerCase()
+            generateSortableValue: (exhibition: Item): SortableValue => ((exhibition.User as Item).full_name_reverse as string).toLowerCase()
         },
         {
             columnDescription: "Created",
             TableCellComponent: ExhibitionDateCreatedStackedCell,
-            generateSortableValue: (exhibition) => new Date(exhibition.date_created)
+            generateSortableValue: (exhibition: Item): SortableValue => new Date(exhibition.date_created as string)
         },
         {
             columnDescription: "Modified",
             TableCellComponent: ExhibitionDateModifiedStackedCell,
-            generateSortableValue: (exhibition) => new Date(exhibition.date_modified)
+            generateSortableValue: (exhibition: Item): SortableValue => new Date(exhibition.date_modified as string)
         },
         {
             columnDescription: "Access",
@@ -58,7 +59,7 @@ class Exhibition extends Entity {
 }
 
 class PublicExhibition extends Exhibition {
-    static baseUrl = "/api/exhibitions?public_only=1";
+    public static baseUrl = "/api/exhibitions?public_only=1";
 }
 
 export const exhibitionStatePropTypesShape = PropTypes.shape({

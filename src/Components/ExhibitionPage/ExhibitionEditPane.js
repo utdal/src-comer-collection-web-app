@@ -17,7 +17,7 @@ import { ExhibitionOption } from "./ExhibitionOption.js";
 import { ExhibitionOptionGroup } from "./ExhibitionOptionGroup.js";
 import { ImageRearrangeDialog } from "./ImageRearrangeDialog.js";
 import { ImageChooserDialog } from "./ImageChooserDialog.js";
-import { exhibitionStatePropTypesShape } from "../../Classes/Entities/Exhibition.js";
+import { exhibitionStatePropTypesShape } from "../../Classes/Entities/Exhibition.ts";
 import { entityPropTypeShape } from "../../Classes/Entity.ts";
 
 const moodinessOptions = [

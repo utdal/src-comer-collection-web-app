@@ -1,7 +1,7 @@
 import React from "react";
 import { Card, CardContent, Divider, Paper, Stack, Typography } from "@mui/material";
 import PropTypes from "prop-types";
-import { exhibitionStatePropTypesShape } from "../../Classes/Entities/Exhibition.js";
+import { exhibitionStatePropTypesShape } from "../../Classes/Entities/Exhibition.ts";
 import { entityPropTypeShape } from "../../Classes/Entity.ts";
 
 export const ArtInfoPopup = ({ globalImageCatalog, imageId, exhibitionState }) => {

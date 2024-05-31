@@ -3,7 +3,7 @@ import { Course } from "../Classes/Entities/Course.ts";
 import { DeletedImage, Image } from "../Classes/Entities/Image.js";
 import { Artist } from "../Classes/Entities/Artist.ts";
 import { Tag } from "../Classes/Entities/Tag.js";
-import { Exhibition } from "../Classes/Entities/Exhibition.js";
+import { Exhibition } from "../Classes/Entities/Exhibition.ts";
 import { sendAuthenticatedRequest } from "../Helpers/APICalls.js";
 import { capitalized } from "../Classes/Entity.ts";
 

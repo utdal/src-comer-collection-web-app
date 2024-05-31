@@ -14,7 +14,7 @@ import PropTypes from "prop-types";
 import { ExhibitionIntro } from "./ExhibitionIntro.js";
 import { ArtInfoPopup } from "./ArtInfoPopup.js";
 import { entityPropTypeShape } from "../../Classes/Entity.ts";
-import { exhibitionStatePropTypesShape } from "../../Classes/Entities/Exhibition.js";
+import { exhibitionStatePropTypesShape } from "../../Classes/Entities/Exhibition.ts";
 
 const getAmbientLightIntensity = (moodiness) => {
     switch (moodiness) {
