@@ -30,6 +30,7 @@ module.exports = {
     plugins: [
         "react", "@typescript-eslint", "react-hooks"
     ],
+    ignorePatterns: [".eslintrc.cjs"],
     rules: {
         indent: ["error", 4],
         semi: [2, "always"],
