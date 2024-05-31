@@ -4,7 +4,7 @@ import { IconButton } from "@mui/material";
 import { DeleteIcon } from "../../../Imports/Icons.js";
 import { useTableCellItem, useTableCellManagementCallbacks } from "../../../ContextProviders/TableCellProvider.js";
 
-const TableRowDeleteButton = ({ disabled = false }) => {
+const EntityDeleteButton = ({ disabled = false }) => {
     const item = useTableCellItem();
     const { openDialogByIntentWithSingleUnderlyingItem } = useTableCellManagementCallbacks();
     const handleOpenDeleteDialog = useCallback(() => {
@@ -20,8 +20,8 @@ const TableRowDeleteButton = ({ disabled = false }) => {
     );
 };
 
-TableRowDeleteButton.propTypes = {
+EntityDeleteButton.propTypes = {
     disabled: PropTypes.bool
 };
 
-export default TableRowDeleteButton;
+export default EntityDeleteButton;

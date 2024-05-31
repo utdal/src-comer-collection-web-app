@@ -1,18 +1,13 @@
-import React, { useCallback } from "react";
-import { useTableCellItem, useTableCellManagementCallbacks } from "../../../ContextProviders/TableCellProvider.js";
+import React from "react";
+import { useTableCellItem } from "../../../ContextProviders/TableCellProvider.js";
 
-import { DeleteButton } from "../Entity/DeleteButton.js";
+import EntityDeleteButton from "../Entity/EntityDeleteButton.js";
 
 export const CourseDeleteButton = () => {
     const course = useTableCellItem();
-    const { handleOpenCourseDeleteDialog } = useTableCellManagementCallbacks();
-    const handleOpenDeleteDialog = useCallback(() => {
-        handleOpenCourseDeleteDialog(course);
-    }, [course, handleOpenCourseDeleteDialog]);
     return (
-        <DeleteButton
+        <EntityDeleteButton
             disabled={course.Users.length > 0}
-            onClick={handleOpenDeleteDialog}
         />
     );
 };
