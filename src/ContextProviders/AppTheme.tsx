@@ -1,6 +1,7 @@
 import type { ReactNode } from "react";
 import React, { createContext, useCallback, useContext, useMemo, useState } from "react";
 import PropTypes from "prop-types";
+import type { SimplePaletteColorOptions } from "@mui/material";
 import { ThemeProvider, createTheme } from "@mui/material";
 import { green, grey, orange } from "@mui/material/colors/index.js";
 
@@ -12,6 +13,11 @@ type DarkThemeSetter = (darkThemeSetting: DarkThemeSetting) => void;
 interface AppThemeContextValue {
     appDarkTheme: DarkThemeSetting;
     setAppDarkTheme: DarkThemeSetter;
+}
+
+interface AppPaletteColorOptions extends SimplePaletteColorOptions {
+    translucent?: string;
+    veryTranslucent?: string;
 }
 
 const storedDarkThemeSetting: DarkThemeSetting = (localStorage.getItem(DARK_THEME_LOCAL_STORAGE_KEY) ?? "light") as DarkThemeSetting;
@@ -155,7 +161,7 @@ const AppThemeProvider = ({ children }: {
                 100: primaryColor["100"],
                 translucent: `${primaryColor["700"]}40`,
                 veryTranslucent: `${primaryColor["700"]}20`
-            },
+            } as AppPaletteColorOptions,
             secondary: {
                 main: secondaryColor["700"],
                 contrastText: "white",
@@ -163,7 +169,7 @@ const AppThemeProvider = ({ children }: {
                 100: secondaryColor["100"],
                 translucent: `${secondaryColor["700"]}40`,
                 veryTranslucent: `${secondaryColor["700"]}20`
-            },
+            } as AppPaletteColorOptions,
             grey: {
                 main: grey["600"],
                 contrastText: appDarkTheme === "dark" ? "white" : "black",
