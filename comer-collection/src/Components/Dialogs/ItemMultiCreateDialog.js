@@ -13,6 +13,7 @@ import { useEntity, useManagementCallbacks } from "../../ContextProviders/Manage
 import { PersistentDialog } from "./PersistentDialog.js";
 import { DialogStateOld } from "../../Classes/DialogState.js";
 import { useActionData, useSubmit } from "react-router-dom";
+import DialogCancelButton from "../Buttons/DialogCancelButton.js";
 
 /**
  * @typedef {Object<string, any>} Item
@@ -266,15 +267,18 @@ export const ItemMultiCreateDialog = ({ dialogState }) => {
                     spacing={1}
                     sx={{ width: "100%" }}
                 >
-                    <Button
-                        color="primary"
-                        disabled={!submitEnabled}
-                        onClick={handleClose}
-                        size="large"
-                        variant="outlined"
+                    <Stack
+                        direction="row"
+                        spacing={1}
+                        sx={{ width: "20%" }}
                     >
-                        {createDialogItems.length > 0 ? "Cancel" : "Close"}
-                    </Button>
+
+                        <DialogCancelButton
+                            dialogIntent="multi-create"
+                            disabled={!submitEnabled}
+                            displayText={createDialogItems.length > 0 ? "Cancel" : "Close"}
+                        />
+                    </Stack>
 
                     <Stack
                         direction="row"
