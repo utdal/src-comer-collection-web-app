@@ -6,7 +6,7 @@
 build/
 
 # package and yarn files
-*.json
+# *.json
 *.lock
 
 # User-specific files
