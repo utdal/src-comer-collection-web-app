@@ -16,30 +16,7 @@ import { useActionData, useSubmit } from "react-router-dom";
 import DialogCancelButton from "../Buttons/DialogCancelButton.js";
 
 /**
- * @typedef {Object<string, any>} Item
- *
- * @typedef {{
- *  type: "add"
- * }|{
- *  type: "change",
- *  index: number,
- *  field: string,
- *  newValue: any
- * }|{
- *  type: "remove",
- *  index: number
- * }|{
- *  type: "filterByIndex",
- *  indicesToKeep: number[]
- * }|{
- *  type: "set",
- *  newArray: Item[]
- * }} MultiCreateDialogDispatchAction
- */
-
-/**
- *
- * @param {{dialogState: import("../../Hooks/useDialogStates.js").DialogState}} param0
+ * @param {{dialogState: DialogState}} props
  * @returns
  */
 export const ItemMultiCreateDialog = ({ dialogState }) => {

@@ -11,10 +11,6 @@ import { InfoIcon } from "../../Imports/Icons.js";
 import DataTableRow from "./DataTableRow.js";
 
 /**
- * @typedef {import("../../ContextProviders/ManagementPageProvider.js").Item} Item
- */
-
-/**
  * Functional component for DataTable
  * @param {{
  *  tableFields,

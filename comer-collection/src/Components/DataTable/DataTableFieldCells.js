@@ -5,10 +5,6 @@ import { TableCellProvider } from "../../ContextProviders/TableCellProvider.js";
 import { entityPropTypeShape, tableFieldPropTypeShape } from "../../Classes/Entity.js";
 
 /**
- * @typedef {import("../../ContextProviders/ManagementPageProvider.js").ItemDictionaryEntry} ItemDictionaryEntry
- * @param {{
- *      itemDictionaryEntry: ItemDictionaryEntry
- * }} props
  * @returns {React.JSX.Element}
  */
 export const DataTableFieldCells = memo(function DataTableFieldCells ({ tableFields, item, managementCallbacks }) {

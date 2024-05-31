@@ -6,10 +6,6 @@ import { DataTableFieldCells } from "./DataTableFieldCells.js";
 import { DataTableRowPlaceholder } from "./DataTableRowPlaceholder.js";
 import { entityPropTypeShape, tableFieldPropTypeShape } from "../../Classes/Entity.js";
 
-/**
- * @typedef {import("../../ContextProviders/ManagementPageProvider.js").ItemDictionaryEntry} ItemDictionaryEntry
- */
-
 const ColoredTableRow = styled(TableRow, {
     shouldForwardProp: (prop) => !["themeColor", "isSelected"].includes(prop)
 })(({ isSelected, theme, themeColor }) => ({
