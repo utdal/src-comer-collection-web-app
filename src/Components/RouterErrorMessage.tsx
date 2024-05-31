@@ -1,5 +1,4 @@
 import React, { useCallback } from "react";
-import PropTypes from "prop-types";
 import { useRouteError } from "react-router";
 import { WarningIcon } from "../Imports/Icons.js";
 import { FullPageMessage } from "./FullPageMessage";
@@ -25,12 +24,6 @@ const RouterErrorMessage = ({ viewportHeight, includeLogo, suggestReload }: {
             viewportHeight={viewportHeight}
         />
     );
-};
-
-RouterErrorMessage.propTypes = {
-    includeLogo: PropTypes.bool,
-    suggestReload: PropTypes.bool,
-    viewportHeight: PropTypes.bool
 };
 
 export default RouterErrorMessage;

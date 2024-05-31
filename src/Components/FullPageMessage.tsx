@@ -2,7 +2,6 @@ import { Box, Button, LinearProgress, Paper, Stack, Typography } from "@mui/mate
 import React, { useCallback } from "react";
 import { useNavigate } from "react-router";
 import type { ReactComponentLike } from "prop-types";
-import PropTypes from "prop-types";
 import SideBySideLogo from "./Logos/SideBySideLogo.js";
 
 export const FullPageMessage = ({ message, button = true, buttonText, buttonDestination = "/SignIn", Icon, buttonAction, includeLinearProgress = false, includeLogo = false, viewportHeight = false }: {
@@ -65,16 +64,4 @@ export const FullPageMessage = ({ message, button = true, buttonText, buttonDest
             {includeLinearProgress ? <LinearProgress /> : null}
         </Box>
     );
-};
-
-FullPageMessage.propTypes = {
-    Icon: PropTypes.elementType,
-    button: PropTypes.bool,
-    buttonAction: PropTypes.func,
-    buttonDestination: PropTypes.string,
-    buttonText: PropTypes.string,
-    includeLinearProgress: PropTypes.bool,
-    includeLogo: PropTypes.bool,
-    message: PropTypes.string.isRequired,
-    viewportHeight: PropTypes.bool
 };
