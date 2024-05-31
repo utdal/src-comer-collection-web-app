@@ -467,13 +467,6 @@ export const useEntity = () => {
 };
 
 /**
- * @returns {[isLoaded: boolean, isError: boolean]} [isLoaded, isError]
- */
-export const useItemsLoadStatus = () => {
-    return [true, false];
-};
-
-/**
  * Allows components inside the ManagementPageContext
  * to access and modify pagination settings
  */
