@@ -9,7 +9,7 @@ import {
 import { ContentCopyIcon, SyncIcon } from "../../Imports/Icons.js";
 import { useClipboard, useSnackbar } from "../../ContextProviders/AppFeatures.js";
 import PropTypes from "prop-types";
-import { DialogState } from "../../Classes/DialogState.js";
+import { DialogStateOld } from "../../Classes/DialogState.js";
 import { PersistentDialog } from "./PersistentDialog.js";
 import { useActionData, useSubmit } from "react-router-dom";
 
@@ -19,7 +19,7 @@ const randomPassword = () => {
 };
 
 /**
- * @param {{ dialogState: DialogState }} props
+ * @param {{ dialogState: DialogStateOld }} props
  */
 export const UserResetPasswordDialog = ({ dialogState }) => {
     const [newPassword, setNewPassword] = useState("");
@@ -229,5 +229,5 @@ export const UserResetPasswordDialog = ({ dialogState }) => {
 };
 
 UserResetPasswordDialog.propTypes = {
-    dialogState: PropTypes.instanceOf(DialogState).isRequired
+    dialogState: PropTypes.instanceOf(DialogStateOld).isRequired
 };

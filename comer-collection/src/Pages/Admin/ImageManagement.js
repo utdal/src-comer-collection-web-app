@@ -31,6 +31,7 @@ import EntityManageButton from "../../Components/Buttons/EntityManageButton.js";
 import AssociationManageButton from "../../Components/Buttons/AssociationManageButton.js";
 import PaginationSummary from "../../Components/PaginationSummary/PaginationSummary.js";
 import OpenTrashButton from "../../Components/Buttons/OpenTrashButton.js";
+import useDialogStates from "../../Hooks/useDialogStates.js";
 
 const ImageManagement = () => {
     const images = useLoaderData();
@@ -54,7 +55,18 @@ const ImageManagement = () => {
     const [previewerImage, setPreviewerImage] = useState(null);
     const [previewerOpen, setPreviewerOpen] = useState(false);
 
-    const [createDialogState, handleOpenMultiCreateDialog] = useDialogState();
+    /**
+     * @type {import("../../Classes/buildRouterAction.js").Intent[]}
+     */
+    const intentArray = ["multi-create", "single-edit", "single-delete"];
+    const {
+        dialogStateDictionary,
+        openDialogByIntentWithNoUnderlyingItems,
+        openDialogByIntentWithSingleUnderlyingItem,
+        openDialogByIntentWithMultipleUnderlyingItems,
+        closeDialogByIntent
+    } = useDialogStates(intentArray);
+
     const [editDialogState, openEditDialog] = useDialogState(false);
     const [deleteDialogState, openDeleteDialog] = useDialogState(false);
 
@@ -123,11 +135,14 @@ const ImageManagement = () => {
         handleOpenImageAssignTagDialog,
         handleOpenImageViewExhibitionDialog,
         handleOpenImagePreviewer,
-        handleOpenMultiCreateDialog,
         handleOpenImageEditDialog,
         handleOpenImageDeleteDialog,
         handleClearFilters,
-        handleRefresh
+        handleRefresh,
+        openDialogByIntentWithNoUnderlyingItems,
+        openDialogByIntentWithSingleUnderlyingItem,
+        openDialogByIntentWithMultipleUnderlyingItems,
+        closeDialogByIntent
     }), [handleClearFilters,
         handleOpenImageAssignArtistDialog,
         handleOpenImageAssignTagDialog,
@@ -135,8 +150,12 @@ const ImageManagement = () => {
         handleOpenImageEditDialog,
         handleOpenImagePreviewer,
         handleOpenImageViewExhibitionDialog,
-        handleOpenMultiCreateDialog,
-        handleRefresh]);
+        handleRefresh,
+        openDialogByIntentWithNoUnderlyingItems,
+        openDialogByIntentWithSingleUnderlyingItem,
+        openDialogByIntentWithMultipleUnderlyingItems,
+        closeDialogByIntent
+    ]);
 
     return (
         <ManagementPageProvider
@@ -196,7 +215,7 @@ const ImageManagement = () => {
 
             </ManagementPageContainer>
 
-            <ItemMultiCreateDialog dialogState={createDialogState} />
+            <ItemMultiCreateDialog dialogState={dialogStateDictionary["multi-create"]} />
 
             <ItemSingleEditDialog dialogState={editDialogState} />
 

@@ -16,7 +16,7 @@ import { AssociationTableDisplay } from "./AssociationTableDisplay.js";
 import { entityPropTypeShape } from "../../../Classes/Entity.js";
 import { AssociationManagementPageProvider } from "../../../ContextProviders/AssociationManagementPageProvider.js";
 import { useItemsReducer, useManagementCallbacks } from "../../../ContextProviders/ManagementPageProvider.js";
-import { DialogState } from "../../../Classes/DialogState.js";
+import { DialogStateOld } from "../../../Classes/DialogState.js";
 import { PersistentDialog } from "../PersistentDialog.js";
 import SecondaryManagementButton from "../../Buttons/SecondaryManagementButton.js";
 
@@ -31,7 +31,7 @@ const unassignButtonColumnDefinition = {
 
 /**
  * @param {{
- *  dialogState: DialogState
+ *  dialogState: DialogStateOld
  * }} props
  */
 export const AssociationManagementDialog = ({
@@ -269,7 +269,7 @@ AssociationManagementDialog.propTypes = {
     Association: PropTypes.func.isRequired,
     defaultSortAscending: PropTypes.bool,
     defaultSortColumn: PropTypes.string,
-    dialogState: PropTypes.instanceOf(DialogState),
+    dialogState: PropTypes.instanceOf(DialogStateOld),
     editMode: PropTypes.bool,
     handleSwitchToSecondary: PropTypes.func.isRequired,
     secondaryItemsAll: PropTypes.arrayOf(entityPropTypeShape).isRequired

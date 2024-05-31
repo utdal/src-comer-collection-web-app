@@ -1,12 +1,12 @@
 import { useCallback, useMemo, useState } from "react";
-import { DialogState } from "../Classes/DialogState.js";
+import { DialogStateOld } from "../Classes/DialogState.js";
 
 /**
  * Custom hook to manage dialog state (open/closed and associated items)
  * @param {Boolean} multipleItems Set to false if dialog pertains to only one
  * primary item.  Set to true if dialog pertains to multiple primary items.
  * @param {Class} entity Optionally choose a specific type of item
- * @returns {[DialogState, openDialog: () => void, closeDialog: () => void]} [dialogState, openDialog, closeDialog]
+ * @returns {[DialogStateOld, openDialog: () => void, closeDialog: () => void]} [dialogState, openDialog, closeDialog]
  */
 export const useDialogState = (multipleItems) => {
     const [dialogIsOpen, setDialogIsOpen] = useState(false);
@@ -57,7 +57,7 @@ export const useDialogState = (multipleItems) => {
             : openDialogWithNoItems;
 
     const dialogState = useMemo(() => {
-        return new DialogState({
+        return new DialogStateOld({
             dialogIsOpen,
             openDialog,
             closeDialog,

@@ -78,6 +78,10 @@ import { capitalized } from "./Entity.js";
  */
 
 /**
+ * @typedef {"none"|"single"|"multi"} DialogItemsMultiplicity
+ */
+
+/**
  * @type {Object<string, Function[]>}
  */
 const permittedEntitiesByIntent = {

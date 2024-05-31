@@ -1,13 +1,23 @@
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Stack, Typography } from "@mui/material";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { CollectionGalleryGrid } from "../CollectionGallery/CollectionGalleryGrid.js";
 import { AddPhotoAlternateIcon } from "../../Imports/Icons.js";
 import PropTypes from "prop-types";
 import { exhibitionStatePropTypesShape } from "../../Classes/Entities/Exhibition.js";
 import { entityPropTypeShape } from "../../Classes/Entity.js";
+import { ManagementPageProvider, useItemsReducer } from "../../ContextProviders/ManagementPageProvider.js";
+import { Image } from "../../Classes/Entities/Image.js";
 
 export const ImageChooserDialog = ({ imageChooserIsOpen, setImageChooserIsOpen, exhibitionState, globalImageCatalog, setSelectedImageId, exhibitionEditDispatch }) => {
     const [imageChooserSelectedImage, setImageChooserSelectedImage] = useState(null);
+
+    const [imageChooserItemsCombinedState, { setItems: setImageChooserItems }] = useItemsReducer();
+
+    useEffect(() => {
+        if (globalImageCatalog) {
+            setImageChooserItems();
+        }
+    }, [globalImageCatalog, setImageChooserItems]);
 
     return (
         <Dialog
@@ -33,13 +43,18 @@ export const ImageChooserDialog = ({ imageChooserIsOpen, setImageChooserIsOpen, 
             </DialogTitle>
 
             <DialogContent>
-                <CollectionGalleryGrid
-                    disabledImages={exhibitionState.images}
-                    images={globalImageCatalog}
-                    isDialogMode
-                    selectedItem={imageChooserSelectedImage}
-                    setSelectedItem={setImageChooserSelectedImage}
-                />
+                <ManagementPageProvider
+                    Entity={Image}
+                    itemsCombinedState={imageChooserItemsCombinedState}
+                >
+
+                    <CollectionGalleryGrid
+                        disabledImages={exhibitionState.images}
+                        isDialogMode
+                        selectedItem={imageChooserSelectedImage}
+                        setSelectedItem={setImageChooserSelectedImage}
+                    />
+                </ManagementPageProvider>
             </DialogContent>
 
             <DialogActions>

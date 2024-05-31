@@ -9,9 +9,9 @@ import {
 import { DeleteIcon } from "../../Imports/Icons.js";
 import { getBlankItemFields } from "../../Helpers/fields.js";
 import { useSnackbar } from "../../ContextProviders/AppFeatures.js";
-import { useEntity } from "../../ContextProviders/ManagementPageProvider.js";
+import { useEntity, useManagementCallbacks } from "../../ContextProviders/ManagementPageProvider.js";
 import { PersistentDialog } from "./PersistentDialog.js";
-import { DialogState } from "../../Classes/DialogState.js";
+import { DialogStateOld } from "../../Classes/DialogState.js";
 import { useActionData, useSubmit } from "react-router-dom";
 
 /**
@@ -36,11 +36,18 @@ import { useActionData, useSubmit } from "react-router-dom";
  * }} MultiCreateDialogDispatchAction
  */
 
+/**
+ *
+ * @param {{dialogState: import("../../Hooks/useDialogStates.js").DialogState}} param0
+ * @returns
+ */
 export const ItemMultiCreateDialog = ({ dialogState }) => {
     const Entity = useEntity();
     const showSnackbar = useSnackbar();
 
-    const { dialogIsOpen, closeDialog } = dialogState;
+    const { dialogIsOpen } = dialogState;
+
+    const { closeDialogByIntent } = useManagementCallbacks();
 
     /**
      * @type {import("../../Classes/buildRouterAction.js").RouterActionResponse}
@@ -87,30 +94,6 @@ export const ItemMultiCreateDialog = ({ dialogState }) => {
     const [createDialogItems, createDialogDispatch] = useReducer(createDialogReducer, []);
 
     useEffect(() => {
-        if (actionData) {
-            console.log(actionData);
-            if (actionData.status === "success") {
-                closeDialog();
-                createDialogDispatch({
-                    type: "set",
-                    newArray: []
-                });
-                showSnackbar(actionData.snackbarText, "success");
-            } else if (actionData.status === "error") {
-                setSubmitEnabled(true);
-                showSnackbar(actionData.snackbarText, "error");
-            } else if (actionData.status === "partial") {
-                setSubmitEnabled(true);
-                showSnackbar(actionData.snackbarText, "warning");
-                createDialogDispatch({
-                    type: "filterByIndex",
-                    indicesToKeep: actionData.indicesWithErrors
-                });
-            }
-        }
-    }, [actionData, closeDialog, showSnackbar]);
-
-    useEffect(() => {
         if (dialogIsOpen) {
             setSubmitEnabled(true);
         }
@@ -133,36 +116,49 @@ export const ItemMultiCreateDialog = ({ dialogState }) => {
             method: "POST",
             encType: "application/json"
         });
-
-        // Entity.handleMultiCreate(createDialogItems).then((itemPromises) => {
-        //     const itemsWithErrors = createDialogItems.filter((u, i) => {
-        //         return itemPromises[i].status !== "fulfilled";
-        //     });
-        //     createDialogDispatch({
-        //         type: "set",
-        //         newArray: itemsWithErrors
-        //     });
-        //     if (itemsWithErrors.length > 0) {
-        //         setSubmitEnabled(true);
-        //         if (itemsWithErrors.length === createDialogItems.length) {
-        //             showSnackbar(`Could not create ${createDialogItems.length === 1 ? Entity.singular : Entity.plural}`, "error");
-        //         } else if (itemsWithErrors.length < createDialogItems.length) {
-        //             handleRefresh();
-        //             showSnackbar(`${createDialogItems.length - itemsWithErrors.length} of ${createDialogItems.length} ${Entity.plural} created`, "warning");
-        //         }
-        //     } else {
-        //         handleRefresh();
-        //         closeDialog();
-        //         showSnackbar(`${createDialogItems.length} ${createDialogItems.length === 1 ? Entity.singular : Entity.plural} created`, "success");
-        //     }
-        // });
     }, [createDialogItems, submit]);
+
+    const handleClose = useCallback(() => {
+        closeDialogByIntent("multi-create");
+    }, [closeDialogByIntent]);
+
+    /**
+     * When dialog transitions from open to closed, clear all the input fields
+     */
+    useEffect(() => {
+        if (!dialogState.dialogIsOpen) {
+            createDialogDispatch({
+                type: "set",
+                newArray: []
+            });
+        }
+    }, [dialogState.dialogIsOpen]);
+
+    useEffect(() => {
+        if (actionData) {
+            console.log(actionData);
+            if (actionData.status === "success") {
+                handleClose();
+                showSnackbar(actionData.snackbarText, "success");
+            } else if (actionData.status === "error") {
+                setSubmitEnabled(true);
+                showSnackbar(actionData.snackbarText, "error");
+            } else if (actionData.status === "partial") {
+                setSubmitEnabled(true);
+                showSnackbar(actionData.snackbarText, "warning");
+                createDialogDispatch({
+                    type: "filterByIndex",
+                    indicesToKeep: actionData.indicesWithErrors
+                });
+            }
+        }
+    }, [actionData, handleClose, showSnackbar]);
 
     return (
         <PersistentDialog
             isForm
             maxWidth="lg"
-            onClose={closeDialog}
+            onClose={handleClose}
             onSubmit={handleSubmit}
             open={dialogIsOpen}
         >
@@ -273,13 +269,7 @@ export const ItemMultiCreateDialog = ({ dialogState }) => {
                     <Button
                         color="primary"
                         disabled={!submitEnabled}
-                        onClick={() => {
-                            closeDialog();
-                            createDialogDispatch({
-                                type: "set",
-                                newArray: []
-                            });
-                        }}
+                        onClick={handleClose}
                         size="large"
                         variant="outlined"
                     >
@@ -324,5 +314,5 @@ export const ItemMultiCreateDialog = ({ dialogState }) => {
 };
 
 ItemMultiCreateDialog.propTypes = {
-    dialogState: PropTypes.instanceOf(DialogState).isRequired
+    dialogState: PropTypes.instanceOf(DialogStateOld).isRequired
 };

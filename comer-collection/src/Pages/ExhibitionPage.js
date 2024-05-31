@@ -11,9 +11,7 @@ import { useSnackbar, useTitle } from "../ContextProviders/AppFeatures.js";
 const ExhibitionPage = () => {
     const exhibitionId = parseInt(useParams().exhibitionId);
 
-    const exhibitionData = useLoaderData();
-
-    const [globalImageCatalog, setGlobalImageCatalog] = useState([]);
+    const { exhibitionData, globalImageCatalog } = useLoaderData();
 
     const [exhibitionMetadata, setExhibitionMetadata] = useState(exhibitionData);
 
@@ -21,10 +19,10 @@ const ExhibitionPage = () => {
     const [exhibitionIsEditable, setExhibitionIsEditable] = useState(false);
     const [editModeActive, setEditModeActive] = useState(false);
 
-    const loadCatalog = async () => {
-        const catalogData = await sendAuthenticatedRequest("GET", "/api/images");
-        setGlobalImageCatalog(catalogData.data);
-    };
+    // const loadCatalog = async () => {
+    //     const catalogData = await sendAuthenticatedRequest("GET", "/api/images");
+    //     setGlobalImageCatalog(catalogData.data);
+    // };
 
     const appUser = useAppUser();
     const showSnackbar = useSnackbar();
@@ -65,9 +63,9 @@ const ExhibitionPage = () => {
         loadExhibition();
     }, [appUser, loadExhibition]);
 
-    useEffect(() => {
-        loadCatalog();
-    }, []);
+    // useEffect(() => {
+    //     loadCatalog();
+    // }, []);
 
     const onUnload = useCallback(async () => {
         await saveExhibition();

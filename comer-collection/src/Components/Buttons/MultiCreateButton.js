@@ -1,5 +1,5 @@
 import { Button } from "@mui/material";
-import React, { memo } from "react";
+import React, { memo, useCallback } from "react";
 import { useEntity, useManagementCallbacks } from "../../ContextProviders/ManagementPageProvider.js";
 
 /**
@@ -10,7 +10,10 @@ import { useEntity, useManagementCallbacks } from "../../ContextProviders/Manage
  */
 export const MultiCreateButton = memo(function MultiCreateButton () {
     const Entity = useEntity();
-    const { handleOpenMultiCreateDialog } = useManagementCallbacks();
+    const { openDialogByIntentWithNoUnderlyingItems } = useManagementCallbacks();
+    const handleOpenMultiCreateDialog = useCallback(() => {
+        openDialogByIntentWithNoUnderlyingItems("multi-create");
+    }, [openDialogByIntentWithNoUnderlyingItems]);
     return (
         <Button
             color="primary"

@@ -86,6 +86,13 @@ import { itemsCombinedStatePropTypeShape } from "../Classes/Entity.js";
  *      setPaginationStartIndex: (startIndex: number) => void
  * }} ItemsCallbacks
  *
+ * @typedef {{
+ *      openDialogByIntentWithNoUnderlyingItems: import("../Hooks/useDialogStates.js").OpenDialogByIntentFunctionNoUnderlyingItems,
+ *      openDialogByIntentWithSingleUnderlyingItem: import("../Hooks/useDialogStates.js").OpenDialogByIntentFunctionSingleUnderlyingItem,
+ *      openDialogByIntentWithMultipleUnderlyingItems: import("../Hooks/useDialogStates.js").OpenDialogByIntentFunctionMultipleUnderlyingItems,
+ *      closeDialogByIntent: import("../Hooks/useDialogStates.js").CloseDialogByIntentFunction
+ * }} ManagementCallbacks
+ *
  */
 
 /**
@@ -341,7 +348,7 @@ const ManagementPageContext = createContext();
 /**
  * @param {{
  *      Entity: class,
- *      managementCallbacks: Object<string, () => void>,
+ *      managementCallbacks: ManagementCallbacks,
  *      itemsCombinedState: ItemsCombinedState,
  *      itemsCallbacks: ItemsCallbacks,
  *      children
@@ -373,7 +380,7 @@ ManagementPageProvider.propTypes = {
 };
 
 /**
- * @returns {Object.<string, function()>}
+ * @returns {ManagementCallbacks}
  */
 export const useManagementCallbacks = () => {
     return useContext(ManagementPageContext).managementCallbacks;

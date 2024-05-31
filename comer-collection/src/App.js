@@ -49,11 +49,14 @@ const appUserLoader = async () => {
 const exhibitionPageLoader = async ({ params }) => {
     const exhibitionId = parseInt(params.exhibitionId);
     const exhibitionUrl = `/api/exhibitions/${exhibitionId}/data`;
-    const response = await sendAuthenticatedRequest("GET", exhibitionUrl);
-    if (response.status === 200) {
-        return response.data;
-    } else {
-        throw new Error("Exhibition unavailable");
+    try {
+        const [{ data: exhibitionData }, { data: globalImageCatalog }] = await Promise.all([
+            sendAuthenticatedRequest("GET", exhibitionUrl),
+            sendAuthenticatedRequest("GET", Image.baseUrl)
+        ]);
+        return { exhibitionData, globalImageCatalog };
+    } catch (e) {
+        throw new Error("Exhibition Unavailable");
     }
 };
 

@@ -11,11 +11,11 @@ import { DarkModeIcon, LightModeIcon } from "../../../Imports/Icons.js";
 import PropTypes from "prop-types";
 import { AppSettingsDialogOption } from "./AppSettingsDialogOption.js";
 import { PersistentDialog } from "../PersistentDialog.js";
-import { DialogState } from "../../../Classes/DialogState.js";
+import { DialogStateOld } from "../../../Classes/DialogState.js";
 
 /**
  * @param {{
- *  dialogState: DialogState
+ *  dialogState: DialogStateOld
  * }} props
  */
 export const AppSettingsDialog = ({ dialogState }) => {
@@ -107,5 +107,5 @@ export const AppSettingsDialog = ({ dialogState }) => {
 };
 
 AppSettingsDialog.propTypes = {
-    dialogState: PropTypes.instanceOf(DialogState)
+    dialogState: PropTypes.instanceOf(DialogStateOld)
 };

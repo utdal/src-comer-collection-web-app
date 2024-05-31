@@ -12,11 +12,11 @@ import { useEntity } from "../../ContextProviders/ManagementPageProvider.js";
 import { DialogInputFieldWithRef } from "../Inputs/DialogInputFieldWithRef.js";
 import { PersistentDialog } from "./PersistentDialog.js";
 import PropTypes from "prop-types";
-import { DialogState } from "../../Classes/DialogState.js";
+import { DialogStateOld } from "../../Classes/DialogState.js";
 import { useActionData, useSubmit } from "react-router-dom";
 
 /**
- * @param {{ dialogState: DialogState }} props
+ * @param {{ dialogState: DialogStateOld }} props
  */
 export const ItemSingleEditDialog = ({ dialogState }) => {
     const showSnackbar = useSnackbar();
@@ -163,5 +163,5 @@ export const ItemSingleEditDialog = ({ dialogState }) => {
 };
 
 ItemSingleEditDialog.propTypes = {
-    dialogState: PropTypes.instanceOf(DialogState).isRequired
+    dialogState: PropTypes.instanceOf(DialogStateOld).isRequired
 };

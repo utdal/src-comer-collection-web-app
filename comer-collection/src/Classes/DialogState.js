@@ -1,4 +1,4 @@
-export class DialogState {
+export class DialogStateOld {
     constructor ({ dialogIsOpen, openDialog, closeDialog, dialogItems, dialogItem }) {
         /**
          * @type {boolean}

@@ -9,14 +9,14 @@ import { DeleteIcon, RestoreIcon } from "../../Imports/Icons.js";
 import PropTypes from "prop-types";
 import { useSnackbar } from "../../ContextProviders/AppFeatures.js";
 import { useEntity } from "../../ContextProviders/ManagementPageProvider.js";
-import { DialogState } from "../../Classes/DialogState.js";
+import { DialogStateOld } from "../../Classes/DialogState.js";
 import { PersistentDialog } from "./PersistentDialog.js";
 import { useActionData, useSubmit } from "react-router-dom";
 import { capitalized } from "../../Classes/Entity.js";
 
 /**
  * @param {{
- *  dialogState: DialogState
+ *  dialogState: DialogStateOld
  * }} param0
  * @returns
  */
@@ -251,7 +251,7 @@ export const ItemSingleDeleteDialog = ({ requireTypedConfirmation, dialogState, 
 };
 
 ItemSingleDeleteDialog.propTypes = {
-    dialogState: PropTypes.instanceOf(DialogState),
+    dialogState: PropTypes.instanceOf(DialogStateOld),
     requireTypedConfirmation: PropTypes.bool,
     restoreMode: PropTypes.bool
 };

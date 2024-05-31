@@ -10,7 +10,7 @@ import { SecurityIcon, PersonIcon, CollectionManagerIcon } from "../../Imports/I
 import { User } from "../../Classes/Entities/User.js";
 import { useSnackbar } from "../../ContextProviders/AppFeatures.js";
 import { useManagementCallbacks } from "../../ContextProviders/ManagementPageProvider.js";
-import { DialogState } from "../../Classes/DialogState.js";
+import { DialogStateOld } from "../../Classes/DialogState.js";
 import PropTypes from "prop-types";
 import { PersistentDialog } from "./PersistentDialog.js";
 
@@ -39,7 +39,7 @@ const userPrivilegeOptions = () => [
 ];
 
 /**
- * @param {{ dialogState: DialogState }} props
+ * @param {{ dialogState: DialogStateOld }} props
  */
 export const UserChangePrivilegesDialog = ({ dialogState }) => {
     const [confirmAction, setConfirmAction] = useState(false);
@@ -218,5 +218,5 @@ export const UserChangePrivilegesDialog = ({ dialogState }) => {
 };
 
 UserChangePrivilegesDialog.propTypes = {
-    dialogState: PropTypes.instanceOf(DialogState).isRequired
+    dialogState: PropTypes.instanceOf(DialogStateOld).isRequired
 };
