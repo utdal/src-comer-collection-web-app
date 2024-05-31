@@ -1,8 +1,9 @@
-import { sendAuthenticatedRequest } from "../Helpers/APICalls.ts";
-import { Image } from "../Classes/Entities/Image.ts";
+import { sendAuthenticatedRequest } from "../Helpers/APICalls.js";
+import { Image } from "../Classes/Entities/Image.js";
+import type { LoaderFunction, Params } from "react-router";
 
-export const appUserLoader = async () => {
-    if (!localStorage.getItem("token")) {
+export const appUserLoader: LoaderFunction = async () => {
+    if (localStorage.getItem("token") == null) {
         return false;
     }
     const response = await sendAuthenticatedRequest("GET", "/api/account/profile");
@@ -13,8 +14,10 @@ export const appUserLoader = async () => {
     }
 };
 
-export const exhibitionPageLoader = async ({ params }) => {
-    const exhibitionId = parseInt(params.exhibitionId);
+export const exhibitionPageLoader: LoaderFunction = async ({ params }: {
+    readonly params: Params;
+}) => {
+    const exhibitionId = parseInt((params as { exhibitionId: string }).exhibitionId);
     const exhibitionUrl = `/api/exhibitions/${exhibitionId}/data`;
     try {
         const [{ data: exhibitionData }, { data: globalImageCatalog }] = await Promise.all([
