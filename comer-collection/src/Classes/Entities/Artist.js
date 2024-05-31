@@ -51,6 +51,9 @@ class Artist extends Entity {
     static searchBoxFields = ["fullName", "fullNameReverse", "notes"];
     static searchBoxPlaceholder = "Search artists by name or notes";
 
+    /**
+     * @type {TableFieldDefinition[]}
+     */
     static tableFields = [
         {
             columnDescription: "ID",

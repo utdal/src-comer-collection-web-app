@@ -16,6 +16,9 @@ class ImageExhibition extends Association {
     static singular = "exhibition";
     static plural = "exhibitions";
 
+    /**
+     * @type {TableFieldDefinition[]}
+     */
     static tableFields = [
         {
             columnDescription: "ID",

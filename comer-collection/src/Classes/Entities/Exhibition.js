@@ -17,7 +17,7 @@ class Exhibition extends Entity {
     static searchBoxPlaceholder = "Search by title";
 
     /**
-     * @type {EntityFieldDefinition[]}
+     * @type {TableFieldDefinition[]}
      */
     static tableFields = [
         {

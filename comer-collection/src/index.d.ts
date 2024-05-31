@@ -255,3 +255,9 @@ type EntityFieldDefinition = {
     blank?: string | number,
     multiline?: boolean
 };
+
+type TableFieldDefinition = {
+    columnDescription: string,
+    TableCellComponent: () => any,
+    generateSortableValue?: SortableValueFunction
+};

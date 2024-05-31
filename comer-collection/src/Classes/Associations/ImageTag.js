@@ -20,6 +20,9 @@ class ImageTag extends Association {
 
     static secondaryFieldInPrimary = "Tags";
 
+    /**
+     * @type {TableFieldDefinition[]}
+     */
     static tableFields = [
         {
             columnDescription: "ID",

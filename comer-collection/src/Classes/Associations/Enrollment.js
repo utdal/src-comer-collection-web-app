@@ -32,6 +32,9 @@ class EnrollmentUserPrimary extends Enrollment {
     static secondarySearchBoxFields = ["name"];
     static secondarySearchBoxPlaceholder = "Search courses by name";
 
+    /**
+     * @type {TableFieldDefinition[]}
+     */
     static tableFields = [
         {
             columnDescription: "ID",

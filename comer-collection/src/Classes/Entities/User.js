@@ -73,6 +73,9 @@ class User extends Entity {
         });
     }
 
+    /**
+     * @type {TableFieldDefinition[]}
+     */
     static tableFields = [
         {
             columnDescription: "ID",

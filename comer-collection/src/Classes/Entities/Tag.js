@@ -38,6 +38,9 @@ class Tag extends Entity {
     static searchBoxFields = ["data", "notes"];
     static searchBoxPlaceholder = "Search tags by name or notes";
 
+    /**
+     * @type {TableFieldDefinition[]}
+     */
     static tableFields = [
         {
             columnDescription: "ID",

@@ -51,6 +51,9 @@ class Association {
         });
     }
 
+    /**
+     * @type {TableFieldDefinition[]}
+     */
     static tableFields = [];
 }
 

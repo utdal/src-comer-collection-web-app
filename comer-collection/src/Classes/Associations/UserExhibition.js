@@ -21,6 +21,9 @@ class UserExhibition extends Association {
     static secondarySearchBoxFields = ["title"];
     static secondarySearchBoxPlaceholder = "Search exhibitions by title";
 
+    /**
+     * @type {TableFieldDefinition[]}
+     */
     static tableFields = [
         {
             columnDescription: "ID",

@@ -20,6 +20,9 @@ class ImageArtist extends Association {
 
     static secondaryFieldInPrimary = "Artists";
 
+    /**
+     * @type {TableFieldDefinition[]}
+     */
     static tableFields = [
         {
             columnDescription: "ID",
