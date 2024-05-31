@@ -38,7 +38,7 @@ module.exports = {
             namedComponents: "arrow-function"
         }],
         "react/jsx-filename-extension": [1, {
-            extensions: [".js", ".jsx"]
+            extensions: [".js", ".jsx", ".tsx"]
         }],
         "react/jsx-no-bind": [0],
         "react/jsx-max-depth": [0],
