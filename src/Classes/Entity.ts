@@ -4,10 +4,11 @@ import type React from "react";
 import type { EntityFieldDefinition } from "../index.js";
 
 export const capitalized = (string: string): string => {
-    return string.substr(0, 1).toUpperCase() + string.substr(1).toLowerCase();
+    // eslint-disable-next-line @typescript-eslint/no-magic-numbers
+    return string.substring(0, 1).toUpperCase() + string.substr(1).toLowerCase();
 };
 
-export class Entity {
+export class Entity extends null {
     public static baseUrl = null;
 
     public static singular = "item";
@@ -40,7 +41,7 @@ export class Entity {
 
     public static searchBoxPlaceholder = "Search items by ID";
 
-    public static MultiCreateButtonIcon: React.ElementType | null = AddIcon;
+    public static MultiCreateButtonIcon: React.ElementType = AddIcon as React.FunctionComponent;
 
     public static multiCreateDialogSubtitle = null;
 
@@ -48,7 +49,7 @@ export class Entity {
 
     public static fetcherUrl = null;
 
-    public static formatDate = (date) => {
+    public static formatDate = (date: string): string => {
         return new Date(date).toLocaleDateString([], {
             year: "numeric",
             month: "short",
@@ -57,7 +58,7 @@ export class Entity {
         });
     };
 
-    public static formatTime = (date) => {
+    public static formatTime = (date: string): string => {
         return new Date(date).toLocaleTimeString([], {
             hour: "numeric",
             minute: "2-digit",
