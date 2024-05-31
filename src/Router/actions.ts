@@ -10,29 +10,25 @@ export const myExhibitionsAction: ActionFunction = async ({ request }: ActionFun
             await Exhibition.handleMultiCreate([requestData]);
             return {
                 status: "success",
-                message: "Exhibition created",
                 snackbarText: "Exhibition created"
             };
         } catch (e) {
             return {
                 status: "error",
-                error: (e as Error).message,
                 snackbarText: "Could not create exhibition"
             };
         }
     } else if (request.method === "PUT") {
         const { id, ...requestBody } = requestData;
         try {
-            const result = await Exhibition.handleEdit(id, requestBody);
+            await Exhibition.handleEdit(id, requestBody);
             return {
                 status: "success",
-                message: result as string,
                 snackbarText: "Exhibition settings updated"
             };
         } catch (e) {
             return {
                 status: "error",
-                error: (e as Error).message,
                 snackbarText: "Could not update exhibition"
             };
         }
