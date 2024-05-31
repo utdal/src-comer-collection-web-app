@@ -16,6 +16,7 @@ import { useLoaderData, useNavigate } from "react-router-dom";
 import EntityManageUpdateSection from "./EntityManageUpdateSection.js";
 import EntityManageCreateSection from "./EntityManageCreateSection.js";
 import { DeleteIcon } from "../../../Imports/Icons.js";
+import { Entity } from "../../../Classes/Entity.js";
 
 /**
  * @returns {React.JSX.Element}
@@ -167,5 +168,5 @@ export const EntityManageDialog = ({ Entity }) => {
 };
 
 EntityManageDialog.propTypes = {
-    Entity: PropTypes.func.isRequired
+    Entity: PropTypes.instanceOf(typeof Entity)
 };

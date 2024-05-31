@@ -28,7 +28,7 @@ import ExhibitionPage from "../Pages/ExhibitionPage.js";
 import SignIn from "../Pages/SignIn.js";
 import { myExhibitionsAction } from "./actions.js";
 import buildRouterActionByEntity from "./buildRouterActionByEntity.js";
-import buildRouterLoaderByEntity from "./buildRouterLoaderByEntity.ts";
+import buildRouterLoaderByEntity from "./buildRouterLoaderByEntity";
 import { appUserLoader, exhibitionPageLoader } from "./loaders.js";
 
 const router = createBrowserRouter([
@@ -62,7 +62,7 @@ const router = createBrowserRouter([
             {
                 element: <ExhibitionBrowser />,
                 path: "Exhibitions",
-                loader: PublicExhibition.loader,
+                loader: buildRouterLoaderByEntity(PublicExhibition),
                 ErrorBoundary: RouterErrorMessage
             },
             {
