@@ -4,8 +4,6 @@ import { itemsCombinedStatePropTypeShape } from "../Classes/Entity.js";
 
 /**
  *
- * @typedef {{id: number}} Item
- *
  * @typedef {{
  *      all: number,
  *      selected: number,
