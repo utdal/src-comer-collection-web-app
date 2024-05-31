@@ -1,8 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import SearchBox from "../../Components/SearchBox.js";
-import { ItemSingleDeleteDialog } from "../../Components/Dialogs/ItemSingleDeleteDialog.js";
-import { ItemMultiCreateDialog } from "../../Components/Dialogs/ItemMultiCreateDialog.js";
-import { ItemSingleEditDialog } from "../../Components/Dialogs/ItemSingleEditDialog.js";
 import { doesItemMatchSearchQuery } from "../../Helpers/SearchUtilities.js";
 import { Outlet, useLoaderData, useNavigate, useRevalidator } from "react-router";
 import { ImageFullScreenViewer } from "../../Components/Dialogs/ImageFullScreenViewer.js";
@@ -32,6 +29,7 @@ import AssociationManageButton from "../../Components/Buttons/AssociationManageB
 import PaginationSummary from "../../Components/PaginationSummary/PaginationSummary.js";
 import OpenTrashButton from "../../Components/Buttons/OpenTrashButton.js";
 import useDialogStates from "../../Hooks/useDialogStates.js";
+import DialogByIntent from "../../Components/Dialogs/DialogByIntent.js";
 
 const ImageManagement = () => {
     const images = useLoaderData();
@@ -200,11 +198,13 @@ const ImageManagement = () => {
 
             </ManagementPageContainer>
 
-            <ItemMultiCreateDialog dialogState={dialogStateDictionary["multi-create"]} />
-
-            <ItemSingleEditDialog dialogState={dialogStateDictionary["single-edit"]} />
-
-            <ItemSingleDeleteDialog dialogState={dialogStateDictionary["single-delete"]} />
+            {["single-edit", "multi-create", "single-delete"].map((intent) => (
+                <DialogByIntent
+                    dialogState={dialogStateDictionary[intent]}
+                    intent={intent}
+                    key={intent}
+                />
+            ))}
 
             {/* Entity manage dialogs and any trash dialogs are child routes of the page and use the outlet */}
             <Outlet />

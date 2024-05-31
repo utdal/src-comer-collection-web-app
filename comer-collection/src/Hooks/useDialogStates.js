@@ -1,4 +1,6 @@
 import { useCallback, useReducer } from "react";
+import PropTypes from "prop-types";
+import { entityPropTypeShape } from "../Classes/Entity.js";
 
 /**
  * @type {Object<string, import("../Classes/buildRouterAction").DialogItemsMultiplicity>}
@@ -29,6 +31,13 @@ const dialogItemsMultiplicityByIntent = {
  *
  * @typedef {Object<string, DialogState>} DialogStateDictionary
  */
+
+export const dialogStatePropTypeShape = PropTypes.shape({
+    dialogIsOpen: PropTypes.bool,
+    dialogItemsMultiplicityByIntent: PropTypes.string,
+    underlyingItem: entityPropTypeShape,
+    underlyingItems: PropTypes.arrayOf(entityPropTypeShape)
+});
 
 /**
  * @param {import("../Classes/buildRouterAction").Intent[]} intentArray
