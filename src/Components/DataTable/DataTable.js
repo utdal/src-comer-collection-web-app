@@ -218,8 +218,7 @@ export const DataTable = ({
             {itemCounts.visible === 0 && (
                 <FullPageMessage
                     Icon={InfoIcon}
-                    buttonAction={null}
-                    buttonText={null}
+                    button={false}
                     message={itemCounts.all === 0 ? "This list is empty" : "All items are hidden"}
                 />
             )}

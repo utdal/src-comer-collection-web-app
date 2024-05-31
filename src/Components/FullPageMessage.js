@@ -4,7 +4,7 @@ import { useNavigate } from "react-router";
 import PropTypes from "prop-types";
 import SideBySideLogo from "./Logos/SideBySideLogo.js";
 
-export const FullPageMessage = ({ message, buttonText, buttonDestination = "/SignIn", Icon, buttonAction = null, includeLinearProgress = false, includeLogo = false, viewportHeight = false }) => {
+export const FullPageMessage = ({ message, button = true, buttonText, buttonDestination = "/SignIn", Icon, buttonAction = null, includeLinearProgress = false, includeLogo = false, viewportHeight = false }) => {
     const navigate = useNavigate();
 
     const handleNavigate = useCallback(() => {
@@ -39,7 +39,7 @@ export const FullPageMessage = ({ message, buttonText, buttonDestination = "/Sig
                     {message}
                 </Typography>
 
-                {(buttonDestination || buttonText)
+                {button && (buttonDestination || buttonText)
                     ? (
                         <Button
                             onClick={buttonAction ?? handleNavigate}
@@ -58,6 +58,7 @@ export const FullPageMessage = ({ message, buttonText, buttonDestination = "/Sig
 
 FullPageMessage.propTypes = {
     Icon: PropTypes.elementType,
+    button: PropTypes.bool,
     buttonAction: PropTypes.func,
     buttonDestination: PropTypes.string,
     buttonText: PropTypes.string,
