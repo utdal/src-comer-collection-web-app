@@ -20,7 +20,7 @@ import { UserProfilePasswordInfoCell } from "../../Components/TableCells/User/Us
 import UserTypeCell from "../../Components/TableCells/User/UserTypeCell.js";
 import { UserExhibitionQuotaCell } from "../../Components/TableCells/User/UserExhibitionQuotaCell.js";
 import { User } from "../../Classes/Entities/User.js";
-import { Course } from "../../Classes/Entities/Course.js";
+import { Course } from "../../Classes/Entities/Course.ts";
 import PaginationSummary from "../../Components/PaginationSummary/PaginationSummary.js";
 
 const courseTableFields = [

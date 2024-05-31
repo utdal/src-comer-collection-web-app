@@ -1,7 +1,7 @@
 import React from "react";
 import { Stack, Typography } from "@mui/material";
 import { useTableCellItem } from "../../../ContextProviders/TableCellProvider.js";
-import { Course } from "../../../Classes/Entities/Course.js";
+import { Course } from "../../../Classes/Entities/Course.ts";
 
 export const CourseStartDateTimeStackedCell = () => {
     const course = useTableCellItem();

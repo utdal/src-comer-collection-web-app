@@ -1,5 +1,5 @@
 import { PersonAddIcon, PersonRemoveIcon } from "../../Imports/Icons.js";
-import { Course } from "../Entities/Course.js";
+import { Course } from "../Entities/Course.ts";
 import { User } from "../Entities/User.js";
 import { Association } from "../Association.ts";
 import { CourseIDCell } from "../../Components/TableCells/Course/CourseIDCell.js";

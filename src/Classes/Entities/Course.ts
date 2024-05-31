@@ -1,4 +1,5 @@
 /* eslint-disable react/prop-types */
+import type React from "react";
 import { CourseEndDateTimeStackedCell } from "../../Components/TableCells/Course/CourseEndDateTimeStackedCell.js";
 import { CourseIDCell } from "../../Components/TableCells/Course/CourseIDCell.js";
 import { CourseNameCell } from "../../Components/TableCells/Course/CourseNameCell.js";
@@ -8,22 +9,23 @@ import { CourseStartDateTimeStackedCell } from "../../Components/TableCells/Cour
 import { CourseStatusCell } from "../../Components/TableCells/Course/CourseStatusCell.js";
 import { CourseUserAssignmentCell } from "../../Components/TableCells/Course/CourseUserAssignmentCell.js";
 import { SchoolIcon } from "../../Imports/Icons.js";
-import { Entity } from "../Entity.ts";
+import { Entity } from "../Entity";
+import type { EntityFieldDefinition, Item, SortableValue, TableFieldDefinition } from "../../index.js";
 
 class Course extends Entity {
-    static baseUrl = "/api/courses";
-    static singular = "course";
-    static plural = "courses";
+    public static baseUrl = "/api/courses";
 
-    static multiCreateDialogSubtitle = "You can enroll users after creating the courses.";
-    static DefaultIcon = SchoolIcon;
+    public static singular = "course";
 
-    static searchBoxPlaceholder = "Search courses by name";
+    public static plural = "courses";
 
-    /**
-     * @type {EntityFieldDefinition[]}
-     */
-    static fieldDefinitions = [
+    public static multiCreateDialogSubtitle = "You can enroll users after creating the courses.";
+
+    public static DefaultIcon = SchoolIcon as React.FunctionComponent;
+
+    public static searchBoxPlaceholder = "Search courses by name";
+
+    public static fieldDefinitions: EntityFieldDefinition[] = [
         {
             fieldName: "name",
             displayName: "Course Name",
@@ -46,34 +48,32 @@ class Course extends Entity {
             fieldName: "notes",
             displayName: "Notes",
             inputType: "textarea",
-            multiline: true
+            multiline: true,
+            isRequired: false
         }
     ];
 
-    /**
-     * @type {TableFieldDefinition[]}
-     */
-    static tableFields = [
+    public static tableFields: TableFieldDefinition[] = [
         {
             columnDescription: "ID",
             TableCellComponent: CourseIDCell,
-            generateSortableValue: (course) => course.id
+            generateSortableValue: (course: Item): SortableValue => course.id
         },
         {
             columnDescription: "Name",
             maxWidth: "200px",
             TableCellComponent: CourseNameCell,
-            generateSortableValue: (course) => course.name.toLowerCase()
+            generateSortableValue: (course: Item): SortableValue => (course.name as string).toLowerCase()
         },
         {
             columnDescription: "Start",
             TableCellComponent: CourseStartDateTimeStackedCell,
-            generateSortableValue: (course) => new Date(course.date_start)
+            generateSortableValue: (course: Item): SortableValue => new Date(course.date_start as string)
         },
         {
             columnDescription: "End",
             TableCellComponent: CourseEndDateTimeStackedCell,
-            generateSortableValue: (course) => new Date(course.date_end)
+            generateSortableValue: (course: Item): SortableValue => new Date(course.date_end as string)
         },
         {
             columnDescription: "Status",

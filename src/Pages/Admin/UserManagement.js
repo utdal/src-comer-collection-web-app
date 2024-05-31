@@ -17,7 +17,7 @@ import { RefreshButton } from "../../Components/Buttons/RefreshButton.js";
 import { MultiCreateButton } from "../../Components/Buttons/MultiCreateButton.js";
 import { ManagementButtonStack } from "../../Components/ManagementPage/ManagementButtonStack.js";
 import { useDialogState } from "../../Hooks/useDialogState.js";
-import { Course } from "../../Classes/Entities/Course.js";
+import { Course } from "../../Classes/Entities/Course.ts";
 import { ManagementPageContainer } from "../../Components/ManagementPage/ManagementPageContainer.js";
 import { ManagementPageHeader } from "../../Components/ManagementPage/ManagementPageHeader.js";
 import { ManagementPageBody } from "../../Components/ManagementPage/ManagementPageBody.js";

@@ -6,7 +6,7 @@ import { AssociationManagementDialog } from "../../Components/Dialogs/Associatio
 import { useLoaderData, useNavigate, useRevalidator } from "react-router";
 import { SelectionSummary } from "../../Components/SelectionSummary.js";
 import { useTitle } from "../../ContextProviders/AppFeatures.js";
-import { Course } from "../../Classes/Entities/Course.js";
+import { Course } from "../../Classes/Entities/Course.ts";
 import { EnrollmentCoursePrimary } from "../../Classes/Associations/Enrollment.js";
 import { ManagementPageProvider, useItemsReducer } from "../../ContextProviders/ManagementPageProvider.js";
 import { ClearFilterButton } from "../../Components/Buttons/ClearFilterButton.js";

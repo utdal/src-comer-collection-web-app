@@ -22,7 +22,7 @@ export type SelectionStatusDictionary = Record<number, boolean>;
 
 export type VisibilityStatusDictionary = Record<number, boolean>;
 
-export type SortableValue = number | string;
+export type SortableValue = Date | number | string;
 
 export type SortableValueDictionary = Record<number, SortableValue>;
 
@@ -249,6 +249,7 @@ export interface EntityFieldDefinition {
 
 export interface TableFieldDefinition {
     columnDescription: string;
+    maxWidth?: string;
     TableCellComponent: () => React.JSX.Element;
     generateSortableValue?: SortableValueFunction;
 }

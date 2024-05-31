@@ -1,7 +1,7 @@
 import PropTypes from "prop-types";
 import { AddIcon } from "../Imports/Icons.js";
 import type React from "react";
-import type { EntityFieldDefinition } from "../index.js";
+import type { EntityFieldDefinition, TableFieldDefinition } from "../index.js";
 
 export const capitalized = (string: string): string => {
     // eslint-disable-next-line @typescript-eslint/no-magic-numbers
@@ -9,7 +9,7 @@ export const capitalized = (string: string): string => {
 };
 
 export class Entity extends null {
-    public static baseUrl = null;
+    public static baseUrl = "/";
 
     public static singular = "item";
 
@@ -43,9 +43,9 @@ export class Entity extends null {
 
     public static MultiCreateButtonIcon: React.ElementType = AddIcon as React.FunctionComponent;
 
-    public static multiCreateDialogSubtitle = null;
+    public static multiCreateDialogSubtitle = "";
 
-    public static tableFields = [];
+    public static tableFields = [] as TableFieldDefinition[];
 
     public static fetcherUrl = null;
 

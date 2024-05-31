@@ -1,6 +1,6 @@
 import React from "react";
 import { Typography } from "@mui/material";
-import { Course } from "../../../Classes/Entities/Course.js";
+import { Course } from "../../../Classes/Entities/Course.ts";
 import { useTableCellItem } from "../../../ContextProviders/TableCellProvider.js";
 
 export const CourseStartDateTimeCell = () => {

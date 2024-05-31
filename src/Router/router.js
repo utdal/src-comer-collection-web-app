@@ -3,7 +3,7 @@ import { Navigate } from "react-router";
 import { createBrowserRouter } from "react-router-dom";
 import AppLayout from "../Layouts/AppLayout.js";
 import { Artist } from "../Classes/Entities/Artist.js";
-import { Course } from "../Classes/Entities/Course.js";
+import { Course } from "../Classes/Entities/Course.ts";
 import { Exhibition, PublicExhibition } from "../Classes/Entities/Exhibition.js";
 import { Image, DeletedImage } from "../Classes/Entities/Image.js";
 import { Tag } from "../Classes/Entities/Tag.js";

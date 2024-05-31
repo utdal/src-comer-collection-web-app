@@ -1,5 +1,5 @@
 import { User } from "../Classes/Entities/User.js";
-import { Course } from "../Classes/Entities/Course.js";
+import { Course } from "../Classes/Entities/Course.ts";
 import { DeletedImage, Image } from "../Classes/Entities/Image.js";
 import { Artist } from "../Classes/Entities/Artist.js";
 import { Tag } from "../Classes/Entities/Tag.js";
