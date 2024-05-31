@@ -16,10 +16,6 @@ class Exhibition extends Entity {
     static searchBoxFields = ["title"];
     static searchBoxPlaceholder = "Search by title";
 
-    static loader = async () => {
-        return await this.handleFetchAll();
-    };
-
     static tableFields = [
         {
             columnDescription: "ID",
@@ -58,20 +54,8 @@ class Exhibition extends Entity {
     ];
 }
 
-class MyExhibition extends Exhibition {
-    static baseUrl = "/api/exhibitions";
-
-    static loader = async () => {
-        return await this.handleFetchAll();
-    };
-}
-
 class PublicExhibition extends Exhibition {
     static baseUrl = "/api/exhibitions?public_only=1";
-
-    static loader = async () => {
-        return await this.handleFetchAll();
-    };
 }
 
 export const exhibitionStatePropTypesShape = PropTypes.shape({
@@ -92,4 +76,4 @@ export const exhibitionStatePropTypesShape = PropTypes.shape({
     images: PropTypes.arrayOf(entityPropTypeShape)
 });
 
-export { Exhibition, MyExhibition, PublicExhibition };
+export { Exhibition, PublicExhibition };

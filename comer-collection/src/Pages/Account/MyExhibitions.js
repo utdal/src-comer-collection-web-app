@@ -19,7 +19,7 @@ import { ManagementPageProvider, useItemsReducer } from "../../ContextProviders/
 import { CreateExhibitionButton } from "../../Components/Buttons/CreateExhibitionButton.js";
 import { ExhibitionCreationRestriction } from "../../Components/TextBanners/ExhibitionCreationRestriction.js";
 import { useDialogState } from "../../Hooks/useDialogState.js";
-import { MyExhibition } from "../../Classes/Entities/Exhibition.js";
+import { Exhibition } from "../../Classes/Entities/Exhibition.js";
 import { useRevalidator } from "react-router";
 import PaginationSummary from "../../Components/PaginationSummary/PaginationSummary.js";
 
@@ -108,7 +108,7 @@ const MyExhibitions = () => {
 
     return (
         <ManagementPageProvider
-            Entity={MyExhibition}
+            Entity={Exhibition}
             itemsCallbacks={itemsCallbacks}
             itemsCombinedState={exhibitionsCombinedState}
             managementCallbacks={managementCallbacks}

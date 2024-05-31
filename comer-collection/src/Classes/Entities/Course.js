@@ -18,10 +18,6 @@ class Course extends Entity {
     static multiCreateDialogSubtitle = "You can enroll users after creating the courses.";
     static DefaultIcon = SchoolIcon;
 
-    static loader = async () => {
-        return await this.handleFetchAll();
-    };
-
     static searchBoxPlaceholder = "Search courses by name";
 
     static fieldDefinitions = [

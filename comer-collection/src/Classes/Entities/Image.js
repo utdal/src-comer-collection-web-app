@@ -18,10 +18,6 @@ class Image extends Entity {
     static singular = "image";
     static plural = "images";
 
-    static loader = async () => {
-        return await this.handleFetchAll();
-    };
-
     static MultiCreateButtonIcon = AddPhotoAlternateIcon;
     static multiCreateDialogSubtitle = "You can add artists and tags after creating the images.";
 
@@ -180,14 +176,6 @@ class Image extends Entity {
     ];
 }
 
-class PublicImage extends Image {
-    static baseUrl = "/api/images";
-
-    static loader = async () => {
-        return await this.handleFetchAll();
-    };
-};
-
 class DeletedImage extends Image {
     static isTrash = true;
     static hasTrash = false;
@@ -237,4 +225,4 @@ class DeletedImage extends Image {
 
 Image.TrashEntity = DeletedImage;
 
-export { Image, PublicImage, DeletedImage };
+export { Image, DeletedImage };
