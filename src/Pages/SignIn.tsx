@@ -1,14 +1,16 @@
 import React, { useCallback, useState } from "react";
 import { Navigate, useRevalidator } from "react-router";
 import { Box, Button, Divider, Paper, Stack, TextField } from "@mui/material";
-import type { APIResponse } from "../Helpers/APICalls";
-import { sendAuthenticatedRequest } from "../Helpers/APICalls";
+import type { APIResponse } from "../Helpers/APICalls.ts";
+import { sendAuthenticatedRequest } from "../Helpers/APICalls.ts";
 import { useAppUser } from "../Hooks/useAppUser";
-import { useTitle } from "../ContextProviders/AppFeatures.js";
+import { useSnackbar, useTitle } from "../ContextProviders/AppFeatures.js";
 
 const SignIn = (): React.JSX.Element => {
     const appUser = useAppUser();
     const revalidator = useRevalidator();
+
+    const showSnackbar = useSnackbar();
 
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
@@ -17,7 +19,7 @@ const SignIn = (): React.JSX.Element => {
 
     useTitle("Sign In");
 
-    const handleSignIn = useCallback((event: Readonly<Event>) => {
+    const handleSignIn = useCallback((event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         setFormEnabled(false);
 
@@ -26,7 +28,7 @@ const SignIn = (): React.JSX.Element => {
         }).then((response: APIResponse) => {
             const token = response.token;
 
-            if (token) {
+            if (token != null) {
                 localStorage.setItem("token", token);
                 revalidator.revalidate();
             }
@@ -34,11 +36,17 @@ const SignIn = (): React.JSX.Element => {
             setPassword("");
             setFormEnabled(true);
             setError(true);
+            showSnackbar((e as Error).message, "error");
         });
-    }, [email, password, revalidator]);
+    }, [email, password, revalidator, showSnackbar]);
 
-    const handleChangeEmail = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
+    const handleEmailInput = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
         setEmail(event.target.value);
+        setError(false);
+    }, []);
+
+    const handlePasswordInput = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
+        setPassword(event.target.value);
         setError(false);
     }, []);
 
@@ -73,7 +81,7 @@ const SignIn = (): React.JSX.Element => {
                             error={Boolean(error)}
                             label="Email"
                             name="email"
-                            onChange={handleChangeEmail}
+                            onChange={handleEmailInput}
                             required
                             sx={{ minWidth: "400px" }}
                             type="text"
@@ -85,10 +93,7 @@ const SignIn = (): React.JSX.Element => {
                             error={Boolean(error)}
                             label="Password"
                             name="password"
-                            onChange={(event) => {
-                                setPassword(event.target.value);
-                                setError(false);
-                            }}
+                            onChange={handlePasswordInput}
                             required
                             sx={{ minWidth: "400px" }}
                             type="password"
