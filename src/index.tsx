@@ -3,15 +3,19 @@ import "./index.css";
 import App from "./App";
 import { createRoot } from "react-dom/client";
 import type { Container } from "react-dom/client";
+import type { Artist } from "./Classes/Entities/Artist";
+import type { Course } from "./Classes/Entities/Course";
+import type { Exhibition, PublicExhibition } from "./Classes/Entities/Exhibition";
+import type { Tag } from "./Classes/Entities/Tag";
+import type { User } from "./Classes/Entities/User";
+import type { DeletedImage, Image } from "./Classes/Entities/Image";
 
 export interface Item {
     readonly [x: string]: boolean | number | object | string | readonly boolean[] | readonly number[] | readonly object[] | readonly string[];
     readonly id: number;
 }
 
-export interface EntityType {
-    readonly baseUrl: string;
-}
+export type EntityType = typeof Artist | typeof Course | typeof DeletedImage | typeof Exhibition | typeof Image | typeof PublicExhibition | typeof Tag | typeof User;
 
 export interface AppUser {
     id: number;
@@ -104,7 +108,7 @@ export interface ItemsCallbacks {
     setPaginationStartIndex: (startIndex: number) => void;
 }
 
-export type Intent = "multi-create" | "multi-delete" | "single-delete" | "single-edit" | "single-permanent-delete" | "user-change-activation-status" | "user-change-privileges" | "user-reset-password";
+export type Intent = "multi-create" | "multi-delete" | "single-delete" | "single-edit" | "single-permanent-delete" | "single-restore" | "user-change-activation-status" | "user-change-privileges" | "user-reset-password";
 
 export type OpenDialogByIntentFunctionNoUnderlyingItems = (intent: Intent) => void;
 
@@ -167,7 +171,6 @@ export type RouterActionRequest = (
 export type RouterActionResponse = (
     {
         status: "error";
-        error: string;
         snackbarText: string;
     } | {
         status: "partial";
@@ -180,7 +183,6 @@ export type RouterActionResponse = (
         snackbarText: string;
     } | {
         status: "success";
-        message: string;
         snackbarText: string;
     }
 );

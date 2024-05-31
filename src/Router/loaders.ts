@@ -11,7 +11,7 @@ export const appUserLoader: LoaderFunction = async () => {
         console.log(response.data);
         return response.data;
     } else {
-        throw new Response("Network request failed", { status: 405 });
+        throw new Error("Network request failed");
     }
 };
 
@@ -27,6 +27,6 @@ export const exhibitionPageLoader: LoaderFunction = async ({ params }: {
         ]);
         return { exhibitionData, globalImageCatalog };
     } catch (e) {
-        throw new Error("Exhibition Unavailable");
+        throw new Error(`Exhibition Unavailable ${(e as Error).message}`);
     }
 };

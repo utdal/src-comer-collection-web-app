@@ -5,19 +5,20 @@ import { Artist } from "../Classes/Entities/Artist";
 import { Tag } from "../Classes/Entities/Tag";
 import { Exhibition } from "../Classes/Entities/Exhibition";
 import { sendAuthenticatedRequest } from "../Helpers/APICalls";
-import type { Entity } from "../Classes/Entity";
 import { capitalized } from "../Classes/Entity";
-import type { Intent } from "../index.js";
-import type { V7_FormMethod as FormMethod } from "react-router-dom";
+import type { EntityType, Intent, RouterActionRequest, RouterActionResponse } from "../index.js";
+import type { ActionFunction, ActionFunctionArgs, V7_FormMethod as FormMethod } from "react-router-dom";
 
-const permittedEntitiesByIntent: Record<Intent, typeof Entity> = {
+const permittedEntitiesByIntent: Record<Intent, EntityType[]> = {
     "single-delete": [User, Course, Image, Artist, Tag, Exhibition],
     "single-permanent-delete": [DeletedImage],
     "single-restore": [DeletedImage],
     "single-edit": [User, Course, Image, Artist, Tag],
     "multi-create": [User, Course, Image],
     "user-reset-password": [User],
-    "user-change-activation-status": [User]
+    "user-change-activation-status": [User],
+    "multi-delete": [User, Course, Image, Artist, Tag, Exhibition],
+    "user-change-privileges": [User]
 };
 
 const requiredMethodsByIntent: Record<Intent, FormMethod> = {
@@ -27,7 +28,9 @@ const requiredMethodsByIntent: Record<Intent, FormMethod> = {
     "single-edit": "PUT",
     "multi-create": "POST",
     "user-reset-password": "PUT",
-    "user-change-activation-status": "PUT"
+    "user-change-activation-status": "PUT",
+    "multi-delete": "DELETE",
+    "user-change-privileges": "PUT"
 };
 
 /**
@@ -41,15 +44,16 @@ const requiredMethodsByIntent: Record<Intent, FormMethod> = {
  * @returns {({request, params}) => RouterActionResponse}
  */
 
-const buildRouterActionByEntity = (entityType) => {
-    /**
-     * @param {{request: {
-     *  method: import("react-router-dom").V7_FormMethod,
-     *  json: () => RouterActionRequest
-     * }, params: import("react-router").Params}}
-     * @returns {RouterActionResponse}
-     */
-    const routerAction = async ({ request, params }) => {
+interface RouterRequest extends Request {
+    json: () => Promise<RouterActionRequest>;
+}
+
+interface RouterActionFunctionArgs extends ActionFunctionArgs {
+    request: RouterRequest;
+}
+
+const buildRouterActionByEntity = (entityType: EntityType): ActionFunction => {
+    const routerAction: ActionFunction = async ({ request }: RouterActionFunctionArgs): Promise<RouterActionResponse> => {
         const requestData = await request.json();
         const { intent } = requestData;
 
@@ -62,64 +66,56 @@ const buildRouterActionByEntity = (entityType) => {
         if (intent === "single-delete") {
             const { itemId } = requestData;
             try {
-                const result = await sendAuthenticatedRequest("DELETE", `${entityType.baseUrl}/${itemId}`);
+                await sendAuthenticatedRequest("DELETE", `${entityType.baseUrl}/${itemId}`);
                 return {
                     status: "success",
-                    message: result,
                     snackbarText: `${capitalized(entityType.singular)} ${entityType.hasTrash ? "moved to trash" : "deleted"}`
                 };
             } catch (e) {
                 return {
                     status: "error",
-                    error: e.message,
                     snackbarText: entityType.hasTrash ? `Could not delete ${entityType.singular}` : `Could not move ${entityType.singular} to trash`
                 };
             }
         } else if (intent === "single-permanent-delete") {
             const { itemId } = requestData;
             try {
-                const result = await sendAuthenticatedRequest("DELETE", `${entityType.baseUrl}/${itemId}`);
+                await sendAuthenticatedRequest("DELETE", `${entityType.baseUrl}/${itemId}`);
                 return {
                     status: "success",
-                    message: result,
                     snackbarText: `${capitalized(entityType.singular)} permanently deleted`
                 };
             } catch (e) {
                 return {
                     status: "error",
-                    error: e.message,
                     snackbarText: `Could not permanently delete ${entityType.singular}`
                 };
             }
         } else if (intent === "single-restore") {
             const { itemId } = requestData;
             try {
-                const result = await sendAuthenticatedRequest("PUT", `${entityType.baseUrl}/${itemId}`);
+                await sendAuthenticatedRequest("PUT", `${entityType.baseUrl}/${itemId}`);
                 return {
                     status: "success",
-                    message: result,
                     snackbarText: `${capitalized(entityType.singular)} restored`
                 };
             } catch (e) {
                 return {
                     status: "error",
-                    error: e.message,
                     snackbarText: `Could not restore ${entityType.singular}`
                 };
             }
         } else if (intent === "single-edit") {
             const { body, itemId } = requestData;
             try {
-                const result = await sendAuthenticatedRequest("PUT", `${entityType.baseUrl}/${itemId}`, body);
+                await sendAuthenticatedRequest("PUT", `${entityType.baseUrl}/${itemId}`, body);
                 return {
                     status: "success",
-                    message: result,
                     snackbarText: `${capitalized(entityType.singular)} updated`
                 };
             } catch (e) {
                 return {
                     status: "error",
-                    error: e.message,
                     snackbarText: `Could not edit ${entityType.singular}`
                 };
             }
@@ -127,7 +123,7 @@ const buildRouterActionByEntity = (entityType) => {
             const { body } = requestData;
             try {
                 const promiseResults = await Promise.allSettled(body.itemsToCreate.map(async (newItem) => {
-                    return new Promise((resolve, reject) => {
+                    return new Promise<void>((resolve, reject) => {
                         sendAuthenticatedRequest("POST", `${entityType.baseUrl}`, newItem).then(() => {
                             resolve();
                         }).catch((e) => {
@@ -145,7 +141,6 @@ const buildRouterActionByEntity = (entityType) => {
                 case 0:
                     return {
                         status: "success",
-                        message: "all items created",
                         snackbarText: body.itemsToCreate.length > 1
                             ? `Created ${body.itemsToCreate.length} ${entityType.plural}`
                             : `Created ${entityType.singular}`
@@ -153,7 +148,6 @@ const buildRouterActionByEntity = (entityType) => {
                 case body.itemsToCreate.length:
                     return {
                         status: "error",
-                        error: "no items created",
                         snackbarText: body.itemsToCreate.length > 1
                             ? `Could not create ${indicesWithErrors.length} ${entityType.plural}`
                             : `Could not create ${entityType.singular}`
@@ -162,14 +156,13 @@ const buildRouterActionByEntity = (entityType) => {
                     return {
                         status: "partial",
                         indicesWithErrors,
-                        errors: promiseResults.map((promiseResult) => promiseResult.reason),
+                        errors: promiseResults.map((promiseResult) => (promiseResult as PromiseRejectedResult).reason as string),
                         snackbarText: `Created ${body.itemsToCreate.length - indicesWithErrors.length} of ${body.itemsToCreate.length} ${entityType.plural}`
                     };
                 }
             } catch (e) {
                 return {
                     status: "error",
-                    error: e.message,
                     snackbarText: `Could not create ${entityType.plural}`
                 };
             }
@@ -180,18 +173,16 @@ const buildRouterActionByEntity = (entityType) => {
                 await sendAuthenticatedRequest("PUT", `${entityType.baseUrl}/${userId}/password`, { newPassword });
                 return {
                     status: "success",
-                    message: "Reset user password",
                     snackbarText: "User password reset"
                 };
             } catch (e) {
                 return {
                     status: "error",
-                    error: e.message,
                     snackbarText: "Could not reset user password"
                 };
             }
         } else {
-            throw new Response("Method not allowed", { status: 405 });
+            throw new Error("Method not allowed");
         }
     };
     return routerAction;
