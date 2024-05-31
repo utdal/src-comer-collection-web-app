@@ -5,9 +5,9 @@ module.exports = {
         node: true
     },
     extends: [
+        "plugin:@typescript-eslint/all",
         "standard",
-        "plugin:react/all",
-        "plugin:@typescript-eslint/recommended"
+        "plugin:react/all"
     ],
     overrides: [
         {
@@ -24,10 +24,11 @@ module.exports = {
     ],
     parserOptions: {
         ecmaVersion: "latest",
-        sourceType: "module"
+        sourceType: "module",
+        project: "./tsconfig.json"
     },
     plugins: [
-        "react", "react-hooks", "@typescript-eslint"
+        "react", "@typescript-eslint", "react-hooks"
     ],
     rules: {
         indent: ["error", 4],
@@ -44,6 +45,8 @@ module.exports = {
         "react/jsx-no-bind": [0],
         "react/jsx-max-depth": [0],
         "react/jsx-no-literals": [0],
-        "react/require-default-props": [0]
+        "react/require-default-props": [0],
+        "@typescript-eslint/object-curly-spacing": "off",
+        "@typescript-eslint/naming-convention": "off"
     }
 };
