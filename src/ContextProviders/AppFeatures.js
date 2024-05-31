@@ -5,7 +5,7 @@ import PropTypes from "prop-types";
 
 import { CacheProvider } from "@emotion/react";
 import { Helmet, HelmetProvider } from "react-helmet-async";
-import AppSnackbar from "../Components/AppSnackbar.js";
+import AppSnackbar from "../Components/AppSnackbar.tsx";
 
 const defaultTitleSuffix = "Comer Collection";
 

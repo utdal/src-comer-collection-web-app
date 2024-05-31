@@ -1,8 +1,12 @@
 import React, { useCallback } from "react";
-import PropTypes from "prop-types";
 import { Alert, Snackbar, Stack } from "@mui/material";
 
-const AppSnackbar = ({ snackbarOpen, setSnackbarOpen, snackbarSeverity, snackbarText }) => {
+const AppSnackbar = ({ snackbarOpen, setSnackbarOpen, snackbarSeverity, snackbarText }: {
+    readonly snackbarSeverity: "error" | "info" | "success" | "warning";
+    readonly snackbarOpen: boolean;
+    readonly setSnackbarOpen: (isOpen: boolean) => void;
+    readonly snackbarText: string;
+}): React.JSX.Element => {
     const closeSnackbar = useCallback(() => {
         setSnackbarOpen(false);
     }, [setSnackbarOpen]);
@@ -22,13 +26,6 @@ const AppSnackbar = ({ snackbarOpen, setSnackbarOpen, snackbarSeverity, snackbar
             </Alert>
         </Snackbar>
     );
-};
-
-AppSnackbar.propTypes = {
-    setSnackbarOpen: PropTypes.func,
-    snackbarOpen: PropTypes.bool,
-    snackbarSeverity: PropTypes.string,
-    snackbarText: PropTypes.string
 };
 
 export default AppSnackbar;
