@@ -125,11 +125,11 @@ export type RouterActionRequest = (
     {
         intent: "multi-create";
         body: {
-            itemsToCreate: Item[];
+            itemsToCreate: readonly Item[];
         };
     } | {
         intent: "multi-delete";
-        itemIds: number[];
+        itemIds: readonly number[];
     } | {
         intent: "single-delete";
         itemId: number;
