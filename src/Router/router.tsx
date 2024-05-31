@@ -14,7 +14,7 @@ import { EntityManageDialog } from "../Components/Dialogs/EntityManageDialog/Ent
 import { FullPageMessage } from "../Components/FullPageMessage";
 import RouterErrorMessage from "../Components/RouterErrorMessage";
 import { InfoIcon } from "../Imports/Icons.js";
-import ChangePassword from "../Pages/Account/ChangePassword.js";
+import ChangePassword from "../Pages/Account/ChangePassword";
 import MyExhibitions from "../Pages/Account/MyExhibitions.js";
 import Profile from "../Pages/Account/Profile.js";
 import AccountLayout from "../Layouts/AccountLayout.js";
@@ -25,7 +25,7 @@ import UserManagement from "../Pages/Admin/UserManagement.js";
 import { CollectionBrowser } from "../Pages/Browsers/CollectionBrowser.js";
 import { ExhibitionBrowser } from "../Pages/Browsers/ExhibitionBrowser.js";
 import ExhibitionPage from "../Pages/ExhibitionPage.js";
-import SignIn from "../Pages/SignIn.tsx";
+import SignIn from "../Pages/SignIn";
 import { myExhibitionsAction } from "./actions";
 import buildRouterActionByEntity from "./buildRouterActionByEntity";
 import buildRouterLoaderByEntity from "./buildRouterLoaderByEntity";
