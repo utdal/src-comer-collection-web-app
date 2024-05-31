@@ -47,6 +47,7 @@ module.exports = {
         "react/jsx-no-literals": [0],
         "react/require-default-props": [0],
         "@typescript-eslint/object-curly-spacing": "off",
-        "@typescript-eslint/naming-convention": "off"
+        "@typescript-eslint/naming-convention": "off",
+        "@typescript-eslint/no-type-alias": "off"
     }
 };
