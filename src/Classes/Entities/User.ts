@@ -1,15 +1,15 @@
 /* eslint-disable react/prop-types */
 import { sendAuthenticatedRequest } from "../../Helpers/APICalls";
 import { Entity } from "../Entity";
-import { UserIDCell } from "../../Components/TableCells/User/UserIDCell.js";
-import { UserFullNameReverseCell } from "../../Components/TableCells/User/UserFullNameReverseCell.js";
-import { UserEmailCopyCell } from "../../Components/TableCells/User/UserEmailCopyCell.js";
-import UserPasswordSetOrResetCell from "../../Components/TableCells/User/UserPasswordSetOrResetCell.js";
-import { UserCourseAssignmentCell } from "../../Components/TableCells/User/UserCourseAssignmentCell.js";
-import { UserExhibitionCountCell } from "../../Components/TableCells/User/UserExhibitionCountCell.js";
-import UserTypeButtonCell from "../../Components/TableCells/User/UserTypeButtonCell.js";
-import { UserActivationSwitchCell } from "../../Components/TableCells/User/UserActivationSwitchCell.js";
-import UserOptionsCell from "../../Components/TableCells/User/UserOptionsCell.js";
+import UserIDCell from "../../Components/TableCells/User/UserIDCell";
+import UserFullNameReverseCell from "../../Components/TableCells/User/UserFullNameReverseCell";
+import UserEmailCopyCell from "../../Components/TableCells/User/UserEmailCopyCell";
+import UserPasswordSetOrResetCell from "../../Components/TableCells/User/UserPasswordSetOrResetCell";
+import UserCourseAssignmentCell from "../../Components/TableCells/User/UserCourseAssignmentCell";
+import UserExhibitionCountCell from "../../Components/TableCells/User/UserExhibitionCountCell";
+import UserTypeButtonCell from "../../Components/TableCells/User/UserTypeButtonCell";
+import UserActivationSwitchCell from "../../Components/TableCells/User/UserActivationSwitchCell";
+import UserOptionsCell from "../../Components/TableCells/User/UserOptionsCell";
 import { GroupAddIcon, PersonIcon } from "../../Imports/Icons.js";
 import type React from "react";
 import type { EntityFieldDefinition, Item, SortableValue, TableFieldDefinition } from "../../index.js";

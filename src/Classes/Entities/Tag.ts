@@ -1,9 +1,9 @@
 import type React from "react";
-import { TagDataCell } from "../../Components/TableCells/Tag/TagDataCell.js";
-import { TagIDCell } from "../../Components/TableCells/Tag/TagIDCell.js";
-import { TagImageCountCell } from "../../Components/TableCells/Tag/TagImageCountCell.js";
-import TagManageOptionsArray from "../../Components/TableCells/Tag/TagManageOptionsArray.js";
-import { TagNotesCell } from "../../Components/TableCells/Tag/TagNotesCell.js";
+import TagDataCell from "../../Components/TableCells/Tag/TagDataCell";
+import TagIDCell from "../../Components/TableCells/Tag/TagIDCell";
+import TagImageCountCell from "../../Components/TableCells/Tag/TagImageCountCell";
+import TagManageOptionsArray from "../../Components/TableCells/Tag/TagManageOptionsArray";
+import TagNotesCell from "../../Components/TableCells/Tag/TagNotesCell";
 import { SellIcon } from "../../Imports/Icons.js";
 import type { EntityFieldDefinition, Item, SortableValue } from "../../index.js";
 import { Entity } from "../Entity";

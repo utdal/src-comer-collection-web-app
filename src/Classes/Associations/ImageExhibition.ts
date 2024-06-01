@@ -1,12 +1,12 @@
 import { Exhibition } from "../Entities/Exhibition";
 import { Association } from "../Association";
 import { Image } from "../Entities/Image";
-import { ExhibitionIDCell } from "../../Components/TableCells/Exhibition/ExhibitionIDCell.js";
-import { ExhibitionTitleCell } from "../../Components/TableCells/Exhibition/ExhibitionTitleCell.js";
-import { ExhibitionOpenInNewTabCell } from "../../Components/TableCells/Exhibition/ExhibitionOpenInNewTabCell.js";
-import { ExhibitionDateCreatedStackedCell } from "../../Components/TableCells/Exhibition/ExhibitionDateCreatedStackedCell.js";
-import { ExhibitionDateModifiedStackedCell } from "../../Components/TableCells/Exhibition/ExhibitionDateModifiedStackedCell.js";
-import { ExhibitionAccessCell } from "../../Components/TableCells/Exhibition/ExhibitionAccessCell.js";
+import ExhibitionIDCell from "../../Components/TableCells/Exhibition/ExhibitionIDCell";
+import ExhibitionTitleCell from "../../Components/TableCells/Exhibition/ExhibitionTitleCell";
+import ExhibitionOpenInNewTabCell from "../../Components/TableCells/Exhibition/ExhibitionOpenInNewTabCell";
+import ExhibitionDateCreatedStackedCell from "../../Components/TableCells/Exhibition/ExhibitionDateCreatedStackedCell";
+import ExhibitionDateModifiedStackedCell from "../../Components/TableCells/Exhibition/ExhibitionDateModifiedStackedCell";
+import ExhibitionAccessCell from "../../Components/TableCells/Exhibition/ExhibitionAccessCell";
 import type { TableFieldDefinition } from "../../index.js";
 
 class ImageExhibition extends Association {

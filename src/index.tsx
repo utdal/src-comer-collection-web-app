@@ -25,8 +25,20 @@ export interface ArtistItem extends Item {
     Images?: Item[];
 }
 
+export interface TagItem extends Item {
+    notes: string | null;
+    data: string;
+    Images?: Item[];
+}
+
 export interface ImageItem extends Item {
     Artists?: Item[];
+    Tags?: Item[];
+    accessionNumber: string | null;
+    Exhibitions?: Item[];
+    location: string | null;
+    title: string;
+    year: number | null;
 }
 
 export interface CourseItem extends Item {
@@ -41,20 +53,35 @@ export interface CourseItem extends Item {
 export interface UserItem extends Item {
     given_name?: string;
     family_name?: string;
+    full_name_reverse: string;
+    email: string;
+    is_active: boolean;
+    has_password: boolean;
+    is_admin: boolean;
+    is_admin_or_collection_manager: boolean;
+    is_collection_manager: boolean;
+    Courses?: Item[];
+    Exhibitions?: Item[];
+    exhibition_quota: number;
+    has_name: boolean;
+    pw_updated: string;
+    pw_change_required: boolean;
+}
+
+export type ExhibitionPrivacy = "PRIVATE" | "PUBLIC_ANONYMOUS" | "PUBLIC";
+
+export interface ExhibitionItem extends Item {
+    privacy: ExhibitionPrivacy;
+    curator: string;
+    date_created: string;
+    date_modified: string;
+    title: string | null;
+    User: Item;
 }
 
 export type EntityType = typeof Artist | typeof Course | typeof DeletedImage | typeof Exhibition | typeof Image | typeof PublicExhibition | typeof Tag | typeof User;
 
-export interface AppUser {
-    id: number;
-    is_admin: boolean;
-    is_collection_manager: boolean;
-    is_admin_or_collection_manager: boolean;
-    exhibition_quota: number;
-    pw_change_required: boolean;
-    Courses: Item[];
-    Exhibitions: Item[];
-}
+export type AppUser = UserItem;
 
 export interface ItemCounts {
     all: number;

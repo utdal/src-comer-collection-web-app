@@ -1,10 +1,10 @@
 import React from "react";
 import EntityEditButton from "../Entity/EntityEditButton";
 
-const ArtistManageEditButton = (): React.JSX.Element => {
+const ImageEditButton = (): React.JSX.Element => {
     return (
         <EntityEditButton />
     );
 };
 
-export default ArtistManageEditButton;
+export default ImageEditButton;

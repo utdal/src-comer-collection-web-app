@@ -1,9 +1,9 @@
 import { Image } from "../Entities/Image";
 import { Tag } from "../Entities/Tag";
 import { Association } from "../Association";
-import { TagIDCell } from "../../Components/TableCells/Tag/TagIDCell.js";
-import { TagDataCell } from "../../Components/TableCells/Tag/TagDataCell.js";
-import { TagNotesCell } from "../../Components/TableCells/Tag/TagNotesCell.js";
+import TagIDCell from "../../Components/TableCells/Tag/TagIDCell";
+import TagDataCell from "../../Components/TableCells/Tag/TagDataCell";
+import TagNotesCell from "../../Components/TableCells/Tag/TagNotesCell";
 import type { Item, SortableValue } from "../..";
 
 class ImageTag extends Association {

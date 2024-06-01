@@ -2,7 +2,7 @@ import React from "react";
 import { Typography } from "@mui/material";
 import { useTableCellItem } from "../../../ContextProviders/TableCellProvider";
 import type { CourseItem } from "../../../index.js";
-import { formatDate, formatTime } from "../../../Classes/Entity.js";
+import { formatDate, formatTime } from "../../../Classes/Entity";
 
 const CourseEndDateTimeCell = (): React.JSX.Element => {
     const course = useTableCellItem() as CourseItem;

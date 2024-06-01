@@ -1,17 +1,17 @@
 /* eslint-disable react/prop-types */
 import { Entity } from "../Entity";
-import { ImageIDCell } from "../../Components/TableCells/Image/ImageIDCell.js";
-import { ImageTitleCell } from "../../Components/TableCells/Image/ImageTitleCell.js";
-import { ImagePreviewThumbnailCell } from "../../Components/TableCells/Image/ImagePreviewThumbnailCell.js";
-import { ImageAccessionNumberCell } from "../../Components/TableCells/Image/ImageAccessionNumberCell.js";
-import { ImageYearCell } from "../../Components/TableCells/Image/ImageYearCell.js";
-import { ImageLocationCell } from "../../Components/TableCells/Image/ImageLocationCell.js";
-import { ImageArtistAssignmentCell } from "../../Components/TableCells/Image/ImageArtistAssignmentCell.js";
-import { ImageTagAssignmentCell } from "../../Components/TableCells/Image/ImageTagAssignmentCell.js";
-import { ImageExhibitionCountCell } from "../../Components/TableCells/Image/ImageExhibitionCountCell.js";
-import ImageOptionsCell from "../../Components/TableCells/Image/ImageOptionsCell.js";
+import ImageIDCell from "../../Components/TableCells/Image/ImageIDCell";
+import ImageTitleCell from "../../Components/TableCells/Image/ImageTitleCell";
+import ImagePreviewThumbnailCell from "../../Components/TableCells/Image/ImagePreviewThumbnailCell";
+import ImageAccessionNumberCell from "../../Components/TableCells/Image/ImageAccessionNumberCell";
+import ImageYearCell from "../../Components/TableCells/Image/ImageYearCell";
+import ImageLocationCell from "../../Components/TableCells/Image/ImageLocationCell";
+import ImageArtistAssignmentCell from "../../Components/TableCells/Image/ImageArtistAssignmentCell";
+import ImageTagAssignmentCell from "../../Components/TableCells/Image/ImageTagAssignmentCell";
+import ImageExhibitionCountCell from "../../Components/TableCells/Image/ImageExhibitionCountCell";
+import ImageOptionsCell from "../../Components/TableCells/Image/ImageOptionsCell";
+import ImageDeletedOptionsCell from "../../Components/TableCells/Image/ImageDeletedOptionsCell";
 import { AddPhotoAlternateIcon, DeleteIcon } from "../../Imports/Icons.js";
-import { ImageDeletedOptionsCell } from "../../Components/TableCells/Image/ImageDeletedOptionsCell.js";
 import type React from "react";
 import type { EntityFieldDefinition, Item, SortableValue, TableFieldDefinition } from "../..";
 

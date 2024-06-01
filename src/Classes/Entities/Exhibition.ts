@@ -1,12 +1,12 @@
 import PropTypes from "prop-types";
-import { ExhibitionAccessCell } from "../../Components/TableCells/Exhibition/ExhibitionAccessCell.js";
-import { ExhibitionDateCreatedStackedCell } from "../../Components/TableCells/Exhibition/ExhibitionDateCreatedStackedCell.js";
-import { ExhibitionDateModifiedStackedCell } from "../../Components/TableCells/Exhibition/ExhibitionDateModifiedStackedCell.js";
-import { ExhibitionIDCell } from "../../Components/TableCells/Exhibition/ExhibitionIDCell.js";
-import { ExhibitionOptionsCell } from "../../Components/TableCells/Exhibition/ExhibitionOptionsCell.js";
-import { ExhibitionOwnerStackedNameEmailCell } from "../../Components/TableCells/Exhibition/ExhibitionOwnerStackedNameEmailCell.js";
-import { ExhibitionTitleCell } from "../../Components/TableCells/Exhibition/ExhibitionTitleCell.js";
-import type { Item, SortableValue, TableFieldDefinition } from "../../index.js";
+import ExhibitionAccessCell from "../../Components/TableCells/Exhibition/ExhibitionAccessCell";
+import ExhibitionDateCreatedStackedCell from "../../Components/TableCells/Exhibition/ExhibitionDateCreatedStackedCell";
+import ExhibitionDateModifiedStackedCell from "../../Components/TableCells/Exhibition/ExhibitionDateModifiedStackedCell";
+import ExhibitionIDCell from "../../Components/TableCells/Exhibition/ExhibitionIDCell";
+import ExhibitionOptionsCell from "../../Components/TableCells/Exhibition/ExhibitionOptionsCell";
+import ExhibitionOwnerStackedNameEmailCell from "../../Components/TableCells/Exhibition/ExhibitionOwnerStackedNameEmailCell";
+import ExhibitionTitleCell from "../../Components/TableCells/Exhibition/ExhibitionTitleCell";
+import type { Item, SortableValue, TableFieldDefinition } from "../../index";
 import { Entity, entityPropTypeShape } from "../Entity";
 
 class Exhibition extends Entity {

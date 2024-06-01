@@ -4,9 +4,9 @@ import { useAssociationType, useRelevantPrimaryItems } from "../../../ContextPro
 import { User } from "../../../Classes/Entities/User.ts";
 import { Button, Typography } from "@mui/material";
 import { CheckIcon } from "../../../Imports/Icons.js";
-import { useTableCellItem } from "../../../ContextProviders/TableCellProvider.js";
+import { useTableCellItem } from "../../../ContextProviders/TableCellProvider";
 
-export const AssignButton = () => {
+const AssignButton = (): React.JSX.Element => {
     const showSnackbar = useSnackbar();
     const secondaryItem = useTableCellItem();
     const primaryItems = useRelevantPrimaryItems();
