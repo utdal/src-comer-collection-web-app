@@ -6,7 +6,7 @@ import {
     Button,
     Typography, DialogContentText, TextField
 } from "@mui/material";
-import { ContentCopyIcon, SyncIcon } from "../../Imports/Icons.js";
+import { ContentCopyIcon, SyncIcon } from "../../Imports/Icons";
 import { useClipboard, useSnackbar } from "../../ContextProviders/AppFeatures.js";
 import PersistentDialog from "./PersistentDialog.js";
 import { useActionData, useSubmit } from "react-router-dom";

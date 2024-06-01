@@ -1,6 +1,6 @@
 import { Stack, DialogTitle, DialogContent, Typography, DialogActions, Button } from "@mui/material";
 import React, { useCallback } from "react";
-import { PersonIcon } from "../../Imports/Icons.js";
+import { PersonIcon } from "../../Imports/Icons";
 import PersistentDialog from "./PersistentDialog.js";
 import type { ArtistItem, DialogState, DialogStateSingleUnderlyingItem, ImageItem, Item } from "../../index.js";
 import { useManagementCallbacks } from "../../ContextProviders/ManagementPageProvider.js";

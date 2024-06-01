@@ -4,7 +4,7 @@ import {
     BrokenImageIcon,
     ArrowBackIcon,
     ArrowForwardIcon
-} from "../../Imports/Icons.js";
+} from "../../Imports/Icons";
 import PropTypes from "prop-types";
 import { getSwappedImageArray, directionOptions } from "./ExhibitionEditPane";
 import { exhibitionStatePropTypesShape } from "../../Classes/Entities/Exhibition";

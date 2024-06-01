@@ -1,6 +1,6 @@
 import React from "react";
 import { Stack, Typography, Select, ListItemButton, Divider } from "@mui/material";
-import { CheckIcon, RemoveCircleOutlineIcon } from "../../Imports/Icons.js";
+import { CheckIcon, RemoveCircleOutlineIcon } from "../../Imports/Icons";
 import type { Item } from "../../index.js";
 
 export const SecondaryFilterMenu = ({ filterValue, setFilterValue, secondaries, helpMessage, emptyMessage, nullMessage, displayFunction, sortFunction, SecondaryIcon }: {

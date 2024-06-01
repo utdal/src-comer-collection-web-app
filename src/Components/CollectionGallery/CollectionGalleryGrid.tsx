@@ -1,6 +1,6 @@
 import { Box, Paper, Stack, ToggleButton, ToggleButtonGroup } from "@mui/material";
 import React, { useCallback, useMemo, useState } from "react";
-import { GridOnIcon, ViewListIcon } from "../../Imports/Icons.js";
+import { GridOnIcon, ViewListIcon } from "../../Imports/Icons";
 import SearchBox from "../SearchBox";
 import CollectionBrowserImageDetails from "./CollectionGalleryImageDetails.js";
 import { useItems, useItemsPagination, useVisibilityStatuses } from "../../ContextProviders/ManagementPageProvider";

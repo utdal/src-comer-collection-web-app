@@ -8,7 +8,7 @@ import { setupCeiling } from "./js/Ceiling.js";
 import { createArt } from "./js/Art.js";
 import { Box, Fab, Stack, Typography } from "@mui/material";
 import { PointerLockControls } from "three/examples/jsm/controls/PointerLockControls.js";
-import { EditIcon, SecurityIcon, VisibilityIcon } from "../../Imports/Icons.js";
+import { EditIcon, SecurityIcon, VisibilityIcon } from "../../Imports/Icons";
 import useAppUser from "../../Hooks/useAppUser.ts";
 import PropTypes from "prop-types";
 import { ExhibitionIntro } from "./ExhibitionIntro.js";

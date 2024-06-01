@@ -1,7 +1,7 @@
 import { Box, Paper, Stack, Typography } from "@mui/material";
 import React from "react";
 import DataTable from "../../Components/DataTable/DataTable.js";
-import { PhotoCameraBackIcon } from "../../Imports/Icons.js";
+import { PhotoCameraBackIcon } from "../../Imports/Icons";
 import { useTitle } from "../../ContextProviders/AppFeatures.js";
 import { ManagementPageProvider, useItemsReducer } from "../../ContextProviders/ManagementPageProvider.js";
 import { useLoaderData } from "react-router";

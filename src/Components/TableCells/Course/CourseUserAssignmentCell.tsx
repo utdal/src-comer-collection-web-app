@@ -2,7 +2,7 @@ import React from "react";
 import { Button, Stack, Typography } from "@mui/material";
 import { useTableCellItem } from "../../../ContextProviders/TableCellProvider";
 
-import { PersonIcon } from "../../../Imports/Icons.js";
+import { PersonIcon } from "../../../Imports/Icons";
 import type { CourseItem, UserItem } from "../../..";
 
 const CourseUserAssignmentCell = (): React.JSX.Element => {

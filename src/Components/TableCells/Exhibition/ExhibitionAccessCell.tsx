@@ -1,6 +1,6 @@
 import React from "react";
 import { Stack, Typography } from "@mui/material";
-import { LockIcon, PublicIcon, VpnLockIcon } from "../../../Imports/Icons.js";
+import { LockIcon, PublicIcon, VpnLockIcon } from "../../../Imports/Icons";
 import { useTableCellItem } from "../../../ContextProviders/TableCellProvider";
 import type { ExhibitionItem } from "../../../index.js";
 

@@ -2,7 +2,7 @@
 import React, { useCallback, useMemo } from "react";
 import type { IconButtonOwnProps, OutlinedTextFieldProps } from "@mui/material";
 import { TextField, InputAdornment, IconButton, styled } from "@mui/material";
-import { SearchIcon, ClearIcon } from "../Imports/Icons.js";
+import { SearchIcon, ClearIcon } from "../Imports/Icons";
 import { useEntity, useItemCounts } from "../ContextProviders/ManagementPageProvider";
 
 interface DisappearingIconButtonProps extends IconButtonOwnProps {

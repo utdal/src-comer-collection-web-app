@@ -8,7 +8,7 @@ import {
     DeleteIcon,
     CollectionsIcon,
     SecurityIcon
-} from "../../Imports/Icons.js";
+} from "../../Imports/Icons";
 import useAppUser from "../../Hooks/useAppUser";
 import ColorInput from "./ColorInput";
 import AccordionSubHeading from "./AccordionSubHeading";

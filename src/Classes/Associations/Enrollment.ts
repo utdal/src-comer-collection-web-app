@@ -1,4 +1,4 @@
-import { PersonAddIcon, PersonRemoveIcon } from "../../Imports/Icons.js";
+import { PersonAddIcon, PersonRemoveIcon } from "../../Imports/Icons";
 import { Course } from "../Entities/Course";
 import { User } from "../Entities/User";
 import { Association } from "../Association";

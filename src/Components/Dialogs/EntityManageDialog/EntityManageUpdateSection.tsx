@@ -6,7 +6,7 @@ import RefreshButton from "../../Buttons/RefreshButton.js";
 import DataTable from "../../DataTable/DataTable.js";
 import { useEntity, useVisibilityStatuses } from "../../../ContextProviders/ManagementPageProvider";
 import { FullPageMessage } from "../../FullPageMessage";
-import { DeleteIcon } from "../../../Imports/Icons.js";
+import { DeleteIcon } from "../../../Imports/Icons";
 import { itemsCombinedStatePropTypeShape } from "../../../Classes/Entity";
 import { doesItemMatchSearchQuery } from "../../../Helpers/SearchUtilities.js";
 import type { Item, ItemsCombinedState } from "../../..";

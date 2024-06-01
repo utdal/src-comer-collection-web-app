@@ -1,6 +1,6 @@
 import React, { useCallback } from "react";
 import { IconButton } from "@mui/material";
-import { DeleteIcon } from "../../../Imports/Icons.js";
+import { DeleteIcon } from "../../../Imports/Icons";
 import { useTableCellItem, useTableCellManagementCallbacks } from "../../../ContextProviders/TableCellProvider";
 
 const EntityDeleteButton = ({ disabled = false }: {

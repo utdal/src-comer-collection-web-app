@@ -1,7 +1,7 @@
 import React, { useCallback } from "react";
 import { Button } from "@mui/material";
 import { useNavigate } from "react-router";
-import { DeleteIcon } from "../../Imports/Icons.js";
+import { DeleteIcon } from "../../Imports/Icons";
 
 const OpenTrashButton = (): React.JSX.Element => {
     const navigate = useNavigate();

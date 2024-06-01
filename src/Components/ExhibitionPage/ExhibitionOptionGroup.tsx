@@ -1,6 +1,6 @@
 import { Accordion, AccordionDetails, AccordionSummary, Box, ListItemButton, Paper, Stack, Typography } from "@mui/material";
 import React from "react";
-import { ExpandMoreIcon } from "../../Imports/Icons.js";
+import { ExpandMoreIcon } from "../../Imports/Icons";
 
 const ExhibitionOptionGroup = ({ id, description, expandedSection, setExpandedSection, children }: {
     readonly children: React.ReactNode;

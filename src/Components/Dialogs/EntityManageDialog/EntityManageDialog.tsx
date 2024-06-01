@@ -13,7 +13,7 @@ import SelectionSummary from "../../SelectionSummary.js";
 import { useLoaderData, useNavigate } from "react-router-dom";
 import EntityManageUpdateSection from "./EntityManageUpdateSection.js";
 import EntityManageCreateSection from "./EntityManageCreateSection.js";
-import { DeleteIcon } from "../../../Imports/Icons.js";
+import { DeleteIcon } from "../../../Imports/Icons";
 import type { EntityType, Intent, Item, ManagementCallbacks } from "../../../index.js";
 import useDialogStates from "../../../Hooks/useDialogStates.js";
 

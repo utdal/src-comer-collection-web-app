@@ -2,7 +2,7 @@ import React from "react";
 import { Button, Stack, Typography } from "@mui/material";
 import { useTableCellItem } from "../../../ContextProviders/TableCellProvider";
 
-import { PhotoCameraBackIcon } from "../../../Imports/Icons.js";
+import { PhotoCameraBackIcon } from "../../../Imports/Icons";
 import type { ExhibitionItem, UserItem } from "../../..";
 
 const UserExhibitionCountCell = (): React.JSX.Element => {

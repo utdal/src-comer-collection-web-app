@@ -5,7 +5,7 @@ import ArtistManageOptionsCell from "../../Components/TableCells/Artist/ArtistMa
 import ArtistNameCell from "../../Components/TableCells/Artist/ArtistNameCell";
 import ArtistNotesCell from "../../Components/TableCells/Artist/ArtistNotesCell";
 import ArtistWebsiteCell from "../../Components/TableCells/Artist/ArtistWebsiteCell";
-import { BrushIcon } from "../../Imports/Icons.js";
+import { BrushIcon } from "../../Imports/Icons";
 import { Entity } from "../Entity";
 import type { EntityFieldDefinition, Item, SortableValue, TableFieldDefinition } from "../../index.js";
 

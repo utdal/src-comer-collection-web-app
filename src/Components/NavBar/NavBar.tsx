@@ -2,7 +2,7 @@ import React, { useCallback } from "react";
 import { AppBar, Toolbar, Button, Divider, IconButton, Stack } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import useAppUser from "../../Hooks/useAppUser.js";
-import { SettingsIcon } from "../../Imports/Icons.js";
+import { SettingsIcon } from "../../Imports/Icons";
 import { AppSettingsDialog } from "../Dialogs/AppSettingsDialog/AppSettingsDialog.js";
 import { NavBarUserMenu } from "./NavBarUserMenu.js";
 import { NavBarButton } from "./NavBarButton.js";

@@ -1,6 +1,6 @@
 import React, { useCallback } from "react";
 import { useRouteError } from "react-router";
-import { WarningIcon } from "../Imports/Icons.js";
+import { WarningIcon } from "../Imports/Icons";
 import { FullPageMessage } from "./FullPageMessage";
 
 const RouterErrorMessage = ({ viewportHeight, includeLogo, suggestReload }: {

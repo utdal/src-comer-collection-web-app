@@ -2,7 +2,7 @@ import React from "react";
 import type { ReactElementLike } from "prop-types";
 import useAppUser from "../../Hooks/useAppUser";
 import { FullPageMessage } from "../FullPageMessage";
-import { LockIcon } from "../../Imports/Icons.js";
+import { LockIcon } from "../../Imports/Icons";
 import RequirePermanentPassword from "./RequirePermanentPassword";
 import type { AppUser } from "../../index.js";
 

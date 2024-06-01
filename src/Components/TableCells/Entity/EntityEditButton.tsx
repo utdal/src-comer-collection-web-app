@@ -1,6 +1,6 @@
 import React, { useCallback } from "react";
 import { IconButton } from "@mui/material";
-import { EditIcon } from "../../../Imports/Icons.js";
+import { EditIcon } from "../../../Imports/Icons";
 import { useTableCellItem, useTableCellManagementCallbacks } from "../../../ContextProviders/TableCellProvider";
 
 const EntityEditButton = ({ disabled = false }: {

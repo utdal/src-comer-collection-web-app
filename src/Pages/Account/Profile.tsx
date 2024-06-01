@@ -4,7 +4,7 @@ import {
     Box
 } from "@mui/material";
 import { DataTable } from "../../Components/DataTable/DataTable.js";
-import { AccountCircleIcon, SchoolIcon } from "../../Imports/Icons.js";
+import { AccountCircleIcon, SchoolIcon } from "../../Imports/Icons";
 import useAppUser from "../../Hooks/useAppUser.js";
 import { useTitle } from "../../ContextProviders/AppFeatures.js";
 

@@ -1,6 +1,6 @@
 import React from "react";
 import { Button } from "@mui/material";
-import { DeleteForeverIcon } from "../../../Imports/Icons.js";
+import { DeleteForeverIcon } from "../../../Imports/Icons";
 
 const PermanentDeleteButton = ({ disabled = false }: {
     readonly disabled?: boolean;

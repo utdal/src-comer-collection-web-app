@@ -1,7 +1,7 @@
 import React from "react";
 import { Stack, Typography } from "@mui/material";
 import { useTableCellItem } from "../../../ContextProviders/TableCellProvider";
-import { CollectionManagerIcon, SecurityIcon } from "../../../Imports/Icons.js";
+import { CollectionManagerIcon, SecurityIcon } from "../../../Imports/Icons";
 import type { UserItem } from "../../..";
 
 const UserIDWithAccessIconCell = (): React.JSX.Element => {

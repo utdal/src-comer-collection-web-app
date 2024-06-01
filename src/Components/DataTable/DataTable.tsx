@@ -5,7 +5,7 @@ import { Checkbox, Stack, TableCell, TableContainer, Typography, Table, TableBod
 import ColumnSortButton from "../Buttons/ColumnSortButton.js";
 import { useItemCounts, useItemDictionary, useItemsPagination, useManagementCallbacks, useSelectionStatuses, useSortableValues, useVisibilityStatuses } from "../../ContextProviders/ManagementPageProvider.js";
 import { FullPageMessage } from "../FullPageMessage.js";
-import { InfoIcon } from "../../Imports/Icons.js";
+import { InfoIcon } from "../../Imports/Icons";
 import DataTableRow from "./DataTableRow.js";
 import type { Item, TableFieldDefinition, UserItem } from "../../index.js";
 

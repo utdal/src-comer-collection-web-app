@@ -10,7 +10,7 @@ import UserExhibitionCountCell from "../../Components/TableCells/User/UserExhibi
 import UserTypeButtonCell from "../../Components/TableCells/User/UserTypeButtonCell";
 import UserActivationSwitchCell from "../../Components/TableCells/User/UserActivationSwitchCell";
 import UserOptionsCell from "../../Components/TableCells/User/UserOptionsCell";
-import { GroupAddIcon, PersonIcon } from "../../Imports/Icons.js";
+import { GroupAddIcon, PersonIcon } from "../../Imports/Icons";
 import type React from "react";
 import type { EntityFieldDefinition, Item, SortableValue, TableFieldDefinition } from "../../index.js";
 

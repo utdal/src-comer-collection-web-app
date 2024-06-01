@@ -3,7 +3,7 @@ import { Button, Typography } from "@mui/material";
 import useAppUser from "../../../Hooks/useAppUser";
 import { useTableCellItem, useTableCellManagementCallbacks } from "../../../ContextProviders/TableCellProvider";
 
-import { CollectionManagerIcon, PersonIcon, SecurityIcon } from "../../../Imports/Icons.js";
+import { CollectionManagerIcon, PersonIcon, SecurityIcon } from "../../../Imports/Icons";
 import type { AppUser, UserItem } from "../../../index.js";
 
 const UserTypeButtonCell = (): React.JSX.Element => {

@@ -1,7 +1,7 @@
 import React from "react";
 import { Stack, Typography } from "@mui/material";
 import useAppUser from "../../../Hooks/useAppUser";
-import { PersonIcon } from "../../../Imports/Icons.js";
+import { PersonIcon } from "../../../Imports/Icons";
 import { useTableCellItem } from "../../../ContextProviders/TableCellProvider";
 import type { AppUser, UserItem } from "../../../index.js";
 

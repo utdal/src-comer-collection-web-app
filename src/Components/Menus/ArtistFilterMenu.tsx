@@ -1,5 +1,5 @@
 import React from "react";
-import { BrushIcon } from "../../Imports/Icons.js";
+import { BrushIcon } from "../../Imports/Icons";
 import { SecondaryFilterMenu } from "./SecondaryFilterMenu.js";
 import { Typography } from "@mui/material";
 import type { ArtistItem, Item } from "../../index.js";

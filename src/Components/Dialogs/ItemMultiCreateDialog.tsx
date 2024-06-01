@@ -5,7 +5,7 @@ import {
     DialogActions,
     Button, IconButton, DialogContentText, TextField, Divider
 } from "@mui/material";
-import { DeleteIcon } from "../../Imports/Icons.js";
+import { DeleteIcon } from "../../Imports/Icons";
 import getBlankItemFields from "../../Helpers/getBlankItemFields.js";
 import { useSnackbar } from "../../ContextProviders/AppFeatures.js";
 import { useEntity, useManagementCallbacks } from "../../ContextProviders/ManagementPageProvider.js";

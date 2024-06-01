@@ -1,6 +1,6 @@
 import React, { useCallback } from "react";
 import { Button, Typography } from "@mui/material";
-import { ContentCopyIcon } from "../../../Imports/Icons.js";
+import { ContentCopyIcon } from "../../../Imports/Icons";
 import { useClipboard } from "../../../ContextProviders/AppFeatures";
 import { useTableCellItem } from "../../../ContextProviders/TableCellProvider";
 import type { ArtistItem } from "../../../index.js";

@@ -4,7 +4,7 @@ import {
     Button,
     Typography
 } from "@mui/material";
-import { CheckIcon, ArrowUpwardIcon, DeselectIcon } from "../Imports/Icons.js";
+import { CheckIcon, ArrowUpwardIcon, DeselectIcon } from "../Imports/Icons";
 import { useEntity, useItemCounts, useSelectionStatuses } from "../ContextProviders/ManagementPageProvider.js";
 
 const SelectionSummary = (): React.JSX.Element | null => {

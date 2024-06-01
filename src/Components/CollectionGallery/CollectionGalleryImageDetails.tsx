@@ -1,6 +1,6 @@
 import { Chip, Stack, Typography, ListItemButton } from "@mui/material";
 import React, { useMemo } from "react";
-import { SellIcon, PersonIcon } from "../../Imports/Icons.js";
+import { SellIcon, PersonIcon } from "../../Imports/Icons";
 import { CollectionGalleryThumbnailBox } from "./CollectionGalleryThumbnailBox.js";
 import { useInView } from "react-intersection-observer";
 import type { ArtistItem, ImageItem, TagItem } from "../../index.js";

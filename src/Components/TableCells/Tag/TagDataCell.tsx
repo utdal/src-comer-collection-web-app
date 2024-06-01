@@ -1,6 +1,6 @@
 import React from "react";
 import { Stack, Typography } from "@mui/material";
-import { SellIcon } from "../../../Imports/Icons.js";
+import { SellIcon } from "../../../Imports/Icons";
 import { useTableCellItem } from "../../../ContextProviders/TableCellProvider";
 import type { TagItem } from "../../../index.js";
 

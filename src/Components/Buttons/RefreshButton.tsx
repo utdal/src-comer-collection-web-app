@@ -1,6 +1,6 @@
 import { Button } from "@mui/material";
 import React, { useCallback } from "react";
-import { RefreshIcon } from "../../Imports/Icons.js";
+import { RefreshIcon } from "../../Imports/Icons";
 import { useRevalidator } from "react-router";
 
 const RefreshButton = (): React.JSX.Element => {

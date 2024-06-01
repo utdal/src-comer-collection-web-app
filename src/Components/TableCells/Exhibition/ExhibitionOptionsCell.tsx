@@ -1,6 +1,6 @@
 import React from "react";
 import { Button, Stack, Typography } from "@mui/material";
-import { OpenInNewIcon } from "../../../Imports/Icons.js";
+import { OpenInNewIcon } from "../../../Imports/Icons";
 import ExhibitionSettingsButton from "./ExhibitionSettingsButton";
 import ExhibitionDeleteButton from "./ExhibitionDeleteButton";
 import { useTableCellItem } from "../../../ContextProviders/TableCellProvider";

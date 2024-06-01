@@ -1,6 +1,6 @@
 import React from "react";
 import { Typography } from "@mui/material";
-import { SellIcon } from "../../Imports/Icons.js";
+import { SellIcon } from "../../Imports/Icons";
 import PropTypes from "prop-types";
 import { SecondaryFilterMenu } from "./SecondaryFilterMenu.js";
 import { entityPropTypeShape } from "../../Classes/Entity.js";

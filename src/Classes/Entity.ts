@@ -1,5 +1,5 @@
 import PropTypes from "prop-types";
-import { AddIcon } from "../Imports/Icons.js";
+import { AddIcon } from "../Imports/Icons";
 import type React from "react";
 import type { EntityFieldDefinition, TableFieldDefinition } from "../index.js";
 

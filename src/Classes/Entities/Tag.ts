@@ -4,7 +4,7 @@ import TagIDCell from "../../Components/TableCells/Tag/TagIDCell";
 import TagImageCountCell from "../../Components/TableCells/Tag/TagImageCountCell";
 import TagManageOptionsArray from "../../Components/TableCells/Tag/TagManageOptionsArray";
 import TagNotesCell from "../../Components/TableCells/Tag/TagNotesCell";
-import { SellIcon } from "../../Imports/Icons.js";
+import { SellIcon } from "../../Imports/Icons";
 import type { EntityFieldDefinition, Item, SortableValue } from "../../index.js";
 import { Entity } from "../Entity";
 

@@ -8,7 +8,7 @@ import CourseOptionsCell from "../../Components/TableCells/Course/CourseOptionsC
 import CourseStartDateTimeStackedCell from "../../Components/TableCells/Course/CourseStartDateTimeStackedCell";
 import CourseStatusCell from "../../Components/TableCells/Course/CourseStatusCell";
 import CourseUserAssignmentCell from "../../Components/TableCells/Course/CourseUserAssignmentCell";
-import { SchoolIcon } from "../../Imports/Icons.js";
+import { SchoolIcon } from "../../Imports/Icons";
 import { Entity } from "../Entity";
 import type { EntityFieldDefinition, Item, SortableValue, TableFieldDefinition } from "../../index.js";
 

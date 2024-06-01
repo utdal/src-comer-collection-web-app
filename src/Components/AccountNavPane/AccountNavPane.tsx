@@ -1,6 +1,6 @@
 import React from "react";
 import { Stack, Divider } from "@mui/material";
-import { AccountCircleIcon, GroupsIcon, PhotoCameraBackIcon, ImageIcon, SchoolIcon, LockIcon } from "../../Imports/Icons.js";
+import { AccountCircleIcon, GroupsIcon, PhotoCameraBackIcon, ImageIcon, SchoolIcon, LockIcon } from "../../Imports/Icons";
 import useAppUser from "../../Hooks/useAppUser.js";
 import AccountNavSection from "./AccountNavSection.js";
 import type { AppUser, NavPaneLinkDefinition } from "../../index.js";

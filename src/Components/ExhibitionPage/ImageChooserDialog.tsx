@@ -1,7 +1,7 @@
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Stack, Typography } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import CollectionGalleryGrid from "../CollectionGallery/CollectionGalleryGrid";
-import { AddPhotoAlternateIcon } from "../../Imports/Icons.js";
+import { AddPhotoAlternateIcon } from "../../Imports/Icons";
 import { ManagementPageProvider, useItemsReducer } from "../../ContextProviders/ManagementPageProvider";
 import { Image } from "../../Classes/Entities/Image";
 import type { ExhibitionData, ExhibitionDispatchAction } from "./ExhibitionDispatchActionTypes";

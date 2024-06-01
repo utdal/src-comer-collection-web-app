@@ -1,7 +1,7 @@
 import React from "react";
 import { Stack, Typography } from "@mui/material";
 import { useTableCellItem } from "../../../ContextProviders/TableCellProvider";
-import { AccessTimeIcon, CheckIcon, ExpiredIcon } from "../../../Imports/Icons.js";
+import { AccessTimeIcon, CheckIcon, ExpiredIcon } from "../../../Imports/Icons";
 import type { CourseItem } from "../../..";
 
 const CourseStatusCell = (): React.JSX.Element => {

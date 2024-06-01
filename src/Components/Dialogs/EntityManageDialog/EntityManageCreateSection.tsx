@@ -3,7 +3,7 @@ import { Box, Button, DialogContentText, Stack, TextField } from "@mui/material"
 import { useEntity } from "../../../ContextProviders/ManagementPageProvider";
 import getBlankItemFields from "../../../Helpers/getBlankItemFields.js";
 import { useSnackbar } from "../../../ContextProviders/AppFeatures";
-import { AddIcon } from "../../../Imports/Icons.js";
+import { AddIcon } from "../../../Imports/Icons";
 
 const EntityManageCreateSection = (): React.JSX.Element => {
     const Entity = useEntity();

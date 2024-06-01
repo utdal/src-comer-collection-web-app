@@ -5,7 +5,7 @@ import {
     DialogActions,
     Button, DialogContentText
 } from "@mui/material";
-import { SaveIcon } from "../../Imports/Icons.js";
+import { SaveIcon } from "../../Imports/Icons";
 import getLocalISOString from "../../Helpers/getLocalISOString.js";
 import { useSnackbar } from "../../ContextProviders/AppFeatures.js";
 import { useEntity, useManagementCallbacks } from "../../ContextProviders/ManagementPageProvider.js";

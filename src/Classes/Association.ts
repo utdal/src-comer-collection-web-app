@@ -1,4 +1,4 @@
-import { AddIcon, RemoveIcon } from "../Imports/Icons.js";
+import { AddIcon, RemoveIcon } from "../Imports/Icons";
 import { Entity, capitalized } from "./Entity";
 import { sendAuthenticatedRequest } from "../Helpers/APICalls";
 import type React from "react";

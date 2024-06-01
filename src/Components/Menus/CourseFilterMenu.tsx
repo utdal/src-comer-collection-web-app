@@ -1,6 +1,6 @@
 import type { ElementType } from "react";
 import React from "react";
-import { SchoolIcon } from "../../Imports/Icons.js";
+import { SchoolIcon } from "../../Imports/Icons";
 import { SecondaryFilterMenu } from "./SecondaryFilterMenu.js";
 import { Typography } from "@mui/material";
 import type { CourseItem, Item } from "../../index.js";

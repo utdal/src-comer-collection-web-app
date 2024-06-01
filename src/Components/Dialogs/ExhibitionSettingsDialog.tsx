@@ -6,7 +6,7 @@ import {
     Button,
     Typography, DialogContentText, TextField, ToggleButtonGroup, ToggleButton
 } from "@mui/material";
-import { SaveIcon, PublicIcon, LockIcon, VpnLockIcon } from "../../Imports/Icons.js";
+import { SaveIcon, PublicIcon, LockIcon, VpnLockIcon } from "../../Imports/Icons";
 import { useSnackbar } from "../../ContextProviders/AppFeatures.js";
 import PersistentDialog from "./PersistentDialog.js";
 import { useActionData, useSubmit } from "react-router-dom";

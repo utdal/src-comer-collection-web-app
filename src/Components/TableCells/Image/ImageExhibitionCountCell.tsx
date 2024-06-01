@@ -1,6 +1,6 @@
 import React from "react";
 import { Button, Stack, Typography } from "@mui/material";
-import { PhotoCameraBackIcon } from "../../../Imports/Icons.js";
+import { PhotoCameraBackIcon } from "../../../Imports/Icons";
 import { useTableCellItem } from "../../../ContextProviders/TableCellProvider";
 import type { AppUser, ExhibitionItem, ImageItem } from "../../../index.js";
 import useAppUser from "../../../Hooks/useAppUser";

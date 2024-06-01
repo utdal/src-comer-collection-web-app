@@ -11,7 +11,7 @@ import ImageTagAssignmentCell from "../../Components/TableCells/Image/ImageTagAs
 import ImageExhibitionCountCell from "../../Components/TableCells/Image/ImageExhibitionCountCell";
 import ImageOptionsCell from "../../Components/TableCells/Image/ImageOptionsCell";
 import ImageDeletedOptionsCell from "../../Components/TableCells/Image/ImageDeletedOptionsCell";
-import { AddPhotoAlternateIcon, DeleteIcon } from "../../Imports/Icons.js";
+import { AddPhotoAlternateIcon, DeleteIcon } from "../../Imports/Icons";
 import type React from "react";
 import type { EntityFieldDefinition, Item, SortableValue, TableFieldDefinition } from "../..";
 

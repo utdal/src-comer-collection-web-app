@@ -1,7 +1,7 @@
 import React from "react";
 import { Button } from "@mui/material";
 import { useItemCounts } from "../../ContextProviders/ManagementPageProvider";
-import { FilterAltOffOutlinedIcon } from "../../Imports/Icons.js";
+import { FilterAltOffOutlinedIcon } from "../../Imports/Icons";
 
 const ClearFilterButton = (): React.JSX.Element => {
     const itemCounts = useItemCounts();

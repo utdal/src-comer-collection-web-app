@@ -7,7 +7,7 @@ import {
     AccountCircleIcon,
     PhotoCameraBackIcon,
     LogoutIcon
-} from "../../Imports/Icons.js";
+} from "../../Imports/Icons";
 import type { AppUser } from "../../index.js";
 
 export const NavBarUserMenu = (): React.JSX.Element => {

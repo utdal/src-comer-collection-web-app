@@ -3,7 +3,7 @@ import { useSnackbar } from "../../../ContextProviders/AppFeatures";
 import { useAssociationType, useRelevantPrimaryItems } from "../../../ContextProviders/AssociationManagementPageProvider";
 import { User } from "../../../Classes/Entities/User";
 import { Button, Typography } from "@mui/material";
-import { CheckIcon } from "../../../Imports/Icons.js";
+import { CheckIcon } from "../../../Imports/Icons";
 import { useTableCellItem } from "../../../ContextProviders/TableCellProvider";
 import type { SecondaryItem, UserItem } from "../../..";
 

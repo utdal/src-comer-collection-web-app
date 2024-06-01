@@ -1,6 +1,6 @@
 import React from "react";
 import { Button } from "@mui/material";
-import { RestoreIcon } from "../../../Imports/Icons.js";
+import { RestoreIcon } from "../../../Imports/Icons";
 
 const RestoreButton = ({ disabled = false }: {
     readonly disabled?: false;

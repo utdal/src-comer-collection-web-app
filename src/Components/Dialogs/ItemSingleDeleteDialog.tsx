@@ -5,7 +5,7 @@ import {
     DialogActions,
     Button, DialogContentText, TextField
 } from "@mui/material";
-import { DeleteIcon, RestoreIcon } from "../../Imports/Icons.js";
+import { DeleteIcon, RestoreIcon } from "../../Imports/Icons";
 import { useSnackbar } from "../../ContextProviders/AppFeatures.js";
 import { useEntity, useManagementCallbacks } from "../../ContextProviders/ManagementPageProvider.js";
 import PersistentDialog from "./PersistentDialog.js";

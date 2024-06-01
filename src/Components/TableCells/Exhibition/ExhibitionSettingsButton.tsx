@@ -1,6 +1,6 @@
 import React from "react";
 import { IconButton } from "@mui/material";
-import { SettingsIcon } from "../../../Imports/Icons.js";
+import { SettingsIcon } from "../../../Imports/Icons";
 
 const ExhibitionSettingsButton = ({ disabled = false }: {
     readonly disabled?: boolean;

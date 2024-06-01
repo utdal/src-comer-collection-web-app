@@ -13,7 +13,7 @@ import RequirePermanentPassword from "../Components/AccessControl/RequirePermane
 import { EntityManageDialog } from "../Components/Dialogs/EntityManageDialog/EntityManageDialog.js";
 import { FullPageMessage } from "../Components/FullPageMessage";
 import RouterErrorMessage from "../Components/RouterErrorMessage";
-import { InfoIcon } from "../Imports/Icons.js";
+import { InfoIcon } from "../Imports/Icons";
 import ChangePassword from "../Pages/Account/ChangePassword";
 import MyExhibitions from "../Pages/Account/MyExhibitions.js";
 import Profile from "../Pages/Account/Profile.js";
