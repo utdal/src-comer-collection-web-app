@@ -1,5 +1,5 @@
 import React from "react";
-import { useAppUser } from "../../../Hooks/useAppUser";
+import useAppUser from "../../../Hooks/useAppUser";
 import { useTableCellItem } from "../../../ContextProviders/TableCellProvider";
 import type { AppUser, ExhibitionItem, ImageItem } from "../../../index.js";
 import PermanentDeleteButton from "../Entity/PermanentDeleteButton";

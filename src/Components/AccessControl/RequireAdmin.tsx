@@ -1,6 +1,6 @@
 import React from "react";
 import type { ReactElementLike } from "prop-types";
-import { useAppUser } from "../../Hooks/useAppUser";
+import useAppUser from "../../Hooks/useAppUser";
 import { FullPageMessage } from "../FullPageMessage";
 import { LockIcon } from "../../Imports/Icons.js";
 import RequirePermanentPassword from "./RequirePermanentPassword";

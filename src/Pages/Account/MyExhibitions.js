@@ -7,7 +7,7 @@ import { PhotoCameraBackIcon } from "../../Imports/Icons.js";
 import { ExhibitionSettingsDialog } from "../../Components/Dialogs/ExhibitionSettingsDialog.js";
 import { ItemSingleDeleteDialog } from "../../Components/Dialogs/ItemSingleDeleteDialog.js";
 import { useTitle } from "../../ContextProviders/AppFeatures";
-import { useAppUser } from "../../Hooks/useAppUser.ts";
+import useAppUser from "../../Hooks/useAppUser.ts";
 
 import { ExhibitionTitleCell } from "../../Components/TableCells/Exhibition/ExhibitionTitleCell.js";
 import { ExhibitionOpenInCurrentTabCell } from "../../Components/TableCells/Exhibition/ExhibitionOpenInCurrentTabCell.js";

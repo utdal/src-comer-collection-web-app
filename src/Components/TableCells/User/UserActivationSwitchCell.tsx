@@ -1,6 +1,6 @@
 import React from "react";
 import { Switch } from "@mui/material";
-import { useAppUser } from "../../../Hooks/useAppUser";
+import useAppUser from "../../../Hooks/useAppUser";
 import { useTableCellItem } from "../../../ContextProviders/TableCellProvider";
 import type { AppUser, UserItem } from "../../..";
 

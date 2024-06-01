@@ -170,7 +170,7 @@ export type OpenDialogByIntentFunctionNoUnderlyingItems = (intent: Intent) => vo
 
 export type OpenDialogByIntentFunctionSingleUnderlyingItem = (intent: Intent, item: Item) => void;
 
-export type OpenDialogByIntentFunctionMultipleUnderlyingItems = (intent: Intent, items: readonly Item[]) => void;
+export type OpenDialogByIntentFunctionMultipleUnderlyingItems = (intent: Intent, items: Item[]) => void;
 
 export type CloseDialogByIntentFunction = (intent: Intent) => void;
 
@@ -256,32 +256,40 @@ type DialogState = (
     } | {
         dialogIsOpen: boolean;
         dialogItemsMultiplicity: "single";
-        underlyingItem: Item;
+        underlyingItem: Item | null;
     }
 );
 
 export type DialogStateDictionary = Record<Intent, DialogState>;
 
-export type DialogStateAction = (
-    {
-        type: "close";
-        dialogIntent: Intent;
-    } | {
-        type: "open";
-        dialogIntent: Intent;
-        dialogItemsMultiplicity: "multi";
-        underlyingItems: Item[];
-    } | {
-        type: "open";
-        dialogIntent: Intent;
-        dialogItemsMultiplicity: "none";
-    } | {
-        type: "open";
-        dialogIntent: Intent;
-        dialogItemsMultiplicity: "single";
-        underlyingItem: Item;
-    }
-);
+interface DialogStateActionBase {
+    dialogIntent: Intent;
+    dialogItemsMultiplicity: DialogItemsMultiplicity;
+    type: "close" | "open";
+}
+
+interface DialogStateOpenSingleItemAction extends DialogStateActionBase {
+    type: "open";
+    underlyingItem: Item;
+    dialogItemsMultiplicity: "single";
+}
+
+interface DialogStateOpenMultipleItemsAction extends DialogStateActionBase {
+    type: "open";
+    underlyingItems: Item[];
+    dialogItemsMultiplicity: "multi";
+}
+
+interface DialogStateOpenNoItemsAction extends DialogStateActionBase {
+    type: "open";
+    dialogItemsMultiplicity: "none";
+}
+
+interface DialogStateCloseAction extends DialogStateActionBase {
+    type: "close";
+}
+
+export type DialogStateAction = DialogStateCloseAction | DialogStateOpenMultipleItemsAction | DialogStateOpenNoItemsAction | DialogStateOpenSingleItemAction;
 
 export type MultiCreateDialogDispatchAction = (
     {

@@ -1,7 +1,7 @@
 import React from "react";
 import type { ReactElementLike } from "prop-types";
 import { Navigate } from "react-router";
-import { useAppUser } from "../../Hooks/useAppUser";
+import useAppUser from "../../Hooks/useAppUser";
 import type { AppUser } from "../../index.js";
 
 const RequirePermanentPassword = ({ component }: {

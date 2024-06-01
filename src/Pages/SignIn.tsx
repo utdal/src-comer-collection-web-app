@@ -3,7 +3,7 @@ import { Navigate, useRevalidator } from "react-router";
 import { Box, Button, Divider, Paper, Stack, TextField } from "@mui/material";
 import type { APIResponse } from "../Helpers/APICalls";
 import { sendAuthenticatedRequest } from "../Helpers/APICalls";
-import { useAppUser } from "../Hooks/useAppUser";
+import useAppUser from "../Hooks/useAppUser";
 import { useSnackbar, useTitle } from "../ContextProviders/AppFeatures";
 
 const SignIn = (): React.JSX.Element => {

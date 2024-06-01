@@ -1,7 +1,7 @@
 import React from "react";
 import { AppBar, Toolbar, Button, Divider, IconButton, Stack } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-import { useAppUser } from "../../Hooks/useAppUser.ts";
+import useAppUser from "../../Hooks/useAppUser.ts";
 import { SettingsIcon } from "../../Imports/Icons.js";
 import { AppSettingsDialog } from "../Dialogs/AppSettingsDialog/AppSettingsDialog.js";
 import { NavBarUserMenu } from "./NavBarUserMenu.js";

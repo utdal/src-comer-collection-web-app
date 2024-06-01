@@ -6,7 +6,7 @@ import React, { useCallback, useEffect, useReducer, useState } from "react";
 import { exhibitionEditReducer, blankExhibitionData } from "../Components/ExhibitionPage/exhibitionEditReducer";
 import Exhibition3DViewport from "../Components/Exhibition3DViewport/Exhibition3DViewport.js";
 import { sendAuthenticatedRequest } from "../Helpers/APICalls";
-import { useAppUser } from "../Hooks/useAppUser";
+import useAppUser from "../Hooks/useAppUser";
 import { useSnackbar, useTitle } from "../ContextProviders/AppFeatures";
 import type { Item } from "../index.js";
 import type { ExhibitionData, ExhibitionDataAsString, ExhibitionMetadata, ExhibitionSetEverythingAction } from "../Components/ExhibitionPage/ExhibitionDispatchActionTypes.js";

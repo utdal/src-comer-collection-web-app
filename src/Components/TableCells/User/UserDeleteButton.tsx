@@ -1,5 +1,5 @@
 import React from "react";
-import { useAppUser } from "../../../Hooks/useAppUser";
+import useAppUser from "../../../Hooks/useAppUser";
 import { useTableCellItem } from "../../../ContextProviders/TableCellProvider";
 import EntityDeleteButton from "../Entity/EntityDeleteButton";
 import type { AppUser, CourseItem, ExhibitionItem, UserItem } from "../../../index.js";

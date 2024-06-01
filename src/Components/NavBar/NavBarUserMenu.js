@@ -1,7 +1,7 @@
 import React, { useCallback, useState } from "react";
 import { Typography, Button, Divider, Menu, MenuItem, Stack } from "@mui/material";
 import { useNavigate, useRevalidator } from "react-router-dom";
-import { useAppUser } from "../../Hooks/useAppUser.ts";
+import useAppUser from "../../Hooks/useAppUser.ts";
 import {
     ArrowDropDownIcon,
     AccountCircleIcon,

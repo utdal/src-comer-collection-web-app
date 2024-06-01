@@ -3,7 +3,7 @@ import { Button, Stack, Typography } from "@mui/material";
 import { PhotoCameraBackIcon } from "../../../Imports/Icons.js";
 import { useTableCellItem } from "../../../ContextProviders/TableCellProvider";
 import type { AppUser, ExhibitionItem, ImageItem } from "../../../index.js";
-import { useAppUser } from "../../../Hooks/useAppUser";
+import useAppUser from "../../../Hooks/useAppUser";
 
 const ImageExhibitionCountCell = (): React.JSX.Element => {
     const image = useTableCellItem() as ImageItem;

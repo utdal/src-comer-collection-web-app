@@ -2,7 +2,7 @@ import React from "react";
 import { Stack, Divider } from "@mui/material";
 import { useTheme } from "@emotion/react";
 import { AccountCircleIcon, GroupsIcon, PhotoCameraBackIcon, ImageIcon, SchoolIcon, LockIcon } from "../../Imports/Icons.js";
-import { useAppUser } from "../../Hooks/useAppUser.ts";
+import useAppUser from "../../Hooks/useAppUser.ts";
 import { AccountNavSection } from "./AccountNavSection.js";
 
 /**

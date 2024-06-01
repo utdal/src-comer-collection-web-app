@@ -1,6 +1,6 @@
 import { Stack, Typography } from "@mui/material";
 import React from "react";
-import { useAppUser } from "../../Hooks/useAppUser";
+import useAppUser from "../../Hooks/useAppUser";
 import { InfoIcon, SecurityIcon } from "../../Imports/Icons.js";
 import type { AppUser } from "../../index.js";
 

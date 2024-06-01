@@ -1,20 +1,18 @@
 import { useCallback, useReducer } from "react";
 import PropTypes from "prop-types";
-import { entityPropTypeShape } from "../Classes/Entity.ts";
+import { entityPropTypeShape } from "../Classes/Entity.js";
+import type { CloseDialogByIntentFunction, DialogItemsMultiplicity, DialogStateAction, DialogStateDictionary, Intent, Item, OpenDialogByIntentFunctionMultipleUnderlyingItems, OpenDialogByIntentFunctionNoUnderlyingItems, OpenDialogByIntentFunctionSingleUnderlyingItem } from "../index.js";
 
-/**
- * @type {{
- *  [S in Intent]: DialogItemsMultiplicity
- * }}
- */
-const dialogItemsMultiplicityByIntent = {
+const dialogItemsMultiplicityByIntent: Record<Intent, DialogItemsMultiplicity> = {
     "single-delete": "single",
     "single-permanent-delete": "single",
     "single-restore": "single",
     "single-edit": "single",
     "multi-create": "none",
     "user-reset-password": "single",
-    "user-change-activation-status": "single"
+    "user-change-activation-status": "single",
+    "multi-delete": "multi",
+    "user-change-privileges": "single"
 };
 
 export const dialogStatePropTypeShape = PropTypes.shape({
@@ -24,19 +22,12 @@ export const dialogStatePropTypeShape = PropTypes.shape({
     underlyingItems: PropTypes.arrayOf(entityPropTypeShape)
 });
 
-/**
- * @param {Intent[]} intentArray
- * @returns {DialogStateDictionary}
- */
-const generateDefaultDialogStates = (intentArray) => {
-    /**
-     * @type {DialogStateDictionary}
-     */
-    const output = {};
+const generateDefaultDialogStates = (intentArray: Intent[]): DialogStateDictionary => {
+    const output = {} as DialogStateDictionary;
     for (const intent of intentArray) {
         output[intent] = {
             dialogIsOpen: false,
-            dialogItemsMultiplicity: dialogItemsMultiplicityByIntent[intent] ?? "none",
+            dialogItemsMultiplicity: dialogItemsMultiplicityByIntent[intent],
             underlyingItem: null,
             underlyingItems: []
         };
@@ -46,19 +37,16 @@ const generateDefaultDialogStates = (intentArray) => {
 
 /**
  * Reducer function for useDialogStates
- * @param {DialogStateDictionary} state
- * @param {DialogStateAction} action
  * @returns {DialogStateDictionary}
  */
-const dialogStateReducer = (state, action) => {
-    const correctMultiplicity = state[action.dialogIntent].dialogItemsMultiplicity;
+const dialogStateReducer = (state: DialogStateDictionary, action: DialogStateAction): DialogStateDictionary => {
     if (action.type === "open") {
-        if (correctMultiplicity !== action.dialogItemsMultiplicity) {
+        if (action.dialogItemsMultiplicity !== state[action.dialogIntent].dialogItemsMultiplicity) {
             throw new Error(`The dialog with intent ${action.dialogIntent} 
-            has multiplicity ${correctMultiplicity}, 
+            has multiplicity ${action.dialogItemsMultiplicity}, 
             but the DialogStateAction dispatched has multiplicity ${action.dialogItemsMultiplicity}`);
         }
-        switch (correctMultiplicity) {
+        switch (action.dialogItemsMultiplicity) {
         case "multi":
             return {
                 ...state,
@@ -86,10 +74,10 @@ const dialogStateReducer = (state, action) => {
                 }
             };
         default:
-            throw new Error(`Action contains invalid dialogItemsMultiplicity ${action.dialogItemsMultiplicity}`);
+            return state;
         }
-    } else if (action.type === "close") {
-        switch (correctMultiplicity) {
+    } else {
+        switch (action.dialogItemsMultiplicity) {
         case "multi":
             return {
                 ...state,
@@ -117,24 +105,24 @@ const dialogStateReducer = (state, action) => {
                 }
             };
         default:
-            console.warn("Correct multiplicity was not calculated correctly in dialogStateReducer");
             return state;
         }
     }
-    return state;
 };
 
 /**
  * Hook to help manage the states of multiple dialogs
- * @param {Intent[]} intentArray
  */
-const useDialogStates = ([...intentArray]) => {
+const useDialogStates = ([...intentArray]: Intent[]): {
+    dialogStateDictionary: DialogStateDictionary;
+    openDialogByIntentWithNoUnderlyingItems: OpenDialogByIntentFunctionNoUnderlyingItems;
+    openDialogByIntentWithSingleUnderlyingItem: OpenDialogByIntentFunctionSingleUnderlyingItem;
+    openDialogByIntentWithMultipleUnderlyingItems: OpenDialogByIntentFunctionMultipleUnderlyingItems;
+    closeDialogByIntent: CloseDialogByIntentFunction;
+} => {
     const [dialogStateDictionary, dialogStateDispatch] = useReducer(dialogStateReducer, intentArray, generateDefaultDialogStates);
 
-    /**
-     * @type {OpenDialogByIntentFunctionNoUnderlyingItems}
-     */
-    const openDialogByIntentWithNoUnderlyingItems = useCallback((intent) => {
+    const openDialogByIntentWithNoUnderlyingItems: OpenDialogByIntentFunctionNoUnderlyingItems = useCallback((intent: Intent) => {
         dialogStateDispatch({
             type: "open",
             dialogIntent: intent,
@@ -142,10 +130,7 @@ const useDialogStates = ([...intentArray]) => {
         });
     }, []);
 
-    /**
-     * @type {OpenDialogByIntentFunctionSingleUnderlyingItem}
-     */
-    const openDialogByIntentWithSingleUnderlyingItem = useCallback((intent, item) => {
+    const openDialogByIntentWithSingleUnderlyingItem: OpenDialogByIntentFunctionSingleUnderlyingItem = useCallback((intent: Intent, item: Item) => {
         dialogStateDispatch({
             type: "open",
             dialogIntent: intent,
@@ -154,10 +139,7 @@ const useDialogStates = ([...intentArray]) => {
         });
     }, []);
 
-    /**
-     * @type {OpenDialogByIntentFunctionMultipleUnderlyingItems}
-     */
-    const openDialogByIntentWithMultipleUnderlyingItems = useCallback((intent, items) => {
+    const openDialogByIntentWithMultipleUnderlyingItems: OpenDialogByIntentFunctionMultipleUnderlyingItems = useCallback((intent: Intent, items: Item[]) => {
         dialogStateDispatch({
             type: "open",
             dialogIntent: intent,
@@ -166,13 +148,11 @@ const useDialogStates = ([...intentArray]) => {
         });
     }, []);
 
-    /**
-     * @type {CloseDialogByIntentFunction}
-     */
-    const closeDialogByIntent = useCallback((intent) => {
+    const closeDialogByIntent: CloseDialogByIntentFunction = useCallback((intent: Intent) => {
         dialogStateDispatch({
             type: "close",
-            dialogIntent: intent
+            dialogIntent: intent,
+            dialogItemsMultiplicity: dialogItemsMultiplicityByIntent[intent]
         });
     }, []);
     return {
