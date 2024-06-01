@@ -51,19 +51,19 @@ export const getBlankExhibitionImageData = (imageId: number): ExhibitionImageDat
             description: "",
             year: 0,
             medium: "",
-            additionalInformation: null,
+            additional_information: null,
             direction: 1
         }
     };
 };
 
-export const getImageStateById = (exhibitionData: ExhibitionData, imageId: number): ExhibitionImageData | null => {
+export const getImageStateById = (exhibitionData: ExhibitionData, imageId: number): ExhibitionImageData => {
     for (const i of (exhibitionData.images)) {
         if (i.image_id === imageId) {
             return i;
         }
     }
-    return null;
+    throw new Error(`getImageStateById: imageId ${imageId} does not exist within the exhibition data`);
 };
 
 const widthFtMin = 10;

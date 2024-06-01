@@ -3,7 +3,7 @@ import React, { createContext, useCallback, useContext, useMemo, useState } from
 import PropTypes from "prop-types";
 import type { SimplePaletteColorOptions } from "@mui/material";
 import { ThemeProvider, createTheme } from "@mui/material";
-import { green, grey, orange } from "@mui/material/colors/index.js";
+import { green, orange } from "@mui/material/colors/index.js";
 
 const DARK_THEME_LOCAL_STORAGE_KEY = "appDarkTheme";
 
@@ -169,16 +169,7 @@ const AppThemeProvider = ({ children }: {
                 100: secondaryColor["100"],
                 translucent: `${secondaryColor["700"]}40`,
                 veryTranslucent: `${secondaryColor["700"]}20`
-            } as AppPaletteColorOptions,
-            grey: {
-                main: grey["600"],
-                contrastText: appDarkTheme === "dark" ? "white" : "black",
-                translucent: appDarkTheme === "dark" ? grey["800"] : "#CCC",
-                veryTranslucent: appDarkTheme === "light" ? "#333" : "#EEE"
-            },
-            lightgrey: {
-                main: appDarkTheme === "dark" ? grey["500"] : grey["700"]
-            }
+            } as AppPaletteColorOptions
         }
     })), [appDarkTheme]);
 

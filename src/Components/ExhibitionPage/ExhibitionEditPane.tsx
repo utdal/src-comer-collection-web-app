@@ -1,6 +1,6 @@
+import type { SelectChangeEvent } from "@mui/material";
 import { Box, Button, Checkbox, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, Input, MenuItem, Paper, Select, Stack, TextField, Typography } from "@mui/material";
 import React, { useEffect, useState } from "react";
-import { useTheme } from "@emotion/react";
 import { getImageStateById } from "./exhibitionEditReducer";
 import {
     CloudUploadIcon,
@@ -19,6 +19,9 @@ import { ImageRearrangeDialog } from "./ImageRearrangeDialog";
 import { ImageChooserDialog } from "./ImageChooserDialog.js";
 import { exhibitionStatePropTypesShape } from "../../Classes/Entities/Exhibition";
 import { entityPropTypeShape } from "../../Classes/Entity";
+import type { ExhibitionData, ExhibitionDispatchAction, ExhibitionImageData, ExhibitionImageDirectionIdentifier, ExhibitionMetadata } from "./ExhibitionDispatchActionTypes";
+import type { Item } from "../..";
+import styled from "@emotion/styled";
 
 const moodinessOptions = [
     {
@@ -58,7 +61,14 @@ export const directionOptions = [
     }
 ];
 
-const textureOptions = [
+type TextureValue = string;
+
+interface TextureOption {
+    value: TextureValue;
+    displayText: string;
+}
+
+const textureOptions: TextureOption[] = [
     {
         value: "black_carpet.png",
         displayText: "Black Carpet"
@@ -89,10 +99,12 @@ const textureOptions = [
     }
 ];
 
-export const getSwappedImageArray = (images, imageIdA, imageIdB) => {
+export const getSwappedImageArray = (images: ExhibitionImageData[], imageIdA: number, imageIdB: number): ExhibitionImageData[] => {
     const imageA = images.find((image) => image.image_id === imageIdA);
     const imageB = images.find((image) => image.image_id === imageIdB);
-    if (!imageA || !imageB) { return images; }
+    if (!imageA || !imageB) {
+        return images;
+    }
 
     return images.map((image) => {
         switch (image.image_id) {
@@ -106,17 +118,29 @@ export const getSwappedImageArray = (images, imageIdA, imageIdB) => {
     });
 };
 
-export const ExhibitionEditPane = ({ exhibitionMetadata, exhibitionState, exhibitionEditDispatch, globalImageCatalog, saveExhibition }) => {
+interface ExhibitionEditPaneComponentProps {
+    exhibitionMetadata: ExhibitionMetadata;
+    exhibitionState: ExhibitionData;
+    exhibitionEditDispatch: React.Dispatch<ExhibitionDispatchAction>;
+    globalImageCatalog: Item[];
+    saveExhibition: () => void;
+}
+
+const StyledHeader = styled(Box)(() => ({
+    gridArea: "header",
+    backgroundColor: "gray"
+}));
+
+export const ExhibitionEditPane = ({ exhibitionMetadata, exhibitionState, exhibitionEditDispatch, globalImageCatalog, saveExhibition }: ExhibitionEditPaneComponentProps): React.JSX.Element => {
     const [expandedSection, setExpandedSection] = useState(null);
 
-    const [selectedImageId, setSelectedImageId] = useState(null);
+    const [selectedImageId, setSelectedImageId] = useState(null as number | null);
 
     const [imageChooserIsOpen, setImageChooserIsOpen] = useState(false);
     const [imageRearrangerIsOpen, setImageRearrangerIsOpen] = useState(false);
 
     const [deleteImageDialogIsOpen, setDeleteImageDialogIsOpen] = useState(false);
 
-    const theme = useTheme();
     const appUser = useAppUser();
 
     useEffect(() => {
@@ -144,20 +168,14 @@ export const ExhibitionEditPane = ({ exhibitionMetadata, exhibitionState, exhibi
             }}
         >
 
-            <Box
-                padding={2}
-                sx={{
-                    gridArea: "header",
-                    backgroundColor: theme.palette.grey.veryTranslucent
-                }}
-            >
+            <StyledHeader padding={2} >
                 <Typography
                     align="center"
                     variant="h5"
                 >
                     {exhibitionMetadata.title}
                 </Typography>
-            </Box>
+            </StyledHeader>
 
             <Box sx={{ gridArea: "accordions", overflowY: "scroll" }} >
 
@@ -171,7 +189,7 @@ export const ExhibitionEditPane = ({ exhibitionMetadata, exhibitionState, exhibi
 
                     <ExhibitionOption description="Main Wall Color">
                         <ColorInput
-                            onChange={(e) => {
+                            onChange={(e: React.ChangeEvent<HTMLInputElement>): void => {
                                 exhibitionEditDispatch({
                                     scope: "exhibition",
                                     type: "set_main_wall_color",
@@ -185,7 +203,7 @@ export const ExhibitionEditPane = ({ exhibitionMetadata, exhibitionState, exhibi
 
                     <ExhibitionOption description="Side Wall Color">
                         <ColorInput
-                            onChange={(e) => {
+                            onChange={(e: React.ChangeEvent<HTMLInputElement>): void => {
                                 exhibitionEditDispatch({
                                     scope: "exhibition",
                                     type: "set_side_wall_color",
@@ -199,7 +217,7 @@ export const ExhibitionEditPane = ({ exhibitionMetadata, exhibitionState, exhibi
 
                     <ExhibitionOption description="Floor Color">
                         <ColorInput
-                            onChange={(e) => {
+                            onChange={(e: React.ChangeEvent<HTMLInputElement>): void => {
                                 exhibitionEditDispatch({
                                     scope: "exhibition",
                                     type: "set_floor_color",
@@ -213,7 +231,7 @@ export const ExhibitionEditPane = ({ exhibitionMetadata, exhibitionState, exhibi
 
                     <ExhibitionOption description="Ceiling Color">
                         <ColorInput
-                            onChange={(e) => {
+                            onChange={(e: React.ChangeEvent<HTMLInputElement>): void => {
                                 exhibitionEditDispatch({
                                     scope: "exhibition",
                                     type: "set_ceiling_color",
@@ -227,14 +245,14 @@ export const ExhibitionEditPane = ({ exhibitionMetadata, exhibitionState, exhibi
 
                     <ExhibitionOption description="Floor Texture">
                         <Select
-                            onChange={(e) => {
+                            onChange={(e: SelectChangeEvent): void => {
                                 exhibitionEditDispatch({
                                     scope: "exhibition",
                                     type: "set_floor_texture",
                                     newTexture: e.target.value
                                 });
                             }}
-                            value={exhibitionState.appearance.floor_texture ?? ""}
+                            value={exhibitionState.appearance.floor_texture}
                         >
                             {textureOptions.map((option) => (
                                 <MenuItem
@@ -251,14 +269,14 @@ export const ExhibitionEditPane = ({ exhibitionMetadata, exhibitionState, exhibi
 
                     <ExhibitionOption description="Moodiness">
                         <Select
-                            onChange={(e) => {
+                            onChange={(e: SelectChangeEvent): void => {
                                 exhibitionEditDispatch({
                                     scope: "exhibition",
                                     type: "set_moodiness",
                                     newMoodiness: e.target.value
                                 });
                             }}
-                            value={exhibitionState.appearance.moodiness ?? ""}
+                            value={exhibitionState.appearance.moodiness}
                         >
                             {moodinessOptions.map((option) => (
                                 <MenuItem
@@ -273,7 +291,7 @@ export const ExhibitionEditPane = ({ exhibitionMetadata, exhibitionState, exhibi
 
                     <ExhibitionOption description="Ambient Light Color">
                         <ColorInput
-                            onChange={(e) => {
+                            onChange={(e: React.ChangeEvent<HTMLInputElement>): void => {
                                 exhibitionEditDispatch({
                                     scope: "exhibition",
                                     type: "set_ambient_light_color",
@@ -289,43 +307,43 @@ export const ExhibitionEditPane = ({ exhibitionMetadata, exhibitionState, exhibi
 
                     <ExhibitionOption description="Length">
                         <Input
-                            onChange={(e) => {
+                            onChange={(e: React.ChangeEvent<HTMLInputElement>): void => {
                                 exhibitionEditDispatch({
                                     scope: "exhibition",
                                     type: "set_length",
-                                    newValue: e.target.value
+                                    newValue: parseInt(e.target.value)
                                 });
                             }}
                             type="number"
-                            value={exhibitionState.size.length_ft ?? 0}
+                            value={exhibitionState.size.length_ft}
                         />
                     </ExhibitionOption>
 
                     <ExhibitionOption description="Width">
                         <Input
-                            onChange={(e) => {
+                            onChange={(e: React.ChangeEvent<HTMLInputElement>): void => {
                                 exhibitionEditDispatch({
                                     scope: "exhibition",
                                     type: "set_width",
-                                    newValue: e.target.value
+                                    newValue: parseInt(e.target.value)
                                 });
                             }}
                             type="number"
-                            value={exhibitionState.size.width_ft ?? 0}
+                            value={exhibitionState.size.width_ft}
                         />
                     </ExhibitionOption>
 
                     <ExhibitionOption description="Height">
                         <Input
-                            onChange={(e) => {
+                            onChange={(e: React.ChangeEvent<HTMLInputElement>): void => {
                                 exhibitionEditDispatch({
                                     scope: "exhibition",
                                     type: "set_height",
-                                    newValue: e.target.value
+                                    newValue: parseInt(e.target.value)
                                 });
                             }}
                             type="number"
-                            value={exhibitionState.size.height_ft ?? 0}
+                            value={exhibitionState.size.height_ft}
                         />
                     </ExhibitionOption>
 
@@ -335,16 +353,14 @@ export const ExhibitionEditPane = ({ exhibitionMetadata, exhibitionState, exhibi
                     description="Image Settings"
                     expandedSection={expandedSection}
                     id="image_settings"
-                    selectedImageId={selectedImageId}
                     setExpandedSection={setExpandedSection}
-                    setSelectedImageId={setSelectedImageId}
                 >
 
                     <ExhibitionOption>
 
                         <Button
                             fullWidth
-                            onClick={() => {
+                            onClick={(): void => {
                                 setImageChooserIsOpen(true);
                             }}
                             startIcon={<AddPhotoAlternateIcon />}
@@ -358,7 +374,7 @@ export const ExhibitionEditPane = ({ exhibitionMetadata, exhibitionState, exhibi
 
                         <Button
                             fullWidth
-                            onClick={() => {
+                            onClick={(): void => {
                                 setImageRearrangerIsOpen(true);
                             }}
                             startIcon={<CollectionsIcon />}
@@ -372,20 +388,19 @@ export const ExhibitionEditPane = ({ exhibitionMetadata, exhibitionState, exhibi
                     <ExhibitionOption>
 
                         <Select
-                            disabled={!exhibitionState.images?.length}
-                            onChange={(e) => {
-                                setSelectedImageId(e.target.value);
+                            disabled={!exhibitionState.images.length}
+                            onChange={(e: SelectChangeEvent): void => {
+                                setSelectedImageId(parseInt(e.target.value));
                             }}
                             sx={{ width: "100%", minHeight: "70px" }}
-                            value={selectedImageId ?? ""}
+                            value={JSON.stringify(selectedImageId)}
                         >
-                            {(exhibitionState.images ?? []).map((image) => {
-                                const catalogImage = globalImageCatalog?.find((i) => i.id === image.image_id);
-                                const imageTitle = catalogImage?.title;
+                            {(exhibitionState.images).map((image) => {
+                                const catalogImage = globalImageCatalog.find((i) => i.id === image.image_id);
                                 return (
                                     <MenuItem
                                         key={image.image_id}
-                                        value={image.image_id ?? ""}
+                                        value={image.image_id}
                                     >
                                         <Stack
                                             alignItems="center"
@@ -395,7 +410,7 @@ export const ExhibitionEditPane = ({ exhibitionMetadata, exhibitionState, exhibi
                                             <Box
                                                 height="40px"
                                                 sx={{
-                                                    backgroundImage: `url("${catalogImage?.thumbnailUrl}")`,
+                                                    backgroundImage: catalogImage != null ? `url("${catalogImage.thumbnailUrl as string}")` : undefined,
                                                     backgroundSize: "contain",
                                                     backgroundRepeat: "no-repeat",
                                                     backgroundPosition: "center"
@@ -404,7 +419,7 @@ export const ExhibitionEditPane = ({ exhibitionMetadata, exhibitionState, exhibi
                                             />
 
                                             <Typography>
-                                                {imageTitle}
+                                                {`${catalogImage?.title as string}`}
                                             </Typography>
                                         </Stack>
                                     </MenuItem>
@@ -413,33 +428,32 @@ export const ExhibitionEditPane = ({ exhibitionMetadata, exhibitionState, exhibi
                         </Select>
 
                         <IconButton
-                            disabled={!selectedImageId}
-                            onClick={() => {
+                            disabled={selectedImageId == null}
+                            onClick={(): void => {
                                 setDeleteImageDialogIsOpen(true);
                             }}
-                            variant="contained"
                         >
                             <DeleteIcon />
                         </IconButton>
 
                     </ExhibitionOption>
 
-                    { selectedImageId
+                    { (selectedImageId != null)
                         ? (
                             <>
                                 <AccordionSubHeading text="Position" />
 
                                 <ExhibitionOption description="Wall">
                                     <Select
-                                        onChange={(e) => {
+                                        onChange={(e: SelectChangeEvent<ExhibitionImageDirectionIdentifier>): void => {
                                             exhibitionEditDispatch({
                                                 scope: "image",
                                                 image_id: selectedImageId,
                                                 type: "set_direction",
-                                                newValue: e.target.value
+                                                newValue: e.target.value as ExhibitionImageDirectionIdentifier
                                             });
                                         }}
-                                        value={getImageStateById(exhibitionState, selectedImageId)?.metadata.direction ?? ""}
+                                        value={getImageStateById(exhibitionState, selectedImageId).metadata.direction}
                                     >
                                         {directionOptions.map((option) => (
                                             <MenuItem
@@ -456,8 +470,8 @@ export const ExhibitionEditPane = ({ exhibitionMetadata, exhibitionState, exhibi
                                 <ExhibitionOption description="Custom Position">
 
                                     <Checkbox
-                                        checked={Boolean(getImageStateById(exhibitionState, selectedImageId)?.position.custom_position)}
-                                        onChange={(e) => {
+                                        checked={Boolean(getImageStateById(exhibitionState, selectedImageId).position.custom_position)}
+                                        onChange={(e: React.ChangeEvent<HTMLInputElement>): void => {
                                             exhibitionEditDispatch({
                                                 scope: "image",
                                                 image_id: selectedImageId,
@@ -468,31 +482,31 @@ export const ExhibitionEditPane = ({ exhibitionMetadata, exhibitionState, exhibi
                                     />
 
                                     <Input
-                                        disabled={!getImageStateById(exhibitionState, selectedImageId)?.position.custom_position}
-                                        onChange={(e) => {
+                                        disabled={!getImageStateById(exhibitionState, selectedImageId).position.custom_position}
+                                        onChange={(e: React.ChangeEvent<HTMLInputElement>): void => {
                                             exhibitionEditDispatch({
                                                 scope: "image",
                                                 image_id: selectedImageId,
                                                 type: "set_position_custom_x",
-                                                newValue: e.target.value
+                                                newValue: parseInt(e.target.value)
                                             });
                                         }}
                                         type="number"
-                                        value={getImageStateById(exhibitionState, selectedImageId)?.position.custom_x ?? ""}
+                                        value={getImageStateById(exhibitionState, selectedImageId).position.custom_x}
                                     />
 
                                     <Input
-                                        disabled={!getImageStateById(exhibitionState, selectedImageId)?.position.custom_position}
-                                        onChange={(e) => {
+                                        disabled={!getImageStateById(exhibitionState, selectedImageId).position.custom_position}
+                                        onChange={(e: React.ChangeEvent<HTMLInputElement>): void => {
                                             exhibitionEditDispatch({
                                                 scope: "image",
                                                 image_id: selectedImageId,
                                                 type: "set_position_custom_y",
-                                                newValue: e.target.value
+                                                newValue: parseInt(e.target.value)
                                             });
                                         }}
                                         type="number"
-                                        value={getImageStateById(exhibitionState, selectedImageId)?.position.custom_y ?? ""}
+                                        value={getImageStateById(exhibitionState, selectedImageId).position.custom_y}
                                     />
 
                                 </ExhibitionOption>
@@ -501,7 +515,7 @@ export const ExhibitionEditPane = ({ exhibitionMetadata, exhibitionState, exhibi
 
                                 <ExhibitionOption description="Color">
                                     <ColorInput
-                                        onChange={(e) => {
+                                        onChange={(e: React.ChangeEvent<HTMLInputElement>): void => {
                                             exhibitionEditDispatch({
                                                 scope: "image",
                                                 image_id: selectedImageId,
@@ -510,7 +524,7 @@ export const ExhibitionEditPane = ({ exhibitionMetadata, exhibitionState, exhibi
                                             }
                                             );
                                         }}
-                                        value={getImageStateById(exhibitionState, selectedImageId)?.matte.color}
+                                        value={getImageStateById(exhibitionState, selectedImageId).matte.color}
                                     />
 
                                 </ExhibitionOption>
@@ -518,8 +532,8 @@ export const ExhibitionEditPane = ({ exhibitionMetadata, exhibitionState, exhibi
                                 <ExhibitionOption description="Custom Weight">
 
                                     <Checkbox
-                                        checked={Boolean(getImageStateById(exhibitionState, selectedImageId)?.matte.weighted)}
-                                        onChange={(e) => {
+                                        checked={Boolean(getImageStateById(exhibitionState, selectedImageId).matte.weighted)}
+                                        onChange={(e: React.ChangeEvent<HTMLInputElement>): void => {
                                             exhibitionEditDispatch({
                                                 scope: "image",
                                                 image_id: selectedImageId,
@@ -530,17 +544,17 @@ export const ExhibitionEditPane = ({ exhibitionMetadata, exhibitionState, exhibi
                                     />
 
                                     <Input
-                                        disabled={!getImageStateById(exhibitionState, selectedImageId)?.matte.weighted}
-                                        onChange={(e) => {
+                                        disabled={!getImageStateById(exhibitionState, selectedImageId).matte.weighted}
+                                        onChange={(e: React.ChangeEvent<HTMLInputElement>): void => {
                                             exhibitionEditDispatch({
                                                 scope: "image",
                                                 image_id: selectedImageId,
                                                 type: "set_matte_weight_value",
-                                                newValue: e.target.value
+                                                newValue: parseInt(e.target.value)
                                             });
                                         }}
                                         type="number"
-                                        value={getImageStateById(exhibitionState, selectedImageId)?.matte.weighted_value ?? ""}
+                                        value={getImageStateById(exhibitionState, selectedImageId).matte.weighted_value}
                                     />
                                 </ExhibitionOption>
 
@@ -548,8 +562,8 @@ export const ExhibitionEditPane = ({ exhibitionMetadata, exhibitionState, exhibi
 
                                 <ExhibitionOption description="Custom Frame">
                                     <Checkbox
-                                        checked={Boolean(getImageStateById(exhibitionState, selectedImageId)?.frame.custom)}
-                                        onChange={(e) => {
+                                        checked={Boolean(getImageStateById(exhibitionState, selectedImageId).frame.custom)}
+                                        onChange={(e: React.ChangeEvent<HTMLInputElement>): void => {
                                             exhibitionEditDispatch({
                                                 scope: "image",
                                                 image_id: selectedImageId,
@@ -563,8 +577,8 @@ export const ExhibitionEditPane = ({ exhibitionMetadata, exhibitionState, exhibi
 
                                 <ExhibitionOption description="Color">
                                     <ColorInput
-                                        disabled={!getImageStateById(exhibitionState, selectedImageId)?.frame.custom}
-                                        onChange={(e) => {
+                                        disabled={!getImageStateById(exhibitionState, selectedImageId).frame.custom}
+                                        onChange={(e: React.ChangeEvent<HTMLInputElement>): void => {
                                             exhibitionEditDispatch({
                                                 scope: "image",
                                                 image_id: selectedImageId,
@@ -573,40 +587,40 @@ export const ExhibitionEditPane = ({ exhibitionMetadata, exhibitionState, exhibi
                                             }
                                             );
                                         }}
-                                        value={getImageStateById(exhibitionState, selectedImageId)?.frame.color}
+                                        value={getImageStateById(exhibitionState, selectedImageId).frame.color}
                                     />
 
                                 </ExhibitionOption>
 
                                 <ExhibitionOption description="Width">
                                     <Input
-                                        disabled={!getImageStateById(exhibitionState, selectedImageId)?.frame.custom}
-                                        onChange={(e) => {
+                                        disabled={!getImageStateById(exhibitionState, selectedImageId).frame.custom}
+                                        onChange={(e: React.ChangeEvent<HTMLInputElement>): void => {
                                             exhibitionEditDispatch({
                                                 scope: "image",
                                                 image_id: selectedImageId,
                                                 type: "set_frame_width",
-                                                newValue: e.target.value
+                                                newValue: parseInt(e.target.value)
                                             });
                                         }}
                                         type="number"
-                                        value={getImageStateById(exhibitionState, selectedImageId)?.frame.width ?? ""}
+                                        value={getImageStateById(exhibitionState, selectedImageId).frame.width}
                                     />
                                 </ExhibitionOption>
 
                                 <ExhibitionOption description="Height">
                                     <Input
-                                        disabled={!getImageStateById(exhibitionState, selectedImageId)?.frame.custom}
-                                        onChange={(e) => {
+                                        disabled={!getImageStateById(exhibitionState, selectedImageId).frame.custom}
+                                        onChange={(e: React.ChangeEvent<HTMLInputElement>): void => {
                                             exhibitionEditDispatch({
                                                 scope: "image",
                                                 image_id: selectedImageId,
                                                 type: "set_frame_height",
-                                                newValue: e.target.value
+                                                newValue: parseInt(e.target.value)
                                             });
                                         }}
                                         type="number"
-                                        value={getImageStateById(exhibitionState, selectedImageId)?.frame.height ?? ""}
+                                        value={getImageStateById(exhibitionState, selectedImageId).frame.height}
                                     />
                                 </ExhibitionOption>
 
@@ -614,7 +628,7 @@ export const ExhibitionEditPane = ({ exhibitionMetadata, exhibitionState, exhibi
 
                                 <ExhibitionOption description="Color">
                                     <ColorInput
-                                        onChange={(e) => {
+                                        onChange={(e: React.ChangeEvent<HTMLInputElement>): void => {
                                             exhibitionEditDispatch({
                                                 scope: "image",
                                                 image_id: selectedImageId,
@@ -623,22 +637,22 @@ export const ExhibitionEditPane = ({ exhibitionMetadata, exhibitionState, exhibi
                                             }
                                             );
                                         }}
-                                        value={getImageStateById(exhibitionState, selectedImageId)?.light.color}
+                                        value={getImageStateById(exhibitionState, selectedImageId).light.color}
                                     />
                                 </ExhibitionOption>
 
                                 <ExhibitionOption description="Intensity">
                                     <Input
-                                        onChange={(e) => {
+                                        onChange={(e: React.ChangeEvent<HTMLInputElement>): void => {
                                             exhibitionEditDispatch({
                                                 scope: "image",
                                                 image_id: selectedImageId,
                                                 type: "set_light_intensity",
-                                                newValue: e.target.value
+                                                newValue: parseInt(e.target.value)
                                             });
                                         }}
                                         type="number"
-                                        value={getImageStateById(exhibitionState, selectedImageId)?.light.intensity ?? ""}
+                                        value={getImageStateById(exhibitionState, selectedImageId).light.intensity}
                                     />
                                 </ExhibitionOption>
 
@@ -650,7 +664,7 @@ export const ExhibitionEditPane = ({ exhibitionMetadata, exhibitionState, exhibi
                                 >
                                     <TextField
                                         multiline
-                                        onChange={(e) => {
+                                        onChange={(e: React.ChangeEvent<HTMLInputElement>): void => {
                                             exhibitionEditDispatch({
                                                 scope: "image",
                                                 image_id: selectedImageId,
@@ -661,7 +675,7 @@ export const ExhibitionEditPane = ({ exhibitionMetadata, exhibitionState, exhibi
                                         placeholder="Enter text"
                                         rows={4}
                                         type="textarea"
-                                        value={getImageStateById(exhibitionState, selectedImageId)?.metadata.description ?? ""}
+                                        value={getImageStateById(exhibitionState, selectedImageId).metadata.description}
                                         variant="outlined"
                                     />
                                 </ExhibitionOption>
@@ -672,7 +686,7 @@ export const ExhibitionEditPane = ({ exhibitionMetadata, exhibitionState, exhibi
                                 >
                                     <TextField
                                         multiline
-                                        onChange={(e) => {
+                                        onChange={(e: React.ChangeEvent<HTMLInputElement>): void => {
                                             exhibitionEditDispatch({
                                                 scope: "image",
                                                 image_id: selectedImageId,
@@ -683,7 +697,7 @@ export const ExhibitionEditPane = ({ exhibitionMetadata, exhibitionState, exhibi
                                         placeholder="Enter text"
                                         rows={2}
                                         type="textarea"
-                                        value={getImageStateById(exhibitionState, selectedImageId)?.metadata.additional_information ?? ""}
+                                        value={getImageStateById(exhibitionState, selectedImageId).metadata.additional_information}
                                         variant="outlined"
                                     />
                                 </ExhibitionOption>
@@ -703,17 +717,17 @@ export const ExhibitionEditPane = ({ exhibitionMetadata, exhibitionState, exhibi
                     width: "100%",
                     height: "100%",
                     gridArea: "footer",
-                    backgroundColor: theme.palette.grey.veryTranslucent
+                    backgroundColor: "gray"
                 }}
             >
 
                 <Button
                     color={
-                        appUser.is_admin && appUser.id !== exhibitionMetadata.exhibition_owner ? "secondary" : "primary"
+                        appUser != null && appUser !== false && appUser.is_admin && appUser.id !== exhibitionMetadata.exhibition_owner ? "secondary" : "primary"
                     }
                     onClick={saveExhibition}
                     startIcon={
-                        appUser.is_admin && appUser.id !== exhibitionMetadata.exhibition_owner ? <SecurityIcon /> : <CloudUploadIcon />
+                        appUser != null && appUser !== false && appUser.is_admin && appUser.id !== exhibitionMetadata.exhibition_owner ? <SecurityIcon /> : <CloudUploadIcon />
                     }
                     variant="contained"
                 >
@@ -741,13 +755,15 @@ export const ExhibitionEditPane = ({ exhibitionMetadata, exhibitionState, exhibi
 
             <Dialog
                 component="form"
-                onSubmit={(e) => {
+                onSubmit={(e: React.FormEvent<HTMLDivElement>): void => {
                     e.preventDefault();
-                    exhibitionEditDispatch({
-                        scope: "exhibition",
-                        type: "remove_image",
-                        image_id: selectedImageId
-                    });
+                    if (selectedImageId != null) {
+                        exhibitionEditDispatch({
+                            scope: "exhibition",
+                            type: "remove_image",
+                            image_id: selectedImageId
+                        });
+                    }
                     setDeleteImageDialogIsOpen(false);
                     setSelectedImageId(null);
                 }}
@@ -772,7 +788,7 @@ export const ExhibitionEditPane = ({ exhibitionMetadata, exhibitionState, exhibi
                         width="100%"
                     >
                         <Button
-                            onClick={() => {
+                            onClick={(): void => {
                                 setDeleteImageDialogIsOpen(false);
                             }}
                             variant="outlined"

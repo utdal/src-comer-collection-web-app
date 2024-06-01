@@ -42,7 +42,7 @@ export interface ExhibitionImageData {
         description: string;
         year: number;
         medium: string;
-        additionalInformation: string | null;
+        additional_information: string | null;
         direction: ExhibitionImageDirectionIdentifier;
     };
 }
