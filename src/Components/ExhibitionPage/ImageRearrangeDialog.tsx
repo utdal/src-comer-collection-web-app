@@ -9,13 +9,23 @@ import PropTypes from "prop-types";
 import { getSwappedImageArray, directionOptions } from "./ExhibitionEditPane";
 import { exhibitionStatePropTypesShape } from "../../Classes/Entities/Exhibition";
 import { entityPropTypeShape } from "../../Classes/Entity";
+import type { ExhibitionData, ExhibitionDispatchAction } from "./ExhibitionDispatchActionTypes.js";
+import type { Item } from "../../index.js";
 
-export const ImageRearrangeDialog = ({ imageRearrangerIsOpen, setImageRearrangerIsOpen, exhibitionState, exhibitionEditDispatch, globalImageCatalog }) => {
+interface ImageRearrangeDialogProps {
+    imageRearrangerIsOpen: boolean;
+    setImageRearrangerIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
+    exhibitionState: ExhibitionData;
+    exhibitionEditDispatch: React.Dispatch<ExhibitionDispatchAction>;
+    globalImageCatalog: Item[];
+}
+
+export const ImageRearrangeDialog = ({ imageRearrangerIsOpen, setImageRearrangerIsOpen, exhibitionState, exhibitionEditDispatch, globalImageCatalog }: ImageRearrangeDialogProps): React.JSX.Element => {
     const [currentWall, setCurrentWall] = useState(1);
 
-    const imagesOnWall = exhibitionState.images.filter((i) => i.metadata?.direction === currentWall);
+    const imagesOnWall = exhibitionState.images.filter((i) => i.metadata.direction === currentWall);
 
-    const handleImageSwap = (aId, bId) => {
+    const handleImageSwap = (aId: number, bId: number): void => {
         const newArray = getSwappedImageArray(exhibitionState.images, aId, bId);
         exhibitionEditDispatch({
             scope: "exhibition",
@@ -39,6 +49,9 @@ export const ImageRearrangeDialog = ({ imageRearrangerIsOpen, setImageRearranger
 
                 <ToggleButtonGroup
                     exclusive
+                    onChange={(e: React.MouseEvent, value: number): void => {
+                        setCurrentWall(value);
+                    }}
                     sx={{
                         width: "100%"
                     }}
@@ -47,9 +60,6 @@ export const ImageRearrangeDialog = ({ imageRearrangerIsOpen, setImageRearranger
                     {directionOptions.map((option) => (
                         <ToggleButton
                             key={option.value}
-                            onClick={(e) => {
-                                setCurrentWall(e.target.value);
-                            }}
                             selected={option.value === currentWall}
                             sx={{
                                 textTransform: "unset",
@@ -71,70 +81,73 @@ export const ImageRearrangeDialog = ({ imageRearrangerIsOpen, setImageRearranger
                     spacing={2}
                     width="100%"
                 >
-                    {(imagesOnWall.length > 0 && imagesOnWall.map((i, index) => {
-                        const catalogImage = globalImageCatalog.find((gi) => gi.id === i.image_id);
-                        return (
-                            <Stack
-                                alignItems="center"
-                                direction="column"
-                                justifyItems="center"
-                                key={i.image_id}
-                                spacing={2}
-                            >
-                                <Box
-                                    height="150px"
-                                    sx={{
-                                        backgroundImage: `url("${catalogImage.thumbnailUrl}")`,
-                                        backgroundPosition: "center",
-                                        backgroundSize: "contain",
-                                        backgroundRepeat: "no-repeat"
-                                    }}
-                                    width="150px"
-                                >
-                                    {!catalogImage.thumbnailUrl && (
-                                        <BrokenImageIcon sx={{
-                                            opacity: 0.2,
-                                            width: "100%",
-                                            height: "100%"
-                                        }}
-                                        />
-                                    )}
-                                </Box>
+                    {imagesOnWall.length > 0
+                        ? (
+                            imagesOnWall.map((i, index) => {
+                                const catalogImage = globalImageCatalog.find((gi) => gi.id === i.image_id);
+                                return (
+                                    <Stack
+                                        alignItems="center"
+                                        direction="column"
+                                        justifyItems="center"
+                                        key={i.image_id}
+                                        spacing={2}
+                                    >
+                                        <Box
+                                            height="150px"
+                                            sx={{
+                                                backgroundImage: catalogImage != null ? `url("${catalogImage.thumbnailUrl as string}")` : undefined,
+                                                backgroundPosition: "center",
+                                                backgroundSize: "contain",
+                                                backgroundRepeat: "no-repeat"
+                                            }}
+                                            width="150px"
+                                        >
+                                            {Boolean(catalogImage?.thumbnailUrl) && (
+                                                <BrokenImageIcon sx={{
+                                                    opacity: 0.2,
+                                                    width: "100%",
+                                                    height: "100%"
+                                                }}
+                                                />
+                                            )}
+                                        </Box>
 
+                                        <Typography>
+                                            {`${catalogImage?.title as string}`}
+                                        </Typography>
+
+                                        <Stack direction="row">
+                                            <IconButton
+                                                disabled={index === 0}
+                                                onClick={(): void => {
+                                                    handleImageSwap(imagesOnWall[index - 1].image_id, i.image_id);
+                                                }}
+                                            >
+                                                <ArrowBackIcon />
+                                            </IconButton>
+
+                                            <IconButton
+                                                disabled={index === imagesOnWall.length - 1}
+                                                onClick={(): void => {
+                                                    handleImageSwap(imagesOnWall[index + 1].image_id, i.image_id);
+                                                }}
+                                            >
+                                                <ArrowForwardIcon />
+                                            </IconButton>
+                                        </Stack>
+                                    </Stack>
+                                );
+                            })
+                        )
+                        : (
+                            <Stack spacing={1}>
                                 <Typography>
-                                    {catalogImage.title}
+                                    The selected wall contains no images.
                                 </Typography>
 
-                                <Stack direction="row">
-                                    <IconButton
-                                        disabled={index === 0}
-                                        onClick={() => {
-                                            handleImageSwap(imagesOnWall[index - 1].image_id, i.image_id);
-                                        }}
-                                    >
-                                        <ArrowBackIcon />
-                                    </IconButton>
-
-                                    <IconButton
-                                        disabled={index === imagesOnWall.length - 1}
-                                        onClick={() => {
-                                            handleImageSwap(imagesOnWall[index + 1].image_id, i.image_id);
-                                        }}
-                                    >
-                                        <ArrowForwardIcon />
-                                    </IconButton>
-                                </Stack>
                             </Stack>
-                        );
-                    })) || (imagesOnWall.length === 0 &&
-                        <Stack spacing={1}>
-                            <Typography>
-                                The selected wall contains no images.
-                            </Typography>
-
-                        </Stack>
-
-                    )}
+                        )}
                 </Stack>
             </DialogContent>
 
@@ -155,7 +168,7 @@ export const ImageRearrangeDialog = ({ imageRearrangerIsOpen, setImageRearranger
                     width="100%"
                 >
                     <Button
-                        onClick={() => {
+                        onClick={(): void => {
                             setImageRearrangerIsOpen(false);
                         }}
                         sx={{

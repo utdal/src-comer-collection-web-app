@@ -164,7 +164,7 @@ export interface ExhibitionRemoveImageAction extends ExhibitionScope {
     image_id: number;
 }
 
-export interface ExhibitionSetImageAction extends ExhibitionScope {
+export interface ExhibitionSetImagesAction extends ExhibitionScope {
     type: "set_images";
     newImages: ExhibitionImageData[];
 }
@@ -244,7 +244,7 @@ export interface ExhibitionImageSetDirectionAction extends ImageScope {
     newValue: ExhibitionImageDirectionIdentifier;
 }
 
-export type ExhibitionScopedAction = ExhibitionAddImageAction | ExhibitionImageSetAdditionalInfoAction | ExhibitionImageSetCustomFrameColorAction | ExhibitionImageSetDescriptionAction | ExhibitionImageSetDirectionAction | ExhibitionImageSetLightColorAction | ExhibitionImageSetLightIntensityAction | ExhibitionRemoveImageAction | ExhibitionSetAmbientLightColorAction | ExhibitionSetCeilingColorAction | ExhibitionSetEverythingAction | ExhibitionSetFloorColorAction | ExhibitionSetFloorTextureAction | ExhibitionSetHeightAction | ExhibitionSetImageAction | ExhibitionSetLengthAction | ExhibitionSetMainWallColorAction | ExhibitionSetMoodinessAction | ExhibitionSetWideWallColorAction | ExhibitionSetWidthAction;
+export type ExhibitionScopedAction = ExhibitionAddImageAction | ExhibitionImageSetAdditionalInfoAction | ExhibitionImageSetCustomFrameColorAction | ExhibitionImageSetDescriptionAction | ExhibitionImageSetDirectionAction | ExhibitionImageSetLightColorAction | ExhibitionImageSetLightIntensityAction | ExhibitionRemoveImageAction | ExhibitionSetAmbientLightColorAction | ExhibitionSetCeilingColorAction | ExhibitionSetEverythingAction | ExhibitionSetFloorColorAction | ExhibitionSetFloorTextureAction | ExhibitionSetHeightAction | ExhibitionSetImagesAction | ExhibitionSetLengthAction | ExhibitionSetMainWallColorAction | ExhibitionSetMoodinessAction | ExhibitionSetWideWallColorAction | ExhibitionSetWidthAction;
 
 export type ExhibitionImageScopedAction = ExhibitionImageCustomPositionEnablementAction | ExhibitionImageCustomPositionSetXAction | ExhibitionImageCustomPositionSetYAction | ExhibitionImageSetCustomFrameEnablementAction | ExhibitionImageSetCustomFrameHeightAction | ExhibitionImageSetCustomFrameWidthAction | ExhibitionImageSetMatteColorAction | ExhibitionImageSetMatteWeightEnablementAction | ExhibitionImageSetMatteWeightValue;
 
