@@ -1,13 +1,13 @@
 /* eslint-disable react/prop-types */
 import type React from "react";
-import { CourseEndDateTimeStackedCell } from "../../Components/TableCells/Course/CourseEndDateTimeStackedCell.js";
-import { CourseIDCell } from "../../Components/TableCells/Course/CourseIDCell.js";
-import { CourseNameCell } from "../../Components/TableCells/Course/CourseNameCell.js";
-import { CourseNotesCell } from "../../Components/TableCells/Course/CourseNotesCell.js";
-import CourseOptionsCell from "../../Components/TableCells/Course/CourseOptionsCell.js";
-import { CourseStartDateTimeStackedCell } from "../../Components/TableCells/Course/CourseStartDateTimeStackedCell.js";
-import { CourseStatusCell } from "../../Components/TableCells/Course/CourseStatusCell.js";
-import { CourseUserAssignmentCell } from "../../Components/TableCells/Course/CourseUserAssignmentCell.js";
+import CourseEndDateTimeStackedCell from "../../Components/TableCells/Course/CourseEndDateTimeStackedCell";
+import CourseIDCell from "../../Components/TableCells/Course/CourseIDCell";
+import CourseNameCell from "../../Components/TableCells/Course/CourseNameCell";
+import CourseNotesCell from "../../Components/TableCells/Course/CourseNotesCell";
+import CourseOptionsCell from "../../Components/TableCells/Course/CourseOptionsCell";
+import CourseStartDateTimeStackedCell from "../../Components/TableCells/Course/CourseStartDateTimeStackedCell";
+import CourseStatusCell from "../../Components/TableCells/Course/CourseStatusCell";
+import CourseUserAssignmentCell from "../../Components/TableCells/Course/CourseUserAssignmentCell";
 import { SchoolIcon } from "../../Imports/Icons.js";
 import { Entity } from "../Entity";
 import type { EntityFieldDefinition, Item, SortableValue, TableFieldDefinition } from "../../index.js";

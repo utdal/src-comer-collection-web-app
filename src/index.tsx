@@ -10,6 +10,8 @@ import type { Tag } from "./Classes/Entities/Tag";
 import type { User } from "./Classes/Entities/User";
 import type { DeletedImage, Image } from "./Classes/Entities/Image";
 
+export type CourseStatus = "Active" | "Expired" | "Upcoming";
+
 export interface Item {
     readonly [x: string]: Item[] | boolean | number | object | string | readonly boolean[] | readonly number[] | readonly object[] | readonly string[] | null | undefined;
     readonly id: number;
@@ -25,6 +27,20 @@ export interface ArtistItem extends Item {
 
 export interface ImageItem extends Item {
     Artists?: Item[];
+}
+
+export interface CourseItem extends Item {
+    date_start: string;
+    date_end: string;
+    notes?: string;
+    Users?: Item[];
+    status: CourseStatus;
+    name: string;
+}
+
+export interface UserItem extends Item {
+    given_name?: string;
+    family_name?: string;
 }
 
 export type EntityType = typeof Artist | typeof Course | typeof DeletedImage | typeof Exhibition | typeof Image | typeof PublicExhibition | typeof Tag | typeof User;

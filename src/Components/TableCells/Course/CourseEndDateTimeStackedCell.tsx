@@ -1,10 +1,11 @@
 import React from "react";
 import { Stack, Typography } from "@mui/material";
-import { useTableCellItem } from "../../../ContextProviders/TableCellProvider.js";
-import { Course } from "../../../Classes/Entities/Course.ts";
+import { useTableCellItem } from "../../../ContextProviders/TableCellProvider";
+import { Course } from "../../../Classes/Entities/Course";
+import type { CourseItem } from "../../..";
 
-export const CourseEndDateTimeStackedCell = () => {
-    const course = useTableCellItem();
+const CourseEndDateTimeStackedCell = (): React.JSX.Element => {
+    const course = useTableCellItem() as CourseItem;
     return (
         <Stack
             direction="column"
@@ -20,3 +21,5 @@ export const CourseEndDateTimeStackedCell = () => {
         </Stack>
     );
 };
+
+export default CourseEndDateTimeStackedCell;

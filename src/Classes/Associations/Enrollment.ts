@@ -2,11 +2,11 @@ import { PersonAddIcon, PersonRemoveIcon } from "../../Imports/Icons.js";
 import { Course } from "../Entities/Course";
 import { User } from "../Entities/User";
 import { Association } from "../Association";
-import { CourseIDCell } from "../../Components/TableCells/Course/CourseIDCell.js";
-import { CourseNameCell } from "../../Components/TableCells/Course/CourseNameCell.js";
-import { CourseDateRangeStackedCell } from "../../Components/TableCells/Course/CourseDateRangeStackedCell.js";
-import { UserIDWithAccessIconCell } from "../../Components/TableCells/User/UserIDWithAccessIconCell.js";
-import { UserStackedNameEmailCell } from "../../Components/TableCells/User/UserStackedNameEmailCell.js";
+import CourseIDCell from "../../Components/TableCells/Course/CourseIDCell";
+import CourseNameCell from "../../Components/TableCells/Course/CourseNameCell";
+import CourseDateRangeStackedCell from "../../Components/TableCells/Course/CourseDateRangeStackedCell";
+import { UserIDWithAccessIconCell } from "../../Components/TableCells/User/UserIDWithAccessIconCell";
+import { UserStackedNameEmailCell } from "../../Components/TableCells/User/UserStackedNameEmailCell";
 import type React from "react";
 import type { Item, SortableValue, TableFieldDefinition } from "../../index.js";
 

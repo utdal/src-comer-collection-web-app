@@ -1,8 +1,8 @@
 import React from "react";
-import CourseEditButton from "./CourseEditButton.js";
-import CourseDeleteButton from "./CourseDeleteButton.js";
+import CourseEditButton from "./CourseEditButton";
+import CourseDeleteButton from "./CourseDeleteButton";
 
-const CourseOptionsCell = () => {
+const CourseOptionsCell = (): React.JSX.Element => {
     return (
         <>
             <CourseEditButton />

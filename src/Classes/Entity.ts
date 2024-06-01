@@ -8,6 +8,23 @@ export const capitalized = (string: string): string => {
     return string.substring(0, 1).toUpperCase() + string.substr(1).toLowerCase();
 };
 
+export const formatDate = (date: string): string => {
+    return new Date(date).toLocaleDateString([], {
+        year: "numeric",
+        month: "short",
+        day: "numeric",
+        weekday: "short"
+    });
+};
+
+export const formatTime = (date: string): string => {
+    return new Date(date).toLocaleTimeString([], {
+        hour: "numeric",
+        minute: "2-digit",
+        second: "2-digit"
+    });
+};
+
 export class Entity extends null {
     public static baseUrl = "/";
 
@@ -46,23 +63,6 @@ export class Entity extends null {
     public static tableFields = [] as TableFieldDefinition[];
 
     public static fetcherUrl = "";
-
-    public static formatDate = (date: string): string => {
-        return new Date(date).toLocaleDateString([], {
-            year: "numeric",
-            month: "short",
-            day: "numeric",
-            weekday: "short"
-        });
-    };
-
-    public static formatTime = (date: string): string => {
-        return new Date(date).toLocaleTimeString([], {
-            hour: "numeric",
-            minute: "2-digit",
-            second: "2-digit"
-        });
-    };
 }
 
 export const entityPropTypeShape = PropTypes.shape({

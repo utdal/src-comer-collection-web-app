@@ -1,9 +1,10 @@
 import React from "react";
 import { Stack, Typography } from "@mui/material";
-import { useTableCellItem } from "../../../ContextProviders/TableCellProvider.js";
+import { useTableCellItem } from "../../../ContextProviders/TableCellProvider";
+import type { CourseItem } from "../../..";
 
-export const CourseDateRangeStackedCell = () => {
-    const course = useTableCellItem();
+const CourseDateRangeStackedCell = (): React.JSX.Element => {
+    const course = useTableCellItem() as CourseItem;
     return (
         <Stack>
             <Typography variant="body1">
@@ -16,3 +17,5 @@ export const CourseDateRangeStackedCell = () => {
         </Stack>
     );
 };
+
+export default CourseDateRangeStackedCell;

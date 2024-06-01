@@ -1,7 +1,7 @@
 import React from "react";
 import EntityEditButton from "../Entity/EntityEditButton.js";
 
-const CourseEditButton = () => {
+const CourseEditButton = (): React.JSX.Element => {
     return (
         <EntityEditButton />
     );
