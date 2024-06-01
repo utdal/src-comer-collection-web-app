@@ -1,9 +1,9 @@
 import React from "react";
 import { Typography } from "@mui/material";
-import { useTableCellItem } from "../../../ContextProviders/TableCellProvider.js";
+import { useTableCellItem } from "../../../ContextProviders/TableCellProvider";
 import type { ArtistItem } from "../../../index.js";
 
-export const ArtistNotesCell = (): React.JSX.Element => {
+const ArtistNotesCell = (): React.JSX.Element => {
     const artist = useTableCellItem() as ArtistItem;
 
     return artist.notes != null
@@ -19,3 +19,5 @@ export const ArtistNotesCell = (): React.JSX.Element => {
             />
         );
 };
+
+export default ArtistNotesCell;

@@ -1,10 +1,10 @@
 import React from "react";
 import { Stack, Typography } from "@mui/material";
 import { ImageIcon } from "../../../Imports/Icons.js";
-import { useTableCellItem } from "../../../ContextProviders/TableCellProvider.js";
+import { useTableCellItem } from "../../../ContextProviders/TableCellProvider";
 import type { ArtistItem, ImageItem } from "../../../index.js";
 
-export const ArtistImageCountCell = (): React.JSX.Element => {
+const ArtistImageCountCell = (): React.JSX.Element => {
     const artist = useTableCellItem() as ArtistItem;
     return (
         <Stack
@@ -20,3 +20,5 @@ export const ArtistImageCountCell = (): React.JSX.Element => {
         </Stack>
     );
 };
+
+export default ArtistImageCountCell;

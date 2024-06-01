@@ -1,10 +1,10 @@
 import { Artist } from "../Entities/Artist";
 import { Image } from "../Entities/Image";
 import { Association } from "../Association";
-import { ArtistIDCell } from "../../Components/TableCells/Artist/ArtistIDCell.js";
-import { ArtistNameCell } from "../../Components/TableCells/Artist/ArtistNameCell.js";
-import { ArtistNotesCell } from "../../Components/TableCells/Artist/ArtistNotesCell.js";
-import type { Item, SortableValue } from "../..";
+import ArtistIDCell from "../../Components/TableCells/Artist/ArtistIDCell";
+import ArtistNameCell from "../../Components/TableCells/Artist/ArtistNameCell";
+import ArtistNotesCell from "../../Components/TableCells/Artist/ArtistNotesCell";
+import type { Item, SortableValue, TableFieldDefinition } from "../..";
 
 class ImageArtist extends Association {
     public static url = "/api/imageartists";
@@ -27,10 +27,7 @@ class ImageArtist extends Association {
 
     public static secondaryFieldInPrimary = "Artists";
 
-    /**
-     * @type {TableFieldDefinition[]}
-     */
-    public static tableFields = [
+    public static tableFields: TableFieldDefinition[] = [
         {
             columnDescription: "ID",
             TableCellComponent: ArtistIDCell,

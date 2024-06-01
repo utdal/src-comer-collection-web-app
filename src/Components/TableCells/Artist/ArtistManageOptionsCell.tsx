@@ -1,9 +1,9 @@
 import React from "react";
-import { ArtistManageDeleteButton } from "./ArtistManageDeleteButton.js";
-import { ArtistManageEditButton } from "./ArtistManageEditButton.js";
+import ArtistManageDeleteButton from "./ArtistManageDeleteButton";
+import ArtistManageEditButton from "./ArtistManageEditButton";
 import { Stack } from "@mui/material";
 
-export const ArtistManageOptionsCell = (): React.JSX.Element => {
+const ArtistManageOptionsCell = (): React.JSX.Element => {
     return (
         <Stack direction="row">
             <ArtistManageEditButton />
@@ -12,3 +12,5 @@ export const ArtistManageOptionsCell = (): React.JSX.Element => {
         </Stack>
     );
 };
+
+export default ArtistManageOptionsCell;

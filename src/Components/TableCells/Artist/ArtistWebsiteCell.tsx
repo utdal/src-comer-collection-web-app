@@ -1,11 +1,11 @@
 import React, { useCallback } from "react";
-import { Button } from "@mui/material";
+import { Button, Typography } from "@mui/material";
 import { ContentCopyIcon } from "../../../Imports/Icons.js";
-import { useClipboard } from "../../../ContextProviders/AppFeatures.js";
-import { useTableCellItem } from "../../../ContextProviders/TableCellProvider.js";
+import { useClipboard } from "../../../ContextProviders/AppFeatures";
+import { useTableCellItem } from "../../../ContextProviders/TableCellProvider";
 import type { ArtistItem } from "../../../index.js";
 
-export const ArtistWebsiteCell = (): React.JSX.Element | null => {
+const ArtistWebsiteCell = (): React.JSX.Element => {
     const artist = useTableCellItem() as ArtistItem;
     const clipboard = useClipboard();
 
@@ -26,5 +26,11 @@ export const ArtistWebsiteCell = (): React.JSX.Element | null => {
                 {artist.website}
             </Button>
         )
-        : null;
+        : (
+            <Typography>
+                No website
+            </Typography>
+        );
 };
+
+export default ArtistWebsiteCell;

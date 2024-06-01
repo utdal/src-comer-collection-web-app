@@ -1,9 +1,9 @@
 import React from "react";
 import { EntityManageDeleteButton } from "../Entity/EntityManageDeleteButton.js";
-import { useTableCellItem } from "../../../ContextProviders/TableCellProvider.js";
+import { useTableCellItem } from "../../../ContextProviders/TableCellProvider";
 import type { ArtistItem, ImageItem } from "../../../index.js";
 
-export const ArtistManageDeleteButton = (): React.JSX.Element => {
+const ArtistManageDeleteButton = (): React.JSX.Element => {
     const artist = useTableCellItem() as ArtistItem;
     return (
         <EntityManageDeleteButton
@@ -11,3 +11,5 @@ export const ArtistManageDeleteButton = (): React.JSX.Element => {
         />
     );
 };
+
+export default ArtistManageDeleteButton;

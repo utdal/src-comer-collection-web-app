@@ -1,13 +1,13 @@
 import type React from "react";
-import { ArtistIDCell } from "../../Components/TableCells/Artist/ArtistIDCell.js";
-import { ArtistImageCountCell } from "../../Components/TableCells/Artist/ArtistImageCountCell.js";
-import { ArtistManageOptionsCell } from "../../Components/TableCells/Artist/ArtistManageOptionsCell.js";
-import { ArtistNameCell } from "../../Components/TableCells/Artist/ArtistNameCell.js";
-import { ArtistNotesCell } from "../../Components/TableCells/Artist/ArtistNotesCell.js";
-import { ArtistWebsiteCell } from "../../Components/TableCells/Artist/ArtistWebsiteCell.js";
+import ArtistIDCell from "../../Components/TableCells/Artist/ArtistIDCell";
+import ArtistImageCountCell from "../../Components/TableCells/Artist/ArtistImageCountCell";
+import ArtistManageOptionsCell from "../../Components/TableCells/Artist/ArtistManageOptionsCell";
+import ArtistNameCell from "../../Components/TableCells/Artist/ArtistNameCell";
+import ArtistNotesCell from "../../Components/TableCells/Artist/ArtistNotesCell";
+import ArtistWebsiteCell from "../../Components/TableCells/Artist/ArtistWebsiteCell";
 import { BrushIcon } from "../../Imports/Icons.js";
 import { Entity } from "../Entity";
-import type { EntityFieldDefinition, Item, SortableValue } from "../../index.js";
+import type { EntityFieldDefinition, Item, SortableValue, TableFieldDefinition } from "../../index.js";
 
 class Artist extends Entity {
     public static baseUrl = "/api/artists";
@@ -53,10 +53,7 @@ class Artist extends Entity {
 
     public static searchBoxPlaceholder = "Search artists by name or notes";
 
-    /**
-     * @type {TableFieldDefinition[]}
-     */
-    public static tableFields = [
+    public static tableFields: TableFieldDefinition[] = [
         {
             columnDescription: "ID",
             TableCellComponent: ArtistIDCell,

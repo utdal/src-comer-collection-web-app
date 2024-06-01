@@ -1,9 +1,9 @@
 import React from "react";
 import { Typography } from "@mui/material";
-import { useTableCellItem } from "../../../ContextProviders/TableCellProvider.js";
+import { useTableCellItem } from "../../../ContextProviders/TableCellProvider";
 import type { ArtistItem } from "../../../index.js";
 
-export const ArtistIDCell = (): React.JSX.Element => {
+const ArtistIDCell = (): React.JSX.Element => {
     const artist = useTableCellItem() as ArtistItem;
     return (
         <Typography>
@@ -11,3 +11,5 @@ export const ArtistIDCell = (): React.JSX.Element => {
         </Typography>
     );
 };
+
+export default ArtistIDCell;
