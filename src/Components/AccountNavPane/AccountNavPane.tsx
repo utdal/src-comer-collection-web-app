@@ -1,77 +1,71 @@
 import React from "react";
 import { Stack, Divider } from "@mui/material";
-import { useTheme } from "@emotion/react";
 import { AccountCircleIcon, GroupsIcon, PhotoCameraBackIcon, ImageIcon, SchoolIcon, LockIcon } from "../../Imports/Icons.js";
-import useAppUser from "../../Hooks/useAppUser.ts";
-import { AccountNavSection } from "./AccountNavSection.js";
+import useAppUser from "../../Hooks/useAppUser.js";
+import AccountNavSection from "./AccountNavSection.js";
+import type { AppUser, NavPaneLinkDefinition } from "../../index.js";
 
-/**
- * @type {AccountNavPaneLinkDefinition[]}
- */
-const navLinks = [
+const navLinks: NavPaneLinkDefinition[] = [
     {
         title: "Profile",
-        Icon: AccountCircleIcon,
+        Icon: AccountCircleIcon as React.ElementType,
         link: "/Account/Profile",
-        requirePermanentPassword: true
+        requirePermanentPassword: true,
+        displayText: "Profile"
     },
     {
         title: "My Exhibitions",
-        Icon: PhotoCameraBackIcon,
+        Icon: PhotoCameraBackIcon as React.ElementType,
         link: "/Account/MyExhibitions",
-        requirePermanentPassword: true
+        requirePermanentPassword: true,
+        displayText: "My Exhibitions"
     },
     {
         title: "Change Password",
-        Icon: LockIcon,
-        link: "/Account/ChangePassword"
+        Icon: LockIcon as React.ElementType,
+        link: "/Account/ChangePassword",
+        requirePermanentPassword: false,
+        displayText: "Change Password"
     }
 ];
 
-/**
- * @type {AccountNavPaneLinkDefinition[]}
- */
-const collectionManagerNavLinks = [
+const collectionManagerNavLinks: NavPaneLinkDefinition[] = [
     {
         displayText: "Images",
         title: "Image Management",
-        Icon: ImageIcon,
+        Icon: ImageIcon as React.ElementType,
         link: "/Account/Admin/Images",
         requirePermanentPassword: true
     }
 ];
 
-/**
- * @type {AccountNavPaneLinkDefinition[]}
- */
-const adminNavLinks = [
+const adminNavLinks: NavPaneLinkDefinition[] = [
     {
         displayText: "Users",
         title: "User Management",
-        Icon: GroupsIcon,
+        Icon: GroupsIcon as React.ElementType,
         link: "/Account/Admin/Users",
         requirePermanentPassword: true
     },
     {
         displayText: "Exhibitions",
         title: "Exhibition Management",
-        Icon: PhotoCameraBackIcon,
+        Icon: PhotoCameraBackIcon as React.ElementType,
         link: "/Account/Admin/Exhibitions",
         requirePermanentPassword: true
     },
     {
         displayText: "Courses",
         title: "Course Management",
-        Icon: SchoolIcon,
+        Icon: SchoolIcon as React.ElementType,
         link: "/Account/Admin/Courses",
         requirePermanentPassword: true
     }
 
 ];
 
-export const AccountNavPane = () => {
-    const appUser = useAppUser();
-    const theme = useTheme();
+export const AccountNavPane = (): React.JSX.Element => {
+    const appUser = useAppUser() as AppUser;
 
     return (
         <Stack
@@ -83,14 +77,10 @@ export const AccountNavPane = () => {
                 sectionTitle="Account"
             />
 
-            {appUser?.is_admin_or_collection_manager
+            {appUser.is_admin_or_collection_manager
                 ? (
                     <>
-                        <Divider sx={{
-                            borderColor: theme.palette.grey.main,
-                            opacity: 0.5
-                        }}
-                        />
+                        <Divider />
 
                         <AccountNavSection
                             linkDefinitions={collectionManagerNavLinks}
@@ -100,14 +90,10 @@ export const AccountNavPane = () => {
                 )
                 : null}
 
-            {appUser?.is_admin
+            {appUser.is_admin
                 ? (
                     <>
-                        <Divider sx={{
-                            borderColor: theme.palette.grey.main,
-                            opacity: 0.5
-                        }}
-                        />
+                        <Divider />
 
                         <AccountNavSection
                             linkDefinitions={adminNavLinks}

@@ -320,12 +320,12 @@ export type MultiCreateDialogDispatchAction = (
     }
 );
 
-export interface AccountNavPaneLinkDefinition {
-    title: string;
-    Icon: () => React.JSX.Element;
-    link: string;
+export interface NavPaneLinkDefinition {
     requirePermanentPassword: boolean;
+    title: string;
+    link: string;
     displayText: string;
+    Icon: React.ElementType;
 }
 
 export interface EntityFieldDefinition {
