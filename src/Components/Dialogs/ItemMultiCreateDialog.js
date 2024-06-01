@@ -9,7 +9,7 @@ import {
 import { DeleteIcon } from "../../Imports/Icons.js";
 import { getBlankItemFields } from "../../Helpers/fields.js";
 import { useSnackbar } from "../../ContextProviders/AppFeatures";
-import { useEntity, useManagementCallbacks } from "../../ContextProviders/ManagementPageProvider.js";
+import { useEntity, useManagementCallbacks } from "../../ContextProviders/ManagementPageProvider";
 import { PersistentDialog } from "./PersistentDialog.js";
 import { DialogStateOld } from "../../Classes/DialogState.js";
 import { useActionData, useSubmit } from "react-router-dom";

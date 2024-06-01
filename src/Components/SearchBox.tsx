@@ -1,28 +1,40 @@
 /* eslint-disable react/no-multi-comp */
-import React, { memo, useCallback, useMemo } from "react";
+import React, { useCallback, useMemo } from "react";
+import type { IconButtonOwnProps, OutlinedTextFieldProps } from "@mui/material";
 import { TextField, InputAdornment, IconButton, styled } from "@mui/material";
 import { SearchIcon, ClearIcon } from "../Imports/Icons.js";
-import PropTypes from "prop-types";
-import { useEntity, useItemCounts } from "../ContextProviders/ManagementPageProvider.js";
+import { useEntity, useItemCounts } from "../ContextProviders/ManagementPageProvider";
+
+interface DisappearingIconButtonProps extends IconButtonOwnProps {
+    isVisible: boolean;
+}
+
+interface FixedWidthTextFieldProps extends OutlinedTextFieldProps {
+    width: string;
+}
 
 /**
  * Use as regular IconButton and add isVisible Boolean property
  */
 const DisappearingIconButton = styled(IconButton, {
     shouldForwardProp: (prop) => prop !== "isVisible"
-})(({ isVisible }) => ({
+})(({ isVisible }: DisappearingIconButtonProps) => ({
     display: isVisible ? "" : "none"
 }));
 
-const FixedWidthTextField = styled(TextField)(({ width }) => ({
+const FixedWidthTextField = styled(TextField)(({ width }: FixedWidthTextFieldProps) => ({
     width
 }));
 
-const SearchBox = memo(function SearchBox ({ searchQuery, setSearchQuery, width }) {
+const SearchBox = ({ searchQuery, setSearchQuery, width }: {
+    readonly searchQuery: string;
+    readonly setSearchQuery: React.Dispatch<React.SetStateAction<string>>;
+    readonly width?: string;
+}): React.JSX.Element => {
     const { searchBoxPlaceholder } = useEntity();
     const itemCounts = useItemCounts();
 
-    const handleEditSearchQuery = useCallback((e) => {
+    const handleEditSearchQuery = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
         setSearchQuery(e.target.value);
     }, [setSearchQuery]);
 
@@ -55,18 +67,12 @@ const SearchBox = memo(function SearchBox ({ searchQuery, setSearchQuery, width 
             InputProps={textfieldInputProps}
             disabled={itemCounts.all === 0}
             onChange={handleEditSearchQuery}
-            placeholder={searchBoxPlaceholder ?? "Search"}
+            placeholder={searchBoxPlaceholder}
             value={searchQuery}
             variant="outlined"
-            width={width}
+            width={width ?? "200px"}
         />
     );
-});
-
-SearchBox.propTypes = {
-    searchQuery: PropTypes.string,
-    setSearchQuery: PropTypes.func,
-    width: PropTypes.string
 };
 
 export default SearchBox;

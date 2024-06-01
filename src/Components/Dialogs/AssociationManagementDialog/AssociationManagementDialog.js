@@ -6,7 +6,7 @@ import {
     Button, Box
 } from "@mui/material";
 import { DataTable } from "../../DataTable/DataTable.js";
-import SearchBox from "../../SearchBox.js";
+import SearchBox from "../../SearchBox";
 import { searchItems } from "../../../Helpers/SearchUtilities.js";
 import PropTypes from "prop-types";
 import { AssignButton } from "../../TableCells/Association/AssignButton.js";
@@ -14,8 +14,8 @@ import { UnassignButton } from "../../TableCells/Association/UnassignButton.js";
 import { computeSecondaryItemsAssigned } from "../../../Helpers/computeSecondaryItemsAssigned.js";
 import { AssociationTableDisplay } from "./AssociationTableDisplay.js";
 import { entityPropTypeShape } from "../../../Classes/Entity.ts";
-import { AssociationManagementPageProvider } from "../../../ContextProviders/AssociationManagementPageProvider.js";
-import { useItemsReducer, useManagementCallbacks } from "../../../ContextProviders/ManagementPageProvider.js";
+import { AssociationManagementPageProvider } from "../../../ContextProviders/AssociationManagementPageProvider";
+import { useItemsReducer, useManagementCallbacks } from "../../../ContextProviders/ManagementPageProvider";
 import { DialogStateOld } from "../../../Classes/DialogState.js";
 import { PersistentDialog } from "../PersistentDialog.js";
 import SecondaryManagementButton from "../../Buttons/SecondaryManagementButton.js";

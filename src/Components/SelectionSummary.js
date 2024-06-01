@@ -5,7 +5,7 @@ import {
     Typography
 } from "@mui/material";
 import { CheckIcon, ArrowUpwardIcon, DeselectIcon } from "../Imports/Icons.js";
-import { useEntity, useItemCounts, useSelectionStatuses } from "../ContextProviders/ManagementPageProvider.js";
+import { useEntity, useItemCounts, useSelectionStatuses } from "../ContextProviders/ManagementPageProvider";
 
 export const SelectionSummary = () => {
     const [, , setSelectedItems] = useSelectionStatuses();

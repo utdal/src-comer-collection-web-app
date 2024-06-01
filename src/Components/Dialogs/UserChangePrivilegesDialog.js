@@ -9,7 +9,7 @@ import {
 import { SecurityIcon, PersonIcon, CollectionManagerIcon } from "../../Imports/Icons.js";
 import { User } from "../../Classes/Entities/User.ts";
 import { useSnackbar } from "../../ContextProviders/AppFeatures";
-import { useManagementCallbacks } from "../../ContextProviders/ManagementPageProvider.js";
+import { useManagementCallbacks } from "../../ContextProviders/ManagementPageProvider";
 import { DialogStateOld } from "../../Classes/DialogState.js";
 import PropTypes from "prop-types";
 import { PersistentDialog } from "./PersistentDialog.js";

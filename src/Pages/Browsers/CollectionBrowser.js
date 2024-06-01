@@ -1,7 +1,7 @@
 import React from "react";
 import { useLoaderData } from "react-router";
 import { CollectionGalleryGrid } from "../../Components/CollectionGallery/CollectionGalleryGrid.js";
-import { ManagementPageProvider, useItemsReducer } from "../../ContextProviders/ManagementPageProvider.js";
+import { ManagementPageProvider, useItemsReducer } from "../../ContextProviders/ManagementPageProvider";
 
 export const CollectionBrowser = () => {
     const images = useLoaderData();

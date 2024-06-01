@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
-import SearchBox from "../../Components/SearchBox.js";
+import SearchBox from "../../Components/SearchBox";
 import { DataTable } from "../../Components/DataTable/DataTable.js";
 import { doesItemMatchSearchQuery } from "../../Helpers/SearchUtilities.js";
 import { AssociationManagementDialog } from "../../Components/Dialogs/AssociationManagementDialog/AssociationManagementDialog.js";
@@ -11,7 +11,7 @@ import { useSnackbar, useTitle } from "../../ContextProviders/AppFeatures";
 import { User } from "../../Classes/Entities/User.ts";
 import { EnrollmentUserPrimary } from "../../Classes/Associations/Enrollment.ts";
 import { UserExhibition } from "../../Classes/Associations/UserExhibition.ts";
-import { ManagementPageProvider, useItemsReducer } from "../../ContextProviders/ManagementPageProvider.js";
+import { ManagementPageProvider, useItemsReducer } from "../../ContextProviders/ManagementPageProvider";
 import { ClearFilterButton } from "../../Components/Buttons/ClearFilterButton.js";
 import { RefreshButton } from "../../Components/Buttons/RefreshButton.js";
 import { MultiCreateButton } from "../../Components/Buttons/MultiCreateButton.js";

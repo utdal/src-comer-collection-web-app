@@ -1,25 +1,32 @@
 import { Box, Paper, Stack, ToggleButton, ToggleButtonGroup } from "@mui/material";
-import React, { useMemo, useState } from "react";
+import React, { useCallback, useMemo, useState } from "react";
 import { GridOnIcon, ViewListIcon } from "../../Imports/Icons.js";
-import SearchBox from "../SearchBox.js";
-import PropTypes from "prop-types";
-import { entityPropTypeShape } from "../../Classes/Entity.ts";
+import SearchBox from "../SearchBox";
 import { CollectionBrowserImageDetails } from "./CollectionGalleryImageDetails.js";
-import { useItems, useItemsPagination, useVisibilityStatuses } from "../../ContextProviders/ManagementPageProvider.js";
+import { useItems, useItemsPagination, useVisibilityStatuses } from "../../ContextProviders/ManagementPageProvider";
 import PaginationSummary from "../PaginationSummary/PaginationSummary.js";
+import type { ImageItem } from "../../index.js";
+import type { ExhibitionImageData } from "../ExhibitionPage/ExhibitionDispatchActionTypes.js";
 
-const disabledImagesDefaultValue = [];
+const disabledImagesDefaultValue: ImageItem[] = [];
 
-export const CollectionGalleryGrid = ({ isDialogMode, selectedItem = null, setSelectedItem = null, disabledImages = disabledImagesDefaultValue }) => {
-    const [viewMode, setViewMode] = useState("grid");
+type CollectionGalleryGridViewMode = "grid" | "list";
+
+const CollectionGalleryGrid = ({ isDialogMode, selectedItem = null, setSelectedItem = null, disabledImages = disabledImagesDefaultValue }: {
+    readonly isDialogMode: boolean;
+    readonly selectedItem: ImageItem | null;
+    readonly setSelectedItem: React.Dispatch<React.SetStateAction<ImageItem | null>> | null;
+    readonly disabledImages: ExhibitionImageData[] | ImageItem[];
+}): React.JSX.Element => {
+    const [viewMode, setViewMode] = useState("grid" as CollectionGalleryGridViewMode);
 
     const [imagesArray] = useItems();
     const [visibilityStatuses] = useVisibilityStatuses();
     const { paginationStatus } = useItemsPagination();
 
-    const handleViewModeChange = (event, next) => {
-        setViewMode(next);
-    };
+    const handleViewModeChange = useCallback((event: React.MouseEvent<HTMLElement>, value: CollectionGalleryGridViewMode): void => {
+        setViewMode(value);
+    }, []);
 
     const [searchQuery, setSearchQuery] = useState("");
 
@@ -39,7 +46,7 @@ export const CollectionGalleryGrid = ({ isDialogMode, selectedItem = null, setSe
         return finalImagesArray.map((image) => (
             <CollectionBrowserImageDetails
                 image={image}
-                isDisabled={(disabledImages ?? []).map((di) => di.image_id).includes(image.id)}
+                isDisabled={disabledImages.map((di) => di.image_id).includes(image.id)}
                 isSelected={image.id === selectedItem?.id}
                 key={image.id}
                 setSelectedItem={setSelectedItem}
@@ -79,7 +86,6 @@ export const CollectionGalleryGrid = ({ isDialogMode, selectedItem = null, setSe
                     sx={{ gridArea: "toolbar" }}
                 >
                     <SearchBox
-                        placeholder="Search by image title"
                         searchQuery={searchQuery}
                         setSearchQuery={setSearchQuery}
                         width="300px"
@@ -127,18 +133,11 @@ export const CollectionGalleryGrid = ({ isDialogMode, selectedItem = null, setSe
                 spacing={1}
                 sx={{ gridArea: "gallery", overflowY: "scroll", justifyItems: "center", width: "100%" }}
                 useFlexGap
-                variant="standard"
             >
                 {renderedImageDetailContainers}
             </Stack>
         </Box>
     );
 };
-CollectionGalleryGrid.propTypes = {
-    disabledImages: PropTypes.arrayOf(entityPropTypeShape),
-    isDialogMode: PropTypes.bool.isRequired,
-    selectedItem: PropTypes.shape({
-        id: PropTypes.number
-    }),
-    setSelectedItem: PropTypes.func
-};
+
+export default CollectionGalleryGrid;

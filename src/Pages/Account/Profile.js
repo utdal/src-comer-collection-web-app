@@ -13,7 +13,7 @@ import { CourseStartDateTimeCell } from "../../Components/TableCells/Course/Cour
 import { CourseEndDateTimeCell } from "../../Components/TableCells/Course/CourseEndDateTimeCell.js";
 import { CourseStatusCell } from "../../Components/TableCells/Course/CourseStatusCell.js";
 import { CourseNotesCell } from "../../Components/TableCells/Course/CourseNotesCell.js";
-import { ManagementPageProvider, useItemsReducer } from "../../ContextProviders/ManagementPageProvider.js";
+import { ManagementPageProvider, useItemsReducer } from "../../ContextProviders/ManagementPageProvider";
 import { UserFullNameReverseCell } from "../../Components/TableCells/User/UserFullNameReverseCell.js";
 import { UserEmailCopyCell } from "../../Components/TableCells/User/UserEmailCopyCell.js";
 import { UserProfilePasswordInfoCell } from "../../Components/TableCells/User/UserProfilePasswordInfoCell.js";

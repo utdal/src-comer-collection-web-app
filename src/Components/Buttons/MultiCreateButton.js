@@ -1,6 +1,6 @@
 import { Button } from "@mui/material";
 import React, { memo, useCallback } from "react";
-import { useEntity, useManagementCallbacks } from "../../ContextProviders/ManagementPageProvider.js";
+import { useEntity, useManagementCallbacks } from "../../ContextProviders/ManagementPageProvider";
 
 /**
  * Button to open MultiCreateDialog on a management page.

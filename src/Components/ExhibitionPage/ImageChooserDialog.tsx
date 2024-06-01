@@ -1,22 +1,27 @@
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Stack, Typography } from "@mui/material";
 import React, { useEffect, useState } from "react";
-import { CollectionGalleryGrid } from "../CollectionGallery/CollectionGalleryGrid.js";
+import CollectionGalleryGrid from "../CollectionGallery/CollectionGalleryGrid";
 import { AddPhotoAlternateIcon } from "../../Imports/Icons.js";
-import PropTypes from "prop-types";
-import { exhibitionStatePropTypesShape } from "../../Classes/Entities/Exhibition";
-import { entityPropTypeShape } from "../../Classes/Entity";
-import { ManagementPageProvider, useItemsReducer } from "../../ContextProviders/ManagementPageProvider.js";
+import { ManagementPageProvider, useItemsReducer } from "../../ContextProviders/ManagementPageProvider";
 import { Image } from "../../Classes/Entities/Image";
+import type { ExhibitionData, ExhibitionDispatchAction } from "./ExhibitionDispatchActionTypes";
+import type { ImageItem } from "../../index.js";
 
-export const ImageChooserDialog = ({ imageChooserIsOpen, setImageChooserIsOpen, exhibitionState, globalImageCatalog, setSelectedImageId, exhibitionEditDispatch }) => {
-    const [imageChooserSelectedImage, setImageChooserSelectedImage] = useState(null);
+const ImageChooserDialog = ({ imageChooserIsOpen, setImageChooserIsOpen, exhibitionState, globalImageCatalog, setSelectedImageId, exhibitionEditDispatch }: {
+    readonly imageChooserIsOpen: boolean;
+    readonly setImageChooserIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
+    readonly exhibitionState: ExhibitionData;
+    readonly globalImageCatalog: ImageItem[];
+    readonly setSelectedImageId: React.Dispatch<React.SetStateAction<number | null>>;
+    readonly exhibitionEditDispatch: React.Dispatch<ExhibitionDispatchAction>;
+}): React.JSX.Element => {
+    const [imageChooserSelectedImage, setImageChooserSelectedImage] = useState(null as ImageItem | null);
 
-    const [imageChooserItemsCombinedState, { setItems: setImageChooserItems }] = useItemsReducer();
+    const [imageChooserItemsCombinedState, itemsCallbacks] = useItemsReducer(globalImageCatalog);
+    const { setItems: setImageChooserItems } = itemsCallbacks;
 
     useEffect(() => {
-        if (globalImageCatalog) {
-            setImageChooserItems();
-        }
+        setImageChooserItems(globalImageCatalog);
     }, [globalImageCatalog, setImageChooserItems]);
 
     return (
@@ -24,16 +29,18 @@ export const ImageChooserDialog = ({ imageChooserIsOpen, setImageChooserIsOpen, 
             component="form"
             fullWidth
             maxWidth="xl"
-            onSubmit={(e) => {
+            onSubmit={(e: React.FormEvent<HTMLDivElement>): void => {
                 e.preventDefault();
-                exhibitionEditDispatch({
-                    scope: "exhibition",
-                    type: "add_image",
-                    image_id: imageChooserSelectedImage.id
-                });
-                setImageChooserIsOpen(false);
-                setImageChooserSelectedImage(null);
-                setSelectedImageId(imageChooserSelectedImage.id);
+                if (imageChooserSelectedImage) {
+                    exhibitionEditDispatch({
+                        scope: "exhibition",
+                        type: "add_image",
+                        image_id: imageChooserSelectedImage.id
+                    });
+                    setImageChooserIsOpen(false);
+                    setImageChooserSelectedImage(null);
+                    setSelectedImageId(imageChooserSelectedImage.id);
+                }
             }}
             open={imageChooserIsOpen}
             sx={{ zIndex: 10000 }}
@@ -45,7 +52,9 @@ export const ImageChooserDialog = ({ imageChooserIsOpen, setImageChooserIsOpen, 
             <DialogContent>
                 <ManagementPageProvider
                     Entity={Image}
+                    itemsCallbacks={itemsCallbacks}
                     itemsCombinedState={imageChooserItemsCombinedState}
+                    managementCallbacks={{}}
                 >
 
                     <CollectionGalleryGrid
@@ -65,7 +74,7 @@ export const ImageChooserDialog = ({ imageChooserIsOpen, setImageChooserIsOpen, 
                     width="100%"
                 >
                     <Button
-                        onClick={() => {
+                        onClick={(): void => {
                             setImageChooserIsOpen(false);
                         }}
                         sx={{
@@ -96,11 +105,5 @@ export const ImageChooserDialog = ({ imageChooserIsOpen, setImageChooserIsOpen, 
         </Dialog>
     );
 };
-ImageChooserDialog.propTypes = {
-    exhibitionEditDispatch: PropTypes.func.isRequired,
-    exhibitionState: exhibitionStatePropTypesShape.isRequired,
-    globalImageCatalog: PropTypes.arrayOf(entityPropTypeShape),
-    imageChooserIsOpen: PropTypes.bool.isRequired,
-    setImageChooserIsOpen: PropTypes.func.isRequired,
-    setSelectedImageId: PropTypes.func.isRequired
-};
+
+export default ImageChooserDialog;

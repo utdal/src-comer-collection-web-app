@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useMemo } from "react";
 import PropTypes from "prop-types";
-import { ManagementPageProvider, useItemCounts, useItems } from "./ManagementPageProvider.js";
+import { ManagementPageProvider, useItemCounts, useItems } from "./ManagementPageProvider";
 import { entityPropTypeShape, itemsCombinedStatePropTypeShape } from "../Classes/Entity.ts";
 
 const AssociationManagementPageContext = createContext();

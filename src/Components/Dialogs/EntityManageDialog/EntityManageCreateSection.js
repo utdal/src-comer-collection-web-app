@@ -1,6 +1,6 @@
 import React, { useCallback, useMemo, useState } from "react";
 import { Box, Button, DialogContentText, Stack, TextField } from "@mui/material";
-import { useEntity } from "../../../ContextProviders/ManagementPageProvider.js";
+import { useEntity } from "../../../ContextProviders/ManagementPageProvider";
 import { getBlankItemFields } from "../../../Helpers/fields.js";
 import { useSnackbar } from "../../../ContextProviders/AppFeatures";
 import { AddIcon } from "../../../Imports/Icons.js";

@@ -7,7 +7,7 @@ import { ExhibitionTitleCell } from "../../Components/TableCells/Exhibition/Exhi
 import { ExhibitionCuratorCell } from "../../Components/TableCells/Exhibition/ExhibitionCuratorCell.js";
 import { ExhibitionDateModifiedCell } from "../../Components/TableCells/Exhibition/ExhibitionDateModifiedCell.js";
 import { ExhibitionOpenInCurrentTabCell } from "../../Components/TableCells/Exhibition/ExhibitionOpenInCurrentTabCell.js";
-import { ManagementPageProvider, useItemsReducer } from "../../ContextProviders/ManagementPageProvider.js";
+import { ManagementPageProvider, useItemsReducer } from "../../ContextProviders/ManagementPageProvider";
 import { useLoaderData } from "react-router";
 import { PublicExhibition } from "../../Classes/Entities/Exhibition.ts";
 

@@ -116,7 +116,7 @@ export interface ItemsCombinedState {
     itemDictionary: ItemDictionary;
     selectionStatuses: SelectionStatusDictionary;
     visibilityStatuses: VisibilityStatusDictionary;
-    filterFunction: FilterFunction;
+    filterFunction?: FilterFunction | null;
     sortableValueDictionary: SortableValueDictionary;
     sortableValueFunction: SortableValueFunction;
     itemCounts: ItemCounts;
@@ -153,8 +153,8 @@ export type ItemsDispatchAction = (
 );
 
 export interface ItemsCallbacks {
-    setItems: (items: readonly Item[]) => void;
-    setSelectedItems: (selectedItems: readonly Item[]) => void;
+    setItems: (items: Item[]) => void;
+    setSelectedItems: (selectedItems: Item[]) => void;
     filterItems: (filterFunction: FilterFunction) => void;
     setItemSelectionStatus: (itemId: number, newStatus: boolean) => void;
     calculateSortableItemValues: (sortableValueFunction: SortableValueFunction) => void;
@@ -174,10 +174,10 @@ export type OpenDialogByIntentFunctionMultipleUnderlyingItems = (intent: Intent,
 export type CloseDialogByIntentFunction = (intent: Intent) => void;
 
 export interface ManagementCallbacks {
-    openDialogByIntentWithNoUnderlyingItems: OpenDialogByIntentFunctionNoUnderlyingItems;
-    openDialogByIntentWithSingleUnderlyingItem: OpenDialogByIntentFunctionSingleUnderlyingItem;
-    openDialogByIntentWithMultipleUnderlyingItems: OpenDialogByIntentFunctionMultipleUnderlyingItems;
-    closeDialogByIntent: CloseDialogByIntentFunction;
+    openDialogByIntentWithNoUnderlyingItems?: OpenDialogByIntentFunctionNoUnderlyingItems;
+    openDialogByIntentWithSingleUnderlyingItem?: OpenDialogByIntentFunctionSingleUnderlyingItem;
+    openDialogByIntentWithMultipleUnderlyingItems?: OpenDialogByIntentFunctionMultipleUnderlyingItems;
+    closeDialogByIntent?: CloseDialogByIntentFunction;
 }
 
 export type RouterActionRequest = (

@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useRef } from "react";
 import PropTypes from "prop-types";
 import { MenuItem, Typography } from "@mui/material";
-import { useItemsPagination } from "../../ContextProviders/ManagementPageProvider.js";
+import { useItemsPagination } from "../../ContextProviders/ManagementPageProvider";
 
 /**
  *

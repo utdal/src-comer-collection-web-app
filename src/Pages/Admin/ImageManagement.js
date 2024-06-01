@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
-import SearchBox from "../../Components/SearchBox.js";
+import SearchBox from "../../Components/SearchBox";
 import { doesItemMatchSearchQuery } from "../../Helpers/SearchUtilities.js";
 import { Outlet, useLoaderData, useNavigate, useRevalidator } from "react-router";
 import { ImageFullScreenViewer } from "../../Components/Dialogs/ImageFullScreenViewer.js";
@@ -13,7 +13,7 @@ import { Tag } from "../../Classes/Entities/Tag.ts";
 import { ImageArtist } from "../../Classes/Associations/ImageArtist.ts";
 import { ImageTag } from "../../Classes/Associations/ImageTag.ts";
 import { ImageExhibition } from "../../Classes/Associations/ImageExhibition.ts";
-import { ManagementPageProvider, useItemsReducer } from "../../ContextProviders/ManagementPageProvider.js";
+import { ManagementPageProvider, useItemsReducer } from "../../ContextProviders/ManagementPageProvider";
 import { DataTable } from "../../Components/DataTable/DataTable.js";
 import { ClearFilterButton } from "../../Components/Buttons/ClearFilterButton.js";
 import { RefreshButton } from "../../Components/Buttons/RefreshButton.js";

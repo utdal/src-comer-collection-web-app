@@ -1,6 +1,6 @@
 import React, { memo } from "react";
 import { Button } from "@mui/material";
-import { useItemCounts, useManagementCallbacks } from "../../ContextProviders/ManagementPageProvider.js";
+import { useItemCounts, useManagementCallbacks } from "../../ContextProviders/ManagementPageProvider";
 import { FilterAltOffOutlinedIcon } from "../../Imports/Icons.js";
 
 export const ClearFilterButton = memo(function ClearFilterButton () {

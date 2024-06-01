@@ -1,7 +1,7 @@
 import React, { useMemo } from "react";
 import PropTypes from "prop-types";
 import { Button, styled } from "@mui/material";
-import { useItemCounts } from "../../ContextProviders/ManagementPageProvider.js";
+import { useItemCounts } from "../../ContextProviders/ManagementPageProvider";
 
 const DisappearingButton = styled(Button, {
     shouldForwardProp: (prop) => prop !== "itemCounts"

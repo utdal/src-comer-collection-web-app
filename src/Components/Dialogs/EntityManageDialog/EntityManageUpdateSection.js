@@ -1,10 +1,10 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { Box, Stack } from "@mui/material";
-import SearchBox from "../../SearchBox.js";
+import SearchBox from "../../SearchBox";
 import PaginationSummary from "../../PaginationSummary/PaginationSummary.js";
 import { RefreshButton } from "../../Buttons/RefreshButton.js";
 import { DataTable } from "../../DataTable/DataTable.js";
-import { useEntity, useVisibilityStatuses } from "../../../ContextProviders/ManagementPageProvider.js";
+import { useEntity, useVisibilityStatuses } from "../../../ContextProviders/ManagementPageProvider";
 import { FullPageMessage } from "../../FullPageMessage";
 import { DeleteIcon } from "../../../Imports/Icons.js";
 import { itemsCombinedStatePropTypeShape } from "../../../Classes/Entity.ts";

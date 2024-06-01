@@ -8,7 +8,7 @@ import {
 import { ItemSingleDeleteDialog } from "../ItemSingleDeleteDialog.js";
 import { ItemSingleEditDialog } from "../ItemSingleEditDialog.js";
 import PropTypes from "prop-types";
-import { ManagementPageProvider, useItemsReducer } from "../../../ContextProviders/ManagementPageProvider.js";
+import { ManagementPageProvider, useItemsReducer } from "../../../ContextProviders/ManagementPageProvider";
 import { useDialogState } from "../../../Hooks/useDialogState.js";
 import { PersistentDialog } from "../PersistentDialog.js";
 import { SelectionSummary } from "../../SelectionSummary.js";

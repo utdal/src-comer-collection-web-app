@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { Button, Typography } from "@mui/material";
-import { useAssociationType } from "../../ContextProviders/AssociationManagementPageProvider.js";
+import { useAssociationType } from "../../ContextProviders/AssociationManagementPageProvider";
 
 /**
  * Button placed within AssociationManagementDialog that navigates

@@ -1,7 +1,7 @@
 import React, { useCallback } from "react";
 import PropTypes from "prop-types";
 import { Button } from "@mui/material";
-import { useManagementCallbacks } from "../../ContextProviders/ManagementPageProvider.js";
+import { useManagementCallbacks } from "../../ContextProviders/ManagementPageProvider";
 
 /**
  * Generic dialog cancel button that uses DialogIntent

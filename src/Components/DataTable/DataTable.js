@@ -4,7 +4,7 @@ import { Checkbox, Stack, TableCell, TableContainer, Typography, Table, TableBod
 import { useTheme } from "@emotion/react";
 import { ColumnSortButton } from "../Buttons/ColumnSortButton.js";
 import PropTypes from "prop-types";
-import { useItemCounts, useItemDictionary, useItemsPagination, useManagementCallbacks, useSelectionStatuses, useSortableValues, useVisibilityStatuses } from "../../ContextProviders/ManagementPageProvider.js";
+import { useItemCounts, useItemDictionary, useItemsPagination, useManagementCallbacks, useSelectionStatuses, useSortableValues, useVisibilityStatuses } from "../../ContextProviders/ManagementPageProvider";
 import { tableFieldPropTypeShape } from "../../Classes/Entity.ts";
 import { FullPageMessage } from "../FullPageMessage";
 import { InfoIcon } from "../../Imports/Icons.js";

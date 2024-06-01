@@ -1,6 +1,6 @@
 import React, { useCallback } from "react";
 import PropTypes from "prop-types";
-import { useItemCounts, useItemsPagination } from "../../ContextProviders/ManagementPageProvider.js";
+import { useItemCounts, useItemsPagination } from "../../ContextProviders/ManagementPageProvider";
 import { IconButton, Stack, styled } from "@mui/material";
 import { KeyboardArrowLeftIcon, KeyboardArrowRightIcon, KeyboardDoubleArrowLeftIcon, KeyboardDoubleArrowRightIcon } from "../../Imports/Icons.js";
 import PaginationSummaryMenu from "./PaginationSummaryMenu.js";

@@ -12,7 +12,7 @@ import PropTypes from "prop-types";
 import { DialogStateOld } from "../../Classes/DialogState.js";
 import { PersistentDialog } from "./PersistentDialog.js";
 import { useActionData, useSubmit } from "react-router-dom";
-import { useManagementCallbacks } from "../../ContextProviders/ManagementPageProvider.js";
+import { useManagementCallbacks } from "../../ContextProviders/ManagementPageProvider";
 
 const randomPassword = () => {
     const password = Math.random().toString(36).slice(-8) + Math.random().toString(36).slice(-8);

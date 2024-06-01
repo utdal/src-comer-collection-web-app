@@ -15,9 +15,9 @@ import AccordionSubHeading from "./AccordionSubHeading";
 import ExhibitionOption from "./ExhibitionOption";
 import ExhibitionOptionGroup from "./ExhibitionOptionGroup";
 import { ImageRearrangeDialog } from "./ImageRearrangeDialog";
-import { ImageChooserDialog } from "./ImageChooserDialog";
+import ImageChooserDialog from "./ImageChooserDialog";
 import type { ExhibitionData, ExhibitionDispatchAction, ExhibitionImageData, ExhibitionImageDirectionIdentifier, ExhibitionMetadata } from "./ExhibitionDispatchActionTypes";
-import type { Item } from "../..";
+import type { ImageItem } from "../..";
 import styled from "@emotion/styled";
 
 const moodinessOptions = [
@@ -119,7 +119,7 @@ interface ExhibitionEditPaneComponentProps {
     readonly exhibitionMetadata: ExhibitionMetadata;
     readonly exhibitionState: ExhibitionData;
     readonly exhibitionEditDispatch: React.Dispatch<ExhibitionDispatchAction>;
-    readonly globalImageCatalog: Item[];
+    readonly globalImageCatalog: ImageItem[];
     readonly saveExhibition: () => void;
 }
 
@@ -416,7 +416,7 @@ export const ExhibitionEditPane = ({ exhibitionMetadata, exhibitionState, exhibi
                                             />
 
                                             <Typography>
-                                                {`${catalogImage?.title as string}`}
+                                                {catalogImage !== undefined ? `${catalogImage.title}` : "No title"}
                                             </Typography>
                                         </Stack>
                                     </MenuItem>
