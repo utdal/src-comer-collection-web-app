@@ -7,7 +7,7 @@ import {
 import { CheckIcon, ArrowUpwardIcon, DeselectIcon } from "../Imports/Icons.js";
 import { useEntity, useItemCounts, useSelectionStatuses } from "../ContextProviders/ManagementPageProvider.js";
 
-export const SelectionSummary = (): React.JSX.Element | null => {
+const SelectionSummary = (): React.JSX.Element | null => {
     const [, , setSelectedItems] = useSelectionStatuses();
     const Entity = useEntity();
     const itemCounts = useItemCounts();
@@ -91,3 +91,5 @@ export const SelectionSummary = (): React.JSX.Element | null => {
         </Stack>
     );
 };
+
+export default SelectionSummary;

@@ -6,23 +6,21 @@ import {
     Button, Divider
 } from "@mui/material";
 import { ItemSingleDeleteDialog } from "../ItemSingleDeleteDialog.js";
-import { ItemSingleEditDialog } from "../ItemSingleEditDialog.js";
-import PropTypes from "prop-types";
-import { ManagementPageProvider, useItemsReducer } from "../../../ContextProviders/ManagementPageProvider";
-import { useDialogState } from "../../../Hooks/useDialogState.js";
-import { PersistentDialog } from "../PersistentDialog.js";
-import { SelectionSummary } from "../../SelectionSummary.js";
+import ItemSingleEditDialog from "../ItemSingleEditDialog.js";
+import { ManagementPageProvider, useItemsReducer } from "../../../ContextProviders/ManagementPageProvider.js";
+import PersistentDialog from "../PersistentDialog.js";
+import SelectionSummary from "../../SelectionSummary.js";
 import { useLoaderData, useNavigate } from "react-router-dom";
 import EntityManageUpdateSection from "./EntityManageUpdateSection.js";
 import EntityManageCreateSection from "./EntityManageCreateSection.js";
 import { DeleteIcon } from "../../../Imports/Icons.js";
-import { Entity } from "../../../Classes/Entity.ts";
+import type { EntityType, Intent, Item, ManagementCallbacks } from "../../../index.js";
+import useDialogStates from "../../../Hooks/useDialogStates.js";
 
-/**
- * @returns {React.JSX.Element}
- */
-export const EntityManageDialog = ({ Entity }) => {
-    const dialogItems = useLoaderData();
+const EntityManageDialog = ({ Entity }: {
+    readonly Entity: EntityType;
+}): React.JSX.Element => {
+    const dialogItems = useLoaderData() as Item[];
 
     const [dialogItemsCombinedState, itemsCallbacks] = useItemsReducer([]);
 
@@ -38,29 +36,24 @@ export const EntityManageDialog = ({ Entity }) => {
         navigate("..");
     }, [navigate]);
 
-    const [editDialogState, openEditDialog] = useDialogState(false);
-    const [deleteDialogState, openDeleteDialog] = useDialogState(false);
-    const [restoreDialogState, openRestoreDialog] = useDialogState(false);
+    const intentArray: Intent[] = ["single-delete", "single-edit", "single-restore", "single-permanent-delete"];
 
-    const pluralCapitalized = Entity?.plural.substr(0, 1).toUpperCase() + Entity?.plural.substr(1).toLowerCase();
+    const {
+        dialogStateDictionary,
+        openDialogByIntentWithSingleUnderlyingItem,
+        openDialogByIntentWithMultipleUnderlyingItems,
+        openDialogByIntentWithNoUnderlyingItems,
+        closeDialogByIntent
+    } = useDialogStates(intentArray);
 
-    const handleOpenEntityEditDialog = useCallback((item) => {
-        openEditDialog(item);
-    }, [openEditDialog]);
+    const pluralCapitalized = Entity.plural.substring(0, 1).toUpperCase() + Entity.plural.substr(1).toLowerCase();
 
-    const handleOpenEntityDeleteDialog = useCallback((item) => {
-        openDeleteDialog(item);
-    }, [openDeleteDialog]);
-
-    const handleOpenEntityRestoreDialog = useCallback((item) => {
-        openRestoreDialog(item);
-    }, [openRestoreDialog]);
-
-    const managementCallbacks = useMemo(() => ({
-        handleOpenEntityEditDialog,
-        handleOpenEntityDeleteDialog,
-        handleOpenEntityRestoreDialog
-    }), [handleOpenEntityDeleteDialog, handleOpenEntityEditDialog, handleOpenEntityRestoreDialog]);
+    const managementCallbacks: ManagementCallbacks = useMemo(() => ({
+        openDialogByIntentWithNoUnderlyingItems,
+        openDialogByIntentWithMultipleUnderlyingItems,
+        openDialogByIntentWithSingleUnderlyingItem,
+        closeDialogByIntent
+    }), [closeDialogByIntent, openDialogByIntentWithMultipleUnderlyingItems, openDialogByIntentWithNoUnderlyingItems, openDialogByIntentWithSingleUnderlyingItem]);
 
     const isTrashMode = Entity.isTrash;
 
@@ -73,6 +66,7 @@ export const EntityManageDialog = ({ Entity }) => {
         >
             <PersistentDialog
                 maxWidth="lg"
+                onClose={handleClose}
                 open
             >
                 {Entity.isTrash
@@ -154,12 +148,12 @@ export const EntityManageDialog = ({ Entity }) => {
                 </DialogActions>
             </PersistentDialog>
 
-            <ItemSingleEditDialog dialogState={editDialogState} />
+            <ItemSingleEditDialog dialogState={dialogStateDictionary["single-edit"]} />
 
-            <ItemSingleDeleteDialog dialogState={deleteDialogState} />
+            <ItemSingleDeleteDialog dialogState={dialogStateDictionary["single-delete"]} />
 
             <ItemSingleDeleteDialog
-                dialogState={restoreDialogState}
+                dialogState={dialogStateDictionary["single-restore"]}
                 restoreMode
             />
 
@@ -167,6 +161,4 @@ export const EntityManageDialog = ({ Entity }) => {
     );
 };
 
-EntityManageDialog.propTypes = {
-    Entity: PropTypes.instanceOf(typeof Entity)
-};
+export default EntityManageDialog;

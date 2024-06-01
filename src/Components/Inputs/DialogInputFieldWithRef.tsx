@@ -1,14 +1,15 @@
 import { TextField } from "@mui/material";
 import React from "react";
-import type { EntityFieldDefinition } from "../..";
+import type { EntityFieldDefinition, ItemGenericFieldValue } from "../..";
 
-const DialogInputFieldWithRef = ({ fieldDefinition, inputRef }: {
+const DialogInputFieldWithRef = ({ fieldDefinition, defaultValue, inputRef }: {
+    readonly defaultValue?: ItemGenericFieldValue;
     readonly fieldDefinition: EntityFieldDefinition;
-    readonly inputRef: React.Ref<Element> | React.RefCallback<Element>;
+    readonly inputRef: React.Ref<HTMLInputElement> | React.RefCallback<HTMLInputElement>;
 }): React.JSX.Element => {
     return (
         <TextField
-            defaultValue={fieldDefinition.blank as string}
+            defaultValue={defaultValue}
             inputProps={{
                 type: fieldDefinition.inputType,
                 min: fieldDefinition.minValue ?? ""

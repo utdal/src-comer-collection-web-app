@@ -7,39 +7,34 @@ import {
 } from "@mui/material";
 import { SaveIcon } from "../../Imports/Icons.js";
 import { getLocalISOString } from "../../Helpers/getLocalISOString.js";
-import { useSnackbar } from "../../ContextProviders/AppFeatures";
-import { useEntity, useManagementCallbacks } from "../../ContextProviders/ManagementPageProvider";
-import { DialogInputFieldWithRef } from "../Inputs/DialogInputFieldWithRef.js";
-import { PersistentDialog } from "./PersistentDialog.js";
-import PropTypes from "prop-types";
-import { DialogStateOld } from "../../Classes/DialogState.js";
+import { useSnackbar } from "../../ContextProviders/AppFeatures.js";
+import { useEntity, useManagementCallbacks } from "../../ContextProviders/ManagementPageProvider.js";
+import DialogInputFieldWithRef from "../Inputs/DialogInputFieldWithRef.js";
+import PersistentDialog from "./PersistentDialog.js";
 import { useActionData, useSubmit } from "react-router-dom";
 import DialogCancelButton from "../Buttons/DialogCancelButton.js";
+import type { DialogState, DialogStateSingleUnderlyingItem, ItemGenericFieldValue, RouterActionRequest, RouterActionResponse } from "../../index.js";
 
-/**
- * @param {{ dialogState: DialogState }} props
- */
-export const ItemSingleEditDialog = ({ dialogState }) => {
+const ItemSingleEditDialog = ({ dialogState }: {
+    readonly dialogState: DialogState;
+}): React.JSX.Element => {
     const showSnackbar = useSnackbar();
     const Entity = useEntity();
 
     const [submitEnabled, setSubmitEnabled] = useState(true);
 
-    const { dialogIsOpen, underlyingItem: dialogItem } = dialogState;
+    const { dialogIsOpen, underlyingItem: dialogItem } = dialogState as DialogStateSingleUnderlyingItem;
 
     const { closeDialogByIntent } = useManagementCallbacks();
     const handleClose = useCallback(() => {
         closeDialogByIntent("single-edit");
     }, [closeDialogByIntent]);
 
-    const editDialogFieldRefs = useRef([]);
+    const editDialogFieldRefs = useRef([] as HTMLInputElement[]);
 
     const submit = useSubmit();
 
-    /**
-     * @type {RouterActionResponse}
-     */
-    const actionData = useActionData();
+    const actionData = useActionData() as RouterActionResponse | null;
 
     useEffect(() => {
         if (actionData) {
@@ -54,35 +49,41 @@ export const ItemSingleEditDialog = ({ dialogState }) => {
     }, [actionData, handleClose, showSnackbar]);
 
     useEffect(() => {
-        if (dialogIsOpen || !dialogIsOpen) {
+        if (dialogIsOpen) {
+            editDialogFieldRefs.current = [];
+        }
+    }, [dialogIsOpen]);
+
+    useEffect(() => {
+        if (!dialogIsOpen) {
             editDialogFieldRefs.current = [];
         }
     }, [dialogIsOpen]);
 
     const handleSubmit = useCallback(() => {
-        const editDialogFieldData = {};
-        for (const r of editDialogFieldRefs.current) {
-            editDialogFieldData[r.name] = r.value;
+        if (dialogItem) {
+            const editDialogFieldData = {} as Record<string, ItemGenericFieldValue>;
+            for (const r of editDialogFieldRefs.current) {
+                editDialogFieldData[r.name] = r.value;
+            }
+
+            const request: RouterActionRequest = {
+                intent: "single-edit",
+                body: editDialogFieldData,
+                itemId: dialogItem.id
+            };
+            const requestAsString = JSON.stringify(request);
+            submit(requestAsString, {
+                encType: "application/json",
+                method: "PUT"
+            });
         }
-        /**
-         * @type {RouterActionRequest}
-         */
-        const request = {
-            intent: "single-edit",
-            body: editDialogFieldData,
-            itemId: dialogItem?.id
-        };
-        submit(request, {
-            encType: "application/json",
-            method: "PUT"
-        });
     }, [dialogItem, submit]);
 
-    const singularCapitalized = Entity?.singular.substr(0, 1).toUpperCase() + Entity?.singular.substr(1).toLowerCase();
+    const singularCapitalized = Entity.singular.substring(0, 1).toUpperCase() + Entity.singular.substr(1).toLowerCase();
 
     return (
         <PersistentDialog
-            isForm
             onClose={handleClose}
             onSubmit={handleSubmit}
             open={dialogIsOpen}
@@ -123,7 +124,7 @@ export const ItemSingleEditDialog = ({ dialogState }) => {
                                     : dialogItem?.[f.fieldName]
                             }
                             fieldDefinition={f}
-                            inputRef={(element) => editDialogFieldRefs.current.push(element)}
+                            inputRef={(element: HTMLInputElement): number => editDialogFieldRefs.current.push(element)}
                             key={f.fieldName}
                         />
                     ))}
@@ -158,6 +159,4 @@ export const ItemSingleEditDialog = ({ dialogState }) => {
     );
 };
 
-ItemSingleEditDialog.propTypes = {
-    dialogState: PropTypes.instanceOf(DialogStateOld).isRequired
-};
+export default ItemSingleEditDialog;

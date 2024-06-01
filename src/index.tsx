@@ -191,28 +191,28 @@ export type OpenDialogByIntentFunctionMultipleUnderlyingItems = (intent: Intent,
 export type CloseDialogByIntentFunction = (intent: Intent) => void;
 
 export interface ManagementCallbacks {
-    openDialogByIntentWithNoUnderlyingItems?: OpenDialogByIntentFunctionNoUnderlyingItems;
-    openDialogByIntentWithSingleUnderlyingItem?: OpenDialogByIntentFunctionSingleUnderlyingItem;
-    openDialogByIntentWithMultipleUnderlyingItems?: OpenDialogByIntentFunctionMultipleUnderlyingItems;
-    closeDialogByIntent?: CloseDialogByIntentFunction;
+    openDialogByIntentWithNoUnderlyingItems: OpenDialogByIntentFunctionNoUnderlyingItems;
+    openDialogByIntentWithSingleUnderlyingItem: OpenDialogByIntentFunctionSingleUnderlyingItem;
+    openDialogByIntentWithMultipleUnderlyingItems: OpenDialogByIntentFunctionMultipleUnderlyingItems;
+    closeDialogByIntent: CloseDialogByIntentFunction;
 }
 
 export type RouterActionRequest = (
     {
         intent: "multi-create";
         body: {
-            itemsToCreate: readonly Item[];
+            itemsToCreate: object[];
         };
     } | {
         intent: "multi-delete";
-        itemIds: readonly number[];
+        itemIds: number[];
     } | {
         intent: "single-delete";
         itemId: number;
     } | {
         intent: "single-edit";
         itemId: number;
-        body: Item;
+        body: object;
     } | {
         intent: "single-permanent-delete";
         itemId: number;
@@ -261,20 +261,26 @@ export type RouterActionResponse = (
 
 export type DialogItemsMultiplicity = "multi" | "none" | "single";
 
-type DialogState = (
-    {
-        dialogIsOpen: boolean;
-        dialogItemsMultiplicity: "multi";
-        underlyingItems: Item[];
-    } | {
-        dialogIsOpen: boolean;
-        dialogItemsMultiplicity: "none";
-    } | {
-        dialogIsOpen: boolean;
-        dialogItemsMultiplicity: "single";
-        underlyingItem: Item | null;
-    }
-);
+export interface DialogStateBase {
+    dialogIsOpen: boolean;
+    dialogItemsMultiplicity: DialogItemsMultiplicity;
+}
+
+export interface DialogStateNoUnderlyingItems extends DialogStateBase {
+    dialogItemsMultiplicity: "none";
+}
+
+export interface DialogStateSingleUnderlyingItem extends DialogStateBase {
+    dialogItemsMultiplicity: "single";
+    underlyingItem: Item | null;
+}
+
+export interface DialogStateMultipleUnderlyingItems extends DialogStateBase {
+    dialogItemsMultiplicity: "multi";
+    underlyingItems: Item[];
+}
+
+export type DialogState = DialogStateMultipleUnderlyingItems | DialogStateNoUnderlyingItems | DialogStateSingleUnderlyingItem;
 
 export type DialogStateDictionary = Record<Intent, DialogState>;
 
