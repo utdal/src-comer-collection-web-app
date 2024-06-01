@@ -7,12 +7,12 @@ import {
     Typography, DialogContentText, TextField
 } from "@mui/material";
 import { ContentCopyIcon, SyncIcon } from "../../Imports/Icons";
-import { useClipboard, useSnackbar } from "../../ContextProviders/AppFeatures.js";
-import PersistentDialog from "./PersistentDialog.js";
+import { useClipboard, useSnackbar } from "../../ContextProviders/AppFeatures";
+import PersistentDialog from "./PersistentDialog";
 import { useActionData, useSubmit } from "react-router-dom";
-import { useManagementCallbacks } from "../../ContextProviders/ManagementPageProvider.js";
+import { useManagementCallbacks } from "../../ContextProviders/ManagementPageProvider";
 import randomPassword from "../../Helpers/randomPassword";
-import type { DialogState, DialogStateSingleUnderlyingItem, RouterActionErrorResponse, RouterActionRequest, RouterActionSuccessResponse, UserItem } from "../../index.js";
+import type { DialogState, DialogStateSingleUnderlyingItem, RouterActionErrorResponse, RouterActionRequest, RouterActionSuccessResponse, UserItem } from "../../index";
 
 const UserResetPasswordDialog = ({ dialogState }: {
     readonly dialogState: DialogState;

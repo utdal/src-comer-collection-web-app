@@ -14,14 +14,14 @@ const CourseStatusCell = (): React.JSX.Element => {
             {
                 course.status === "Active"
                     ? (
-                        <CheckIcon color="grey" />
+                        <CheckIcon htmlColor="gray" />
                     )
                     : course.status === "Upcoming"
                         ? (
-                            <AccessTimeIcon color="grey" />
+                            <AccessTimeIcon htmlColor="gray" />
                         )
                         : (
-                            <ExpiredIcon color="grey" />
+                            <ExpiredIcon htmlColor="gray" />
                         )
             }
 

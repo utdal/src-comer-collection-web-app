@@ -1,9 +1,9 @@
 import React, { useCallback } from "react";
 import { Button } from "@mui/material";
-import useAppUser from "../../Hooks/useAppUser.js";
+import useAppUser from "../../Hooks/useAppUser";
 import { AddIcon } from "../../Imports/Icons";
-import type { AppUser } from "../../index.js";
-import { useManagementCallbacks } from "../../ContextProviders/ManagementPageProvider.js";
+import type { AppUser } from "../../index";
+import { useManagementCallbacks } from "../../ContextProviders/ManagementPageProvider";
 
 const CreateExhibitionButton = (): React.JSX.Element => {
     const appUser = useAppUser() as AppUser;

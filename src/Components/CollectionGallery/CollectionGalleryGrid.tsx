@@ -2,9 +2,9 @@ import { Box, Paper, Stack, ToggleButton, ToggleButtonGroup } from "@mui/materia
 import React, { useCallback, useMemo, useState } from "react";
 import { GridOnIcon, ViewListIcon } from "../../Imports/Icons";
 import SearchBox from "../SearchBox";
-import CollectionBrowserImageDetails from "./CollectionGalleryImageDetails.js";
+import CollectionBrowserImageDetails from "./CollectionGalleryImageDetails";
 import { useItems, useItemsPagination, useVisibilityStatuses } from "../../ContextProviders/ManagementPageProvider";
-import PaginationSummary from "../PaginationSummary/PaginationSummary.js";
+import PaginationSummary from "../PaginationSummary/PaginationSummary";
 import type { ImageItem } from "../../index.js";
 import type { ExhibitionImageData } from "../ExhibitionPage/ExhibitionDispatchActionTypes.js";
 

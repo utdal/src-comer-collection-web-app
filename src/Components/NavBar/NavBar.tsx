@@ -1,28 +1,28 @@
 import React, { useCallback } from "react";
 import { AppBar, Toolbar, Button, Divider, IconButton, Stack } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-import useAppUser from "../../Hooks/useAppUser.js";
+import useAppUser from "../../Hooks/useAppUser";
 import { SettingsIcon } from "../../Imports/Icons";
-import { AppSettingsDialog } from "../Dialogs/AppSettingsDialog/AppSettingsDialog.js";
-import { NavBarUserMenu } from "./NavBarUserMenu.js";
-import { NavBarButton } from "./NavBarButton.js";
-import { useDialogState } from "../../Hooks/useDialogState.js";
-import NavBarLogo from "./NavBarLogo.js";
-import type { AppUser } from "../../index.js";
+import AppSettingsDialog from "../Dialogs/AppSettingsDialog/AppSettingsDialog";
+import NavBarUserMenu from "./NavBarUserMenu";
+import NavBarButton from "./NavBarButton";
+import NavBarLogo from "./NavBarLogo";
+import useDialogStates from "../../Hooks/useDialogStates";
 
 const NavBar = (): React.JSX.Element => {
-    const appUser = useAppUser() as AppUser;
+    const appUser = useAppUser();
     const navigate = useNavigate();
 
-    const [appSettingsDialogState, openAppSettingsDialog] = useDialogState();
+    const { dialogStateDictionary, openDialogByIntentWithNoUnderlyingItems } = useDialogStates(["app-settings"]);
 
     const handleOpenSettingsDialog: React.MouseEventHandler<HTMLButtonElement> = useCallback(() => {
-        openAppSettingsDialog();
-    }, [openAppSettingsDialog]);
+        openDialogByIntentWithNoUnderlyingItems("app-settings");
+    }, [openDialogByIntentWithNoUnderlyingItems]);
 
     return (
         <AppBar
             color="primary"
+            sx={{ gridArea: "header" }}
         >
             <Stack
                 alignItems="center"
@@ -54,7 +54,7 @@ const NavBar = (): React.JSX.Element => {
                             />
                         </Stack>
 
-                        {appUser
+                        {appUser !== false && appUser != null
                             ? (
                                 <>
                                     <Divider sx={{
@@ -94,7 +94,7 @@ const NavBar = (): React.JSX.Element => {
                 </Toolbar>
             </Stack>
 
-            <AppSettingsDialog dialogState={appSettingsDialogState} />
+            <AppSettingsDialog dialogState={dialogStateDictionary["app-settings"]} />
         </AppBar>
     );
 };

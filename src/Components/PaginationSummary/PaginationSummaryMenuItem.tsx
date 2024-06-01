@@ -15,9 +15,9 @@ const PaginationSummaryMenuItem = ({ startIndex, endIndex, handleMenuClose }: {
 }): React.JSX.Element => {
     const { paginationStatus, setPaginationStartIndex } = useItemsPagination();
 
-    const ref = useRef((null as unknown) as Element);
+    const ref = useRef((null as unknown) as HTMLSpanElement | null);
 
-    const handleClick: React.MouseEventHandler<HTMLAnchorElement> = useCallback(() => {
+    const handleClick: React.MouseEventHandler<HTMLSpanElement> = useCallback(() => {
         handleMenuClose();
         setPaginationStartIndex(startIndex);
     }, [handleMenuClose, setPaginationStartIndex, startIndex]);
@@ -25,7 +25,7 @@ const PaginationSummaryMenuItem = ({ startIndex, endIndex, handleMenuClose }: {
     const isCurrentPage = startIndex === paginationStatus.startIndex && endIndex === paginationStatus.endIndex;
 
     useEffect(() => {
-        if (isCurrentPage) {
+        if (isCurrentPage && ref.current) {
             ref.current.scrollIntoView({
                 block: "center"
             });
@@ -36,11 +36,12 @@ const PaginationSummaryMenuItem = ({ startIndex, endIndex, handleMenuClose }: {
         <MenuItem
             disabled={isCurrentPage}
             onClick={handleClick}
-            ref={ref}
+            selected={isCurrentPage}
         >
 
             <Typography
                 align="center"
+                ref={ref}
                 width="100%"
             >
 

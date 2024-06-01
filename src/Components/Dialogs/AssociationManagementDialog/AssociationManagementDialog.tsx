@@ -12,11 +12,10 @@ import UnassignButton from "../../TableCells/Association/UnassignButton.js";
 import computeSecondaryItemsAssigned from "../../../Helpers/computeSecondaryItemsAssigned.js";
 import AssociationTableDisplay from "./AssociationTableDisplay.js";
 import { AssociationManagementPageProvider } from "../../../ContextProviders/AssociationManagementPageProvider.js";
-import { useItemsReducer } from "../../../ContextProviders/ManagementPageProvider.js";
-import type DialogStateOld from "../../../Classes/DialogState.js";
+import { useItemsReducer, useManagementCallbacks } from "../../../ContextProviders/ManagementPageProvider.js";
 import PersistentDialog from "../PersistentDialog.js";
 import SecondaryManagementButton from "../../Buttons/SecondaryManagementButton.js";
-import type { AssociationType, Item, TableFieldDefinition } from "../../../index.js";
+import type { AssociationType, DialogState, DialogStateMultipleUnderlyingItems, Item, TableFieldDefinition } from "../../../index.js";
 
 const assignButtonColumnDefinition: TableFieldDefinition = {
     columnDescription: "Assign",
@@ -34,7 +33,7 @@ export const AssociationManagementDialog = ({
     dialogState,
     defaultSortColumn = "ID", defaultSortAscending = true
 }: {
-    readonly dialogState: DialogStateOld;
+    readonly dialogState: DialogState;
     readonly Association: AssociationType;
     readonly defaultSortAscending?: boolean;
     readonly defaultSortColumn?: string;
@@ -48,9 +47,10 @@ export const AssociationManagementDialog = ({
         setItems: setSecondaryItems
     } = secondaryItemsCallbacks;
 
-    const { dialogIsOpen, dialogItems: primaryItems, closeDialog } = dialogState;
+    const { dialogIsOpen, underlyingItems } = dialogState as DialogStateMultipleUnderlyingItems;
+    const primaryItems = underlyingItems;
 
-    // const { handleRefresh } = useManagementCallbacks();
+    const { closeDialogByIntent } = useManagementCallbacks();
 
     useEffect(() => {
         setSecondaryItems(secondaryItemsAll);
@@ -80,9 +80,8 @@ export const AssociationManagementDialog = ({
     const [secondarySearchQuery, setSecondarySearchQuery] = useState("");
 
     const handleCloseDialog = useCallback(() => {
-        // handleRefresh();
-        closeDialog();
-    }, [closeDialog]);
+        closeDialogByIntent("image-full-screen-preview"); // change later
+    }, [closeDialogByIntent]);
 
     const getQuantityAssigned = useCallback((secondary: Item) => {
         return Object.entries(secondariesByPrimary)
@@ -158,14 +157,10 @@ export const AssociationManagementDialog = ({
         <AssociationManagementPageProvider
             AssociationType={Association}
             relevantPrimaryItems={primaryItems}
-            // secondaryItemsCallbacks={secondaryItemsCallbacks}
-            // secondaryItemsCombinedState={secondaryItemsCombinedState}
-            // setSecondaryItems={setSecondaryItems}
-            // setSelectedSecondaryItems={setSelectedSecondaryItems}
         >
             <PersistentDialog
                 maxWidth={editMode ? "lg" : "md"}
-                onClose={closeDialog}
+                onClose={handleCloseDialog}
                 open={dialogIsOpen}
             >
                 <DialogTitle>

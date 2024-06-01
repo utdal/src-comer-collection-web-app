@@ -18,35 +18,6 @@ export const SecondaryFilterMenu = ({ filterValue, setFilterValue, secondaries, 
         <Select
             displayEmpty
             placeholder="All secondaries"
-            renderValue={(selected): React.JSX.Element => {
-                return (
-                    <Stack
-                        alignItems="center"
-                        direction="row"
-                        spacing={2}
-                    >
-                        <SecondaryIcon />
-
-                        {secondaries.find((i) => i.id === selected)
-                            ? (
-                                <Typography
-                                    sx={{ minWidth: "120px" }}
-                                    variant="body1"
-                                >
-                                    {`${secondaries.find((c) => c.id === selected)?.safe_display_name as string}`}
-                                </Typography>
-                            )
-                            : (
-                                <Typography
-                                    sx={{ minWidth: "120px", opacity: 0.5 }}
-                                    variant="body1"
-                                >
-                                    {helpMessage}
-                                </Typography>
-                            )}
-                    </Stack>
-                );
-            }}
             sx={{
                 wordWrap: "break-word",
                 width: "300px"
@@ -54,13 +25,41 @@ export const SecondaryFilterMenu = ({ filterValue, setFilterValue, secondaries, 
             value={filterValue?.id ?? ""}
             variant="outlined"
         >
+            <Stack
+                alignItems="center"
+                direction="row"
+                spacing={2}
+            >
+                <SecondaryIcon />
+
+                <Typography>
+                    {helpMessage}
+                </Typography>
+
+                {/* {selectedItem
+                    ? (
+                        <Typography
+                            sx={{ minWidth: "120px" }}
+                            variant="body1"
+                        >
+                            {`${(selectedItem as Item).safe_display_name}`}
+                        </Typography>
+                    )
+                    : (
+                        <Typography
+                            sx={{ minWidth: "120px", opacity: 0.5 }}
+                            variant="body1"
+                        >
+                            {helpMessage}
+                        </Typography>
+                    )} */}
+            </Stack>
 
             {secondaries.length > 0
                 ? (
                     <ListItemButton
                         disabled
                         key=""
-                        value=""
                     >
                         <Stack
                             alignItems="center"
@@ -85,7 +84,6 @@ export const SecondaryFilterMenu = ({ filterValue, setFilterValue, secondaries, 
                             onClick={(): void => {
                                 setFilterValue(null);
                             }}
-                            value=""
                         >
                             <Stack
                                 alignItems="center"
@@ -111,7 +109,6 @@ export const SecondaryFilterMenu = ({ filterValue, setFilterValue, secondaries, 
                                 onClick={(): void => {
                                     setFilterValue(secondary);
                                 }}
-                                value={secondary.id}
                             >
                                 <Stack
                                     alignItems="center"

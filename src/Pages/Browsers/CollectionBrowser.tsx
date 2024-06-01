@@ -1,10 +1,10 @@
 import React from "react";
 import { useLoaderData } from "react-router";
-import CollectionGalleryGrid from "../../Components/CollectionGallery/CollectionGalleryGrid.js";
-import { ManagementPageProvider, useItemsReducer } from "../../ContextProviders/ManagementPageProvider.js";
-import type { ImageItem } from "../../index.js";
-import { Image } from "../../Classes/Entities/Image.js";
-import useDialogStates from "../../Hooks/useDialogStates.js";
+import CollectionGalleryGrid from "../../Components/CollectionGallery/CollectionGalleryGrid";
+import { ManagementPageProvider, useItemsReducer } from "../../ContextProviders/ManagementPageProvider";
+import type { ImageItem } from "../../index";
+import { Image } from "../../Classes/Entities/Image";
+import useDialogStates from "../../Hooks/useDialogStates";
 
 const CollectionBrowser = (): React.JSX.Element => {
     const images = useLoaderData() as ImageItem[];

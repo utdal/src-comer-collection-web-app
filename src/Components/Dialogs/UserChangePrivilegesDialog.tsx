@@ -7,11 +7,11 @@ import {
     Typography, DialogContentText, Checkbox, ToggleButtonGroup, ToggleButton
 } from "@mui/material";
 import { SecurityIcon, PersonIcon, CollectionManagerIcon } from "../../Imports/Icons";
-import { User } from "../../Classes/Entities/User.js";
-import { useSnackbar } from "../../ContextProviders/AppFeatures.js";
-import { useManagementCallbacks } from "../../ContextProviders/ManagementPageProvider.js";
-import PersistentDialog from "./PersistentDialog.js";
-import type { DialogState, DialogStateSingleUnderlyingItem, UserRole } from "../../index.js";
+import { User } from "../../Classes/Entities/User";
+import { useSnackbar } from "../../ContextProviders/AppFeatures";
+import { useManagementCallbacks } from "../../ContextProviders/ManagementPageProvider";
+import PersistentDialog from "./PersistentDialog";
+import type { DialogState, DialogStateSingleUnderlyingItem, UserRole } from "../../index";
 
 interface UserPrivilegeDisplayOption {
     value: UserRole;

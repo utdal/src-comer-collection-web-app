@@ -1,13 +1,13 @@
 import { Box, Paper, Stack, Typography } from "@mui/material";
 import React from "react";
-import DataTable from "../../Components/DataTable/DataTable.js";
+import DataTable from "../../Components/DataTable/DataTable";
 import { PhotoCameraBackIcon } from "../../Imports/Icons";
-import { useTitle } from "../../ContextProviders/AppFeatures.js";
-import { ManagementPageProvider, useItemsReducer } from "../../ContextProviders/ManagementPageProvider.js";
+import { useTitle } from "../../ContextProviders/AppFeatures";
+import { ManagementPageProvider, useItemsReducer } from "../../ContextProviders/ManagementPageProvider";
 import { useLoaderData } from "react-router";
-import { PublicExhibition } from "../../Classes/Entities/Exhibition.js";
-import type { ExhibitionItem } from "../../index.js";
-import useDialogStates from "../../Hooks/useDialogStates.js";
+import { PublicExhibition } from "../../Classes/Entities/Exhibition";
+import type { ExhibitionItem } from "../../index";
+import useDialogStates from "../../Hooks/useDialogStates";
 
 const ExhibitionBrowser = (): React.JSX.Element => {
     const exhibitions = useLoaderData() as ExhibitionItem[];

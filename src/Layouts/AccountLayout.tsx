@@ -1,6 +1,6 @@
 import React from "react";
 import { Navigate, Outlet } from "react-router-dom"; // Import Route from react-router-dom
-import { AccountNavPane } from "../Components/AccountNavPane/AccountNavPane.js";
+import AccountNavPane from "../Components/AccountNavPane/AccountNavPane";
 import { Box } from "@mui/material";
 import useAppUser from "../Hooks/useAppUser";
 
@@ -19,7 +19,7 @@ const AccountLayout = (): React.JSX.Element => {
             }}
             >
 
-                <AccountNavPane sx={{ gridArea: "sidebar" }} />
+                <AccountNavPane />
 
                 <Box sx={{ gridArea: "main", position: "relative", overflowY: "hidden", height: "100%" }}>
 

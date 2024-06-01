@@ -1,23 +1,23 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import SearchBox from "../../Components/SearchBox";
-import ItemSingleDeleteDialog from "../../Components/Dialogs/ItemSingleDeleteDialog.js";
-import DataTable from "../../Components/DataTable/DataTable.js";
-import SelectionSummary from "../../Components/SelectionSummary.js";
-import ExhibitionSettingsDialog from "../../Components/Dialogs/ExhibitionSettingsDialog.js";
+import ItemSingleDeleteDialog from "../../Components/Dialogs/ItemSingleDeleteDialog";
+import DataTable from "../../Components/DataTable/DataTable";
+import SelectionSummary from "../../Components/SelectionSummary";
+import ExhibitionSettingsDialog from "../../Components/Dialogs/ExhibitionSettingsDialog";
 import { useTitle } from "../../ContextProviders/AppFeatures";
-import { CourseFilterMenu } from "../../Components/Menus/CourseFilterMenu.js";
+import { CourseFilterMenu } from "../../Components/Menus/CourseFilterMenu";
 
 import { Exhibition } from "../../Classes/Entities/Exhibition";
 import { ManagementPageProvider, useItemsReducer } from "../../ContextProviders/ManagementPageProvider";
-import ClearFilterButton from "../../Components/Buttons/ClearFilterButton.js";
-import RefreshButton from "../../Components/Buttons/RefreshButton.js";
-import ManagementButtonStack from "../../Components/ManagementPage/ManagementButtonStack.js";
-import ManagementPageContainer from "../../Components/ManagementPage/ManagementPageContainer.js";
-import ManagementPageHeader from "../../Components/ManagementPage/ManagementPageHeader.js";
-import ManagementPageBody from "../../Components/ManagementPage/ManagementPageBody.js";
-import ManagementPageFooter from "../../Components/ManagementPage/ManagementPageFooter.js";
+import ClearFilterButton from "../../Components/Buttons/ClearFilterButton";
+import RefreshButton from "../../Components/Buttons/RefreshButton";
+import ManagementButtonStack from "../../Components/ManagementPage/ManagementButtonStack";
+import ManagementPageContainer from "../../Components/ManagementPage/ManagementPageContainer";
+import ManagementPageHeader from "../../Components/ManagementPage/ManagementPageHeader";
+import ManagementPageBody from "../../Components/ManagementPage/ManagementPageBody";
+import ManagementPageFooter from "../../Components/ManagementPage/ManagementPageFooter";
 import { useLoaderData, useRevalidator } from "react-router";
-import PaginationSummary from "../../Components/PaginationSummary/PaginationSummary.js";
+import PaginationSummary from "../../Components/PaginationSummary/PaginationSummary";
 import type { CourseItem, ExhibitionItem, FilterFunction, Intent, Item } from "../..";
 import useDialogStates from "../../Hooks/useDialogStates";
 

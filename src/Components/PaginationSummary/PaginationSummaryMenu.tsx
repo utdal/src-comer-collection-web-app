@@ -1,6 +1,6 @@
 import React, { useCallback, useMemo, useState } from "react";
 import { Button, Menu, Stack, Typography } from "@mui/material";
-import PaginationSummaryMenuItem from "./PaginationSummaryMenuItem.js";
+import PaginationSummaryMenuItem from "./PaginationSummaryMenuItem";
 import type { PaginationStatus } from "../../index.js";
 
 const PaginationSummaryMenu = ({ visibleItemCount, paginationStatus }: {

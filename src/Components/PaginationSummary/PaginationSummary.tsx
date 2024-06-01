@@ -4,7 +4,7 @@ import { useItemCounts, useItemsPagination } from "../../ContextProviders/Manage
 import type { IconButtonOwnProps, StackOwnProps } from "@mui/material";
 import { IconButton, Stack, styled } from "@mui/material";
 import { KeyboardArrowLeftIcon, KeyboardArrowRightIcon, KeyboardDoubleArrowLeftIcon, KeyboardDoubleArrowRightIcon } from "../../Imports/Icons";
-import PaginationSummaryMenu from "./PaginationSummaryMenu.js";
+import PaginationSummaryMenu from "./PaginationSummaryMenu";
 
 interface DisappearingStackProps extends StackOwnProps {
     isHidden: boolean;

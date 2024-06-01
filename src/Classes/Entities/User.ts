@@ -35,18 +35,21 @@ class User extends Entity {
         {
             fieldName: "given_name",
             displayName: "First Name",
-            isRequired: false
+            isRequired: false,
+            maxlength: 255
         },
         {
             fieldName: "family_name",
             displayName: "Last Name",
-            isRequired: false
+            isRequired: false,
+            maxlength: 255
         },
         {
             fieldName: "email",
             displayName: "Email",
             isRequired: true,
-            inputType: "email"
+            inputType: "email",
+            maxlength: 255
         },
         {
             fieldName: "exhibition_quota",
@@ -54,7 +57,8 @@ class User extends Entity {
             isRequired: true,
             inputType: "number",
             blank: 5,
-            minValue: 0
+            minValue: 0,
+            maxlength: 255
         }
     ];
 

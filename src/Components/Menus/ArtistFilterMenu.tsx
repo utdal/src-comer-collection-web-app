@@ -1,8 +1,8 @@
 import React from "react";
 import { BrushIcon } from "../../Imports/Icons";
-import { SecondaryFilterMenu } from "./SecondaryFilterMenu.js";
+import { SecondaryFilterMenu } from "./SecondaryFilterMenu";
 import { Typography } from "@mui/material";
-import type { ArtistItem, Item } from "../../index.js";
+import type { ArtistItem, Item } from "../../index";
 
 const artistSortFunction = (a: Item, b: Item): number => {
     return (a as ArtistItem).fullNameReverse > (b as ArtistItem).fullNameReverse ? 1 : -1;

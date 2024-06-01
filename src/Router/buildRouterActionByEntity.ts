@@ -3,7 +3,7 @@ import { Course } from "../Classes/Entities/Course";
 import { DeletedImage, Image } from "../Classes/Entities/Image";
 import { Artist } from "../Classes/Entities/Artist";
 import { Tag } from "../Classes/Entities/Tag";
-import { Exhibition } from "../Classes/Entities/Exhibition";
+import { Exhibition, MyExhibition } from "../Classes/Entities/Exhibition";
 import { sendAuthenticatedRequest } from "../Helpers/APICalls";
 import { capitalized } from "../Classes/Entity";
 import type { EntityType, Intent, RouterActionRequest, RouterActionResponse } from "../index.js";
@@ -18,10 +18,14 @@ const permittedEntitiesByIntent: Record<Intent, EntityType[]> = {
     "user-reset-password": [User],
     "user-change-activation-status": [User],
     "multi-delete": [User, Course, Image, Artist, Tag, Exhibition],
-    "user-change-privileges": [User]
+    "user-change-privileges": [User],
+    "app-settings": [],
+    "exhibition-single-create": [MyExhibition],
+    "exhibition-single-update-settings": [Exhibition, MyExhibition],
+    "image-full-screen-preview": [Image]
 };
 
-const requiredMethodsByIntent: Record<Intent, FormMethod> = {
+const requiredMethodsByIntent: Record<Intent, FormMethod | null> = {
     "single-delete": "DELETE",
     "single-permanent-delete": "DELETE",
     "single-restore": "PUT",
@@ -30,7 +34,11 @@ const requiredMethodsByIntent: Record<Intent, FormMethod> = {
     "user-reset-password": "PUT",
     "user-change-activation-status": "PUT",
     "multi-delete": "DELETE",
-    "user-change-privileges": "PUT"
+    "user-change-privileges": "PUT",
+    "app-settings": null,
+    "exhibition-single-create": "POST",
+    "exhibition-single-update-settings": "PUT",
+    "image-full-screen-preview": null
 };
 
 /**
@@ -60,7 +68,7 @@ const buildRouterActionByEntity = (entityType: EntityType): ActionFunction => {
         if (!permittedEntitiesByIntent[intent].includes(entityType)) {
             throw new Error(`The intent '${intent}' is not permitted on the entity '${entityType.singular}'`);
         } else if (requiredMethodsByIntent[intent] !== request.method) {
-            throw new Error(`The intent '${intent}' requires the ${requiredMethodsByIntent[intent]} method, but the route received a ${request.method} request`);
+            throw new Error(`The intent '${intent}' requires the ${requiredMethodsByIntent[intent] as string} method, but the route received a ${request.method} request`);
         }
 
         if (intent === "single-delete") {
@@ -154,7 +162,7 @@ const buildRouterActionByEntity = (entityType: EntityType): ActionFunction => {
                     };
                 default:
                     return {
-                        status: "partial",
+                        status: "partial-by-index",
                         indicesWithErrors,
                         errors: promiseResults.map((promiseResult) => (promiseResult as PromiseRejectedResult).reason as string),
                         snackbarText: `Created ${body.itemsToCreate.length - indicesWithErrors.length} of ${body.itemsToCreate.length} ${entityType.plural}`

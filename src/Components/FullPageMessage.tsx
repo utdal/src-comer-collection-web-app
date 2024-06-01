@@ -2,7 +2,7 @@ import { Box, Button, LinearProgress, Paper, Stack, Typography } from "@mui/mate
 import React, { useCallback } from "react";
 import { useNavigate } from "react-router";
 import type { ReactComponentLike } from "prop-types";
-import SideBySideLogo from "./Logos/SideBySideLogo.js";
+import SideBySideLogo from "./Logos/SideBySideLogo";
 
 export const FullPageMessage = ({ message, button = true, buttonText, buttonDestination = "/SignIn", Icon, buttonAction, includeLinearProgress = false, includeLogo = false, viewportHeight = false }: {
     readonly message: string;

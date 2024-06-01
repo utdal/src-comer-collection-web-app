@@ -100,7 +100,10 @@ export type EntityType = typeof Artist | typeof Course | typeof DeletedImage | t
 
 export type AssociationType = typeof EnrollmentCoursePrimary | typeof EnrollmentUserPrimary | typeof ImageArtist | typeof ImageExhibition | typeof ImageTag | typeof UserExhibition;
 
-export type AppUser = UserItem;
+export interface AppUser extends UserItem {
+    Courses: CourseItem[];
+    Exhibitions: ExhibitionItem[];
+}
 
 export interface ItemCounts {
     all: number;
@@ -182,7 +185,7 @@ export interface ItemsCallbacks {
     setPaginationStartIndex: (startIndex: number) => void;
 }
 
-export type Intent = "exhibition-single-create" | "exhibition-single-update-settings" | "image-full-screen-preview" | "multi-create" | "multi-delete" | "single-delete" | "single-edit" | "single-permanent-delete" | "single-restore" | "user-change-activation-status" | "user-change-privileges" | "user-reset-password";
+export type Intent = "app-settings" | "exhibition-single-create" | "exhibition-single-update-settings" | "image-full-screen-preview" | "multi-create" | "multi-delete" | "single-delete" | "single-edit" | "single-permanent-delete" | "single-restore" | "user-change-activation-status" | "user-change-privileges" | "user-reset-password";
 
 export type OpenDialogByIntentFunctionNoUnderlyingItems = (intent: Intent) => void;
 
@@ -257,7 +260,7 @@ export type RouterActionRequest = (
 
 export interface RouterActionResponseBase {
     status: "error" | "partial-by-id" | "partial-by-index" | "success";
-    snackbarText: "string";
+    snackbarText: string;
 }
 
 export interface RouterActionSuccessResponse extends RouterActionResponseBase {

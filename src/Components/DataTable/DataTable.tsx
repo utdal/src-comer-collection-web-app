@@ -2,12 +2,12 @@
 import type { ElementType } from "react";
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Checkbox, Stack, TableCell, TableContainer, Typography, Table, TableBody, TableHead, TableRow, Paper } from "@mui/material";
-import ColumnSortButton from "../Buttons/ColumnSortButton.js";
-import { useItemCounts, useItemDictionary, useItemsPagination, useManagementCallbacks, useSelectionStatuses, useSortableValues, useVisibilityStatuses } from "../../ContextProviders/ManagementPageProvider.js";
-import { FullPageMessage } from "../FullPageMessage.js";
+import ColumnSortButton from "../Buttons/ColumnSortButton";
+import { useItemCounts, useItemDictionary, useItemsPagination, useManagementCallbacks, useSelectionStatuses, useSortableValues, useVisibilityStatuses } from "../../ContextProviders/ManagementPageProvider";
+import { FullPageMessage } from "../FullPageMessage";
 import { InfoIcon } from "../../Imports/Icons";
-import DataTableRow from "./DataTableRow.js";
-import type { Item, TableFieldDefinition, UserItem } from "../../index.js";
+import DataTableRow from "./DataTableRow";
+import type { Item, TableFieldDefinition, UserItem } from "../../index";
 
 const DataTable = ({
     tableFields, rowSelectionEnabled, smallCheckboxes, defaultSortColumn = "ID", defaultSortAscending = true, noSkeleton

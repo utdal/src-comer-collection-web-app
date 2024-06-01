@@ -2,20 +2,20 @@ import React, { useEffect, useMemo } from "react";
 import {
     Typography, Stack, Paper, Box
 } from "@mui/material";
-import DataTable from "../../Components/DataTable/DataTable.js";
+import DataTable from "../../Components/DataTable/DataTable";
 import { PhotoCameraBackIcon } from "../../Imports/Icons";
-import ExhibitionSettingsDialog from "../../Components/Dialogs/ExhibitionSettingsDialog.js";
-import ItemSingleDeleteDialog from "../../Components/Dialogs/ItemSingleDeleteDialog.js";
-import { useTitle } from "../../ContextProviders/AppFeatures.js";
-import useAppUser from "../../Hooks/useAppUser.js";
+import ExhibitionSettingsDialog from "../../Components/Dialogs/ExhibitionSettingsDialog";
+import ItemSingleDeleteDialog from "../../Components/Dialogs/ItemSingleDeleteDialog";
+import { useTitle } from "../../ContextProviders/AppFeatures";
+import useAppUser from "../../Hooks/useAppUser";
 
-import { ManagementPageProvider, useItemsReducer } from "../../ContextProviders/ManagementPageProvider.js";
-import CreateExhibitionButton from "../../Components/Buttons/CreateExhibitionButton.js";
-import { ExhibitionCreationRestriction } from "../../Components/TextBanners/ExhibitionCreationRestriction.js";
-import { Exhibition, MyExhibition } from "../../Classes/Entities/Exhibition.js";
-import PaginationSummary from "../../Components/PaginationSummary/PaginationSummary.js";
-import type { AppUser, ExhibitionItem, Intent } from "../../index.js";
-import useDialogStates from "../../Hooks/useDialogStates.js";
+import { ManagementPageProvider, useItemsReducer } from "../../ContextProviders/ManagementPageProvider";
+import CreateExhibitionButton from "../../Components/Buttons/CreateExhibitionButton";
+import ExhibitionCreationRestriction from "../../Components/TextBanners/ExhibitionCreationRestriction";
+import { Exhibition, MyExhibition } from "../../Classes/Entities/Exhibition";
+import PaginationSummary from "../../Components/PaginationSummary/PaginationSummary";
+import type { AppUser, Intent } from "../../index";
+import useDialogStates from "../../Hooks/useDialogStates";
 
 const MyExhibitions = (): React.JSX.Element => {
     useTitle("My Exhibitions");
@@ -32,14 +32,14 @@ const MyExhibitions = (): React.JSX.Element => {
         closeDialogByIntent
     } = useDialogStates(intentArray);
 
-    const [exhibitionsCombinedState, itemsCallbacks] = useItemsReducer(appUser.Exhibitions as ExhibitionItem[]);
+    const [exhibitionsCombinedState, itemsCallbacks] = useItemsReducer(appUser.Exhibitions);
 
     const {
         setItems: setExhibitions
     } = itemsCallbacks;
 
     useEffect(() => {
-        setExhibitions(appUser.Exhibitions as ExhibitionItem[]);
+        setExhibitions(appUser.Exhibitions);
     }, [setExhibitions, appUser.Exhibitions]);
 
     const managementCallbacks = useMemo(() => ({

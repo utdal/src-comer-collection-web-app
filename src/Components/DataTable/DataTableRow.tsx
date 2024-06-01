@@ -2,9 +2,9 @@ import React, { memo, useCallback } from "react";
 import { useInView } from "react-intersection-observer";
 import type { TableRowOwnProps, Theme } from "@mui/material";
 import { Checkbox, TableCell, TableRow, styled, useTheme } from "@mui/material";
-import DataTableFieldCells from "./DataTableFieldCells.js";
-import DataTableRowPlaceholder from "./DataTableRowPlaceholder.js";
-import type { Item, ManagementCallbacks, TableFieldDefinition } from "../../index.js";
+import DataTableFieldCells from "./DataTableFieldCells";
+import DataTableRowPlaceholder from "./DataTableRowPlaceholder";
+import type { Item, ManagementCallbacks, TableFieldDefinition } from "../../index";
 
 interface ColoredTableRowProps extends TableRowOwnProps {
     theme: Theme;

@@ -5,7 +5,8 @@ import { AddPhotoAlternateIcon } from "../../Imports/Icons";
 import { ManagementPageProvider, useItemsReducer } from "../../ContextProviders/ManagementPageProvider";
 import { Image } from "../../Classes/Entities/Image";
 import type { ExhibitionData, ExhibitionDispatchAction } from "./ExhibitionDispatchActionTypes";
-import type { ImageItem } from "../../index.js";
+import type { ImageItem, Intent } from "../../index.js";
+import useDialogStates from "../../Hooks/useDialogStates";
 
 const ImageChooserDialog = ({ imageChooserIsOpen, setImageChooserIsOpen, exhibitionState, globalImageCatalog, setSelectedImageId, exhibitionEditDispatch }: {
     readonly imageChooserIsOpen: boolean;
@@ -19,6 +20,8 @@ const ImageChooserDialog = ({ imageChooserIsOpen, setImageChooserIsOpen, exhibit
 
     const [imageChooserItemsCombinedState, itemsCallbacks] = useItemsReducer(globalImageCatalog);
     const { setItems: setImageChooserItems } = itemsCallbacks;
+
+    const dialogCallbacks = useDialogStates([] as Intent[]);
 
     useEffect(() => {
         setImageChooserItems(globalImageCatalog);
@@ -54,7 +57,7 @@ const ImageChooserDialog = ({ imageChooserIsOpen, setImageChooserIsOpen, exhibit
                     Entity={Image}
                     itemsCallbacks={itemsCallbacks}
                     itemsCombinedState={imageChooserItemsCombinedState}
-                    managementCallbacks={{}}
+                    managementCallbacks={dialogCallbacks}
                 >
 
                     <CollectionGalleryGrid

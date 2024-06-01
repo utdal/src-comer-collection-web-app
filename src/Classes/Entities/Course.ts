@@ -30,26 +30,30 @@ class Course extends Entity {
             fieldName: "name",
             displayName: "Course Name",
             inputType: "textarea",
-            isRequired: true
+            isRequired: true,
+            maxlength: 255
         },
         {
             fieldName: "date_start",
             displayName: "Start",
             inputType: "datetime-local",
-            isRequired: true
+            isRequired: true,
+            maxlength: 255
         },
         {
             fieldName: "date_end",
             displayName: "End",
             inputType: "datetime-local",
-            isRequired: true
+            isRequired: true,
+            maxlength: 255
         },
         {
             fieldName: "notes",
             displayName: "Notes",
             inputType: "textarea",
             multiline: true,
-            isRequired: false
+            isRequired: false,
+            maxlength: 255
         }
     ];
 

@@ -8,7 +8,7 @@ import { setupCeiling } from "./js/Ceiling.js";
 import { createArt } from "./js/Art.js";
 import { Box, Fab, Stack, Typography } from "@mui/material";
 import { PointerLockControls } from "three/examples/jsm/controls/PointerLockControls.js";
-import { EditIcon, SecurityIcon, VisibilityIcon } from "../../Imports/Icons";
+import { EditIcon, SecurityIcon, VisibilityIcon } from "../../Imports/Icons.ts";
 import useAppUser from "../../Hooks/useAppUser.ts";
 import PropTypes from "prop-types";
 import { ExhibitionIntro } from "./ExhibitionIntro.js";
@@ -279,7 +279,9 @@ const Exhibition3DViewport = ({ exhibitionState, exhibitionMetadata, exhibitionI
 
             return () => {
                 myControls.removeEventListener("change", handleControlsChange);
-                if (canvasRef.current) { canvasRef.current.removeChild(myRenderer.domElement); }
+                if (canvasRef.current) {
+                    canvasRef.current.removeChild(myRenderer.domElement);
+                }
             };
         }
     }, [myControls, myScene, myRenderer]);
@@ -293,7 +295,15 @@ const Exhibition3DViewport = ({ exhibitionState, exhibitionMetadata, exhibitionI
 
             // count photos on walls
             exhibitionState.images.forEach((image) => {
-                if (image.metadata.direction === 1) { photosOn1++; } else if (image.metadata.direction === 2) { photosOn2++; } else if (image.metadata.direction === 3) { photosOn3++; } else if (image.metadata.direction === 4) { photosOn4++; }
+                if (image.metadata.direction === 1) {
+                    photosOn1++;
+                } else if (image.metadata.direction === 2) {
+                    photosOn2++;
+                } else if (image.metadata.direction === 3) {
+                    photosOn3++;
+                } else if (image.metadata.direction === 4) {
+                    photosOn4++;
+                }
             });
 
             // kind of a last minute add, but scene needs to be here for lighting, even though
@@ -411,7 +421,13 @@ const Exhibition3DViewport = ({ exhibitionState, exhibitionMetadata, exhibitionI
         <Box
             height="calc(100vh - 64px)"
             ref={containerRef}
-            sx={{ position: "relative" }}
+            sx={{
+                position: "relative",
+                gridArea: "viewer",
+                width: "100%",
+                height: "calc(100vh - 64px)"
+
+            }}
             width="100%"
         >
             <div

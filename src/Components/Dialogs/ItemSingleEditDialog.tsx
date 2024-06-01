@@ -6,14 +6,14 @@ import {
     Button, DialogContentText
 } from "@mui/material";
 import { SaveIcon } from "../../Imports/Icons";
-import getLocalISOString from "../../Helpers/getLocalISOString.js";
-import { useSnackbar } from "../../ContextProviders/AppFeatures.js";
-import { useEntity, useManagementCallbacks } from "../../ContextProviders/ManagementPageProvider.js";
-import DialogInputFieldWithRef from "../Inputs/DialogInputFieldWithRef.js";
-import PersistentDialog from "./PersistentDialog.js";
+import getLocalISOString from "../../Helpers/getLocalISOString";
+import { useSnackbar } from "../../ContextProviders/AppFeatures";
+import { useEntity, useManagementCallbacks } from "../../ContextProviders/ManagementPageProvider";
+import DialogInputFieldWithRef from "../Inputs/DialogInputFieldWithRef";
+import PersistentDialog from "./PersistentDialog";
 import { useActionData, useSubmit } from "react-router-dom";
-import DialogCancelButton from "../Buttons/DialogCancelButton.js";
-import type { DialogState, DialogStateSingleUnderlyingItem, ItemGenericFieldValue, RouterActionRequest, RouterActionResponse } from "../../index.js";
+import DialogCancelButton from "../Buttons/DialogCancelButton";
+import type { DialogState, DialogStateSingleUnderlyingItem, ItemGenericFieldValue, RouterActionRequest, RouterActionResponse } from "../../index";
 
 const ItemSingleEditDialog = ({ dialogState }: {
     readonly dialogState: DialogState;

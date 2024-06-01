@@ -1,9 +1,9 @@
 import React from "react";
 import { Stack, Divider } from "@mui/material";
 import { AccountCircleIcon, GroupsIcon, PhotoCameraBackIcon, ImageIcon, SchoolIcon, LockIcon } from "../../Imports/Icons";
-import useAppUser from "../../Hooks/useAppUser.js";
-import AccountNavSection from "./AccountNavSection.js";
-import type { AppUser, NavPaneLinkDefinition } from "../../index.js";
+import useAppUser from "../../Hooks/useAppUser";
+import AccountNavSection from "./AccountNavSection";
+import type { AppUser, NavPaneLinkDefinition } from "../../index";
 
 const navLinks: NavPaneLinkDefinition[] = [
     {
@@ -64,13 +64,13 @@ const adminNavLinks: NavPaneLinkDefinition[] = [
 
 ];
 
-export const AccountNavPane = (): React.JSX.Element => {
+const AccountNavPane = (): React.JSX.Element => {
     const appUser = useAppUser() as AppUser;
 
     return (
         <Stack
             direction="column"
-            sx={{ backgroundColor: "#222", height: "100%", color: "white", overflowY: "auto" }}
+            sx={{ gridArea: "sidebar", backgroundColor: "#222", height: "100%", color: "white", overflowY: "auto" }}
         >
             <AccountNavSection
                 linkDefinitions={navLinks}
@@ -105,3 +105,5 @@ export const AccountNavPane = (): React.JSX.Element => {
         </Stack>
     );
 };
+
+export default AccountNavPane;

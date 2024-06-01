@@ -1,14 +1,14 @@
 import React from "react";
 import PropTypes from "prop-types";
-import ItemMultiCreateDialog from "./ItemMultiCreateDialog.js";
-import { dialogStatePropTypeShape } from "../../Hooks/useDialogStates.js";
-import ItemSingleDeleteDialog from "./ItemSingleDeleteDialog.js";
-import ItemSingleEditDialog from "./ItemSingleEditDialog.js";
-import UserResetPasswordDialog from "./UserResetPasswordDialog.js";
-import UserChangePrivilegesDialog from "./UserChangePrivilegesDialog.js";
-import type { DialogState, Intent } from "../../index.js";
-import ExhibitionSettingsDialog from "./ExhibitionSettingsDialog.js";
-import ImageFullScreenViewerDialog from "./ImageFullScreenViewerDialog.js";
+import ItemMultiCreateDialog from "./ItemMultiCreateDialog";
+import { dialogStatePropTypeShape } from "../../Hooks/useDialogStates";
+import ItemSingleDeleteDialog from "./ItemSingleDeleteDialog";
+import ItemSingleEditDialog from "./ItemSingleEditDialog";
+import UserResetPasswordDialog from "./UserResetPasswordDialog";
+import UserChangePrivilegesDialog from "./UserChangePrivilegesDialog";
+import type { DialogState, Intent } from "../../index";
+import ExhibitionSettingsDialog from "./ExhibitionSettingsDialog";
+import ImageFullScreenViewerDialog from "./ImageFullScreenViewerDialog";
 
 /**
  * This component acts as a switchboard for all the types of dialogs

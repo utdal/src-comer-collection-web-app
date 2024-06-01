@@ -6,13 +6,13 @@ import {
     Button, DialogContentText, TextField
 } from "@mui/material";
 import { DeleteIcon, RestoreIcon } from "../../Imports/Icons";
-import { useSnackbar } from "../../ContextProviders/AppFeatures.js";
-import { useEntity, useManagementCallbacks } from "../../ContextProviders/ManagementPageProvider.js";
-import PersistentDialog from "./PersistentDialog.js";
+import { useSnackbar } from "../../ContextProviders/AppFeatures";
+import { useEntity, useManagementCallbacks } from "../../ContextProviders/ManagementPageProvider";
+import PersistentDialog from "./PersistentDialog";
 import { useActionData, useSubmit } from "react-router-dom";
-import { capitalized } from "../../Classes/Entity.js";
-import DialogCancelButton from "../Buttons/DialogCancelButton.js";
-import type { DialogState, DialogStateSingleUnderlyingItem, RouterActionResponse } from "../../index.js";
+import { capitalized } from "../../Classes/Entity";
+import DialogCancelButton from "../Buttons/DialogCancelButton";
+import type { DialogState, DialogStateSingleUnderlyingItem, RouterActionResponse } from "../../index";
 
 const ItemSingleDeleteDialog = ({ dialogState, restoreMode = false }: {
     readonly dialogState: DialogState;

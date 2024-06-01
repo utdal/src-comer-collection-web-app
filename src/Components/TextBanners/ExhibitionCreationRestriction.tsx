@@ -4,7 +4,7 @@ import useAppUser from "../../Hooks/useAppUser";
 import { InfoIcon, SecurityIcon } from "../../Imports/Icons";
 import type { AppUser } from "../../index.js";
 
-export const ExhibitionCreationRestriction = (): React.JSX.Element => {
+const ExhibitionCreationRestriction = (): React.JSX.Element => {
     const appUser = useAppUser() as AppUser;
     return (
         <Stack
@@ -58,3 +58,5 @@ export const ExhibitionCreationRestriction = (): React.JSX.Element => {
         </Stack>
     );
 };
+
+export default ExhibitionCreationRestriction;

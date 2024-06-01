@@ -24,18 +24,21 @@ class Artist extends Entity {
         {
             fieldName: "familyName",
             displayName: "Last Name",
-            isRequired: true
+            isRequired: true,
+            maxlength: 255
         },
         {
             fieldName: "givenName",
             displayName: "First Name",
-            isRequired: true
+            isRequired: true,
+            maxlength: 255
         },
         {
             fieldName: "website",
             displayName: "Website",
             isRequired: false,
-            inputType: "url"
+            inputType: "url",
+            maxlength: 255
         },
         {
             fieldName: "notes",
@@ -43,7 +46,8 @@ class Artist extends Entity {
             isRequired: false,
             inputType: "textarea",
             multiline: true,
-            blank: ""
+            blank: "",
+            maxlength: 255
         }
     ];
 

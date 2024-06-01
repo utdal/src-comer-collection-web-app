@@ -2,7 +2,7 @@ import React from "react";
 import { Stack } from "@mui/material";
 
 const SideBySideLogo = ({ height = 150 }: {
-    readonly height: number;
+    readonly height?: number;
 }): React.JSX.Element => {
     const spacing = -height / 20;
     return (

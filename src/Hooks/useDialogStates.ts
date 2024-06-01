@@ -1,7 +1,7 @@
 import { useCallback, useReducer } from "react";
 import PropTypes from "prop-types";
-import { entityPropTypeShape } from "../Classes/Entity.js";
-import type { CloseDialogByIntentFunction, DialogItemsMultiplicity, DialogStateAction, DialogStateDictionary, Intent, Item, OpenDialogByIntentFunctionMultipleUnderlyingItems, OpenDialogByIntentFunctionNoUnderlyingItems, OpenDialogByIntentFunctionSingleUnderlyingItem } from "../index.js";
+import { entityPropTypeShape } from "../Classes/Entity";
+import type { CloseDialogByIntentFunction, DialogItemsMultiplicity, DialogStateAction, DialogStateDictionary, Intent, Item, OpenDialogByIntentFunctionMultipleUnderlyingItems, OpenDialogByIntentFunctionNoUnderlyingItems, OpenDialogByIntentFunctionSingleUnderlyingItem } from "../index";
 
 const dialogItemsMultiplicityByIntent: Record<Intent, DialogItemsMultiplicity> = {
     "single-delete": "single",
@@ -12,7 +12,11 @@ const dialogItemsMultiplicityByIntent: Record<Intent, DialogItemsMultiplicity> =
     "user-reset-password": "single",
     "user-change-activation-status": "single",
     "multi-delete": "multi",
-    "user-change-privileges": "single"
+    "user-change-privileges": "single",
+    "exhibition-single-create": "none",
+    "exhibition-single-update-settings": "single",
+    "image-full-screen-preview": "single",
+    "app-settings": "none"
 };
 
 export const dialogStatePropTypeShape = PropTypes.shape({

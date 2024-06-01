@@ -23,14 +23,16 @@ class Tag extends Entity {
         {
             fieldName: "data",
             displayName: "Tag",
-            isRequired: true
+            isRequired: true,
+            maxlength: 255
         },
         {
             fieldName: "notes",
             displayName: "Notes",
             isRequired: false,
             inputType: "textarea",
-            multiline: true
+            multiline: true,
+            maxlength: 255
         }
     ];
 

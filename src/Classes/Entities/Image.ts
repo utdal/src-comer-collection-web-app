@@ -38,24 +38,28 @@ class Image extends Entity {
         {
             fieldName: "title",
             displayName: "Image Title",
-            isRequired: true
+            isRequired: true,
+            maxlength: 255
         },
         {
             fieldName: "accessionNumber",
             displayName: "Accession Number",
-            isRequired: false
+            isRequired: false,
+            maxlength: 255
         },
         {
             fieldName: "year",
             displayName: "Year",
             isRequired: false,
-            inputType: "number"
+            inputType: "number",
+            maxlength: 255
         },
         {
             fieldName: "additionalPrintYear",
             displayName: "Additional Print Year",
             isRequired: false,
-            inputType: "number"
+            inputType: "number",
+            maxlength: 255
         },
         {
             fieldName: "url",
@@ -63,7 +67,8 @@ class Image extends Entity {
             inputType: "url",
             multiline: true,
             blank: "https://atecquilt01.utdallas.edu/comer/public/images/",
-            isRequired: false
+            isRequired: false,
+            maxlength: 255
         },
         {
             fieldName: "thumbnailUrl",
@@ -71,75 +76,87 @@ class Image extends Entity {
             inputType: "url",
             multiline: true,
             blank: "https://atecquilt01.utdallas.edu/comer/public/images/",
-            isRequired: false
+            isRequired: false,
+            maxlength: 255
         },
         {
             fieldName: "medium",
             displayName: "Medium",
-            isRequired: false
+            isRequired: false,
+            maxlength: 255
         },
         {
             fieldName: "width",
             displayName: "Image Width",
             isRequired: true,
-            inputType: "number"
+            inputType: "number",
+            maxlength: 255
         },
         {
             fieldName: "height",
             displayName: "Image Height",
             isRequired: true,
-            inputType: "number"
+            inputType: "number",
+            maxlength: 255
         },
         {
             fieldName: "matWidth",
             displayName: "Mat Width",
             inputType: "number",
-            isRequired: false
+            isRequired: false,
+            maxlength: 255
         },
         {
             fieldName: "matHeight",
             displayName: "Mat Height",
             inputType: "number",
-            isRequired: false
+            isRequired: false,
+            maxlength: 255
         },
         {
             fieldName: "copyright",
             displayName: "Copyright",
             inputType: "textarea",
             multiline: true,
-            isRequired: false
+            isRequired: false,
+            maxlength: 255
         },
         {
             fieldName: "location",
             displayName: "Location",
-            isRequired: false
+            isRequired: false,
+            maxlength: 255
         },
         {
             fieldName: "subject",
             displayName: "Subject",
             inputType: "textarea",
             multiline: true,
-            isRequired: false
+            isRequired: false,
+            maxlength: 255
         },
         {
             fieldName: "condition",
             displayName: "Condition",
             inputType: "textarea",
-            isRequired: false
+            isRequired: false,
+            maxlength: 255
         },
         {
             fieldName: "valuationNotes",
             displayName: "Valuation Notes",
             inputType: "textarea",
             multiline: true,
-            isRequired: false
+            isRequired: false,
+            maxlength: 255
         },
         {
             fieldName: "otherNotes",
             displayName: "Other Notes",
             inputType: "textarea",
             multiline: true,
-            isRequired: false
+            isRequired: false,
+            maxlength: 255
         }
     ];
 

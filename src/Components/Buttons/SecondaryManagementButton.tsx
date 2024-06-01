@@ -1,5 +1,4 @@
 import React from "react";
-import PropTypes from "prop-types";
 import { Button, Typography } from "@mui/material";
 import { useAssociationType } from "../../ContextProviders/AssociationManagementPageProvider";
 
@@ -8,11 +7,10 @@ import { useAssociationType } from "../../ContextProviders/AssociationManagement
  * to the management console for the secondary entity.
  * Either switches dialogs or navigates to a different page,
  * depending on which entities are involved
- * @param {{
- *  handleSwitchToSecondary: () => void
- * }} props
  */
-const SecondaryManagementButton = ({ handleSwitchToSecondary }) => {
+const SecondaryManagementButton = ({ handleSwitchToSecondary }: {
+    readonly handleSwitchToSecondary: () => void;
+}): React.JSX.Element => {
     const AssociationType = useAssociationType();
     return (
         <Button
@@ -26,10 +24,6 @@ const SecondaryManagementButton = ({ handleSwitchToSecondary }) => {
             </Typography>
         </Button>
     );
-};
-
-SecondaryManagementButton.propTypes = {
-    handleSwitchToSecondary: PropTypes.func.isRequired
 };
 
 export default SecondaryManagementButton;

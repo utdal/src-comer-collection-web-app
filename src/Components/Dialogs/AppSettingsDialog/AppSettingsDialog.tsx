@@ -4,20 +4,19 @@ import {
     DialogContent,
     DialogActions,
     Button, Divider,
-    Typography, DialogContentText, ToggleButton, ToggleButtonGroup
+    Typography, DialogContentText, ToggleButton, ToggleButtonGroup,
+    Dialog
 } from "@mui/material";
 import { useAppDarkTheme } from "../../../ContextProviders/AppTheme";
 import { DarkModeIcon, LightModeIcon } from "../../../Imports/Icons";
-import PropTypes from "prop-types";
-import AppSettingsDialogOption from "./AppSettingsDialogOption.js";
-import PersistentDialog from "../PersistentDialog.js";
-import { DialogStateOld } from "../../../Classes/DialogState.js";
+import AppSettingsDialogOption from "./AppSettingsDialogOption";
+import type { DialogState } from "../../..";
 
-export const AppSettingsDialog = ({ dialogState }: {
-    readonly dialogState: DialogStateOld;
+const AppSettingsDialog = ({ dialogState }: {
+    readonly dialogState: DialogState;
 }): React.JSX.Element => {
     const { appDarkTheme, handleSetDarkTheme } = useAppDarkTheme();
-    const { closeDialog, dialogIsOpen } = dialogState;
+    const { dialogIsOpen } = dialogState;
 
     const handleSwitchToLightTheme = useCallback(() => {
         handleSetDarkTheme("light");
@@ -28,8 +27,8 @@ export const AppSettingsDialog = ({ dialogState }: {
     }, [handleSetDarkTheme]);
 
     return (
-        <PersistentDialog
-            onClose={closeDialog}
+        <Dialog
+            disableEscapeKeyDown={false}
             open={dialogIsOpen}
         >
             <DialogTitle>
@@ -92,17 +91,16 @@ export const AppSettingsDialog = ({ dialogState }: {
             <DialogActions>
                 <Button
                     color="primary"
+                    disabled
                     fullWidth
-                    onClick={closeDialog}
+                    // onClick={closeDialog}
                     variant="contained"
                 >
                     Close
                 </Button>
             </DialogActions>
-        </PersistentDialog>
+        </Dialog>
     );
 };
 
-AppSettingsDialog.propTypes = {
-    dialogState: PropTypes.instanceOf(DialogStateOld)
-};
+export default AppSettingsDialog;

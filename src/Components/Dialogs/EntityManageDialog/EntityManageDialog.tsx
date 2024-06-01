@@ -5,17 +5,17 @@ import {
     DialogActions,
     Button, Divider
 } from "@mui/material";
-import ItemSingleDeleteDialog from "../ItemSingleDeleteDialog.js";
-import ItemSingleEditDialog from "../ItemSingleEditDialog.js";
-import { ManagementPageProvider, useItemsReducer } from "../../../ContextProviders/ManagementPageProvider.js";
-import PersistentDialog from "../PersistentDialog.js";
-import SelectionSummary from "../../SelectionSummary.js";
+import ItemSingleDeleteDialog from "../ItemSingleDeleteDialog";
+import ItemSingleEditDialog from "../ItemSingleEditDialog";
+import { ManagementPageProvider, useItemsReducer } from "../../../ContextProviders/ManagementPageProvider";
+import PersistentDialog from "../PersistentDialog";
+import SelectionSummary from "../../SelectionSummary";
 import { useLoaderData, useNavigate } from "react-router-dom";
-import EntityManageUpdateSection from "./EntityManageUpdateSection.js";
-import EntityManageCreateSection from "./EntityManageCreateSection.js";
+import EntityManageUpdateSection from "./EntityManageUpdateSection";
+import EntityManageCreateSection from "./EntityManageCreateSection";
 import { DeleteIcon } from "../../../Imports/Icons";
-import type { EntityType, Intent, Item, ManagementCallbacks } from "../../../index.js";
-import useDialogStates from "../../../Hooks/useDialogStates.js";
+import type { EntityType, Intent, Item, ManagementCallbacks } from "../../..";
+import useDialogStates from "../../../Hooks/useDialogStates";
 
 const EntityManageDialog = ({ Entity }: {
     readonly Entity: EntityType;

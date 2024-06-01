@@ -7,12 +7,12 @@ import {
     Typography, DialogContentText, TextField, ToggleButtonGroup, ToggleButton
 } from "@mui/material";
 import { SaveIcon, PublicIcon, LockIcon, VpnLockIcon } from "../../Imports/Icons";
-import { useSnackbar } from "../../ContextProviders/AppFeatures.js";
-import PersistentDialog from "./PersistentDialog.js";
+import { useSnackbar } from "../../ContextProviders/AppFeatures";
+import PersistentDialog from "./PersistentDialog";
 import { useActionData, useSubmit } from "react-router-dom";
-import type { DialogState, DialogStateNoUnderlyingItems, DialogStateSingleUnderlyingItem, ExhibitionItem, ExhibitionPrivacy, RouterActionRequest, RouterActionResponse } from "../../index.js";
-import { useEntity, useManagementCallbacks } from "../../ContextProviders/ManagementPageProvider.js";
-import { Exhibition, MyExhibition } from "../../Classes/Entities/Exhibition.js";
+import type { DialogState, DialogStateNoUnderlyingItems, DialogStateSingleUnderlyingItem, ExhibitionItem, ExhibitionPrivacy, RouterActionRequest, RouterActionResponse } from "../../index";
+import { useEntity, useManagementCallbacks } from "../../ContextProviders/ManagementPageProvider";
+import { Exhibition, MyExhibition } from "../../Classes/Entities/Exhibition";
 
 interface ExhibitionAccessDisplayOption {
     value: ExhibitionPrivacy;

@@ -15,14 +15,14 @@ const ExhibitionAccessCell = (): React.JSX.Element => {
             {
                 exhibition.privacy === "PRIVATE"
                     ? (
-                        <LockIcon color="grey" />
+                        <LockIcon htmlColor="gray" />
                     )
                     : exhibition.privacy === "PUBLIC_ANONYMOUS"
                         ? (
-                            <VpnLockIcon color="grey" />
+                            <VpnLockIcon htmlColor="gray" />
                         )
                         : (
-                            <PublicIcon color="grey" />
+                            <PublicIcon htmlColor="gray" />
                         )
             }
 

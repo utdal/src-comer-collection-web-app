@@ -6,13 +6,13 @@ import {
     Button, IconButton, DialogContentText, TextField, Divider
 } from "@mui/material";
 import { DeleteIcon } from "../../Imports/Icons";
-import getBlankItemFields from "../../Helpers/getBlankItemFields.js";
-import { useSnackbar } from "../../ContextProviders/AppFeatures.js";
-import { useEntity, useManagementCallbacks } from "../../ContextProviders/ManagementPageProvider.js";
-import PersistentDialog from "./PersistentDialog.js";
+import getBlankItemFields from "../../Helpers/getBlankItemFields";
+import { useSnackbar } from "../../ContextProviders/AppFeatures";
+import { useEntity, useManagementCallbacks } from "../../ContextProviders/ManagementPageProvider";
+import PersistentDialog from "./PersistentDialog";
 import { useActionData, useSubmit } from "react-router-dom";
-import DialogCancelButton from "../Buttons/DialogCancelButton.js";
-import type { DialogState, DialogStateNoUnderlyingItems, ItemGenericFieldValue, MultiCreateDialogDispatchAction, RouterActionErrorResponse, RouterActionPartialByIndexResponse, RouterActionSuccessResponse } from "../../index.js";
+import DialogCancelButton from "../Buttons/DialogCancelButton";
+import type { DialogState, DialogStateNoUnderlyingItems, ItemGenericFieldValue, MultiCreateDialogDispatchAction, RouterActionErrorResponse, RouterActionPartialByIndexResponse, RouterActionSuccessResponse } from "../../index";
 
 const ItemMultiCreateDialog = ({ dialogState }: {
     readonly dialogState: DialogState;

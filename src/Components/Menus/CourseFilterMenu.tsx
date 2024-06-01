@@ -1,9 +1,9 @@
 import type { ElementType } from "react";
 import React from "react";
 import { SchoolIcon } from "../../Imports/Icons";
-import { SecondaryFilterMenu } from "./SecondaryFilterMenu.js";
+import { SecondaryFilterMenu } from "./SecondaryFilterMenu";
 import { Typography } from "@mui/material";
-import type { CourseItem, Item } from "../../index.js";
+import type { CourseItem, Item } from "../../index";
 
 const courseSortFunction = (a: Item, b: Item): number => {
     return (new Date((b as CourseItem).date_start)).getTime() - (new Date((a as CourseItem).date_start)).getTime() ? 1 : -1;

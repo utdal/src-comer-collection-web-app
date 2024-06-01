@@ -2,8 +2,8 @@ import React, { useCallback } from "react";
 import type { ListItemButtonProps, Theme } from "@mui/material";
 import { ListItemButton, ListItemIcon, styled, useTheme } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-import useAppUser from "../../Hooks/useAppUser.js";
-import type { AppUser, NavPaneLinkDefinition } from "../../index.js";
+import useAppUser from "../../Hooks/useAppUser";
+import type { AppUser, NavPaneLinkDefinition } from "../../index";
 
 interface StyledListItemButtonProps extends ListItemButtonProps {
     isSelected: boolean;

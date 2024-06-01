@@ -1,16 +1,16 @@
 import React, { useCallback, useState } from "react";
 import { Typography, Button, Divider, Menu, MenuItem, Stack } from "@mui/material";
 import { useNavigate, useRevalidator } from "react-router-dom";
-import useAppUser from "../../Hooks/useAppUser.js";
+import useAppUser from "../../Hooks/useAppUser";
 import {
     ArrowDropDownIcon,
     AccountCircleIcon,
     PhotoCameraBackIcon,
     LogoutIcon
 } from "../../Imports/Icons";
-import type { AppUser } from "../../index.js";
+import type { AppUser } from "../../index";
 
-export const NavBarUserMenu = (): React.JSX.Element => {
+const NavBarUserMenu = (): React.JSX.Element => {
     const [anchorElement, setAnchorElement] = useState((null as unknown) as Element | null);
     const appUser = useAppUser() as AppUser;
     const navigate = useNavigate();
@@ -123,3 +123,5 @@ export const NavBarUserMenu = (): React.JSX.Element => {
         </>
     );
 };
+
+export default NavBarUserMenu;

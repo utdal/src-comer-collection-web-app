@@ -8,7 +8,7 @@ import Exhibition3DViewport from "../Components/Exhibition3DViewport/Exhibition3
 import { sendAuthenticatedRequest } from "../Helpers/APICalls";
 import useAppUser from "../Hooks/useAppUser";
 import { useSnackbar, useTitle } from "../ContextProviders/AppFeatures";
-import type { Item } from "../index.js";
+import type { ImageItem, Item } from "../index.js";
 import type { ExhibitionData, ExhibitionDataAsString, ExhibitionMetadata, ExhibitionSetEverythingAction } from "../Components/ExhibitionPage/ExhibitionDispatchActionTypes.js";
 
 interface ExhibitionPageParams extends Readonly<Params> {
@@ -36,17 +36,16 @@ const ExhibitionPage = (): React.JSX.Element => {
 
     const exhibitionUrl = `/api/exhibitions/${exhibitionId}/data`;
 
-    const saveExhibition = useCallback(async () => {
-        try {
-            const exhibitionStateAsString: ExhibitionDataAsString = JSON.stringify(exhibitionState);
-            await sendAuthenticatedRequest("PUT", exhibitionUrl, {
-                data: exhibitionStateAsString
-            });
+    const saveExhibition = useCallback(() => {
+        const exhibitionStateAsString: ExhibitionDataAsString = JSON.stringify(exhibitionState);
+        sendAuthenticatedRequest("PUT", exhibitionUrl, {
+            data: exhibitionStateAsString
+        }).then(() => {
             showSnackbar("Exhibition saved", "success");
-        } catch (e) {
+        }).catch((e) => {
             console.log("Error saving exhibition", (e as Error).message);
             showSnackbar("Could not save exhibition", "error");
-        }
+        });
     }, [exhibitionState, exhibitionUrl, showSnackbar]);
 
     useEffect(() => {
@@ -88,28 +87,16 @@ const ExhibitionPage = (): React.JSX.Element => {
                 exhibitionState={exhibitionState}
                 globalImageCatalog={globalImageCatalog}
                 setEditModeActive={setEditModeActive}
-                sx={{
-                    gridArea: "viewer",
-                    width: "100%",
-                    height: "calc(100vh - 64px)"
-                }}
             />
 
             {editModeActive
                 ? (
                     <ExhibitionEditPane
-                        editModeActive={editModeActive}
                         exhibitionEditDispatch={exhibitionEditDispatch}
-                        exhibitionId={exhibitionId}
                         exhibitionMetadata={exhibitionMetadata}
                         exhibitionState={exhibitionState}
-                        globalImageCatalog={globalImageCatalog}
+                        globalImageCatalog={globalImageCatalog as ImageItem[]}
                         saveExhibition={saveExhibition}
-                        setEditModeActive={setEditModeActive}
-                        sx={{
-                            gridArea: "editpane",
-                            display: editModeActive ? "" : "none"
-                        }}
                     />
                 )
                 : null}

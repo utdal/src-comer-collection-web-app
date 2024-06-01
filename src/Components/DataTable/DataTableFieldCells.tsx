@@ -1,7 +1,7 @@
 import React, { memo, useMemo } from "react";
-import DataTableCell from "./DataTableCell.js";
-import { TableCellProvider } from "../../ContextProviders/TableCellProvider.js";
-import type { Item, ManagementCallbacks, TableFieldDefinition } from "../../index.js";
+import DataTableCell from "./DataTableCell";
+import { TableCellProvider } from "../../ContextProviders/TableCellProvider";
+import type { Item, ManagementCallbacks, TableFieldDefinition } from "../../index";
 
 const DataTableFieldCells = ({ tableFields, item, managementCallbacks }: {
     readonly tableFields: TableFieldDefinition[];

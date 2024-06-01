@@ -1,7 +1,7 @@
 import React from "react";
 import { Button, Dialog, DialogActions, DialogContent, Stack, Typography, styled } from "@mui/material";
 import PropTypes from "prop-types";
-import FullLogo from "../Logos/FullLogo.js";
+import FullLogo from "../Logos/FullLogo.tsx";
 
 const PositionedDialog = styled(Dialog)(() => ({
     position: "absolute",

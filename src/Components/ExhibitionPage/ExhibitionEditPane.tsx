@@ -153,6 +153,7 @@ export const ExhibitionEditPane = ({ exhibitionMetadata, exhibitionState, exhibi
             component={Paper}
             square
             sx={{
+                gridArea: "editpane",
                 display: "grid",
                 gridTemplateColumns: "1fr",
                 gridTemplateRows: "60px calc(100vh - 184px) 60px",

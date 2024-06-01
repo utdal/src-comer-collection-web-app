@@ -1,7 +1,7 @@
 import React from "react";
 import { List, Typography } from "@mui/material";
-import type { NavPaneLinkDefinition } from "../../index.js";
-import AccountNavButton from "./AccountNavButton.js";
+import type { NavPaneLinkDefinition } from "../../index";
+import AccountNavButton from "./AccountNavButton";
 
 const AccountNavSection = ({ sectionTitle, linkDefinitions }: {
     readonly sectionTitle: string;
