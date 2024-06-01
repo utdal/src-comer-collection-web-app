@@ -1,8 +1,9 @@
 import React from "react";
-import PropTypes from "prop-types";
 import { Stack } from "@mui/material";
 
-const SideBySideLogo = ({ height = 150 }) => {
+const SideBySideLogo = ({ height = 150 }: {
+    readonly height: number;
+}): React.JSX.Element => {
     const spacing = -height / 20;
     return (
         <Stack
@@ -23,10 +24,6 @@ const SideBySideLogo = ({ height = 150 }) => {
             />
         </Stack>
     );
-};
-
-SideBySideLogo.propTypes = {
-    height: PropTypes.number
 };
 
 export default SideBySideLogo;

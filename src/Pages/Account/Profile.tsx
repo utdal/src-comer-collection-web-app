@@ -5,25 +5,26 @@ import {
 } from "@mui/material";
 import { DataTable } from "../../Components/DataTable/DataTable.js";
 import { AccountCircleIcon, SchoolIcon } from "../../Imports/Icons.js";
-import useAppUser from "../../Hooks/useAppUser.ts";
-import { useTitle } from "../../ContextProviders/AppFeatures";
+import useAppUser from "../../Hooks/useAppUser.js";
+import { useTitle } from "../../ContextProviders/AppFeatures.js";
 
-import { CourseNameCell } from "../../Components/TableCells/Course/CourseNameCell.js";
-import { CourseStartDateTimeCell } from "../../Components/TableCells/Course/CourseStartDateTimeCell.js";
-import { CourseEndDateTimeCell } from "../../Components/TableCells/Course/CourseEndDateTimeCell.js";
-import { CourseStatusCell } from "../../Components/TableCells/Course/CourseStatusCell.js";
-import { CourseNotesCell } from "../../Components/TableCells/Course/CourseNotesCell.js";
-import { ManagementPageProvider, useItemsReducer } from "../../ContextProviders/ManagementPageProvider";
-import { UserFullNameReverseCell } from "../../Components/TableCells/User/UserFullNameReverseCell.js";
-import { UserEmailCopyCell } from "../../Components/TableCells/User/UserEmailCopyCell.js";
-import { UserProfilePasswordInfoCell } from "../../Components/TableCells/User/UserProfilePasswordInfoCell.js";
+import CourseNameCell from "../../Components/TableCells/Course/CourseNameCell.js";
+import CourseStartDateTimeCell from "../../Components/TableCells/Course/CourseStartDateTimeCell.js";
+import CourseEndDateTimeCell from "../../Components/TableCells/Course/CourseEndDateTimeCell.js";
+import CourseStatusCell from "../../Components/TableCells/Course/CourseStatusCell.js";
+import CourseNotesCell from "../../Components/TableCells/Course/CourseNotesCell.js";
+import { ManagementPageProvider, useItemsReducer } from "../../ContextProviders/ManagementPageProvider.js";
+import UserFullNameReverseCell from "../../Components/TableCells/User/UserFullNameReverseCell.js";
+import UserEmailCopyCell from "../../Components/TableCells/User/UserEmailCopyCell.js";
+import UserProfilePasswordInfoCell from "../../Components/TableCells/User/UserProfilePasswordInfoCell.js";
 import UserTypeCell from "../../Components/TableCells/User/UserTypeCell.js";
-import { UserExhibitionQuotaCell } from "../../Components/TableCells/User/UserExhibitionQuotaCell.js";
-import { User } from "../../Classes/Entities/User.ts";
-import { Course } from "../../Classes/Entities/Course.ts";
+import UserExhibitionQuotaCell from "../../Components/TableCells/User/UserExhibitionQuotaCell.js";
+import { User } from "../../Classes/Entities/User.js";
+import { Course } from "../../Classes/Entities/Course.js";
 import PaginationSummary from "../../Components/PaginationSummary/PaginationSummary.js";
+import type { AppUser, CourseItem, TableFieldDefinition } from "../../index.js";
 
-const courseTableFields = [
+const courseTableFields: TableFieldDefinition[] = [
     {
         columnDescription: "Course Name",
         TableCellComponent: CourseNameCell
@@ -70,11 +71,11 @@ const userTableFields = [
     }
 ];
 
-const Profile = () => {
-    const appUser = useAppUser();
+const Profile = (): React.JSX.Element => {
+    const appUser = useAppUser() as AppUser;
 
     const [usersCombinedState, usersCallbacks] = useItemsReducer([appUser]);
-    const [coursesCombinedState, coursesCallbacks] = useItemsReducer(appUser.Courses);
+    const [coursesCombinedState, coursesCallbacks] = useItemsReducer(appUser.Courses as CourseItem[]);
 
     useTitle("Profile");
 

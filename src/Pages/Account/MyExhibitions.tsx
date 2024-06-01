@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import {
     Typography, Stack, Paper, Box
 } from "@mui/material";
@@ -6,29 +6,31 @@ import { DataTable } from "../../Components/DataTable/DataTable.js";
 import { PhotoCameraBackIcon } from "../../Imports/Icons.js";
 import { ExhibitionSettingsDialog } from "../../Components/Dialogs/ExhibitionSettingsDialog.js";
 import { ItemSingleDeleteDialog } from "../../Components/Dialogs/ItemSingleDeleteDialog.js";
-import { useTitle } from "../../ContextProviders/AppFeatures";
-import useAppUser from "../../Hooks/useAppUser.ts";
+import { useTitle } from "../../ContextProviders/AppFeatures.js";
+import useAppUser from "../../Hooks/useAppUser.js";
 
-import { ExhibitionTitleCell } from "../../Components/TableCells/Exhibition/ExhibitionTitleCell.js";
-import { ExhibitionOpenInCurrentTabCell } from "../../Components/TableCells/Exhibition/ExhibitionOpenInCurrentTabCell.js";
-import { ExhibitionDateCreatedCell } from "../../Components/TableCells/Exhibition/ExhibitionDateCreatedCell.js";
-import { ExhibitionDateModifiedCell } from "../../Components/TableCells/Exhibition/ExhibitionDateModifiedCell.js";
-import { ExhibitionAccessCell } from "../../Components/TableCells/Exhibition/ExhibitionAccessCell.js";
-import { ExhibitionOptionsCell } from "../../Components/TableCells/Exhibition/ExhibitionOptionsCell.js";
-import { ManagementPageProvider, useItemsReducer } from "../../ContextProviders/ManagementPageProvider";
-import { CreateExhibitionButton } from "../../Components/Buttons/CreateExhibitionButton.js";
-import { ExhibitionCreationRestriction } from "../../Components/TextBanners/ExhibitionCreationRestriction";
+import ExhibitionTitleCell from "../../Components/TableCells/Exhibition/ExhibitionTitleCell.js";
+import ExhibitionOpenInCurrentTabCell from "../../Components/TableCells/Exhibition/ExhibitionOpenInCurrentTabCell.js";
+import ExhibitionDateCreatedCell from "../../Components/TableCells/Exhibition/ExhibitionDateCreatedCell.js";
+import ExhibitionDateModifiedCell from "../../Components/TableCells/Exhibition/ExhibitionDateModifiedCell.js";
+import ExhibitionAccessCell from "../../Components/TableCells/Exhibition/ExhibitionAccessCell.js";
+import ExhibitionOptionsCell from "../../Components/TableCells/Exhibition/ExhibitionOptionsCell.js";
+import { ManagementPageProvider, useItemsReducer } from "../../ContextProviders/ManagementPageProvider.js";
+import CreateExhibitionButton from "../../Components/Buttons/CreateExhibitionButton.js";
+import { ExhibitionCreationRestriction } from "../../Components/TextBanners/ExhibitionCreationRestriction.js";
 import { useDialogState } from "../../Hooks/useDialogState.js";
-import { Exhibition } from "../../Classes/Entities/Exhibition.ts";
+import { Exhibition } from "../../Classes/Entities/Exhibition.js";
 import { useRevalidator } from "react-router";
 import PaginationSummary from "../../Components/PaginationSummary/PaginationSummary.js";
+import type { AppUser, ExhibitionItem, SortableValue } from "../../index.js";
+import type { ExhibitionPrivacyOptions } from "../../Components/ExhibitionPage/ExhibitionDispatchActionTypes.js";
 
 const exhibitionTableFields = [
     {
         columnDescription: "Title",
         maxWidth: "200px",
         TableCellComponent: ExhibitionTitleCell,
-        generateSortableValue: (exhibition) => exhibition.title.toLowerCase()
+        generateSortableValue: (exhibition: ExhibitionItem): SortableValue => (exhibition.title ?? "").toLowerCase()
     },
     {
         columnDescription: "Open",
@@ -37,12 +39,12 @@ const exhibitionTableFields = [
     {
         columnDescription: "Date Created",
         TableCellComponent: ExhibitionDateCreatedCell,
-        generateSortableValue: (exhibition) => new Date(exhibition.date_created)
+        generateSortableValue: (exhibition: ExhibitionItem): SortableValue => new Date(exhibition.date_created)
     },
     {
         columnDescription: "Date Modified",
         TableCellComponent: ExhibitionDateModifiedCell,
-        generateSortableValue: (exhibition) => new Date(exhibition.date_modified)
+        generateSortableValue: (exhibition: ExhibitionItem): SortableValue => new Date(exhibition.date_modified)
     },
     {
         columnDescription: "Access",
@@ -54,64 +56,64 @@ const exhibitionTableFields = [
     }
 ];
 
-const MyExhibitions = () => {
+const MyExhibitions = (): React.JSX.Element => {
     useTitle("My Exhibitions");
 
-    const appUser = useAppUser();
+    const appUser = useAppUser() as AppUser;
     const revalidator = useRevalidator();
 
     const [dialogIsOpen, setDialogIsOpen] = useState(false);
-    const [dialogExhibitionId, setDialogExhibitionId] = useState(null);
-    const [dialogExhibitionTitle, setDialogExhibitionTitle] = useState("");
-    const [dialogExhibitionAccess, setDialogExhibitionAccess] = useState(null);
+    const [dialogExhibitionId, setDialogExhibitionId] = useState((null as unknown) as number | null);
+    const [dialogExhibitionTitle, setDialogExhibitionTitle] = useState("" as string | null);
+    const [dialogExhibitionAccess, setDialogExhibitionAccess] = useState((null as unknown) as ExhibitionPrivacyOptions);
     const [dialogEditMode, setDialogEditMode] = useState(false);
 
     const [deleteDialogState, openDeleteDialog] = useDialogState(false);
 
-    const [exhibitionsCombinedState, itemsCallbacks] = useItemsReducer(appUser.Exhibitions);
+    const [exhibitionsCombinedState, itemsCallbacks] = useItemsReducer(appUser.Exhibitions as ExhibitionItem[]);
 
     const {
         setItems: setExhibitions
     } = itemsCallbacks;
 
     useEffect(() => {
-        setExhibitions(appUser.Exhibitions);
+        setExhibitions(appUser.Exhibitions as ExhibitionItem[]);
     }, [setExhibitions, appUser.Exhibitions]);
 
-    const handleRefresh = useCallback(async () => {
+    const handleRefresh = useCallback(() => {
         revalidator.revalidate();
     }, [revalidator]);
 
-    const handleOpenExhibitionCreateDialog = useCallback(() => {
-        setDialogEditMode(false);
-        setDialogExhibitionId(null);
-        setDialogIsOpen(true);
-    }, []);
+    // const handleOpenExhibitionCreateDialog = useCallback(() => {
+    //     setDialogEditMode(false);
+    //     setDialogExhibitionId(null);
+    //     setDialogIsOpen(true);
+    // }, []);
 
-    const handleOpenExhibitionSettings = useCallback((exhibition) => {
-        setDialogExhibitionId(exhibition.id);
-        setDialogExhibitionAccess(exhibition.privacy);
-        setDialogExhibitionTitle(exhibition.title);
-        setDialogEditMode(true);
-        setDialogIsOpen(true);
-    }, []);
+    // const handleOpenExhibitionSettings = useCallback((exhibition: ExhibitionItem) => {
+    //     setDialogExhibitionId(exhibition.id);
+    //     setDialogExhibitionAccess(exhibition.privacy);
+    //     setDialogExhibitionTitle(exhibition.title);
+    //     setDialogEditMode(true);
+    //     setDialogIsOpen(true);
+    // }, []);
 
-    const handleOpenExhibitionDeleteDialog = useCallback((exhibition) => {
-        openDeleteDialog(exhibition);
-    }, [openDeleteDialog]);
+    // const handleOpenExhibitionDeleteDialog = useCallback((exhibition: ExhibitionItem) => {
+    // openDeleteDialog(exhibition);
+    // }, [openDeleteDialog]);
 
-    const managementCallbacks = useMemo(() => ({
-        handleOpenExhibitionCreateDialog,
-        handleOpenExhibitionSettings,
-        handleOpenExhibitionDeleteDialog
-    }), [handleOpenExhibitionCreateDialog, handleOpenExhibitionDeleteDialog, handleOpenExhibitionSettings]);
+    // const managementCallbacks = useMemo(() => ({
+    //     handleOpenExhibitionCreateDialog,
+    //     handleOpenExhibitionSettings
+    // }), [handleOpenExhibitionCreateDialog, handleOpenExhibitionSettings]);
 
     return (
         <ManagementPageProvider
             Entity={Exhibition}
             itemsCallbacks={itemsCallbacks}
             itemsCombinedState={exhibitionsCombinedState}
-            managementCallbacks={managementCallbacks}
+            // managementCallbacks={managementCallbacks}
+            managementCallbacks={{}}
         >
             <Box
                 component={Paper}

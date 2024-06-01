@@ -9,6 +9,11 @@ import type { Exhibition, PublicExhibition } from "./Classes/Entities/Exhibition
 import type { Tag } from "./Classes/Entities/Tag";
 import type { User } from "./Classes/Entities/User";
 import type { DeletedImage, Image } from "./Classes/Entities/Image";
+import type { ImageArtist } from "./Classes/Associations/ImageArtist";
+import type { ImageTag } from "./Classes/Associations/ImageTag";
+import type { ImageExhibition } from "./Classes/Associations/ImageExhibition";
+import type { EnrollmentCoursePrimary, EnrollmentUserPrimary } from "./Classes/Associations/Enrollment";
+import type { UserExhibition } from "./Classes/Associations/UserExhibition";
 
 export type CourseStatus = "Active" | "Expired" | "Upcoming";
 
@@ -83,6 +88,8 @@ export interface ExhibitionItem extends Item {
 }
 
 export type EntityType = typeof Artist | typeof Course | typeof DeletedImage | typeof Exhibition | typeof Image | typeof PublicExhibition | typeof Tag | typeof User;
+
+export type AssociationType = typeof EnrollmentCoursePrimary | typeof EnrollmentUserPrimary | typeof ImageArtist | typeof ImageExhibition | typeof ImageTag | typeof UserExhibition;
 
 export type AppUser = UserItem;
 
