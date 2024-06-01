@@ -1,12 +1,13 @@
 import React from "react";
 import { EntityManageDeleteButton } from "../Entity/EntityManageDeleteButton.js";
 import { useTableCellItem } from "../../../ContextProviders/TableCellProvider.js";
+import type { ArtistItem, ImageItem } from "../../../index.js";
 
-export const ArtistManageDeleteButton = () => {
-    const artist = useTableCellItem();
+export const ArtistManageDeleteButton = (): React.JSX.Element => {
+    const artist = useTableCellItem() as ArtistItem;
     return (
         <EntityManageDeleteButton
-            disabled={artist.Images.length > 0}
+            disabled={(artist.Images as ImageItem[]).length > 0}
         />
     );
 };

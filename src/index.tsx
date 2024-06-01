@@ -11,8 +11,20 @@ import type { User } from "./Classes/Entities/User";
 import type { DeletedImage, Image } from "./Classes/Entities/Image";
 
 export interface Item {
-    readonly [x: string]: boolean | number | object | string | readonly boolean[] | readonly number[] | readonly object[] | readonly string[];
+    readonly [x: string]: Item[] | boolean | number | object | string | readonly boolean[] | readonly number[] | readonly object[] | readonly string[] | null | undefined;
     readonly id: number;
+}
+
+export interface ArtistItem extends Item {
+    website: string | null;
+    notes: string | null;
+    familyName: string | null;
+    givenName: string | null;
+    Images?: Item[];
+}
+
+export interface ImageItem extends Item {
+    Artists?: Item[];
 }
 
 export type EntityType = typeof Artist | typeof Course | typeof DeletedImage | typeof Exhibition | typeof Image | typeof PublicExhibition | typeof Tag | typeof User;
