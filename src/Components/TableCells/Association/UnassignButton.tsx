@@ -1,17 +1,18 @@
 import React from "react";
 import { useSnackbar } from "../../../ContextProviders/AppFeatures";
 import { useAssociationType, useRelevantPrimaryItems } from "../../../ContextProviders/AssociationManagementPageProvider";
-import { User } from "../../../Classes/Entities/User.ts";
-import { capitalized } from "../../../Classes/Entity.ts";
+import { User } from "../../../Classes/Entities/User";
+import { capitalized } from "../../../Classes/Entity";
 import { Button, Typography } from "@mui/material";
 import { useTableCellItem } from "../../../ContextProviders/TableCellProvider";
+import type { SecondaryItem, UserItem } from "../../..";
 
 const UnassignButton = (): React.JSX.Element => {
     const showSnackbar = useSnackbar();
-    const secondaryItem = useTableCellItem();
+    const secondaryItem = useTableCellItem() as SecondaryItem;
     const primaryItems = useRelevantPrimaryItems();
     const AssociationType = useAssociationType();
-    const buttonColor = AssociationType.secondary === User && secondaryItem.is_admin_or_collection_manager ? "secondary" : "primary";
+    const buttonColor = AssociationType.secondary === User && (secondaryItem as SecondaryItem & UserItem).is_admin_or_collection_manager ? "secondary" : "primary";
     const quantity = secondaryItem.quantity_assigned;
     const buttonText = (
         primaryItems.length === 1
@@ -21,13 +22,13 @@ const UnassignButton = (): React.JSX.Element => {
     return (
         <Button
             color={buttonColor}
-            onClick={() => {
+            onClick={(): void => {
                 const primaryIds = primaryItems.map((p) => p.id);
                 AssociationType.handleUnassign(primaryIds, [secondaryItem.id]).then((msg) => {
                     showSnackbar(msg, "success");
                 // refreshAllItems();
                 }).catch((err) => {
-                    showSnackbar(err.message, "error");
+                    showSnackbar((err as Error).message, "error");
                 });
             }}
             startIcon={<AssociationType.UnassignIcon />}
@@ -39,3 +40,5 @@ const UnassignButton = (): React.JSX.Element => {
         </Button>
     );
 };
+
+export default UnassignButton;

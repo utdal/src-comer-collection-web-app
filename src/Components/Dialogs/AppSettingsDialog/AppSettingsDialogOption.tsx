@@ -1,8 +1,10 @@
 import React from "react";
 import { Stack, DialogContentText } from "@mui/material";
-import PropTypes from "prop-types";
 
-export const AppSettingsDialogOption = ({ description, children }) => {
+const AppSettingsDialogOption = ({ description, children }: {
+    readonly description: string;
+    readonly children: React.ReactNode;
+}): React.JSX.Element => {
     return (
         <Stack
             alignItems="center"
@@ -17,7 +19,5 @@ export const AppSettingsDialogOption = ({ description, children }) => {
         </Stack>
     );
 };
-AppSettingsDialogOption.propTypes = {
-    children: PropTypes.node.isRequired,
-    description: PropTypes.string.isRequired
-};
+
+export default AppSettingsDialogOption;

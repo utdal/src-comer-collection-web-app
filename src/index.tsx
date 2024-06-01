@@ -18,8 +18,13 @@ import type { UserExhibition } from "./Classes/Associations/UserExhibition";
 export type CourseStatus = "Active" | "Expired" | "Upcoming";
 
 export interface Item {
-    readonly [x: string]: Item[] | boolean | number | object | string | readonly boolean[] | readonly number[] | readonly object[] | readonly string[] | null | undefined;
-    readonly id: number;
+    [x: string]: Item[] | boolean | number | object | string | readonly boolean[] | readonly number[] | readonly object[] | readonly string[] | null | undefined;
+    id: number;
+    safe_display_name: string;
+}
+
+export interface SecondaryItem extends Item {
+    readonly quantity_assigned: number;
 }
 
 export interface ArtistItem extends Item {
@@ -74,7 +79,6 @@ export interface UserItem extends Item {
     pw_updated: string;
     pw_change_required: boolean;
     can_create_exhibition: boolean;
-    safe_display_name: string;
 }
 
 export type ExhibitionPrivacy = "PRIVATE" | "PUBLIC_ANONYMOUS" | "PUBLIC";
@@ -343,7 +347,7 @@ export interface EntityFieldDefinition {
 export interface TableFieldDefinition {
     columnDescription: string;
     maxWidth?: string;
-    TableCellComponent: () => React.JSX.Element;
+    TableCellComponent: React.ElementType;
     generateSortableValue?: SortableValueFunction;
 }
 

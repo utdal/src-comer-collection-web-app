@@ -1,17 +1,18 @@
 import React from "react";
 import { useSnackbar } from "../../../ContextProviders/AppFeatures";
 import { useAssociationType, useRelevantPrimaryItems } from "../../../ContextProviders/AssociationManagementPageProvider";
-import { User } from "../../../Classes/Entities/User.ts";
+import { User } from "../../../Classes/Entities/User";
 import { Button, Typography } from "@mui/material";
 import { CheckIcon } from "../../../Imports/Icons.js";
 import { useTableCellItem } from "../../../ContextProviders/TableCellProvider";
+import type { SecondaryItem, UserItem } from "../../..";
 
 const AssignButton = (): React.JSX.Element => {
     const showSnackbar = useSnackbar();
-    const secondaryItem = useTableCellItem();
+    const secondaryItem = useTableCellItem() as SecondaryItem;
     const primaryItems = useRelevantPrimaryItems();
     const AssociationType = useAssociationType();
-    const buttonColor = AssociationType.secondary === User && secondaryItem.is_admin_or_collection_manager ? "secondary" : "primary";
+    const buttonColor = AssociationType.secondary === User && (secondaryItem as SecondaryItem & UserItem).is_admin_or_collection_manager ? "secondary" : "primary";
     const quantity = secondaryItem.quantity_assigned;
     if (quantity === primaryItems.length) {
         const buttonText = (
@@ -42,13 +43,13 @@ const AssignButton = (): React.JSX.Element => {
         return (
             <Button
                 color={buttonColor}
-                onClick={() => {
+                onClick={(): void => {
                     const primaryIds = primaryItems.map((p) => p.id);
                     AssociationType.handleAssign(primaryIds, [secondaryItem.id]).then((msg) => {
                         showSnackbar(msg, "success");
                     // refreshAllItems();
                     }).catch((err) => {
-                        showSnackbar(err.message, "error");
+                        showSnackbar((err as Error).message, "error");
                     });
                 }}
                 startIcon={<AssociationType.AssignIcon />}
@@ -59,6 +60,13 @@ const AssignButton = (): React.JSX.Element => {
                 </Typography>
             </Button>
         );
+    } else {
+        return (
+            <Typography>
+                Error
+            </Typography>
+        );
     }
-    return "Error";
 };
+
+export default AssignButton;

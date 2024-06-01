@@ -9,16 +9,13 @@ import {
 import { useAppDarkTheme } from "../../../ContextProviders/AppTheme";
 import { DarkModeIcon, LightModeIcon } from "../../../Imports/Icons.js";
 import PropTypes from "prop-types";
-import { AppSettingsDialogOption } from "./AppSettingsDialogOption.js";
-import { PersistentDialog } from "../PersistentDialog.js";
+import AppSettingsDialogOption from "./AppSettingsDialogOption.js";
+import PersistentDialog from "../PersistentDialog.js";
 import { DialogStateOld } from "../../../Classes/DialogState.js";
 
-/**
- * @param {{
- *  dialogState: DialogStateOld
- * }} props
- */
-export const AppSettingsDialog = ({ dialogState }) => {
+export const AppSettingsDialog = ({ dialogState }: {
+    readonly dialogState: DialogStateOld;
+}): React.JSX.Element => {
     const { appDarkTheme, handleSetDarkTheme } = useAppDarkTheme();
     const { closeDialog, dialogIsOpen } = dialogState;
 
@@ -49,7 +46,7 @@ export const AppSettingsDialog = ({ dialogState }) => {
 
                     <AppSettingsDialogOption description="Application Theme">
                         <ToggleButtonGroup
-                            required
+                            // required
                             value={appDarkTheme}
                         >
                             <ToggleButton

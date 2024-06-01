@@ -1,6 +1,6 @@
 import type { Item } from "..";
 
-export class DialogStateOld {
+class DialogStateOld {
     public dialogIsOpen: boolean;
 
     public openDialog: (arg0: unknown) => void;
@@ -25,3 +25,5 @@ export class DialogStateOld {
         this.dialogItem = dialogItem;
     }
 }
+
+export default DialogStateOld;

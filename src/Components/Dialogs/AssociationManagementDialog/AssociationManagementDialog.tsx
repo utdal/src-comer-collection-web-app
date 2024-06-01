@@ -5,52 +5,52 @@ import {
     DialogActions,
     Button, Box
 } from "@mui/material";
-import { DataTable } from "../../DataTable/DataTable.js";
-import SearchBox from "../../SearchBox";
-import { searchItems } from "../../../Helpers/SearchUtilities.js";
-import PropTypes from "prop-types";
-import { AssignButton } from "../../TableCells/Association/AssignButton.js";
-import { UnassignButton } from "../../TableCells/Association/UnassignButton.js";
-import { computeSecondaryItemsAssigned } from "../../../Helpers/computeSecondaryItemsAssigned.js";
-import { AssociationTableDisplay } from "./AssociationTableDisplay.js";
-import { entityPropTypeShape } from "../../../Classes/Entity.ts";
-import { AssociationManagementPageProvider } from "../../../ContextProviders/AssociationManagementPageProvider";
-import { useItemsReducer, useManagementCallbacks } from "../../../ContextProviders/ManagementPageProvider";
-import { DialogStateOld } from "../../../Classes/DialogState.js";
-import { PersistentDialog } from "../PersistentDialog.js";
+import DataTable from "../../DataTable/DataTable.js";
+import SearchBox from "../../SearchBox.js";
+import AssignButton from "../../TableCells/Association/AssignButton.js";
+import UnassignButton from "../../TableCells/Association/UnassignButton.js";
+import computeSecondaryItemsAssigned from "../../../Helpers/computeSecondaryItemsAssigned.js";
+import AssociationTableDisplay from "./AssociationTableDisplay.js";
+import { AssociationManagementPageProvider } from "../../../ContextProviders/AssociationManagementPageProvider.js";
+import { useItemsReducer } from "../../../ContextProviders/ManagementPageProvider.js";
+import type DialogStateOld from "../../../Classes/DialogState.js";
+import PersistentDialog from "../PersistentDialog.js";
 import SecondaryManagementButton from "../../Buttons/SecondaryManagementButton.js";
+import type { AssociationType, Item, TableFieldDefinition } from "../../../index.js";
 
-const assignButtonColumnDefinition = {
+const assignButtonColumnDefinition: TableFieldDefinition = {
     columnDescription: "Assign",
-    TableCellComponent: AssignButton
+    TableCellComponent: AssignButton as React.ElementType
 };
-const unassignButtonColumnDefinition = {
+const unassignButtonColumnDefinition: TableFieldDefinition = {
     columnDescription: "Unassign",
-    TableCellComponent: UnassignButton
+    TableCellComponent: UnassignButton as React.ElementType
 };
 
-/**
- * @param {{
- *  dialogState: DialogStateOld
- * }} props
- */
 export const AssociationManagementDialog = ({
     Association, editMode,
     secondaryItemsAll,
     handleSwitchToSecondary,
     dialogState,
-    defaultSortColumn, defaultSortAscending
-}) => {
-    const [secondaryItemsCombinedState, secondaryItemsCallbacks] = useItemsReducer([]);
+    defaultSortColumn = "ID", defaultSortAscending = true
+}: {
+    readonly dialogState: DialogStateOld;
+    readonly Association: AssociationType;
+    readonly defaultSortAscending?: boolean;
+    readonly defaultSortColumn?: string;
+    readonly secondaryItemsAll: Item[];
+    readonly editMode: boolean;
+    readonly handleSwitchToSecondary: () => void;
+}): React.JSX.Element => {
+    const [, secondaryItemsCallbacks] = useItemsReducer([]);
 
     const {
-        setItems: setSecondaryItems,
-        setSelectedItems: setSelectedSecondaryItems
+        setItems: setSecondaryItems
     } = secondaryItemsCallbacks;
 
     const { dialogIsOpen, dialogItems: primaryItems, closeDialog } = dialogState;
 
-    const { handleRefresh } = useManagementCallbacks();
+    // const { handleRefresh } = useManagementCallbacks();
 
     useEffect(() => {
         setSecondaryItems(secondaryItemsAll);
@@ -68,11 +68,11 @@ export const AssociationManagementDialog = ({
             : Association.tableFields
     ), [Association.tableFields, editMode]);
 
-    const [secondariesByPrimary, setSecondariesByPrimary] = useState({});
+    const [secondariesByPrimary, setSecondariesByPrimary] = useState({} as Record<number, Item[]>);
 
     useEffect(() => {
-        setSecondariesByPrimary(primaryItems.reduce((acc, cur) => {
-            acc[cur.id] = cur[Association.secondaryFieldInPrimary];
+        setSecondariesByPrimary(primaryItems.reduce((acc: Record<number, Item[]>, cur) => {
+            acc[cur.id] = cur[Association.secondaryFieldInPrimary] as Item[];
             return acc;
         }, {}));
     }, [Association, primaryItems]);
@@ -80,16 +80,14 @@ export const AssociationManagementDialog = ({
     const [secondarySearchQuery, setSecondarySearchQuery] = useState("");
 
     const handleCloseDialog = useCallback(() => {
-        handleRefresh();
+        // handleRefresh();
         closeDialog();
-    }, [closeDialog, handleRefresh]);
+    }, [closeDialog]);
 
-    const getQuantityAssigned = useCallback((secondary) => {
+    const getQuantityAssigned = useCallback((secondary: Item) => {
         return Object.entries(secondariesByPrimary)
-            .filter(([primaryId]) => (
-                primaryItems.map((pi) => pi.id).includes(parseInt(primaryId))
-            ))
-            .filter(([, secondaries]) => (
+            .filter(([primaryIdAsString, secondaries]: [string, Item[]]) => (
+                primaryItems.map((pi) => pi.id).includes(parseInt(primaryIdAsString)) &&
                 secondaries.map((si) => si.id).includes(secondary.id)
             )).length;
     }, [secondariesByPrimary, primaryItems]);
@@ -106,14 +104,19 @@ export const AssociationManagementDialog = ({
         return { ...si, quantity_assigned: getQuantityAssigned(si) };
     });
 
-    const secondaryItemsAllResults = useMemo(() =>
-        searchItems(secondarySearchQuery, secondaryItemsAllWithQuantities, Association.secondarySearchBoxFields ?? []
+    // const secondaryItemsAllResults = useMemo(() =>
+    //     searchItems(secondarySearchQuery, secondaryItemsAllWithQuantities, Association.secondarySearchBoxFields ?? []
 
-        ), [secondarySearchQuery, secondaryItemsAllWithQuantities, Association.secondarySearchBoxFields]);
+    //     ), [secondarySearchQuery, secondaryItemsAllWithQuantities, Association.secondarySearchBoxFields]);
 
-    const secondaryItemsAssignedResults = useMemo(() =>
-        searchItems(secondarySearchQuery, secondaryItemsAssignedWithQuantities, Association.secondarySearchBoxFields ?? []
-        ), [secondarySearchQuery, secondaryItemsAssignedWithQuantities, Association.secondarySearchBoxFields]);
+    // const secondaryItemsAssignedResults = useMemo(() =>
+    //     searchItems(secondarySearchQuery, secondaryItemsAssignedWithQuantities, Association.secondarySearchBoxFields ?? []
+    //     ), [secondarySearchQuery, secondaryItemsAssignedWithQuantities, Association.secondarySearchBoxFields]);
+
+    const secondaryItemsAllResults = secondaryItemsAllWithQuantities;
+    const secondaryItemsAssignedResults = secondaryItemsAssignedWithQuantities;
+    console.log(secondaryItemsAllResults);
+    console.log(secondaryItemsAssignedResults);
 
     const allTable = useMemo(() => {
         return (
@@ -121,6 +124,7 @@ export const AssociationManagementDialog = ({
                 <DataTable
                     defaultSortAscending={defaultSortAscending}
                     defaultSortColumn={defaultSortColumn}
+                    rowSelectionEnabled
                     tableFields={secondaryTableFieldsAll}
                 />
             </Box>
@@ -131,6 +135,7 @@ export const AssociationManagementDialog = ({
         <DataTable
             defaultSortAscending={defaultSortAscending}
             defaultSortColumn={defaultSortColumn}
+            rowSelectionEnabled
             tableFields={secondaryTableFieldsAssignedOnly}
         />
     ), [defaultSortAscending, defaultSortColumn, secondaryTableFieldsAssignedOnly]);
@@ -140,23 +145,23 @@ export const AssociationManagementDialog = ({
     const secondaryPluralCapitalized = Association.secondary.plural.substr(0, 1).toUpperCase() + Association.secondary.plural.substr(1);
 
     const summarizedSelection = (
-        (primaryItems.length === 1 &&
-            <b>
-                {primaryItems[0].safe_display_name}
-            </b>
-        ) || (primaryItems.length > 1 &&
-            `${primaryItems.length} Selected ${primaryPluralCapitalized}`
-        )
+        primaryItems.length === 1
+            ? (
+                `${primaryItems[0].safe_display_name}`
+            )
+            : (
+                `${primaryItems.length} Selected ${primaryPluralCapitalized}`
+            )
     );
 
     return (
         <AssociationManagementPageProvider
             AssociationType={Association}
             relevantPrimaryItems={primaryItems}
-            secondaryItemsCallbacks={secondaryItemsCallbacks}
-            secondaryItemsCombinedState={secondaryItemsCombinedState}
-            setSecondaryItems={setSecondaryItems}
-            setSelectedSecondaryItems={setSelectedSecondaryItems}
+            // secondaryItemsCallbacks={secondaryItemsCallbacks}
+            // secondaryItemsCombinedState={secondaryItemsCombinedState}
+            // setSecondaryItems={setSecondaryItems}
+            // setSelectedSecondaryItems={setSelectedSecondaryItems}
         >
             <PersistentDialog
                 maxWidth={editMode ? "lg" : "md"}
@@ -182,9 +187,8 @@ export const AssociationManagementDialog = ({
                         padding={1}
                         spacing={2}
                     >
-                        {Association.secondarySearchBoxFields?.length > 0 && (
+                        {Association.secondarySearchBoxFields.length > 0 && (
                             <SearchBox
-                                placeholder={Association.secondarySearchBoxPlaceholder ?? "Search"}
                                 searchQuery={secondarySearchQuery}
                                 setSearchQuery={setSecondarySearchQuery}
                                 width="100%"
@@ -192,7 +196,6 @@ export const AssociationManagementDialog = ({
                         )}
 
                         <Box
-                            spacing={2}
                             sx={{
                                 display: "grid",
                                 gridTemplateAreas: `
@@ -206,10 +209,8 @@ export const AssociationManagementDialog = ({
                                     ? (
                                         <Box sx={{ gridArea: "all" }}>
                                             <AssociationTableDisplay
-                                                AssociationType={Association}
-                                                primaryItems={primaryItems}
-                                                secondaryItems={secondaryItemsAllWithQuantities}
-                                                secondaryItemsResults={secondaryItemsAllResults}
+                                                // secondaryItems={secondaryItemsAllWithQuantities}
+                                                // secondaryItemsResults={secondaryItemsAllResults}
                                                 tableCaption={`All ${secondaryPluralCapitalized}`}
                                             >
                                                 {allTable}
@@ -221,10 +222,8 @@ export const AssociationManagementDialog = ({
 
                             <Box sx={{ gridArea: "assigned" }}>
                                 <AssociationTableDisplay
-                                    AssociationType={Association}
-                                    primaryItems={primaryItems}
-                                    secondaryItems={secondaryItemsAssignedWithQuantities}
-                                    secondaryItemsResults={secondaryItemsAssignedResults}
+                                    // secondaryItems={secondaryItemsAssignedWithQuantities}
+                                    // secondaryItemsResults={secondaryItemsAssignedResults}
                                     tableCaption={editMode ? `Current ${secondaryPluralCapitalized} for ${summarizedSelection}` : ""}
                                 >
                                     {assignedTable}
@@ -265,12 +264,4 @@ export const AssociationManagementDialog = ({
     );
 };
 
-AssociationManagementDialog.propTypes = {
-    Association: PropTypes.func.isRequired,
-    defaultSortAscending: PropTypes.bool,
-    defaultSortColumn: PropTypes.string,
-    dialogState: PropTypes.instanceOf(DialogStateOld),
-    editMode: PropTypes.bool,
-    handleSwitchToSecondary: PropTypes.func.isRequired,
-    secondaryItemsAll: PropTypes.arrayOf(entityPropTypeShape).isRequired
-};
+export default AssociationManagementDialog;

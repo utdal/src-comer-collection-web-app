@@ -1,26 +1,29 @@
 import React, { useCallback } from "react";
-import PropTypes from "prop-types";
 import { Dialog } from "@mui/material";
 
 /**
  * Creates a dialog that behaves as a form and is
  * resistant to being closed by accident
- * @param {{
- *  maxWidth: ('xs'|'sm'|'md'|'lg'|'xl')
- * }} props
- * @returns
  */
-export const PersistentDialog = ({ children, maxWidth, onClose, onSubmit, open }) => {
-    const handleClose = useCallback((event, reason) => {
+const PersistentDialog = ({ children, maxWidth, onClose, onSubmit, open }: {
+    readonly maxWidth?: "lg" | "md" | "sm" | "xl" | "xs";
+    readonly children: React.ReactNode;
+    readonly onClose: () => void;
+    readonly onSubmit?: () => void;
+    readonly open: boolean;
+}): React.JSX.Element => {
+    const handleClose = useCallback((event: Event, reason: "backdropClick" | "escapeKeyDown"): void => {
         if (reason === "backdropClick") {
             return;
         }
         onClose();
     }, [onClose]);
 
-    const handleSubmit = useCallback((e) => {
+    const handleSubmit = useCallback((e: React.FormEvent<HTMLDivElement>) => {
         e.preventDefault();
-        onSubmit();
+        if (onSubmit) {
+            onSubmit();
+        }
     }, [onSubmit]);
 
     return (
@@ -29,7 +32,7 @@ export const PersistentDialog = ({ children, maxWidth, onClose, onSubmit, open }
             fullWidth={Boolean(maxWidth)}
             maxWidth={maxWidth}
             onClose={handleClose}
-            onSubmit={onSubmit ? handleSubmit : null}
+            onSubmit={handleSubmit}
             open={open}
             transitionDuration={0}
         >
@@ -38,10 +41,4 @@ export const PersistentDialog = ({ children, maxWidth, onClose, onSubmit, open }
     );
 };
 
-PersistentDialog.propTypes = {
-    children: PropTypes.node.isRequired,
-    maxWidth: PropTypes.oneOf(["xs", "sm", "md", "lg", "xl"]),
-    onClose: PropTypes.func.isRequired,
-    onSubmit: PropTypes.func,
-    open: PropTypes.bool.isRequired
-};
+export default PersistentDialog;
