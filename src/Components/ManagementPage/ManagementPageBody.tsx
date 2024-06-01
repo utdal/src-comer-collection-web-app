@@ -1,5 +1,4 @@
 import React from "react";
-import PropTypes from "prop-types";
 import { Box, styled } from "@mui/material";
 
 const PositionedBox = styled(Box)(() => ({
@@ -7,7 +6,9 @@ const PositionedBox = styled(Box)(() => ({
     overflowX: "auto"
 }));
 
-export const ManagementPageBody = ({ children }) => {
+const ManagementPageBody = ({ children }: {
+    readonly children: React.ReactNode;
+}): React.JSX.Element => {
     return (
         <PositionedBox>
             {children}
@@ -15,6 +16,4 @@ export const ManagementPageBody = ({ children }) => {
     );
 };
 
-ManagementPageBody.propTypes = {
-    children: PropTypes.node.isRequired
-};
+export default ManagementPageBody;

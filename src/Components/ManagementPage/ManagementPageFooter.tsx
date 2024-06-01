@@ -1,8 +1,9 @@
 import React from "react";
-import PropTypes from "prop-types";
 import { Stack } from "@mui/material";
 
-export const ManagementPageFooter = ({ children }) => {
+const ManagementPageFooter = ({ children }: {
+    readonly children: React.ReactNode;
+}): React.JSX.Element => {
     return (
         <Stack
             alignItems="center"
@@ -17,6 +18,4 @@ export const ManagementPageFooter = ({ children }) => {
     );
 };
 
-ManagementPageFooter.propTypes = {
-    children: PropTypes.node.isRequired
-};
+export default ManagementPageFooter;

@@ -1,5 +1,4 @@
-import React, { memo } from "react";
-import PropTypes from "prop-types";
+import React from "react";
 import { Stack, styled } from "@mui/material";
 
 const HeaderStack = styled(Stack, {
@@ -11,7 +10,9 @@ const HeaderStack = styled(Stack, {
     padding: theme.spacing(2)
 }));
 
-export const ManagementPageHeader = memo(function ManagementPageHeader ({ children }) {
+const ManagementPageHeader = ({ children }: {
+    readonly children: React.ReactNode;
+}): React.JSX.Element => {
     return (
         <HeaderStack
             direction="row"
@@ -20,8 +21,6 @@ export const ManagementPageHeader = memo(function ManagementPageHeader ({ childr
             {children}
         </HeaderStack>
     );
-});
-
-ManagementPageHeader.propTypes = {
-    children: PropTypes.node.isRequired
 };
+
+export default ManagementPageHeader;

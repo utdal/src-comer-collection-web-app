@@ -1,8 +1,9 @@
 import React from "react";
 import { Box, Paper } from "@mui/material";
-import PropTypes from "prop-types";
 
-export const ManagementPageContainer = ({ children }) => {
+const ManagementPageContainer = ({ children }: {
+    readonly children: React.ReactNode;
+}): React.JSX.Element => {
     return (
         <Box
             component={Paper}
@@ -24,6 +25,4 @@ export const ManagementPageContainer = ({ children }) => {
     );
 };
 
-ManagementPageContainer.propTypes = {
-    children: PropTypes.node.isRequired
-};
+export default ManagementPageContainer;
