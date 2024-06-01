@@ -1,5 +1,5 @@
 import { Button } from "@mui/material";
-import React, { memo, useCallback } from "react";
+import React, { useCallback } from "react";
 import { useEntity, useManagementCallbacks } from "../../ContextProviders/ManagementPageProvider";
 
 /**
@@ -8,11 +8,13 @@ import { useEntity, useManagementCallbacks } from "../../ContextProviders/Manage
  * Must be inside a ManagementPageProvider with a function
  * handleOpenMultiCreateDialog inside managementCallbacks.
  */
-export const MultiCreateButton = memo(function MultiCreateButton () {
+export const MultiCreateButton = (): React.JSX.Element => {
     const Entity = useEntity();
     const { openDialogByIntentWithNoUnderlyingItems } = useManagementCallbacks();
     const handleOpenMultiCreateDialog = useCallback(() => {
-        openDialogByIntentWithNoUnderlyingItems("multi-create");
+        if (openDialogByIntentWithNoUnderlyingItems) {
+            openDialogByIntentWithNoUnderlyingItems("multi-create");
+        }
     }, [openDialogByIntentWithNoUnderlyingItems]);
     return (
         <Button
@@ -26,4 +28,6 @@ export const MultiCreateButton = memo(function MultiCreateButton () {
             {Entity.plural}
         </Button>
     );
-});
+};
+
+export default MultiCreateButton;

@@ -1,23 +1,17 @@
 import { Button } from "@mui/material";
-import React, { memo, useCallback, useState } from "react";
+import React, { useCallback } from "react";
 import { RefreshIcon } from "../../Imports/Icons.js";
-import { sleepAsync } from "../../Helpers/sleepAsync.js";
 import { useRevalidator } from "react-router";
 
-export const RefreshButton = memo(function RefreshButton () {
+const RefreshButton = (): React.JSX.Element => {
     const revalidator = useRevalidator();
-    const [refreshInProgress, setRefreshInProgress] = useState(false);
     const handleClickRefresh = useCallback(() => {
-        setRefreshInProgress(true);
         revalidator.revalidate();
-        sleepAsync(1000).then(() => {
-            setRefreshInProgress(false);
-        });
     }, [revalidator]);
     return (
         <Button
             color="primary"
-            disabled={refreshInProgress || revalidator.state === "loading"}
+            disabled={revalidator.state === "loading"}
             onClick={handleClickRefresh}
             startIcon={<RefreshIcon />}
             variant="outlined"
@@ -25,4 +19,6 @@ export const RefreshButton = memo(function RefreshButton () {
             Refresh
         </Button>
     );
-});
+};
+
+export default RefreshButton;

@@ -1,11 +1,18 @@
 import React, { useCallback } from "react";
 import { IconButton } from "@mui/material";
 import { SwapVertIcon, ArrowUpwardIcon, ArrowDownwardIcon } from "../../Imports/Icons.js";
-import PropTypes from "prop-types";
 
-export const ColumnSortButton = ({ columnName, sortColumn, setSortColumn, sortAscending, setSortAscending }) => {
+const ColumnSortButton = ({ columnName, sortColumn, setSortColumn, sortAscending, setSortAscending }: {
+    readonly columnName: string;
+    readonly sortColumn: string;
+    readonly setSortColumn: React.Dispatch<React.SetStateAction<string>>;
+    readonly sortAscending: boolean;
+    readonly setSortAscending: React.Dispatch<React.SetStateAction<boolean>>;
+}): React.JSX.Element => {
     const handleClick = useCallback(() => {
-        if (sortColumn === columnName) { setSortAscending((current) => !current); } else {
+        if (sortColumn === columnName) {
+            setSortAscending((current) => !current);
+        } else {
             setSortColumn(columnName);
             setSortAscending(true);
         }
@@ -13,7 +20,7 @@ export const ColumnSortButton = ({ columnName, sortColumn, setSortColumn, sortAs
 
     return (
         <IconButton
-            color={sortColumn === columnName ? "primary" : "grey"}
+            color={sortColumn === columnName ? "primary" : "inherit"}
             onClick={handleClick}
             size="medium"
         >
@@ -28,10 +35,4 @@ export const ColumnSortButton = ({ columnName, sortColumn, setSortColumn, sortAs
     );
 };
 
-ColumnSortButton.propTypes = {
-    columnName: PropTypes.string.isRequired,
-    setSortAscending: PropTypes.func.isRequired,
-    setSortColumn: PropTypes.func.isRequired,
-    sortAscending: PropTypes.bool.isRequired,
-    sortColumn: PropTypes.string.isRequired
-};
+export default ColumnSortButton;

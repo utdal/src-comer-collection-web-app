@@ -1,18 +1,18 @@
-import React, { memo } from "react";
+import React from "react";
 import { Button } from "@mui/material";
-import { useItemCounts, useManagementCallbacks } from "../../ContextProviders/ManagementPageProvider";
+import { useItemCounts } from "../../ContextProviders/ManagementPageProvider";
 import { FilterAltOffOutlinedIcon } from "../../Imports/Icons.js";
 
-export const ClearFilterButton = memo(function ClearFilterButton () {
+const ClearFilterButton = (): React.JSX.Element => {
     const itemCounts = useItemCounts();
-    const { handleClearFilters } = useManagementCallbacks();
+    // const { handleClearFilters } = useManagementCallbacks();
     return (
         <Button
             color="primary"
             disabled={
                 itemCounts.visible === itemCounts.all
             }
-            onClick={handleClearFilters}
+            // onClick={handleClearFilters}
             startIcon={<FilterAltOffOutlinedIcon />}
             variant={
                 itemCounts.visible > 0 ? "outlined" : "contained"
@@ -21,4 +21,6 @@ export const ClearFilterButton = memo(function ClearFilterButton () {
             Clear Filters
         </Button>
     );
-});
+};
+
+export default ClearFilterButton;

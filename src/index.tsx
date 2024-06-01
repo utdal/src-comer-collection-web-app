@@ -66,6 +66,7 @@ export interface UserItem extends Item {
     has_name: boolean;
     pw_updated: string;
     pw_change_required: boolean;
+    can_create_exhibition: boolean;
 }
 
 export type ExhibitionPrivacy = "PRIVATE" | "PUBLIC_ANONYMOUS" | "PUBLIC";
