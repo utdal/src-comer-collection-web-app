@@ -10,15 +10,12 @@ import {
     SecurityIcon
 } from "../../Imports/Icons.js";
 import { useAppUser } from "../../Hooks/useAppUser";
-import PropTypes from "prop-types";
-import { ColorInput } from "./ColorInput";
-import { AccordionSubHeading } from "./AccordionSubHeading";
-import { ExhibitionOption } from "./ExhibitionOption";
-import { ExhibitionOptionGroup } from "./ExhibitionOptionGroup";
+import ColorInput from "./ColorInput";
+import AccordionSubHeading from "./AccordionSubHeading";
+import ExhibitionOption from "./ExhibitionOption";
+import ExhibitionOptionGroup from "./ExhibitionOptionGroup";
 import { ImageRearrangeDialog } from "./ImageRearrangeDialog";
 import { ImageChooserDialog } from "./ImageChooserDialog";
-import { exhibitionStatePropTypesShape } from "../../Classes/Entities/Exhibition";
-import { entityPropTypeShape } from "../../Classes/Entity";
 import type { ExhibitionData, ExhibitionDispatchAction, ExhibitionImageData, ExhibitionImageDirectionIdentifier, ExhibitionMetadata } from "./ExhibitionDispatchActionTypes";
 import type { Item } from "../..";
 import styled from "@emotion/styled";
@@ -119,11 +116,11 @@ export const getSwappedImageArray = (images: ExhibitionImageData[], imageIdA: nu
 };
 
 interface ExhibitionEditPaneComponentProps {
-    exhibitionMetadata: ExhibitionMetadata;
-    exhibitionState: ExhibitionData;
-    exhibitionEditDispatch: React.Dispatch<ExhibitionDispatchAction>;
-    globalImageCatalog: Item[];
-    saveExhibition: () => void;
+    readonly exhibitionMetadata: ExhibitionMetadata;
+    readonly exhibitionState: ExhibitionData;
+    readonly exhibitionEditDispatch: React.Dispatch<ExhibitionDispatchAction>;
+    readonly globalImageCatalog: Item[];
+    readonly saveExhibition: () => void;
 }
 
 const StyledHeader = styled(Box)(() => ({
@@ -132,7 +129,7 @@ const StyledHeader = styled(Box)(() => ({
 }));
 
 export const ExhibitionEditPane = ({ exhibitionMetadata, exhibitionState, exhibitionEditDispatch, globalImageCatalog, saveExhibition }: ExhibitionEditPaneComponentProps): React.JSX.Element => {
-    const [expandedSection, setExpandedSection] = useState(null);
+    const [expandedSection, setExpandedSection] = useState(null as string | null);
 
     const [selectedImageId, setSelectedImageId] = useState(null as number | null);
 
@@ -819,12 +816,4 @@ export const ExhibitionEditPane = ({ exhibitionMetadata, exhibitionState, exhibi
 
         </Box>
     );
-};
-
-ExhibitionEditPane.propTypes = {
-    exhibitionEditDispatch: PropTypes.func.isRequired,
-    exhibitionMetadata: exhibitionStatePropTypesShape.isRequired,
-    exhibitionState: exhibitionStatePropTypesShape,
-    globalImageCatalog: PropTypes.arrayOf(entityPropTypeShape).isRequired,
-    saveExhibition: PropTypes.func.isRequired
 };

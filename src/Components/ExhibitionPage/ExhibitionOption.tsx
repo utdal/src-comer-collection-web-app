@@ -1,8 +1,11 @@
 import { Stack, Typography } from "@mui/material";
 import React from "react";
-import PropTypes from "prop-types";
 
-export const ExhibitionOption = ({ description, children, vertical }) => {
+const ExhibitionOption = ({ description, children, vertical = false }: {
+    readonly vertical?: boolean;
+    readonly description?: string;
+    readonly children: React.ReactNode;
+}): React.JSX.Element => {
     return (
         <Stack
             alignItems={vertical ? "" : "center"}
@@ -18,8 +21,5 @@ export const ExhibitionOption = ({ description, children, vertical }) => {
         </Stack>
     );
 };
-ExhibitionOption.propTypes = {
-    children: PropTypes.node.isRequired,
-    description: PropTypes.string,
-    vertical: PropTypes.bool
-};
+
+export default ExhibitionOption;

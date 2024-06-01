@@ -1,12 +1,14 @@
 import { Accordion, AccordionDetails, AccordionSummary, Box, ListItemButton, Paper, Stack, Typography } from "@mui/material";
 import React from "react";
-import { useTheme } from "@emotion/react";
 import { ExpandMoreIcon } from "../../Imports/Icons.js";
-import PropTypes from "prop-types";
 
-export const ExhibitionOptionGroup = ({ id, description, expandedSection, setExpandedSection, children }) => {
-    const theme = useTheme();
-
+const ExhibitionOptionGroup = ({ id, description, expandedSection, setExpandedSection, children }: {
+    readonly children: React.ReactNode;
+    readonly description: string;
+    readonly expandedSection: string | null;
+    readonly id: string;
+    readonly setExpandedSection: React.Dispatch<React.SetStateAction<string | null>>;
+}): React.JSX.Element => {
     return (
         <Accordion
             disableGutters
@@ -19,15 +21,15 @@ export const ExhibitionOptionGroup = ({ id, description, expandedSection, setExp
                     width: "100%",
                     position: "sticky",
                     top: "0px",
-                    background: theme.palette.grey.translucent,
                     zIndex: 100
                 }}
             >
                 <ListItemButton
-                    onClick={() => {
-                        setExpandedSection((expandedSection) => (
-                            expandedSection === id ? null : id
-                        ));
+                    onClick={(): void => {
+                        // setExpandedSection((newSection: string) => (
+                        //     newSection === id ? null : id
+                        // ));
+                        setExpandedSection(null);
                     }}
                 >
                     <AccordionSummary
@@ -54,10 +56,5 @@ export const ExhibitionOptionGroup = ({ id, description, expandedSection, setExp
 
     );
 };
-ExhibitionOptionGroup.propTypes = {
-    children: PropTypes.node.isRequired,
-    description: PropTypes.string.isRequired,
-    expandedSection: PropTypes.string,
-    id: PropTypes.string.isRequired,
-    setExpandedSection: PropTypes.func.isRequired
-};
+
+export default ExhibitionOptionGroup;

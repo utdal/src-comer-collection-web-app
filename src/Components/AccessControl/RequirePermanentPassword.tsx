@@ -1,6 +1,5 @@
 import React from "react";
 import type { ReactElementLike } from "prop-types";
-import PropTypes from "prop-types";
 import { Navigate } from "react-router";
 import { useAppUser } from "../../Hooks/useAppUser";
 import type { AppUser } from "../../index.js";
@@ -17,10 +16,6 @@ const RequirePermanentPassword = ({ component }: {
                 to="/Account/ChangePassword"
             />
         );
-};
-
-RequirePermanentPassword.propTypes = {
-    component: PropTypes.node
 };
 
 export default RequirePermanentPassword;

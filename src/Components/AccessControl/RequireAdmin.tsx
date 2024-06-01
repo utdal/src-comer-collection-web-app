@@ -1,6 +1,5 @@
 import React from "react";
 import type { ReactElementLike } from "prop-types";
-import PropTypes from "prop-types";
 import { useAppUser } from "../../Hooks/useAppUser";
 import { FullPageMessage } from "../FullPageMessage";
 import { LockIcon } from "../../Imports/Icons.js";
@@ -24,11 +23,6 @@ const RequireAdmin = ({ component, allowCollectionManager }: {
                 message="Insufficient Privileges"
             />
         );
-};
-
-RequireAdmin.propTypes = {
-    allowCollectionManager: PropTypes.bool,
-    component: PropTypes.node
 };
 
 export default RequireAdmin;

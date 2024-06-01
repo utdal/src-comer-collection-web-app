@@ -1,18 +1,18 @@
 import React from "react";
-import PropTypes from "prop-types";
 
-export const ColorInput = ({ value, onChange, disabled }) => {
+const ColorInput = ({ value, onChange, disabled = false }: {
+    readonly value: string;
+    readonly onChange: React.ChangeEventHandler<HTMLInputElement>;
+    readonly disabled?: boolean;
+}): React.JSX.Element => {
     return (
         <input
             disabled={disabled}
             onChange={onChange}
             type="color"
-            value={value ?? ""}
+            value={value}
         />
     );
 };
-ColorInput.propTypes = {
-    disabled: PropTypes.bool,
-    onChange: PropTypes.func.isRequired,
-    value: PropTypes.string.isRequired
-};
+
+export default ColorInput;
