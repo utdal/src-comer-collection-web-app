@@ -2,7 +2,7 @@ import { Box, Paper, Stack, ToggleButton, ToggleButtonGroup } from "@mui/materia
 import React, { useCallback, useMemo, useState } from "react";
 import { GridOnIcon, ViewListIcon } from "../../Imports/Icons.js";
 import SearchBox from "../SearchBox";
-import { CollectionBrowserImageDetails } from "./CollectionGalleryImageDetails.js";
+import CollectionBrowserImageDetails from "./CollectionGalleryImageDetails.js";
 import { useItems, useItemsPagination, useVisibilityStatuses } from "../../ContextProviders/ManagementPageProvider";
 import PaginationSummary from "../PaginationSummary/PaginationSummary.js";
 import type { ImageItem } from "../../index.js";
@@ -20,7 +20,8 @@ const CollectionGalleryGrid = ({ isDialogMode, selectedItem = null, setSelectedI
 }): React.JSX.Element => {
     const [viewMode, setViewMode] = useState("grid" as CollectionGalleryGridViewMode);
 
-    const [imagesArray] = useItems();
+    const [itemsArray] = useItems();
+    const imagesArray = itemsArray as ImageItem[];
     const [visibilityStatuses] = useVisibilityStatuses();
     const { paginationStatus } = useItemsPagination();
 

@@ -2,10 +2,13 @@ import { Box } from "@mui/material";
 import React from "react";
 import PropTypes from "prop-types";
 import { InView } from "react-intersection-observer";
+import type { ImageItem } from "../..";
 
-export const CollectionGalleryThumbnailBox = ({ image }) => (
+export const CollectionGalleryThumbnailBox = ({ image }: {
+    readonly image: ImageItem;
+}): React.JSX.Element => (
     <InView triggerOnce>
-        {({ inView, ref }) => (
+        {({ inView, ref }): React.ReactNode => (
             <Box
                 height="150px"
                 ref={ref}

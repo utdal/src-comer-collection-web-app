@@ -3,8 +3,15 @@ import React, { useMemo } from "react";
 import { SellIcon, PersonIcon } from "../../Imports/Icons.js";
 import { CollectionGalleryThumbnailBox } from "./CollectionGalleryThumbnailBox.js";
 import { useInView } from "react-intersection-observer";
+import type { ArtistItem, ImageItem, TagItem } from "../../index.js";
 
-export const CollectionBrowserImageDetails = ({ image, viewMode, isSelected, setSelectedItem, isDisabled }) => {
+const CollectionBrowserImageDetails = ({ image, viewMode, isSelected, setSelectedItem, isDisabled }: {
+    readonly image: ImageItem;
+    readonly viewMode: "grid" | "list";
+    readonly isSelected: boolean;
+    readonly setSelectedItem: React.Dispatch<React.SetStateAction<ImageItem | null>> | null;
+    readonly isDisabled: boolean;
+}): React.JSX.Element => {
     const { inView, ref } = useInView();
 
     const infoStack = useMemo(() => (
@@ -40,7 +47,7 @@ export const CollectionBrowserImageDetails = ({ image, viewMode, isSelected, set
                             direction={viewMode === "list" ? "column" : "row"}
                             spacing={viewMode === "list" ? 0 : 2}
                         >
-                            {image.Artists.map((a) => (
+                            {(image.Artists as ArtistItem[]).map((a) => (
                                 <Stack
                                     alignItems="center"
                                     direction="row"
@@ -62,7 +69,7 @@ export const CollectionBrowserImageDetails = ({ image, viewMode, isSelected, set
                             spacing={1}
                             useFlexGap
                         >
-                            {viewMode === "list" && image.Tags.map((t) => (
+                            {viewMode === "list" && (image.Tags as TagItem[]).map((t) => (
                                 <Chip
                                     icon={<SellIcon />}
                                     key={t.id}
@@ -87,8 +94,10 @@ export const CollectionBrowserImageDetails = ({ image, viewMode, isSelected, set
         <ListItemButton
             disableGutters
             disabled={isDisabled}
-            onClick={() => {
-                setSelectedItem(image);
+            onClick={(): void => {
+                if (setSelectedItem) {
+                    setSelectedItem(image);
+                }
             }}
             selected={isSelected}
             sx={{
@@ -100,5 +109,7 @@ export const CollectionBrowserImageDetails = ({ image, viewMode, isSelected, set
         </ListItemButton>
     ), [image, isSelected, isDisabled, infoStack, setSelectedItem]);
 
-    return setSelectedItem ? listItemButton : infoStack;
+    return listItemButton;
 };
+
+export default CollectionBrowserImageDetails;

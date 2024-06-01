@@ -27,6 +27,7 @@ export interface ArtistItem extends Item {
     notes: string | null;
     familyName: string;
     givenName: string;
+    fullName: string;
     fullNameReverse: string;
     Images?: Item[];
 }
