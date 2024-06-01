@@ -1,13 +1,13 @@
 import React, { memo, useMemo } from "react";
-import PropTypes from "prop-types";
-import { DataTableCell } from "./DataTableCell.js";
+import DataTableCell from "./DataTableCell.js";
 import { TableCellProvider } from "../../ContextProviders/TableCellProvider.js";
-import { entityPropTypeShape, tableFieldPropTypeShape } from "../../Classes/Entity.ts";
+import type { Item, ManagementCallbacks, TableFieldDefinition } from "../../index.js";
 
-/**
- * @returns {React.JSX.Element}
- */
-export const DataTableFieldCells = memo(function DataTableFieldCells ({ tableFields, item, managementCallbacks }) {
+const DataTableFieldCells = ({ tableFields, item, managementCallbacks }: {
+    readonly tableFields: TableFieldDefinition[];
+    readonly item: Item;
+    readonly managementCallbacks: ManagementCallbacks;
+}): React.JSX.Element => {
     return useMemo(() => (
         <TableCellProvider
             item={item}
@@ -21,10 +21,6 @@ export const DataTableFieldCells = memo(function DataTableFieldCells ({ tableFie
             ))}
         </TableCellProvider>
     ), [tableFields, item, managementCallbacks]);
-});
-
-DataTableFieldCells.propTypes = {
-    item: entityPropTypeShape,
-    managementCallbacks: PropTypes.objectOf(PropTypes.func),
-    tableFields: PropTypes.arrayOf(tableFieldPropTypeShape)
 };
+
+export default memo(DataTableFieldCells);

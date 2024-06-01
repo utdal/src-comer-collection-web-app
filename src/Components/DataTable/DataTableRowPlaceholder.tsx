@@ -2,12 +2,9 @@ import React, { memo } from "react";
 import PropTypes from "prop-types";
 import { TableCell, Skeleton } from "@mui/material";
 
-/**
- * @type {(props: {
- *      colSpan: number
- * })}
- */
-export const DataTableRowPlaceholder = memo(function TableRowPlaceholder ({ colSpan }) {
+const DataTableRowPlaceholder = ({ colSpan }: {
+    readonly colSpan: number;
+}): React.JSX.Element => {
     return (
         <TableCell
             colSpan={colSpan}
@@ -20,8 +17,10 @@ export const DataTableRowPlaceholder = memo(function TableRowPlaceholder ({ colS
             />
         </TableCell>
     );
-});
+};
 
 DataTableRowPlaceholder.propTypes = {
     colSpan: PropTypes.number
 };
+
+export default memo(DataTableRowPlaceholder);
