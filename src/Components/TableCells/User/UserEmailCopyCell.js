@@ -1,7 +1,7 @@
 import React, { useCallback } from "react";
 import { Button, Typography } from "@mui/material";
 import { useTableCellItem } from "../../../ContextProviders/TableCellProvider.js";
-import { useClipboard } from "../../../ContextProviders/AppFeatures.tsx";
+import { useClipboard } from "../../../ContextProviders/AppFeatures";
 
 export const UserEmailCopyCell = () => {
     const user = useTableCellItem();

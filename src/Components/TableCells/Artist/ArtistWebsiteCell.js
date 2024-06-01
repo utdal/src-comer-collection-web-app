@@ -1,7 +1,7 @@
 import React, { useCallback } from "react";
 import { Button, Typography } from "@mui/material";
 import { ContentCopyIcon } from "../../../Imports/Icons.js";
-import { useClipboard } from "../../../ContextProviders/AppFeatures.tsx";
+import { useClipboard } from "../../../ContextProviders/AppFeatures";
 import { useTableCellItem } from "../../../ContextProviders/TableCellProvider.js";
 
 export const ArtistWebsiteCell = () => {

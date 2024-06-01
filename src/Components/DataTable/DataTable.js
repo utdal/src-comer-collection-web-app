@@ -6,7 +6,7 @@ import { ColumnSortButton } from "../Buttons/ColumnSortButton.js";
 import PropTypes from "prop-types";
 import { useItemCounts, useItemDictionary, useItemsPagination, useManagementCallbacks, useSelectionStatuses, useSortableValues, useVisibilityStatuses } from "../../ContextProviders/ManagementPageProvider.js";
 import { tableFieldPropTypeShape } from "../../Classes/Entity.ts";
-import { FullPageMessage } from "../FullPageMessage.tsx";
+import { FullPageMessage } from "../FullPageMessage";
 import { InfoIcon } from "../../Imports/Icons.js";
 import DataTableRow from "./DataTableRow.js";
 

@@ -6,7 +6,7 @@ import {
 import { DataTable } from "../../Components/DataTable/DataTable.js";
 import { AccountCircleIcon, SchoolIcon } from "../../Imports/Icons.js";
 import { useAppUser } from "../../Hooks/useAppUser.ts";
-import { useTitle } from "../../ContextProviders/AppFeatures.tsx";
+import { useTitle } from "../../ContextProviders/AppFeatures";
 
 import { CourseNameCell } from "../../Components/TableCells/Course/CourseNameCell.js";
 import { CourseStartDateTimeCell } from "../../Components/TableCells/Course/CourseStartDateTimeCell.js";

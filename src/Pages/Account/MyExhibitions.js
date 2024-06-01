@@ -6,7 +6,7 @@ import { DataTable } from "../../Components/DataTable/DataTable.js";
 import { PhotoCameraBackIcon } from "../../Imports/Icons.js";
 import { ExhibitionSettingsDialog } from "../../Components/Dialogs/ExhibitionSettingsDialog.js";
 import { ItemSingleDeleteDialog } from "../../Components/Dialogs/ItemSingleDeleteDialog.js";
-import { useTitle } from "../../ContextProviders/AppFeatures.tsx";
+import { useTitle } from "../../ContextProviders/AppFeatures";
 import { useAppUser } from "../../Hooks/useAppUser.ts";
 
 import { ExhibitionTitleCell } from "../../Components/TableCells/Exhibition/ExhibitionTitleCell.js";
@@ -17,7 +17,7 @@ import { ExhibitionAccessCell } from "../../Components/TableCells/Exhibition/Exh
 import { ExhibitionOptionsCell } from "../../Components/TableCells/Exhibition/ExhibitionOptionsCell.js";
 import { ManagementPageProvider, useItemsReducer } from "../../ContextProviders/ManagementPageProvider.js";
 import { CreateExhibitionButton } from "../../Components/Buttons/CreateExhibitionButton.js";
-import { ExhibitionCreationRestriction } from "../../Components/TextBanners/ExhibitionCreationRestriction.tsx";
+import { ExhibitionCreationRestriction } from "../../Components/TextBanners/ExhibitionCreationRestriction";
 import { useDialogState } from "../../Hooks/useDialogState.js";
 import { Exhibition } from "../../Classes/Entities/Exhibition.ts";
 import { useRevalidator } from "react-router";

@@ -5,7 +5,7 @@ import { Outlet, useLoaderData, useNavigate, useRevalidator } from "react-router
 import { ImageFullScreenViewer } from "../../Components/Dialogs/ImageFullScreenViewer.js";
 import { SelectionSummary } from "../../Components/SelectionSummary.js";
 import { AssociationManagementDialog } from "../../Components/Dialogs/AssociationManagementDialog/AssociationManagementDialog.js";
-import { useTitle } from "../../ContextProviders/AppFeatures.tsx";
+import { useTitle } from "../../ContextProviders/AppFeatures";
 
 import { Image } from "../../Classes/Entities/Image.ts";
 import { Artist } from "../../Classes/Entities/Artist.ts";

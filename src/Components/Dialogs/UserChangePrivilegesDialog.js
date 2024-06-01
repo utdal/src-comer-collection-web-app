@@ -8,7 +8,7 @@ import {
 } from "@mui/material";
 import { SecurityIcon, PersonIcon, CollectionManagerIcon } from "../../Imports/Icons.js";
 import { User } from "../../Classes/Entities/User.ts";
-import { useSnackbar } from "../../ContextProviders/AppFeatures.tsx";
+import { useSnackbar } from "../../ContextProviders/AppFeatures";
 import { useManagementCallbacks } from "../../ContextProviders/ManagementPageProvider.js";
 import { DialogStateOld } from "../../Classes/DialogState.js";
 import PropTypes from "prop-types";

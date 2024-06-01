@@ -11,12 +11,12 @@ import {
 } from "../../Imports/Icons.js";
 import { useAppUser } from "../../Hooks/useAppUser";
 import PropTypes from "prop-types";
-import { ColorInput } from "./ColorInput.js";
-import { AccordionSubHeading } from "./AccordionSubHeading.js";
-import { ExhibitionOption } from "./ExhibitionOption.js";
-import { ExhibitionOptionGroup } from "./ExhibitionOptionGroup.js";
+import { ColorInput } from "./ColorInput";
+import { AccordionSubHeading } from "./AccordionSubHeading";
+import { ExhibitionOption } from "./ExhibitionOption";
+import { ExhibitionOptionGroup } from "./ExhibitionOptionGroup";
 import { ImageRearrangeDialog } from "./ImageRearrangeDialog";
-import { ImageChooserDialog } from "./ImageChooserDialog.js";
+import { ImageChooserDialog } from "./ImageChooserDialog";
 import { exhibitionStatePropTypesShape } from "../../Classes/Entities/Exhibition";
 import { entityPropTypeShape } from "../../Classes/Entity";
 import type { ExhibitionData, ExhibitionDispatchAction, ExhibitionImageData, ExhibitionImageDirectionIdentifier, ExhibitionMetadata } from "./ExhibitionDispatchActionTypes";

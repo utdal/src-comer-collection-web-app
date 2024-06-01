@@ -5,8 +5,8 @@ import createCache from "@emotion/cache";
 
 import { CacheProvider } from "@emotion/react";
 import { Helmet, HelmetProvider } from "react-helmet-async";
-import type { SnackbarSeverity } from "../Components/AppSnackbar.tsx";
-import AppSnackbar from "../Components/AppSnackbar.tsx";
+import type { SnackbarSeverity } from "../Components/AppSnackbar";
+import AppSnackbar from "../Components/AppSnackbar";
 
 const defaultTitleSuffix = "Comer Collection";
 

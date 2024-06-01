@@ -7,7 +7,7 @@ import {
 } from "@mui/material";
 import { SaveIcon } from "../../Imports/Icons.js";
 import { getLocalISOString } from "../../Helpers/getLocalISOString.js";
-import { useSnackbar } from "../../ContextProviders/AppFeatures.tsx";
+import { useSnackbar } from "../../ContextProviders/AppFeatures";
 import { useEntity, useManagementCallbacks } from "../../ContextProviders/ManagementPageProvider.js";
 import { DialogInputFieldWithRef } from "../Inputs/DialogInputFieldWithRef.js";
 import { PersistentDialog } from "./PersistentDialog.js";

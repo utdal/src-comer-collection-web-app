@@ -4,7 +4,7 @@ import { ItemSingleDeleteDialog } from "../../Components/Dialogs/ItemSingleDelet
 import { DataTable } from "../../Components/DataTable/DataTable.js";
 import { SelectionSummary } from "../../Components/SelectionSummary.js";
 import { ExhibitionSettingsDialog } from "../../Components/Dialogs/ExhibitionSettingsDialog.js";
-import { useTitle } from "../../ContextProviders/AppFeatures.tsx";
+import { useTitle } from "../../ContextProviders/AppFeatures";
 import { doesItemMatchSearchQuery } from "../../Helpers/SearchUtilities.js";
 import { CourseFilterMenu } from "../../Components/Menus/CourseFilterMenu.js";
 

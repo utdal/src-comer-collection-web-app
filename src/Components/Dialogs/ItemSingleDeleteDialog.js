@@ -7,7 +7,7 @@ import {
 } from "@mui/material";
 import { DeleteIcon, RestoreIcon } from "../../Imports/Icons.js";
 import PropTypes from "prop-types";
-import { useSnackbar } from "../../ContextProviders/AppFeatures.tsx";
+import { useSnackbar } from "../../ContextProviders/AppFeatures";
 import { useEntity, useManagementCallbacks } from "../../ContextProviders/ManagementPageProvider.js";
 import { DialogStateOld } from "../../Classes/DialogState.js";
 import { PersistentDialog } from "./PersistentDialog.js";
