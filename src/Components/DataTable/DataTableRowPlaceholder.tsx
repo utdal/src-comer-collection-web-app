@@ -1,5 +1,4 @@
 import React, { memo } from "react";
-import PropTypes from "prop-types";
 import { TableCell, Skeleton } from "@mui/material";
 
 const DataTableRowPlaceholder = ({ colSpan }: {
@@ -17,10 +16,6 @@ const DataTableRowPlaceholder = ({ colSpan }: {
             />
         </TableCell>
     );
-};
-
-DataTableRowPlaceholder.propTypes = {
-    colSpan: PropTypes.number
 };
 
 export default memo(DataTableRowPlaceholder);

@@ -1,9 +1,7 @@
 import React from "react";
 import { Typography } from "@mui/material";
 import { SellIcon } from "../../Imports/Icons";
-import PropTypes from "prop-types";
 import { SecondaryFilterMenu } from "./SecondaryFilterMenu.js";
-import { entityPropTypeShape } from "../../Classes/Entity.js";
 import type { Item, TagItem } from "../../index.js";
 
 const tagSortFunction = (a: Item, b: Item): number => {
@@ -21,7 +19,7 @@ const tagDisplayFunction = (tag: Item): React.ReactNode => {
     );
 };
 
-export const TagFilterMenu = ({ filterValue, setFilterValue, tags }: {
+const TagFilterMenu = ({ filterValue, setFilterValue, tags }: {
     readonly filterValue: TagItem | null;
     readonly setFilterValue: React.Dispatch<React.SetStateAction<Item | null>>;
     readonly tags: TagItem[];
@@ -41,8 +39,4 @@ export const TagFilterMenu = ({ filterValue, setFilterValue, tags }: {
     );
 };
 
-TagFilterMenu.propTypes = {
-    filterValue: PropTypes.arrayOf(entityPropTypeShape).isRequired,
-    setFilterValue: PropTypes.func.isRequired,
-    tags: PropTypes.arrayOf(entityPropTypeShape).isRequired
-};
+export default TagFilterMenu;

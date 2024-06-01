@@ -5,22 +5,19 @@ import {
     ArrowBackIcon,
     ArrowForwardIcon
 } from "../../Imports/Icons";
-import PropTypes from "prop-types";
 import { getSwappedImageArray, directionOptions } from "./ExhibitionEditPane";
-import { exhibitionStatePropTypesShape } from "../../Classes/Entities/Exhibition";
-import { entityPropTypeShape } from "../../Classes/Entity";
 import type { ExhibitionData, ExhibitionDispatchAction } from "./ExhibitionDispatchActionTypes.js";
 import type { Item } from "../../index.js";
 
 interface ImageRearrangeDialogProps {
-    imageRearrangerIsOpen: boolean;
-    setImageRearrangerIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
-    exhibitionState: ExhibitionData;
-    exhibitionEditDispatch: React.Dispatch<ExhibitionDispatchAction>;
-    globalImageCatalog: Item[];
+    readonly imageRearrangerIsOpen: boolean;
+    readonly setImageRearrangerIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
+    readonly exhibitionState: ExhibitionData;
+    readonly exhibitionEditDispatch: React.Dispatch<ExhibitionDispatchAction>;
+    readonly globalImageCatalog: Item[];
 }
 
-export const ImageRearrangeDialog = ({ imageRearrangerIsOpen, setImageRearrangerIsOpen, exhibitionState, exhibitionEditDispatch, globalImageCatalog }: ImageRearrangeDialogProps): React.JSX.Element => {
+const ImageRearrangeDialog = ({ imageRearrangerIsOpen, setImageRearrangerIsOpen, exhibitionState, exhibitionEditDispatch, globalImageCatalog }: ImageRearrangeDialogProps): React.JSX.Element => {
     const [currentWall, setCurrentWall] = useState(1);
 
     const imagesOnWall = exhibitionState.images.filter((i) => i.metadata.direction === currentWall);
@@ -186,10 +183,4 @@ export const ImageRearrangeDialog = ({ imageRearrangerIsOpen, setImageRearranger
     );
 };
 
-ImageRearrangeDialog.propTypes = {
-    exhibitionEditDispatch: PropTypes.func.isRequired,
-    exhibitionState: exhibitionStatePropTypesShape,
-    globalImageCatalog: PropTypes.arrayOf(entityPropTypeShape).isRequired,
-    imageRearrangerIsOpen: PropTypes.bool.isRequired,
-    setImageRearrangerIsOpen: PropTypes.func.isRequired
-};
+export default ImageRearrangeDialog;

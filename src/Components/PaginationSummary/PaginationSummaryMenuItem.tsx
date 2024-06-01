@@ -1,13 +1,7 @@
 import React, { useCallback, useEffect, useRef } from "react";
-import PropTypes from "prop-types";
 import { MenuItem, Typography } from "@mui/material";
 import { useItemsPagination } from "../../ContextProviders/ManagementPageProvider";
 
-/**
- *
- * @param {{startIndex: number, endIndex: number, handleMenuClose: () => void}} param0
- * @returns
- */
 const PaginationSummaryMenuItem = ({ startIndex, endIndex, handleMenuClose }: {
     readonly startIndex: number;
     readonly endIndex: number;
@@ -54,12 +48,6 @@ const PaginationSummaryMenuItem = ({ startIndex, endIndex, handleMenuClose }: {
 
         </MenuItem>
     );
-};
-
-PaginationSummaryMenuItem.propTypes = {
-    endIndex: PropTypes.number,
-    handleMenuClose: PropTypes.func,
-    startIndex: PropTypes.number
 };
 
 export default PaginationSummaryMenuItem;

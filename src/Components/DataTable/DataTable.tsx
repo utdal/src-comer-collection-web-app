@@ -7,7 +7,7 @@ import { useItemCounts, useItemDictionary, useItemsPagination, useManagementCall
 import { FullPageMessage } from "../FullPageMessage";
 import { InfoIcon } from "../../Imports/Icons";
 import DataTableRow from "./DataTableRow";
-import type { Item, TableFieldDefinition, UserItem } from "../../index";
+import type { Item, SortableValueFunction, TableFieldDefinition, UserItem } from "../../index";
 
 const DataTable = ({
     tableFields, rowSelectionEnabled, smallCheckboxes, defaultSortColumn = "ID", defaultSortAscending = true, noSkeleton
@@ -49,8 +49,10 @@ const DataTable = ({
         const tableFieldToSort: TableFieldDefinition | undefined = tableFields.find((tf) => tf.columnDescription === sortColumn);
         if (tableFieldToSort?.generateSortableValue) {
             calculateSortableItemValues(tableFieldToSort.generateSortableValue);
+        } else {
+            const defaultSortableValueFunction: SortableValueFunction = (item: Item) => item.id;
+            calculateSortableItemValues(defaultSortableValueFunction);
         }
-        throw new Error("Could not sort table properly");
     }, [calculateSortableItemValues, sortColumn, tableFields]);
 
     const sortRoutine = useCallback((itemA: Item, itemB: Item): number => {

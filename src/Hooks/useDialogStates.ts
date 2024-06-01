@@ -1,6 +1,4 @@
 import { useCallback, useReducer } from "react";
-import PropTypes from "prop-types";
-import { entityPropTypeShape } from "../Classes/Entity";
 import type { CloseDialogByIntentFunction, DialogItemsMultiplicity, DialogStateAction, DialogStateDictionary, Intent, Item, OpenDialogByIntentFunctionMultipleUnderlyingItems, OpenDialogByIntentFunctionNoUnderlyingItems, OpenDialogByIntentFunctionSingleUnderlyingItem } from "../index";
 
 const dialogItemsMultiplicityByIntent: Record<Intent, DialogItemsMultiplicity> = {
@@ -18,13 +16,6 @@ const dialogItemsMultiplicityByIntent: Record<Intent, DialogItemsMultiplicity> =
     "image-full-screen-preview": "single",
     "app-settings": "none"
 };
-
-export const dialogStatePropTypeShape = PropTypes.shape({
-    dialogIsOpen: PropTypes.bool,
-    dialogItemsMultiplicityByIntent: PropTypes.string,
-    underlyingItem: entityPropTypeShape,
-    underlyingItems: PropTypes.arrayOf(entityPropTypeShape)
-});
 
 const generateDefaultDialogStates = (intentArray: Intent[]): DialogStateDictionary => {
     const output = {} as DialogStateDictionary;

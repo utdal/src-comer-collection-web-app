@@ -1,6 +1,5 @@
 import type { ReactNode } from "react";
 import React, { createContext, useCallback, useContext, useMemo, useState } from "react";
-import PropTypes from "prop-types";
 import type { SimplePaletteColorOptions } from "@mui/material";
 import { ThemeProvider, createTheme } from "@mui/material";
 import { green, orange } from "@mui/material/colors/index.js";
@@ -199,10 +198,6 @@ export const useAppDarkTheme = (): {
         localStorage.setItem(DARK_THEME_LOCAL_STORAGE_KEY, darkThemeSetting);
     }, [setAppDarkTheme]);
     return { appDarkTheme, handleSetDarkTheme };
-};
-
-AppThemeProvider.propTypes = {
-    children: PropTypes.node
 };
 
 export default AppThemeProvider;

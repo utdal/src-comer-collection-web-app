@@ -1,7 +1,5 @@
 import React from "react";
-import PropTypes from "prop-types";
 import ItemMultiCreateDialog from "./ItemMultiCreateDialog";
-import { dialogStatePropTypeShape } from "../../Hooks/useDialogStates";
 import ItemSingleDeleteDialog from "./ItemSingleDeleteDialog";
 import ItemSingleEditDialog from "./ItemSingleEditDialog";
 import UserResetPasswordDialog from "./UserResetPasswordDialog";
@@ -15,8 +13,8 @@ import ImageFullScreenViewerDialog from "./ImageFullScreenViewerDialog";
  * and renders the correct type of dialog based on the "intent" property.
  */
 const DialogByIntent = ({ intent, dialogState }: {
-    intent: Intent;
-    dialogState: DialogState;
+    readonly intent: Intent;
+    readonly dialogState: DialogState;
 }): React.JSX.Element => {
     switch (intent) {
     case "multi-create":
@@ -37,11 +35,6 @@ const DialogByIntent = ({ intent, dialogState }: {
     default:
         throw new Error(`DialogByIntent received an invalid intent ${intent}`);
     }
-};
-
-DialogByIntent.propTypes = {
-    dialogState: dialogStatePropTypeShape,
-    intent: PropTypes.string
 };
 
 export default DialogByIntent;

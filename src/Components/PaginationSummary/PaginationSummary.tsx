@@ -1,5 +1,4 @@
 import React, { useCallback } from "react";
-import PropTypes from "prop-types";
 import { useItemCounts, useItemsPagination } from "../../ContextProviders/ManagementPageProvider";
 import type { IconButtonOwnProps, StackOwnProps } from "@mui/material";
 import { IconButton, Stack, styled } from "@mui/material";
@@ -98,10 +97,6 @@ const PaginationSummary = ({ hideOnSinglePage }: {
             </DisappearingIconButton>
         </DisappearingStack>
     );
-};
-
-PaginationSummary.propTypes = {
-    hideOnSinglePage: PropTypes.bool
 };
 
 export default PaginationSummary;

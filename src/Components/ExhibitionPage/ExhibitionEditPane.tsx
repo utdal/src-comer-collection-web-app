@@ -14,7 +14,7 @@ import ColorInput from "./ColorInput";
 import AccordionSubHeading from "./AccordionSubHeading";
 import ExhibitionOption from "./ExhibitionOption";
 import ExhibitionOptionGroup from "./ExhibitionOptionGroup";
-import { ImageRearrangeDialog } from "./ImageRearrangeDialog";
+import ImageRearrangeDialog from "./ImageRearrangeDialog";
 import ImageChooserDialog from "./ImageChooserDialog";
 import type { ExhibitionData, ExhibitionDispatchAction, ExhibitionImageData, ExhibitionImageDirectionIdentifier, ExhibitionMetadata } from "./ExhibitionDispatchActionTypes";
 import type { ImageItem } from "../..";

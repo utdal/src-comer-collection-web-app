@@ -1,10 +1,9 @@
 import { Box } from "@mui/material";
 import React from "react";
-import PropTypes from "prop-types";
 import { InView } from "react-intersection-observer";
 import type { ImageItem } from "../..";
 
-export const CollectionGalleryThumbnailBox = ({ image }: {
+const CollectionGalleryThumbnailBox = ({ image }: {
     readonly image: ImageItem;
 }): React.JSX.Element => (
     <InView triggerOnce>
@@ -24,8 +23,5 @@ export const CollectionGalleryThumbnailBox = ({ image }: {
         )}
     </InView>
 );
-CollectionGalleryThumbnailBox.propTypes = {
-    image: PropTypes.shape({
-        id: PropTypes.number
-    }).isRequired
-};
+
+export default CollectionGalleryThumbnailBox;

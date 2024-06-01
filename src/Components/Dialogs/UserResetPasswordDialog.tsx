@@ -16,7 +16,7 @@ import type { DialogState, DialogStateSingleUnderlyingItem, RouterActionErrorRes
 
 const UserResetPasswordDialog = ({ dialogState }: {
     readonly dialogState: DialogState;
-}): React.JSX.Element => {
+}): React.JSX.Element | null => {
     const [newPassword, setNewPassword] = useState("");
     const [editMode, setEditMode] = useState(true);
     const [hasCopied, setHasCopied] = useState(false);
@@ -30,9 +30,9 @@ const UserResetPasswordDialog = ({ dialogState }: {
     const actionData = useActionData() as RouterActionErrorResponse | RouterActionSuccessResponse | null;
 
     const { dialogIsOpen, underlyingItem } = dialogState as DialogStateSingleUnderlyingItem;
-    const dialogUser = underlyingItem as UserItem;
+    const dialogUser = underlyingItem as UserItem | null;
 
-    const themeColor = dialogUser.is_admin_or_collection_manager ? "secondary" : "primary";
+    const themeColor = ((dialogUser?.is_admin_or_collection_manager) ?? false) ? "secondary" : "primary";
 
     useEffect(() => {
         if (actionData) {
@@ -59,18 +59,20 @@ const UserResetPasswordDialog = ({ dialogState }: {
     }, [handleClose, dialogIsOpen]);
 
     const handleSubmit = useCallback(() => {
-        const request: RouterActionRequest = {
-            intent: "user-reset-password",
-            userId: dialogUser.id,
-            body: {
-                newPassword
-            }
-        };
-        submit(JSON.stringify(request), {
-            method: "PUT",
-            encType: "application/json"
-        });
-    }, [dialogUser.id, newPassword, submit]);
+        if (dialogUser) {
+            const request: RouterActionRequest = {
+                intent: "user-reset-password",
+                userId: dialogUser.id,
+                body: {
+                    newPassword
+                }
+            };
+            submit(JSON.stringify(request), {
+                method: "PUT",
+                encType: "application/json"
+            });
+        }
+    }, [dialogUser, newPassword, submit]);
 
     const handleNewPasswordInput = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
         setNewPassword(e.target.value);
@@ -84,6 +86,10 @@ const UserResetPasswordDialog = ({ dialogState }: {
         clipboard(newPassword);
         setHasCopied(true);
     }, [clipboard, newPassword]);
+
+    if (dialogUser == null) {
+        return null;
+    }
 
     return (
         <PersistentDialog

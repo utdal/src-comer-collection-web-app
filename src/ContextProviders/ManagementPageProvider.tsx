@@ -1,6 +1,4 @@
 import React, { createContext, useCallback, useContext, useMemo, useReducer } from "react";
-import PropTypes from "prop-types";
-import { itemsCombinedStatePropTypeShape } from "../Classes/Entity";
 import type { EntityType, FilterFunction, Item, ItemCounts, ItemDictionary, ItemsCallbacks, ItemsCombinedState, ItemsDispatchAction, ManagementCallbacks, PaginationStatus, SelectionStatusDictionary, SortableValueDictionary, SortableValueFunction, VisibilityStatusDictionary } from "../index.js";
 
 /**
@@ -240,16 +238,16 @@ const defaultItemsCombinedState = (items: Item[]): ItemsCombinedState => {
 };
 
 interface ManagementPageContextValue {
-    Entity: EntityType;
-    managementCallbacks: ManagementCallbacks;
-    itemsCombinedState: ItemsCombinedState;
-    itemsCallbacks: ItemsCallbacks;
+    readonly Entity: EntityType;
+    readonly managementCallbacks: ManagementCallbacks;
+    readonly itemsCombinedState: ItemsCombinedState;
+    readonly itemsCallbacks: ItemsCallbacks;
 }
 
 const ManagementPageContext = createContext((null as unknown) as ManagementPageContextValue);
 
 interface ManagementPageProviderProps extends ManagementPageContextValue {
-    children: React.ReactNode;
+    readonly children: React.ReactNode;
 }
 
 /**
@@ -270,14 +268,6 @@ export const ManagementPageProvider = ({ Entity, managementCallbacks, itemsCombi
             {children}
         </ManagementPageContext.Provider>
     );
-};
-
-ManagementPageProvider.propTypes = {
-    Entity: PropTypes.func.isRequired,
-    children: PropTypes.node.isRequired,
-    itemsCallbacks: PropTypes.objectOf(PropTypes.func),
-    itemsCombinedState: itemsCombinedStatePropTypeShape.isRequired,
-    managementCallbacks: PropTypes.objectOf(PropTypes.func)
 };
 
 export const useManagementCallbacks = (): ManagementCallbacks => {
