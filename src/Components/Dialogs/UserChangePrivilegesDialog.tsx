@@ -7,97 +7,95 @@ import {
     Typography, DialogContentText, Checkbox, ToggleButtonGroup, ToggleButton
 } from "@mui/material";
 import { SecurityIcon, PersonIcon, CollectionManagerIcon } from "../../Imports/Icons.js";
-import { User } from "../../Classes/Entities/User.ts";
-import { useSnackbar } from "../../ContextProviders/AppFeatures";
-import { useManagementCallbacks } from "../../ContextProviders/ManagementPageProvider";
-import { DialogStateOld } from "../../Classes/DialogState.js";
-import PropTypes from "prop-types";
-import { PersistentDialog } from "./PersistentDialog.js";
+import { User } from "../../Classes/Entities/User.js";
+import { useSnackbar } from "../../ContextProviders/AppFeatures.js";
+import { useManagementCallbacks } from "../../ContextProviders/ManagementPageProvider.js";
+import PersistentDialog from "./PersistentDialog.js";
+import type { DialogState, DialogStateSingleUnderlyingItem, UserRole } from "../../index.js";
 
-const userPrivilegeOptions = () => [
+interface UserPrivilegeDisplayOption {
+    value: UserRole;
+    displayText: string;
+    caption: string;
+    icon: React.ElementType;
+    color: "primary" | "secondary";
+}
+
+const userPrivilegeOptions = (): UserPrivilegeDisplayOption[] => [
     {
         value: "ADMINISTRATOR",
         displayText: "Administrator",
         caption: "Administrators have full control of the system.  They can manage users, courses, exhibitions, and the collection.  They can also change the access level of other users and revoke your privileges.",
-        icon: SecurityIcon,
+        icon: SecurityIcon as React.ElementType,
         color: "secondary"
     },
     {
         value: "COLLECTION_MANAGER",
         displayText: "Collection Manager",
         caption: "Collection managers can manage images, artists, and tags.  They also have curator privileges.  This role is appropriate for student workers who help manage the collection.",
-        icon: CollectionManagerIcon,
+        icon: CollectionManagerIcon as React.ElementType,
         color: "secondary"
     },
     {
         value: "CURATOR",
         displayText: "Curator",
         caption: "Curators can create and edit their own exhibitions using existing images.  This role is appropriate for most users, including students.",
-        icon: PersonIcon,
+        icon: PersonIcon as React.ElementType,
         color: "primary"
     }
 ];
 
-/**
- * @param {{ dialogState: DialogStateOld }} props
- */
-export const UserChangePrivilegesDialog = ({ dialogState }) => {
+const UserChangePrivilegesDialog = ({ dialogState }: {
+    readonly dialogState: DialogState;
+}): React.JSX.Element => {
     const [confirmAction, setConfirmAction] = useState(false);
-    const [newAccess, setNewAccess] = useState(null);
+    const [newAccess, setNewAccess] = useState((null as unknown) as UserRole);
     const [submitEnabled, setSubmitEnabled] = useState(true);
 
     const showSnackbar = useSnackbar();
     const themeColor = newAccess === "CURATOR" ? "primary" : "secondary";
 
-    const { handleRefresh } = useManagementCallbacks();
-
-    const { dialogItem: dialogUser, dialogIsOpen, closeDialog } = dialogState;
+    const { dialogIsOpen, underlyingItem: dialogUser } = dialogState as DialogStateSingleUnderlyingItem;
+    const { closeDialogByIntent } = useManagementCallbacks();
 
     useEffect(() => {
         if (dialogIsOpen) {
-            setNewAccess(dialogUser?.access_level);
+            setNewAccess(dialogUser?.access_level as UserRole);
             setSubmitEnabled(true);
             setConfirmAction(false);
         }
     }, [dialogIsOpen, dialogUser?.access_level]);
 
-    const handleChangeNewAccessInput = useCallback((e, next) => {
-        if (next) {
-            setNewAccess(next);
-            setConfirmAction(false);
-        }
+    const handleChangeNewAccessInput = useCallback((e: React.MouseEvent<HTMLElement>, next: UserRole) => {
+        setNewAccess(next);
+        setConfirmAction(false);
     }, []);
 
-    const handleChangeConfirmationInput = useCallback((e) => {
-        setConfirmAction(e.target.checked);
+    const handleChangeConfirmationInput = useCallback((e: React.ChangeEvent<HTMLInputElement>, isChecked: boolean) => {
+        setConfirmAction(isChecked);
     }, []);
 
-    const handleClose = useCallback((event, reason) => {
-        if (reason === "backdropClick") {
-            return;
-        }
-        closeDialog();
-    }, [closeDialog]);
+    const handleClose = useCallback(() => {
+        closeDialogByIntent("user-change-privileges");
+    }, [closeDialogByIntent]);
 
     const handleSubmit = useCallback(() => {
         if (dialogUser) {
             setSubmitEnabled(false);
             User.handleChangeUserAccess(dialogUser.id, newAccess).then((msg) => {
-                closeDialog();
+                handleClose();
                 setConfirmAction(false);
-                handleRefresh();
                 showSnackbar(msg, "success");
             }).catch((err) => {
                 setConfirmAction(false);
                 setSubmitEnabled(true);
-                showSnackbar(err, "error");
+                showSnackbar((err as Error).message, "error");
             });
         }
-    }, [closeDialog, dialogUser, newAccess, handleRefresh, showSnackbar]);
+    }, [dialogUser, newAccess, handleClose, showSnackbar]);
 
     return (
         <PersistentDialog
-            isForm
             maxWidth="sm"
             onClose={handleClose}
             onSubmit={handleSubmit}
@@ -121,7 +119,7 @@ export const UserChangePrivilegesDialog = ({ dialogState }) => {
                         exclusive
                         onChange={handleChangeNewAccessInput}
                         orientation="vertical"
-                        required
+                        // required
                         value={newAccess}
                     >
                         {userPrivilegeOptions().map((option) => (
@@ -217,6 +215,4 @@ export const UserChangePrivilegesDialog = ({ dialogState }) => {
     );
 };
 
-UserChangePrivilegesDialog.propTypes = {
-    dialogState: PropTypes.instanceOf(DialogStateOld).isRequired
-};
+export default UserChangePrivilegesDialog;

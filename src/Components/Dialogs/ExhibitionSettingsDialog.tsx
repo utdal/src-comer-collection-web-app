@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import {
     Stack, DialogTitle,
     DialogContent,
@@ -7,19 +7,27 @@ import {
     Typography, DialogContentText, TextField, ToggleButtonGroup, ToggleButton
 } from "@mui/material";
 import { SaveIcon, PublicIcon, LockIcon, VpnLockIcon } from "../../Imports/Icons.js";
-import PropTypes from "prop-types";
-import { useSnackbar } from "../../ContextProviders/AppFeatures";
-import { PersistentDialog } from "./PersistentDialog.js";
+import { useSnackbar } from "../../ContextProviders/AppFeatures.js";
+import PersistentDialog from "./PersistentDialog.js";
 import { useActionData, useSubmit } from "react-router-dom";
+import type { DialogState, DialogStateNoUnderlyingItems, DialogStateSingleUnderlyingItem, ExhibitionItem, ExhibitionPrivacy, RouterActionRequest, RouterActionResponse } from "../../index.js";
+import { useManagementCallbacks } from "../../ContextProviders/ManagementPageProvider.js";
 
-const exhibitionAccessOptions = (adminMode) => [
+interface ExhibitionAccessDisplayOption {
+    value: ExhibitionPrivacy;
+    displayText: string;
+    caption: string;
+    icon: React.ElementType;
+}
+
+const exhibitionAccessOptions = (adminMode: boolean): ExhibitionAccessDisplayOption[] => [
     {
         value: "PRIVATE",
         displayText: "Private",
         caption: adminMode
             ? "Only the owner, you, and other administrators will be able to access this exhibition."
             : "Only you and administrators will be able to access this exhibition.",
-        icon: LockIcon
+        icon: LockIcon as React.ElementType
     },
     {
         value: "PUBLIC_ANONYMOUS",
@@ -27,7 +35,7 @@ const exhibitionAccessOptions = (adminMode) => [
         caption: adminMode
             ? "This exhibition will be visible to the public, but the owner's name will not be displayed to anyone except the owner and administrators."
             : "This exhibition will be visible to the public, but your name will not be displayed to anyone except you and administrators.",
-        icon: VpnLockIcon
+        icon: VpnLockIcon as React.ElementType
     },
     {
         value: "PUBLIC",
@@ -35,12 +43,23 @@ const exhibitionAccessOptions = (adminMode) => [
         caption: adminMode
             ? "This exhibition will be visible to the public, and the owner's full name will be visible to anyone who views the exhibition.  The owner's email address and course enrollments will never be displayed publicly."
             : "This exhibition will be visible to the public, and your full name will be visible to anyone who views the exhibition.  Your email address and course enrollments will never be displayed publicly.",
-        icon: PublicIcon
+        icon: PublicIcon as React.ElementType
     }
 ];
 
-export const ExhibitionSettingsDialog = ({ editMode, adminMode, dialogIsOpen, setDialogIsOpen, dialogExhibitionId, dialogExhibitionTitle, dialogExhibitionAccess, setDialogExhibitionId, setDialogExhibitionTitle, setDialogExhibitionAccess, refreshFunction }) => {
+const ExhibitionSettingsDialog = ({ adminMode, dialogState }: {
+    readonly adminMode: boolean;
+    readonly dialogState: DialogState;
+}): React.JSX.Element => {
     const showSnackbar = useSnackbar();
+
+    const { dialogIsOpen, dialogItemsMultiplicity } = dialogState as DialogStateNoUnderlyingItems | DialogStateSingleUnderlyingItem;
+    const dialogExhibition = dialogItemsMultiplicity === "single" ? (dialogState as DialogStateSingleUnderlyingItem).underlyingItem as ExhibitionItem : null;
+
+    const { closeDialogByIntent } = useManagementCallbacks();
+
+    const [dialogExhibitionTitle, setDialogExhibitionTitle] = useState(dialogExhibition?.title ?? "");
+    const [dialogExhibitionPrivacy, setDialogExhibitionPrivacy] = useState(dialogExhibition?.privacy ?? "PRIVATE");
 
     // const handleExhibitionCreate = useCallback((title, privacy) => {
     //     MyExhibition.handleMultiCreate([{
@@ -81,53 +100,70 @@ export const ExhibitionSettingsDialog = ({ editMode, adminMode, dialogIsOpen, se
     // }, [adminMode, refreshFunction, setDialogExhibitionAccess, setDialogExhibitionId, setDialogExhibitionTitle, setDialogIsOpen, showSnackbar]);
 
     const submit = useSubmit();
-    const actionData = useActionData();
+    const actionData = useActionData() as RouterActionResponse | null;
 
     const handleFormSubmit = useCallback(() => {
-        if (editMode) {
-            submit({
-                id: dialogExhibitionId,
-                title: dialogExhibitionTitle,
-                privacy: dialogExhibitionAccess
-            }, {
+        if (dialogItemsMultiplicity === "single" && dialogExhibition != null) {
+            const request: RouterActionRequest = {
+                intent: "exhibition-single-update-settings",
+                body: {
+                    newTitle: dialogExhibitionTitle,
+                    newPrivacy: dialogExhibitionPrivacy
+                },
+                exhibitionId: dialogExhibition.id
+            };
+            submit(JSON.stringify(request), {
                 encType: "application/json",
                 method: "PUT"
             });
-            // handleExhibitionEdit(dialogExhibitionId, dialogExhibitionTitle, dialogExhibitionAccess);
-        } else {
-            submit({
-                title: dialogExhibitionTitle,
-                privacy: dialogExhibitionAccess
-            }, {
+        } else if (dialogItemsMultiplicity === "none" && dialogExhibition == null) {
+            const request: RouterActionRequest = {
+                intent: "exhibition-single-create",
+                body: {
+                    title: dialogExhibitionTitle,
+                    privacy: dialogExhibitionPrivacy
+                }
+            };
+            submit(JSON.stringify(request), {
                 encType: "application/json",
                 method: "POST"
             });
             // handleExhibitionCreate(dialogExhibitionTitle, dialogExhibitionAccess);
         }
-    }, [dialogExhibitionAccess, dialogExhibitionId, dialogExhibitionTitle, editMode, submit]);
+    }, [dialogItemsMultiplicity, dialogExhibition, dialogExhibitionTitle, dialogExhibitionPrivacy, submit]);
+
+    const handleClose = useCallback(() => {
+        switch (dialogItemsMultiplicity) {
+        case "none":
+            closeDialogByIntent("exhibition-single-create");
+            break;
+        case "single":
+            closeDialogByIntent("exhibition-single-update-settings");
+            break;
+        default:
+            break;
+        }
+    }, [closeDialogByIntent, dialogItemsMultiplicity]);
 
     useEffect(() => {
         if (actionData) {
             if (actionData.status === "success") {
-                showSnackbar(actionData.message, "success");
-                setDialogIsOpen(false);
+                showSnackbar(actionData.snackbarText, "success");
+                handleClose();
             } else if (actionData.status === "error") {
-                showSnackbar(actionData.error, "error");
+                showSnackbar(actionData.snackbarText, "error");
             }
         }
-    }, [actionData, setDialogIsOpen, showSnackbar]);
+    }, [actionData, showSnackbar, handleClose]);
 
     return (
         <PersistentDialog
-            isForm
-            onClose={() => {
-                setDialogIsOpen(false);
-            }}
+            onClose={handleClose}
             onSubmit={handleFormSubmit}
             open={dialogIsOpen}
         >
             <DialogTitle>
-                {editMode ? "Edit Exhibition" : "Create Exhibition"}
+                {dialogItemsMultiplicity === "single" ? "Edit Exhibition" : "Create Exhibition"}
             </DialogTitle>
 
             <DialogContent>
@@ -142,7 +178,7 @@ export const ExhibitionSettingsDialog = ({ editMode, adminMode, dialogIsOpen, se
 
                     <TextField
                         label="Exhibition Title"
-                        onChange={(e) => {
+                        onChange={(e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>): void => {
                             setDialogExhibitionTitle(e.target.value);
                         }}
                         required
@@ -159,12 +195,13 @@ export const ExhibitionSettingsDialog = ({ editMode, adminMode, dialogIsOpen, se
 
                     <ToggleButtonGroup
                         exclusive
-                        onChange={(e, next) => {
-                            setDialogExhibitionAccess(next);
+                        onChange={(e: React.MouseEvent<HTMLElement>, next: ExhibitionPrivacy | null): void => {
+                            if (next) {
+                                setDialogExhibitionPrivacy(next);
+                            }
                         }}
                         orientation="vertical"
-                        required
-                        value={dialogExhibitionAccess}
+                        value={dialogExhibitionPrivacy}
                     >
                         {exhibitionAccessOptions(Boolean(adminMode)).map((option) => (
                             <ToggleButton
@@ -209,11 +246,7 @@ export const ExhibitionSettingsDialog = ({ editMode, adminMode, dialogIsOpen, se
                     <Button
                         color="primary"
                         fullWidth
-                        onClick={() => {
-                            setDialogIsOpen(false);
-                            setDialogExhibitionAccess(null);
-                            setDialogExhibitionTitle("");
-                        }}
+                        onClick={handleClose}
                         variant="outlined"
                     >
                         Cancel
@@ -221,14 +254,14 @@ export const ExhibitionSettingsDialog = ({ editMode, adminMode, dialogIsOpen, se
 
                     <Button
                         color="primary"
-                        disabled={!(dialogExhibitionAccess && dialogExhibitionTitle)}
+                        disabled={!dialogExhibitionTitle}
                         fullWidth
                         size="large"
                         startIcon={<SaveIcon />}
                         type="submit"
                         variant="contained"
                     >
-                        {editMode ? "Save Settings" : "Create Exhibition"}
+                        {dialogItemsMultiplicity === "single" ? "Save Settings" : "Create Exhibition"}
                     </Button>
                 </Stack>
             </DialogActions>
@@ -236,16 +269,4 @@ export const ExhibitionSettingsDialog = ({ editMode, adminMode, dialogIsOpen, se
     );
 };
 
-ExhibitionSettingsDialog.propTypes = {
-    adminMode: PropTypes.bool,
-    dialogExhibitionAccess: PropTypes.string,
-    dialogExhibitionId: PropTypes.number,
-    dialogExhibitionTitle: PropTypes.string,
-    dialogIsOpen: PropTypes.bool.isRequired,
-    editMode: PropTypes.bool.isRequired,
-    refreshFunction: PropTypes.func.isRequired,
-    setDialogExhibitionAccess: PropTypes.func.isRequired,
-    setDialogExhibitionId: PropTypes.func.isRequired,
-    setDialogExhibitionTitle: PropTypes.func.isRequired,
-    setDialogIsOpen: PropTypes.func.isRequired
-};
+export default ExhibitionSettingsDialog;

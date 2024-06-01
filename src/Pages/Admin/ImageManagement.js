@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useMemo, useState } from "react";
 import SearchBox from "../../Components/SearchBox";
 import { doesItemMatchSearchQuery } from "../../Helpers/SearchUtilities.js";
 import { Outlet, useLoaderData, useNavigate, useRevalidator } from "react-router";
-import { ImageFullScreenViewer } from "../../Components/Dialogs/ImageFullScreenViewer.js";
+import { ImageFullScreenViewer } from "../../Components/Dialogs/ImageFullScreenViewerDialog.js";
 import { SelectionSummary } from "../../Components/SelectionSummary.js";
 import { AssociationManagementDialog } from "../../Components/Dialogs/AssociationManagementDialog/AssociationManagementDialog.js";
 import { useTitle } from "../../ContextProviders/AppFeatures";

@@ -17,6 +17,8 @@ import type { UserExhibition } from "./Classes/Associations/UserExhibition";
 
 export type CourseStatus = "Active" | "Expired" | "Upcoming";
 
+export type UserRole = "ADMINISTRATOR" | "COLLECTION_MANAGER" | "CURATOR";
+
 export type ItemGenericFieldValue = boolean[] | number[] | object[] | string[] | boolean | number | object | string | null | undefined;
 
 export interface Item {
@@ -180,7 +182,7 @@ export interface ItemsCallbacks {
     setPaginationStartIndex: (startIndex: number) => void;
 }
 
-export type Intent = "multi-create" | "multi-delete" | "single-delete" | "single-edit" | "single-permanent-delete" | "single-restore" | "user-change-activation-status" | "user-change-privileges" | "user-reset-password";
+export type Intent = "exhibition-single-create" | "exhibition-single-update-settings" | "image-full-screen-preview" | "multi-create" | "multi-delete" | "single-delete" | "single-edit" | "single-permanent-delete" | "single-restore" | "user-change-activation-status" | "user-change-privileges" | "user-reset-password";
 
 export type OpenDialogByIntentFunctionNoUnderlyingItems = (intent: Intent) => void;
 
@@ -199,6 +201,19 @@ export interface ManagementCallbacks {
 
 export type RouterActionRequest = (
     {
+        intent: "exhibition-single-create";
+        body: {
+            title: string;
+            privacy: ExhibitionPrivacy;
+        };
+    } | {
+        intent: "exhibition-single-update-settings";
+        exhibitionId: number;
+        body: {
+            newTitle: string;
+            newPrivacy: ExhibitionPrivacy;
+        };
+    } | {
         intent: "multi-create";
         body: {
             itemsToCreate: object[];
@@ -229,7 +244,7 @@ export type RouterActionRequest = (
         intent: "user-change-privileges";
         userId: number;
         body: {
-            newRole: "ADMINISTRATOR" | "COLLECTION_MANAGER" | "CURATOR";
+            newRole: UserRole;
         };
     } | {
         intent: "user-reset-password";
