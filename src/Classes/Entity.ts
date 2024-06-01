@@ -36,7 +36,8 @@ export class Entity extends null {
         {
             fieldName: "id",
             displayName: "ID",
-            isRequired: false
+            isRequired: false,
+            maxlength: 255
         }
     ];
 
@@ -45,6 +46,8 @@ export class Entity extends null {
     public static isTrash = false;
 
     public static deleteDialogAdditionalInstructions = "";
+
+    public static deleteDialogRequireTypedConfirmation = false;
 
     public static permanentDeleteDialogAdditionalInstructions = "";
 

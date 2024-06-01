@@ -4,9 +4,9 @@
  * when editing an exhibition.
  */
 
-export type ExhibitionImageDirectionIdentifier = 1 | 2 | 3 | 4;
+import type { ExhibitionPrivacy } from "../..";
 
-export type ExhibitionPrivacyOptions = "PRIVATE" | "PUBLIC_ANONYMOUS" | "PUBLIC";
+export type ExhibitionImageDirectionIdentifier = 1 | 2 | 3 | 4;
 
 export type ExhibitionDataAsString = string;
 
@@ -71,7 +71,7 @@ export interface ExhibitionMetadata {
     title: string;
     date_created: string;
     date_modified: string;
-    privacy: ExhibitionPrivacyOptions;
+    privacy: ExhibitionPrivacy;
     exhibition_owner: number;
     curator: string;
     isEditable: boolean;

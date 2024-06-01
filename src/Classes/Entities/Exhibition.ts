@@ -6,8 +6,11 @@ import ExhibitionIDCell from "../../Components/TableCells/Exhibition/ExhibitionI
 import ExhibitionOptionsCell from "../../Components/TableCells/Exhibition/ExhibitionOptionsCell";
 import ExhibitionOwnerStackedNameEmailCell from "../../Components/TableCells/Exhibition/ExhibitionOwnerStackedNameEmailCell";
 import ExhibitionTitleCell from "../../Components/TableCells/Exhibition/ExhibitionTitleCell";
-import type { Item, SortableValue, TableFieldDefinition } from "../../index";
+import type { ExhibitionItem, Item, SortableValue, TableFieldDefinition } from "../../index";
 import { Entity, entityPropTypeShape } from "../Entity";
+import ExhibitionOpenInCurrentTabCell from "../../Components/TableCells/Exhibition/ExhibitionOpenInCurrentTabCell";
+import ExhibitionDateCreatedCell from "../../Components/TableCells/Exhibition/ExhibitionDateCreatedCell";
+import ExhibitionDateModifiedCell from "../../Components/TableCells/Exhibition/ExhibitionDateModifiedCell";
 
 class Exhibition extends Entity {
     public static baseUrl = "/api/exhibitions";
@@ -19,6 +22,8 @@ class Exhibition extends Entity {
     public static searchBoxFields = ["title"];
 
     public static searchBoxPlaceholder = "Search by title";
+
+    public static deleteDialogRequireTypedConfirmation = true;
 
     public static tableFields: TableFieldDefinition[] = [
         {
@@ -58,6 +63,39 @@ class Exhibition extends Entity {
     ];
 }
 
+class MyExhibition extends Exhibition {
+    public static tableFields: TableFieldDefinition[] = [
+        {
+            columnDescription: "Title",
+            maxWidth: "200px",
+            TableCellComponent: ExhibitionTitleCell,
+            generateSortableValue: (item: Item): SortableValue => ((item as ExhibitionItem).title ?? "").toLowerCase()
+        },
+        {
+            columnDescription: "Open",
+            TableCellComponent: ExhibitionOpenInCurrentTabCell
+        },
+        {
+            columnDescription: "Date Created",
+            TableCellComponent: ExhibitionDateCreatedCell,
+            generateSortableValue: (item: Item): SortableValue => new Date((item as ExhibitionItem).date_created)
+        },
+        {
+            columnDescription: "Date Modified",
+            TableCellComponent: ExhibitionDateModifiedCell,
+            generateSortableValue: (item: Item): SortableValue => new Date((item as ExhibitionItem).date_modified)
+        },
+        {
+            columnDescription: "Access",
+            TableCellComponent: ExhibitionAccessCell
+        },
+        {
+            columnDescription: "Options",
+            TableCellComponent: ExhibitionOptionsCell
+        }
+    ];
+}
+
 class PublicExhibition extends Exhibition {
     public static baseUrl = "/api/exhibitions?public_only=1";
 }
@@ -80,4 +118,4 @@ export const exhibitionStatePropTypesShape = PropTypes.shape({
     images: PropTypes.arrayOf(entityPropTypeShape)
 });
 
-export { Exhibition, PublicExhibition };
+export { Exhibition, MyExhibition, PublicExhibition };

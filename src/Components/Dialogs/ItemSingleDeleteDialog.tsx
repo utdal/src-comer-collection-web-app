@@ -14,8 +14,7 @@ import { capitalized } from "../../Classes/Entity.js";
 import DialogCancelButton from "../Buttons/DialogCancelButton.js";
 import type { DialogState, DialogStateSingleUnderlyingItem, RouterActionResponse } from "../../index.js";
 
-const ItemSingleDeleteDialog = ({ requireTypedConfirmation, dialogState, restoreMode = false }: {
-    readonly requireTypedConfirmation?: boolean;
+const ItemSingleDeleteDialog = ({ dialogState, restoreMode = false }: {
     readonly dialogState: DialogState;
     readonly restoreMode?: boolean;
 }): React.JSX.Element => {
@@ -24,6 +23,7 @@ const ItemSingleDeleteDialog = ({ requireTypedConfirmation, dialogState, restore
     const showSnackbar = useSnackbar();
 
     const Entity = useEntity();
+    const requireTypedConfirmation = Entity.deleteDialogRequireTypedConfirmation;
 
     const submit = useSubmit();
 
@@ -194,7 +194,7 @@ const ItemSingleDeleteDialog = ({ requireTypedConfirmation, dialogState, restore
                         )
                         : null}
 
-                    {requireTypedConfirmation === true
+                    {requireTypedConfirmation
                         ? (
                             <TextField
                                 autoComplete="off"
@@ -224,7 +224,7 @@ const ItemSingleDeleteDialog = ({ requireTypedConfirmation, dialogState, restore
 
                     <Button
                         color={Entity.hasTrash || restoreMode ? "primary" : "error"}
-                        disabled={!submitEnabled || (requireTypedConfirmation === true && deleteConfirmation.toLowerCase() !== "delete")}
+                        disabled={!submitEnabled || (requireTypedConfirmation && deleteConfirmation.toLowerCase() !== "delete")}
                         fullWidth
                         size="large"
                         startIcon={restoreMode ? <RestoreIcon /> : <DeleteIcon />}

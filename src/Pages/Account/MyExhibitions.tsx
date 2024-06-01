@@ -1,74 +1,36 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useEffect, useMemo } from "react";
 import {
     Typography, Stack, Paper, Box
 } from "@mui/material";
-import { DataTable } from "../../Components/DataTable/DataTable.js";
+import DataTable from "../../Components/DataTable/DataTable.js";
 import { PhotoCameraBackIcon } from "../../Imports/Icons.js";
-import { ExhibitionSettingsDialog } from "../../Components/Dialogs/ExhibitionSettingsDialog.js";
-import { ItemSingleDeleteDialog } from "../../Components/Dialogs/ItemSingleDeleteDialog.js";
+import ExhibitionSettingsDialog from "../../Components/Dialogs/ExhibitionSettingsDialog.js";
+import ItemSingleDeleteDialog from "../../Components/Dialogs/ItemSingleDeleteDialog.js";
 import { useTitle } from "../../ContextProviders/AppFeatures.js";
 import useAppUser from "../../Hooks/useAppUser.js";
 
-import ExhibitionTitleCell from "../../Components/TableCells/Exhibition/ExhibitionTitleCell.js";
-import ExhibitionOpenInCurrentTabCell from "../../Components/TableCells/Exhibition/ExhibitionOpenInCurrentTabCell.js";
-import ExhibitionDateCreatedCell from "../../Components/TableCells/Exhibition/ExhibitionDateCreatedCell.js";
-import ExhibitionDateModifiedCell from "../../Components/TableCells/Exhibition/ExhibitionDateModifiedCell.js";
-import ExhibitionAccessCell from "../../Components/TableCells/Exhibition/ExhibitionAccessCell.js";
-import ExhibitionOptionsCell from "../../Components/TableCells/Exhibition/ExhibitionOptionsCell.js";
 import { ManagementPageProvider, useItemsReducer } from "../../ContextProviders/ManagementPageProvider.js";
 import CreateExhibitionButton from "../../Components/Buttons/CreateExhibitionButton.js";
 import { ExhibitionCreationRestriction } from "../../Components/TextBanners/ExhibitionCreationRestriction.js";
-import { useDialogState } from "../../Hooks/useDialogState.js";
-import { Exhibition } from "../../Classes/Entities/Exhibition.js";
-import { useRevalidator } from "react-router";
+import { Exhibition, MyExhibition } from "../../Classes/Entities/Exhibition.js";
 import PaginationSummary from "../../Components/PaginationSummary/PaginationSummary.js";
-import type { AppUser, ExhibitionItem, SortableValue } from "../../index.js";
-import type { ExhibitionPrivacyOptions } from "../../Components/ExhibitionPage/ExhibitionDispatchActionTypes.js";
-
-const exhibitionTableFields = [
-    {
-        columnDescription: "Title",
-        maxWidth: "200px",
-        TableCellComponent: ExhibitionTitleCell,
-        generateSortableValue: (exhibition: ExhibitionItem): SortableValue => (exhibition.title ?? "").toLowerCase()
-    },
-    {
-        columnDescription: "Open",
-        TableCellComponent: ExhibitionOpenInCurrentTabCell
-    },
-    {
-        columnDescription: "Date Created",
-        TableCellComponent: ExhibitionDateCreatedCell,
-        generateSortableValue: (exhibition: ExhibitionItem): SortableValue => new Date(exhibition.date_created)
-    },
-    {
-        columnDescription: "Date Modified",
-        TableCellComponent: ExhibitionDateModifiedCell,
-        generateSortableValue: (exhibition: ExhibitionItem): SortableValue => new Date(exhibition.date_modified)
-    },
-    {
-        columnDescription: "Access",
-        TableCellComponent: ExhibitionAccessCell
-    },
-    {
-        columnDescription: "Options",
-        TableCellComponent: ExhibitionOptionsCell
-    }
-];
+import type { AppUser, ExhibitionItem, Intent } from "../../index.js";
+import useDialogStates from "../../Hooks/useDialogStates.js";
 
 const MyExhibitions = (): React.JSX.Element => {
     useTitle("My Exhibitions");
 
     const appUser = useAppUser() as AppUser;
-    const revalidator = useRevalidator();
 
-    const [dialogIsOpen, setDialogIsOpen] = useState(false);
-    const [dialogExhibitionId, setDialogExhibitionId] = useState((null as unknown) as number | null);
-    const [dialogExhibitionTitle, setDialogExhibitionTitle] = useState("" as string | null);
-    const [dialogExhibitionAccess, setDialogExhibitionAccess] = useState((null as unknown) as ExhibitionPrivacyOptions);
-    const [dialogEditMode, setDialogEditMode] = useState(false);
+    const intentArray: Intent[] = ["exhibition-single-create", "exhibition-single-update-settings", "single-delete"];
 
-    const [deleteDialogState, openDeleteDialog] = useDialogState(false);
+    const {
+        dialogStateDictionary,
+        openDialogByIntentWithNoUnderlyingItems,
+        openDialogByIntentWithSingleUnderlyingItem,
+        openDialogByIntentWithMultipleUnderlyingItems,
+        closeDialogByIntent
+    } = useDialogStates(intentArray);
 
     const [exhibitionsCombinedState, itemsCallbacks] = useItemsReducer(appUser.Exhibitions as ExhibitionItem[]);
 
@@ -80,40 +42,19 @@ const MyExhibitions = (): React.JSX.Element => {
         setExhibitions(appUser.Exhibitions as ExhibitionItem[]);
     }, [setExhibitions, appUser.Exhibitions]);
 
-    const handleRefresh = useCallback(() => {
-        revalidator.revalidate();
-    }, [revalidator]);
-
-    // const handleOpenExhibitionCreateDialog = useCallback(() => {
-    //     setDialogEditMode(false);
-    //     setDialogExhibitionId(null);
-    //     setDialogIsOpen(true);
-    // }, []);
-
-    // const handleOpenExhibitionSettings = useCallback((exhibition: ExhibitionItem) => {
-    //     setDialogExhibitionId(exhibition.id);
-    //     setDialogExhibitionAccess(exhibition.privacy);
-    //     setDialogExhibitionTitle(exhibition.title);
-    //     setDialogEditMode(true);
-    //     setDialogIsOpen(true);
-    // }, []);
-
-    // const handleOpenExhibitionDeleteDialog = useCallback((exhibition: ExhibitionItem) => {
-    // openDeleteDialog(exhibition);
-    // }, [openDeleteDialog]);
-
-    // const managementCallbacks = useMemo(() => ({
-    //     handleOpenExhibitionCreateDialog,
-    //     handleOpenExhibitionSettings
-    // }), [handleOpenExhibitionCreateDialog, handleOpenExhibitionSettings]);
+    const managementCallbacks = useMemo(() => ({
+        openDialogByIntentWithNoUnderlyingItems,
+        closeDialogByIntent,
+        openDialogByIntentWithMultipleUnderlyingItems,
+        openDialogByIntentWithSingleUnderlyingItem
+    }), [closeDialogByIntent, openDialogByIntentWithMultipleUnderlyingItems, openDialogByIntentWithNoUnderlyingItems, openDialogByIntentWithSingleUnderlyingItem]);
 
     return (
         <ManagementPageProvider
             Entity={Exhibition}
             itemsCallbacks={itemsCallbacks}
             itemsCombinedState={exhibitionsCombinedState}
-            // managementCallbacks={managementCallbacks}
-            managementCallbacks={{}}
+            managementCallbacks={managementCallbacks}
         >
             <Box
                 component={Paper}
@@ -167,33 +108,18 @@ const MyExhibitions = (): React.JSX.Element => {
                         defaultSortAscending={false}
                         defaultSortColumn="Date Modified"
                         noSkeleton
-                        tableFields={exhibitionTableFields}
+                        rowSelectionEnabled
+                        tableFields={MyExhibition.tableFields}
                     />
                 </Box>
 
             </Box>
 
-            <ItemSingleDeleteDialog
-                dialogState={deleteDialogState}
-                requireTypedConfirmation
-            />
+            <ItemSingleDeleteDialog dialogState={dialogStateDictionary["single-delete"]} />
 
-            <ExhibitionSettingsDialog
-                dialogExhibitionAccess={dialogExhibitionAccess}
-                dialogExhibitionId={dialogExhibitionId}
-                dialogExhibitionTitle={dialogExhibitionTitle}
-                dialogIsOpen={
-                    dialogIsOpen
-                        ? dialogEditMode || appUser.can_create_exhibition
-                        : false
-                }
-                editMode={dialogEditMode}
-                refreshFunction={handleRefresh}
-                setDialogExhibitionAccess={setDialogExhibitionAccess}
-                setDialogExhibitionId={setDialogExhibitionId}
-                setDialogExhibitionTitle={setDialogExhibitionTitle}
-                setDialogIsOpen={setDialogIsOpen}
-            />
+            <ExhibitionSettingsDialog dialogState={dialogStateDictionary["exhibition-single-create"]} />
+
+            <ExhibitionSettingsDialog dialogState={dialogStateDictionary["exhibition-single-update-settings"]} />
         </ManagementPageProvider>
     );
 };

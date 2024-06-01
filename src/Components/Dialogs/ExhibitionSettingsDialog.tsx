@@ -11,7 +11,8 @@ import { useSnackbar } from "../../ContextProviders/AppFeatures.js";
 import PersistentDialog from "./PersistentDialog.js";
 import { useActionData, useSubmit } from "react-router-dom";
 import type { DialogState, DialogStateNoUnderlyingItems, DialogStateSingleUnderlyingItem, ExhibitionItem, ExhibitionPrivacy, RouterActionRequest, RouterActionResponse } from "../../index.js";
-import { useManagementCallbacks } from "../../ContextProviders/ManagementPageProvider.js";
+import { useEntity, useManagementCallbacks } from "../../ContextProviders/ManagementPageProvider.js";
+import { Exhibition, MyExhibition } from "../../Classes/Entities/Exhibition.js";
 
 interface ExhibitionAccessDisplayOption {
     value: ExhibitionPrivacy;
@@ -47,11 +48,17 @@ const exhibitionAccessOptions = (adminMode: boolean): ExhibitionAccessDisplayOpt
     }
 ];
 
-const ExhibitionSettingsDialog = ({ adminMode, dialogState }: {
-    readonly adminMode: boolean;
+const ExhibitionSettingsDialog = ({ dialogState }: {
     readonly dialogState: DialogState;
 }): React.JSX.Element => {
     const showSnackbar = useSnackbar();
+
+    const Entity = useEntity();
+    if (Entity !== Exhibition && Entity !== MyExhibition) {
+        throw new Error("ExhibitionSettingsDialog must be used only with the Exhibition entity or sub-classes");
+    }
+
+    const adminMode = Entity === Exhibition;
 
     const { dialogIsOpen, dialogItemsMultiplicity } = dialogState as DialogStateNoUnderlyingItems | DialogStateSingleUnderlyingItem;
     const dialogExhibition = dialogItemsMultiplicity === "single" ? (dialogState as DialogStateSingleUnderlyingItem).underlyingItem as ExhibitionItem : null;
