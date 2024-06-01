@@ -24,7 +24,7 @@ import ImageManagement from "../Pages/Admin/ImageManagement.js";
 import UserManagement from "../Pages/Admin/UserManagement.js";
 import { CollectionBrowser } from "../Pages/Browsers/CollectionBrowser.js";
 import { ExhibitionBrowser } from "../Pages/Browsers/ExhibitionBrowser.js";
-import ExhibitionPage from "../Pages/ExhibitionPage.js";
+import ExhibitionPage from "../Pages/ExhibitionPage";
 import SignIn from "../Pages/SignIn";
 import { myExhibitionsAction } from "./actions";
 import buildRouterActionByEntity from "./buildRouterActionByEntity";

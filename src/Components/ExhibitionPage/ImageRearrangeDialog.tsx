@@ -6,9 +6,9 @@ import {
     ArrowForwardIcon
 } from "../../Imports/Icons.js";
 import PropTypes from "prop-types";
-import { getSwappedImageArray, directionOptions } from "./ExhibitionEditPane.js";
-import { exhibitionStatePropTypesShape } from "../../Classes/Entities/Exhibition.ts";
-import { entityPropTypeShape } from "../../Classes/Entity.ts";
+import { getSwappedImageArray, directionOptions } from "./ExhibitionEditPane";
+import { exhibitionStatePropTypesShape } from "../../Classes/Entities/Exhibition";
+import { entityPropTypeShape } from "../../Classes/Entity";
 
 export const ImageRearrangeDialog = ({ imageRearrangerIsOpen, setImageRearrangerIsOpen, exhibitionState, exhibitionEditDispatch, globalImageCatalog }) => {
     const [currentWall, setCurrentWall] = useState(1);

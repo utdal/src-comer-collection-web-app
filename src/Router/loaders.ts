@@ -1,6 +1,8 @@
+import type { APIResponse } from "../Helpers/APICalls";
 import { sendAuthenticatedRequest } from "../Helpers/APICalls";
 import { Image } from "../Classes/Entities/Image";
 import type { LoaderFunction, Params } from "react-router";
+import type { ExhibitionDataAsString, ExhibitionMetadata } from "../Components/ExhibitionPage/ExhibitionDispatchActionTypes";
 
 export const appUserLoader: LoaderFunction = async () => {
     if (localStorage.getItem("token") == null) {
@@ -21,11 +23,15 @@ export const exhibitionPageLoader: LoaderFunction = async ({ params }: {
     const exhibitionId = parseInt((params as { exhibitionId: string }).exhibitionId);
     const exhibitionUrl = `/api/exhibitions/${exhibitionId}/data`;
     try {
-        const [{ data: exhibitionData }, { data: globalImageCatalog }] = await Promise.all([
+        const [{ data: exhibitionDataAndMetadata }, { data: globalImageCatalog }] = await Promise.all([
             sendAuthenticatedRequest("GET", exhibitionUrl),
             sendAuthenticatedRequest("GET", Image.baseUrl)
-        ]);
-        return { exhibitionData, globalImageCatalog };
+        ]) as [APIResponse, APIResponse];
+        const { data: exhibitionDataAsString, ...exhibitionMetadata } = exhibitionDataAndMetadata as {
+            data: ExhibitionDataAsString;
+            exhibitionMetadata: ExhibitionMetadata;
+        };
+        return { exhibitionDataAsString, exhibitionMetadata, globalImageCatalog };
     } catch (e) {
         throw new Error(`Exhibition Unavailable ${(e as Error).message}`);
     }

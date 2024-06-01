@@ -1,7 +1,7 @@
 import { Box, Button, Checkbox, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, Input, MenuItem, Paper, Select, Stack, TextField, Typography } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { useTheme } from "@emotion/react";
-import { getImageStateById } from "./exhibitionEditReducer.js";
+import { getImageStateById } from "./exhibitionEditReducer";
 import {
     CloudUploadIcon,
     AddPhotoAlternateIcon,
@@ -9,16 +9,16 @@ import {
     CollectionsIcon,
     SecurityIcon
 } from "../../Imports/Icons.js";
-import { useAppUser } from "../../Hooks/useAppUser.ts";
+import { useAppUser } from "../../Hooks/useAppUser";
 import PropTypes from "prop-types";
 import { ColorInput } from "./ColorInput.js";
 import { AccordionSubHeading } from "./AccordionSubHeading.js";
 import { ExhibitionOption } from "./ExhibitionOption.js";
 import { ExhibitionOptionGroup } from "./ExhibitionOptionGroup.js";
-import { ImageRearrangeDialog } from "./ImageRearrangeDialog.js";
+import { ImageRearrangeDialog } from "./ImageRearrangeDialog";
 import { ImageChooserDialog } from "./ImageChooserDialog.js";
-import { exhibitionStatePropTypesShape } from "../../Classes/Entities/Exhibition.ts";
-import { entityPropTypeShape } from "../../Classes/Entity.ts";
+import { exhibitionStatePropTypesShape } from "../../Classes/Entities/Exhibition";
+import { entityPropTypeShape } from "../../Classes/Entity";
 
 const moodinessOptions = [
     {

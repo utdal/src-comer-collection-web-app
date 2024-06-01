@@ -1,4 +1,6 @@
-export const blankExhibitionData = {
+import type { ExhibitionDispatchAction, ExhibitionData, ExhibitionImageData } from "./ExhibitionDispatchActionTypes";
+
+export const blankExhibitionData: ExhibitionData = {
     appearance: {
         main_wall_color: "#ffffff",
         side_wall_color: "#ffffff",
@@ -16,7 +18,7 @@ export const blankExhibitionData = {
     images: []
 };
 
-export const getBlankExhibitionImageData = (imageId) => {
+export const getBlankExhibitionImageData = (imageId: number): ExhibitionImageData => {
     return {
         image_id: imageId,
         position: {
@@ -55,9 +57,11 @@ export const getBlankExhibitionImageData = (imageId) => {
     };
 };
 
-export const getImageStateById = (exhibitionData, imageId) => {
-    for (const i of (exhibitionData.images ?? [])) {
-        if (i.image_id === imageId) { return i; }
+export const getImageStateById = (exhibitionData: ExhibitionData, imageId: number): ExhibitionImageData | null => {
+    for (const i of (exhibitionData.images)) {
+        if (i.image_id === imageId) {
+            return i;
+        }
     }
     return null;
 };
@@ -66,7 +70,7 @@ const widthFtMin = 10;
 const heightFtMin = 4;
 const lengthFtMin = 10;
 
-export const exhibitionEditReducer = (exhibitionData, action) => {
+export const exhibitionEditReducer = (exhibitionData: ExhibitionData, action: ExhibitionDispatchAction): ExhibitionData => {
     switch (action.scope) {
     case "exhibition":
 
@@ -176,7 +180,6 @@ export const exhibitionEditReducer = (exhibitionData, action) => {
                 images: action.newImages
             };
         default:
-            console.log("Unrecognized exhibition edit action: ", action.type, action);
             return exhibitionData;
         }
 
@@ -187,154 +190,154 @@ export const exhibitionEditReducer = (exhibitionData, action) => {
         }
         return {
             ...exhibitionData,
-            images: exhibitionData.images.map((image) => {
-                if (image.image_id !== action.image_id) { return image; }
+            images: exhibitionData.images.map((imageData) => {
+                if (imageData.image_id !== action.image_id) {
+                    return imageData;
+                }
 
                 switch (action.type) {
                 case "set_position_custom_x":
                     return {
-                        ...image,
+                        ...imageData,
                         position: {
-                            ...image.position,
+                            ...imageData.position,
                             custom_x: action.newValue
                         }
                     };
 
                 case "set_position_custom_y":
                     return {
-                        ...image,
+                        ...imageData,
                         position: {
-                            ...image.position,
+                            ...imageData.position,
                             custom_y: action.newValue
                         }
                     };
 
                 case "set_position_custom_enabled":
                     return {
-                        ...image,
+                        ...imageData,
                         position: {
-                            ...image.position,
+                            ...imageData.position,
                             custom_position: action.isEnabled
                         }
                     };
 
                 case "set_matte_color":
                     return {
-                        ...image,
+                        ...imageData,
                         matte: {
-                            ...image.matte,
+                            ...imageData.matte,
                             color: action.newColor
                         }
                     };
 
                 case "set_matte_weight_enabled":
                     return {
-                        ...image,
+                        ...imageData,
                         matte: {
-                            ...image.matte,
+                            ...imageData.matte,
                             weighted: action.isEnabled
                         }
                     };
 
                 case "set_matte_weight_value":
                     return {
-                        ...image,
+                        ...imageData,
                         matte: {
-                            ...image.matte,
+                            ...imageData.matte,
                             weighted_value: action.newValue
                         }
                     };
 
                 case "set_frame_custom_enabled":
                     return {
-                        ...image,
+                        ...imageData,
                         frame: {
-                            ...image.frame,
+                            ...imageData.frame,
                             custom: action.isEnabled
                         }
                     };
 
                 case "set_frame_width":
                     return {
-                        ...image,
+                        ...imageData,
                         frame: {
-                            ...image.frame,
+                            ...imageData.frame,
                             width: action.newValue
                         }
                     };
 
                 case "set_frame_height":
                     return {
-                        ...image,
+                        ...imageData,
                         frame: {
-                            ...image.frame,
+                            ...imageData.frame,
                             height: action.newValue
                         }
                     };
 
                 case "set_frame_color":
                     return {
-                        ...image,
+                        ...imageData,
                         frame: {
-                            ...image.frame,
+                            ...imageData.frame,
                             color: action.newColor
                         }
                     };
 
                 case "set_light_intensity":
                     return {
-                        ...image,
+                        ...imageData,
                         light: {
-                            ...image.light,
+                            ...imageData.light,
                             intensity: action.newValue
                         }
                     };
 
                 case "set_light_color":
                     return {
-                        ...image,
+                        ...imageData,
                         light: {
-                            ...image.light,
+                            ...imageData.light,
                             color: action.newColor
                         }
                     };
 
                 case "set_description":
                     return {
-                        ...image,
+                        ...imageData,
                         metadata: {
-                            ...image.metadata,
+                            ...imageData.metadata,
                             description: action.newValue
                         }
                     };
 
                 case "set_additional_information":
                     return {
-                        ...image,
+                        ...imageData,
                         metadata: {
-                            ...image.metadata,
+                            ...imageData.metadata,
                             additional_information: action.newValue
                         }
                     };
 
                 case "set_direction":
                     return {
-                        ...image,
+                        ...imageData,
                         metadata: {
-                            ...image.metadata,
+                            ...imageData.metadata,
                             direction: action.newValue
                         }
                     };
 
                 default:
-                    console.log("Unrecognized image edit action: ", action.type, action);
-                    return exhibitionData;
+                    return imageData;
                 }
             })
         };
 
     default:
-        console.log("Unrecognized exhibition edit scope: ", action.scope, action);
         return exhibitionData;
     }
 };

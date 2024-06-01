@@ -1,28 +1,34 @@
 import { Box } from "@mui/material";
+import type { Params } from "react-router";
 import { useLoaderData, useParams } from "react-router";
-import { ExhibitionEditPane } from "../Components/ExhibitionPage/ExhibitionEditPane.js";
+import { ExhibitionEditPane } from "../Components/ExhibitionPage/ExhibitionEditPane";
 import React, { useCallback, useEffect, useReducer, useState } from "react";
-import { exhibitionEditReducer, blankExhibitionData } from "../Components/ExhibitionPage/exhibitionEditReducer.js";
+import { exhibitionEditReducer, blankExhibitionData } from "../Components/ExhibitionPage/exhibitionEditReducer";
 import Exhibition3DViewport from "../Components/Exhibition3DViewport/Exhibition3DViewport.js";
-import { sendAuthenticatedRequest } from "../Helpers/APICalls.js";
-import { useAppUser } from "../Hooks/useAppUser.ts";
-import { useSnackbar, useTitle } from "../ContextProviders/AppFeatures.tsx";
+import { sendAuthenticatedRequest } from "../Helpers/APICalls";
+import { useAppUser } from "../Hooks/useAppUser";
+import { useSnackbar, useTitle } from "../ContextProviders/AppFeatures";
+import type { Item } from "../index.js";
+import type { ExhibitionData, ExhibitionDataAsString, ExhibitionMetadata, ExhibitionSetEverythingAction } from "../Components/ExhibitionPage/ExhibitionDispatchActionTypes.js";
 
-const ExhibitionPage = () => {
-    const exhibitionId = parseInt(useParams().exhibitionId);
+interface ExhibitionPageParams extends Readonly<Params> {
+    exhibitionIdParam: string;
+}
 
-    const { exhibitionData, globalImageCatalog } = useLoaderData();
+interface ExhibitionPageLoaderData {
+    exhibitionDataAsString: ExhibitionDataAsString | null;
+    exhibitionMetadata: ExhibitionMetadata;
+    globalImageCatalog: Item[];
+}
 
-    const [exhibitionMetadata, setExhibitionMetadata] = useState(exhibitionData);
+const ExhibitionPage = (): React.JSX.Element => {
+    const params = useParams() as ExhibitionPageParams;
+    const exhibitionId = parseInt(params.exhibitionIdParam);
+
+    const { exhibitionDataAsString, exhibitionMetadata, globalImageCatalog } = useLoaderData() as ExhibitionPageLoaderData;
 
     const [exhibitionState, exhibitionEditDispatch] = useReducer(exhibitionEditReducer, blankExhibitionData);
-    const [exhibitionIsEditable, setExhibitionIsEditable] = useState(false);
     const [editModeActive, setEditModeActive] = useState(false);
-
-    // const loadCatalog = async () => {
-    //     const catalogData = await sendAuthenticatedRequest("GET", "/api/images");
-    //     setGlobalImageCatalog(catalogData.data);
-    // };
 
     const appUser = useAppUser();
     const showSnackbar = useSnackbar();
@@ -32,74 +38,34 @@ const ExhibitionPage = () => {
 
     const saveExhibition = useCallback(async () => {
         try {
+            const exhibitionStateAsString: ExhibitionDataAsString = JSON.stringify(exhibitionState);
             await sendAuthenticatedRequest("PUT", exhibitionUrl, {
-                data: JSON.stringify(exhibitionState)
+                data: exhibitionStateAsString
             });
-            window.onbeforeunload = null;
             showSnackbar("Exhibition saved", "success");
         } catch (e) {
-            console.log("Error saving exhibition", e.message);
+            console.log("Error saving exhibition", (e as Error).message);
             showSnackbar("Could not save exhibition", "error");
         }
     }, [exhibitionState, exhibitionUrl, showSnackbar]);
 
-    const loadExhibition = useCallback(async () => {
-        setExhibitionMetadata(exhibitionData);
-
-        if (exhibitionData?.data) {
-            exhibitionEditDispatch({
+    useEffect(() => {
+        if (exhibitionDataAsString != null) {
+            const dispatchAction: ExhibitionSetEverythingAction = {
                 scope: "exhibition",
                 type: "set_everything",
-                newExhibition: JSON.parse(exhibitionData.data)
-            });
-        }
-        if (exhibitionData?.isEditable) {
-            setExhibitionIsEditable(true);
-        }
-        setTitleText(exhibitionData?.title);
-    }, [exhibitionData, setTitleText]);
-
-    useEffect(() => {
-        loadExhibition();
-    }, [appUser, loadExhibition]);
-
-    // useEffect(() => {
-    //     loadCatalog();
-    // }, []);
-
-    const onUnload = useCallback(async () => {
-        await saveExhibition();
-        return false;
-    }, [saveExhibition]);
-
-    useEffect(() => {
-        window.onbeforeunload = onUnload;
-        return () => {
-            window.onbeforeunload = null;
-        };
-    }, [exhibitionState, onUnload]);
-
-    useEffect(() => {
-        if (exhibitionIsEditable && !editModeActive) {
-            saveExhibition();
-        }
-    }, [editModeActive, exhibitionIsEditable, saveExhibition]);
-
-    const handleControlS = useCallback((e) => {
-        if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "s") {
-            e.preventDefault();
-            saveExhibition();
-        }
-    }, [saveExhibition]);
-
-    useEffect(() => {
-        if (editModeActive) {
-            document.addEventListener("keydown", handleControlS);
-            return () => {
-                document.removeEventListener("keydown", handleControlS);
+                newExhibition: JSON.parse(exhibitionDataAsString) as ExhibitionData
             };
+            exhibitionEditDispatch(dispatchAction);
         }
-    }, [editModeActive, handleControlS]);
+        setTitleText(exhibitionMetadata.title);
+    }, [appUser, exhibitionDataAsString, exhibitionMetadata.title, setTitleText]);
+
+    useEffect(() => {
+        if (exhibitionMetadata.isEditable) {
+            setEditModeActive(true);
+        }
+    }, [exhibitionMetadata.isEditable]);
 
     return (
         <Box
@@ -117,7 +83,7 @@ const ExhibitionPage = () => {
 
             <Exhibition3DViewport
                 editModeActive={editModeActive}
-                exhibitionIsEditable={exhibitionIsEditable}
+                exhibitionIsEditable={exhibitionMetadata.isEditable}
                 exhibitionMetadata={exhibitionMetadata}
                 exhibitionState={exhibitionState}
                 globalImageCatalog={globalImageCatalog}
