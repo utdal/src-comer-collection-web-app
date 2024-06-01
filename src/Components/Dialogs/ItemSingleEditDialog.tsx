@@ -6,7 +6,7 @@ import {
     Button, DialogContentText
 } from "@mui/material";
 import { SaveIcon } from "../../Imports/Icons.js";
-import { getLocalISOString } from "../../Helpers/getLocalISOString.js";
+import getLocalISOString from "../../Helpers/getLocalISOString.js";
 import { useSnackbar } from "../../ContextProviders/AppFeatures.js";
 import { useEntity, useManagementCallbacks } from "../../ContextProviders/ManagementPageProvider.js";
 import DialogInputFieldWithRef from "../Inputs/DialogInputFieldWithRef.js";
@@ -120,7 +120,7 @@ const ItemSingleEditDialog = ({ dialogState }: {
                         <DialogInputFieldWithRef
                             defaultValue={
                                 f.inputType === "datetime-local"
-                                    ? getLocalISOString(dialogItem?.[f.fieldName])
+                                    ? getLocalISOString(dialogItem?.[f.fieldName] as string)
                                     : dialogItem?.[f.fieldName]
                             }
                             fieldDefinition={f}
