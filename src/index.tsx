@@ -20,8 +20,9 @@ export interface Item {
 export interface ArtistItem extends Item {
     website: string | null;
     notes: string | null;
-    familyName: string | null;
-    givenName: string | null;
+    familyName: string;
+    givenName: string;
+    fullNameReverse: string;
     Images?: Item[];
 }
 
@@ -67,6 +68,7 @@ export interface UserItem extends Item {
     pw_updated: string;
     pw_change_required: boolean;
     can_create_exhibition: boolean;
+    safe_display_name: string;
 }
 
 export type ExhibitionPrivacy = "PRIVATE" | "PUBLIC_ANONYMOUS" | "PUBLIC";

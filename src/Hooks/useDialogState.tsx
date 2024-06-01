@@ -1,18 +1,19 @@
 import { useCallback, useMemo, useState } from "react";
 import { DialogStateOld } from "../Classes/DialogState.js";
+import type { Item } from "../index.js";
 
 /**
  * Custom hook to manage dialog state (open/closed and associated items)
- * @param {Boolean} multipleItems Set to false if dialog pertains to only one
+ * @param multipleItems Set to false if dialog pertains to only one
  * primary item.  Set to true if dialog pertains to multiple primary items.
- * @param {Class} entity Optionally choose a specific type of item
- * @returns {[DialogStateOld, openDialog: () => void, closeDialog: () => void]} [dialogState, openDialog, closeDialog]
+ * Exclude the parameter if dialog pertains to no primary items.
+ * @returns [dialogState, openDialog, closeDialog]
  */
-export const useDialogState = (multipleItems) => {
+export const useDialogState = (multipleItems?: boolean): [DialogStateOld, openDialog: (() => void) | (([...newItems]: Item[]) => void) | ((newItem: Item) => void), closeDialog: () => void] => {
     const [dialogIsOpen, setDialogIsOpen] = useState(false);
-    const [dialogItems, setDialogItems] = useState(multipleItems ? [] : null);
+    const [dialogItems, setDialogItems] = useState(multipleItems === true ? [] as Item[] : multipleItems === false ? (null as unknown) as Item : null);
 
-    const openDialogWithItems = useCallback(([...newItems]) => {
+    const openDialogWithItems = useCallback(([...newItems]: Item[]): void => {
         if (multipleItems === true) {
             setDialogItems(newItems);
             setDialogIsOpen(true);
@@ -23,7 +24,7 @@ export const useDialogState = (multipleItems) => {
         }
     }, [multipleItems]);
 
-    const openDialogWithItem = useCallback((newItem) => {
+    const openDialogWithItem = useCallback((newItem: Item): void => {
         if (multipleItems === true) {
             throw new Error("This dialog uses an array of items.  Use openDialogWithItems instead.");
         } else if (multipleItems === false) {
@@ -34,7 +35,7 @@ export const useDialogState = (multipleItems) => {
         }
     }, [multipleItems]);
 
-    const openDialogWithNoItems = useCallback(() => {
+    const openDialogWithNoItems = useCallback((): void => {
         if (multipleItems === true) {
             throw new Error("This dialog uses an array of items.  Use openDialogWithItems instead.");
         } else if (multipleItems === false) {
@@ -47,7 +48,7 @@ export const useDialogState = (multipleItems) => {
 
     const closeDialog = useCallback(() => {
         setDialogIsOpen(false);
-        setDialogItems(multipleItems ? [] : null);
+        setDialogItems(multipleItems === true ? [] : null);
     }, [multipleItems]);
 
     const openDialog = multipleItems === true

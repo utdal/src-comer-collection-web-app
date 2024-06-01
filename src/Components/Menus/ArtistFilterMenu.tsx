@@ -1,29 +1,32 @@
 import React from "react";
 import { BrushIcon } from "../../Imports/Icons.js";
-import PropTypes from "prop-types";
 import { SecondaryFilterMenu } from "./SecondaryFilterMenu.js";
 import { Typography } from "@mui/material";
-import { entityPropTypeShape } from "../../Classes/Entity.ts";
+import type { ArtistItem, Item } from "../../index.js";
 
-const artistSortFunction = (a, b) => {
-    return a.fullNameReverse > b.fullNameReverse;
+const artistSortFunction = (a: Item, b: Item): number => {
+    return (a as ArtistItem).fullNameReverse > (b as ArtistItem).fullNameReverse ? 1 : -1;
 };
 
-const artistDisplayFunction = (artist) => {
+const artistDisplayFunction = (artist: Item): React.ReactNode => {
     return (
         <Typography
             sx={{ minWidth: "120px", maxWidth: "200px", wordWrap: "break-word" }}
             variant="body1"
         >
-            {artist.fullNameReverse}
+            {(artist as ArtistItem).fullNameReverse}
         </Typography>
     );
 };
 
-export const ArtistFilterMenu = ({ filterValue, setFilterValue, artists }) => {
+export const ArtistFilterMenu = ({ filterValue, setFilterValue, artists }: {
+    readonly filterValue: ArtistItem;
+    readonly setFilterValue: React.Dispatch<React.SetStateAction<Item | null>>;
+    readonly artists: ArtistItem[];
+}): React.JSX.Element => {
     return (
         <SecondaryFilterMenu
-            SecondaryIcon={BrushIcon}
+            SecondaryIcon={BrushIcon as React.ElementType}
             displayFunction={artistDisplayFunction}
             emptyMessage="No artist filters available"
             filterValue={filterValue}
@@ -34,10 +37,4 @@ export const ArtistFilterMenu = ({ filterValue, setFilterValue, artists }) => {
             sortFunction={artistSortFunction}
         />
     );
-};
-
-ArtistFilterMenu.propTypes = {
-    artists: PropTypes.arrayOf(entityPropTypeShape).isRequired,
-    filterValue: PropTypes.shape(entityPropTypeShape).isRequired,
-    setFilterValue: PropTypes.func.isRequired
 };

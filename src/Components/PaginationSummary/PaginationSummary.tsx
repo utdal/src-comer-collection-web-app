@@ -1,23 +1,34 @@
 import React, { useCallback } from "react";
 import PropTypes from "prop-types";
 import { useItemCounts, useItemsPagination } from "../../ContextProviders/ManagementPageProvider";
+import type { IconButtonOwnProps, StackOwnProps } from "@mui/material";
 import { IconButton, Stack, styled } from "@mui/material";
 import { KeyboardArrowLeftIcon, KeyboardArrowRightIcon, KeyboardDoubleArrowLeftIcon, KeyboardDoubleArrowRightIcon } from "../../Imports/Icons.js";
 import PaginationSummaryMenu from "./PaginationSummaryMenu.js";
 
+interface DisappearingStackProps extends StackOwnProps {
+    isHidden: boolean;
+}
+
+interface DisappearingIconButtonProps extends IconButtonOwnProps {
+    isHidden: boolean;
+}
+
 const DisappearingStack = styled(Stack, {
     shouldForwardProp: (prop) => prop !== "isHidden"
-})(({ isHidden }) => ({
+})(({ isHidden }: DisappearingStackProps) => ({
     visibility: isHidden ? "hidden" : "visible"
 }));
 
 const DisappearingIconButton = styled(IconButton, {
     shouldForwardProp: (prop) => prop !== "isHidden"
-})(({ isHidden }) => ({
+})(({ isHidden }: DisappearingIconButtonProps) => ({
     display: isHidden ? "none" : ""
 }));
 
-const PaginationSummary = ({ hideOnSinglePage }) => {
+const PaginationSummary = ({ hideOnSinglePage }: {
+    readonly hideOnSinglePage?: boolean;
+}): React.JSX.Element => {
     const { paginationStatus, setPaginationStartIndex } = useItemsPagination();
     const itemCounts = useItemCounts();
 
@@ -37,7 +48,7 @@ const PaginationSummary = ({ hideOnSinglePage }) => {
         setPaginationStartIndex(Math.ceil(itemCounts.visible / paginationStatus.itemsPerPage - 1) * paginationStatus.itemsPerPage);
     }, [itemCounts.visible, paginationStatus.itemsPerPage, setPaginationStartIndex]);
 
-    const isHidden = itemCounts.visible === 0 ? "none" : "" || (hideOnSinglePage && itemCounts.visible <= paginationStatus.itemsPerPage);
+    const isHidden = itemCounts.visible === 0 || (hideOnSinglePage === true && itemCounts.visible <= paginationStatus.itemsPerPage);
     const skipButtonsHidden = itemCounts.visible <= 2 * paginationStatus.itemsPerPage;
 
     return (

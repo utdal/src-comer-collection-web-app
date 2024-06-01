@@ -3,27 +3,32 @@ import { Typography } from "@mui/material";
 import { SellIcon } from "../../Imports/Icons.js";
 import PropTypes from "prop-types";
 import { SecondaryFilterMenu } from "./SecondaryFilterMenu.js";
-import { entityPropTypeShape } from "../../Classes/Entity.ts";
+import { entityPropTypeShape } from "../../Classes/Entity.js";
+import type { Item, TagItem } from "../../index.js";
 
-const tagSortFunction = (a, b) => {
-    return a.data > b.data;
+const tagSortFunction = (a: Item, b: Item): number => {
+    return (a as TagItem).data > (b as TagItem).data ? 1 : -1;
 };
 
-const tagDisplayFunction = (tag) => {
+const tagDisplayFunction = (tag: Item): React.ReactNode => {
     return (
         <Typography
             sx={{ minWidth: "120px", maxWidth: "200px", wordWrap: "break-word" }}
             variant="body1"
         >
-            {tag.data}
+            {(tag as TagItem).data}
         </Typography>
     );
 };
 
-export const TagFilterMenu = ({ filterValue, setFilterValue, tags }) => {
+export const TagFilterMenu = ({ filterValue, setFilterValue, tags }: {
+    readonly filterValue: TagItem;
+    readonly setFilterValue: React.Dispatch<React.SetStateAction<Item | null>>;
+    readonly tags: TagItem[];
+}): React.JSX.Element => {
     return (
         <SecondaryFilterMenu
-            SecondaryIcon={SellIcon}
+            SecondaryIcon={SellIcon as React.ElementType}
             displayFunction={tagDisplayFunction}
             emptyMessage="No tag filters available"
             filterValue={filterValue}

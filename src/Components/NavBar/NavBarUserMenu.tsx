@@ -1,22 +1,23 @@
 import React, { useCallback, useState } from "react";
 import { Typography, Button, Divider, Menu, MenuItem, Stack } from "@mui/material";
 import { useNavigate, useRevalidator } from "react-router-dom";
-import useAppUser from "../../Hooks/useAppUser.ts";
+import useAppUser from "../../Hooks/useAppUser.js";
 import {
     ArrowDropDownIcon,
     AccountCircleIcon,
     PhotoCameraBackIcon,
     LogoutIcon
 } from "../../Imports/Icons.js";
+import type { AppUser } from "../../index.js";
 
-export const NavBarUserMenu = () => {
-    const [anchorElement, setAnchorElement] = useState(null);
-    const appUser = useAppUser();
+export const NavBarUserMenu = (): React.JSX.Element => {
+    const [anchorElement, setAnchorElement] = useState((null as unknown) as Element | null);
+    const appUser = useAppUser() as AppUser;
     const navigate = useNavigate();
 
     const revalidator = useRevalidator();
 
-    const handleMenuOpen = useCallback((event) => {
+    const handleMenuOpen = useCallback((event: React.MouseEvent<HTMLButtonElement>): void => {
         setAnchorElement(event.currentTarget);
     }, []);
 
@@ -64,7 +65,7 @@ export const NavBarUserMenu = () => {
                     horizontal: "right"
                 }}
             >
-                <MenuItem onClick={() => {
+                <MenuItem onClick={(): void => {
                     handleMenuClose();
                     navigate("/Account/Profile");
                 }}
@@ -75,13 +76,13 @@ export const NavBarUserMenu = () => {
                     >
                         <AccountCircleIcon />
 
-                        <Typography variant="body">
+                        <Typography>
                             My Profile
                         </Typography>
                     </Stack>
                 </MenuItem>
 
-                <MenuItem onClick={() => {
+                <MenuItem onClick={(): void => {
                     handleMenuClose();
                     navigate("/Account/MyExhibitions");
                 }}
@@ -92,7 +93,7 @@ export const NavBarUserMenu = () => {
                     >
                         <PhotoCameraBackIcon />
 
-                        <Typography variant="body">
+                        <Typography>
                             My Exhibitions
                         </Typography>
                     </Stack>
@@ -100,7 +101,7 @@ export const NavBarUserMenu = () => {
 
                 <Divider />
 
-                <MenuItem onClick={() => {
+                <MenuItem onClick={(): void => {
                     handleMenuClose();
                     localStorage.removeItem("token");
                     revalidator.revalidate();
@@ -113,7 +114,7 @@ export const NavBarUserMenu = () => {
                     >
                         <LogoutIcon />
 
-                        <Typography variant="body">
+                        <Typography>
                             Sign Out
                         </Typography>
                     </Stack>

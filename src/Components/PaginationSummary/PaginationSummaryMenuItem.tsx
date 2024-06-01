@@ -8,15 +8,16 @@ import { useItemsPagination } from "../../ContextProviders/ManagementPageProvide
  * @param {{startIndex: number, endIndex: number, handleMenuClose: () => void}} param0
  * @returns
  */
-const PaginationSummaryMenuItem = ({ startIndex, endIndex, handleMenuClose }) => {
+const PaginationSummaryMenuItem = ({ startIndex, endIndex, handleMenuClose }: {
+    readonly startIndex: number;
+    readonly endIndex: number;
+    readonly handleMenuClose: () => void;
+}): React.JSX.Element => {
     const { paginationStatus, setPaginationStartIndex } = useItemsPagination();
 
-    /**
-     * @type {{current: Element}}
-     */
-    const ref = useRef();
+    const ref = useRef((null as unknown) as Element);
 
-    const handleClick = useCallback(() => {
+    const handleClick: React.MouseEventHandler<HTMLAnchorElement> = useCallback(() => {
         handleMenuClose();
         setPaginationStartIndex(startIndex);
     }, [handleMenuClose, setPaginationStartIndex, startIndex]);

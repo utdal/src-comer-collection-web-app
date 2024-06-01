@@ -1,16 +1,19 @@
 import React, { useCallback, useMemo, useState } from "react";
-import PropTypes from "prop-types";
 import { Button, Menu, Stack, Typography } from "@mui/material";
 import PaginationSummaryMenuItem from "./PaginationSummaryMenuItem.js";
+import type { PaginationStatus } from "../../index.js";
 
-const PaginationSummaryMenu = ({ visibleItemCount, paginationStatus }) => {
-    const [anchorElement, setAnchorElement] = useState(null);
+const PaginationSummaryMenu = ({ visibleItemCount, paginationStatus }: {
+    readonly visibleItemCount: number;
+    readonly paginationStatus: PaginationStatus;
+}): React.JSX.Element => {
+    const [anchorElement, setAnchorElement] = useState((null as unknown) as Element | null);
 
     const textWidth = useMemo(() => (
         `${55 + (Math.floor(Math.log10(visibleItemCount)) + 1) * 20}px`
     ), [visibleItemCount]);
 
-    const handleMenuOpen = useCallback((event) => {
+    const handleMenuOpen = useCallback((event: React.MouseEvent<HTMLButtonElement>) => {
         setAnchorElement(event.currentTarget);
     }, []);
 
@@ -90,15 +93,6 @@ const PaginationSummaryMenu = ({ visibleItemCount, paginationStatus }) => {
             </Menu>
         </>
     );
-};
-
-PaginationSummaryMenu.propTypes = {
-    paginationStatus: PropTypes.shape({
-        startIndex: PropTypes.number,
-        endIndex: PropTypes.number,
-        itemsPerPage: PropTypes.number
-    }),
-    visibleItemCount: PropTypes.number
 };
 
 export default PaginationSummaryMenu;

@@ -1,19 +1,24 @@
-import React from "react";
+import React, { useCallback } from "react";
 import { AppBar, Toolbar, Button, Divider, IconButton, Stack } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-import useAppUser from "../../Hooks/useAppUser.ts";
+import useAppUser from "../../Hooks/useAppUser.js";
 import { SettingsIcon } from "../../Imports/Icons.js";
 import { AppSettingsDialog } from "../Dialogs/AppSettingsDialog/AppSettingsDialog.js";
 import { NavBarUserMenu } from "./NavBarUserMenu.js";
 import { NavBarButton } from "./NavBarButton.js";
 import { useDialogState } from "../../Hooks/useDialogState.js";
 import NavBarLogo from "./NavBarLogo.js";
+import type { AppUser } from "../../index.js";
 
-const NavBar = () => {
-    const appUser = useAppUser();
+const NavBar = (): React.JSX.Element => {
+    const appUser = useAppUser() as AppUser;
     const navigate = useNavigate();
 
     const [appSettingsDialogState, openAppSettingsDialog] = useDialogState();
+
+    const handleOpenSettingsDialog: React.MouseEventHandler<HTMLButtonElement> = useCallback(() => {
+        openAppSettingsDialog();
+    }, [openAppSettingsDialog]);
 
     return (
         <AppBar
@@ -68,7 +73,9 @@ const NavBar = () => {
                                     }}
                                 >
                                     <Button
-                                        onClick={() => { navigate("/SignIn"); }}
+                                        onClick={(): void => {
+                                            navigate("/SignIn");
+                                        }}
                                         variant="contained"
                                     >
                                         Sign In
@@ -79,7 +86,7 @@ const NavBar = () => {
                     </Stack>
 
                     <IconButton
-                        onClick={openAppSettingsDialog}
+                        onClick={handleOpenSettingsDialog}
                         sx={{ color: "white", marginLeft: 2 }}
                     >
                         <SettingsIcon />
