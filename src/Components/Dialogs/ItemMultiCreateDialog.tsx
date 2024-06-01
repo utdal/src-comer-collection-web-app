@@ -1,5 +1,4 @@
 import React, { useCallback, useEffect, useReducer, useState } from "react";
-import PropTypes from "prop-types";
 import {
     Stack, DialogTitle,
     DialogContent,
@@ -7,45 +6,41 @@ import {
     Button, IconButton, DialogContentText, TextField, Divider
 } from "@mui/material";
 import { DeleteIcon } from "../../Imports/Icons.js";
-import { getBlankItemFields } from "../../Helpers/getBlankItemFields.js";
-import { useSnackbar } from "../../ContextProviders/AppFeatures";
-import { useEntity, useManagementCallbacks } from "../../ContextProviders/ManagementPageProvider";
-import { PersistentDialog } from "./PersistentDialog.js";
-import { DialogStateOld } from "../../Classes/DialogState.js";
+import getBlankItemFields from "../../Helpers/getBlankItemFields.js";
+import { useSnackbar } from "../../ContextProviders/AppFeatures.js";
+import { useEntity, useManagementCallbacks } from "../../ContextProviders/ManagementPageProvider.js";
+import PersistentDialog from "./PersistentDialog.js";
 import { useActionData, useSubmit } from "react-router-dom";
 import DialogCancelButton from "../Buttons/DialogCancelButton.js";
+import type { DialogState, DialogStateNoUnderlyingItems, ItemGenericFieldValue, MultiCreateDialogDispatchAction, RouterActionErrorResponse, RouterActionPartialByIndexResponse, RouterActionSuccessResponse } from "../../index.js";
 
-/**
- * @param {{dialogState: DialogState}} props
- * @returns
- */
-export const ItemMultiCreateDialog = ({ dialogState }) => {
+const ItemMultiCreateDialog = ({ dialogState }: {
+    readonly dialogState: DialogState;
+}): React.JSX.Element => {
     const Entity = useEntity();
     const showSnackbar = useSnackbar();
 
-    const { dialogIsOpen } = dialogState;
+    const { dialogIsOpen } = dialogState as DialogStateNoUnderlyingItems;
 
     const { closeDialogByIntent } = useManagementCallbacks();
 
-    /**
-     * @type {RouterActionResponse}
-     */
-    const actionData = useActionData();
+    const actionData = useActionData() as RouterActionErrorResponse | RouterActionPartialByIndexResponse | RouterActionSuccessResponse | null;
 
     const submit = useSubmit();
     const [submitEnabled, setSubmitEnabled] = useState(true);
 
-    /**
-     * @type {(createDialogItems: Item[], action: MultiCreateDialogDispatchAction) => void}
-     */
-    const createDialogReducer = useCallback((createDialogItems, action) => {
+    const createDialogReducer = useCallback((createDialogItems: Record<string, ItemGenericFieldValue>[], action: MultiCreateDialogDispatchAction): Record<string, ItemGenericFieldValue>[] => {
         switch (action.type) {
         case "add":
             return [...createDialogItems, getBlankItemFields(Entity.fieldDefinitions)];
 
         case "change":
             return createDialogItems.map((r, i) => {
-                if (action.index === i) { return { ...r, [action.field]: action.newValue }; } else { return r; }
+                if (action.index === i) {
+                    return { ...r, [action.field]: action.newValue };
+                } else {
+                    return r;
+                }
             });
 
         case "remove":
@@ -66,9 +61,6 @@ export const ItemMultiCreateDialog = ({ dialogState }) => {
         }
     }, [Entity.fieldDefinitions]);
 
-    /**
-     * @type {[Item[], (action: MultiCreateDialogDispatchAction) => void]}
-     */
     const [createDialogItems, createDialogDispatch] = useReducer(createDialogReducer, []);
 
     useEffect(() => {
@@ -77,10 +69,11 @@ export const ItemMultiCreateDialog = ({ dialogState }) => {
         }
     }, [dialogIsOpen]);
 
-    const pluralCapitalized = Entity?.plural.substr(0, 1).toUpperCase() + Entity?.plural.substr(1).toLowerCase();
+    const pluralCapitalized = Entity.plural.substring(0, 1).toUpperCase() + Entity.plural.substr(1).toLowerCase();
 
     const handleSubmit = useCallback(() => {
         setSubmitEnabled(false);
+
         /**
          * @type {RouterActionRequest}
          */
@@ -90,7 +83,7 @@ export const ItemMultiCreateDialog = ({ dialogState }) => {
                 itemsToCreate: createDialogItems
             }
         };
-        submit(request, {
+        submit(JSON.stringify(request), {
             method: "POST",
             encType: "application/json"
         });
@@ -121,7 +114,7 @@ export const ItemMultiCreateDialog = ({ dialogState }) => {
             } else if (actionData.status === "error") {
                 setSubmitEnabled(true);
                 showSnackbar(actionData.snackbarText, "error");
-            } else if (actionData.status === "partial") {
+            } else {
                 setSubmitEnabled(true);
                 showSnackbar(actionData.snackbarText, "warning");
                 createDialogDispatch({
@@ -134,7 +127,6 @@ export const ItemMultiCreateDialog = ({ dialogState }) => {
 
     return (
         <PersistentDialog
-            isForm
             maxWidth="lg"
             onClose={handleClose}
             onSubmit={handleSubmit}
@@ -184,7 +176,7 @@ export const ItemMultiCreateDialog = ({ dialogState }) => {
                                     {Entity.fieldDefinitions.map((f, fi) => (
                                         <TextField
                                             InputLabelProps={
-                                                (() => {
+                                                ((): object | undefined => {
                                                     if (f.inputType === "datetime-local") {
                                                         return {
                                                             shrink: true
@@ -195,15 +187,15 @@ export const ItemMultiCreateDialog = ({ dialogState }) => {
                                             autoFocus={fi === 0}
                                             inputProps={{
                                                 type: f.inputType ?? "text",
-                                                maxLength: f.maxlength ?? 255,
+                                                maxLength: f.maxlength,
                                                 min: f.minValue
                                             }}
                                             key={f.fieldName}
-                                            label={f.displayName ?? ""}
+                                            label={f.displayName}
                                             minRows={2}
                                             multiline={f.multiline}
                                             name={f.fieldName}
-                                            onChange={(e) => {
+                                            onChange={(e: React.ChangeEvent<HTMLInputElement>): void => {
                                                 createDialogDispatch({
                                                     type: "change",
                                                     field: f.fieldName,
@@ -220,7 +212,7 @@ export const ItemMultiCreateDialog = ({ dialogState }) => {
                                     ))}
                                 </Stack>
 
-                                <IconButton onClick={() => {
+                                <IconButton onClick={(): void => {
                                     createDialogDispatch({
                                         type: "remove",
                                         index
@@ -266,7 +258,7 @@ export const ItemMultiCreateDialog = ({ dialogState }) => {
                             color="primary"
                             disabled={!submitEnabled}
                             fullWidth
-                            onClick={() => {
+                            onClick={(): void => {
                                 createDialogDispatch({
                                     type: "add"
                                 });
@@ -294,6 +286,4 @@ export const ItemMultiCreateDialog = ({ dialogState }) => {
     );
 };
 
-ItemMultiCreateDialog.propTypes = {
-    dialogState: PropTypes.instanceOf(DialogStateOld).isRequired
-};
+export default ItemMultiCreateDialog;

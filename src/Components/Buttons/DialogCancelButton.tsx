@@ -16,9 +16,7 @@ const DialogCancelButton = ({ dialogIntent, displayText = "Cancel", disabled = f
     }): React.JSX.Element => {
     const { closeDialogByIntent } = useManagementCallbacks();
     const handleClick = useCallback(() => {
-        if (closeDialogByIntent) {
-            closeDialogByIntent(dialogIntent);
-        }
+        closeDialogByIntent(dialogIntent);
     }, [closeDialogByIntent, dialogIntent]);
     return (
         <Button

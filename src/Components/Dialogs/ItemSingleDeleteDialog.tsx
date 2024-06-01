@@ -6,22 +6,19 @@ import {
     Button, DialogContentText, TextField
 } from "@mui/material";
 import { DeleteIcon, RestoreIcon } from "../../Imports/Icons.js";
-import PropTypes from "prop-types";
-import { useSnackbar } from "../../ContextProviders/AppFeatures";
-import { useEntity, useManagementCallbacks } from "../../ContextProviders/ManagementPageProvider";
-import { DialogStateOld } from "../../Classes/DialogState.js";
-import { PersistentDialog } from "./PersistentDialog.js";
+import { useSnackbar } from "../../ContextProviders/AppFeatures.js";
+import { useEntity, useManagementCallbacks } from "../../ContextProviders/ManagementPageProvider.js";
+import PersistentDialog from "./PersistentDialog.js";
 import { useActionData, useSubmit } from "react-router-dom";
-import { capitalized } from "../../Classes/Entity.ts";
+import { capitalized } from "../../Classes/Entity.js";
 import DialogCancelButton from "../Buttons/DialogCancelButton.js";
+import type { DialogState, DialogStateSingleUnderlyingItem, RouterActionResponse } from "../../index.js";
 
-/**
- * @param {{
- *  dialogState: DialogState
- * }} param0
- * @returns
- */
-export const ItemSingleDeleteDialog = ({ requireTypedConfirmation, dialogState, restoreMode = false }) => {
+const ItemSingleDeleteDialog = ({ requireTypedConfirmation, dialogState, restoreMode = false }: {
+    readonly requireTypedConfirmation?: boolean;
+    readonly dialogState: DialogState;
+    readonly restoreMode?: boolean;
+}): React.JSX.Element => {
     const [deleteConfirmation, setDeleteConfirmation] = useState("");
     const [submitEnabled, setSubmitEnabled] = useState(true);
     const showSnackbar = useSnackbar();
@@ -30,12 +27,9 @@ export const ItemSingleDeleteDialog = ({ requireTypedConfirmation, dialogState, 
 
     const submit = useSubmit();
 
-    /**
-     * @type {RouterActionResponse}
-     */
-    const actionData = useActionData();
+    const actionData = useActionData() as RouterActionResponse | null;
 
-    const { dialogIsOpen, underlyingItem: dialogItem } = dialogState;
+    const { dialogIsOpen, underlyingItem: dialogItem } = dialogState as DialogStateSingleUnderlyingItem;
 
     const { closeDialogByIntent } = useManagementCallbacks();
     const handleClose = useCallback(() => {
@@ -49,9 +43,6 @@ export const ItemSingleDeleteDialog = ({ requireTypedConfirmation, dialogState, 
     }, [dialogIsOpen]);
 
     const handleSubmit = useCallback(() => {
-        /**
-         * @type {RouterActionRequest}
-         */
         const request = {
             intent: Entity.isTrash
                 ? (
@@ -60,7 +51,7 @@ export const ItemSingleDeleteDialog = ({ requireTypedConfirmation, dialogState, 
                 : "single-delete",
             itemId: dialogItem?.id
         };
-        submit(request, {
+        submit(JSON.stringify(request), {
             method: restoreMode ? "PUT" : "DELETE",
             encType: "application/json"
         });
@@ -80,7 +71,6 @@ export const ItemSingleDeleteDialog = ({ requireTypedConfirmation, dialogState, 
 
     return (
         <PersistentDialog
-            isForm
             maxWidth="sm"
             onClose={handleClose}
             onSubmit={handleSubmit}
@@ -91,9 +81,9 @@ export const ItemSingleDeleteDialog = ({ requireTypedConfirmation, dialogState, 
                     <DialogTitle>
                         {"Move "}
 
-                        {Entity?.singular.substr(0, 1).toUpperCase()}
+                        {Entity.singular.substr(0, 1).toUpperCase()}
 
-                        {Entity?.singular.substr(1).toLowerCase()}
+                        {Entity.singular.substr(1).toLowerCase()}
 
                         {" to Trash "}
                     </DialogTitle>
@@ -101,16 +91,16 @@ export const ItemSingleDeleteDialog = ({ requireTypedConfirmation, dialogState, 
                 : restoreMode
                     ? (
                         <DialogTitle>
-                            {`Restore ${capitalized(Entity?.singular)} from Trash`}
+                            {`Restore ${capitalized(Entity.singular)} from Trash`}
                         </DialogTitle>
                     )
                     : (
                         <DialogTitle>
                             {Entity.isTrash ? "Permanently Delete " : "Delete "}
 
-                            {Entity?.singular.substr(0, 1).toUpperCase()}
+                            {Entity.singular.substr(0, 1).toUpperCase()}
 
-                            {Entity?.singular.substr(1).toLowerCase()}
+                            {Entity.singular.substr(1).toLowerCase()}
                         </DialogTitle>
                     )}
 
@@ -124,7 +114,7 @@ export const ItemSingleDeleteDialog = ({ requireTypedConfirmation, dialogState, 
                             >
                                 {"Are you sure you want to move the "}
 
-                                {Entity?.singular}
+                                {Entity.singular}
 
                                 {" "}
 
@@ -144,7 +134,7 @@ export const ItemSingleDeleteDialog = ({ requireTypedConfirmation, dialogState, 
                                     >
                                         {"Are you sure you want to restore the "}
 
-                                        {Entity?.singular}
+                                        {Entity.singular}
 
                                         {" "}
 
@@ -162,7 +152,7 @@ export const ItemSingleDeleteDialog = ({ requireTypedConfirmation, dialogState, 
                                     >
                                         {"Are you sure you want to delete the "}
 
-                                        {Entity?.singular}
+                                        {Entity.singular}
 
                                         {" "}
 
@@ -184,7 +174,7 @@ export const ItemSingleDeleteDialog = ({ requireTypedConfirmation, dialogState, 
                                 >
                                     {"Are you sure you want to delete the "}
 
-                                    {Entity?.singular}
+                                    {Entity.singular}
 
                                     {" "}
 
@@ -196,19 +186,19 @@ export const ItemSingleDeleteDialog = ({ requireTypedConfirmation, dialogState, 
                                 </DialogContentText>
                             )}
 
-                    {Entity?.deleteDialogAdditionalInstructions
+                    {Entity.deleteDialogAdditionalInstructions
                         ? (
                             <DialogContentText>
-                                {Entity?.deleteDialogAdditionalInstructions}
+                                {Entity.deleteDialogAdditionalInstructions}
                             </DialogContentText>
                         )
                         : null}
 
-                    {requireTypedConfirmation
+                    {requireTypedConfirmation === true
                         ? (
                             <TextField
                                 autoComplete="off"
-                                onChange={(e) => {
+                                onChange={(e: React.ChangeEvent<HTMLInputElement>): void => {
                                     setDeleteConfirmation(e.target.value);
                                 }}
                                 placeholder="Type 'delete' to confirm"
@@ -230,12 +220,11 @@ export const ItemSingleDeleteDialog = ({ requireTypedConfirmation, dialogState, 
                     <DialogCancelButton
                         dialogIntent="single-delete"
                         disabled={!submitEnabled}
-                        fullWidth
                     />
 
                     <Button
                         color={Entity.hasTrash || restoreMode ? "primary" : "error"}
-                        disabled={!submitEnabled || (requireTypedConfirmation && deleteConfirmation.toLowerCase() !== "delete")}
+                        disabled={!submitEnabled || (requireTypedConfirmation === true && deleteConfirmation.toLowerCase() !== "delete")}
                         fullWidth
                         size="large"
                         startIcon={restoreMode ? <RestoreIcon /> : <DeleteIcon />}
@@ -252,8 +241,4 @@ export const ItemSingleDeleteDialog = ({ requireTypedConfirmation, dialogState, 
     );
 };
 
-ItemSingleDeleteDialog.propTypes = {
-    dialogState: PropTypes.instanceOf(DialogStateOld),
-    requireTypedConfirmation: PropTypes.bool,
-    restoreMode: PropTypes.bool
-};
+export default ItemSingleDeleteDialog;

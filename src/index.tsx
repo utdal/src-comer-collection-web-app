@@ -240,24 +240,32 @@ export type RouterActionRequest = (
     }
 );
 
-export type RouterActionResponse = (
-    {
-        status: "error";
-        snackbarText: string;
-    } | {
-        status: "partial";
-        indicesWithErrors: number[];
-        errors: (string | null)[];
-        snackbarText: string;
-    } | {
-        status: "partial";
-        itemIdsWithErrors: number[];
-        snackbarText: string;
-    } | {
-        status: "success";
-        snackbarText: string;
-    }
-);
+export interface RouterActionResponseBase {
+    status: "error" | "partial-by-id" | "partial-by-index" | "success";
+    snackbarText: "string";
+}
+
+export interface RouterActionSuccessResponse extends RouterActionResponseBase {
+    status: "success";
+}
+
+export interface RouterActionErrorResponse extends RouterActionResponseBase {
+    status: "error";
+}
+
+export interface RouterActionPartialByIndexResponse extends RouterActionResponseBase {
+    status: "partial-by-index";
+    indicesWithErrors: number[];
+    errors: (string | null)[];
+}
+
+export interface RouterActionPartialByItemIdResponse extends RouterActionResponseBase {
+    status: "partial-by-id";
+    itemIdsWithErrors: number[];
+    errorsByItemId: Record<number, string>;
+}
+
+export type RouterActionResponse = RouterActionErrorResponse | RouterActionPartialByIndexResponse | RouterActionPartialByItemIdResponse | RouterActionSuccessResponse;
 
 export type DialogItemsMultiplicity = "multi" | "none" | "single";
 
@@ -342,6 +350,7 @@ export interface NavPaneLinkDefinition {
 }
 
 export interface EntityFieldDefinition {
+    maxlength: number;
     fieldName: string;
     displayName: string;
     isRequired: boolean;

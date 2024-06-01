@@ -5,7 +5,7 @@ import {
     DialogActions,
     Button, Divider
 } from "@mui/material";
-import { ItemSingleDeleteDialog } from "../ItemSingleDeleteDialog.js";
+import ItemSingleDeleteDialog from "../ItemSingleDeleteDialog.js";
 import ItemSingleEditDialog from "../ItemSingleEditDialog.js";
 import { ManagementPageProvider, useItemsReducer } from "../../../ContextProviders/ManagementPageProvider.js";
 import PersistentDialog from "../PersistentDialog.js";
