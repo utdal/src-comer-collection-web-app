@@ -11,6 +11,7 @@ import { Entity, entityPropTypeShape } from "../Entity";
 import ExhibitionOpenInCurrentTabCell from "../../Components/TableCells/Exhibition/ExhibitionOpenInCurrentTabCell";
 import ExhibitionDateCreatedCell from "../../Components/TableCells/Exhibition/ExhibitionDateCreatedCell";
 import ExhibitionDateModifiedCell from "../../Components/TableCells/Exhibition/ExhibitionDateModifiedCell";
+import ExhibitionCuratorCell from "../../Components/TableCells/Exhibition/ExhibitionCuratorCell";
 
 class Exhibition extends Entity {
     public static baseUrl = "/api/exhibitions";
@@ -98,6 +99,29 @@ class MyExhibition extends Exhibition {
 
 class PublicExhibition extends Exhibition {
     public static baseUrl = "/api/exhibitions?public_only=1";
+
+    public static tableFields: TableFieldDefinition[] = [
+        {
+            columnDescription: "Title",
+            maxWidth: "200px",
+            TableCellComponent: ExhibitionTitleCell,
+            generateSortableValue: (item: Item): string => ((item as ExhibitionItem).title ?? "").toLowerCase()
+        },
+        {
+            columnDescription: "Curator",
+            TableCellComponent: ExhibitionCuratorCell,
+            generateSortableValue: (item: Item): string => (item as ExhibitionItem).curator.toLowerCase()
+        },
+        {
+            columnDescription: "Last Updated",
+            TableCellComponent: ExhibitionDateModifiedCell,
+            generateSortableValue: (item: Item): Date => new Date((item as ExhibitionItem).date_modified)
+        },
+        {
+            columnDescription: "Open",
+            TableCellComponent: ExhibitionOpenInCurrentTabCell
+        }
+    ];
 }
 
 export const exhibitionStatePropTypesShape = PropTypes.shape({

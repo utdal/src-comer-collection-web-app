@@ -22,7 +22,7 @@ const tagDisplayFunction = (tag: Item): React.ReactNode => {
 };
 
 export const TagFilterMenu = ({ filterValue, setFilterValue, tags }: {
-    readonly filterValue: TagItem;
+    readonly filterValue: TagItem | null;
     readonly setFilterValue: React.Dispatch<React.SetStateAction<Item | null>>;
     readonly tags: TagItem[];
 }): React.JSX.Element => {

@@ -20,7 +20,7 @@ const artistDisplayFunction = (artist: Item): React.ReactNode => {
 };
 
 export const ArtistFilterMenu = ({ filterValue, setFilterValue, artists }: {
-    readonly filterValue: ArtistItem;
+    readonly filterValue: ArtistItem | null;
     readonly setFilterValue: React.Dispatch<React.SetStateAction<Item | null>>;
     readonly artists: ArtistItem[];
 }): React.JSX.Element => {

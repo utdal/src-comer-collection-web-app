@@ -14,9 +14,9 @@ type CollectionGalleryGridViewMode = "grid" | "list";
 
 const CollectionGalleryGrid = ({ isDialogMode, selectedItem = null, setSelectedItem = null, disabledImages = disabledImagesDefaultValue }: {
     readonly isDialogMode: boolean;
-    readonly selectedItem: ImageItem | null;
-    readonly setSelectedItem: React.Dispatch<React.SetStateAction<ImageItem | null>> | null;
-    readonly disabledImages: ExhibitionImageData[] | ImageItem[];
+    readonly selectedItem?: ImageItem | null;
+    readonly setSelectedItem?: React.Dispatch<React.SetStateAction<ImageItem | null>> | null;
+    readonly disabledImages?: ExhibitionImageData[] | ImageItem[];
 }): React.JSX.Element => {
     const [viewMode, setViewMode] = useState("grid" as CollectionGalleryGridViewMode);
 

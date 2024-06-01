@@ -1,31 +1,27 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import SearchBox from "../../Components/SearchBox";
-import { DataTable } from "../../Components/DataTable/DataTable.js";
-import { doesItemMatchSearchQuery } from "../../Helpers/SearchUtilities.js";
-import { AssociationManagementDialog } from "../../Components/Dialogs/AssociationManagementDialog/AssociationManagementDialog.js";
-import { useLoaderData, useNavigate, useRevalidator } from "react-router";
-import { SelectionSummary } from "../../Components/SelectionSummary.js";
+import DataTable from "../../Components/DataTable/DataTable.js";
+import { useLoaderData, useRevalidator } from "react-router";
+import SelectionSummary from "../../Components/SelectionSummary.js";
 import { useTitle } from "../../ContextProviders/AppFeatures";
-import { Course } from "../../Classes/Entities/Course.ts";
-import { EnrollmentCoursePrimary } from "../../Classes/Associations/Enrollment.ts";
+import { Course } from "../../Classes/Entities/Course";
 import { ManagementPageProvider, useItemsReducer } from "../../ContextProviders/ManagementPageProvider";
-import { ClearFilterButton } from "../../Components/Buttons/ClearFilterButton.js";
-import { RefreshButton } from "../../Components/Buttons/RefreshButton.js";
+import ClearFilterButton from "../../Components/Buttons/ClearFilterButton.js";
+import RefreshButton from "../../Components/Buttons/RefreshButton.js";
 import { MultiCreateButton } from "../../Components/Buttons/MultiCreateButton.js";
-import { ManagementButtonStack } from "../../Components/ManagementPage/ManagementButtonStack.js";
-import { User } from "../../Classes/Entities/User.ts";
-import { ManagementPageContainer } from "../../Components/ManagementPage/ManagementPageContainer.js";
-import { ManagementPageHeader } from "../../Components/ManagementPage/ManagementPageHeader.js";
-import { ManagementPageBody } from "../../Components/ManagementPage/ManagementPageBody.js";
-import { ManagementPageFooter } from "../../Components/ManagementPage/ManagementPageFooter.js";
-import { useDialogState } from "../../Hooks/useDialogState.js";
-import AssociationManageButton from "../../Components/Buttons/AssociationManageButton.js";
+import ManagementButtonStack from "../../Components/ManagementPage/ManagementButtonStack.js";
+import ManagementPageContainer from "../../Components/ManagementPage/ManagementPageContainer.js";
+import ManagementPageHeader from "../../Components/ManagementPage/ManagementPageHeader.js";
+import ManagementPageBody from "../../Components/ManagementPage/ManagementPageBody.js";
+import ManagementPageFooter from "../../Components/ManagementPage/ManagementPageFooter.js";
 import PaginationSummary from "../../Components/PaginationSummary/PaginationSummary.js";
 import DialogByIntent from "../../Components/Dialogs/DialogByIntent.js";
 import useDialogStates from "../../Hooks/useDialogStates.js";
+import type { CourseItem, FilterFunction, Intent, Item } from "../..";
+import { Typography } from "@mui/material";
 
-const CourseManagement = () => {
-    const courses = useLoaderData();
+const CourseManagement = (): React.JSX.Element => {
+    const courses = useLoaderData() as CourseItem[];
     const revalidator = useRevalidator();
 
     const [coursesCombinedState, itemsCallbacks] = useItemsReducer(courses);
@@ -39,14 +35,11 @@ const CourseManagement = () => {
         setCourses(courses);
     }, [setCourses, courses]);
 
-    const handleRefresh = useCallback(async () => {
+    const handleRefresh = useCallback(() => {
         revalidator.revalidate();
     }, [revalidator]);
 
-    /**
-     * @type {Intent[]}
-     */
-    const intentArray = ["multi-create", "single-edit", "single-delete"];
+    const intentArray: Intent[] = ["multi-create", "single-edit", "single-delete"];
     const {
         dialogStateDictionary,
         openDialogByIntentWithNoUnderlyingItems,
@@ -55,43 +48,38 @@ const CourseManagement = () => {
         closeDialogByIntent
     } = useDialogStates(intentArray);
 
-    const [userDialogState, openUserDialog] = useDialogState(true);
-
     const [searchQuery, setSearchQuery] = useState("");
 
     const handleClearFilters = useCallback(() => {
         setSearchQuery("");
     }, []);
 
-    const navigate = useNavigate();
     useTitle("Course Management");
 
-    const courseFilterFunction = useCallback((course) => {
-        return doesItemMatchSearchQuery(searchQuery, course, ["name", "notes"]);
-    }, [searchQuery]);
+    const courseFilterFunction: FilterFunction = useCallback((item: Item) => {
+        return (item as CourseItem).id > 0;
+    }, []);
 
     useEffect(() => {
         filterCourses(courseFilterFunction);
     }, [filterCourses, courseFilterFunction]);
 
-    const handleOpenAssignCourseUserDialog = useCallback((course) => {
-        openUserDialog([course]);
-    }, [openUserDialog]);
+    // const handleOpenAssignCourseUserDialog = useCallback((course) => {
+    //     openUserDialog([course]);
+    // }, [openUserDialog]);
 
-    const handleSwitchToUsersView = useCallback(() => {
-        navigate("/Account/Admin/Users");
-    }, [navigate]);
+    // const handleSwitchToUsersView = useCallback(() => {
+    //     navigate("/Account/Admin/Users");
+    // }, [navigate]);
 
     const managementCallbacks = useMemo(() => ({
         openDialogByIntentWithNoUnderlyingItems,
         openDialogByIntentWithSingleUnderlyingItem,
         openDialogByIntentWithMultipleUnderlyingItems,
         closeDialogByIntent,
-        handleOpenAssignCourseUserDialog,
         handleClearFilters,
         handleRefresh
     }), [handleClearFilters,
-        handleOpenAssignCourseUserDialog,
         openDialogByIntentWithNoUnderlyingItems,
         openDialogByIntentWithSingleUnderlyingItem,
         openDialogByIntentWithMultipleUnderlyingItems,
@@ -125,7 +113,6 @@ const CourseManagement = () => {
 
                 <ManagementPageBody>
                     <DataTable
-                        emptyMinHeight="300px"
                         rowSelectionEnabled
                         tableFields={Course.tableFields}
                     />
@@ -135,10 +122,14 @@ const CourseManagement = () => {
                     <SelectionSummary />
 
                     <ManagementButtonStack>
-                        <AssociationManageButton
+                        <Typography>
+                            Placeholder for Course/User assignment button
+                        </Typography>
+
+                        {/* <AssociationManageButton
                             handleOpenDialog={handleOpenAssignCourseUserDialog}
                             secondaryEntity={User}
-                        />
+                        /> */}
                     </ManagementButtonStack>
 
                     <PaginationSummary />
@@ -154,7 +145,7 @@ const CourseManagement = () => {
                 />
             ))}
 
-            <AssociationManagementDialog
+            {/* <AssociationManagementDialog
                 Association={EnrollmentCoursePrimary}
                 defaultSortAscending
                 defaultSortColumn="Name"
@@ -162,7 +153,7 @@ const CourseManagement = () => {
                 editMode
                 handleSwitchToSecondary={handleSwitchToUsersView}
                 secondaryItemsAll={[]}
-            />
+            /> */}
         </ManagementPageProvider>
     );
 };

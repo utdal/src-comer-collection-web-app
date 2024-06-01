@@ -1,54 +1,28 @@
 import { Box, Paper, Stack, Typography } from "@mui/material";
-import React, { useCallback } from "react";
-import { DataTable } from "../../Components/DataTable/DataTable.js";
+import React from "react";
+import DataTable from "../../Components/DataTable/DataTable.js";
 import { PhotoCameraBackIcon } from "../../Imports/Icons.js";
-import { useTitle } from "../../ContextProviders/AppFeatures";
-import { ExhibitionTitleCell } from "../../Components/TableCells/Exhibition/ExhibitionTitleCell.js";
-import { ExhibitionCuratorCell } from "../../Components/TableCells/Exhibition/ExhibitionCuratorCell.js";
-import { ExhibitionDateModifiedCell } from "../../Components/TableCells/Exhibition/ExhibitionDateModifiedCell.js";
-import { ExhibitionOpenInCurrentTabCell } from "../../Components/TableCells/Exhibition/ExhibitionOpenInCurrentTabCell.js";
-import { ManagementPageProvider, useItemsReducer } from "../../ContextProviders/ManagementPageProvider";
+import { useTitle } from "../../ContextProviders/AppFeatures.js";
+import { ManagementPageProvider, useItemsReducer } from "../../ContextProviders/ManagementPageProvider.js";
 import { useLoaderData } from "react-router";
-import { PublicExhibition } from "../../Classes/Entities/Exhibition.ts";
+import { PublicExhibition } from "../../Classes/Entities/Exhibition.js";
+import type { ExhibitionItem } from "../../index.js";
+import useDialogStates from "../../Hooks/useDialogStates.js";
 
-const exhibitionTableFields = [
-    {
-        columnDescription: "Title",
-        maxWidth: "200px",
-        TableCellComponent: ExhibitionTitleCell,
-        generateSortableValue: (exhibition) => exhibition.title?.toLowerCase()
-    },
-    {
-        columnDescription: "Curator",
-        TableCellComponent: ExhibitionCuratorCell,
-        generateSortableValue: (exhibition) => exhibition.curator?.toLowerCase()
-    },
-    {
-        columnDescription: "Last Updated",
-        TableCellComponent: ExhibitionDateModifiedCell,
-        generateSortableValue: (exhibition) => new Date(exhibition.date_modified)
-    },
-    {
-        columnDescription: "Open",
-        columnHeaderLabel: "",
-        TableCellComponent: ExhibitionOpenInCurrentTabCell
-    }
-];
-
-export const ExhibitionBrowser = () => {
-    const exhibitions = useLoaderData();
+const ExhibitionBrowser = (): React.JSX.Element => {
+    const exhibitions = useLoaderData() as ExhibitionItem[];
     const [exhibitionsCombinedState, itemsCallbacks] = useItemsReducer(exhibitions);
 
     useTitle("Public Exhibitions");
 
-    const handleRefresh = useCallback(async () => {}, []);
+    const dialogCallbacks = useDialogStates([]);
 
     return (
         <ManagementPageProvider
             Entity={PublicExhibition}
-            handleRefresh={handleRefresh}
             itemsCallbacks={itemsCallbacks}
             itemsCombinedState={exhibitionsCombinedState}
+            managementCallbacks={dialogCallbacks}
         >
             <Box
                 component={Paper}
@@ -92,9 +66,8 @@ export const ExhibitionBrowser = () => {
                         <DataTable
                             defaultSortAscending={false}
                             defaultSortColumn="Last Updated"
-                            emptyMinHeight="500px"
-                            nonEmptyHeight="500px"
-                            tableFields={exhibitionTableFields}
+                            rowSelectionEnabled={false}
+                            tableFields={PublicExhibition.tableFields}
                         />
                     </Box>
                 </Stack>
@@ -104,3 +77,5 @@ export const ExhibitionBrowser = () => {
 
     );
 };
+
+export default ExhibitionBrowser;

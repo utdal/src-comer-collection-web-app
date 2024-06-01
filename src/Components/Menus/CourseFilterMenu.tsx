@@ -29,8 +29,8 @@ const courseDisplayFunction = (c: Item): React.ReactNode => {
 };
 
 export const CourseFilterMenu = ({ filterValue, setFilterValue, courses }: {
-    readonly filterValue: CourseItem;
-    readonly setFilterValue: React.Dispatch<React.SetStateAction<Item | null>>;
+    readonly filterValue: CourseItem | null;
+    readonly setFilterValue: React.Dispatch<React.SetStateAction<CourseItem | null>>;
     readonly courses: CourseItem[];
 }): React.JSX.Element => {
     return (
@@ -38,11 +38,11 @@ export const CourseFilterMenu = ({ filterValue, setFilterValue, courses }: {
             SecondaryIcon={SchoolIcon as ElementType}
             displayFunction={courseDisplayFunction}
             emptyMessage="No course filters available"
-            filterValue={filterValue}
+            filterValue={filterValue as Item | null}
             helpMessage="Filter users by course"
             nullMessage="Do not filter by course"
-            secondaries={courses}
-            setFilterValue={setFilterValue}
+            secondaries={courses as Item[]}
+            setFilterValue={setFilterValue as React.Dispatch<React.SetStateAction<Item | null>>}
             sortFunction={courseSortFunction}
         />
     );
