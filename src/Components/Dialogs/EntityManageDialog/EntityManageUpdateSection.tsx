@@ -2,22 +2,25 @@ import React, { useCallback, useEffect, useState } from "react";
 import { Box, Stack } from "@mui/material";
 import SearchBox from "../../SearchBox";
 import PaginationSummary from "../../PaginationSummary/PaginationSummary.js";
-import { RefreshButton } from "../../Buttons/RefreshButton.js";
-import { DataTable } from "../../DataTable/DataTable.js";
+import RefreshButton from "../../Buttons/RefreshButton.js";
+import DataTable from "../../DataTable/DataTable.js";
 import { useEntity, useVisibilityStatuses } from "../../../ContextProviders/ManagementPageProvider";
 import { FullPageMessage } from "../../FullPageMessage";
 import { DeleteIcon } from "../../../Imports/Icons.js";
-import { itemsCombinedStatePropTypeShape } from "../../../Classes/Entity.ts";
+import { itemsCombinedStatePropTypeShape } from "../../../Classes/Entity";
 import { doesItemMatchSearchQuery } from "../../../Helpers/SearchUtilities.js";
+import type { Item, ItemsCombinedState } from "../../..";
 
-const EntityManageUpdateSection = ({ dialogItemsCombinedState }) => {
+const EntityManageUpdateSection = ({ dialogItemsCombinedState }: {
+    readonly dialogItemsCombinedState: ItemsCombinedState;
+}): React.JSX.Element => {
     const Entity = useEntity();
 
     const [itemSearchQuery, setItemSearchQuery] = useState("");
 
     const [, filterDialogItems] = useVisibilityStatuses();
 
-    const itemFilterFunction = useCallback((item) => {
+    const itemFilterFunction = useCallback((item: Item) => {
         return (
             doesItemMatchSearchQuery(itemSearchQuery, item, Entity.searchBoxFields)
         );
@@ -55,7 +58,6 @@ const EntityManageUpdateSection = ({ dialogItemsCombinedState }) => {
                         </Stack>
 
                         <DataTable
-                            NoContentIcon="div"
                             rowSelectionEnabled
                             smallCheckboxes
                             tableFields={Entity.tableFields}
@@ -67,7 +69,7 @@ const EntityManageUpdateSection = ({ dialogItemsCombinedState }) => {
                     Entity.isTrash
                         ? (
                             <FullPageMessage
-                                Icon={DeleteIcon}
+                                Icon={DeleteIcon as React.ElementType}
                                 message={`No ${Entity.plural} in trash`}
                             />
                         )

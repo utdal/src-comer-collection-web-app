@@ -17,8 +17,10 @@ import type { UserExhibition } from "./Classes/Associations/UserExhibition";
 
 export type CourseStatus = "Active" | "Expired" | "Upcoming";
 
+export type ItemGenericFieldValue = boolean[] | number[] | object[] | string[] | boolean | number | object | string | null | undefined;
+
 export interface Item {
-    [x: string]: Item[] | boolean | number | object | string | readonly boolean[] | readonly number[] | readonly object[] | readonly string[] | null | undefined;
+    [x: string]: ItemGenericFieldValue;
     id: number;
     safe_display_name: string;
 }

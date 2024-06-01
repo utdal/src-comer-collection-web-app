@@ -7,7 +7,7 @@ import {
     Button, IconButton, DialogContentText, TextField, Divider
 } from "@mui/material";
 import { DeleteIcon } from "../../Imports/Icons.js";
-import { getBlankItemFields } from "../../Helpers/fields.js";
+import { getBlankItemFields } from "../../Helpers/getBlankItemFields.js";
 import { useSnackbar } from "../../ContextProviders/AppFeatures";
 import { useEntity, useManagementCallbacks } from "../../ContextProviders/ManagementPageProvider";
 import { PersistentDialog } from "./PersistentDialog.js";

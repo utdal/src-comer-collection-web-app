@@ -1,29 +1,30 @@
 import React, { useCallback, useMemo, useState } from "react";
 import { Box, Button, DialogContentText, Stack, TextField } from "@mui/material";
 import { useEntity } from "../../../ContextProviders/ManagementPageProvider";
-import { getBlankItemFields } from "../../../Helpers/fields.js";
+import getBlankItemFields from "../../../Helpers/getBlankItemFields.js";
 import { useSnackbar } from "../../../ContextProviders/AppFeatures";
 import { AddIcon } from "../../../Imports/Icons.js";
 
-const EntityManageCreateSection = () => {
+const EntityManageCreateSection = (): React.JSX.Element => {
     const Entity = useEntity();
     const showSnackbar = useSnackbar();
 
     const blankItem = useMemo(() => getBlankItemFields(Entity.fieldDefinitions), [Entity.fieldDefinitions]);
     const [itemToAdd, setItemToAdd] = useState(blankItem);
 
-    const singularCapitalized = Entity?.singular.substr(0, 1).toUpperCase() + Entity?.singular.substr(1).toLowerCase();
+    // const singularCapitalized = Entity?.singular.substr(0, 1).toUpperCase() + Entity?.singular.substr(1).toLowerCase();
 
     const handleCreate = useCallback(() => {
-        Entity.handleMultiCreate([itemToAdd]).then(([{ status }]) => {
-            if (status === "fulfilled") {
-                showSnackbar(`${singularCapitalized} created`, "success");
-            } else {
-                showSnackbar(`Failed to create ${Entity.singular}`, "error");
-            }
-        });
+        // Entity.handleMultiCreate([itemToAdd]).then(([{ status }]) => {
+        //     if (status === "fulfilled") {
+        //         showSnackbar(`${singularCapitalized} created`, "success");
+        //     } else {
+        //         showSnackbar(`Failed to create ${Entity.singular}`, "error");
+        //     }
+        // });
+        showSnackbar("Functionality pending", "info");
         setItemToAdd(blankItem);
-    }, [Entity, itemToAdd, blankItem, showSnackbar, singularCapitalized]);
+    }, [blankItem, showSnackbar]);
 
     return (
         <Box
@@ -70,7 +71,7 @@ const EntityManageCreateSection = () => {
                                 minRows={2}
                                 multiline={f.multiline}
                                 name={f.fieldName}
-                                onChange={(e) => {
+                                onChange={(e): void => {
                                     setItemToAdd({
                                         ...itemToAdd,
                                         [f.fieldName]: e.target.value
