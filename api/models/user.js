@@ -1,0 +1,133 @@
+import { DataTypes } from "sequelize";
+
+/**
+ * @param {import("sequelize").Sequelize} sequelize
+ */
+export default (sequelize) => {
+    const User = sequelize.define("User", {
+        id: {
+            type: DataTypes.INTEGER,
+            autoIncrement: true,
+            initialAutoIncrement: 1,
+            primaryKey: true,
+            field: "user_id"
+        },
+        email: {
+            type: DataTypes.STRING(255),
+            allowNull: false,
+            unique: true,
+            field: "user_email"
+        },
+        email_without_domain: {
+            type: DataTypes.VIRTUAL,
+            get () {
+                return `${this.email?.substr(0, this.email?.lastIndexOf("@"))}`;
+            }
+        },
+        family_name: {
+            type: DataTypes.TEXT("tiny"),
+            field: "user_family_name"
+        },
+        given_name: {
+            type: DataTypes.TEXT("tiny"),
+            field: "user_given_name"
+        },
+        full_name: {
+            type: DataTypes.VIRTUAL,
+            get () {
+                return `${this.given_name} ${this.family_name}`;
+            }
+        },
+        full_name_reverse: {
+            type: DataTypes.VIRTUAL,
+            get () {
+                return `${this.family_name}, ${this.given_name}`;
+            }
+        },
+        safe_display_name: {
+            type: DataTypes.VIRTUAL,
+            get () {
+                return this.has_name ? `${this.full_name}` : `${this.email}`;
+            }
+        },
+        has_name: {
+            type: DataTypes.VIRTUAL,
+            get () {
+                return Boolean(this.family_name || this.given_name);
+            }
+        },
+        exhibition_quota: {
+            type: DataTypes.INTEGER,
+            allowNull: false,
+            defaultValue: 5,
+            validate: {
+                min: 0
+            },
+            field: "user_exhibition_quota"
+        },
+        access_level: {
+            type: DataTypes.STRING(20),
+            field: "user_access_level",
+            allowNull: false,
+            validate: {
+                isIn: [["CURATOR", "COLLECTION_MANAGER", "ADMINISTRATOR"]]
+            },
+            defaultValue: "CURATOR"
+        },
+        pw_hash: {
+            type: DataTypes.TEXT("tiny"),
+            field: "user_pw_hash",
+            defaultValue: null
+        },
+        has_password: {
+            type: DataTypes.VIRTUAL,
+            get () {
+                return Boolean(this.pw_updated);
+            }
+        },
+        pw_change_required: {
+            type: DataTypes.BOOLEAN,
+            field: "user_pw_change_required",
+            allowNull: false,
+            defaultValue: true
+        },
+        pw_updated: {
+            type: DataTypes.DATE(3),
+            field: "user_pw_last_updated",
+            defaultValue: null
+        },
+        is_active: {
+            type: DataTypes.BOOLEAN,
+            field: "user_is_active",
+            allowNull: false,
+            defaultValue: true
+        },
+        is_admin: {
+            type: DataTypes.VIRTUAL,
+            get () {
+                return Boolean(this.access_level === "ADMINISTRATOR");
+            }
+        },
+        is_collection_manager: {
+            type: DataTypes.VIRTUAL,
+            get () {
+                return Boolean(this.access_level === "COLLECTION_MANAGER");
+            }
+        },
+        is_admin_or_collection_manager: {
+            type: DataTypes.VIRTUAL,
+            get () {
+                return Boolean(this.is_admin || this.is_collection_manager);
+            }
+        }
+    }, {
+        tableName: "comer_users",
+        defaultScope: {
+            attributes: {
+                exclude: ["pw_hash"]
+            }
+        }
+    });
+
+    return User;
+};
