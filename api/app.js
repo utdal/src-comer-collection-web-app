@@ -44,7 +44,7 @@ app.use(helmet());
 app.use(contentSecurityPolicy({
     useDefaults: false,
     directives: {
-        "default-src": "none"
+        "default-src": ["'none'"]
     }
 }));
 
