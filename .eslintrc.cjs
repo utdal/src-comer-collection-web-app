@@ -30,7 +30,7 @@ module.exports = {
     plugins: [
         "react", "@typescript-eslint", "react-hooks"
     ],
-    ignorePatterns: [".eslintrc.cjs"],
+    ignorePatterns: [".eslintrc.cjs", "src/Components/Exhibition3DViewport/*"],
     rules: {
         indent: ["error", 4],
         semi: [2, "always"],
