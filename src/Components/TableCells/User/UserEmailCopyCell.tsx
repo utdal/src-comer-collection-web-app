@@ -12,11 +12,15 @@ const UserEmailCopyCell = (): React.JSX.Element => {
     }, [clipboard, user.email]);
     return (
         <Button
+            color="inherit"
             onClick={handleCopyToClipboard}
             sx={{ textTransform: "unset" }}
             variant="text"
         >
-            <Typography variant="body1">
+            <Typography
+                color="gray"
+                variant="body1"
+            >
                 {user.email}
             </Typography>
         </Button>
