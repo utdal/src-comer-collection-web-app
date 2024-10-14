@@ -7,11 +7,13 @@ declare module "@mui/material/styles" {
     interface PaletteColor {
         translucent?: string;
         veryTranslucent?: string;
+        slightlyTranslucent?: string;
     }
 
     interface SimplePaletteColorOptions {
         translucent?: string;
         veryTranslucent?: string;
+        slightlyTranslucent?: string;
     }
 
     interface PaletteOptions {
@@ -172,20 +174,24 @@ const AppThemeProvider = ({ children }: {
                 contrastText: "white",
                 200: primaryColor["200"],
                 100: primaryColor["100"],
-                translucent: `${primaryColor["700"]}50`,
-                veryTranslucent: `${primaryColor["700"]}30`
+                translucent: `${primaryColor["700"]}40`,
+                veryTranslucent: `${primaryColor["700"]}20`,
+                slightlyTranslucent: `${secondaryColor["700"]}70`
             },
             secondary: {
                 main: secondaryColor["700"],
                 contrastText: "white",
                 200: secondaryColor["200"],
                 100: secondaryColor["100"],
-                translucent: `${secondaryColor["700"]}50`,
-                veryTranslucent: `${secondaryColor["700"]}30`
+                translucent: `${secondaryColor["700"]}40`,
+                veryTranslucent: `${secondaryColor["700"]}20`,
+                slightlyTranslucent: `${secondaryColor["700"]}70`
             },
             neutral: {
                 main: grey["700"],
-                translucent: `${grey["700"]}50`
+                translucent: `${grey["700"]}40`,
+                veryTranslucent: `${grey["700"]}20`,
+                slightlyTranslucent: `${grey["700"]}70`
             }
         }
     })), [appDarkTheme]);
