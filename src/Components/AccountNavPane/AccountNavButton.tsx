@@ -13,9 +13,11 @@ interface StyledListItemButtonProps extends ListItemButtonProps {
 const StyledListItemButton = styled(ListItemButton, {
     shouldForwardProp: (prop) => prop !== "isSelected"
 })(({ theme, isSelected }: StyledListItemButtonProps) => ({
-    backgroundColor: isSelected ? theme.palette.secondary.main : "unset",
+    "&:not(:hover)": {
+        backgroundColor: isSelected ? theme.palette.secondary.dark : "unset",
+    },
     "&:hover": {
-        backgroundColor: isSelected ? theme.palette.secondary.main : "unset",
+        backgroundColor: isSelected ? theme.palette.secondary.main : theme.palette.neutral.light,
         textDecoration: "underline"
     }
 }));

@@ -1,5 +1,6 @@
 import React from "react";
-import { Stack, Divider } from "@mui/material";
+import type { Theme, DividerOwnProps } from "@mui/material";
+import { Stack, Divider, styled } from "@mui/material";
 import { AccountCircleIcon, GroupsIcon, PhotoCameraBackIcon, ImageIcon, SchoolIcon, LockIcon } from "../../Imports/Icons";
 import useAppUser from "../../Hooks/useAppUser";
 import AccountNavSection from "./AccountNavSection";
@@ -64,6 +65,18 @@ const adminNavLinks: NavPaneLinkDefinition[] = [
 
 ];
 
+interface ColoredDividerProps extends DividerOwnProps {
+    theme: Theme;
+}
+
+const ColoredDivider = styled(Divider, {
+    shouldForwardProp: () => true
+})(({ theme }: ColoredDividerProps) => ({
+    borderImage: `linear-gradient(180deg, ${theme.palette.neutral.main} 0%, ${theme.palette.neutral.translucent} 100%) 1`,
+    borderWidth: "0px",
+    borderStyle: "solid"
+}));
+
 const AccountNavPane = (): React.JSX.Element => {
     const appUser = useAppUser() as AppUser;
 
@@ -80,7 +93,7 @@ const AccountNavPane = (): React.JSX.Element => {
             {appUser.is_admin_or_collection_manager
                 ? (
                     <>
-                        <Divider />
+                        <ColoredDivider />
 
                         <AccountNavSection
                             linkDefinitions={collectionManagerNavLinks}
@@ -93,7 +106,7 @@ const AccountNavPane = (): React.JSX.Element => {
             {appUser.is_admin
                 ? (
                     <>
-                        <Divider />
+                        <ColoredDivider />
 
                         <AccountNavSection
                             linkDefinitions={adminNavLinks}

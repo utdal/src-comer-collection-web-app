@@ -193,6 +193,7 @@ const AppThemeProvider = ({ children }: {
             },
             neutral: {
                 main: grey["700"],
+                light: grey[600],
                 translucent: `${grey["700"]}40`,
                 veryTranslucent: `${grey["700"]}20`,
                 slightlyTranslucent: `${grey["700"]}70`
