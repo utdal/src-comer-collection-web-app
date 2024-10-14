@@ -1,5 +1,5 @@
 import React from "react";
-import { Checkbox, Stack, TableCell, Typography, TableHead, TableRow } from "@mui/material";
+import { Checkbox, Stack, TableCell, Typography, TableHead, TableRow, useTheme } from "@mui/material";
 import ColumnSortButton from "../Buttons/ColumnSortButton";
 import type { TableFieldDefinition } from "../..";
 import { useItemCounts } from "../../ContextProviders/ManagementPageProvider";
@@ -18,12 +18,13 @@ const DataTableHead = ({
 }): React.JSX.Element => {
     
     const itemCounts = useItemCounts();
+    const theme = useTheme();
 
     return (
         <TableHead>
             <TableRow>
                 {Boolean(rowSelectionEnabled) && (
-                    <TableCell sx={{ backgroundColor: "gray" }}>
+                    <TableCell sx={{ backgroundColor: theme.palette.neutral.slightlyTranslucent }}>
                         <Checkbox
                             checked={
                                 itemCounts.selectedAndVisible === itemCounts.visible && itemCounts.visible > 0
@@ -51,7 +52,7 @@ const DataTableHead = ({
                 {tableFields.map((tf) => (
                     <TableCell
                         key={tf.columnDescription}
-                        sx={{ backgroundColor: "gray" }}
+                        sx={{ backgroundColor: theme.palette.neutral.slightlyTranslucent }}
                     >
                         <Stack
                             alignItems="center"
