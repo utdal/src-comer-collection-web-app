@@ -23,6 +23,7 @@ declare module "@mui/material/styles" {
     interface Palette {
         neutral: SimplePaletteColorOptions;
     }
+
 }
 
 const DARK_THEME_LOCAL_STORAGE_KEY = "appDarkTheme";
@@ -53,7 +54,10 @@ const AppThemeProvider = ({ children }: {
                 styleOverrides: {
                     root: ({ theme }) => ({
                         ...theme.typography.body1
-                    })
+                    }),
+                },
+                defaultProps: {
+                    color: "inherit"
                 },
                 variants: [
                     {
