@@ -34,6 +34,8 @@ export default tseslint.config(
             "sort-imports": ["off"],
             "sort-keys": ["off"],
             "max-lines-per-function": ["off"],
+            "max-statements": "off",
+            "id-length": "off",
             "one-var": ["error", "never"],
             "no-duplicate-imports": "off",
             "max-lines": "off",
