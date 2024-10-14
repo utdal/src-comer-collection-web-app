@@ -19,20 +19,18 @@ export default tseslint.config(
     pluginReact.configs.flat.all,
     ...tseslint.configs.all,
     {
-        ignores: ["eslint.config.js", "src/Components/Exhibition3DViewport/*"],
         languageOptions: {
             parser: tseslint.parser,
             parserOptions: {
-                projectService: {
-                    allowDefaultProject: ["eslint.config.js"]
-                },
-                tsconfigRootDir: import.meta.dirname
+                projectService: true,
+                project: "./tsconfig.json"
             }
         },
         rules: {
             indent: ["error", 4],
             semi: [2, "always"],
             quotes: [2, "double"],
+            "no-multiple-empty-lines": [2, { max: 1 }],
             "sort-imports": ["off"],
             "sort-keys": ["off"],
             "max-lines-per-function": ["off"],
