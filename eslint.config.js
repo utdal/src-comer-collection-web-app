@@ -3,7 +3,6 @@ import js from "@eslint/js";
 import pluginReact from "eslint-plugin-react";
 import tseslint from "typescript-eslint";
 
-
 export default tseslint.config(
     {
         files: ["**/*.{js,mjs,cjs,ts,jsx,tsx}"]
@@ -17,24 +16,32 @@ export default tseslint.config(
         }
     },
     js.configs.all,
-    ...tseslint.configs.all,
     pluginReact.configs.flat.all,
+    ...tseslint.configs.all,
     {
+        ignores: ["eslint.config.js", "src/Components/Exhibition3DViewport/*"],
         languageOptions: {
             parser: tseslint.parser,
             parserOptions: {
-                projectService: true,
+                projectService: {
+                    allowDefaultProject: ["eslint.config.js"]
+                },
                 tsconfigRootDir: import.meta.dirname
             }
         },
         rules: {
+            indent: ["error", 4],
+            semi: [2, "always"],
+            quotes: [2, "double"],
             "sort-imports": ["off"],
             "sort-keys": ["off"],
             "max-lines-per-function": ["off"],
             "one-var": ["error", "never"],
-            indent: ["error", 4],
-            semi: [2, "always"],
-            quotes: [2, "double"],
+            "no-duplicate-imports": "off",
+            "max-lines": "off",
+            "no-ternary": "off",
+            "capitalized-comments": "off",
+            "no-console": "warn",
             // "react-hooks/rules-of-hooks": "error",
             // "react-hooks/exhaustive-deps": "error",
             "react/function-component-definition": [2, {

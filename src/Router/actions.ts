@@ -1,7 +1,6 @@
 import type { ActionFunction, ActionFunctionArgs } from "react-router";
 import type { RouterActionRequest, RouterActionResponse } from "../index.js";
 
-// eslint-disable-next-line @typescript-eslint/prefer-readonly-parameter-types
 export const myExhibitionsAction: ActionFunction = async ({ request }: ActionFunctionArgs): Promise<RouterActionResponse> => {
     const requestData = await request.json() as RouterActionRequest;
     return new Promise<RouterActionResponse>((resolve) => {

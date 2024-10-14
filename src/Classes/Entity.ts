@@ -3,27 +3,20 @@ import { AddIcon } from "../Imports/Icons";
 import type React from "react";
 import type { EntityFieldDefinition, TableFieldDefinition } from "../index.js";
 
-export const capitalized = (string: string): string => {
-    // eslint-disable-next-line @typescript-eslint/no-magic-numbers
-    return string.substring(0, 1).toUpperCase() + string.substr(1).toLowerCase();
-};
+export const capitalized = (string: string): string => string.substring(0, 1).toUpperCase() + string.substring(1).toLowerCase();
 
-export const formatDate = (date: string): string => {
-    return new Date(date).toLocaleDateString([], {
-        year: "numeric",
-        month: "short",
-        day: "numeric",
-        weekday: "short"
-    });
-};
+export const formatDate = (date: string): string => new Date(date).toLocaleDateString([], {
+    year: "numeric",
+    month: "short",
+    day: "numeric",
+    weekday: "short"
+});
 
-export const formatTime = (date: string): string => {
-    return new Date(date).toLocaleTimeString([], {
-        hour: "numeric",
-        minute: "2-digit",
-        second: "2-digit"
-    });
-};
+export const formatTime = (date: string): string => new Date(date).toLocaleTimeString([], {
+    hour: "numeric",
+    minute: "2-digit",
+    second: "2-digit"
+});
 
 export class Entity extends null {
     public static baseUrl = "/";
