@@ -16,11 +16,11 @@ const ColoredTableRow = styled(TableRow, {
     shouldForwardProp: (prop) => prop !== "themeColor" && prop !== "isSelected"
 })(({ isSelected, theme, themeColor }: ColoredTableRowProps) => ({
     "&:hover": {
-        backgroundColor: isSelected ? theme.palette[themeColor].dark : "gray"
+        backgroundColor: isSelected ? theme.palette[themeColor].translucent : theme.palette.neutral.translucent
 
     },
     "&:not(:hover)": {
-        backgroundColor: isSelected ? theme.palette[themeColor].dark : ""
+        backgroundColor: isSelected ? theme.palette[themeColor].veryTranslucent : "unset"
     }
 }));
 
