@@ -28,6 +28,8 @@ export default tseslint.config(
             }
         },
         rules: {
+            "sort-imports": ["off"],
+            "sort-keys": ["off"],
             "max-lines-per-function": ["off"],
             "one-var": ["error", "never"],
             indent: ["error", 4],
