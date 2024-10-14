@@ -12,8 +12,9 @@ import { DarkModeIcon, LightModeIcon } from "../../../Imports/Icons";
 import AppSettingsDialogOption from "./AppSettingsDialogOption";
 import type { DialogState } from "../../..";
 
-const AppSettingsDialog = ({ dialogState }: {
+const AppSettingsDialog = ({ dialogState, closeDialog }: {
     readonly dialogState: DialogState;
+    readonly closeDialog: () => void;
 }): React.JSX.Element => {
     const { appDarkTheme, handleSetDarkTheme } = useAppDarkTheme();
     const { dialogIsOpen } = dialogState;
@@ -50,7 +51,7 @@ const AppSettingsDialog = ({ dialogState }: {
                         >
                             <ToggleButton
                                 onClick={handleSwitchToLightTheme}
-                                value={false}
+                                value="light"
                             >
                                 <Stack
                                     alignItems="center"
@@ -67,7 +68,7 @@ const AppSettingsDialog = ({ dialogState }: {
 
                             <ToggleButton
                                 onClick={handleSwitchToDarkTheme}
-                                value
+                                value="dark"
                             >
                                 <Stack
                                     alignItems="center"
@@ -91,9 +92,8 @@ const AppSettingsDialog = ({ dialogState }: {
             <DialogActions>
                 <Button
                     color="primary"
-                    disabled
                     fullWidth
-                    // onClick={closeDialog}
+                    onClick={closeDialog}
                     variant="contained"
                 >
                     Close

@@ -13,11 +13,15 @@ const NavBar = (): React.JSX.Element => {
     const appUser = useAppUser();
     const navigate = useNavigate();
 
-    const { dialogStateDictionary, openDialogByIntentWithNoUnderlyingItems } = useDialogStates(["app-settings"]);
+    const { dialogStateDictionary, openDialogByIntentWithNoUnderlyingItems, closeDialogByIntent } = useDialogStates(["app-settings"]);
 
     const handleOpenSettingsDialog: React.MouseEventHandler<HTMLButtonElement> = useCallback(() => {
         openDialogByIntentWithNoUnderlyingItems("app-settings");
     }, [openDialogByIntentWithNoUnderlyingItems]);
+
+    const closeAppSettingsDialog = useCallback(() => {
+        closeDialogByIntent("app-settings");
+    }, [closeDialogByIntent]);
 
     return (
         <AppBar
@@ -54,7 +58,7 @@ const NavBar = (): React.JSX.Element => {
                             />
                         </Stack>
 
-                        {appUser !== false && appUser != null
+                        {appUser !== false && appUser !== null
                             ? (
                                 <>
                                     <Divider sx={{
@@ -94,7 +98,10 @@ const NavBar = (): React.JSX.Element => {
                 </Toolbar>
             </Stack>
 
-            <AppSettingsDialog dialogState={dialogStateDictionary["app-settings"]} />
+            <AppSettingsDialog
+                closeDialog={closeAppSettingsDialog}
+                dialogState={dialogStateDictionary["app-settings"]}
+            />
         </AppBar>
     );
 };
