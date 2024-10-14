@@ -1,8 +1,27 @@
 import type { ReactNode } from "react";
 import React, { createContext, useCallback, useContext, useMemo, useState } from "react";
-import type { SimplePaletteColorOptions } from "@mui/material";
 import { ThemeProvider, createTheme } from "@mui/material";
-import { green, orange } from "@mui/material/colors/index.js";
+import { green, grey, orange } from "@mui/material/colors/index.js";
+
+declare module "@mui/material/styles" {
+    interface PaletteColor {
+        translucent?: string;
+        veryTranslucent?: string;
+    }
+
+    interface SimplePaletteColorOptions {
+        translucent?: string;
+        veryTranslucent?: string;
+    }
+
+    interface PaletteOptions {
+        neutral: SimplePaletteColorOptions
+    }
+
+    interface Palette {
+        neutral: SimplePaletteColorOptions;
+    }
+}
 
 const DARK_THEME_LOCAL_STORAGE_KEY = "appDarkTheme";
 
@@ -14,12 +33,7 @@ interface AppThemeContextValue {
     setAppDarkTheme: DarkThemeSetter;
 }
 
-interface AppPaletteColorOptions extends SimplePaletteColorOptions {
-    translucent?: string;
-    veryTranslucent?: string;
-}
-
-const storedDarkThemeSetting: DarkThemeSetting = (localStorage.getItem(DARK_THEME_LOCAL_STORAGE_KEY) ?? "light") as DarkThemeSetting;
+const storedDarkThemeSetting: DarkThemeSetting = (localStorage.getItem(DARK_THEME_LOCAL_STORAGE_KEY) === "dark" ? "dark" : "light");
 
 const primaryColor = green;
 const secondaryColor = orange;
@@ -158,26 +172,28 @@ const AppThemeProvider = ({ children }: {
                 contrastText: "white",
                 200: primaryColor["200"],
                 100: primaryColor["100"],
-                translucent: `${primaryColor["700"]}40`,
-                veryTranslucent: `${primaryColor["700"]}20`
-            } as AppPaletteColorOptions,
+                translucent: `${primaryColor["700"]}50`,
+                veryTranslucent: `${primaryColor["700"]}30`
+            },
             secondary: {
                 main: secondaryColor["700"],
                 contrastText: "white",
                 200: secondaryColor["200"],
                 100: secondaryColor["100"],
-                translucent: `${secondaryColor["700"]}40`,
-                veryTranslucent: `${secondaryColor["700"]}20`
-            } as AppPaletteColorOptions
+                translucent: `${secondaryColor["700"]}50`,
+                veryTranslucent: `${secondaryColor["700"]}30`
+            },
+            neutral: {
+                main: grey["700"],
+                translucent: `${grey["700"]}50`
+            }
         }
     })), [appDarkTheme]);
 
-    const appThemeContextValue: AppThemeContextValue = useMemo(() => {
-        return {
-            appDarkTheme,
-            setAppDarkTheme
-        };
-    }, [appDarkTheme, setAppDarkTheme]);
+    const appThemeContextValue: AppThemeContextValue = useMemo(() => ({
+        appDarkTheme,
+        setAppDarkTheme
+    }), [appDarkTheme, setAppDarkTheme]);
 
     return (
         <AppThemeContext.Provider value={appThemeContextValue}>
