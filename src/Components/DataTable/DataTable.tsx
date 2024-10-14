@@ -1,13 +1,13 @@
-/* eslint-disable react/no-multi-comp */
+ 
 import type { ElementType } from "react";
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { Checkbox, Stack, TableCell, TableContainer, Typography, Table, TableBody, TableHead, TableRow, Paper } from "@mui/material";
-import ColumnSortButton from "../Buttons/ColumnSortButton";
+import { TableContainer, Table, TableBody, Paper } from "@mui/material";
 import { useItemCounts, useItemDictionary, useItemsPagination, useManagementCallbacks, useSelectionStatuses, useSortableValues, useVisibilityStatuses } from "../../ContextProviders/ManagementPageProvider";
 import { FullPageMessage } from "../FullPageMessage";
 import { InfoIcon } from "../../Imports/Icons";
 import DataTableRow from "./DataTableRow";
 import type { Item, SortableValueFunction, TableFieldDefinition, UserItem } from "../../index";
+import DataTableHead from "./DataTableHead";
 
 const DataTable = ({
     tableFields, rowSelectionEnabled, smallCheckboxes, defaultSortColumn = "ID", defaultSortAscending = true, noSkeleton
@@ -55,9 +55,7 @@ const DataTable = ({
         }
     }, [calculateSortableItemValues, sortColumn, tableFields]);
 
-    const sortRoutine = useCallback((itemA: Item, itemB: Item): number => {
-        return sortableValueDictionary[itemA.id] > sortableValueDictionary[itemB.id] ? 1 : -1;
-    }, [sortableValueDictionary]);
+    const sortRoutine = useCallback((itemA: Item, itemB: Item): number => sortableValueDictionary[itemA.id] > sortableValueDictionary[itemB.id] ? 1 : -1, [sortableValueDictionary]);
 
     /**
      * The array of items to render in the table is determined in four steps,
@@ -72,25 +70,19 @@ const DataTable = ({
     /**
      * Memoize the array representation of the items (converted from Object format)
      */
-    const itemArray: Item[] = useMemo(() => {
-        return Object.values(itemDictionary);
-    }, [itemDictionary]);
+    const itemArray: Item[] = useMemo(() => Object.values(itemDictionary), [itemDictionary]);
 
     /**
      * Reapply the filter when any visibility status changes
      * or when the items change
      */
-    const visibleItemArray: Item[] = useMemo(() => {
-        return itemArray.filter((item) => visibilityStatuses[item.id]);
-    }, [itemArray, visibilityStatuses]);
+    const visibleItemArray: Item[] = useMemo(() => itemArray.filter((item) => visibilityStatuses[item.id]), [itemArray, visibilityStatuses]);
 
     /**
      * Reapply the sort order when the sort function changes
      * or the visible items change
      */
-    const sortedVisibleItemArray: Item[] = useMemo(() => {
-        return [...visibleItemArray].sort(sortRoutine);
-    }, [sortRoutine, visibleItemArray]);
+    const sortedVisibleItemArray: Item[] = useMemo(() => [...visibleItemArray].sort(sortRoutine), [sortRoutine, visibleItemArray]);
 
     /**
      * Reverse the array if descending sort order is requested
@@ -98,9 +90,9 @@ const DataTable = ({
     const directionallySortedVisibleItemArray = useMemo(() => {
         if (sortAscending) {
             return [...sortedVisibleItemArray];
-        } else {
-            return [...sortedVisibleItemArray].reverse();
-        }
+        } 
+        return [...sortedVisibleItemArray].reverse();
+        
     }, [sortAscending, sortedVisibleItemArray]);
 
     /**
@@ -109,9 +101,9 @@ const DataTable = ({
     const finalItemArray: Item[] = useMemo(() => {
         if (paginationStatus.enabled) {
             return directionallySortedVisibleItemArray.slice(paginationStatus.startIndex, paginationStatus.endIndex + 1);
-        } else {
-            return directionallySortedVisibleItemArray;
-        }
+        } 
+        return directionallySortedVisibleItemArray;
+        
     }, [directionallySortedVisibleItemArray, paginationStatus]);
 
     const renderedTableRows: React.ReactNode = useMemo(() => (
@@ -143,65 +135,14 @@ const DataTable = ({
             ref={tableContainerRef}
         >
             <Table>
-                <TableHead>
-                    <TableRow>
-                        {Boolean(rowSelectionEnabled) && (
-                            <TableCell sx={{ backgroundColor: "gray" }}>
-                                <Checkbox
-                                    checked={
-                                        itemCounts.selectedAndVisible === itemCounts.visible && itemCounts.visible > 0
-                                    }
-                                    disabled /* visibleItems.length === 0 */
-                                    indeterminate={(itemCounts.selectedAndVisible > 0 && itemCounts.selectedAndVisible < itemCounts.visible)}
-                                    // (selectedVisibleItems.length > 0 && selectedVisibleItems.length < visibleItems.length) || visibleItems.length === 0
-                                    onChange={(e: React.ChangeEvent<HTMLInputElement>): void => {
-                                        if (e.target.checked) {
-                                            // setSelectedItems([...selectedItems, ...visibleItems.filter((i) => (
-                                            //     !selectedItems.map((si) => si.id).includes(parseInt(i.id))
-                                            // ))]);
-                                        } else {
-                                            // setSelectedItems(selectedItems.filter((si) => (
-                                            //     !selectedVisibleItems.map((vsi) => vsi.id).includes(parseInt(si.id))
-                                            // )));
-                                        }
-                                    }}
-                                    size={smallCheckboxes === true ? "medium" : "large"}
-                                />
-                            </TableCell>
-                        )}
-
-                        {tableFields.map((tf) => {
-                            return (
-                                <TableCell
-                                    key={tf.columnDescription}
-                                    sx={{ backgroundColor: "gray" }}
-                                >
-                                    <Stack
-                                        alignItems="center"
-                                        direction="row"
-                                        spacing={1}
-                                    >
-                                        <Typography variant="h6">
-                                            {tf.columnDescription}
-                                        </Typography>
-
-                                        {tf.generateSortableValue
-                                            ? (
-                                                <ColumnSortButton
-                                                    columnName={tf.columnDescription}
-                                                    setSortAscending={setSortAscending}
-                                                    setSortColumn={setSortColumn}
-                                                    sortAscending={sortAscending}
-                                                    sortColumn={sortColumn}
-                                                />
-                                            )
-                                            : null}
-                                    </Stack>
-                                </TableCell>
-                            );
-                        })}
-                    </TableRow>
-                </TableHead>
+                <DataTableHead
+                    rowSelectionEnabled={rowSelectionEnabled}
+                    setSortAscending={setSortAscending}
+                    setSortColumn={setSortColumn}
+                    sortAscending={sortAscending}
+                    sortColumn={sortColumn}
+                    tableFields={tableFields}
+                />
 
                 <TableBody>
                     {renderedTableRows}
